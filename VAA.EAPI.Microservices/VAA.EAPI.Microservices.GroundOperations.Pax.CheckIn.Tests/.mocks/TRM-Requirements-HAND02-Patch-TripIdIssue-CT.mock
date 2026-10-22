@@ -1,0 +1,19 @@
+###Request
+PATCH https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements/handcrafted-example-02-trm  HTTP/1.1
+
+$[?(@.requests[0].tripId == '05a6d1e9-a6fc-43a3-9cc0-8c80913863d7' && @.requests[0].passengerResourceId == '96y1213c-967b-43df-aa9b-9eb6bde711e9')]
+
+###Response
+HTTP/1.1 500 Internal Server Error
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "code": "THP5004",
+    "message": "Internal Server Error",
+    "developerMessage": "Cannot invoke \"com.delta.trmcore.models.Trip.getDepartureStation()\" because \"trip\" is null",
+    "moreInfo": []
+}

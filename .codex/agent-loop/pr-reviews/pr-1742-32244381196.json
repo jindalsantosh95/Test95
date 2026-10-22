@@ -1,0 +1,168 @@
+{
+  "prNumber": 1742,
+  "branch": "codex/holidays-document-token-diagram-clean",
+  "base": "main",
+  "headSha": "c9361b91789aadb29a72ac882cec939de46562b6",
+  "runId": "32244381196",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/32244381196",
+  "collectedAtUtc": "2026-08-19T10:48:18.937Z",
+  "approved": false,
+  "reviewDecision": null,
+  "approvals": [],
+  "unresolvedAiThreads": [
+    {
+      "threadId": "PRRT_kwDORKRjBc6abu6-",
+      "replyToCommentDatabaseId": 3812228268,
+      "path": "VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Trips/Services/HolidayProvider.cs",
+      "line": 74,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3812228268",
+      "author": "copilot-pull-request-reviewer",
+      "body": "`RetrieveDocument` uses `_httpConnector.SendAsync<T>(...)`, which (via `VAA.EAPI.GraphQL.Infrastructure.Services.HttpConnector`) logs request/response content on non-success responses. Because the request body includes `DocumentUrl`, any downstream 4xx/5xx (including a normal 404) can write the DMAZE URL into telemetry, conflicting with the “don’t log document-url” constraint. Also, the current call path throws for non-success status codes, preventing the caller from distinguishing NotFound vs other failures.\n\nPrefer the non-throwing `SendAsync(HttpRequestMessage, CancellationToken)` overload and handle status codes explicitly (return null for 404; throw a sanitized exception otherwise), then deserialize only on success.",
+      "decision": "valid",
+      "resolutionComment": "Valid. HolidayProvider now uses the non-throwing raw HttpResponseMessage connector overload, returns null for HTTP 404, throws a sanitized HttpRequestException containing only a controlled message and status for other failures, and deserializes the response body only after a successful status. This prevents the request body containing DocumentUrl from being added to connector exception telemetry. The GraphQL Trips project builds with 0 warnings/errors, and the focused HolidayProvider/holiday document contract test run passed with TRX analysis (coverage: 9.22% line, 6.99% branch)."
+    },
+    {
+      "threadId": "PRRT_kwDORKRjBc6abu7T",
+      "replyToCommentDatabaseId": 3812228304,
+      "path": "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Holidays/Application/RetrieveDocumentService.cs",
+      "line": 238,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3812228304",
+      "author": "copilot-pull-request-reviewer",
+      "body": "`RetrieveDocument` downloads the DMAZE file via `_httpConnector.SendAsync(documentUri.ToString(), ...)` (line 237). The shared `VAA.EAPI.Infrastructure.Services.HttpConnector` logs `request.RequestUri` at info level for every request (`HttpConnector.cs:139`), which will include the full DMAZE `documentUri` (and therefore the otherwise-hidden downstream URL) in telemetry.\n\nGiven the sequence-goal constraint “do not log the document-url”, this call path should be adjusted so the connector does not emit the full URL (e.g., add a redaction option / log-safe URI to the connector, or introduce a dedicated download client/logger for this flow).",
+      "decision": "valid",
+      "resolutionComment": "Valid. Added an explicit HttpRequestMessage option for sensitive requests to suppress full request-URI logging. RetrieveDocument marks only the DMAZE download request with that option, and the shared connector logs the URI authority (scheme/host/port) instead of the sensitive path/query while retaining method, response content length, and timing telemetry. Other connector calls retain existing URI logging. The Retail Holidays project builds with 0 warnings/errors, and all 82 Holidays tests passed with TRX analysis. Coverage was unavailable because this project's Microsoft Testing Platform runner does not expose the configured coverage option."
+    }
+  ],
+  "checks": {
+    "combinedStatus": "pending",
+    "checkRuns": [
+      {
+        "name": "copilot-pull-request-reviewer",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244429181/job/96041773709"
+      },
+      {
+        "name": "harness-coverage",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244425319/job/96041756987"
+      },
+      {
+        "name": "review-team-labels",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244423905/job/96041756507"
+      },
+      {
+        "name": "review",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244424471/job/96041756395"
+      },
+      {
+        "name": "Wiz Vulnerability Scanner",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/96041756265"
+      },
+      {
+        "name": "Wiz IaC Scanner",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/96041756123"
+      },
+      {
+        "name": "Wiz Secret Scanner",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/96041755968"
+      },
+      {
+        "name": "Wiz Data Scanner",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/96041755846"
+      },
+      {
+        "name": "verify-docs-agent-loop",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244424463/job/96041755325"
+      },
+      {
+        "name": "detect-scopes",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244424450/job/96041755232"
+      },
+      {
+        "name": "verify",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244424470/job/96041755157"
+      },
+      {
+        "name": "closed-loop-gate",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244424464/job/96041755032"
+      },
+      {
+        "name": "build",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244424466/job/96041755000"
+      },
+      {
+        "name": "high-risk-autolabel",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244424505/job/96041754883"
+      },
+      {
+        "name": "harness-coverage",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244424445/job/96041754617"
+      },
+      {
+        "name": "Verify and complete goal",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244421985/job/96041749043"
+      },
+      {
+        "name": "qa-rob-ai",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244421985/job/96041748858"
+      },
+      {
+        "name": "dev-jim-ai",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32244421985/job/96041748067"
+      }
+    ]
+  },
+  "resourceUsage": {
+    "workflow": "sequence-goal-pr-review-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 4399968,
+      "inputTokens": 4390006,
+      "cachedInputTokens": 4317078,
+      "outputTokens": 9962,
+      "reasoningOutputTokens": 1463,
+      "estimatedUsd": 5.494648
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "4,399,968 tokens (4,390,006 input, 4,317,078 cached + 9,962 output, 1,463 reasoning); $5.494648 USD"
+  }
+}

@@ -1,0 +1,70 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/storelocator/Stores/GetStoresById HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "storeId": "LON001",
+  "name": "London Heathrow Store",
+  "label": "Heathrow Terminal",
+  "addressLine1": "Terminal 3",
+  "city": "London",
+  "county": "Middlesex",
+  "countryCode": "GB",
+  "postalCode": "TW6",
+  "storeWorkHours": [],
+  "latitude": 51.4706,
+  "longitude": -0.4619,
+  "featuredImage": {
+    "src": "https://example.com/store.jpg",
+    "alt": "Store"
+  },
+  "cardImages": [],
+  "distance": "2mi",
+  "drivingTime": "10min",
+  "markedAsClosed": true,
+  "isNew": true,
+  "isClosest": true,
+  "fullDetails": {
+    "details": {
+      "phone": "0207 000 0000",
+      "emailAddress": "store@example.com",
+      "address": {
+        "addressLine1": "Terminal 3",
+        "city": "London",
+        "county": "Middlesex",
+        "countryCode": "GB",
+        "postalCode": "TW6"
+      }
+    },
+    "openingHours": {
+      "isOpenNow": true,
+      "weeklyHours": [
+        {
+          "day": "Mon",
+          "hours": "09:00 - 18:00"
+        }
+      ],
+       "specialHours": [
+        {
+          "label": "Christmas Day",
+          "date": "2026-12-25",
+          "openingTime": "",
+          "closingTime": "",
+          "isClosed": true
+        }
+      ]
+    },
+    "services": {
+      "inStoreFacilities": ["Coffee"],
+      "accessibilityFeatures": [
+        {
+          "name": "InStoreExpert",
+          "value": "Available"
+        }
+      ]
+    }
+  }
+}

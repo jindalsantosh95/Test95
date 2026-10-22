@@ -1,0 +1,11 @@
+query RetrieveStoreCalendarAvailability($storeId: String, $year: Int!, $month: Int!) {
+  RetrieveStoreCalendarAvailability(storeId: $storeId, year: $year, month: $month) {
+    storeId
+    year
+    month
+    days {
+      date
+      hasAvailableSlot
+    }
+  }
+}

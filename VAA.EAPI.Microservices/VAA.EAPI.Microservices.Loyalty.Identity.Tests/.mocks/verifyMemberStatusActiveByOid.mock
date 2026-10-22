@@ -1,0 +1,23 @@
+###Request
+GET https://graph.test.com/Success/v1.0/users/oid-123?$select=Id,Identities,extension_b4e6641f44c644ea8b9a899e786c7579_memberStatus HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+	"id": "12345678-1234-1234-1234-123456789012",
+	"extension_b4e6641f44c644ea8b9a899e786c7579_memberStatus": "ACTIVE",
+	"identities": [
+		{
+			"signInType": "emailAddress",
+			"issuer": "entratenant.onmicrosoft.com",
+			"issuerAssignedId": "resolved@example.com"
+		},
+		{
+			"signInType": "username",
+			"issuer": "entratenant.onmicrosoft.com",
+			"issuerAssignedId": "9106430888"
+		}
+	]
+}

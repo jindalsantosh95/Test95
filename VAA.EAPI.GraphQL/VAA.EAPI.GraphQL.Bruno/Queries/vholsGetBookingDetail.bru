@@ -1,0 +1,33 @@
+meta {
+  name: vholsGetBookingDetail
+  type: graphql
+  seq: 65
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query vholsGetBookingDetail($refresh: Boolean, $where: BookingDetailFilterInput, $order: [BookingDetailSortInput!]) {
+    vholsGetBookingDetail(refresh: $refresh, where: $where, order: $order) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "refresh": false,
+    "where": {},
+    "order": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

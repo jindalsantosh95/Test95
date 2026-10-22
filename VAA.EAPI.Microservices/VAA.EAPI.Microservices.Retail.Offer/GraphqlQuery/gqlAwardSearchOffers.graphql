@@ -1,0 +1,425 @@
+query Query($offerSearchCriteria: OfferSearchCriteriaInput) {
+  searchOffers(offerSearchCriteria: $offerSearchCriteria) {    
+    offersSets {
+      offers {
+        offerId
+        offerPricing {
+          totalAmt {
+            currencyEquivalentPrice {
+              currencyAmt
+              currencyCode
+              formattedCurrencyAmt
+            }
+            milesEquivalentPrice {
+                mileCnt
+            }
+          }
+          baseAmt {
+            currencyEquivalentPrice {
+              currencyAmt
+              currencyCode
+              formattedCurrencyAmt
+            }
+            milesEquivalentPrice {
+                mileCnt
+            }
+          }
+          taxSummary {
+            totalTaxAmt {
+              currencyEquivalentPrice {
+                currencyAmt
+                currencyCode
+                formattedCurrencyAmt
+              }
+            }
+          }
+        }
+        soldOut
+        offerExpirationTimeLimitUtcTs
+        offerItems {
+          offerItemId
+          offerSupplier {
+            offerId
+          }
+          tripIds
+          flightSegmentIds
+          passengerIds
+          retailItems {
+            retailItemDefinitionId
+            retailItemPricing {
+              totalAmt {
+                currencyEquivalentPrice {
+                  currencyAmt
+                  currencyCode
+                  formattedCurrencyAmt
+                }
+                milesEquivalentPrice {
+                mileCnt
+               }
+              }
+              baseAmt {
+                currencyEquivalentPrice {
+                  currencyAmt
+                  currencyCode
+                  formattedCurrencyAmt
+                }
+                milesEquivalentPrice {
+                mileCnt
+                }
+              }
+              taxSummary {
+                totalTaxAmt {
+                  currencyEquivalentPrice {
+                    currencyAmt
+                    currencyCode
+                    formattedCurrencyAmt
+                  }
+                }
+              }
+            }
+
+            retailItemMetaData {
+              fareInformation {
+                availableSeatCnt
+                brandByFlightLegs {
+                  brandId
+                  cosCode
+                  dominantLeg
+                  flightSegmentId
+                }
+
+                dominantSegmentBrandId
+                endorsement {
+                  bookingCodes
+                  extendedFareCode
+                  salesAdjustedPrice {
+                    milesEquivalentPrice {
+                      mileCnt
+                    }
+                  }
+                  destinationCityCode
+                  originCityCode
+                  ticketDesignator
+                }
+
+                passenger {
+                  passengerTypeCode
+                }
+                farePrice {
+                  baseFare {
+                    currencyEquivalentPrice {
+                      currencyAmt
+                      currencyCode
+                      formattedCurrencyAmt
+                    }
+                     milesEquivalentPrice {
+                        mileCnt
+                    }
+                  }
+                  totalFarePrice {
+                    currencyEquivalentPrice {
+                      currencyAmt
+                      currencyCode
+                      formattedCurrencyAmt
+                    }
+                     milesEquivalentPrice {
+                        mileCnt
+                    }
+                  }
+                  totalTaxAndFees {
+                    currencyEquivalentPrice {
+                      currencyAmt
+                      currencyCode
+                      formattedCurrencyAmt
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        additionalOfferProperties {
+          soldOut
+          refundable
+          dominantSegmentBrandId
+          payWithMilesEligible
+          discountAvailable
+        }
+      }
+      tripId
+    }
+selectedOfferSets {
+      offers {
+        offerId
+        offerPricing {
+          totalAmt {
+            currencyEquivalentPrice {
+              currencyAmt
+              currencyCode
+              formattedCurrencyAmt
+            }
+            milesEquivalentPrice {
+                mileCnt
+            }
+          }
+          baseAmt {
+            currencyEquivalentPrice {
+              currencyAmt
+              currencyCode
+              formattedCurrencyAmt
+            }
+            milesEquivalentPrice {
+                mileCnt
+            }
+          }
+          taxSummary {
+            totalTaxAmt {
+              currencyEquivalentPrice {
+                currencyAmt
+                currencyCode
+                formattedCurrencyAmt
+              }
+            }
+          }
+        }
+        soldOut
+        offerExpirationTimeLimitUtcTs
+        offerItems {
+          offerItemId
+          offerSupplier {
+            offerId
+          }
+          tripIds
+          flightSegmentIds
+          passengerIds
+          retailItems {
+            retailItemDefinitionId
+            retailItemPricing {
+              totalAmt {
+                currencyEquivalentPrice {
+                  currencyAmt
+                  currencyCode
+                  formattedCurrencyAmt
+                }
+                milesEquivalentPrice {
+                mileCnt
+               }
+              }
+              baseAmt {
+                currencyEquivalentPrice {
+                  currencyAmt
+                  currencyCode
+                  formattedCurrencyAmt
+                }
+                milesEquivalentPrice {
+                mileCnt
+                }
+              }
+              taxSummary {
+                totalTaxAmt {
+                  currencyEquivalentPrice {
+                    currencyAmt
+                    currencyCode
+                    formattedCurrencyAmt
+                  }
+                }
+              }
+            }
+
+            retailItemMetaData {
+              fareInformation {
+                brandByFlightLegs {
+                  brandId
+                  cosCode
+                  dominantLeg
+                  flightSegmentId
+                }
+
+                dominantSegmentBrandId
+                endorsement {
+                  bookingCodes
+                  extendedFareCode
+                  salesAdjustedPrice {
+                    milesEquivalentPrice {
+                      mileCnt
+                    }
+                  }
+                  destinationCityCode
+                  originCityCode
+                }
+
+                passenger {
+                  passengerTypeCode
+                }
+                farePrice {
+                  baseFare {
+                    currencyEquivalentPrice {
+                      currencyAmt
+                      currencyCode
+                      formattedCurrencyAmt
+                    }
+                     milesEquivalentPrice {
+                        mileCnt
+                    }
+                  }
+                  totalFarePrice {
+                    currencyEquivalentPrice {
+                      currencyAmt
+                      currencyCode
+                      formattedCurrencyAmt
+                    }
+                     milesEquivalentPrice {
+                        mileCnt
+                    }
+                  }
+                  totalTaxAndFees {
+                    currencyEquivalentPrice {
+                      currencyAmt
+                      currencyCode
+                      formattedCurrencyAmt
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        additionalOfferProperties {
+          soldOut
+          refundable
+          dominantSegmentBrandId
+          payWithMilesEligible
+        }
+      }
+      tripId
+    }
+    offerDataList {
+      customers {
+        customerId
+        passengerId
+        passengerTypeCode
+      }
+
+      originDestinationTrips {
+        originDestinationId
+        originAirportCode
+        destinationAirportCode
+        tripIds
+      }
+
+      trips {
+        destinationAirportCode
+        originAirportCode 
+        scheduledDepartureLocalTs
+        totalTripTime {
+          dayCnt
+          hourCnt
+          minuteCnt
+        }
+        tripId
+        flightSegmentIdList
+      }
+      flightSegments {
+        aircraftTypeCode        
+        destinationAirport {
+          airportCode
+        }
+        destinationAirportCode
+        destinationCityCode
+        dominantSegment
+        flightLeg {
+          carrierCode
+          dayChange
+          distance { 
+            unitOfMeasure 
+            unitOfMeasureCnt
+          } 
+          destinationAirport {
+            airportCode
+          }
+          destinationAirportCode
+          dominantLeg
+          duration {
+            dayCnt
+            hourCnt
+            minuteCnt
+          }
+          layover {
+            layoverDuration {
+              dayCnt
+              hourCnt
+              minuteCnt
+            }
+          }
+          legId
+          marketingCarrier {
+            carrierCode
+          }
+          operatedByOwnerCarrier
+          operatingCarrier {
+            carrierCode
+          }
+          operatingCarrierCode
+          originAirport {
+            airportCode
+            airportTerminals {
+              terminalId
+            }
+          }
+          originAirportCode
+          originCityCode
+          scheduledArrivalLocalTs
+          scheduledDepartureLocalTs
+          destinationCityCode
+        }
+        flightSegmentNum
+        layover {
+          layoverDuration {
+            dayCnt
+            hourCnt
+            minuteCnt
+          }
+        }
+        marketingCarrier {
+          carrierCode
+          carrierNum
+        }
+        marketingFlightNum
+        operatingCarrier {
+          carrierCode
+          carrierNum
+        }
+        operatingFlightNum
+        originAirport {
+          airportCode
+        }
+        originAirportCode
+        originCityCode
+        scheduledArrivalLocalTs
+        scheduledDepartureLocalTs
+        stopCnt
+        pendingGovtApproval
+        totalAirTime {
+          dayCnt
+          hourCnt
+          minuteCnt
+        }
+        flightSegmentId
+      }
+    }
+    errors {
+      code
+      developerMessage
+      message
+      moreInfo {
+        callbackId
+        callbackInSecs
+        code
+        field
+        message
+      }
+    }
+  }
+}

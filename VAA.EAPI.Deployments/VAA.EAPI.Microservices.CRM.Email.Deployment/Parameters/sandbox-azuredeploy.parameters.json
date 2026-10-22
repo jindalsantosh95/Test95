@@ -1,0 +1,181 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sandbox",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "SANDBOX"
+    },
+    "AppServicePlanName": {
+      "value": "avaieunasp001"
+    },
+    "appName": {
+      "value": "AVAIEUNAFNEMAILMS"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-i-eun-ase-001"
+    },
+    "aseName": {
+      "value": "avaieunase001"
+    },
+    "keyVaultName": {
+      "value": "avaieunkv001"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "EMAILMS",
+        "DOMAIN": "EMAILMS",
+        "ENVIRONMENT": "DEV",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "appinsightname": {
+      "value": "AVAIEUNAIEMAILMS"
+    },
+    "storageaccountName": {
+      "value": "avaieunstemailms"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+
+    "AppSetting:OpenApi__Description": {
+      "value": "This API provides ability to get informaiton for Email ms"
+    },
+    "AppSetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "AppSetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "AppSetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "AppSetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "AppSetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "AppSetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "AppSetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:PaymentCommunicationEventHandlerTopicName": {
+      "value": "Communication"
+    },
+    "Appsetting:PaymentCommunicationEventSubscriptionName": {
+      "value": "CPDBusinessErrorSubscriber"
+    },
+    "Appsetting:RefundFailureFromAddress": {
+      "value": "Paymentsdonotreply@fly.virgin.com"
+    },
+    "Appsetting:RefundFailureToAddress": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "Appsetting:RefundFailureCcAddress": {
+      "value": ""
+    },
+    "Appsetting:RefundFailureSubject": {
+      "value": "Refund refusal - Transaction Id : {0}"
+    },
+    "Appsetting:RefundFailureTemplate": {
+      "value": "SOVGEN-01"
+    },
+    "Appsetting:SoapEndpointUri": {
+      "value": "https://virginatlantic-rt-stage2.campaign.adobe.com/nl/jsp/soaprouter.jsp"
+    },
+    "Appsetting:SoapEndpointUriV2": {
+      "value": "https://virginatlantic-rt-stage4-all-lb.campaign.adobe.com/nl/jsp/soaprouter.jsp"
+    },
+    "Appsetting:RetryCounter": {
+      "value": "5"
+    },
+    "Appsetting:DelayTime": {
+      "value": "0:0:0:5"
+    },
+    "KeyVaultUri": {
+      "value": "https://avaieunkv001.vault.azure.net/"
+    },
+    "Appsetting:ApplicationId": {
+      "value": "ND"
+    },
+    "Appsetting:DeltaCertificateName": {
+      "value": "NdcDLSoaCertificate"
+    },
+    "Appsetting:PNRCommonV6EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:31063/pnrcommon/v6"
+    },
+    "Appsetting:PoolType": {
+      "value": "STAMPING/VAA/NEW/DIST/CAPABILITY"
+    },
+    "Appsetting:RoleIndicator": {
+      "value": "RESNDCSALES"
+    },
+    "Appsetting:SecurityId": {
+      "value": "D027954"
+    },
+    "Appsetting:TestLab": {
+      "value": "TVTH"
+    },
+    "Appsetting:AgentCityCode": {
+      "value": "LON"
+    },
+    "Appsetting:TicketingProcessV3EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:37531/ticketingprocess/v3"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "EmailEventStore"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "value": "EmailResponse"
+    },
+    "Appsetting:BookingAcknowledgmentTemplate": {
+      "value": "vaaECommBKGACK"
+    },
+    "Appsetting:BookingCancellationTemplate": {
+      "value": "vaaECommBKGCNX"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "HoldBookingTemplate": {
+      "value": "vaaECommHBFACK"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+info:
+  name: DL Flight Amenities And Meals
+  type: http
+  seq: 6
+
+http:
+  method: GET
+  url: https://www.virginatlantic.com/flights/amenitiesAndMeals?departureAirportCode=LHR&arrivalAirportCode=JFK&flightNumber=3&departureDateTime=2026-10-10T08:20:00%2B01:00
+  headers:
+    - name: Accept
+      value: application/json
+    - name: x-vaa-flight-status
+      value: "1"
+  params:
+    - name: departureAirportCode
+      value: LHR
+      type: query
+    - name: arrivalAirportCode
+      value: JFK
+      type: query
+    - name: flightNumber
+      value: "3"
+      type: query
+    - name: departureDateTime
+      value: "2026-10-10T08:20:00+01:00"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 15000
+  followRedirects: true
+  maxRedirects: 5

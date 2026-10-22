@@ -1,0 +1,17 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/orderdata/svc/orders/search HTTP/1.1
+
+$[?(@.pnr == 'ABC123')]
+$[?(@.firstName == 'Jane')]
+$[?(@.lastName == 'Smith')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "pnr": true,
+  "isGroup": false,
+  "firstName": true,
+  "surname": false
+}

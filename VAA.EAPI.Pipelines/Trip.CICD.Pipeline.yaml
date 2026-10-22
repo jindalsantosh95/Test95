@@ -1,0 +1,112 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Trip*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Retail.Trip*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Trip.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Trip*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Retail.Trip*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Trip.bruno
+
+variables: 
+  - group: Common_Variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: AzureWebJobsStorage  
+  - name: agentPool
+    value: 'Azure Pipelines'   
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: subRootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: applicationName
+    value: 'Retail.Trip'
+  - name: microserviceName
+    value: 'tripmicroservice' 
+  - name: productId
+    value: 'EAPI-Trip' 
+  - name: apimurlname
+    value: 'Trip'            
+  - name: functionAppName_DEV
+    value: 'avadeunafntripmicroservice' 
+  - name: functionAppName_SIT
+    value: 'avateunafntripmicroservice'
+  - name: functionAppName_UAT
+    value: 'avaseunafntripmicroservice' 
+  - name: functionAppName_PRD
+    value: 'avapeunafntripmicroservice'
+
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+  # CD (Deployment) Pipeline
+  - template: functions/MyTrips/release_apim_nonslot.yaml
+    parameters:
+      agentPool: $(agentPool)      
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      buildConfiguration: $(buildConfiguration)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      subscriptionId_Prod: $(subscriptionId_Prod)      
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_PRD: $(functionAppName_PRD)
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)

@@ -1,0 +1,35 @@
+meta {
+  name: CheckIn
+  type: graphql
+  seq: 17
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query CheckIn($pnrLocator: String, $eTicketNumber: String, $originCode: String, $givenNames: String, $surname: String) {
+    CheckIn(pnrLocator: $pnrLocator, eTicketNumber: $eTicketNumber, originCode: $originCode, givenNames: $givenNames, surname: $surname) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "pnrLocator": "",
+    "eTicketNumber": "",
+    "originCode": "",
+    "givenNames": "",
+    "surname": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

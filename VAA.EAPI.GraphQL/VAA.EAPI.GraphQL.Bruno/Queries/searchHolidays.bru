@@ -1,0 +1,37 @@
+meta {
+  name: searchHolidays
+  type: graphql
+  seq: 47
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query searchHolidays($location: String!, $depDate: DateTime!, $gateway: String!, $duration: Int!, $adults: Int!, $where: HolidaySearchResponseFilterInput, $order: [HolidaySearchResponseSortInput!]) {
+    searchHolidays(location: $location, depDate: $depDate, gateway: $gateway, duration: $duration, adults: $adults, where: $where, order: $order) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "location": "",
+    "depDate": "",
+    "gateway": "",
+    "duration": 0,
+    "adults": 0,
+    "where": {},
+    "order": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

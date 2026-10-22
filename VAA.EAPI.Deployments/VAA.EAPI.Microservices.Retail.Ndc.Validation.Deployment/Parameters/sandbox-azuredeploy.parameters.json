@@ -1,0 +1,191 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sandbox",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "SANDBOX"
+    },
+    "AppServicePlanName": {
+      "value": "avaieunasplnofferapis"
+    },
+    "appName": {
+      "value": "Avaieunafnvalidationmicroserv"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-i-eun-ase-001"
+    },
+    "aseName": {
+      "value": "avaieunase001"
+    },
+    "keyVaultName": {
+      "value": "avaieunkv001"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "EAPINDC",
+        "DOMAIN": "NDC DEVELOPER",
+        "ENVIRONMENT": "DEV",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "appinsightname": {
+      "value": "avaieunaioffer"
+    },
+    "storageaccountName": {
+      "value": "avaieunstvalidationms"
+    },
+    "appinsightkey": {
+      "value": "3adefa05-3814-42f6-86d9-6997531f2bff"
+    },
+    "appinsight_string": {
+      "value": "InstrumentationKey=3adefa05-3814-42f6-86d9-6997531f2bff;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "AzureAd:TenantId": {
+      "value": ""
+    },
+
+    "redisName": {
+      "value": "avaieunrcvalidation"
+    },
+    /*"AppSetting:RedisCacheConnectionString": {
+      "value": ""
+    },*/
+    "AppSetting:AgencySlidingExpirationInDay": {
+      "value": "00:00:30:00"
+    },
+    "AppSetting:AgencyAbsoluteExpirationInDay": {
+      "value": "00:00:30:00"
+    },
+    "AppSetting:SubscriptionCachingSlidingExpirationInDay": {
+      "value": "01:00:00:00"
+    },
+    "AppSetting:SubscriptionCachingAbsoluteExpirationInDay": {
+      "value": "01:00:00:00"
+    },
+    "AppSetting:SecuritySvcOCPKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNVALIDATIONMICROSERV-Config-SecuritySvcOCPKey/)"
+    },
+    "AppSetting:SecuritySvcEndPoint": {
+      "value": "https://testresources.virginatlantic.com/uat/securitymicroservice/apim/subscription/ndc/"
+    },
+    "AppSetting:OpenApi__Description": {
+      "value": "This API provides ability to Validate Agency Details"
+    },
+    "AppSetting:OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/Agency/Validate"
+    },
+    "AppSetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "AppSetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "AppSetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "AppSetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "AppSetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "AppSetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "AppSetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNVALIDATIONMICROSERV-AzureAdClientId/)"
+    },
+    "AppSetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+
+    "AppSetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "AppSetting:NDCConnectStoredProc": {
+       "value": "EXEC [dbo].[spIDX_APIKEY_VALIDATION_v3-3] @requestAgencyId,@requestAgencyType, @environment, @keyType, @corporateId"
+    },
+    "AppSetting:NDCConnectAgencyOCNStoredProc": {
+      "value": "EXEC [dbo].[spIDX_OCN_ENDPOINT_v1-0] @requestAgencyId, @environment, @AggregatorId"
+    },
+    "AppSetting:NDCConnectDBConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNVALIDATIONMICROSERV-Config-NDCConnectDBConnectionString/)"
+    },
+    "vaultName": {
+      "value": "avaieunkv001"
+    },
+    "storageaccountName2": {
+      "value": "avaieunstpricingrefdata"
+    },
+    "tablename": {
+      "value": "CurrencyPOS"
+    },
+    //IFG AgentFOP Lookup
+    "IFGAgentFopLookupUsername": {
+      "value": "va932tl@snb.ifg.iata.org"
+    },
+    "IFGAgentFopLookupPassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNVALIDATIONMICROSERV-IFGAgentFopLookupPassword/)"
+    },
+    "IFGAgentFopLookupUrl": {
+      "value": "https://snb.ifg.iata.org/main/v4/agentFopLookup"
+    },
+    // Ticket authority check
+    "AppSetting:AgentTktAuthorityEndpointGet": {
+      "value": "https://stg-ndc.virginatlantic.com/api/IATA/Get?AgentId={agentid}&Environment={env}"
+    },
+    "AppSetting:AgentTktAuthorityEndpointUpdate": {
+      "value": "https://stg-ndc.virginatlantic.com/api/IATA/Update?AgentId={agentid}&Environment={env}"
+    },
+    "AppSetting:AgentTktAuthorityEnv": {
+      "value": "NONPROD"
+    },
+    "AppSetting:AgentTktAuthorityClientId": {
+      "value": "A23EBF74F9DFA41F4B1CFD5D9718C77A5F583B28AB422A01EA8"
+    },
+    "AppSetting:AgentTktAuthoritySecretKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNVALIDATIONMICROSERV-AgentTktAuthoritySecretKey/)"
+    },
+    "AppSetting:AgentTktAuthorityCacheExpiryDuration": {
+      "value": "00:23:00:00"
+    },
+    "SecurityMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/securitymicroservice/heartbeat"
+    }
+
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "FunctionAppName": {
+      "value": "AVAPEUNAFNARCPAYMENTMS"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPIORDERMS"
+    },
+    "AppInsightsName": {
+      "value": "AVAPEUNAIARCPAYMENTMS"
+    },
+    "workspacename": {
+      "value": "avapeunlaweapi"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avapeunafnarcpaymentms"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avapeunstarcpayment"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "KeyVaultUri": {
+      "value": "https://avapeunkvems.vault.azure.net/"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Order ARC Payment Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to have electronic payments"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "ArcCheckClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNARCPAYMENTMS-Config-ArcCheckClientId/)"
+    },
+    "ArcCheckBaseUrl": {
+      "value": "https://api.arc.travel/arc-check3/api/agency-statuses"
+    },
+    "ArcCheckClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNARCPAYMENTMS-Config-ArcCheckClientSecret/)"
+    },
+    "ArcTransactionClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNARCPAYMENTMS-Config-ArcTransactionClientId/)"
+    },
+    "ArcTransactionClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNARCPAYMENTMS-Config-ArcTransactionClientSecret/)"
+    },
+    "ArcTransactionAudience": {
+      "value": "https://eum-okta-cic-tapi.arctravel.auth0app.com/api/v2/"
+    },
+    "ArcTransactionTokenUrl": {
+      "value": "https://eum-okta-cic.arctravel.auth0app.com/oauth/token"
+    },
+    "ArcTransactionUrl": {
+      "value": "https://ingestion-api.settlement-prod.arc.travel/v1/transactions"
+    },
+    "ArcCheckTokenUrl": {
+      "value": "https://myarc.okta.com/oauth2/ause2fx17D7uPsznb356/v1/token"
+    },
+    "TicketingSystemCode": {
+      "value": "PROD"
+    },
+    "ArcCheckScope": {
+      "value": "arc_check"
+    },
+    "ARCEnvironmentName": {
+      "value": "PROD"
+    },
+    "OrderApiRetryCount": {
+      "value": "3"
+    },
+    "OrderRetryDelayMilliseconds": {
+      "value": "1000"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "ARC",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "PROD",
+        "Purpose": "Support functions for the Order ARC Payment API AFN",
+        "ApplicationUsageIdList": "AVAPEUNAFNARCPAYMENTMS"
+      }
+    }
+  }
+}

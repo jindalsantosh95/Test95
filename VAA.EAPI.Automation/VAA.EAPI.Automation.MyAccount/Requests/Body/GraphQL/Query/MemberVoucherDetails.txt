@@ -1,0 +1,24 @@
+query MemberVoucherDetails($page: Int!, $pageSize: Int!) {
+  memberVoucherDetails(page: $page, pageSize: $pageSize) {
+    categories {
+      code
+      sortOrder
+    }
+    vouchers {
+      type
+      name
+      source
+      description
+      issueDate
+      expiryDate
+      status
+      number
+      category
+      isGifted
+      points
+    }
+    memberTotalVoucherCount
+    pointsThreshold
+  }
+}
+

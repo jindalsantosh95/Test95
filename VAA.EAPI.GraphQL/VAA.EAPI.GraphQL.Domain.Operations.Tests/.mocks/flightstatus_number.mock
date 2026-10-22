@@ -1,0 +1,9 @@
+###Request
+GET https://flight-status-internal.test/api/flightstatus/flights/VS3/2026-10-14?departureAirportCode=LHR&selectedLegId=leg-1 HTTP/1.1
+Ocp-Apim-Subscription-Key: test-subscription-key
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{"flightDate":"2026-10-14","flightNumber":"VS3","selectedLegId":"leg-1","activeLeg":{"id":"leg-1","marketingFlightNumber":"VS3","departure":{"airportCode":"LHR","scheduledTime":"2026-10-14T12:00:00Z"},"arrival":{"airportCode":"JFK"},"aircraft":{"type":"A350","specification":{"range":{"inMiles":334}}},"detail":{"status":{"description":"On time"},"performance":{"onTime":92},"position":{"latitude":51.5},"amenities":[{"code":"WIFI"}],"meals":[{"code":"VGML"}]}},"legs":[{"id":"leg-1","marketingFlightNumber":"VS3"}],"warnings":[]}

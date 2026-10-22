@@ -1,0 +1,45 @@
+info:
+  name: SSR-SpecialMeals
+  type: http
+  seq: 7
+
+http:
+  method: PATCH
+  url: "{{delta_ssr}}{{reservationResourceId}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: transactionid
+      value: "{{$randomUUID}}"
+    - name: x-air4_mytrips_test
+      value: "{{appname_test}}"
+  body:
+    type: json
+    data: |-
+      {
+          "reservationResourceId": "{{reservationResourceId}}",
+          "passengerResourceId": "{{passengerResourceId}}",
+          "ssrSegments": [
+              {
+                  "datedOperatingSegment": {
+                      "segmentId": 1
+                  },
+                  "specialServiceRequests": [
+                      {
+                          "code": "AVML",
+                          "status": "HK"
+                      }
+                  ]
+              }
+          ],
+          "applyToAll": false,
+          "actionType": "ADD"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

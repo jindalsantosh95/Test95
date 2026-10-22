@@ -1,0 +1,35 @@
+info:
+  name: PaxInfo
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{delta_passenger}}{{reservationResourceId}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Content-Type
+      value: text/html
+      disabled: true
+    - name: Accept
+      value: application/json
+    - name: Referrer-Policy
+      value: origin
+    - name: scope
+      value: read " -H "
+      disabled: true
+    - name: transactionid
+      value: "{{$randomUUID}}"
+    - name: x-air4_mytrips_test
+      value: "{{appname_test}}"
+  body:
+    type: json
+    data: ""
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

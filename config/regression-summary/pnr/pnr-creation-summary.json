@@ -1,0 +1,81 @@
+{
+  "defaultGroup": "PNR Creation",
+  "defaultCustomerImpact": "PNR prerequisite data creation may fail for downstream Trips regression scenarios.",
+  "groupOrder": [
+    "Flying Club Members",
+    "Glass Tier Details",
+    "Partner Airlines",
+    "Award Bookings",
+    "Seats Testing"
+  ],
+  "groupRules": [
+    {
+      "pattern": "PNRsWithFlyingClubMembers",
+      "group": "Flying Club Members"
+    },
+    {
+      "pattern": "PNRsWithGlassTierDetails",
+      "group": "Glass Tier Details"
+    },
+    {
+      "pattern": "MobileAppPnrsCreationForPartnerAirlines",
+      "group": "Partner Airlines"
+    },
+    {
+      "pattern": "PNRsWithAwardBookings",
+      "group": "Award Bookings"
+    },
+    {
+      "pattern": "MobileAppPnrsSeatsTesting",
+      "group": "Seats Testing"
+    }
+  ],
+  "customerImpactRules": [
+    {
+      "pattern": "PNRsWithFlyingClubMembers",
+      "impact": "Flying Club member PNR data may be unavailable for dependent test suites."
+    },
+    {
+      "pattern": "PNRsWithGlassTierDetails",
+      "impact": "Glass tier PNR data may be unavailable for dependent test suites."
+    },
+    {
+      "pattern": "MobileAppPnrsCreationForPartnerAirlines",
+      "impact": "Partner-airline PNR data may be unavailable for dependent test suites."
+    },
+    {
+      "pattern": "PNRsWithAwardBookings",
+      "impact": "Award booking PNR data may be unavailable for dependent test suites."
+    },
+    {
+      "pattern": "MobileAppPnrsSeatsTesting",
+      "impact": "Seat-related PNR data may be unavailable for dependent test suites."
+    }
+  ],
+  "dataUnavailableReasonPattern": "not available in storage|data unavailable|No matching .* found|No usable .* found|incomplete or invalid in storage|Could not find a different PNR",
+  "priorityContextKeys": [
+    "route",
+    "flightType",
+    "pnr",
+    "confirmationNum",
+    "bookingReference",
+    "reference",
+    "travelDate",
+    "departureDate",
+    "origin",
+    "destination",
+    "cabin",
+    "fareType",
+    "tripType"
+  ],
+  "priorityContextLabels": {
+    "flighttype": "flightType",
+    "confirmationnum": "confirmationNum",
+    "bookingreference": "bookingReference",
+    "leadname": "leadName",
+    "dateofbirth": "dateOfBirth",
+    "triptype": "tripType",
+    "traveldate": "travelDate",
+    "departuredate": "departureDate"
+  }
+}

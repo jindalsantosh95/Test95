@@ -1,0 +1,32 @@
+meta {
+  name: Account OTP Validate
+  type: graphql
+  seq: 8
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation AccountOtpValidate {
+    accountOTPValidate(emailId: "{{account_email}}", otp: {{account_otp}}) {
+      enrolmentToken
+      isEnrolledMember
+    }
+  }
+}
+
+script:post-response {
+  const body = typeof res.getBody === "function" ? res.getBody() : res.body;
+  const enrolmentToken = body?.data?.accountOTPValidate?.enrolmentToken;
+  
+  if (enrolmentToken) bru.setVar("account_enrolment_token", enrolmentToken);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

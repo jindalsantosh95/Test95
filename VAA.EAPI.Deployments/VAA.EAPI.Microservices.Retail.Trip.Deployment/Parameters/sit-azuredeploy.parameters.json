@@ -1,0 +1,235 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sit",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "SIT"
+    },
+    "FunctionAppName": {
+      "value": "avateunafntripmicroservice"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-T-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVATEUNASPEAPI1"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "AppInsightsName": {
+      "value": "AVATEUNAITRIP"
+    },
+    "workspacename": {
+      "value": "avateunlaweapi"
+    },
+    "vaultName": {
+      "value": "AVATEUNKVEMS"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avateunsttripms"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "KeyVaultUri": {
+      "value": "https://avateunkvems.vault.azure.net/"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    //TRIP MS Settings
+    "Appsetting:x-air4_mytrips_test": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/x-air4-mytrips-test/)"
+    },
+    "Appsetting:DlMyTripsUri": {
+      "value": "https://mytrips-api-si.vs01.vs.air4.com/v1/mytrips/travelreservations"
+    },
+    "Appsetting:DlMessageCentreUri": {
+      "value": "https://messagecenter-api-si.vs01.vs.air4.com/v1/messages/"
+    },
+    "Appsetting:DlPassengerInfoUri": {
+      "value": "https://passengerinfo-api-si.vs01.vs.air4.com/v1/passengerinformation/"
+    },
+    "Appsetting:DlUpsellOfffersUri": {
+      "value": "https://mytrips-api-si.vs01.vs.air4.com/v1/upsell/upsell/"
+    },
+    "Appsetting:BookingIdJwtKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafntripmicroservice-BookingIdJwtKey/)"
+    },
+    "Appsetting:DeltaClientIdValue": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafntripmicroservice-DeltaClientIdValue/)"
+    },
+    "Appsetting:DeltaClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafntripmicroservice-DeltaClientSecret/)"
+    },
+    "Appsetting:DeltaAir4TokenEndpoint": {
+      "value": "https://ssaasi.vs01.vs.air4.com/as/token.oauth2"
+    },
+    "Appsetting:DlMyTripsPrivateUri": {
+      "value": "https://mytrips-api-si.vs01.vs.air4.com/v1/mytrips-auth/travelreservations"
+    },
+    "Appsetting:SwitchToPrivateEndpoints": {
+      "value": true
+    },
+    "Appsetting:DlMessageCentrePrivateUri": {
+      "value": "https://messagecenter-api-si.vs01.vs.air4.com/v1/msg-auth/messages/"
+    },
+    "Appsetting:DlUpsellOfffersPrivateUri": {
+      "value": "https://mytrips-api-si.vs01.vs.air4.com/v1/upsell-auth/upsell/"
+    },
+    "Appsetting:DlPassengerInfoPrivateUri": {
+      "value": "https://passengerinfo-api-si.vs01.vs.air4.com/v1/pax-info-auth/passengerinformation/"
+    },
+    "Appsetting:TravelInsuranceDeeplinkUrl_GB": {
+      "value": "https://www.magroup-online.com/WL/VAA/GB/en"
+    },
+    "Appsetting:TravelInsuranceDeeplinkUrl_US": {
+      "value": "https://www.etravelprotection.com/virginatlantic/home"
+    },
+    "Appsetting:ProxyDeeplinkURL": {
+      "value": "https://vaa-test2.virginatlantic.com/holidays/sso/deeplink?id={0}"
+    },
+    "Appsetting:IROP_FAFURL": {
+      "value": "https://stg.virginatlantic.com/tripirop/findOtherFlights.action"
+    },
+    "Appsetting:ManageMyBookingUrl": {
+      "value": "https://stg.virginatlantic.com/mytrips/findPnr.action"
+    },
+    "Appsetting:ManageMyHolidayUrl": {
+      "value": "https://vaa-test2.virginatlantic.com/yourbooking/welcome/"
+    },
+    "Appsetting:RedisConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafntripmicroservice-Redis-Connectionstring/)"
+    },
+    "Appsetting:DeeplinkExpiryLimitInMinutes": {
+      "value": "05"
+    },
+    "Appsetting:POPSMealUrl": {
+      "value": "https://stg-preselect.virginatlantic.com/gb/en.html?token={0}"
+    },
+    "Appsetting:POPSTokenKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafntripmicroservice-Pops-key/)"
+    },
+    "Appsetting:DlEncryptionServiceUri": {
+      "value": "https://mytrips-api-si.vs01.vs.air4.com/v1/encrypt"
+    },
+    "Appsetting:DlEncryptionServicePrivateUri": {
+      "value": "https://mytrips-api-si.vs01.vs.air4.com/v1/encrypt-auth/encrypt"
+    },
+    "Appsetting:FlightCancelUrl": {
+      "value": "https://stg.virginatlantic.com/refunds/cancelTrip.action"
+    },
+    "Appsetting:PlusGradeApiKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafntripmicroservice-PlusGradeApiKey/)"
+    },
+    "Appsetting:PlusGradeApiUri": {
+      "value": "https://request-api.stage.plusgrade.com/v1/offer/"
+    },
+    "Appsetting:PlusGradePartnerId": {
+      "value": "10gM7q0DVS"
+    },
+    "Appsetting:FlightDisruptionUrl": {
+      "value": "https://stg.virginatlantic.com/help/categories/dc2a02fb-d3fe-4e14-8a09-413bb96a8584"
+    },
+    "Appsetting:BaggageAllowanceUrl": {
+      "value": "https://stg.virginatlantic.com/help/categories/070fb328-0c1c-4a04-a2bf-795834008bf1"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "TripMSAPI",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the TRIPMS API AFN",
+        "ApplicationUsageIdList": "avateunafntripms"
+      }
+    },
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Trip Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This endpoint will provide the pax trip information from the DL services"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    }
+  }
+}

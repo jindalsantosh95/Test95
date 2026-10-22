@@ -1,0 +1,50 @@
+info:
+  name: Submit Claim Form
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/submit"
+  headers:
+    - name: Ocp-Apim-Subscription-Key
+      value: "{{ocpkey}}"
+  body:
+    type: json
+    data: |-
+      {
+        "RequestId": "REQ-20260323-0001",
+        "FirstName": "Alex",
+        "LastName": "Taylor",
+        "EMail": "alex.taylor@example.com",
+        "Reason": "Flight disruption - EU261 claim",
+        "BookingReference": "ABC123",
+        "BookingDate": "2026-02-14",
+        "Entries": [
+          {
+            "PassengerRef": "01.01",
+            "PassengerName": "Alex Taylor",
+            "FlightDate": "2026-03-05",
+            "FlightNumber": 2,
+            "TicketNumber": "9321234567890",
+            "CouponNumber": "2",
+            "ClaimNumber": null
+          },
+          {
+            "PassengerRef": "02.01",
+            "PassengerName": "Jamie Taylor",
+            "FlightDate": "2026-03-05",
+            "FlightNumber": 2,
+            "TicketNumber": "9321234567891",
+            "CouponNumber": "2",
+            "ClaimNumber": null
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

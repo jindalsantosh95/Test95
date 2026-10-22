@@ -1,0 +1,27 @@
+meta {
+  name: Retrieve Requirements by Resource Id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{aws_api_url}}/{{stage_name}}/requirements/{{requirement_resource_id}}
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+  transactionId: VS-DigitalFirst-123-{{$guid}}
+  clientId: {{ping_client_id}}
+  configOptions: [{'nativeTravelDocs':'true'}]
+  X-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+  AppChannelName: {{AppChannelName}}
+  AppId: {{AppID}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

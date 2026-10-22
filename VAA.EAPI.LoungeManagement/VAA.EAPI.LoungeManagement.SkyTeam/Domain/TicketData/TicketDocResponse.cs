@@ -1,0 +1,103 @@
+﻿
+namespace VAA.EAPI.LoungeManagement.SkyTeam.Domain.TicketData
+{
+    public class TicketDocResponse
+    {
+
+        private string tktDocNbField;
+
+        private string tktDocIssLDtField;
+
+        private string tktDocSqNbField;
+
+        private string tktDocRspnSqNbField;
+
+        private string tktDocRspnTxtField;
+
+        private string additionalInformationField;
+
+
+
+        public string TktDocNb
+        {
+            get
+            {
+                return this.tktDocNbField;
+            }
+            set
+            {
+                this.tktDocNbField = value;
+            }
+        }
+
+
+
+        public string TktDocIssLDt
+        {
+            get
+            {
+                return this.tktDocIssLDtField;
+            }
+            set
+            {
+                this.tktDocIssLDtField = value;
+            }
+        }
+
+
+
+        public string TktDocSqNb
+        {
+            get
+            {
+                return this.tktDocSqNbField;
+            }
+            set
+            {
+                this.tktDocSqNbField = value;
+            }
+        }
+
+
+
+        public string TktDocRspnSqNb
+        {
+            get
+            {
+                return this.tktDocRspnSqNbField;
+            }
+            set
+            {
+                this.tktDocRspnSqNbField = value;
+            }
+        }
+
+
+
+        public string TktDocRspnTxt
+        {
+            get
+            {
+                return this.tktDocRspnTxtField;
+            }
+            set
+            {
+                this.tktDocRspnTxtField = value;
+            }
+        }
+
+
+
+        public string AdditionalInformation
+        {
+            get
+            {
+                return this.additionalInformationField;
+            }
+            set
+            {
+                this.additionalInformationField = value;
+            }
+        }
+    }
+}

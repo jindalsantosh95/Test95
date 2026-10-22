@@ -1,0 +1,318 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"DataDog": {
+			"value": {
+				"LoggingProvider": "AppInsights",
+				"LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+				"ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+				"Site": "datadoghq.com",
+				"Environment": "prod",
+				"Source": "csharp",
+				"Version": "",
+				"TraceEnabled": true,
+				"RuntimeMetricsEnabled": true,
+				"Tags": "",
+				"BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+				"MinimumLogLevel": "Information",
+				"QueueCapacity": 5000,
+				"BatchSize": 100,
+				"FlushIntervalMilliseconds": 2000
+			}
+		},
+		"Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+			"value": "~4"
+		},
+		"AppServicePlanName": {
+			"value": "AVAPEUNASPEAPI-LOYALTY"
+		},
+		"EnvironmentName": {
+			"value": "PROD"
+		},
+		"ServerFarmIdRg": {
+			"value": "RG-VA-P-EUN-ENTERPRISEMS"
+		},
+		"FunctionAppName": {
+			"value": "AVAPEUNAFNCUSTTRANSMS"
+		},
+		"AppInsightsName": {
+			"value": "AVAPEUNAICUSTTRNS"
+		},
+		/*"AppsettingAppInsightsKey": {
+			"value": "fe8fd990-715e-40c0-a692-9524e40b3b2c"
+		},*/
+		"AzureWebJobsStorage": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCUSTTRANSMS-Config-StorageAccount/)"
+		},
+		"AppsettingAzureAd:ClientId": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCUSTTRANSMS-Config-AzureAD-ClientId/)"
+		},
+		"AppsettingAzureAd:Instance": {
+			"value": "https://login.microsoftonline.com"
+		},
+		"AppsettingAzureAd:TenantId": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+		},
+		"AppSetting:MicroServiceDBKey": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCUSTTRANSMS-Config-StorageAccount/)"
+		},
+		"AppsettingAzureAd:TokenV1Issuer": {
+			"value": "https://sts.windows.net"
+		},
+		"AppsettingCosmosSqlDBConnectionMode": {
+			"value": "Direct"
+		},
+		"AppsettingContactNoteDocType": {
+			"value": "ContactNote"
+		},
+		"AppsettingContactNoteEventSubject": {
+			"value": "ContactNotes"
+		},
+		"AppsettingTargetedMembershipDocType": {
+			"value": "TargetedMembership"
+		},
+		"AppsettingTargetedMembershipEventSubject": {
+			"value": "TargetedMembership"
+		},
+		"Appsetting:CampaignEnrolmentDocType": {
+			"value": "CampaignEnrollment"
+		},
+		"Appsetting:CampaignEnrolmentEventSubject": {
+			"value": "CampaignEnrollment"
+		},
+		"Appsetting:MembershipChangeDocType": {
+			"value": "MembershipChange"
+		},
+		"Appsetting:FlyingClubMemberDocType": {
+			"value": "FlyingClubMember"
+		},
+		"Appsetting:FlyingClubMemberEventSubject": {
+			"value": "FlyingClubMember"
+		},
+		"Appsetting:RuleEngineTopicName": {
+			"value": "ruleengineeventmessages"
+		},
+		"AppsettingAwardDocType": {
+			"value": "Award"
+		},
+		"AppsettingAwardEventSubject": {
+			"value": "Awards"
+		},
+		"Appsetting:ActivityDocType": {
+			"value": "Activity"
+		},
+		"AppsettingTopMemberProductID": {
+			"value": "1634561747"
+		},
+		"AppsettingTransactionDBEndPoint": {
+			"value": "https://avapeuncmdbcustomertransactions.documents.azure.com:443/"
+		},
+		"AppsettingTransactionDB": {
+			"value": "CustomerTransactionsDB"
+		},
+		"AppsettingTransactionCollection": {
+			"value": "CustomerDetailsCollection"
+		},
+		"AppsettingServiceBusConnectionString": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCUSTTRANSMS-Config-ServiceBusConnectionString/)"
+		},
+		"AppsettingServiceBusTopicName": {
+			"value": "customertransactioneventmessages"
+		},
+		"AppsettingCommandStatusLocation": {
+			"value": "https://resources.virginatlantic.com/customertransactions/{0}s/status/{1}"
+		},
+		"AppsettingCommandStatusPollingDelayMS": {
+			"value": "100"
+		},
+		"AppsettingCommandStatusPollingRetryCount": {
+			"value": "50"
+		},
+		"AppsettingMicroServiceEventStoreTableName": {
+			"value": "CustomerTransactionEvents"
+		},
+		"AppsettingMicroServiceResponseTableName": {
+			"value": "CustomerTransactionEventResponses"
+		},
+		"AppsettingCustomerTransactionDB": {
+			"value": "CustomerTransactionsDB"
+		},
+		"AppsettingCustomerTransactionCollection": {
+			"value": "CustomerDetailsCollection"
+		},
+		"MemberCustomAttributesDocType": {
+			"value": "MemberCustomAttributes"
+		},
+		"MemberCustomAttributesEventSubject": {
+			"value": "MemberCustomAttributes"
+		},
+		// GroupDocType
+
+		"Appsetting:GroupDocType": {
+			"value": "Group"
+		},
+		"Appsetting:GroupDocTypeEventSubject": {
+			"value": "GroupDocTypeEventSubject"
+		},
+		//PartnerMembershipDocType
+
+		"Appsetting:PartnerMembershipDocType": {
+			"value": "PartnerMembership"
+		},
+		"Appsetting:PartnerMembershipEventSubject": {
+			"value": "PartnerMembershipEventSubject"
+		},
+		//Audit
+		"Appsetting:AuditServiceBusTopicName": {
+			"value": "auditeventmessages"
+		},
+		"Appsetting:CustomerSearchTopicName": {
+			"value": "customereventmessages"
+		},
+		// Transaction Document
+		"Appsetting:TransactionDocType": {
+			"value": "Transaction"
+		},
+		"Appsetting:BannerResponseURL": {
+			"value": "https://resources.virginatlantic.com/customertransactions/CreateBannerResponse/{CorrelationId}"
+		},
+		"Appsetting:ResponsePollingCount": {
+			"value": "50"
+		},
+		"Appsetting:ResponseDelayTimeInMS": {
+			"value": "100"
+		},
+		"Appsetting:TransactionEventSubject": {
+			"value": "Transaction"
+		},
+
+		"Appsetting:CustomerProfileDocType": {
+			"value": "CustomerProfile"
+		},
+
+		"Appsetting:WEBSITE_DNS_ALT_SERVER": {
+			"value": ""
+		},
+		"Appsetting:WEBSITE_DNS_SERVER": {
+			"value": ""
+		},
+		"IPRestriction": {
+			"value": ""
+		},
+
+		//Slot Settings
+		"storageAccountName": {
+			"value": "avapeunstcusttransms"
+		},
+		"vaultName": {
+			"value": "AVAPEUNKVEMS"
+		},
+		"ResourceGroupSubscriptionId": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+		},
+		"SlotName": {
+			"value": "DS"
+		},
+		"actionGroupsServiceNow": {
+			"value": "ServiceNow"
+		},
+		"actionGroupsEAPISupport": {
+			"value": "EAPI.Support"
+		},
+		"emailAddressServiceNow": {
+			"value": "virginatlantictest@service-now.com"
+		},
+		"emailAddressEAPISupport": {
+			"value": "eapi.support@fly.virgin.com"
+		},
+
+		//Azure B2C Settings
+
+		"AzureAdB2C:ClientId": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCUSTTRANSMS-Config-AzureAD-ClientId/)"
+		},
+		"AzureAdB2C:Instance": {
+			"value": "https://login.microsoftonline.com/"
+		},
+		"AzureAdB2C:SignUpSignInPolicyId": {
+			"value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+		},
+		"AzureAdB2C:TenantId": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+		},
+		"AzureAdB2C:TokenV1Issuer": {
+			"value": "https://sts.windows.net"
+		},
+
+		//swagger
+
+		"Appsettings:OpenApi__DocTitle": {
+			"value": "Customer Transaction Microservice"
+		},
+		"Appsettings:OpenApi__Description": {
+			"value": "This API is for customer transactions"
+		},
+		"Appsettings:OpenApi__HostNames": {
+			"value": "https://testresources.virginatlantic.com/dev/customertransactions/,https://testresources.virginatlantic.com/sit/customertransactions/,https://testresources.virginatlantic.com/customertransactions/,https://resources.virginatlantic.com/customertransactions/"
+		},
+		"Appsettings:OpenApi__DocVersion": {
+			"value": "1.0.0"
+		},
+		"Appsettings:OpenApi__Version": {
+			"value": "v4"
+		},
+		"Appsettings:OpenApi__TokenUrl": {
+			"value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+		},
+		"Appsettings:OpenApi__Scope": {
+			"value": "https://VirginAtlantic365.onmicrosoft.com/f1df1886-f232-49bd-a74d-cd3d5043b488/.default"
+		},
+		"Appsettings:OpenApi__ForceHttps": {
+			"value": "false"
+		},
+		"Appsettings:OpenApi__ForceHttp": {
+			"value": "true"
+		},
+
+		//redeemvoucher
+		"Appsettings:BlobConnStringForStatementTxt": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCUSTTRANSMS-Config-BlobConnStringForStatementTxt/)"
+		},
+		"Appsettings:ContainerNameForStatementTxt": {
+			"value": "transactionstatementtexts"
+		},
+		"Appsettings:BlobNameForStatementTxt": {
+			"value": "StatementTextValues.json"
+		},
+		"Appsettings:LoyaltyMemberMgmtStorageSASKey": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCUSTTRANSMS-Config-LoyaltyMemberMgmtStorageSASKey/)"
+		},
+		"Appsettings:VredServiceBusTopicName": {
+			"value": "vredeventmessages"
+		},
+		"Appsettings:VredCommandStatusLocation": {
+			"value": "https://digital.virginatlantic.com/vred/{0}/response/{1}"
+		},
+		"Appsettings:CacheExpiryHours": {
+			"value": "8"
+		},
+		"Appsettings:TransactionRecentWindowHours": {
+			"value": "1"
+		},
+		"Appsettings:VoucherMonitoringDurationMinutes": {
+			"value": "15"
+		},
+
+		"tags": {
+			"value": {
+				"InitialProjectCode": "375",
+				"InitialProjectName": "API Enterprise",
+				"InitialBudgetCode": "9320",
+				"ActiveStatus": "PROD",
+				"Purpose": "Support functions for the Customer API AFN",
+				"ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AVAPEUNAFNCUSTTRANSSMS\\\"\\\\]}\\\"\""
+			}
+		}
+	}
+}

@@ -1,0 +1,34 @@
+﻿###Request
+POST https://testresources.virginatlantic.com/dev/baggage/ConfirmBaggage HTTP/1.1
+
+$[?(@.paymentReferenceId == 'TestPaymentRefId123')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+
+{
+  "OriginAirportCode": "LHR",
+  "OriginAirportName": "London Heathrow Airport",
+  "DestinationAirportCode": "JFK",
+  "DestinationAirportName": "John F. Kennedy International Airport",
+  "PassengerList": [
+	{
+	  "FirstName": "John",
+	  "LastName": "Doe",
+	  "numberOfExtraBags": 0,
+      "bagAmount": 746.48,
+      "currencyCode": "XCD"
+	}
+	],
+  "TotalPaidAmount": "150.75",
+  "CurrencyCode": "GBP",
+  "CurrencySymbol": "£",
+  "DecimalPrecisionCount": "2",
+  "CheckInId": "CHK123456789"
+}

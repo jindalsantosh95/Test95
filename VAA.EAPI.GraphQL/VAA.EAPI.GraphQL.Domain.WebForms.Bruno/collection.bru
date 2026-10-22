@@ -1,0 +1,27 @@
+headers {
+  Ocp-Apim-Subscription-Key: {{ocp_apim_subscription_key}}
+}
+
+auth {
+  mode: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: https://login.microsoftonline.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/token
+  refresh_token_url:
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+  scope:
+  credentials_placement: body
+  credentials_id: credentials
+  token_source: access_token
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+auth:oauth2:additional_params:access_token_req:body {
+  resource: {{audience_id}}
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "functionappName": { "type": "string" },
+    "keyVaultName": { "type": "string" },
+    "environment": { "type": "string" }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2016-10-01",
+      "name": "[format('{0}/{1}', parameters('keyVaultName'), concat('functionappkey-', parameters('environment')))]",
+      "properties": {
+        "value": "[listkeys(concat(resourceId(resourceGroup().name, 'Microsoft.Web/sites', parameters('functionappName')), '/host/default'), '2018-11-01').functionKeys.default]"
+      }
+    }
+  ]
+}

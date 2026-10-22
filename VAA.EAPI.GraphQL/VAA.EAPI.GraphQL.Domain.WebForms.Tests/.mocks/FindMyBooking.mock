@@ -1,0 +1,70 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/sit/orderdata/findmybooking HTTP/1.1
+
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "BookingReference": "ABC123",
+    "BookingDate": "2026-01-01",
+    "Email": "john.doe@example.com",
+    "Passengers": [
+        {
+            "PassengerRef": "01.01",
+            "FirstName": "John",
+            "LastName": "Doe"
+        },
+        {
+	        "PassengerRef": "02.01",
+            "FirstName": "Jane",
+            "LastName": "Doe"
+        }        
+    ],
+    "Flights": [
+        {
+            "FlightDate": "2026-03-01",
+            "FlightNumber": 1
+        },
+        {
+            "FlightDate": "2026-03-05",
+            "FlightNumber": 2
+        }
+    ],
+    "Tickets": [
+        {
+            "TicketNumber": "1234567890",
+            "PassengerRef": "01.01",
+            "FlightDate": "2026-03-01",
+            "FlightNumber": 1,
+            "CouponNumber": 1
+        },
+        {
+            "TicketNumber": "1234567890",
+            "PassengerRef": "01.01",
+            "FlightDate": "2026-03-05",
+            "FlightNumber": 2,
+            "CouponNumber": 2
+        },
+        {
+            "TicketNumber": "0987654321",
+            "PassengerRef": "02.01",
+            "FlightDate": "2026-03-01",
+            "FlightNumber": 1,
+            "CouponNumber": 1
+        },
+        {
+            "TicketNumber": "0987654321",
+            "PassengerRef": "02.01",
+            "FlightDate": "2026-03-05",
+            "FlightNumber": 2,
+            "CouponNumber": 2
+        }
+       
+    ]
+}

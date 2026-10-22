@@ -1,0 +1,57 @@
+﻿###Request
+POST https://tempuri.org/meals/add HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "OrderId":"Order123",
+  "OrderStatus": "Ok",
+  "RecordLocator": "PNR123",
+  "Segments": [
+    {
+      "FlightDate": "2025-12-15",
+      "SegmentId": "SEG001",
+      "FlightNumber": {
+        "AirlineCode": "VS",
+        "Number": 302
+      },
+      "Passengers": [
+        {
+          "PassengerId": "PAX001",
+          "FirstName": "John",
+          "LastName": "Doe",
+          "FrequentFlyerNumber": "FF123456",         
+          "Meals": [
+            {
+              "Code": "VGML",
+              "Description": "Vegetarian Meal"
+            },
+            {
+              "Code": "AVML",
+              "Description": "Asian Vegetarian Meal"
+            }
+          ]
+        },
+        {
+          "PassengerId": "PAX002",
+          "FirstName": "Jane",
+          "LastName": "Smith",
+          "FrequentFlyerNumber": "FF654321",        
+          "Meals": [
+            {
+              "Code": "CHML",
+              "Description": "Child Meal"
+            },
+            {
+              "Code": "BBML",
+              "Description": "Baby Meal"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

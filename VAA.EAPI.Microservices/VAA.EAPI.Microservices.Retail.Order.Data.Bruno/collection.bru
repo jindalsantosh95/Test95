@@ -1,0 +1,42 @@
+meta {
+  name: Retail Order Data Microservice
+}
+
+headers {
+  Accept: application/json
+  x-correlation-id: VS-OrderData-Bruno-{{$guid}}
+  api-channel: Bruno
+  ~Authorization: Bearer {{access_token}}
+  ~Ocp-Apim-Subscription-Key: {{apim_subscription_key}}
+}
+
+auth {
+  mode: none
+}
+
+vars {
+  order_data_base_url: http://localhost:7071/api
+  order_id: replace-with-order-id
+  pnr: ABC123
+  first_name: Jane
+  last_name: Doe
+  flying_club_number: 1234567890
+  email: jane.doe@example.com
+  phone_number: 7000000000
+  creation_date_from: 2026-09-04T00:00:00Z
+  creation_date_to: 2026-09-05T00:00:00Z
+  last_modified_date_from: 2026-09-04T00:00:00Z
+  last_modified_date_to: 2026-09-05T00:00:00Z
+  order_cancellation_date: 2026-09-04
+  payment_status: Paid
+  travel_date_from: 2026-09-04T00:00:00Z
+}
+
+vars:secret [
+  access_token,
+  apim_subscription_key
+]
+
+docs {
+  Replace placeholder booking and customer values with approved non-production test data. Enable the Authorization and APIM headers only when required. Update Order Document publishes a state-changing event; retrieve the complete order first and verify the selected environment before sending it.
+}

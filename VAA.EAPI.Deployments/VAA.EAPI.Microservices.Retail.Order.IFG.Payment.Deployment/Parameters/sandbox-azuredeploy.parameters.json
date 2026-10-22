@@ -1,0 +1,144 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sandbox",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "SANDBOX"
+    },
+    "AppServicePlanName": {
+      "value": "avaieunasp001"
+    },
+    "appName": {
+      "value": "AVAIEUNAFNIFGPAYMENTMS"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-i-eun-ase-001"
+    },
+    "aseName": {
+      "value": "avaieunase001"
+    },
+    "keyVaultName": {
+      "value": "avaieunkv001"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "AVAIEUNAFNIFGPAYMENTMS",
+        "DOMAIN": "IFG",
+        "ENVIRONMENT": "SANDBOX",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "appinsightname": {
+      "value": "AVAIEUNAIIFGPAYMENTMS"
+    },
+    "storageaccountName": {
+      "value": "avaieunsaifgpayment"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "IFGAuthorizeRequestUrl": {
+      "value": "https://snb.ifg.iata.org/main/v4/payment/authorize"
+    },
+    "IFGOrderRequestUrl": {
+      "value": "https://snb.ifg.iata.org/main/v4/order"
+    },
+    "IFGExchangeRequestUrl": {
+      "value": "https://snb.ifg.iata.org/main/v4/payment/orderExchange"
+    },
+    "IFGRefundRequestUrl": {
+      "value": "https://snb.ifg.iata.org/main/v4/payment/orderRefund"
+    },
+    "IFGAuthorizeCancelRequestUrl": {
+      "value": "https://snb.ifg.iata.org/main/v4/payment/authorizeCancel"
+    },
+    "IFGUsername": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNIFGPAYMENTMS-Config-IFGUsername)"
+    },
+    "IFGPassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNIFGPAYMENTMS-Config-IFGPassword)"
+    },
+    "OrderApiRetryCount": {
+      "value": "3"
+    },
+    "OrderRetryDelayMilliseconds": {
+      "value": "1000"
+    },
+    "IFGEnvironment": {
+      "value": "SANDBOX"
+    },
+    "IfgAdditionalFieldsEnabled": {
+      "value": "true"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+
+    "AppSetting:OpenApi__Description": {
+      "value": "This API provides ability to perform cash payment"
+    },
+    "AppSetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "AppSetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "AppSetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "AppSetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "AppSetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "AppSetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "AppSetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "KeyVaultUri": {
+      "value": "https://avaieunkv001.vault.azure.net/"
+    },
+    "vaultName": {
+      "value": "avaieunkv001"
+    },
+    "WEBSITE_DNS_SERVER_SANDBOX": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "WEBSITE_DNS_ALT_SERVER_SANDBOX": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server)"
+    },
+    "workspacename": {
+      "value": "avaieunlaweapi"
+    }
+  }
+}

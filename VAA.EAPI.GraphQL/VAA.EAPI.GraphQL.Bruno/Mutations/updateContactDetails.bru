@@ -1,0 +1,31 @@
+meta {
+  name: updateContactDetails
+  type: graphql
+  seq: 41
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation updateContactDetails($updateContactDetailsRequest: ContactUpdateRequestInput) {
+    updateContactDetails(updateContactDetailsRequest: $updateContactDetailsRequest) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "updateContactDetailsRequest": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

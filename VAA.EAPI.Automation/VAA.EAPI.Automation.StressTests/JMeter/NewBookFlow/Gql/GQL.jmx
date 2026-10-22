@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="GQL Offer Load Test">
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="GQL Offer - 1st">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">5</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GQL - LHR &gt; LOS">
+          <stringProp name="HTTPSampler.path">https://${URL}${Environment}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;pqId&quot;:&quot;searchOffersBFF&quot;,&quot;variables&quot;:{&quot;request&quot;:{&quot;flightSearchRequest&quot;:{&quot;searchOriginDestinations&quot;:[{&quot;origin&quot;:&quot;LHR&quot;,&quot;destination&quot;:&quot;LOS&quot;,&quot;departureDate&quot;:&quot;${RandomDate}&quot;}],&quot;bundleOffer&quot;:false,&quot;flexiDateSearch&quot;:false,&quot;calendarSearch&quot;:false,&quot;nonStopOnly&quot;:false,&quot;refundableOnly&quot;:false,&quot;checkInBaggageAllowance&quot;:true,&quot;carryOnBaggageAllowance&quot;:true,&quot;awardSearch&quot;:false,&quot;offerID&quot;:&quot;&quot;,&quot;currentTripIndexId&quot;:&quot;0&quot;,&quot;cabinTypes&quot;:[],&quot;fareFamilies&quot;:[]},&quot;customerDetails&quot;:[{&quot;custId&quot;:&quot;ADULT_1&quot;,&quot;ptc&quot;:&quot;ADT&quot;},{&quot;custId&quot;:&quot;ADULT_2&quot;,&quot;ptc&quot;:&quot;ADT&quot;},{&quot;custId&quot;:&quot;YOUNG_1&quot;,&quot;ptc&quot;:&quot;GBE&quot;},{&quot;custId&quot;:&quot;CHILD_1&quot;,&quot;ptc&quot;:&quot;CNN&quot;},{&quot;custId&quot;:&quot;INFANT_1&quot;,&quot;ptc&quot;:&quot;INF&quot;}]}}}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="GQL Offer - 2nd">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">5</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GQL - MAN &gt; MCO">
+          <stringProp name="HTTPSampler.path">https://${URL}${Environment}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;pqId&quot;:&quot;searchOffersBFF&quot;,&quot;variables&quot;:{&quot;request&quot;:{&quot;flightSearchRequest&quot;:{&quot;searchOriginDestinations&quot;:[{&quot;origin&quot;:&quot;LHR&quot;,&quot;destination&quot;:&quot;MCO&quot;,&quot;departureDate&quot;:&quot;${RandomDate}&quot;}],&quot;bundleOffer&quot;:false,&quot;flexiDateSearch&quot;:false,&quot;calendarSearch&quot;:false,&quot;nonStopOnly&quot;:false,&quot;refundableOnly&quot;:false,&quot;checkInBaggageAllowance&quot;:true,&quot;carryOnBaggageAllowance&quot;:true,&quot;awardSearch&quot;:false,&quot;offerID&quot;:&quot;&quot;,&quot;currentTripIndexId&quot;:&quot;0&quot;,&quot;cabinTypes&quot;:[],&quot;fareFamilies&quot;:[]},&quot;customerDetails&quot;:[{&quot;custId&quot;:&quot;ADULT_1&quot;,&quot;ptc&quot;:&quot;ADT&quot;},{&quot;custId&quot;:&quot;ADULT_2&quot;,&quot;ptc&quot;:&quot;ADT&quot;},{&quot;custId&quot;:&quot;YOUNG_1&quot;,&quot;ptc&quot;:&quot;GBE&quot;},{&quot;custId&quot;:&quot;CHILD_1&quot;,&quot;ptc&quot;:&quot;CNN&quot;},{&quot;custId&quot;:&quot;INFANT_1&quot;,&quot;ptc&quot;:&quot;INF&quot;}]}}}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="GQL Offer - 3rd">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">5</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GQL - LHR &gt; SEA">
+          <stringProp name="HTTPSampler.path">https://${URL}${Environment}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;pqId&quot;:&quot;searchOffersBFF&quot;,&quot;variables&quot;:{&quot;request&quot;:{&quot;flightSearchRequest&quot;:{&quot;searchOriginDestinations&quot;:[{&quot;origin&quot;:&quot;LHR&quot;,&quot;destination&quot;:&quot;SEA&quot;,&quot;departureDate&quot;:&quot;${RandomDate}&quot;}],&quot;bundleOffer&quot;:false,&quot;flexiDateSearch&quot;:false,&quot;calendarSearch&quot;:false,&quot;nonStopOnly&quot;:false,&quot;refundableOnly&quot;:false,&quot;checkInBaggageAllowance&quot;:true,&quot;carryOnBaggageAllowance&quot;:true,&quot;awardSearch&quot;:false,&quot;offerID&quot;:&quot;&quot;,&quot;currentTripIndexId&quot;:&quot;0&quot;,&quot;cabinTypes&quot;:[],&quot;fareFamilies&quot;:[]},&quot;customerDetails&quot;:[{&quot;custId&quot;:&quot;ADULT_1&quot;,&quot;ptc&quot;:&quot;ADT&quot;},{&quot;custId&quot;:&quot;ADULT_2&quot;,&quot;ptc&quot;:&quot;ADT&quot;},{&quot;custId&quot;:&quot;YOUNG_1&quot;,&quot;ptc&quot;:&quot;GBE&quot;},{&quot;custId&quot;:&quot;CHILD_1&quot;,&quot;ptc&quot;:&quot;CNN&quot;},{&quot;custId&quot;:&quot;INFANT_1&quot;,&quot;ptc&quot;:&quot;INF&quot;}]}}}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="GQL Offer - 4th">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">5</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GQL - LHR &gt; SFO">
+          <stringProp name="HTTPSampler.path">https://${URL}${Environment}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;pqId&quot;:&quot;searchOffersBFF&quot;,&quot;variables&quot;:{&quot;request&quot;:{&quot;flightSearchRequest&quot;:{&quot;searchOriginDestinations&quot;:[{&quot;origin&quot;:&quot;LHR&quot;,&quot;destination&quot;:&quot;SFO&quot;,&quot;departureDate&quot;:&quot;${RandomDate}&quot;}],&quot;bundleOffer&quot;:false,&quot;flexiDateSearch&quot;:false,&quot;calendarSearch&quot;:false,&quot;nonStopOnly&quot;:false,&quot;refundableOnly&quot;:false,&quot;checkInBaggageAllowance&quot;:true,&quot;carryOnBaggageAllowance&quot;:true,&quot;awardSearch&quot;:false,&quot;offerID&quot;:&quot;&quot;,&quot;currentTripIndexId&quot;:&quot;0&quot;,&quot;cabinTypes&quot;:[],&quot;fareFamilies&quot;:[]},&quot;customerDetails&quot;:[{&quot;custId&quot;:&quot;ADULT_1&quot;,&quot;ptc&quot;:&quot;ADT&quot;},{&quot;custId&quot;:&quot;ADULT_2&quot;,&quot;ptc&quot;:&quot;ADT&quot;},{&quot;custId&quot;:&quot;YOUNG_1&quot;,&quot;ptc&quot;:&quot;GBE&quot;},{&quot;custId&quot;:&quot;CHILD_1&quot;,&quot;ptc&quot;:&quot;CNN&quot;},{&quot;custId&quot;:&quot;INFANT_1&quot;,&quot;ptc&quot;:&quot;INF&quot;}]}}}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="GQL Offer - 5th">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">5</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GQL - LHR &gt; MIA">
+          <stringProp name="HTTPSampler.path">https://${URL}${Environment}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;pqId&quot;:&quot;searchOffersBFF&quot;,&quot;variables&quot;:{&quot;request&quot;:{&quot;flightSearchRequest&quot;:{&quot;searchOriginDestinations&quot;:[{&quot;origin&quot;:&quot;LHR&quot;,&quot;destination&quot;:&quot;MIA&quot;,&quot;departureDate&quot;:&quot;${RandomDate}&quot;}],&quot;bundleOffer&quot;:false,&quot;flexiDateSearch&quot;:false,&quot;calendarSearch&quot;:false,&quot;nonStopOnly&quot;:false,&quot;refundableOnly&quot;:false,&quot;checkInBaggageAllowance&quot;:true,&quot;carryOnBaggageAllowance&quot;:true,&quot;awardSearch&quot;:false,&quot;offerID&quot;:&quot;&quot;,&quot;currentTripIndexId&quot;:&quot;0&quot;,&quot;cabinTypes&quot;:[],&quot;fareFamilies&quot;:[]},&quot;customerDetails&quot;:[{&quot;custId&quot;:&quot;ADULT_1&quot;,&quot;ptc&quot;:&quot;ADT&quot;},{&quot;custId&quot;:&quot;ADULT_2&quot;,&quot;ptc&quot;:&quot;ADT&quot;},{&quot;custId&quot;:&quot;YOUNG_1&quot;,&quot;ptc&quot;:&quot;GBE&quot;},{&quot;custId&quot;:&quot;CHILD_1&quot;,&quot;ptc&quot;:&quot;CNN&quot;},{&quot;custId&quot;:&quot;INFANT_1&quot;,&quot;ptc&quot;:&quot;INF&quot;}]}}}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+      </hashTree>
+      <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+        <stringProp name="cacheKey">true</stringProp>
+        <stringProp name="filename"></stringProp>
+        <stringProp name="parameters"></stringProp>
+        <stringProp name="script">import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Random
+
+// Generate a random date starting from a month from now
+Calendar calendar = Calendar.getInstance()
+calendar.add(Calendar.MONTH, 1) // Start from a month from now
+calendar.add(Calendar.DAY_OF_YEAR, new Random().nextInt(30)) // Add random number of days up to 30 days
+String randomDate = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;).format(calendar.getTime())
+
+// Generate a random date 2 weeks later
+Calendar calendarPlusTwoWeeks = Calendar.getInstance()
+calendarPlusTwoWeeks.setTime(calendar.getTime()) // Set to the same date as randomDate
+calendarPlusTwoWeeks.add(Calendar.DAY_OF_YEAR, 14) // Add 14 days (2 weeks)
+String randomDatePlusTwoWeeks = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;).format(calendarPlusTwoWeeks.getTime())
+
+// Set the generated random dates as JMeter variables
+vars.put(&quot;RandomDate&quot;, randomDate)
+vars.put(&quot;RandomDatePlusTwoWeeks&quot;, randomDatePlusTwoWeeks)</stringProp>
+        <stringProp name="scriptLanguage">groovy</stringProp>
+      </JSR223PreProcessor>
+      <hashTree/>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="EnvironmentVariables">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="URL" elementType="Argument">
+            <stringProp name="Argument.name">URL</stringProp>
+            <stringProp name="Argument.value">testresources.virginatlantic.com/</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="Environment" elementType="Argument">
+            <stringProp name="Argument.name">Environment</stringProp>
+            <stringProp name="Argument.value">uat/graphql/search/public</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

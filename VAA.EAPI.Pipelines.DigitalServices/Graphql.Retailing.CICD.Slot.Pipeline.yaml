@@ -1,0 +1,167 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Retailing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Retailing.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Retailing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Retailing.bruno
+
+variables: 
+  
+  - group: Digital_Variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: Graphql_Stitch
+  - name: agentPool
+    value: 'Azure Pipelines' 
+  - name: agentPool1
+    value: 'LoyaltySystems'  
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.GraphQL'  
+  - name: subRootPath
+    value: 'VAA.EAPI.GraphQL'  
+  - name: slotName
+    value: 'DS' 
+  - name: applicationName
+    value: 'Retailing'
+  - name: microserviceName
+    value: 'Retailing' 
+  - name: productId
+    value: 'Graphql-Retailing' 
+  - name: apimurlname
+    value: 'Retailing'            
+  - name: functionAppName_DEV
+    value: 'va-dv-eun-gqlretailing-fn-01' 
+  - name: functionAppName_SIT
+    value: 'va-ts-eun-gqlretailing-fn-01'
+  - name: functionAppName_UAT
+    value: 'va-tu-eun-gqlretailing-fn-01'
+  - name: functionAppName_PROD
+    value: 'va-pr-eun-gqlretailing-fn-01'
+  - name: functionAppName_DEV_Secure
+    value: 'va-dv-eun-gqlretailings-fn-01' 
+  - name: functionAppName_SIT_Secure
+    value: 'va-ts-eun-gqlretailings-fn-01'
+  - name: functionAppName_UAT_Secure
+    value: 'va-tu-eun-gqlretailings-fn-01'
+  - name: functionAppName_PROD_Secure
+    value: 'va-pr-eun-gqlretailings-fn-01'
+
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions_digital/build_graphql_retailing.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupName_Omnevo_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_Omnevo_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_Omnevo_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_Omnevo_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)  
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_Prod: $(subscriptionId_Prod)
+
+
+  # CD (Deployment) Pipeline
+  - template: functions_digital/release_graphql_retailing_slot.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_deployment: $(agentPool1)      
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      buildConfiguration: $(buildConfiguration)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)    
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_Prod: $(subscriptionId_Prod) 
+      resourceGroupName_DEV: $(resourceGroupName_Omnevo_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_Omnevo_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_Omnevo_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_Omnevo_PROD)
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_PROD: $(functionAppName_PROD)
+      functionAppName_DEV_Secure: $(functionAppName_DEV_Secure)
+      functionAppName_SIT_Secure: $(functionAppName_SIT_Secure)
+      functionAppName_UAT_Secure: $(functionAppName_UAT_Secure)
+      functionAppName_PROD_Secure: $(functionAppName_PROD_Secure)
+      AppInsightsName_DT5: $(AppInsightsName_DT5)
+      storageAccountName_DT5: $(storageAccountName_DT5)
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)
+      workspaceResourceId: $(workspaceResourceId)
+      workspaceResourceId_prod: $(workspaceResourceId_prod)
+      asename: $(asename)
+      asename_prod: $(asename_prod)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)
+      AppInsightsName_DEV: $(AppInsightsName_Retailing_DEV)
+      AppInsightsName_SIT: $(AppInsightsName_Retailing_SIT)
+      AppInsightsName_UAT: $(AppInsightsName_Retailing_UAT)
+      AppInsightsName_PROD: $(AppInsightsName_Retailing_PROD)
+      storageAccountName_DEV: $(storageAccountName_Retailing_DEV)
+      storageAccountName_SIT: $(storageAccountName_Retailing_SIT)
+      storageAccountName_UAT: $(storageAccountName_Retailing_UAT)
+      storageAccountName_PROD: $(storageAccountName_Retailing_PROD)
+      AppInsightsName_Secure_DEV: $(AppInsightsName_Retailing_DEV)
+      AppInsightsName_Secure_SIT: $(AppInsightsName_Retailing_SIT)
+      AppInsightsName_Secure_UAT: $(AppInsightsName_Retailing_UAT)
+      AppInsightsName_Secure_PROD: $(AppInsightsName_Retailing_PROD)
+      storageAccountName_Secure_DEV: $(storageAccountName_Retailing_Secure_DEV)
+      storageAccountName_Secure_SIT: $(storageAccountName_Retailing_Secure_SIT)
+      storageAccountName_Secure_UAT: $(storageAccountName_Retailing_Secure_UAT)
+      storageAccountName_Secure_PROD: $(storageAccountName_Retailing_Secure_PROD)
+      KeyvaultName_Retailing_DEV: $(KeyvaultName_Retailing_DEV)
+      KeyvaultName_Retailing_SIT: $(KeyvaultName_Retailing_SIT)
+      KeyvaultName_Retailing_UAT: $(KeyvaultName_Retailing_UAT)
+      KeyvaultName_Retailing_PROD: $(KeyvaultName_Retailing_PROD)
+      VARIABLE_GROUP_NAME_SCHEMA: "SchemaValidation_DEV"
+      SLACK_API_TOKEN: $(SLACK_API_TOKEN)
+      SLACK_TITLE: $(SLACK_TITLE_RETAILING)
+    

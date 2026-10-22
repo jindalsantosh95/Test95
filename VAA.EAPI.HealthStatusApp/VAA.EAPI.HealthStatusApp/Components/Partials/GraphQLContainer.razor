@@ -1,0 +1,52 @@
+<div class="card">
+    <div class="card-header">
+        GraphQL
+    </div>
+    <div class="card-body">
+        <div class="containergraphql">
+            @foreach(var item in Items)
+            {
+                <div class="itemgraphql">
+                    <i class="@GetIconClass(item.Key)"></i>
+                    <h5>@item.Value</h5>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Dictionary<string, bool> Services { get; set; }
+
+    private Dictionary<string, string> Items = new Dictionary<string, string>
+    {
+        { "main", "Main" },
+        { "search", "Search" },
+        { "book", "Book" },
+        { "loyalty", "Loyalty" },
+        { "myaccount", "MyAccount"},
+        { "operations", "Operations" }
+    };
+
+    private string GetIconClass(string itemkey)
+    {
+        if (Services != null)
+        {
+            foreach (var service in Services)
+            {
+                if (service.Key.Contains(itemkey, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (service.Value)
+                    {
+                        return "bi bi-check-circle";
+                    }
+                    else
+                    {
+                        return "bi bi-x-circle-fill";
+                    }
+                }
+            }
+        }
+        return "bi bi-dash-circle";
+    }
+}

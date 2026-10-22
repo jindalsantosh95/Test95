@@ -1,0 +1,56 @@
+meta {
+  name: Inflight Enrol Customer
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation InflightEnrolCustomer {
+    inflightEnrolCustomer(
+      request: {
+        channelId: "{{account_channel_id}}"
+        channelUserId: "{{account_channel_user_id}}"
+        enrolmentToken: "{{account_enrolment_token}}"
+        customerDetails: {
+          firstName: "{{account_first_name}}"
+          lastName: "{{account_last_name}}"
+          customerType: Loyalty
+          enrollmentChannel: "{{account_enrolment_channel}}"
+          contactDetails: {
+            emailDetails: [
+              {
+                usage: Personal
+                emailId: "{{account_email}}"
+                preferredFlag: "Y"
+              }
+            ]
+          }
+          loyaltyMember: {
+            programName: VirginAtlanticFlyingClub
+            memberType: "Individual"
+            mediaCode: "{{account_media_code}}"
+            enrollmentChannel: "{{account_enrolment_channel}}"
+            termsAndConditionsAccepted: true
+          }
+          preferences: [
+            {
+              preferenceType: VaaMarketingPermissions
+              preferenceValue: "Y"
+            }
+          ]
+        }
+      }
+    )
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,258 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "ServerFarmIdRg": {
+      "type": "string"
+    },
+    "FunctionAppName": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "AppsettingAppInsightsKey": {
+      "type": "string"
+    },
+    "AppsettingAzureWebJobStorage": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "Object"
+    },
+    "appsettingAzureADEndpoint": {
+      "type": "string"
+    },
+    "appsettingB2CAppId": {
+      "type": "string"
+    },
+    "appsettingEnrolmentApiBaseURL": {
+      "type": "string"
+    },
+    "appsettingEnrolmentApiURI": {
+      "type": "string"
+    },
+    "appsettingEnrolmentClientID": {
+      "type": "string"
+    },
+    "appsettingEnrolmentClientSecretValue": {
+      "type": "string"
+    },
+    "appsettingEnrolmentResource": {
+      "type": "string"
+    },
+    "appsettingEnrolmentSubscriptionNameValue": {
+      "type": "string"
+    }
+
+  },
+  "variables": {
+    "ResourceLocation": "[resourceGroup().location]",
+    "SiteResourceID": "[resourceId('Microsoft.Web/Sites', parameters('FunctionAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('FunctionAppName')]",
+      "location": "[variables('ResourceLocation')]",
+      "kind": "functionapp",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('FunctionAppName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('FunctionAppName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId(parameters('ServerFarmIdRg'), 'Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet-isolated"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[parameters('AppsettingAppInsightsKey')]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[parameters('AppsettingAzureWebJobStorage')]"
+            },
+            {
+              "name": "AzureADEndpoint",
+              "value": "[parameters('appsettingAzureADEndpoint')]"
+            },
+            {
+              "name": "B2CAppId",
+              "value": "[parameters('appsettingB2CAppId')]"
+            },
+            {
+              "name": "EnrolmentApiBaseURL",
+              "value": "[parameters('appsettingEnrolmentApiBaseURL')]"
+            },
+            {
+              "name": "EnrolmentApiURI",
+              "value": "[parameters('appsettingEnrolmentApiURI')]"
+            },
+            {
+              "name": "EnrolmentClientID",
+              "value": "[parameters('appsettingEnrolmentClientID')]"
+            },
+            {
+              "name": "EnrolmentClientSecretValue",
+              "value": "[parameters('appsettingEnrolmentClientSecretValue')]"
+            },
+            {
+              "name": "EnrolmentResource",
+              "value": "[parameters('appsettingEnrolmentResource')]"
+            },
+            {
+              "name": "EnrolmentSubscriptionNameValue",
+              "value": "[parameters('appsettingEnrolmentSubscriptionNameValue')]"
+            }
+          ]
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/web')]",
+      "location": "North Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$[parameters('FunctionAppName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": true,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": false
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "reservedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/', parameters('FunctionAppName'), '.azurewebsites.net')]",
+      "location": "North Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+      ],
+      "properties": {
+        "siteName": "[parameters('FunctionAppName')]",
+        "hostNameType": "Verified"
+      }
+    },
+    {
+      "type": "microsoft.insights/components",
+      "kind": "web",
+      "name": "[parameters('AppInsightsName')]",
+      "apiVersion": "2015-05-01",
+      "location": "[Variables('ResourceLocation')]",
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "applicationId": "[variables('SiteResourceID')]",
+        "Application_Type": "web"
+      },
+      "dependsOn": [ "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]" ]
+    }
+  ]
+}

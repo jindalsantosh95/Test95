@@ -1,0 +1,152 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avateunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Environment": "sit",
+        "Source": "csharp",
+        "Version": "",
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "SIT"
+    },
+    "FunctionAppName": {
+      "value": "avateunafnskylamswrapper"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-T-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVATEUNASPEAPI1"
+    },
+    "AppInsightsName": {
+      "value": "avateunaiskylamswrapper"
+    },
+    "vaultName": {
+      "value": "AVATEUNKVEMS"
+    },
+    "AppSetting:WEBSITE_CONTENTSHARE": {
+      "value": "avateunafnskylamswrapper"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    "IPRestriction": {
+      "value": ""
+    },
+    "AppSetting:AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avateunstskylamswrapper"
+    },
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    /*"Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },*/
+    "AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafnskylamswrapper-ClientID/)"
+    },
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafnskylamswrapper-ClientID/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafnskylamswrapper-TenantID/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "TicketOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafnskylamswrapper-TicketOcpKey/)"
+    },
+    "TicketUrl": {
+      "value": "https://Testresources.virginatlantic.com/sit/OrderTicketMicroservice/"
+    },
+    "OcpKeyHeader": {
+      "value": "Ocp-Apim-Subscription-Key"
+    },
+    "RetrieveTicketEndpoint": {
+      "value": "retrieve/ticket"
+    },
+    "AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafnskylamswrapper-TenantID/)"
+    },
+    "AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Lounge Management"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "Lounge Management lams skyteam ."
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "skylamswrapper",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "lams",
+        "ApplicationUsageIdList": "skylamswrapper"
+      }
+    }
+  }
+}

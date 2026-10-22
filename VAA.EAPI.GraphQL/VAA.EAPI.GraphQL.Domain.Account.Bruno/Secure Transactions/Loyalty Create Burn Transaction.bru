@@ -1,0 +1,39 @@
+meta {
+  name: Loyalty Create Burn Transaction
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_secure}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation LoyaltyCreateBurnTransaction {
+    loyaltyCreateBurnTransaction(
+      transactionRequest: {
+        points: {{transaction_points}}
+        orderId: "{{transaction_order_id}}"
+        activityDate: "{{transaction_activity_date}}"
+        channel: "{{account_channel_id}}"
+        comment: "{{transaction_burn_comment}}"
+        memberNumber: "{{account_member_number}}"
+      }
+    ) {
+      vaaTransactionId
+      orderId
+      errors {
+        code
+        message
+        errorSource
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,32 @@
+meta {
+  name: Loyalty Redeem Linking Proof
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{graphql_secure}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation LoyaltyRedeemLinkingProof {
+    loyaltyRedeemLinkingProof(
+      input: {
+        proof: "{{account_linking_proof}}"
+        transactionId: "{{account_linking_transaction_id}}"
+        clientId: "{{account_linking_client_id}}"
+        resource: "{{account_linking_resource}}"
+      }
+    ) {
+      flyingClubAccountNumber
+      consentSubject
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

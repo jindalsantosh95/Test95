@@ -1,0 +1,61 @@
+meta {
+  name: GetBoardingPass
+  type: graphql
+  seq: 21
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query GetBoardingPass($checkInId: String, $pnrLocator: String, $originCode: String) {
+    GetBoardingPass(checkInId: $checkInId, pnrLocator: $pnrLocator, originCode: $originCode) {
+      __typename
+      tripsBookingId
+      boardingPasses {
+        iosBoardingPassWalletLink
+        androidBoardingPassWalletLink
+        boardingPassAdaptiveLink
+        tierCode
+        tierName
+        operationalStatus {
+          type
+          subType
+          rebookEligible
+          isCleaned
+          information {
+            card {
+              title
+              lines
+            }
+            page {
+              title
+              nextActionText
+              sections {
+                heading
+                paragraphs
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "checkInId": "",
+    "pnrLocator": "",
+    "originCode": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

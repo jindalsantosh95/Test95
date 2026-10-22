@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".mocks\enrolment-success.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\enrolment-business-error.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\enrolment-error.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\oauth-token.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\pnr-link.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\pnr-link-not-found.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\pnr-link-missing-attribute.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\pnr-link-invalid-request.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\VAA.EAPI.Microservices\VAA.EAPI.Common\VAA.EAPI.Common.csproj" />
+    <ProjectReference Include="..\..\VAA.EAPI.Microservices\VAA.EAPI.Core.Functions\VAA.EAPI.Core.Functions.csproj" />
+    <ProjectReference Include="..\..\VAA.EAPI.Microservices\VAA.EAPI.Core.Xunit\VAA.EAPI.Core.Xunit.csproj" />
+    <ProjectReference Include="..\VAA.Facade.EnrolmentFacade\VAA.Facade.EnrolmentFacade.csproj" />
+    <ProjectReference Include="..\VAA.Facade.Test.Framework\VAA.Facade.Test.Framework.csproj" />
+  </ItemGroup>
+
+</Project>

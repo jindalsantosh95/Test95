@@ -1,0 +1,95 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBookingList HTTP/1.1
+
+$[?(@.bookingReference == '6996219')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "tripListResponse": [
+    {
+      "tripSearchRequest": {
+        "using": "HOLIDAYS",
+        "surname": "Walker",
+        "bookingReference": "6996219",
+        "dateOfBirth": "1988-11-29"
+      },
+      "tripDetails": {
+        "booking": {
+          "id": "6996219",
+          "status": "Confirmed",
+          "summary": {
+            "travelDates": {
+              "startDate": "2026-10-27T00:00:00",
+              "endDate": "2026-11-10T00:00:00"
+            }
+          },
+          "travellersComposition": {
+            "adultCount": 1,
+            "travellers": [
+              {
+                "firstName": "TestFirst NameThree",
+                "lastName": "Walker",
+                "leadTraveller": true,
+                "dateOfBirth": "1988-11-29T00:00:00"
+              }
+            ]
+          },
+          "holidayProducts": [
+            {
+              "summary": {
+                "productStatus": "CONFIRMED",
+                "name": "VS",
+                "travelDates": {
+                  "startDate": "2026-10-27T00:00:00",
+                  "endDate": "2026-11-10T00:00:00"
+                }
+              },
+              "flightDetails": {
+                "isBookingSourceAir4": true,
+                "airlineLocator": {
+                  "pnrLocator": "ETNWM4",
+                  "orderId": "ORDER-6996219"
+                },
+                "sectors": [
+                  {
+                    "origin": { "code": "LHR" },
+                    "destination": { "code": "LAX" },
+                    "scheduledDepartureLocal": "2026-10-27T11:20:00",
+                    "scheduledArrivalLocal": "2026-10-27T15:35:00",
+                    "segments": [
+                      {
+                        "operatingCarrier": { "flightNumber": "7", "carrierCode": "VS" },
+                        "marketingCarrier": { "flightNumber": "7", "carrierCode": "VS" },
+                        "scheduledDepartureLocal": "2026-10-27T11:20:00",
+                        "scheduledArrivalLocal": "2026-10-27T15:35:00",
+                        "origin": { "code": "LHR" },
+                        "destination": { "code": "LAX" },
+                        "legs": [
+                          {
+                            "operating": { "flightNumber": "7", "carrierCode": "VS" },
+                            "marketing": { "flightNumber": "7", "carrierCode": "VS" },
+                            "scheduledDepartureLocal": "2026-10-27T11:20:00",
+                            "scheduledArrivalLocal": "2026-10-27T15:35:00",
+                            "origin": { "code": "LHR" },
+                            "destination": { "code": "LAX" },
+                            "aircraft": { "subfleetCode": "351" }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "isAncillaryProduct": false,
+              "tbxProductId": "FLT"
+            }
+          ]
+        },
+        "status": 200
+      }
+    }
+  ]
+}

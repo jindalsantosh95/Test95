@@ -1,0 +1,33 @@
+meta {
+  name: accountEntraOtpValidation
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation accountEntraOtpValidation($request: EntraOtpValidationRequestInput) {
+    accountEntraOtpValidation(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {
+      "validationRequestType": "SIGNIN"
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

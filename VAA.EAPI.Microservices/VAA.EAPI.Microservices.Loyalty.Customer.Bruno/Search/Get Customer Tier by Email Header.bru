@@ -1,0 +1,20 @@
+meta {
+  name: Get Customer Tier by Email Header
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{customer_base_url}}/customerSearchByEmail
+  body: none
+  auth: inherit
+}
+
+headers {
+  CustEmail: {{customer_email}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

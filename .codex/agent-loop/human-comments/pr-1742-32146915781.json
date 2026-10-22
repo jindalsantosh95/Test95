@@ -1,0 +1,51 @@
+{
+  "prNumber": 1742,
+  "branch": "codex/holidays-document-token-diagram-clean",
+  "base": "main",
+  "headSha": "56557a05c7addb693338eb9c54b7f5621c7c72bc",
+  "runId": "32146915781",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/32146915781",
+  "collectedAtUtc": "2026-08-18T14:13:34.37Z",
+  "policy": {
+    "resolveHumanThreads": false,
+    "expectedDecisions": [
+      "agree",
+      "disagree",
+      "not-applicable"
+    ]
+  },
+  "comments": [
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6aIGb5",
+      "replyToCommentDatabaseId": 3804563266,
+      "author": "vaa-dimitris-dimitriou",
+      "body": "we shouldn't be doing this",
+      "path": "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Holidays/Properties/AssemblyInfo.cs",
+      "line": 3,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3804563266",
+      "decision": "agree",
+      "responseComment": "Agreed. The InternalsVisibleTo declaration exposed RetrieveDocumentService implementation helpers solely for direct test access. Removed the friend assembly declaration and restored the helpers to private; the existing controller-level test continues to cover rejection of a restricted loopback document target.",
+      "actionSummary": "Deleted Properties/AssemblyInfo.cs, changed IsMissingDocumentResponse and IsPrivateAddress from internal to private, and removed the white-box helper assertions from RetrieveDocumentDownloadContractTests while retaining the service-registration contract test and existing controller-level restricted-target coverage. The human review thread was left unresolved."
+    }
+  ],
+  "resourceUsage": {
+    "workflow": "sequence-goal-human-comment-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 1390624,
+      "inputTokens": 1386270,
+      "cachedInputTokens": 1338109,
+      "outputTokens": 4354,
+      "reasoningOutputTokens": 619,
+      "estimatedUsd": 2.015649
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "1,390,624 tokens (1,386,270 input, 1,338,109 cached + 4,354 output, 619 reasoning); $2.015649 USD"
+  }
+}

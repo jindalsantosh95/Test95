@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager Navigation
+
+<div class="speed-dial">
+    <div class="pie-d pie1"></div>
+    <div class="pie-d pie2"></div>
+    <div class="pie-d pie3"></div>
+</div>
+<div class="dial-needle animate-slider" style="--score:@Score"></div>
+
+@code {
+    [Parameter] public string Score { get; set; }
+}

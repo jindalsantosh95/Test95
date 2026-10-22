@@ -1,0 +1,47 @@
+info:
+  name: Save Passport
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{checkinms}}/TravelRequirements/SavePassport"
+  body:
+    type: json
+    data: |-
+      {
+          "requirementsId": "{{requirementsId}}",
+          "passengerId": "{{pax1_id}}",
+          "document": {
+              "givenNames": "{{pax1_givennames}}",
+              "surname": "{{pax1_surname}}",
+              "dateOfBirth": "{{pax1_DOB}}",
+              "gender": {
+              "code": "{{pax1_gender}}"
+              },
+              "documentNumber": "{{pax1_documentNumber}}",
+              "expirationDate": "{{pax1_docExpiryDate}}",
+              "issuingCountry": {
+              "code": "{{countryCode}}"
+              },
+              "nationality": {
+              "code": "{{countryCode}}"
+              },
+              "countryOfResidence": {
+              "code": "{{countryCode}}"
+              }
+          },
+          "isScanned": false
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: countryCode
+      value: GBR
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,65 @@
+meta {
+  name: Retrieve Household Account
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query RetrieveHouseHoldAccount {
+    retrieveHouseHoldAccount(
+      retrieveHHAccountRequest: {
+        memberType: Individual
+        houseHoldFcNumber: "{{account_member_number}}"
+      }
+    ) {
+      name
+      totalPoints
+      pageResponse
+      totalMemberandInviteesCount
+      leaderInfo {
+        firstName
+        lastName
+        fCNumber
+        totalPoints
+        tierCode
+      }
+      linkedMemberInfo {
+        firstName
+        lastName
+        fCNumber
+        totalPoints
+        tierCode
+        isYoungFlyer
+      }
+      otherLinkedMemberInfo {
+        firstName
+        lastName
+        totalPoints
+        tierCode
+        isYoungFlyer
+      }
+      inviteeInfo {
+        firstName
+        lastName
+        fCNumber
+        tierCode
+      }
+      inviterInfo {
+        firstName
+        lastName
+        fCNumber
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

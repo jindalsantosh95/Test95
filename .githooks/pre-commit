@@ -1,0 +1,78 @@
+#!/bin/sh
+# Harness engineering pre-commit hook.
+# Enable via: scripts/verify.ps1 -InstallHooks
+
+fail=0
+CPM_GUARD_CMD="central package management guard (no inline PackageReference Version= in staged .csproj)"
+PS_CMD="powershell"
+
+if command -v pwsh >/dev/null 2>&1; then
+    PS_CMD="pwsh"
+fi
+
+# Central package management guard:
+# A staged .csproj must not pin inline PackageReference Version=.
+for f in $(git diff --cached --name-only --diff-filter=d -- '*.csproj' | grep '\.csproj$'); do
+    if git show ":$f" | grep -qE '<PackageReference[^>]*[[:space:]]Version='; then
+        echo "pre-commit: $f pins inline PackageReference Version=; move versions to central package management"
+        fail=1
+    fi
+done
+
+# Knowledge repo update happens pre-commit so it is included in the same commit.
+verify_commands=$("$PS_CMD" -NoProfile -ExecutionPolicy Bypass -File "scripts/verify-staged.ps1" -SkipBuild -ListCommands 2>&1)
+verify_commands_exit=$?
+if [ "$verify_commands_exit" -ne 0 ]; then
+    echo "pre-commit: could not resolve staged verification commands"
+    echo "$verify_commands"
+    fail=1
+fi
+
+VALIDATION_CMD=""
+while IFS= read -r line; do
+    if [ -z "$line" ]; then
+        continue
+    fi
+
+    if [ -z "$VALIDATION_CMD" ]; then
+        VALIDATION_CMD="$line"
+    else
+        VALIDATION_CMD="$VALIDATION_CMD,$line"
+    fi
+done <<EOF
+$verify_commands
+EOF
+
+if [ -z "$VALIDATION_CMD" ]; then
+    VALIDATION_CMD="scripts/verify-staged.ps1 -SkipBuild"
+fi
+
+verify_output=$("$PS_CMD" -NoProfile -ExecutionPolicy Bypass -File "scripts/verify-staged.ps1" -SkipBuild 2>&1)
+verify_exit=$?
+if [ "$verify_exit" -ne 0 ]; then
+    echo "pre-commit: lightweight verify failed"
+    echo "$verify_output"
+    fail=1
+fi
+
+if [ "$fail" -eq 0 ]; then
+    knowledge_output=$("$PS_CMD" -NoProfile -ExecutionPolicy Bypass -File "scripts/update-knowledge-repo.ps1" -FromStaged -ValidationCommand "$CPM_GUARD_CMD,$VALIDATION_CMD" 2>&1)
+    knowledge_exit=$?
+    if [ "$knowledge_exit" -ne 0 ]; then
+        echo "pre-commit: knowledge repo update failed"
+        echo "$knowledge_output"
+        fail=1
+    fi
+fi
+
+if [ "$fail" -eq 0 ]; then
+    git add -- "docs/knowledge-repo.md" >/dev/null 2>&1 || fail=1
+fi
+
+if [ "$fail" -ne 0 ]; then
+    echo ""
+    echo "pre-commit checks failed. Fix the above, or bypass once with: git commit --no-verify"
+    exit 1
+fi
+
+exit 0

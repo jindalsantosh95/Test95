@@ -1,0 +1,270 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sandbox",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+			"value": "SANDBOX"
+		},
+		"AppServicePlanName": {
+			"value": "avaieunasp001"
+		},
+		"appName": {
+			"value": "Avaieunafnordersearchmicroserv"
+		},
+		"location": {
+			"value": "northeurope"
+		},
+		"aseRg": {
+			"value": "rg-va-i-eun-ase-001"
+		},
+		"aseName": {
+			"value": "avaieunase001"
+		},
+		"keyVaultName": {
+			"value": "avaieunkv001"
+		},
+		"tags": {
+			"value": {
+				"APPLICATION_NAME": "EAPINDC",
+				"DOMAIN": "NDC DEVELOPER",
+				"ENVIRONMENT": "DEV",
+				"BUDGETCODE": "",
+				"PROJECTCODE": "",
+				"DEPLOYMENT_CR": ""
+			}
+		},
+		"appinsightname": {
+			"value": "avaieunaiorder"
+		},
+		"appinsightkey": {
+			"value": "f0679053-89c4-4c05-9563-9f2f96b6443a"
+		},
+		"appinsight_string": {
+			"value": "InstrumentationKey=f0679053-89c4-4c05-9563-9f2f96b6443a;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+		},
+		"storageaccountName": {
+			"value": "avaieunstordersearchms"
+		},
+		//App settings
+		"AzureWebJobsStorage": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/avaieunstordersearchms-connectionstring)"
+		},
+		/*"WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": {
+          "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Avaieunafnordersearchmicroserv-Config-FileConnectionString/)"
+        },*/
+		"AzureWebJobsSecretStorageType": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Commong-Config-AzureWebJobsSecretStorageType/)"
+		},
+		"AzureAd:ClientId": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Avaieunafnordersearchmicroserv-Config-Client-ID/)"
+		},
+		"AzureAd:Instance": {
+			"value": "https://login.microsoftonline.com"
+		},
+		"AzureAd:TenantId": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+		},
+		"AzureAd:TokenV1Issuer": {
+			"value": "https://sts.windows.net"
+		},
+		"CabinTypeTableName": {
+			"value": "CabinTypeData"
+		},
+		"AmenitiesTableName": {
+			"value": "Amenities"
+		},
+		"OpenApi__Scope": {
+			"value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+		},
+		"OpenApi__TokenUrl": {
+			"value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+		},
+		"OpenApi__DocTitle": {
+			"value": "Enterprise API-Order Search Microservice"
+		},
+		"OpenApi__Description": {
+			"value": "This API provides ability to Search information of an Order&apos"
+		},
+		"OpenApi__DocVersion": {
+			"value": "1.0.0"
+		},
+		"OpenApi__Version": {
+			"value": "v3"
+		},
+		"OpenApi__ForceHttps": {
+			"value": true
+		},
+		"OpenApi__ForceHttp": {
+			"value": true
+		},
+		"MockOrderSearchResponse": {
+			"value": false
+		},
+		"AgentCityCode": {
+			"value": "LON"
+		},
+		"Air4PnrCommonEndPoint": {
+			"value": "https://webservices.vs01.vs.air4.com:31063/pnrcommon/v6"
+		},
+		"TicketingProcessV3EndPoint": {
+			"value": "https://webservices.vs01.vs.air4.com:37531/ticketingprocess/v3"
+		},
+		"Air4PassengerV4EndPoint": {
+			"value": "https://webservices.vs01.vs.air4.com:31057/passenger/v4"
+		},
+		"ApplicationId": {
+			"value": "ND"
+		},
+		"DeltaCertificateName": {
+			"value": "NdcDLSoaCertificate"
+		},
+		"PoolType": {
+			"value": "STAMPING/VAA/NEW/DIST/CAPABILITY"
+		},
+		"RoleIndicator": {
+			"value": "RESNDCSALES"
+		},
+		"SecurityId": {
+			"value": "D027954"
+		},
+		"TestLab": {
+			"value": "TVTH"
+		},
+		"OptionNumberForDisplayRequest": {
+			"value": "1"
+		},
+		"ProvideResidualValue": {
+			"value": "N"
+		},
+		"TrustedSource": {
+			"value": "Y"
+		},
+		"ReferenceDataMicroServiceDBKey": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/avaieunstordersearchms-connectionstring)"
+		},
+		"ServiceBusConnectionString": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/avaieunordersb001-ServiceBus-ConnectionString/)"
+		},
+		"ReferenceDataTableName": {
+			"value": "AirportLocation"
+		},
+		"AirCraftDataTableName": {
+			"value": "AircraftInstrumentDetails"
+		},
+		"ProductCodeTableName": {
+			"value": "ProductCode"
+		},
+		"StatusCodeTableName": {
+			"value": "StatusCode"
+		},
+		"CommonCachingSlidingExpirationInDay": {
+			"value": "1"
+		},
+		"CommonCachingAbsoluteExpirationInDay": {
+			"value": "1"
+		},
+		"RefDatabaseID": {
+			"value": "https://database.windows.net/.default"
+		},
+		"OrderDBEndpoint": {
+			"value": "https://avadeunscvcmdbsql.documents.azure.com:443/" //same value as UAT
+		},
+		"DatabaseName": {
+			"value": "OrderDB" //Order DB in UAT
+		},
+		"OrdersCollection": {
+			"value": "OrdersCollection"
+		},
+		"SCVRefDBConnString": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Avaieunafnordersearchmicroserv-Config-SCVRefDBConnString/)"
+		},
+		"CosmosSqlDBConnectionMode": {
+			"value": "Direct"
+		},
+		"RFICTableName": {
+			"value": "RFIC"
+		},
+		"DurationFormat": {
+			"value": "HH:MM"
+		},
+		/*"WEBSITE_CONTENTSHARE": {
+          "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/avaieunafnordersearchmicroserv-Config-WEBSITE-CONTENTSHARE/)"
+        },*/
+		"WEBSITE_LOAD_USER_PROFILE": {
+			"value": "1"
+		},
+		"AppChannelName": {
+			"value": "NDC"
+		},
+		"IPRestriction": {
+			"value": ""
+		},
+		"skuName": {
+			"value": "Standard_LRS"
+		},
+		"ResourceGroupSubscriptionId": {
+			"value": "https://avaieunkv001.vault.azure.net/secrets/Common-config-RGSubscription-Id/"
+		},
+		"actionGroupsServiceNow": {
+			"value": "ServiceNow"
+		},
+		"actionGroupsEAPISupport": {
+			"value": "EAPI.Support"
+		},
+		"emailAddressServiceNow": {
+			"value": "virginatlantictest@service-now.com"
+		},
+		"emailAddressEAPISupport": {
+			"value": "eapi.support@fly.virgin.com"
+		},
+		"CommonCachingSlidingExpirationTime": {
+			"value": "1.00:00:00"
+		},
+		"CommonCachingAbsoluteExpirationTime": {
+			"value": "1.00:00:00"
+		},
+		"DebugOptions": {
+			"value": "Y"
+		},
+		"HistoryOnFlag": {
+			"value": "Y"
+		},
+		"PrinterData": {
+			"value": "14450A"
+		},
+		"BrandAPIUrl": {
+			"value": "https://stage-pvt-apigateway.vs01.vs.air4.com/rm/shopping/v1/brands/products/segments/cos"
+		},
+		"BrandAPITokenUrl": {
+			"value": "https://stage-pvt-apigateway.vs01.vs.air4.com/v1/oauth/token"
+		},
+		"BrandAPITokenClientId": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNOFFERMICROSERV-Config-BrandAPITokenClientId/)"
+		},
+		"BrandAPITokenClientSecret": {
+			"value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNOFFERMICROSERV-Config-BrandAPITokenClientSecret/)"
+		},
+		"KeyVaulturi": {
+			"value": "https://avaieunkv001.vault.azure.net/"
+		}
+	}
+}

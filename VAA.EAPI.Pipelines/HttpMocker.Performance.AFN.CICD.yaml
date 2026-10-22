@@ -1,0 +1,72 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Utility.HttpMocker*
+    exclude:
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Utility.HttpMocker.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Utility.HttpMocker*
+    exclude:
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Utility.HttpMocker.bruno
+
+variables: 
+  - group: Common_Variables
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines'    
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release' 
+  - name: rootPath
+    value: 'VAA.EAPI.Automation' 
+  - name: subRootPath
+    value: 'VAA.EAPI.Automation'   
+  - name: applicationName
+    value: 'Utility.HttpMocker'    
+  - name: functionAppName_DEV
+    value: 'AVADEUNAFNHTTPMOCKER' 
+  - name: functionAppName_SIT
+    value: 'AVATEUNAFNHTTPMOCKER' 
+  - name: functionAppName_UAT
+    value: 'AVASEUNAFNHTTPMOCKER'   
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_performance.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      rootPath: $(rootPath)  
+      subRootPath: $(subRootPath)
+      applicationName: $(applicationName)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_performance.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)      
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)

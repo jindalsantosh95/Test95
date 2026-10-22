@@ -1,0 +1,153 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "UAT"
+    },
+    "AppServicePlanName": {
+      "value": "vatueunaspdigital03"
+    },
+    "functionappName": {
+      "value": "va-tu-eun-baggage-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-tu-eun-service-kv-01"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "Baggage Ms",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "UAT",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vatueunbaggagesa01"
+    },
+    "AppInsightsName": {
+      "value": "va-tu-eun-baggage-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    //swagger settings
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-Baggage Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This endpoint will provide Baggage information for flight operations"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "DeltaSsciEndpoint": {
+      "value": "https://stg.virginatlantic.com/PCCOciWeb/apiv2/auth"
+    },
+    "DeltaAir4TokenEndpoint": {
+      "value": "https://ssaasi.vs01.vs.air4.com/as/token.oauth2"
+    },
+    "DeltaClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-service-kv-01.vault.azure.net/secrets/vatueunbaggage-DeltaClientSecret/)"
+    },
+    "DeltaChannelValue": {
+      "value": "DFMOBILE"
+    },
+    "DeltaApiIdValue": {
+      "value": "D2"
+    },
+    "DeltaClientIdValue": {
+      "value": "VAMobileAppAIR4_CC_SI"
+    },
+    "BlobStorageUri": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-service-kv-01.vault.azure.net/secrets/BlobStorageUri/)"
+    },
+    "ContainerName": {
+      "value": "baggagedata"
+    },
+    "SasKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-service-kv-01.vault.azure.net/secrets/BlobSasKey/)"
+    },
+    "AllAboutBagsBlob": {
+      "value": "AdditionalBaggageDetails.json"
+    },
+    "BaggageUrl": {
+      "value": "https://www.virginatlantic.com/help/categories/070fb328-0c1c-4a04-a2bf-795834008bf1"
+    },
+    "MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-service-kv-01.vault.azure.net/secrets/vatueunbaggage-MicroServiceDBKey/)"
+    },
+    "MicroserviceEventStoreTableName": {
+      "value": "BaggageEventStore"
+    },
+    "EmailServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-service-kv-01.vault.azure.net/secrets/vatueunbaggage-EmailServiceBusConnectionString/)"
+    }
+  }
+}

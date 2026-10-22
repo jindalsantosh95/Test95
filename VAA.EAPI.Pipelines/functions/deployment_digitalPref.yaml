@@ -1,0 +1,39 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  applicationName: ''
+  functionAppName: ''
+  environment: ''
+  location: ''
+  resourceGroupName: ''
+  serviceConnection: ''
+  subscriptionId: ''
+  APIM_IP: ''
+
+jobs: 
+- deployment: '${{parameters.environment}}'      
+  
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}  
+  
+  environment: ${{parameters.environment}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop      
+
+        # Task to create the Function App      
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create Function App'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.serviceConnection}}
+            subscriptionid: ${{parameters.subscriptionId}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}
+            location:  ${{parameters.location}}
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy.json
+            csmParametersFile: $(Pipeline.workspace)/drop/Parameters/${{parameters.environment}}-azuredeploy.parameters.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -IPRestriction ${{parameters.APIM_IP}}     

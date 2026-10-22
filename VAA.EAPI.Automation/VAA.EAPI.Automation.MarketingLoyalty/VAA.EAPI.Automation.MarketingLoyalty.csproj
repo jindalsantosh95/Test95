@@ -1,0 +1,339 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Azure.Data.Tables" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" />
+		<PackageReference Include="Microsoft.Azure.Cosmos" />
+		<PackageReference Include="Microsoft.Data.SqlClient" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="log4net" />
+		<PackageReference Include="Snowflake.Data" />
+		<PackageReference Include="xunit" />
+		<PackageReference Include="xunit.abstractions" />
+		<PackageReference Include="xunit.extensibility.core" />
+		<PackageReference Include="Xunit.SkippableFact" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\VAA.EAPI.Automation.Core.Delta\VAA.EAPI.Automation.Core.Delta.csproj" />
+	  <ProjectReference Include="..\VAA.EAPI.Automation.Core\VAA.EAPI.Automation.Core.csproj" />
+	  <ProjectReference Include="..\VAA.EAPI.Automation.MyAccount\VAA.EAPI.Automation.MyAccount.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="VAA.EAPI.Infrastructure">
+	    <HintPath>..\Assemblies\VAA.EAPI.Infrastructure.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="local.settings.local.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AIR4\SFPD\SFPDRetrieve.xml">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AIR4\SFPD\SFPDUpdate.xml">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AuditManagement\RetrieveAddressAudit.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AuditManagement\RetrieveAwardAudit.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AuditManagement\RetrieveContactAudit.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AuditManagement\RetrieveCustomerProfileAudit.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AuditManagement\RetrievePreferenceAudit.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AuditManagement\RetrieveAmexCenturionAudit.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AuditManagement\RetrieveSupplementarySilverAudit.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AutoCancellation\CancelRelatedTransactions.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AutoCancellation\RetrieveRelatedTransactions.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\AssociatedMembersToACampaign.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\CreateCampaign.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\DownloadCampaignsList.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\RetrieveCampaign.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\RetrieveCampaignTypes.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\SearchCampaign.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CreateAccrual\LoyaltyCreateAccrual.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CustomerTransactions\UpdateAward.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CustomerTransactions\CreateAward.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Customer\UpdateVACMemberProfile.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Customer\VACUpgradeToFlyingClub.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Customer\VAEnrolment.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Customer\UpdateMemberPhone.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Customer\UpdateMemberEmail.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Customer\UpdateMemberAddress.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Customer\CustomerSearch.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\AwardAPI\CreateAward.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\AwardAPI\GiftAward.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\AwardAPI\RedeemAward.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\AwardAPI\UpdateAward.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\CustomerAPI\MemberAddressUpdate.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\CustomerAPI\MemberEmailUpdate.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\CustomerAPI\MemberPhoneUpdate.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\CustomerAPI\MemberPreferenceUpdate.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\FinancialPartnerProcessingAPI\VCCUVoucherTierpoints.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\FinancialPartnerProcessingAPI\USCoBrandVoucherTierpoints.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\FinancialPartnerProcessingAPI\VoucherAwardVMCC.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\FinancialPartnerProcessingAPI\VoucherAward.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\TransactionAPI\CreateAccrualTransaction.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\TransactionAPI\CreateManualAdjustmentTransaction.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\TransactionAPI\CreateRedemptionTransaction.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\MemberEnrolment.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\TransactionCancellation.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\AwardVoucher.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\CreateFlightAccrual.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\CreateManualRedemption.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\CreateNewTier.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\ManualCreditAdjustment.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\PointsTransfer.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\ProfileUpdate.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\RedeemVoucher.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\TransferVoucher.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\UpdateNewTier.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\UpdateVoucher.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberCards\CreatePartnerMembership.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberCards\UpdatePartnerMembershipGraphQl.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberCards\CreatePartnerMembershipGraphQl.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberManagement\HouseHoldDelinking.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberManagement\HouseHoldLinking.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberManagement\RetrieveHouseHoldDetails.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberManagement\SupplementarySilverDelinking.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberManagement\SupplementarySilverAccountDetails.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberManagement\SupplementarySilverLinking.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberCards\LoyaltyMemberCardLink.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltySync\LoyaltySyncSFPD.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\MemberSearchByPhone\MemberSearchByPhone.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\PartnerRetro\SkyPartnerRetroCreate.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\PromotionManagement\CreatePromotion.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\PromotionManagement\DelinkCampaignPromotion.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\PromotionManagement\LinkPromotion.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\ContactNotes\LoyaltyCreateNote.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\ContactNotes\LoyaltyDeleteNote.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\ContactNotes\LoyaltyGetNote.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\ContactNotes\LoyaltyUpdateNote.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\PromotionManagement\PromotionSearchAndRetrieve.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\PromotionManagement\PromotionSearchCampaign.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberManagement\RetrieveLoyaltyPartnersDetails.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\UnassignCampaign.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\RetrieveMemberCampaign.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\RegisterCampaign.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\AssignCampaign.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\RetrieveMemberCampaignTypes.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoyaltyMemberManagement\RetrieveMemberAccountDetails.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\CampaignManagement\UpdateCampaign.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\PromotionManagement\UpdatePromotion.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\CustomerAPI\CreateMemberTier.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsBackendAPI\CustomerAPI\UpdateMemberTier.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\RetailTherapy\CancelTransaction.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\RetailTherapy\CreateBurnTransaction.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\RetailTherapy\AccountMemberDetails.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\RetailTherapy\CreateEarnTransaction.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\VAAccount\VACGraphQLProfileUpdate.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\VoucherSelfService\RedeemVoucher.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\VoucherSelfService\UpdatePNR.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\VoucherSelfService\VoucherRollback.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\VRed\CancelTransaction.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\VRed\CreateTransaction.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
+</Project>

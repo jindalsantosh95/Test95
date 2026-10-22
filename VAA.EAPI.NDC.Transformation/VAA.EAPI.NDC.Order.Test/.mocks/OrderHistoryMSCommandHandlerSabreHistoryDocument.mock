@@ -1,0 +1,264 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/dev/NdcOrderSearch/OrderHistory HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"docType": "Indirect",
+	"dataList": {
+		"originDestinationAssociations": [
+					{
+						"odLabel": "OD1",
+						"originDestination": {
+							"originAirport": "LHR",
+							"destinationAirport": "ATL",
+							"departureDate": "2026-08-07"
+						},
+						"journeyRefIds": [
+							"JOUR1"
+						],
+						"flightSegmentRefIds": [
+							"SEG1"
+						]
+					}
+				],
+		"customerDetails": [
+			{
+				"custId": "ADULT_1",
+				"ptc": "ADT",
+				"firstName": "DAVID",
+				"lastName": "SMITH",
+				"gender": "M",
+				"dateOfBirth": "1956-12-22",
+				"contacts": {
+					"email": "TEST.SKYSCANNER@FLY.VIRGIN.COM",
+					"phone": "123456",
+					"phoneType": "H"
+				},
+				"firstNameNumber": "01",
+				"lastNameNumber": "01"
+			}
+		],
+		"orderInstructions": [],
+		"segmentDetails": [
+					{
+						"odRefId": "OD1",
+						"segmentId": "SEG1",
+						"airCraft": "351",
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "103",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "ATL",
+						"classOfService": "T",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-08-07T15:10:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-08-07T10:55:00"
+						},
+						"flightDuration": "00:09:10:00",
+						"legs": [
+							{
+								"scheduledDepartureTime": {
+									"localDateTime": "2026-08-07T10:55:00"
+								},
+								"legSequenceNumber": "1",
+								"originAirportCode": "LHR",
+								"scheduledArrivalTime": {
+									"localDateTime": "2026-08-07T15:10:00"
+								},
+								"destinationAirportCode": "ATL",
+								"legDuration": "00:09:10:00",
+								"legId": "LEG1",
+								"carrierAircraftTypeCode": "A350",
+								"carrierAircraftTypeName": "A350 (widebody)"
+							}
+						],
+						"cabinType": {
+							"cabinCode": "5",
+							"cabinName": "ECONOMY"
+						},
+						"fareBasis": "LYKRB8LA",
+						"status": {
+							"code": "HX"
+						},
+						"ticketNotValidAfter": "2026-08-07",
+						"ticketNotValidBefore": "2026-08-07"
+					}
+				],
+		"priceClass": [],
+		"journey": [
+					{
+						"journeyId": "JOUR1",
+						"duration": "09:10",
+						"flightSegmentRefIds": [
+							"SEG1"
+						]
+					}
+				]
+	},
+	"creationDateTime": {
+		"localDateTime": "22/12/2025 10:50:00"
+	},
+	"orderNumber": {
+		"orderId": "VS932RSNRHC25",
+		"ownerAirline": "VS"
+	},
+	"bookingReference": {
+		"rloc": "RSNRHC",
+		"rlocCreateDate": "22Dec25",
+		"rlocCreateDateTime": "10:50:00",
+		"externalSystem": "1S"
+	},
+	"orderItems": [
+		{
+			"orderItemId": "VS932RSNRHC25-1",
+			"ownerAirline": "VS",
+			"services": [
+						{
+							"serviceId": "SV1",
+							"product": {
+								"productOwner": "VS",
+								"productName": "Economy Light",
+								"productType": "Flight"
+							},
+							"serviceBeneficiaries": [
+								"ADULT_1"
+							],
+							"originDestinationRefIds": [
+								"OD1"
+							],
+							"segmentRefIds": [
+								"SEG1"
+							],
+							"baggageRefIds": [
+								"BAG1",
+								"BAG2"
+							],
+							"serviceDefinitionRefIds": [
+								"SRV1"
+							]
+						}
+					],
+			"accountableDocumentRefs": [
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520047719",
+					"issueDate": "2025-12-22",
+					"issueTime": "16:50:00",
+					"customerRefId": "ADULT_1"
+				},
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520047719",
+					"issueDate": "2025-12-22",
+					"issueTime": "16:54:00",
+					"customerRefId": "ADULT_1"
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			}
+		}
+	],
+	"orderStatus": "Confirmed",
+	"parties": {
+		"participants": [
+			{
+				"partyType": "Seller",
+				"name": "Skyscanner",
+				"agencyID": "91281035",
+				"ordinal": "1",
+				"pccCode": "6UOL",
+				"contacts": {
+					"email": "agentemail@gmail.com"
+				},
+				"isCreditCardAccepted": true
+			}
+		]
+	},
+	"orderHistory": [
+		{
+			"dataList": {
+			"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVIDTEST",
+						"lastName": "SMITHTEST",
+						"gender": "M",
+						"dateOfBirth": "1946-02-09",
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "103",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "ATL",
+						"classOfService": "T",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-08-07T15:10:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-08-07T10:55:00"
+						},
+						"status": {
+							"code": "SS"
+						}
+					}
+				]
+			},
+			"version": "1",
+			"changeDateTime": "2025-12-22T10:50:00Z",
+			"changeType": "OrderItemAdded"
+		},
+		{
+			"dataList": {
+			"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVID",
+						"lastName": "SMITH",
+						"gender": "M",
+						"dateOfBirth": "1946-02-09",
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "103",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "ATL",
+						"classOfService": "T",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-08-07T15:10:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-08-07T10:55:00"
+						},
+						"status": {
+							"code": "HX"
+						}
+					}
+				]
+			},
+			"version": "2",
+			"changeDateTime": "2025-12-22T10:54:00Z",
+			"changeType": "DocumentVoided"
+		}
+	],
+	"id": "VS932RSNRHC25-History",
+	"partitionKey": "VS932RSNRHC25-History"
+}

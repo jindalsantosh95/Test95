@@ -1,0 +1,212 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "DEV"
+    },
+    "FunctionAppName": {
+      "value": "AVADEUNAFNNDCORDERSEARCH"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-D-EUN-ENTERPRISEAPI"
+    },
+    "AppServicePlanName": {
+      "value": "AVADEUNASPORDER"
+    },
+    "AppInsightsName": {
+      "value": "AVADEUNAINDCORDERSEARCHMS"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avadeunafnndcordersearch"
+    },
+    "KeyVaultUri": {
+      "value": "https://avadeunkveapis.vault.azure.net/"
+    },
+    "vaultName": {
+      "value": "AVADEUNKVEAPIS"
+    },
+    "DebugOptions": {
+      "value": "Y"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avadeunstndcordersearch"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Ndc Sabre Order Search Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to fetch Sabre Order search data items"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/dev/NdcOrderSearch"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "SabreEndpoint": {
+      "value": "https://webservices.cert.platform.sabre.com"
+    },
+    "SabreUsername": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/SabreUsername/)"
+    },
+    "SabrePassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/SabrePassword/)"
+    },
+    "FromPartyId": {
+      "value": "Agency"
+    },
+    "ToPartyId": {
+      "value": "Sabre_API"
+    },
+    "PCC": {
+      "value": "09UI"
+    },
+    "Domain": {
+      "value": "DEFAULT"
+    },
+    "ConversationId": {
+      "value": "2021.01.DevStudio"
+    },
+
+    // Order Search
+    "ApplicationId": {
+      "value": "ND"
+    },
+    "RoleIndicator": {
+      "value": "RESNDCSALES"
+    },
+    "SecurityId": {
+      "value": "D027954"
+    },
+    "TestLab": {
+      "value": "TVTH"
+    },
+    "PoolType": {
+      "value": "STAMPING/VAA/NEW/DIST/CAPABILITY"
+    },
+    "AgentCityCode": {
+      "value": "LON"
+    },
+    "DeltaCertificateName": {
+      "value": "NdcDLSoaCertificate"
+    },
+    "DurationFormat": {
+      "value": ""
+    },
+    "AppChannelName": {
+      "value": "ITLITE"
+    },
+    "OptionNumberForDisplayRequest": {
+      "value": "1"
+    },
+    "ProvideResidualValue": {
+      "value": "N"
+    },
+    "TrustedSource": {
+      "value": "Y"
+    },
+    "TicketingProcessV3EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:37531/ticketingprocess/v3"
+    },
+    "Air4PnrCommonEndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:31063/pnrcommon/v6"
+    },
+    "OrderDataServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNNDCORDERMS-Config-OrderDataServiceBusConnectionString/)"
+    },
+    "OrderDataServiceBusTopicName": {
+      "value": "ndcorderrequesteventmessage"
+    },
+    "OrderDataMSEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/dev/orderdata/orders/"
+    },
+    "OrderDataMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/OrderDataMSSubscriptionKey/b203f15dd15c4f96a0b7b15a16d7ceea/)"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "Sabre",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Sabre Order Search API AFN",
+        "ApplicationUsageIdList": "AVADEUNAFNNDCORDERSEARCHMS"
+      }
+    }
+  }
+}

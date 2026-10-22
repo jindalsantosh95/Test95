@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "platform": "iOS",
+  "scenarios": [
+    {
+      "id": "OCI-TC01",
+      "test": "OnlineCheckIn_TC01_SingleAdultPriorityRoute_GeneratesBoardingPass",
+      "data": "OnlineCheckInMobileAppData and OCIPNRs; single passenger; departure in 80 minutes to 24 hours; route priority LHR, USA, any; CheckIn and SavePassport prevalidated",
+      "outcome": "The prepared trip completes native check-in and displays a generated boarding pass."
+    }
+  ],
+  "selectors": {
+    "addTrip": "AddTripButton",
+    "headerAddTrip": "HomeAddTripButton",
+    "bookingReference": "ConfirmationNumberText",
+    "addTripNext": "Next",
+    "addTripNextFallback": "type == 'XCUIElementTypeButton' AND (name CONTAINS[c] 'Next' OR label CONTAINS[c] 'Next' OR value CONTAINS[c] 'Next')",
+    "firstName": "FirstNameText",
+    "lastName": "LastNameText",
+    "findMyTrip": "FindMyTripButton",
+    "checkInNow": "Check in now",
+    "continueToCheckIn": "ContinueToCheckInButton",
+    "continueToCheckInFallback": "Continue to check in (iOS button label)",
+    "submitPassport": "SubmitPassportDataButton",
+    "skipEmergencyContact": "SkipButton",
+    "baggageGuide": "Your baggage guide",
+    "baggageContinue": "Continue",
+    "hazardousMaterialsAcknowledge": "AcknowledgeButton",
+    "viewBoardingPass": "ViewBoardingPassButton",
+    "boardingPass": "Boarding Pass",
+    "appleWallet": "Add to Apple Wallet"
+  }
+}

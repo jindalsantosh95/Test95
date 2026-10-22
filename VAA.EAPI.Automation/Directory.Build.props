@@ -1,0 +1,58 @@
+<Project>
+
+  <!--
+    Harness engineering — shared maintainability defaults (Thread 1).
+    See docs/HARNESS_ENGINEERING.md.
+
+    Properties here are DEFAULTS that MSBuild applies to every project in the
+    solution. Any individual .csproj may still override them, so adding this file
+    does not change projects that already declare a given property explicitly.
+  -->
+
+  <PropertyGroup>
+    <!-- Default for NEW projects. Every existing .csproj currently declares
+         Nullable and ImplicitUsings itself, so today these are no-ops; they set
+         the default for projects added later (so new code is null-safe by
+         default). -->
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!--
+    Analyzer ratchet (Thread 1b). TreatWarningsAsErrors turns every compiler /
+    analyzer / NuGet warning into a build error; WarningsNotAsErrors then
+    re-exempts the 41 warning codes that make up the existing legacy backlog
+    (documented and counted in docs/warnings-baseline.md).
+
+    Net effect: the legacy backlog keeps building, but a NEW warning whose code is
+    not on the exempt list — a regression just introduced — fails the build.
+
+    Burn-down: when a code's count reaches zero, delete it from this list (and from
+    warnings-baseline.md). From then on that rule is gated for good. Adding a code
+    here is moving the ratchet backwards and should be rare and reviewed.
+
+    NU1903 (known package vulnerability) is deliberately NOT exempted - a newly
+    introduced vulnerable package must fail the build. No advisories are currently
+    suppressed; the runtime band is on a patched version.
+
+    (NETSDK1206 and MSB3245 are also in the backlog but are MSBuild/SDK warnings,
+    not compiler warnings, so TreatWarningsAsErrors does not touch them — they are
+    intentionally absent from this list.)
+  -->
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>
+      CS8602;CS8604;CS8600;CS8618;CS8632;CS8601;CS8629;CS8603;CS8625;CS8620;CS8619;CS8605;CS8509;
+      CS0618;CS0168;CS0219;CS1998;CS0472;CS0169;CS0414;CS4014;CS0649;CS1717;CS1718;CS1030;CS0436;CS0252;CS0162;
+      xUnit1031;xUnit1026;xUnit2010;xUnit2002;xUnit1048;xUnit1025;xUnit1013;xUnit2020;xUnit2009;xUnit2017;xUnit1008;
+      CA1416;NU1701
+    </WarningsNotAsErrors>
+  </PropertyGroup>
+
+  <!-- Do not gate the SDK-generated Azure Functions WorkerExtensions project: it
+       is generated code, not ours, and must not be able to break the build. -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'WorkerExtensions'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+</Project>

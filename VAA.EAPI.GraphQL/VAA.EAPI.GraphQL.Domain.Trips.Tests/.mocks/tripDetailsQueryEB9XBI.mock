@@ -1,0 +1,21 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/tripmicroservice/trips/search HTTP/1.1
+
+$[?(@.confirmationNum == 'EB9XBI')]
+
+###Response
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+[
+    {
+        "code": "ROR4090",
+        "message": "Unable to Book/Retrieve/Reshop/Cancel - No Active Segments in PNR",
+        "developerMessage": "RetrieverFlightOrderService.invokeFlightOrderRetriever -transactionId:e81af507-a4cd-43c4-8ed2-c34f83ae6c9b,FE5069:Unable to Book/Retrieve/Reshop/Cancel - No Active Segments in PNR:Invalid response from PnrCommon or Trip Service: HTTP 500 Internal Server Error | ErrorID: 4da83a1b-30da-4c83-8f80-ad3ef9f9c097 | TimeStamp: 04/12/2025 18:23:33",
+        "errorSource": "Delta"
+    }
+]

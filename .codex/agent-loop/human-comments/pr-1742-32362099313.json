@@ -1,0 +1,64 @@
+{
+  "prNumber": 1742,
+  "branch": "codex/holidays-document-token-diagram-clean",
+  "base": "main",
+  "headSha": "fbcdf8dff4f58ff92ecb9fa659b7c3f5e145b828",
+  "runId": "32362099313",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/32362099313",
+  "collectedAtUtc": "2026-08-20T11:06:31.772Z",
+  "policy": {
+    "resolveHumanThreads": false,
+    "expectedDecisions": [
+      "agree",
+      "disagree",
+      "not-applicable"
+    ]
+  },
+  "comments": [
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6ayDgD",
+      "replyToCommentDatabaseId": 3820936889,
+      "author": "vinay-dhawan",
+      "body": "Please add explicit test coverage for DEFINITE and FULLY PAID booking statuses, including expected document types for each status.",
+      "path": "VAA.EAPI.Automation/VAA.EAPI.Automation.Trips/Tests/Holidays/GraphQL/Documents/RetrieveHolidayBookingDocumentDetailsTests.cs",
+      "line": 109,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3820936889",
+      "decision": "agree",
+      "responseComment": "Agreed. DEFINITE is exercised by the core-document theory and asserts CBKINV and ATOLCERTIFICATE. FULLY PAID has a dedicated scenario asserting CBKINV, ATOLCERTIFICATE, ITINERARYDOCUMENT, and TRVDOC. I replaced its permanent skip with a runtime-skippable test so the scenario now executes whenever matching storage data is available.",
+      "actionSummary": "Enabled executable FULLY PAID coverage by changing TC13 from a permanently skipped Fact to a SkippableFact. Retained the explicit per-status document-type assertions and the existing DEFINITE theory case. The human review thread was not resolved."
+    },
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6ayEdw",
+      "replyToCommentDatabaseId": 3820942732,
+      "author": "vinay-dhawan",
+      "body": "These tests are data-dependent. If seed/storage booking data is unavailable, please skip/inconclusive the test instead of failing on assertions, to avoid false negatives in pipeline runs.",
+      "path": "VAA.EAPI.Automation/VAA.EAPI.Automation.Trips/Tests/Holidays/GraphQL/Documents/RetrieveHolidayBookingDocumentDetailsTests.cs",
+      "line": 110,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3820942732",
+      "decision": "agree",
+      "responseComment": "Agreed. These scenarios depend on holiday bookings selected from environment storage. They now use the repository's skippable-test mechanism and skip only when prerequisite booking data is missing, unavailable, or incomplete; downstream/API responses and document-contract assertions still fail normally.",
+      "actionSummary": "Converted all storage-backed tests in RetrieveHolidayBookingDocumentDetailsTests to SkippableFact/SkippableTheory and replaced assertion-based prerequisite validation with TestDataPrerequisiteHelper.ValidateHolidayDetailsOrSkip. No human review threads were resolved."
+    }
+  ],
+  "resourceUsage": {
+    "workflow": "sequence-goal-human-comment-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 2210451,
+      "inputTokens": 2206223,
+      "cachedInputTokens": 2154438,
+      "outputTokens": 4228,
+      "reasoningOutputTokens": 644,
+      "estimatedUsd": 2.862548
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "2,210,451 tokens (2,206,223 input, 2,154,438 cached + 4,228 output, 644 reasoning); $2.862548 USD"
+  }
+}

@@ -1,0 +1,26 @@
+info:
+  name: Retrieve Document List
+  type: http
+  seq: 1
+  tags:
+    - Documents
+
+http:
+  method: POST
+  url: "{{baseUrl}}/retrieveDocumentList"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "bookingReference": "{{bookingReference}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

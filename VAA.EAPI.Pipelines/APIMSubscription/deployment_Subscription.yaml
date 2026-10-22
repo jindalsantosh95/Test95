@@ -1,0 +1,41 @@
+parameters:
+  SubscriptionName: ''
+  OwnerName: ''
+  productId: ''
+  firstName: ''
+  lastName: ''
+  email: ''
+  environment: ''  
+  agentPool: ''
+  agentSpecification: ''
+  APIMName: '' 
+  APIMResourceGroupName: ''
+  APIMServiceConnection: ''
+  APIMSubscriptionId: ''  
+  APIM_IP: ''
+
+jobs: 
+- deployment: '${{parameters.environment}}'      
+  
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}  
+  
+  environment: ${{parameters.environment}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop   
+
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create Subscription'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.APIMServiceConnection}}
+            subscriptionid: ${{parameters.APIMSubscriptionId}}
+            resourceGroupName:  ${{parameters.APIMResourceGroupName}}
+            location:  'North Europe'
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -APIMName ${{parameters.APIMName}}  -SubscriptionName ${{parameters.SubscriptionName}}  -productId ${{parameters.productId}} -OwnerName ${{parameters.OwnerName}} -firstName ${{parameters.firstName}} -lastName ${{parameters.lastName}} -email ${{parameters.email}}

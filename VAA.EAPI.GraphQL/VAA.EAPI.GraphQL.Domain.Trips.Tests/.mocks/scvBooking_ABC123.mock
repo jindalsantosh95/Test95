@@ -1,0 +1,39 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/orderdata/scv/orders/by-flight-date HTTP/1.1
+
+$[?(@.pnr == 'ABC123')]
+$[?(@.firstName == 'Jane')]
+$[?(@.lastName == 'Doe')]
+
+$[?(@.flightDate == '31AUG25')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+[
+  {
+    "id": "ORDER-123",
+    "pos": { "countryCode": "GB", "cityCode": "LON" },
+    "passengers": [ { "firstName": "Jane", "lastName": "Doe" }, { "firstName": "John", "lastName": "Doe" } ],
+    "payment": { "paymentReference": "payment-only" },
+    "product": [ {
+      "bookingType": "AIRLINE",
+      "passengers": [ { "firstName": "Jane", "lastName": "Doe" }, { "firstName": "John", "lastName": "Doe" } ],
+      "reference": { "pnrLocator": "ABC123", "createdDate": "2025-08-31T00:00:00Z" },
+      "checkInEligible": false,
+      "slices": [ { "totalSliceDuration": "PT5H",
+        "scheduledDepartureUtcDateTime": "2026-10-01T10:00:00Z",
+        "scheduledArrivalUtcDateTime": "2026-10-01T15:00:00Z",
+        "segments": [ { "totalSegmentDuration": "PT4H30M",
+          "origin": { "code": "LHR" }, "destination": { "code": "JFK" },
+          "marketingCarrier": { "carrierCode": "VS", "flightNumber": "VS001" },
+          "operatingCarrier": { "carrierCode": "VS", "flightNumber": "VS001" },
+          "scheduledDepartureUtcDateTime": "2026-10-01T10:00:00Z",
+          "scheduledArrivalUtcDateTime": "2026-10-01T15:00:00Z",
+          "legs": []
+        } ]
+      } ]
+    } ]
+  }
+]

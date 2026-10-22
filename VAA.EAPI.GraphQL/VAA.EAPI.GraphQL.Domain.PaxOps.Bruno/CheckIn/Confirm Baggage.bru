@@ -1,0 +1,43 @@
+meta {
+  name: Confirm Baggage
+  type: graphql
+  seq: 9
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation ConfirmBaggage {
+      ConfirmBaggage(confirmBaggageRequest: { checkInId: "{{checkInId}}", paymentReferenceId: "{{paymentReferenceId}}", paymentStatus: "COMPLETED" }) {
+          originAirportCode
+          originAirportName
+          destinationAirportCode
+          destinationAirportName
+          passengerBags {
+              givenNames
+              surname
+              numberOfBags
+              currencyCode
+              totalPaidAmount
+          }
+          totalPaidAmount
+          currencyCode
+          currencySymbol
+          decimalPrecisionCount
+          checkInId
+      }
+  }
+}
+
+vars:post-response {
+  checkInId: res("data.ConfirmBaggage.checkInId")
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

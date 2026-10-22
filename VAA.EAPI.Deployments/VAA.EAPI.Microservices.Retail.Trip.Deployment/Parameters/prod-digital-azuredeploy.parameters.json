@@ -1,0 +1,211 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "Prod"
+    },
+    "AppServicePlanName": {
+      "value": "vapreunaspdigital06"
+    },
+    "functionappName": {
+      "value": "va-pr-eun-trips-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-pr-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avapeunase013"
+    },
+    "keyVaultName": {
+      "value": "va-pr-eun-service-kv-01"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "TRIPMS",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "PROD",
+        "Purpose": "Support functions for the Trip API AFN",
+        "ApplicationUsageIdList": "tripms"
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vapreuntripssa01"
+    },
+    "AppInsightsName": {
+      "value": "va-pr-eun-trips-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-pr-eun-law-020"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avapeunlaw020"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "KeyVaultUri": {
+      "value": "https://va-pr-eun-service-kv-01.vault.azure.net/"
+    },
+    //swagger settings
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-Trip Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This endpoint will provide the pax trip information from the DL services"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    //TRIP MS Settings
+    "x-air4_mytrips_test": {
+      "value": ""
+    },
+    "DlMyTripsUri": {
+      "value": "https://mytrips-api.vs.air4.com/v1/mytrips/travelreservations"
+    },
+    "DlMessageCentreUri": {
+      "value": "https://messagecenter-api.vs.air4.com/v1/messages/"
+    },
+    "DlPassengerInfoUri": {
+      "value": "https://passengerinfo-api.vs.air4.com/v1/passengerinformation/"
+    },
+    "DlUpsellOfffersUri": {
+      "value": "https://mytrips-api.vs.air4.com/v1/upsell/upsell/"
+    },
+    "BookingIdJwtKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-service-kv-01.vault.azure.net/secrets/tripmicroservice-BookingIdJwtKey/)"
+    },
+    "DeltaClientIdValue": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-service-kv-01.vault.azure.net/secrets/tripmicroservice-DeltaClientIdValue/)"
+    },
+    "DeltaClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-service-kv-01.vault.azure.net/secrets/tripmicroservice-DeltaClientSecret/)"
+    },
+    "DeltaAir4TokenEndpoint": {
+      "value": "https://ssaa.vs.air4.com/as/token.oauth2"
+    },
+    "DlMyTripsPrivateUri": {
+      "value": "https://mytrips-api.vs.air4.com/v1/mytrips-auth/travelreservations"
+    },
+    "SwitchToPrivateEndpoints": {
+      "value": true
+    },
+    "DlMessageCentrePrivateUri": {
+      "value": "https://messagecenter-api.vs.air4.com/v1/msg-auth/messages/"
+    },
+    "DlUpsellOfffersPrivateUri": {
+      "value": "https://mytrips-api.vs.air4.com/v1/upsell-auth/upsell/"
+    },
+    "DlPassengerInfoPrivateUri": {
+      "value": "https://passengerinfo-api.vs.air4.com/v1/pax-info-auth/passengerinformation/"
+    },
+    "TravelInsuranceDeeplinkUrl_GB": {
+      "value": "https://www.magroup-online.com/WL/VAA/GB/en"
+    },
+    "TravelInsuranceDeeplinkUrl_US": {
+      "value": "https://www.etravelprotection.com/virginatlantic/home"
+    },
+    "ProxyDeeplinkURL": {
+      "value": "https://www.virginatlantic.com/holidays/sso/deeplink?id={0}"
+    },
+    "ManageMyBookingUrl": {
+      "value": "https://www.virginatlantic.com/mytrips/findPnr.action"
+    },
+    "ManageMyHolidayUrl": {
+      "value": "https://www.virginatlantic.com/yourbooking/welcome/"
+    },
+    "IROP_FAFURL": {
+      "value": "https://www.virginatlantic.com/tripirop/findOtherFlights.action"
+    },
+    "RedisConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-service-kv-01.vault.azure.net/secrets/tripmicroservice-Redis-Connectionstring/)"
+    },
+    "DeeplinkExpiryLimitInMinutes": {
+      "value": "05"
+    },
+    "POPSMealUrl": {
+      "value": "https://preselect.virginatlantic.com/gb/en.html?token={0}"
+    },
+    "POPSTokenKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-service-kv-01.vault.azure.net/secrets/tripmicroservice-Pops-key/)"
+    },
+    "DlEncryptionServiceUri": {
+      "value": "https://mytrips-api.vs.air4.com/v1/encrypt"
+    },
+    "DlEncryptionServicePrivateUri": {
+      "value": "https://mytrips-api.vs.air4.com/v1/encrypt-auth/encrypt"
+    },
+    "FlightCancelUrl": {
+      "value": "https://www.virginatlantic.com/refunds/cancelTrip.action"
+    },
+    "PlusGradeApiKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-service-kv-01.vault.azure.net/secrets/tripmicroservice-PlusGradeApiKey/)"
+    },
+    "PlusGradeApiUri": {
+      "value": "https://request-api.plusgrade.com/v1/offer//"
+    },
+    "PlusGradePartnerId": {
+      "value": "10gM7q0DVS"
+    },
+    "FlightDisruptionUrl": {
+      "value": "https://www.virginatlantic.com/help/categories/dc2a02fb-d3fe-4e14-8a09-413bb96a8584"
+    },
+    "BaggageAllowanceUrl": {
+      "value": "https://www.virginatlantic.com/help/categories/070fb328-0c1c-4a04-a2bf-795834008bf1"
+    }
+  }
+}

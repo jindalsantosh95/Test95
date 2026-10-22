@@ -1,0 +1,37 @@
+meta {
+  name: Account Update Address Details
+  type: graphql
+  seq: 12
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation AccountUpdateAddressDetails {
+    accountUpdateAddressDetails(
+      updateAddressDetail: {
+        memberType: Individual
+        accountAddressDetail: {
+          addressType: Home
+          addressLine1: "{{account_address_line1}}"
+          addressLine2: "{{account_address_line2}}"
+          addressLine3: "{{account_address_line3}}"
+          city: "{{account_city}}"
+          postalCode: "{{account_postal_code}}"
+          region: "{{account_region}}"
+          country: "{{account_country}}"
+          preferredFlag: "Y"
+        }
+      }
+    )
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

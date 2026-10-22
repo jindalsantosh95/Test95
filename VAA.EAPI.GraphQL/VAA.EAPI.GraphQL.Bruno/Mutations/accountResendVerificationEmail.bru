@@ -1,0 +1,29 @@
+meta {
+  name: accountResendVerificationEmail
+  type: graphql
+  seq: 14
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation accountResendVerificationEmail($request: EnrolToAzureB2CCommandRequestInput) {
+    accountResendVerificationEmail(request: $request)
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

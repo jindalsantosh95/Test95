@@ -1,0 +1,129 @@
+meta {
+  name: Save Contact Tracing
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SaveContactTracingTravelRequirements {
+    SaveContactTracingTravelRequirements(
+      travelRequirementsId: "{{travelRequirementsId}}"
+      sliceId: "{{slice1_Id}}"
+      contactTracing: [
+        {
+          passengerId: "{{pax1_Id}}"
+          streetAddress: "456 Park Ave"
+          city: "New York"
+          state: "NY"
+          zip: "10001"
+          email: "traveller@example.test"
+          inTransit: false
+          noEmail: false
+          noSecondaryPhoneNumber: false
+          primaryPhoneNumber: "5550100"
+          primaryPhoneNumberCountryCode: "1"
+          secondaryPhoneNumber: "5550101"
+          secondaryPhoneNumberCountryCode: "1"
+        }
+      ]
+    ) {
+      travelRequirementsId
+      applyEmergencyContactToAllPax
+      reference {
+        pnrLocator
+        createdDate
+      }
+      passengers {
+        passengerId
+        givenNames
+        surname
+        dateOfBirth
+        contactTracing {
+          passengerId
+          streetAddress
+          city
+          state
+          zip
+          email
+          inTransit
+          noEmail
+          noSecondaryPhoneNumber
+          primaryPhoneNumber
+          primaryPhoneNumberCountryCode
+          secondaryPhoneNumber
+          secondaryPhoneNumberCountryCode
+        }
+        sliceRequirements {
+          sliceId
+          passportProvided
+          passportVerified
+          baggageDeclared
+          contactTracing
+          contactTracingAvailableFromUtc
+          contactTracingAvailableFromDescription
+          checkedIn
+          overall
+          unhappyPassport
+          returnDateStatus
+          isReturnDateDeclined
+          returnDate
+          checkinEligible
+          secondaryDocumentStatus
+          secondaryDocuments {
+            documentType
+            countryCode
+            countryName
+            name
+            displayName
+            status
+            secondaryDocumentApplicationOptions {
+              secondaryDocumentId
+              applicationType
+              title
+              message
+              url
+            }
+          }
+          passportErrors {
+            code
+            message
+            category
+            displayCode
+          }
+        }
+      }
+      slices {
+        sliceId
+        scheduledDepartureLocalDateTime
+        scheduledArrivalLocalDateTime
+        origin {
+          code
+          countryCode
+        }
+        destination {
+          code
+          countryCode
+        }
+      }
+    }
+  }
+}
+
+script:post-response {
+  var travelRequirements = res.body.data.SaveContactTracingTravelRequirements;
+  
+  if (travelRequirements?.travelRequirementsId) {
+    bru.setVar("travelRequirementsId", travelRequirements.travelRequirementsId);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

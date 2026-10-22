@@ -1,0 +1,725 @@
+name: ai-delivery-sequence-goal-pr-finalizer
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: ${{ format('sequence-goal-pr-mutation-{0}', github.event.pull_request.number) }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Detect sequence-goal GitHub App credentials
+        id: app-credentials
+        shell: pwsh
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        run: |
+          "configured=$(((-not [string]::IsNullOrWhiteSpace($env:APP_ID)) -and (-not [string]::IsNullOrWhiteSpace($env:APP_PRIVATE_KEY))).ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Create sequence-goal GitHub App token
+        id: app-token
+        if: steps.app-credentials.outputs.configured == 'true'
+        uses: actions/create-github-app-token@v2
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ env.APP_PRIVATE_KEY }}
+          owner: VAAD1ST
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: read
+
+      - name: Resolve finalizer checkout ref
+        id: checkout-ref
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
+          script: |
+            const pr = context.payload.pull_request;
+            if (pr.merged) {
+              core.setOutput("ref", "main");
+              core.setOutput("source_deleted", "false");
+              return;
+            }
+            try {
+              await github.rest.repos.getBranch({ ...context.repo, branch: pr.head.ref });
+              core.setOutput("ref", pr.head.sha);
+              core.setOutput("source_deleted", "false");
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              core.setOutput("ref", "main");
+              core.setOutput("source_deleted", "true");
+              core.info("Coordinator source branch is already deleted; checking out main for the standalone abandonment archive.");
+            }
+
+      - name: Check out target branch
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.checkout-ref.outputs.ref }}
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token || github.token }}
+
+      - name: Archive closure evidence in goal document
+        id: finalize
+        uses: actions/github-script@v7
+        env:
+          SEQUENCE_GOAL_GITHUB_APP_SLUG: ${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}
+          SEQUENCE_GOAL_IOS_BASE_BRANCH: ${{ vars.SEQUENCE_GOAL_IOS_BASE_BRANCH || 'develop' }}
+          SEQUENCE_GOAL_ANDROID_BASE_BRANCH: ${{ vars.SEQUENCE_GOAL_ANDROID_BASE_BRANCH || 'develop' }}
+          SEQUENCE_GOAL_WEBUI_REPOSITORY: ${{ vars.SEQUENCE_GOAL_WEBUI_REPOSITORY }}
+          SEQUENCE_GOAL_WEBUI_BASE_BRANCH: ${{ vars.SEQUENCE_GOAL_WEBUI_BASE_BRANCH || 'main' }}
+          SOURCE_DELETED_AT_CHECKOUT: ${{ steps.checkout-ref.outputs.source_deleted }}
+        with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
+          script: |
+            const fs = require("fs");
+            const path = require("path");
+            const { execSync, execFileSync } = require("child_process");
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.payload.pull_request;
+            const marker = "Automated PR raised by the sequence goal loop after goal completion.";
+            if (!(pr.body || "").includes(marker)) { core.setOutput("should_commit", "false"); core.info("PR lacks the sequence-goal coordinator marker; skipping finalizer."); return; }
+            if (pr.head.repo?.full_name !== `${owner}/${repo}`) {
+              core.setOutput("should_commit", "false");
+              core.info("PR head is not in this repository; skipping write-capable finalizer.");
+              return;
+            }
+            const appSlug = process.env.SEQUENCE_GOAL_GITHUB_APP_SLUG || "";
+            const trustedAuthors = new Set(["github-actions", "github-actions[bot]", ...(appSlug ? [appSlug, `${appSlug}[bot]`] : [])]);
+            if (!trustedAuthors.has(pr.user?.login || "")) {
+              core.setOutput("should_commit", "false");
+              core.info("PR author is not trusted for write-capable sequence-goal finalization.");
+              return;
+            }
+            const headBranch = pr.head.ref || "";
+            if (headBranch === "" || headBranch === "main") {
+              core.setOutput("should_commit", "false");
+              core.info("PR head branch must be a non-main branch; skipping finalizer.");
+              return;
+            }
+
+            const finalState = pr.merged ? "Merged" : "Abandoned";
+            let targetBranch = pr.merged ? "main" : pr.head.ref;
+            const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+            const closedAtUtc = pr.closed_at || new Date().toISOString();
+            const closedBy = context.payload.sender?.login || "unknown";
+            const mergedBy = pr.merged_by?.login || "";
+
+            if (!pr.merged) {
+              let branch;
+              try {
+                if (process.env.SOURCE_DELETED_AT_CHECKOUT === "true") {
+                  const deletedAtCheckout = new Error("Coordinator source branch was absent during checkout resolution.");
+                  deletedAtCheckout.status = 404;
+                  throw deletedAtCheckout;
+                }
+                ({ data: branch } = await github.rest.repos.getBranch({ owner, repo, branch: pr.head.ref }));
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                execFileSync("git", ["fetch", "--no-tags", "origin", "+refs/heads/main:refs/remotes/origin/main"], { stdio: "inherit" });
+                execFileSync("git", ["checkout", "--detach", "origin/main"], { stdio: "inherit" });
+                targetBranch = "main";
+                const archivePath = `.codex/agent-loop/abandonments/pr-${pr.number}.json`;
+                fs.mkdirSync(path.dirname(archivePath), { recursive: true });
+                const archive = {
+                  schemaVersion: 1,
+                  finalState: "Abandoned",
+                  repository: `${owner}/${repo}`,
+                  pullRequest: { number: pr.number, url: pr.html_url, base: pr.base.ref },
+                  source: { branch: pr.head.ref, headSha: pr.head.sha, deletedBeforeFinalization: true },
+                  closedAtUtc,
+                  closedBy,
+                  finalizerRun: runUrl,
+                  note: "Coordinator branch was deleted before branch-local closure evidence could be archived."
+                };
+                if (fs.existsSync(archivePath)) {
+                  const existing = JSON.parse(fs.readFileSync(archivePath, "utf8"));
+                  if (existing.schemaVersion !== 1 || existing.finalState !== "Abandoned" || existing.repository !== archive.repository ||
+                      existing.pullRequest?.number !== pr.number || existing.pullRequest?.url !== pr.html_url ||
+                      existing.source?.branch !== pr.head.ref || existing.source?.headSha !== pr.head.sha || existing.source?.deletedBeforeFinalization !== true) {
+                    throw new Error(`Existing standalone abandonment archive ${archivePath} does not match the closing PR identity.`);
+                  }
+                  core.info(`Preserving existing standalone abandonment archive ${archivePath} from its original finalizer run.`);
+                } else {
+                  fs.writeFileSync(archivePath, JSON.stringify(archive, null, 2) + "\n", "utf8");
+                }
+                const changed = execSync("git status --porcelain", { encoding: "utf8" }).trim();
+                core.setOutput("should_commit", String(Boolean(changed)));
+                core.setOutput("final_state", finalState);
+                core.setOutput("finalizer_note", `Source branch was deleted; durable abandonment evidence was archived on main at ${archivePath}.`);
+                core.setOutput("standalone_archive", archivePath);
+                core.setOutput("target_branch", targetBranch);
+                core.setOutput("expected_head_sha", execSync("git rev-parse HEAD", { encoding: "utf8" }).trim());
+                core.setOutput("diagrams", "");
+                core.setOutput("source_branch", pr.head.ref);
+                core.setOutput("source_head_sha", pr.head.sha);
+                core.info(`Closed coordinator source branch no longer exists; writing standalone abandonment evidence to ${archivePath} on main.`);
+                return;
+              }
+              const remoteHeadSha = branch.commit.sha;
+              if (remoteHeadSha !== pr.head.sha) {
+                const comparison = await github.rest.repos.compareCommitsWithBasehead({ owner, repo, basehead: `${pr.head.sha}...${remoteHeadSha}` });
+                const commits = comparison.data.commits || [];
+                const replayIsTrustedFinalizer = comparison.data.status === "ahead" && commits.length === 1 &&
+                  (trustedAuthors.has(commits[0].author?.login || "") || trustedAuthors.has(commits[0].committer?.login || "")) &&
+                  commits[0].commit?.message === "chore(sequence-goal): archive PR closure evidence";
+                if (!replayIsTrustedFinalizer) throw new Error("Coordinator branch moved after closure; refusing to archive mutable post-close state.");
+                execFileSync("git", ["fetch", "--no-tags", "origin", `+refs/heads/${pr.head.ref}:refs/remotes/origin/${pr.head.ref}`], { stdio: "inherit" });
+                execFileSync("git", ["checkout", "--detach", remoteHeadSha], { stdio: "inherit" });
+              }
+            }
+
+            const diagramRoot = path.resolve("docs/sequence-diagrams");
+            const prFiles = await github.paginate(github.rest.pulls.listFiles, {
+              owner, repo, pull_number: pr.number, per_page: 100
+            });
+            const prCommits = await github.paginate(github.rest.pulls.listCommits, { owner, repo, pull_number: pr.number, per_page: 100 });
+            const closingCommitShas = new Set(prCommits.map(commit => commit.sha).concat(pr.head.sha));
+            const trustedEvidenceCommitShas = new Set(prCommits.filter(commit => trustedAuthors.has(commit.author?.login || "") || trustedAuthors.has(commit.committer?.login || "")).map(commit => commit.sha));
+            if (pr.merged && /^[0-9a-f]{40}$/.test(pr.merge_commit_sha || "")) {
+              closingCommitShas.add(pr.merge_commit_sha);
+            }
+            const evidencePathPattern = new RegExp(`^\\.codex/agent-loop/(?:pr-reviews|human-comments)/pr-${pr.number}-.*\\.json$`);
+            const removedEvidencePaths = prFiles.filter(file => file.status === "removed" && evidencePathPattern.test(file.filename)).map(file => file.filename);
+            if (removedEvidencePaths.length > 0) throw new Error(`Closing coordinator PR deletes lifecycle evidence: ${removedEvidencePaths.join(", ")}.`);
+            const evidenceModifyingCommits = new Map();
+            const evidenceCommitShas = [...closingCommitShas].filter(sha => sha !== pr.merge_commit_sha);
+            const closureCommitDetails = await Promise.all(evidenceCommitShas.map(async sha => (await github.rest.repos.getCommit({ owner, repo, ref: sha })).data));
+            for (const commit of closureCommitDetails) {
+              for (const file of commit.files || []) {
+                for (const candidate of [file.filename, file.previous_filename].filter(Boolean)) {
+                  if (!evidencePathPattern.test(candidate)) continue;
+                  if (!evidenceModifyingCommits.has(candidate)) evidenceModifyingCommits.set(candidate, []);
+                  evidenceModifyingCommits.get(candidate).push(commit.sha);
+                }
+              }
+            }
+            const diagrams = [...new Set(prFiles.map(file => file.filename)
+              .filter(file => /^docs\/sequence-diagrams\/[A-Za-z0-9_.-]+\.md$/.test(file)))].filter(diagram => {
+              const resolved = path.resolve(diagram);
+              return resolved.startsWith(`${diagramRoot}${path.sep}`) && fs.existsSync(resolved);
+            });
+
+            if (diagrams.length === 0) {
+              throw new Error("Sequence-goal coordinator PR has no available delivered goal diagram; refusing to report terminal finalization without durable lifecycle evidence.");
+            }
+            if (diagrams.length !== 1) {
+              throw new Error(`Sequence-goal coordinator PR must change exactly one goal diagram; found ${diagrams.length}.`);
+            }
+            const durableGoalText = fs.readFileSync(diagrams[0], "utf8");
+            if (!/^## Agent Loop Goal\s*$/m.test(durableGoalText)) throw new Error(`Cannot finalize ${diagrams[0]}; required Agent Loop Goal section is missing.`);
+            const openPointHeadings = [...durableGoalText.matchAll(/^## Open points to finalize\s*$/gim)];
+            if (openPointHeadings.length !== 1) throw new Error(`Cannot finalize ${diagrams[0]}; expected exactly one canonical Open points to finalize section, found ${openPointHeadings.length}.`);
+            const openPointsStart = openPointHeadings[0].index + openPointHeadings[0][0].length;
+            const afterOpenPoints = durableGoalText.slice(openPointsStart);
+            const followingHeading = afterOpenPoints.search(/\r?\n## /);
+            const durableOpenPoints = followingHeading < 0 ? afterOpenPoints : afterOpenPoints.slice(0, followingHeading);
+            const declaresNoOpenPoints = /^\s*(?:-\s*)?None\b/i.test(durableOpenPoints);
+            const unresolvedOpenPoints = declaresNoOpenPoints ? [] : [...durableOpenPoints.matchAll(/^\s*-\s+(?<question>.+?)\s*$/gim)];
+            if (pr.merged && unresolvedOpenPoints.length > 0) throw new Error(`Cannot complete ${diagrams[0]}; unresolved open points remain.`);
+            if (pr.merged && !/^\|\s*Status\s*\|\s*`Complete`\s*\|\s*$/mi.test(durableGoalText)) {
+              core.setOutput("should_commit", "false");
+              core.info("Changed sequence diagram is not a Complete sequence-goal coordinator document; skipping finalizer.");
+              return;
+            }
+
+            function loadEvidenceFiles(kind) {
+              const dir = kind === "ai"
+                ? ".codex/agent-loop/pr-reviews"
+                : ".codex/agent-loop/human-comments";
+              if (!fs.existsSync(dir)) {
+                return [];
+              }
+
+              const seenRuns = new Set();
+              return fs.readdirSync(dir)
+                .filter(name => name.startsWith(`pr-${pr.number}-`) && name.endsWith(".json"))
+                .map(name => {
+                  const filePath = path.join(dir, name).replace(/\\/g, "/");
+                  try {
+                    const value = JSON.parse(fs.readFileSync(filePath, "utf8"));
+                    const evidenceKey = `${value.runId}:${value.runAttempt}`;
+                    const expectedName = `pr-${pr.number}-${value.runId}-${value.runAttempt}.json`;
+                    if (value.prNumber !== pr.number || value.branch !== pr.head.ref || value.base !== pr.base.ref ||
+                        !/^[0-9a-f]{40}$/.test(value.headSha || "") || (!Number.isInteger(value.runAttempt) || value.runAttempt < 1) || name !== expectedName || seenRuns.has(evidenceKey) ||
+                        (kind === "ai" ? !Array.isArray(value.unresolvedAiThreads) : !Array.isArray(value.comments))) {
+                      throw new Error("identity or schema does not match the closing coordinator PR");
+                    }
+                    if (!closingCommitShas.has(value.headSha)) throw new Error("evidence head SHA is not a commit of the closing coordinator PR");
+                    const modifyingCommits = evidenceModifyingCommits.get(filePath) || [];
+                    if (modifyingCommits.length === 0 || modifyingCommits.some(sha => !trustedEvidenceCommitShas.has(sha))) throw new Error("evidence file was modified by an untrusted coordinator commit");
+                    seenRuns.add(evidenceKey);
+                    return { filePath, value };
+                  } catch (error) {
+                    throw new Error(`Malformed lifecycle evidence ${filePath}: ${error.message}`);
+                  }
+                });
+            }
+
+            const aiEvidence = loadEvidenceFiles("ai");
+            const humanEvidence = loadEvidenceFiles("human");
+            const deliverySummary = diagrams.length === 1 && fs.existsSync(diagrams[0])
+              ? JSON.parse(fs.readFileSync(diagrams[0], "utf8").match(/^### Delivery: Coordinator\r?\n```json\r?\n([\s\S]*?)\r?\n```/m)?.[1] || "null")
+              : null;
+
+            function summarizeAi(evidence) {
+              const counts = { valid: 0, invalid: 0, "not-applicable": 0, undecided: 0 };
+              let threadCount = 0;
+              for (const entry of evidence) {
+                for (const thread of entry.value.unresolvedAiThreads || []) {
+                  threadCount += 1;
+                  const decision = thread.decision || "undecided";
+                  counts[decision] = (counts[decision] || 0) + 1;
+                }
+              }
+
+              if (evidence.length === 0) {
+                return "No AI review evidence files found.";
+              }
+
+              return `${evidence.length} file(s), ${threadCount} thread(s), valid ${counts.valid}, invalid ${counts.invalid}, not-applicable ${counts["not-applicable"]}, undecided ${counts.undecided}`;
+            }
+
+            function summarizeHuman(evidence) {
+              const counts = { agree: 0, disagree: 0, "not-applicable": 0, undecided: 0 };
+              let commentCount = 0;
+              for (const entry of evidence) {
+                for (const comment of entry.value.comments || []) {
+                  commentCount += 1;
+                  const decision = comment.decision || "undecided";
+                  counts[decision] = (counts[decision] || 0) + 1;
+                }
+              }
+
+              if (evidence.length === 0) {
+                return "No human comment evidence files found.";
+              }
+
+              return `${evidence.length} file(s), ${commentCount} comment(s), agree ${counts.agree}, disagree ${counts.disagree}, not-applicable ${counts["not-applicable"]}, undecided ${counts.undecided}`;
+            }
+
+            function emptyResourceUsage() {
+              return { totalTokens: 0, inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, reasoningOutputTokens: 0, estimatedUsd: 0 };
+            }
+
+            function addResourceUsage(total, usage) {
+              const actual = usage?.actual || usage;
+              if (!actual) return total;
+              for (const field of ["totalTokens", "inputTokens", "cachedInputTokens", "outputTokens", "reasoningOutputTokens", "estimatedUsd"]) {
+                total[field] += Number(actual[field] || 0);
+              }
+              return total;
+            }
+
+            function summarizeEvidenceResources(evidence) {
+              return evidence.reduce((total, entry) => addResourceUsage(total, entry.value.resourceUsage), emptyResourceUsage());
+            }
+
+            function parseResourceLabel(label) {
+              const match = String(label || "").match(/^([\d,]+) tokens \(([\d,]+) input, ([\d,]+) cached \+ ([\d,]+) output, ([\d,]+) reasoning\); \$([\d.]+) USD$/);
+              if (!match) return null;
+              const number = value => Number(value.replace(/,/g, ""));
+              return {
+                totalTokens: number(match[1]), inputTokens: number(match[2]), cachedInputTokens: number(match[3]),
+                outputTokens: number(match[4]), reasoningOutputTokens: number(match[5]), estimatedUsd: Number(match[6])
+              };
+            }
+
+            function formatResourceUsage(usage) {
+              const usd = Math.ceil(usage.estimatedUsd * 100 - 1e-9) / 100;
+              return `${usage.totalTokens.toLocaleString("en-US")} tokens (${usage.inputTokens.toLocaleString("en-US")} input, ${usage.cachedInputTokens.toLocaleString("en-US")} cached + ${usage.outputTokens.toLocaleString("en-US")} output, ${usage.reasoningOutputTokens.toLocaleString("en-US")} reasoning); $${usd.toFixed(2)} USD`;
+            }
+
+            function goalField(text, field) {
+              const escaped = field.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+              return text.match(new RegExp(`^\\|\\s*${escaped}\\s*\\|\\s*(?<value>.*?)\\s*\\|\\s*$`, "mi"))?.groups?.value || "";
+            }
+
+            function setGoalField(text, field, value) {
+              const escaped = field.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+              const pattern = new RegExp(`^\\|\\s*${escaped}\\s*\\|.*\\|\\s*$`, "mi");
+              const row = `| ${field} | ${value} |`;
+              if (pattern.test(text)) return text.replace(pattern, row);
+              const actualPattern = /(^\|\s*Actual agent resources\s*\|.*\|\s*$)/mi;
+              if (!actualPattern.test(text)) throw new Error(`Cannot insert ${field}; Actual agent resources row is missing.`);
+              return text.replace(actualPattern, `$1\n${row}`);
+            }
+
+            function tableValue(value) {
+              return String(value || "n/a")
+                .replace(/\r?\n/g, " ")
+                .replace(/\|/g, "/");
+            }
+
+            const goalDigest = text => {
+              text = text.replace(/^### Delivery: .*?\r?\n```json\r?\n.*?\r?\n```\s*/gms, "");
+              text = text.replace(/^\|\s*(?:Harness Sensor|Acceptance evidence)\s*\|[^\r\n]*\r?\n?/gm, "");
+              text = text.replace(/^## (?:Associated delivery pull requests|Historical associated delivery pull requests|Delivery progress|Agent Loop Closure Evidence)\b.*?(?=^## |(?![\s\S]))/gms, "");
+              text = text.replace(/^## Agent Loop Goal\s*\n(.*?)(?=^## |(?![\s\S]))/gms, (_, table) =>
+                table.split(/\r?\n/).filter(line => /^\|\s*(Goal|Delivery surface|Done when|Promotion verification)\s*\|/.test(line)).join("\n"));
+              return require("crypto").createHash("sha256").update(text.replace(/\r\n/g, "\n").trim(), "utf8").digest("hex");
+            };
+            const readTask = (text, task) => {
+              const sections = [...text.matchAll(/^### Delivery: ([^\r\n]+)\r?\n```json\r?\n([\s\S]*?)\r?\n```/gm)].filter(match => match[1] === task);
+              if (sections.length > 1) throw new Error("Duplicate delivery task in goal document");
+              return sections.length ? JSON.parse(sections[0][2]) : null;
+            };
+            const deliveryIsCurrent = async (candidate, item, pr) => {
+              const surface = item.surface.replace(/^QA-/, "");
+              const phase = item.surface.startsWith("QA-") ? "QA" : "Production";
+              const state = readTask(candidate.goalText, `${surface} ${phase}`);
+              if (!state || state.status !== "Complete" || !/^[a-f0-9]{40}$/.test(pr.head.sha || "")) return false;
+              const digest = goalDigest(candidate.goalText);
+              if (phase === "Production") return state.verifiedCommit === pr.head.sha && String(state.identity || "").split("\n").at(-1) === digest;
+              const productionRows = candidate.associated.filter(row => row.surface === surface);
+              if (productionRows.length !== 1) return false;
+              const productionRow = productionRows[0];
+              const [owner, repo] = productionRow.repository.split("/", 2);
+              const { data: productionPr } = await github.rest.pulls.get({ owner, repo, pull_number: productionRow.number });
+              const productionState = readTask(candidate.goalText, `${surface} Production`);
+              return productionState?.status === "Complete" && productionState.verifiedCommit === productionPr.head.sha &&
+                String(productionState.identity || "").split("\n").at(-1) === digest && state.goalDigest === digest &&
+                state.productionCommit === productionPr.head.sha && state.verifiedCommit === productionPr.head.sha &&
+                state.verifiedQaCommit === pr.head.sha && state.pullRequest === pr.html_url;
+            };
+
+            const aiResourceUsage = summarizeEvidenceResources(aiEvidence);
+            const humanResourceUsage = summarizeEvidenceResources(humanEvidence);
+
+            for (const diagram of diagrams) {
+              let text = fs.readFileSync(diagram, "utf8");
+              const archivedSubsectionPattern = new RegExp(`^### PR #${pr.number}\\s*$[\\s\\S]*?(?=^### |^## |(?![\\s\\S]))`, "m");
+              const archivedSubsection = text.match(archivedSubsectionPattern)?.[0] || "";
+              const replayWithoutTransientEvidence = aiEvidence.length === 0 && humanEvidence.length === 0 && archivedSubsection !== "";
+              const coordinatorState = pr.merged ? "Merged" : "Closed";
+              const coordinatorMergedAt = pr.merged_at || "n/a";
+              const coordinatorUrl = pr.html_url || `${context.serverUrl}/${owner}/${repo}/pull/${pr.number}`;
+              const coordinatorRow = `| \`Coordinator\` | \`${owner}/${repo}\` | \`${pr.base.ref}\` | \`${pr.head.ref}\` | [#${pr.number}](${coordinatorUrl}) | \`${coordinatorState}\` | ${coordinatorMergedAt} |`;
+              const coordinatorPattern = /^\|\s*`Coordinator`\s*\|.*$/mi;
+              if (coordinatorPattern.test(text)) {
+                text = text.replace(coordinatorPattern, coordinatorRow);
+              } else {
+                const heading = "## Associated delivery pull requests";
+                const start = text.indexOf(heading);
+                if (start < 0) throw new Error(`${diagram} has no associated delivery pull requests section.`);
+                const followingHeading = text.indexOf("\n## ", start + heading.length);
+                const end = followingHeading < 0 ? text.length : followingHeading + 1;
+                const section = text.slice(start, end).trimEnd();
+                text = `${text.slice(0, start)}${section}\n${coordinatorRow}\n\n${text.slice(end).replace(/^\n+/, "")}`;
+              }
+
+              if (pr.merged) {
+                const declaredSurfaces = (goalField(text, "Delivery surface") || "Backend")
+                  .replace(/`/g, "").split(/[,;]/).map(value => value.trim()).filter(Boolean);
+                const associatedSection = text.match(/## Associated delivery pull requests\s*([\s\S]*?)(?=\n## |$)/)?.[1] || "";
+                const childRowPattern = /^\|\s*``?(?<surface>Backend|MobileIos|MobileAndroid|WebUi|QA-(?:Backend|MobileIos|MobileAndroid|WebUi))``?\s*\|\s*``?(?<repository>[^`]+)``?\s*\|\s*``?(?<base>[^`]+)``?\s*\|\s*``?(?<head>[^`]+)``?\s*\|\s*\[#(?<number>\d+)\]\((?<url>[^)]+)\)\s*\|\s*``?(?:Open|Merged|Closed|Queued)``?\s*\|\s*[^|]+\|\s*$/gim;
+                const childRows = [...associatedSection.matchAll(childRowPattern)]
+                  .map(match => ({ surface: match.groups.surface, repository: match.groups.repository, base: match.groups.base, head: match.groups.head, number: Number(match.groups.number), url: match.groups.url }));
+                const invalidTableRows = associatedSection.split(/\r?\n/).filter(line => /^\s*\|/.test(line)).filter(line =>
+                  !/^\|\s*(?:Surface|[-: ]+)(?:\s*\|.*)?$/i.test(line) &&
+                  !/^\|\s*`Coordinator`\s*\|/.test(line) &&
+                  !new RegExp(childRowPattern.source, "i").test(line));
+                if (invalidTableRows.length > 0) throw new Error(`Cannot complete ${diagram}; malformed associated delivery row(s): ${invalidTableRows.join(" ; ")}.`);
+                const rowsBySurface = new Map(childRows.map(row => [row.surface, row]));
+                const hasQaRows = childRows.some(row => row.surface.startsWith("QA-"));
+                const expectedSurfaces = hasQaRows ? declaredSurfaces.flatMap(surface => [surface, `QA-${surface}`]) : declaredSurfaces;
+                const missing = expectedSurfaces.filter(surface => !rowsBySurface.has(surface));
+                const unexpected = childRows.filter(row => !expectedSurfaces.includes(row.surface)).map(row => row.surface);
+                if (missing.length > 0 || unexpected.length > 0 || childRows.length !== rowsBySurface.size) {
+                  throw new Error(`Cannot complete ${diagram}; invalid associated delivery rows: missing=${missing.join(", ") || "none"}; unexpected=${unexpected.join(", ") || "none"}; duplicate=${childRows.length !== rowsBySurface.size}.`);
+                }
+                for (const row of childRows) {
+                  const [childOwner, childRepo] = row.repository.split("/", 2);
+                  if (!childOwner || !childRepo || !Number.isInteger(row.number) || row.number <= 0) {
+                    throw new Error(`Cannot complete ${diagram}; malformed associated PR identity for ${row.surface}.`);
+                  }
+                  const { data: childPr } = await github.rest.pulls.get({ owner: childOwner, repo: childRepo, pull_number: row.number });
+                  const phase = row.surface.startsWith("QA-") ? "QA" : "Production";
+                  const surface = row.surface.replace(/^QA-/, "");
+                  const productionTargets = {
+                    Backend: { repository: `${owner}/${repo}`, base: "main" },
+                    MobileIos: { repository: "VAAD1ST/vaa-mobile-ios", base: process.env.SEQUENCE_GOAL_IOS_BASE_BRANCH },
+                    MobileAndroid: { repository: "VAAD1ST/vaa-mobile-android", base: process.env.SEQUENCE_GOAL_ANDROID_BASE_BRANCH },
+                    WebUi: { repository: process.env.SEQUENCE_GOAL_WEBUI_REPOSITORY, base: process.env.SEQUENCE_GOAL_WEBUI_BASE_BRANCH }
+                  };
+                  const target = phase === "QA" ? { repository: `${owner}/${repo}`, base: "main" } : productionTargets[surface];
+                  const body = childPr.body || "";
+                  const coordinatorValue = `${owner}/${repo}@${pr.head.ref}`;
+                  const coordinatorIdentity = "Associated sequence-goal delivery for `" + coordinatorValue + "`.";
+                  const canonicalCoordinatorIdentity = "Associated sequence-goal delivery for ``" + coordinatorValue + "``.";
+                  const escapeRegex = value => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                  const hasExactLine = value => new RegExp(`^${escapeRegex(value)}\\s*$`, "m").test(body);
+                  const coordinatorMatches = hasExactLine(coordinatorIdentity) || hasExactLine(canonicalCoordinatorIdentity);
+                  const currentMetadata = (hasExactLine(`- Surface: \`${surface}\``) || hasExactLine(`- Surface: \`\`${surface}\`\``)) &&
+                    (hasExactLine(`- Phase: \`${phase}\``) || hasExactLine(`- Phase: \`\`${phase}\`\``));
+                  if (!target?.repository || row.repository !== target.repository || row.base !== target.base || childPr.html_url !== row.url || childPr.head?.repo?.full_name !== target.repository ||
+                      childPr.head?.ref !== row.head || childPr.base?.ref !== target.base || !trustedAuthors.has(childPr.user?.login || "") ||
+                      (!coordinatorMatches || !currentMetadata) || !childPr.merged_at) {
+                    throw new Error(`Cannot complete ${diagram}; ${row.repository}#${row.number} does not satisfy the trusted ${phase} ${surface} identity contract.`);
+                  }
+                  if (!(await deliveryIsCurrent({ goalText: text, associated: childRows }, row, childPr))) {
+                    throw new Error(`Cannot complete ${diagram}; ${row.surface} verification does not match the current child commits and goal requirements.`);
+                  }
+                  if (phase === "Production" && surface === "MobileIos") {
+                    const requiredPasses = ["Security and privacy", "Accessibility", "Maintainability and architecture", "Observability, analytics and diagnosability", "Testing quality and coverage gaps", "Behavioural regression and traveller flow correctness"];
+                    const inferential = body.match(/(?:^|\n)## Inferential review[^\n]*\n([\s\S]*?)(?=\n## |\s*$)/i)?.[1] || "";
+                    const actualPasses = [...inferential.matchAll(/^- \[x\] (?<pass>[^\r\n]+)\r?$/gim)].map(match => match.groups.pass);
+                    const outcomes = [...inferential.matchAll(/^Review outcome:\s*(?:no-findings|findings-addressed|not-applicable):\s*\S.*$/gim)];
+                    if (actualPasses.length !== requiredPasses.length || !actualPasses.every((pass, index) => pass === requiredPasses[index]) || outcomes.length !== 1) {
+                      throw new Error(`Cannot complete ${diagram}; ${row.repository}#${row.number} is missing the complete six-pass inferential-review contract.`);
+                    }
+                  }
+                }
+                text = setGoalField(text, "Status", "`Complete`");
+                text = setGoalField(text, "Status Updated By", "`.github/workflows/ai-delivery-sequence-goal-pr-finalizer.yml`");
+                text = setGoalField(text, "Transition note", `All associated delivery PRs merged; coordinator PR #${pr.number} merged to main.`);
+              } else {
+                text = setGoalField(text, "Status", "`InProgress`");
+                text = setGoalField(text, "Status Updated By", "`.github/workflows/ai-delivery-sequence-goal-pr-finalizer.yml`");
+                text = setGoalField(text, "Transition note", `Coordinator PR #${pr.number} closed without merge; delivery remains incomplete.`);
+              }
+              const deliveryLabel = goalField(text, "Actual agent resources");
+              const deliveryResourceUsage = deliverySummary?.resourceUsage?.actual || parseResourceLabel(deliveryLabel);
+              if (!deliveryResourceUsage) {
+                throw new Error(`Cannot calculate lifecycle resources for ${diagram}; Actual agent resources is missing or malformed.`);
+              }
+              const retainedLifecycleUsage = parseResourceLabel(goalField(text, "Lifecycle agent resources"));
+              const lifecycleResourceUsage = retainedLifecycleUsage || emptyResourceUsage();
+              if (!retainedLifecycleUsage) addResourceUsage(lifecycleResourceUsage, deliveryResourceUsage);
+              const unappliedAiEvidence = aiEvidence.filter(entry => !text.includes(`<!-- sequence-goal-evidence-batch:${path.basename(entry.filePath, ".json")} -->`));
+              const unappliedHumanEvidence = humanEvidence.filter(entry => !text.includes(`<!-- sequence-goal-evidence-batch:${path.basename(entry.filePath, ".json")} -->`));
+              addResourceUsage(lifecycleResourceUsage, summarizeEvidenceResources(unappliedAiEvidence));
+              addResourceUsage(lifecycleResourceUsage, summarizeEvidenceResources(unappliedHumanEvidence));
+              const aiResourceLabel = formatResourceUsage(aiResourceUsage);
+              const humanResourceLabel = formatResourceUsage(humanResourceUsage);
+              const lifecycleResourceLabel = replayWithoutTransientEvidence
+                ? goalField(text, "Lifecycle agent resources")
+                : formatResourceUsage(lifecycleResourceUsage);
+              if (!replayWithoutTransientEvidence) text = setGoalField(text, "Lifecycle agent resources", lifecycleResourceLabel);
+
+              const subsectionHeading = `### PR #${pr.number}`;
+              const subsection = [
+                subsectionHeading,
+                "",
+                "| Field | Value |",
+                "| --- | --- |",
+                `| Final state | \`${finalState}\` |`,
+                `| Closed at UTC | ${tableValue(closedAtUtc)} |`,
+                `| Closed by | \`${tableValue(closedBy)}\` |`,
+                `| Merged by | ${mergedBy ? `\`${tableValue(mergedBy)}\`` : "n/a"} |`,
+                `| Target branch | \`${tableValue(targetBranch)}\` |`,
+                `| PR | #${pr.number} |`,
+                `| Finalizer run | ${tableValue(runUrl)} |`,
+                `| Delivery agent resources | ${tableValue(deliveryLabel)} |`,
+                `| AI review agent resources | ${tableValue(aiResourceLabel)} |`,
+                `| Human comment agent resources | ${tableValue(humanResourceLabel)} |`,
+                `| Total lifecycle agent resources | ${tableValue(lifecycleResourceLabel)} |`,
+                `| AI review evidence | ${tableValue(summarizeAi(aiEvidence))} |`,
+                `| Human comment evidence | ${tableValue(summarizeHuman(humanEvidence))} |`,
+                `| Evidence archived by | \`.github/workflows/ai-delivery-sequence-goal-pr-finalizer.yml\` |`,
+                ""
+              ].join("\n");
+              const sectionPattern = /(^## Agent Loop Closure Evidence\s*$[\s\S]*?)(?=^## |(?![\s\S]))/m;
+              if (!replayWithoutTransientEvidence && !sectionPattern.test(text)) {
+                text = `${text.trimEnd()}\n\n## Agent Loop Closure Evidence\n\n${subsection}`;
+              } else if (!replayWithoutTransientEvidence) {
+                const sectionMatch = text.match(sectionPattern);
+                let section = sectionMatch[1].trimEnd();
+                const subsectionPattern = new RegExp(`^### PR #${pr.number}\\s*$[\\s\\S]*?(?=^### |(?![\\s\\S]))`, "m");
+                if (subsectionPattern.test(section)) {
+                  section = section.replace(subsectionPattern, subsection.trimEnd());
+                } else {
+                  section = `${section}\n\n${subsection.trimEnd()}`;
+                }
+
+                text = text.slice(0, sectionMatch.index) + `${section}\n\n` + text.slice(sectionMatch.index + sectionMatch[1].length).replace(/^\n+/, "");
+              }
+
+              fs.writeFileSync(diagram, text, "utf8");
+              core.setOutput("lifecycle_resources", lifecycleResourceLabel);
+            }
+
+            if (!pr.merged) {
+              const indexPath = "docs/sequence-diagrams.md";
+              let indexText = fs.readFileSync(indexPath, "utf8");
+              for (const diagram of diagrams) {
+                const relative = diagram.replace(/^docs\//, "");
+                const escaped = relative.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                const rowPattern = new RegExp(`^\\|(?<row>[^\\n]*\\(${escaped}\\)[^\\n]*)\\|$`, "mi");
+                const match = indexText.match(rowPattern);
+                if (!match) throw new Error(`Cannot update sequence-diagram index for abandoned goal ${diagram}.`);
+                indexText = indexText.replace(rowPattern, value => {
+                  if (/\|\s*`?InProgress`?\s*\|$/.test(value)) return value;
+                  const updated = value.replace(/\|\s*`?Complete`?\s*\|$/, "| `InProgress` |");
+                  if (updated === value) throw new Error(`Cannot find the final Complete status cell for abandoned goal ${diagram}.`);
+                  return updated;
+                });
+              }
+              fs.writeFileSync(indexPath, indexText, "utf8");
+            }
+
+            const evidenceFiles = [...aiEvidence, ...humanEvidence].map(entry => entry.filePath);
+            for (const filePath of evidenceFiles) {
+              if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+              }
+            }
+
+            execSync("git status --short", { encoding: "utf8" })
+              .split(/\r?\n/)
+              .filter(Boolean)
+              .forEach(line => core.info(line));
+
+            const changed = execSync("git status --porcelain", { encoding: "utf8" }).trim();
+            core.setOutput("should_commit", String(Boolean(changed)));
+            core.setOutput("target_branch", targetBranch);
+            core.setOutput("expected_head_sha", execSync("git rev-parse HEAD", { encoding: "utf8" }).trim());
+            core.setOutput("final_state", finalState);
+            core.setOutput("diagrams", diagrams.join(";"));
+            core.setOutput("source_branch", pr.head.ref);
+            core.setOutput("source_head_sha", pr.head.sha);
+
+      - name: Commit finalizer evidence
+        id: commit-finalizer
+        if: steps.finalize.outputs.should_commit == 'true'
+        shell: pwsh
+        env:
+          TARGET_BRANCH: ${{ steps.finalize.outputs.target_branch }}
+          EXPECTED_HEAD_SHA: ${{ steps.finalize.outputs.expected_head_sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_BASE: ${{ github.event.pull_request.base.ref }}
+          SOURCE_BRANCH: ${{ github.event.pull_request.head.ref }}
+          SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          CLOSED_AT_UTC: ${{ github.event.pull_request.closed_at }}
+          CLOSED_BY: ${{ github.event.sender.login }}
+          FINALIZER_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          function Write-StandaloneAbandonmentArchive {
+            git fetch --no-tags origin '+refs/heads/main:refs/remotes/origin/main'
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to fetch main for deleted-branch abandonment fallback.' }
+            git checkout --detach origin/main
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to check out main for deleted-branch abandonment fallback.' }
+            $archivePath = ".codex/agent-loop/abandonments/pr-$env:PR_NUMBER.json"
+            $archive = [ordered]@{
+              schemaVersion = 1; finalState = 'Abandoned'; repository = '${{ github.repository }}'
+              pullRequest = [ordered]@{ number = [int]$env:PR_NUMBER; url = $env:PR_URL; base = $env:PR_BASE }
+              source = [ordered]@{ branch = $env:SOURCE_BRANCH; headSha = $env:SOURCE_HEAD_SHA; deletedBeforeFinalization = $true }
+              closedAtUtc = $env:CLOSED_AT_UTC; closedBy = $env:CLOSED_BY; finalizerRun = $env:FINALIZER_RUN_URL
+              note = 'Coordinator branch was deleted before branch-local closure evidence could be archived.'
+            }
+            $archiveDirectory = Split-Path -Parent $archivePath
+            New-Item -ItemType Directory -Path $archiveDirectory -Force | Out-Null
+            if (Test-Path -LiteralPath $archivePath) {
+              $existing = Get-Content -LiteralPath $archivePath -Raw | ConvertFrom-Json
+              if ($existing.schemaVersion -ne 1 -or $existing.finalState -ne 'Abandoned' -or $existing.repository -ne '${{ github.repository }}' -or
+                  $existing.pullRequest.number -ne [int]$env:PR_NUMBER -or $existing.pullRequest.url -ne $env:PR_URL -or
+                  $existing.source.branch -ne $env:SOURCE_BRANCH -or $existing.source.headSha -ne $env:SOURCE_HEAD_SHA -or $existing.source.deletedBeforeFinalization -ne $true) {
+                throw "Existing standalone abandonment archive $archivePath does not match the closing PR identity."
+              }
+            } else {
+              ($archive | ConvertTo-Json -Depth 5) + "`n" | Set-Content -LiteralPath $archivePath -Encoding UTF8 -NoNewline
+            }
+            git add -- $archivePath
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to stage standalone abandonment evidence.' }
+            git diff --cached --quiet
+            $archiveChanged = $LASTEXITCODE -eq 1
+            if ($LASTEXITCODE -notin @(0, 1)) { throw 'Failed to inspect standalone abandonment archive changes.' }
+            if ($archiveChanged) {
+              git commit -m 'chore(sequence-goal): archive PR closure evidence'
+              if ($LASTEXITCODE -ne 0) { throw 'Failed to commit standalone abandonment evidence.' }
+              $published = $false
+              foreach ($attempt in 1..3) {
+                git fetch --no-tags origin '+refs/heads/main:refs/remotes/origin/main'
+                if ($LASTEXITCODE -ne 0) { throw 'Failed to refresh main after concurrent standalone finalizer activity.' }
+                git rebase origin/main
+                if ($LASTEXITCODE -ne 0) { git rebase --abort; throw 'Standalone abandonment evidence conflicts with a concurrent main update.' }
+                $mainLease = (git rev-parse origin/main).Trim()
+                git push --force-with-lease="refs/heads/main:$mainLease" origin 'HEAD:main'
+                if ($LASTEXITCODE -eq 0) { $published = $true; break }
+                Write-Warning "Standalone abandonment publication raced with another main update (attempt $attempt of 3)."
+              }
+              if (-not $published) { throw 'Failed to push standalone abandonment evidence after three lease-protected main refreshes.' }
+            }
+            "standalone_archive=$archivePath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          }
+          git check-ref-format --branch $env:TARGET_BRANCH | Out-Null
+          if ($LASTEXITCODE -ne 0) { throw 'Finalizer target branch is invalid.' }
+          if ($env:EXPECTED_HEAD_SHA -notmatch '^[0-9a-f]{40}$') { throw 'Finalizer expected head SHA is invalid.' }
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A -- docs/sequence-diagrams.md docs/sequence-diagrams .codex/agent-loop
+          git commit -m "chore(sequence-goal): archive PR closure evidence"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to commit coordinator lifecycle evidence.' }
+          git push --force-with-lease="refs/heads/$($env:TARGET_BRANCH):$($env:EXPECTED_HEAD_SHA)" origin "HEAD:$($env:TARGET_BRANCH)"
+          if ($LASTEXITCODE -ne 0) {
+            if ($env:TARGET_BRANCH -ne 'main') {
+              git ls-remote --exit-code --heads origin "refs/heads/$env:TARGET_BRANCH" | Out-Null
+              $branchLookupExit = $LASTEXITCODE
+              if ($branchLookupExit -eq 2) { Write-StandaloneAbandonmentArchive; exit 0 }
+              if ($branchLookupExit -ne 0) { throw 'Failed to revalidate coordinator branch after the lifecycle push failed.' }
+              throw 'Coordinator branch moved after closure; refusing to write abandonment evidence to a rebuilt branch.'
+            }
+            throw 'Main changed during finalization; rerun to validate the latest goal and child verification bindings.'
+          }
+
+      - name: Comment with shutdown summary
+        if: always() && steps.finalize.outputs.final_state != '' && (steps.finalize.outputs.should_commit != 'true' || steps.commit-finalizer.outcome == 'success')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const state = "${{ steps.finalize.outputs.final_state }}";
+            const diagrams = "${{ steps.finalize.outputs.diagrams }}".split(";").filter(Boolean);
+            const lifecycleResources = "${{ steps.finalize.outputs.lifecycle_resources }}";
+            const finalizerNote = "${{ steps.finalize.outputs.finalizer_note }}";
+            const standaloneArchive = "${{ steps.commit-finalizer.outputs.standalone_archive || steps.finalize.outputs.standalone_archive }}";
+            const marker = `<!-- sequence-goal-finalizer:${context.payload.pull_request.number} -->`;
+            const body = [
+              marker,
+              standaloneArchive
+                ? `[from-codex] Sequence-goal finalizer recorded \`${state}\` closure evidence in \`${standaloneArchive}\` on \`main\`.`
+                : finalizerNote
+                ? `[from-codex] Sequence-goal finalizer handled \`${state}\` closure without writing evidence: ${finalizerNote}`
+                : `[from-codex] Sequence-goal finalizer recorded \`${state}\` closure evidence in the goal document(s).`,
+              "",
+              diagrams.length > 0 ? diagrams.map(diagram => `- \`${diagram}\``).join("\n") : "- No diagram paths recorded.",
+              lifecycleResources ? `- Total lifecycle agent resources: ${lifecycleResources}` : "- Total lifecycle agent resources: not recorded.",
+              "",
+              standaloneArchive
+                ? "The coordinator source branch was unavailable, so no branch-local transient evidence was imported."
+                : finalizerNote
+                ? "Transient evidence was not archived because the durable source branch was unavailable."
+                : "Transient PR review/comment evidence was archived into the goal document and removed from `.codex/agent-loop`."
+            ].join("\n");
+            const appSlug = "${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}";
+            const trustedAuthors = new Set(["github-actions", "github-actions[bot]", ...(appSlug ? [appSlug, `${appSlug}[bot]`] : [])]);
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number, per_page: 100
+            });
+            const existing = comments.find(comment => trustedAuthors.has(comment.user?.login || "") &&
+              String(comment.body || "").split(/\r?\n/).some(line => line.trim() === marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner: context.repo.owner, repo: context.repo.repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.payload.pull_request.number, body });
+            }

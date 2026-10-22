@@ -1,0 +1,54 @@
+meta {
+  name: Update Secure Flight Info
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation UpdateSecureFlightInfo {
+    UpdateSecureFlightInfo(
+      request: {
+        secureFlightReservationId: "{{secureFlightReservationId}}"
+        passengerId: "{{secureFlightPassengerId}}"
+        passengerFirstNin: "{{secureFlightPassengerFirstNin}}"
+        passengerLastNin: "{{secureFlightPassengerLastNin}}"
+        # Provide either CanadianTravelNumber or RedressNumber, but not both.
+        secureFlightDetails: [
+          # {
+          #   type: CanadianTravelNumber
+          #   number: "{{canadianTravelNumber}}"
+          # }
+          {
+            type: RedressNumber
+            number: "{{redressNumber}}"
+          }
+          {
+            type: KnownTravellerNumber
+            number: "{{knownTravellerNumber}}"
+          }
+        ]
+      }
+    ) {
+      secureFlightReservationId
+      passengerDetails {
+        passengerId
+        passengerFirstNin
+        passengerLastNin
+        knownTravellerNumber
+        canadianTravelNumber
+        redressNumber
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

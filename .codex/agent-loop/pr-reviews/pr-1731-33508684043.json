@@ -1,0 +1,1069 @@
+{
+  "prNumber": 1731,
+  "branch": "codex/vaa-eapi-under18-enrolment-diagram-retry-15",
+  "base": "main",
+  "headSha": "ab597ff2aefa72769245d2e25589129e67f91061",
+  "runId": "33508684043",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/33508684043",
+  "collectedAtUtc": "2026-09-01T12:39:36.07Z",
+  "approved": false,
+  "reviewDecision": null,
+  "approvals": [],
+  "unresolvedAiThreads": [
+    {
+      "threadId": "PRRT_kwDORKRjBc6eGiIr",
+      "replyToCommentDatabaseId": 3904079653,
+      "path": "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Loyalty.Identity/Application/Command/RegisterYoungFlyerCommandHandler.cs",
+      "line": 82,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1731#discussion_r3904079653",
+      "author": "copilot-pull-request-reviewer",
+      "body": "PreferredFlag is compared case-sensitively here (== \"Y\"), but this handler otherwise uses the shared case-insensitive string extensions (e.g., Valid.Is(\"N\"), IsNullOrWhiteSpace). Using `Is(\"Y\")` avoids silently skipping the default Home address type when PreferredFlag differs only by case.",
+      "decision": "valid",
+      "resolutionComment": "Updated the PreferredFlag check to use the shared Is(\"Y\") helper. VAA.EAPI.Common.Extensions.StringExtensions.Is performs an ordinal case-insensitive comparison, consistent with the handler's existing Valid.Is(\"N\") check, so lowercase preferred flags now receive the default Home address type."
+    }
+  ],
+  "checks": {
+    "combinedStatus": "pending",
+    "checkRuns": [
+      {
+        "name": "VAA.EAPI.GraphQL.Rest ( Slot ) (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858762676"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Rest ( Slot )",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858755285"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Account (Non Slot) (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858744877"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Account (Non Slot)",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858734977"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Rest (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858716333"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Rest",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858706089"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Holidays (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858691022"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Holidays",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858681034"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Member.Management (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858666300"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Member.Management",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858655554"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Identity (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858636873"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Identity",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858628229"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Search (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858619111"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Search",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858602774"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Operations (Non Slot) (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858589654"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Operations (Non Slot)",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858576365"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Account (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858559856"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Account",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858553358"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858546403"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858532534"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Loyalty (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858505736"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Loyalty",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858496197"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Full (Non Slot) (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858484062"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Full (Non Slot)",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858470886"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Book (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858451518"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Book",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858440855"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.NDCHealthCheck (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858429696"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.NDCHealthCheck",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858417953"
+      },
+      {
+        "name": "VAA.EAPI.ServiceBus.Loops.yml",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858408194"
+      },
+      {
+        "name": "VAA.EAPI.ServiceBus.Loops.yml (build Build Dev)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858397901"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.CRM.Email (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858383561"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.CRM.Email",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858378984"
+      },
+      {
+        "name": "VAA.EAPI.Automation.PR",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858354465"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Customer (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858345033"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Customer",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858334695"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.CRM (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858316626"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.CRM",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858307849"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Trips (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858283541"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Trips",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858270180"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Retailing (Non Slot) (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858253578"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.Retailing (Non Slot)",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858238401"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.PaxOps (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858228355"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Domain.PaxOps",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858216836"
+      },
+      {
+        "name": "VAA.EAPI.NDC.Offer (Digital) (Build Build)",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858198983"
+      },
+      {
+        "name": "VAA.EAPI.NDC.Offer (Digital)",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858195549"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Validation (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858185847"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.QueueMgmt (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858185404"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Offer (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858183449"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Security (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858182435"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.OrderNotification (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858181896"
+      },
+      {
+        "name": "VAA.EAPI.NDC.Order (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858180043"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Inflight.ConnPulse ( Slot )",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858178701"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.OrderSearch (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858178457"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Holidays.PriceFeed (Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858176710"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Inflight.Connectivity ( Slot )",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858174981"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.Order.Document (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858174471"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.Order.Mgmt (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858173305"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.IFG.Payment (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858173226"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Vred (Slot - Old Subscription)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858173069"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.CRM.Refunds (Non slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858171023"
+      },
+      {
+        "name": "VAA.EAPI.HealthStatusApp",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858170511"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.Order (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858169948"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Holidays",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858169093"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.ServiceBus.Retail.Analytics",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858168766"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.Search",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858166922"
+      },
+      {
+        "name": "VAA.EAPI.ServiceBus.Digital",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858166824"
+      },
+      {
+        "name": "VAA.Facade.WalletFacade (Digital -Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858165842"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.ReferenceData",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858165405"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.Payment (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858165381"
+      },
+      {
+        "name": "VAA.EAPI.Automation.Utility.TestRunner.Service",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858163217"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Holidays.PriceFeed",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858163077"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Wallet( Digital - Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858162593"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Inflight.ConnPulse (Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858161925"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.ARC.Payment (Digital)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858161716"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.ChangeFeedProcessor",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858159316"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Holidays.StoreAppointment",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858159259"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.ChangeFeedProcessor (Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858158937"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Reference",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858157726"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.Management",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858156566"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Offer",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858155995"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Analytics",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858155658"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.Ticket",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858154979"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.Microservices/VAA.EAPI.Microservices.Loyalty.Identity/VAA.EAPI.Microservices.Loyalty.Identity.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154629"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.Automation/VAA.EAPI.Automation.MyAccount.UI/VAA.EAPI.Automation.MyAccount.UI.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154591"
+      },
+      {
+        "name": "verify-SolutionPath-VAA.EAPI.Automation/VAA.EAPI.Automation.sln",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154576"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.Microservices/VAA.EAPI.Microservices.Loyalty.Member.Management/VAA.EAPI.Microservices.Loyalty.Member.Management.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154459"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.Microservices/VAA.EAPI.Microservices.CRM.Email/VAA.EAPI.Microservices.CRM.Email.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154457"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.Automation/VAA.EAPI.Automation.MyAccount/VAA.EAPI.Automation.MyAccount.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154447"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.Microservices/VAA.EAPI.Microservices.Loyalty.Customer/VAA.EAPI.Microservices.Loyalty.Customer.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154441"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account/VAA.EAPI.GraphQL.Domain.Account.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154438"
+      },
+      {
+        "name": "verify-SolutionPath-VAA.EAPI.Deployments/VAA.EAPI.Deployments.sln",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154437"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account.Tests/VAA.EAPI.GraphQL.Domain.Account.Tests.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154435"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.Microservices/VAA.EAPI.Microservices.Loyalty.Identity.Tests/VAA.EAPI.Microservices.Loyalty.Identity.Tests.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154432"
+      },
+      {
+        "name": "verify-ScopePath-.",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154421"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.Microservices/VAA.EAPI.Microservices.Loyalty.Member.Management.Tests/VAA.EAPI.Microservices.Loyalty.Member.Management.Tests.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154419"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.Microservices/VAA.EAPI.Domain/VAA.EAPI.Domain.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154410"
+      },
+      {
+        "name": "verify-ProjectPath-VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Common/VAA.EAPI.GraphQL.Common.csproj",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99858154392"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Sky (Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858154188"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.Data",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858152842"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Sync",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858152509"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.GroundOperations.LoungeManagement.SkyTeam",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858152112"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.Payment",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858151102"
+      },
+      {
+        "name": "VAA.EAPI.LoungeManagement.SkyTeam",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858149892"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order.Create (Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858149782"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.PartnerDataManagment",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858149630"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Insurance",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858148726"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Order",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858147717"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Operations (Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858146370"
+      },
+      {
+        "name": "VAA.EAPI.LoungeManagement.Clues",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858146171"
+      },
+      {
+        "name": "VAA.Facade.PDMFacade",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858146158"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Lopa (Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858144990"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Health",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858144397"
+      },
+      {
+        "name": "VAA.EAPI.Web.Search",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858143023"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Sustainability",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858142920"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.RulesEngine",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858142809"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Configuration",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858140683"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Wallet",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858139700"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Seat",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858139632"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Insights",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858139621"
+      },
+      {
+        "name": "VAA.Facade.WalletFacade",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858139232"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Flight.Services",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858137250"
+      },
+      {
+        "name": "VAA.Facade.EnrolmentFacade",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858136534"
+      },
+      {
+        "name": "VAA.EAPI.NDC.Offer",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858136202"
+      },
+      {
+        "name": "VAA.EAPI.NDC.Order",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858136071"
+      },
+      {
+        "name": "VAA.Facade.NDC.IFGFacade",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858134854"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Validation",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858134020"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Enrolment",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858133278"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Security",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858132210"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Customer.Transactions",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858132058"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.OrderSearch",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858130936"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.ChangeFeedProcessor",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858130792"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Campaign.Management",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858129519"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Brand",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858129124"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.Order",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858128610"
+      },
+      {
+        "name": "VAA.EAPI.Web.Book",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858127596"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.Order.Document",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858127462"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.Order.Mgmt",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858126062"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Ndc.Sabre.OrderNotification",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858125733"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Basket",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858124383"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.AddressLookup",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858124218"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Audit",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858124185"
+      },
+      {
+        "name": "VAA.EAPI.Orchestration.RetailTherapy",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858122343"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Loyalty.Vred (Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858121945"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.Retail.Trip",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858121335"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.GroundOperations.Passenger.CheckIn",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858121288"
+      },
+      {
+        "name": "VAA.EAPI.Orchestration.Notifications",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858121085"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.FlightOperations.Catering (Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858118381"
+      },
+      {
+        "name": "VAA.EAPI.GraphQL.Stitch",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858118275"
+      },
+      {
+        "name": "VAA.EAPI.Automation.Utility.HttpMocker",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858118228"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.FlightOperations.Crew",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858117560"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.FlightOperations.Flights",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858117478"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.GroundOperations.Passenger.Baggage",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858115078"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.CRM.Content",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858114479"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.CRM.CustomerProfile (Non Slot)",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858114334"
+      },
+      {
+        "name": "VAA.Facade.EntraFacade",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858114279"
+      },
+      {
+        "name": "VAA.EAPI.Microservices.CRM.Notification",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99858114270"
+      },
+      {
+        "name": "Wiz Vulnerability Scanner",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99857867913"
+      },
+      {
+        "name": "Wiz Secret Scanner",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99857867900"
+      },
+      {
+        "name": "Wiz IaC Scanner",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99857867781"
+      },
+      {
+        "name": "Wiz Data Scanner",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99857867509"
+      },
+      {
+        "name": "copilot-pull-request-reviewer",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508388896/job/99857857432"
+      },
+      {
+        "name": "review",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379789/job/99857823388"
+      },
+      {
+        "name": "harness-coverage",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379777/job/99857822182"
+      },
+      {
+        "name": "detect-scopes",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379800/job/99857821824"
+      },
+      {
+        "name": "closed-loop-gate",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379784/job/99857821758"
+      },
+      {
+        "name": "verify",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379739/job/99857821747"
+      },
+      {
+        "name": "build",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379765/job/99857821743"
+      },
+      {
+        "name": "high-risk-autolabel",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379840/job/99857821703"
+      },
+      {
+        "name": "verify-docs-agent-loop",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508379748/job/99857821325"
+      },
+      {
+        "name": "review-team-labels",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33508378001/job/99857819907"
+      }
+    ]
+  },
+  "resourceUsage": {
+    "workflow": "sequence-goal-pr-review-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 539866,
+      "inputTokens": 537678,
+      "cachedInputTokens": 476659,
+      "outputTokens": 2188,
+      "reasoningOutputTokens": 353,
+      "estimatedUsd": 1.185309
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "539,866 tokens (537,678 input, 476,659 cached + 2,188 output, 353 reasoning); $1.19 USD"
+  }
+}

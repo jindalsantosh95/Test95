@@ -1,0 +1,41 @@
+###Request
+POST https://stg.virginatlantic.com/PCCOciWeb/apiv2/travelparties HTTP/1.1
+
+$[?(@.recordLocator == 'F77JOI')]
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+  "bauFlow": false,
+  "checkinAdvisory": {
+    "advisoryText1": "Uh-oh!  We&#39;re sorry, but we can&#39;t check you in online, because you have a Service Request that requires you to check in at the airport.",
+    "advisoryText2": "Please see an agent at the airport to complete check-in.",
+    "advisoryText3": "You can always view your trip details at {0}.",
+    "checkinAdvisory": true,
+    "errorMessage": "PROHIBITEDSSR",
+    "title": "Advisory"
+  },
+  "displayContactTracing": false,
+  "hasGroupLeaderFlag": false,
+  "hasGroupPNRFlag": false,
+  "passengers": [
+    {
+      "checkedInOnASL": false,
+      "firstNIN": "01",
+      "firstName": "MINOR",
+      "infantPresent": false,
+      "lastNIN": "01",
+      "lastName": "DUDE",
+      "visaRequired": false
+    }
+  ],
+  "recordLocator": "F77JOI",
+  "saferTravelEnabled": false,
+  "transitingUS": false
+}

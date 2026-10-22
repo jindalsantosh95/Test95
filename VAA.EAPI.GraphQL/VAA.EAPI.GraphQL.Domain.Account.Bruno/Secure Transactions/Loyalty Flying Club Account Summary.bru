@@ -1,0 +1,45 @@
+meta {
+  name: Loyalty Flying Club Account Summary
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{graphql_secure}}
+  body: graphql
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer {{access_token}},Token {{flying_club_broker_token}}
+}
+
+body:graphql {
+  query LoyaltyFlyingClubAccountSummary {
+    loyaltyFlyingClubAccountSummary {
+      tier
+      virginPoints
+      tierPoints
+      tierPointsResetDate
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Use a test application access token with the summary role and a linked Flying Club
+  broker token for a synthetic account. Supply both using the existing secret
+  environment variables; never commit token values. This request targets GraphQL,
+  not the MCP transport, so no MCP caller-context assertion is required.
+  The generated REST projection is GET /api/v1/loyaltyFlyingClubAccountSummary.
+  The REST projection and MCP require the configured backend application bearer
+  with the summary role and the linked broker token, using the same two-token
+  Authorization header shown above. No X-EAPI-Caller-Context assertion is required.
+  The shared authentication middleware validates the application bearer; the
+  Account domain still validates the broker token. Keep all tokens in private
+  environment variables. MCP uses POST and its existing transport path.
+}

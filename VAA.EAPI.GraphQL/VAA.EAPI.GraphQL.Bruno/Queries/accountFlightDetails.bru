@@ -1,0 +1,32 @@
+meta {
+  name: accountFlightDetails
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query accountFlightDetails($page: Int!, $pageSize: Int!) {
+    accountFlightDetails(page: $page, pageSize: $pageSize) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "page": 0,
+    "pageSize": 0
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

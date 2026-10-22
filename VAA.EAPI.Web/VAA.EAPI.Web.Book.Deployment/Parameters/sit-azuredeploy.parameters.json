@@ -1,0 +1,289 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avateunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sit",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    // Deployment Settings
+    "FunctionAppName": {
+      "value": "avateunafnwebbffbook"
+    },
+    "EnvironmentName": {
+      "value": "SIT"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-T-EUN-WEBBFF"
+    },
+    "AppServicePlanName": {
+      "value": "avateunaspwebbff"
+    },
+    "AppInsightsName": {
+      "value": "avateunaiwebbff"
+    },
+    "storageAccountName": {
+      "value": "avateunstwebbffbook"
+    },
+    "vaultName": {
+      "value": "avateunkvwebbff"
+    },
+
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvwebbff.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "BFF for WebSearch",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    },
+
+    //vnet settings
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+
+    //slot settings
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+
+    //Payment BFF
+    "OrderPaymentRefIdPqId": {
+      "value": "orderPaymentReferenceId"
+    },
+    "OrderPaymentStatusPqId": {
+      "value": "bookUpdatePaymentStatusPqId"
+    },
+    "PaymentRefIdRequestMockResponse": {
+      "value": "false"
+    },
+    "BffPaymentConfirmationLink": {
+      "value": "https://testresources.virginatlantic.com/sit/book/confirmation"
+    },
+    "BffPaymentAmountLink": {
+      "value": "https://testresources.virginatlantic.com/sit/book/payment/amount"
+    },
+    "BffPaymentLink": {
+      "value": "https://testresources.virginatlantic.com/sit/book/payment"
+    },
+    "OrderResponsePqId": {
+      "value": "orderResponse"
+    },
+    "OrderConfirmationMockResponseFromCache": {
+      "value": false
+    },
+
+    // Azure Function Settings
+    "AppSetting:AzureWebJobsStorage": {
+      "value": ""
+    },
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    /*"AppSetting:WEBSITE_CONTENTSHARE": {
+      "value": "avateunafnwebbffbook-ds"
+    },*/
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "AppSetting:OperationsVisibilityMode": {
+      "value": "Public|Secure"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    // Azure Active Directory
+    "AppSetting:AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AppSetting:AAD:TenantId": {
+      "value": "6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8"
+    },
+    "AppSetting:AAD:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    // Graph QL Microservice
+    "AppSetting:GraphQL:AppID": {
+      "value": ""
+    },
+    "AppSetting:GraphQL:Url": {
+      "value": "https://testresources.virginatlantic.com/sit/GraphQL/book/public"
+    },
+    "AppSetting:GraphQL:ShowMockResponse": {
+      "value": "false"
+    },
+    "AppSetting:GraphQL:SearchOffersPqId": {
+      "value": "searchOffers"
+    },
+    "AppSetting:HttpClientTimeOut": {
+      "value": "00:01:30"
+    },
+    "AppSetting:GraphQL:OfferSearch:PqId": {
+      "value": "searchOffersBFF"
+    },
+    "AppSetting:GraphQL:RetrieveBasketPqId": {
+      "value": "retrieveBasket"
+    },
+    "AppSetting:GraphQL:SearchSummaryPqId": {
+      "value": "offerPrice"
+    },
+    "AppSetting:GraphQL:Brand:PqId": {
+      "value": "brand"
+    },
+
+    // Call Back Translation
+    "AppSetting:PostbackUrl": {
+      "value": "https://testresources.virginatlantic.com/sit/search"
+    },
+
+
+
+    // Delay used by microservice connecter when making get call after post
+    "AppSetting:TimeToWaitBeforeNextRecall": {
+      "value": ""
+    },
+
+    // Redis cache
+    "AppSetting:RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkventgraphql.vault.azure.net/secrets/AVATEUNAFNGRAPHQL-Config-RedisCacheConnectionString/)"
+    },
+    "AppSetting:RedisCacheExpiry": {
+      "value": ""
+    },
+    // test basket settings
+    "KeyVaultUri": {
+      "value": "https://avateunkvwebbff.vault.azure.net"
+    },
+    "MicroServiceClientId": {
+      "value": "Common-Config-AutomationTestClientId"
+    },
+    "MicroServiceClientSecret": {
+      "value": "Common-Config-AutomationTestClientSecret"
+    },
+    "BasketUri": {
+      "value": "https://Testresources.virginatlantic.com/SIT/basketmicroservice/basket"
+    },
+    "OfferSubscriptionAutomationKey": {
+      "value": "AVATEUNAFNOFFERMICROSERV-Subscription-Automation-Key"
+    },
+    "BasketSubscriptionAutomationKey": {
+      "value": "AVATEUNAFNBASKETMICROSERV-Subscription-Automation-Key"
+    },
+    //Basket Links
+    "BasketLink": {
+      "value": "https://Testresources.virginatlantic.com/sit/book/basket"
+    },
+    "ContactLink": {
+      "value": "https://Testresources.virginatlantic.com/sit/book/contact"
+    },
+    "TermsLink": {
+      "value": "https://Testresources.virginatlantic.com/sit/book/terms"
+    },
+    "PassengerLink": {
+      "value": "https://Testresources.virginatlantic.com/sit/book/passenger/"
+    },
+    "BookCreateOrderPqId": {
+      "value": "bookOrderCreate"
+    },
+    "OrderConfirmationMockResponse": {
+      "value": "false"
+    },
+    "PaymentLink": {
+      "value": "https://testresources.virginatlantic.com/sit/book/payment"
+    },
+    "PaymentDetailsResponsePqId": {
+      "value": "paymentDetailsResponsePqId"
+    },
+
+    //BasketPqid's
+    "RetrieveBasketDetailsPqId": {
+      "value": "retrieveBasketDetailsPqId"
+    },
+    "UpdateContactDetailsPqId": {
+      "value": "updateContactDetailsPqId"
+    },
+    "UpdatePassengerMuationReqPqId": {
+      "value": "updatePassengerMuationReqPqId"
+    },
+    "UpdateTnCMutationPqId": {
+      "value": "updateTnCMutationPqId"
+    },
+
+    // Reference PqIds
+    "RetrieveCountriesPqId": {
+      "value": "retrieveCountries"
+    },
+    "RetrieveFQTProgrammesPqId": {
+      "value": "retrieveFQTProgrammes"
+    },
+
+    //swagger settings
+    "Appsettings:OpenApi__DocTitle": {
+      "value": "Web Book"
+    },
+    "Appsettings:OpenApi__Description": {
+      "value": "This API provides ability to Register and Update Web Book"
+    },
+    "Appsettings:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsettings:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsettings:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsettings:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "Appsettings:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsettings:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/bb74c198-0a08-447b-8e7c-01a9c74dda93/.default"
+    }
+  }
+}

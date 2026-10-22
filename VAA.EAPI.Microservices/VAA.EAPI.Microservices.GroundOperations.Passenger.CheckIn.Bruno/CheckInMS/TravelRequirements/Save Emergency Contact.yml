@@ -1,0 +1,61 @@
+info:
+  name: Save Emergency Contact
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{checkinms}}/TravelRequirements/SaveEmergencyContact"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: |-
+      {
+          "requirementsId": "{{requirementsId}}",
+          "emergencyContacts": [
+              {
+                  "passengerId": "{{pax1_id}}",
+                  "firstName": "Emergency",
+                  "lastName": "Contact",
+                  "phoneCountryCode": "GB",
+                  "phoneNumber": "7700900000",
+                  "passengerRefused": false
+              },
+              {
+                  "passengerId": "{{pax2_id}}",
+                  "firstName": "Emergency",
+                  "lastName": "Contact",
+                  "phoneCountryCode": "GB",
+                  "phoneNumber": "7700900000",
+                  "passengerRefused": false
+              }
+          ]
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        var json = res.getBody();
+
+        if (json?.requirementsId) {
+          bru.setVar("requirementsId", json.requirementsId);
+        }
+
+        const passengers = json?.passengers ?? [];
+        const pax1 = passengers[0];
+
+        if (pax1) {
+          bru.setVar("pax1_id", pax1.passengerId);
+          bru.setVar("pax1_givennames", pax1.givenNames);
+          bru.setVar("pax1_surname", pax1.surname);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,82 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Deployments/VAA.EAPI.APIM.Deployment*
+
+variables: 
+  - group: Common_Variables
+  - group: APIM  
+  - group: APIM_IP
+  - name: agentPool
+    value: 'Azure Pipelines' 
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.Deployments'  
+  - name: subRootPath
+    value: 'VAA.EAPI.APIM.Deployment'  
+  - name: location
+    value: 'north europe'
+  - name: microserviceName
+    value: 'passenger'   
+  - name: apimurlname
+    value: 'passenger'   
+  - name: productId
+    value: 'EAPI_TEST_PRODUCT'
+  - name: functionAppName_DEV
+    value: 'AVADEUNAFNPASSENGERMICROSERV' 
+  - name: functionAppName_SIT
+    value: 'AVATEUNAFNPASSENGERMICROSERV' 
+  - name: functionAppName_UAT
+    value: 'AVASEUNAFNPASSENGERMICROSERV' 
+  - name: functionAppName_PRD
+    value: 'AVAPEUNAFNPASSENGERMICROSERV'    
+              
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: build.yml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)  
+      subRootPath: $(subRootPath)
+      applicationName: $(microserviceName) 
+
+
+  # CD (Deployment) Pipeline
+  - template: release_product.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      buildConfiguration: $(buildConfiguration)  
+      location: $(location)                     
+      applicationName: $(applicationName)  
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      productId: $(productId)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_PRD: $(functionAppName_PRD)  
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)                
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+                                              

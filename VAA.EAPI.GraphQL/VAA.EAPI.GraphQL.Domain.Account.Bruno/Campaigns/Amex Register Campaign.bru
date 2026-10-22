@@ -1,0 +1,27 @@
+meta {
+  name: Amex Register Campaign
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation AmexRegisterCampaign {
+    amexRegisterCampaign(
+      registerCampaignRequest: {
+        uniqueId: "{{account_unique_id}}"
+        createdBy: "{{account_email}}"
+      }
+    )
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

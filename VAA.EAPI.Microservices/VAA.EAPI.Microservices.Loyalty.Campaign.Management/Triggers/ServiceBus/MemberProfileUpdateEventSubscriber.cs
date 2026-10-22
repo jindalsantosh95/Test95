@@ -1,0 +1,27 @@
+﻿using MediatR;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
+using VAA.EAPI.Common.Serialisation;
+using VAA.EAPI.Microservices.Loyalty.Campaign.Management.Application.Commands.MemberProfileUpdate;
+
+namespace VAA.EAPI.Microservices.Loyalty.Campaign.Management.Triggers.ServiceBus
+{
+    public class MemberProfileUpdateEventSubscriber
+    {
+        private readonly IMediator _mediator;
+        private readonly ILogger<MemberProfileUpdateEventSubscriber> _logger;
+        public MemberProfileUpdateEventSubscriber(IMediator mediator, ILogger<MemberProfileUpdateEventSubscriber> logger)
+        {
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+        [Function("MemberProfileUpdateSubscriber")]
+        public async Task Run([ServiceBusTrigger(Constants.Application.CampaignManagementEventTopicName, Constants.Application.CampaignRegisterEventSubscriptionNameProfile, Connection = "ServiceBusConnectionString")] string eventRequestPayload, FunctionContext context)
+        {
+            _logger.LogInformation("MemberProfileUpdateEvent received");
+            await _mediator.Send(Json.Deserialize<MemberProfileUpdateEventProcessCommand>(eventRequestPayload));
+        }
+    }
+}

@@ -1,0 +1,59 @@
+﻿###Request
+GET https://tempuri.org/MealEligibileSegments HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "RecordLocator": "ABC123",
+  "BookingDate": "2025-11-12T14:30:00Z",
+  "Passengers": [
+    {
+      "PassengerID": "P001",
+      "FirstName": "John",
+      "LastName": "Doe",
+      "FrequentFlyerNumber": "FF123456"
+    },
+    {
+      "PassengerID": "P002",
+      "FirstName": "Jane",
+      "LastName": "Smith",
+      "FrequentFlyerNumber": "FF654321"
+    }
+  ],
+  "Segments": [
+    {
+      "SegmentID": "S001",
+      "OperatingFlight": {
+        "AirlineCode": "AI",
+        "Number": 101
+      },
+      "MarketingFlight": {
+        "AirlineCode": "UA",
+        "Number": 9001
+      },
+      "Departure": "2025-12-01T09:00:00Z",
+      "Origin": "DEL",
+      "Destination": "LHR",
+      "Cabin": "Business",
+      "Eligibility": "DutyFree"
+    },
+    {
+      "SegmentID": "S002",
+      "OperatingFlight": {
+        "AirlineCode": "AI",
+        "Number": 102
+      },
+      "MarketingFlight": {
+        "AirlineCode": "UA",
+        "Number": 9002
+      },
+      "Departure": "2025-12-10T18:00:00Z",
+      "Origin": "LHR",
+      "Destination": "DEL",
+      "Cabin": "Economy",
+      "Eligibility": "POPS"
+    }
+  ]
+}

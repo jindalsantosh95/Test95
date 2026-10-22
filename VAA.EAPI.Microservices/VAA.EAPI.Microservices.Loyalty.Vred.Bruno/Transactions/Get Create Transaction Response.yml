@@ -1,0 +1,30 @@
+info:
+  name: Get Create Transaction Response
+  type: http
+  seq: 2
+  tags:
+    - Transactions
+
+http:
+  method: GET
+  url: "{{baseUrl}}/createTransaction/response/{{createCorrelationId}}"
+  headers:
+    - name: Accept
+      value: application/json
+    - name: x-correlation-id
+      value: "VRED-Bruno-{{$randomUUID}}"
+    - name: api-channel
+      value: Bruno
+    - name: Authorization
+      value: "Bearer {{accessToken}}"
+      disabled: true
+    - name: Ocp-Apim-Subscription-Key
+      value: "{{ocpApimSubscriptionKey}}"
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,153 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "functionAppName": {
+      "type": "string"
+    },  
+    "apimEnv": {
+      "type": "string"
+    },
+    "apiEnv": {
+      "type": "string"
+    },    
+    "APIMName": {
+      "type": "string"
+    },
+    "applicationName": {
+      "type": "string"
+    }, 
+    "apimurlname": {
+      "type": "string"
+    },
+    "productId": {
+      "type": "string"
+    }, 
+    "apisEnv": {
+      "type": "string"
+    },
+    "tag": {
+      "type": "string",
+      "defaultValue": "Microservices"
+    }
+  },
+  "variables": {
+      "apiName": "[concat('Loyalty', parameters('apimurlname'), '-microservice-', parameters('apisEnv'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'))]",      
+      "properties": {
+        "displayName": "[variables('apiName')]",
+        "apiRevision": "1",
+        "description": "[variables('apiName')]",
+        "subscriptionRequired": true,
+        "serviceUrl": "[concat('https://', parameters('functionAppName'), '.azurewebsites.net/api')]",
+        "path": "[concat(parameters('apimEnv'), parameters('applicationName'))]",  
+        "value": "[concat('https://', parameters('functionAppName'), '.azurewebsites.net/api/swagger.json')]",
+        "format": "openapi-link",            
+        "protocols": ["https"],
+        "isCurrent": true
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2021-08-01",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/renderswaggerdocument')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ],
+      "properties": {
+        "displayName": "Render Swagger Document",
+        "method": "GET",
+        "urlTemplate": "/swagger.json",
+        "request": {
+          "queryParameters": [],
+          "headers": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "Swagger JSON",
+            "representations": [
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/products",
+      "name": "[concat(parameters('APIMName'), '/' ,parameters('productId'))]",
+      "apiVersion": "2017-03-01",
+      "properties": {
+        "displayName": "[parameters('productId')]",
+        "description": "Subscribers have completely unlimited access to the API. Administrator approval is required.",
+        "terms": null,
+        "subscriptionRequired": true,
+        "approvalRequired": true,
+        "subscriptionsLimit": 1,
+        "state": "published"
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', parameters('productId'), '/', variables('apiName'))]", 
+      "properties": {
+        "displayName": "[variables('apiName')]",
+        "apiRevision": "1",
+        "description": "",
+        "serviceUrl": "[concat('https://', parameters('functionAppName'), '.azurewebsites.net/api')]",
+        "path": "[concat(parameters('apimEnv'), parameters('applicationName'))]",
+        "protocols": [
+          "https"
+        ],
+        "authenticationSettings": null,
+        "subscriptionKeyParameterNames": null,
+        "isCurrent": true
+      },
+        
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/products', parameters('APIMName'), parameters('productId'))]"
+      ]
+    }, 
+
+    {
+      "type": "Microsoft.ApiManagement/service/apis/tags",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/', parameters('tag'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/tags",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/', 'Loyalty')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/tags",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/', 'Digital-First')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/tags",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/', 'Epic345')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ]
+    }
+  ]
+}

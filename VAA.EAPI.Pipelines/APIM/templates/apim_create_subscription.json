@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "APIMName": {
+            "type": "string",
+            "defaultValue": "avaxeunamcag001"            
+        },
+        "SubscriptionName": {
+            "type": "string"
+        },
+        "OwnerName": {
+            "type": "string"
+        },
+        "ProductName": {
+            "type": "string"
+        }
+    },
+    "resources": [ 
+        {
+            "type": "Microsoft.ApiManagement/service/subscriptions",
+            "apiVersion": "2021-12-01-preview",
+            "name": "[concat(parameters('APIMName'), '/', parameters('SubscriptionName'))]",
+            "properties": {
+              "ownerId": "[resourceId('Microsoft.ApiManagement/service/users', parameters('APIMName'), parameters('OwnerName'))]",
+              "scope": "[resourceId('Microsoft.ApiManagement/service/products', parameters('APIMName'), parameters('ProductName'))]",
+              "displayName": "[parameters('SubscriptionName')]",
+              "state": "active",
+              "allowTracing": false
+            }
+        }     
+    ]
+}

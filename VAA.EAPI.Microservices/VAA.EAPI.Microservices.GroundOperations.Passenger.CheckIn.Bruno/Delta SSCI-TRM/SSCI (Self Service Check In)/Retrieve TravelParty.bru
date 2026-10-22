@@ -1,0 +1,20 @@
+meta {
+  name: Retrieve TravelParty
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{delta_ssci}}/{{travelparty_id}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  appid: OCI
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

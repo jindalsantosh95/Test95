@@ -1,0 +1,170 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights", "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs", "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)", "Site": "datadoghq.com", "Environment": "uat", "Source": "csharp", "Version": "", "TraceEnabled": true, "RuntimeMetricsEnabled": true,"Tags": "", "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel", "MinimumLogLevel": "Information", "QueueCapacity": 5000, "BatchSize": 100, "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "UAT"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPORDERMS"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVASEUNAFNORDERNOTIFYMICROSERV"
+    },
+    "AppInsightsName": {
+      "value": "AVASEUNAISINGLEORDERVIEW"
+    },
+    "appsettingsAppInsightsKey": {
+      "value": "5b9bbceb-1a48-4e07-a236-ccac7c1a6f5e"
+    },
+    "AppsettingAzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSettingAzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNORDERNOTIFYMICROSERV-Config-StorageAccount/)"
+    },
+    "Appsetting:OrderNotificationResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/ordernotificationmicroservice/order/notification/Status/{correlationid}"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNORDERNOTIFYMICROSERV-Config-AzureAd-ClientID/)"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNORDERNOTIFYMICROSERV-Config-ServiceBusConnectionString/)"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "value": "Order"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "OrderNotificationEventStore"
+    },
+    "appsettingsWEBSITE_CONTENTSHARE": {
+      "value": "avaseunafnordernotifymicroserv"
+    },
+    "Appsetting:ServiceBusSubscriptionName": {
+      "value": "OrderStatusSubscriber"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "value": "OrderNotificationResponse"
+    },
+    "Appsetting:ResponsePollingCount": {
+      "value": "50"
+    },
+    "Appsetting:ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "Appsetting:MockResponseEnabled": {
+      "value": "N"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Order Notification Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to Store Order information of a customer&apos;s booking in Single order view system"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": "https://Testresources.virginatlantic.com/dev/ordernotificationmicroservice/,https://Testresources.virginatlantic.com/sit/ordernotificationmicroservice/,https://Testresources.virginatlantic.com/ordernotificationmicroservice/,https://Restresources.virginatlantic.com/sit/ordernotificationmicroservice/"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/62dc996a-e160-4d83-9605-ddac4da5fbe6/.default"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": false
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": true
+    },
+    "Appsetting:OrderNotifyStatusRetryAfterValue": {
+      "value": "2"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    //Slot Settings
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avaseunstordernotifyms"
+    },
+    "vaultName": {
+      "value": "AVASEUNKVEMS"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNORDERNOTIFYMICROSERV-Config-AzureAd-ClientID/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "Order API",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "[if(equals(parameters('EnvironmentName'),'PROD'),'PROD','NONPROD')]",
+        "Purpose": "Support functions for the Order API AFN",
+        "ApplicationUsageIdList": "AVASEUNAFNORDERNOTIFYMICROSERV"
+      }
+    }
+  }
+}

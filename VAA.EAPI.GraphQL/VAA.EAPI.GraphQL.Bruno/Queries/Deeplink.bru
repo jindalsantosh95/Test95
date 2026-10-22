@@ -1,0 +1,33 @@
+meta {
+  name: Deeplink
+  type: graphql
+  seq: 18
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query Deeplink($request: DeeplinkRequestInput) {
+    Deeplink(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {
+      "deeplinkOption": "FlyReady"
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

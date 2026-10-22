@@ -1,0 +1,131 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Order.ARC.Payment*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Retail.Order.ARC.Payment.Deployment*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Order.ARC.Payment.bruno
+
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Order.ARC.Payment*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Retail.Order.ARC.Payment.Deployment*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Order.ARC.Payment.bruno
+
+variables: 
+  
+  - group: Digital_Variables
+  - group: performance_variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines' 
+  - name: agentPool1
+    value: 'LoyaltySystems'  
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: subRootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: applicationName
+    value: 'Retail.Order.ARC.Payment'
+  - name: microserviceName
+    value: 'ARCPayment' 
+  - name: apimurlname
+    value: 'Order_ARC_Payment_Digital'     
+  - name: slotName
+    value: 'DS'        
+  - name: functionAppName_DEV
+    value: 'va-dv-eun-arcpayment-fn-01' 
+  - name: functionAppName_SIT
+    value: 'va-ts-eun-arcpayment-fn-01' 
+  - name: functionAppName_UAT
+    value: 'va-tu-eun-arcpayment-fn-01'
+  - name: functionAppName_SANDBOX
+    value: 'AVAIEUNAFNARCPAYMENTMS'
+  - name: functionAppName_PROD
+    value: 'va-pr-eun-arcpayment-fn-01' 
+
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions_digital/build_digital_ndc.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupName_NDC_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_NDC_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_NDC_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_NDC_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)  
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_Prod: $(subscriptionId_Prod)  
+
+  # CD (Deployment) Pipeline
+  - template: functions_digital/release_digital_arc.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_deployment: $(agentPool1)    
+      agentPool_SANDBOX: $(agentPool1)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      buildConfiguration: $(buildConfiguration)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      resourceGroupName_DEV: $(resourceGroupName_NDC_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_NDC_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_NDC_UAT)
+      resourceGroupName_SB: $(resourceGroupName_NDC_SB)
+      resourceGroupName_PROD: $(resourceGroupName_NDC_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd) 
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_Prod: $(subscriptionId_Prod)    
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_SANDBOX: $(functionAppName_SANDBOX)
+      functionAppName_PROD: $(functionAppName_PROD)
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)
+      workspaceResourceId: $(workspaceResourceId)
+      workspaceResourceId_prod: $(workspaceResourceId_prod)
+      asename: $(asename)
+      asename_prod: $(asename_prod)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)
+ 

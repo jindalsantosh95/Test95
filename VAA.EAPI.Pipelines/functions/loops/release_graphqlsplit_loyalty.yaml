@@ -1,0 +1,356 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  applicationName: ''
+  buildConfiguration: ''
+  functionAppName_Secure_DEV: ''
+  functionAppName_Secure_SIT: ''
+  functionAppName_Secure_UAT: ''
+  functionAppName_Secure_PRD: ''
+  functionAppName_Public_DEV: ''
+  functionAppName_Public_SIT: ''
+  functionAppName_Public_UAT: ''
+  functionAppName_Public_PRD: ''
+  AppInsightsName_DEV: ''
+  AppInsightsName_SIT: ''
+  AppInsightsName_UAT: ''
+  AppInsightsName_PROD: ''
+  storageAccountName_DEV: ''
+  storageAccountName_SIT: ''
+  storageAccountName_UAT: ''
+  storageAccountName_PROD: ''
+  VARIABLE_GROUP_NAME_SIT: ''
+  VARIABLE_GROUP_NAME_UAT: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: '' 
+
+stages:
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml  
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DEV}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DEV}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment_DEV}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}  
+          AppInsightsName: ${{parameters.AppInsightsName_DEV}}
+          storageAccountName: ${{parameters.storageAccountName_DEV}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_SIT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_SIT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_SIT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_SIT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_SIT}}
+          storageAccountName: ${{parameters.storageAccountName_SIT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'CampaignMgmtFunctionalTests_SIT'
+    displayName: 'CampaignMgmtTests_SIT' 
+    dependsOn: SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_CampaignMgmt.yaml
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+       
+          
+  - stage: 'PromotionMgmtFunctionalTests_SIT'
+    displayName: 'PromotionMgmtTests_SIT' 
+    dependsOn: CampaignMgmtFunctionalTests_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_PromotionMgmt.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+   
+
+  - stage: 'loyaltyMbrMgmtFunctionalTests_SIT'
+    displayName: 'loyaltyMbrMgmt_SIT' 
+    dependsOn: PromotionMgmtFunctionalTests_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_MemberMgmt.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+        
+
+  - stage: 'SupplementarySilverFunctionalTests_SIT'
+    displayName: 'SuppSilverTests_SIT' 
+    dependsOn: loyaltyMbrMgmtFunctionalTests_SIT
+    jobs:  
+     - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_SuppSilver.yaml       
+       parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+     
+
+  - stage: 'loyaltyContactNotesFunctionalTests_SIT'
+    displayName: 'ContactNotesTests_SIT' 
+    dependsOn: SupplementarySilverFunctionalTests_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_loyaltyContactNotes.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+
+
+  - stage: 'loyaltyAuditMgmtFunctionalTests_SIT'
+    displayName: 'AuditMgmtTests_SIT' 
+    dependsOn: loyaltyContactNotesFunctionalTests_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_AuditMgmt.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+  
+
+  - stage: 'loyaltyCustomerFunctionalTests_SIT'
+    displayName: 'CustomerTests_SIT' 
+    dependsOn: loyaltyAuditMgmtFunctionalTests_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_Customer.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+    
+
+  - stage: 'loyaltyCustomerTransactionMSFunctionalTests_SIT'
+    displayName: 'CustomerTransactionMS-Tests_SIT' 
+    dependsOn: loyaltyCustomerFunctionalTests_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_CustomerTxn.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}  
+       
+
+  - stage: 'loyaltyCustomerMSFunctionalTests_SIT'
+    displayName: 'CustomerMS-Tests_SIT' 
+    dependsOn: loyaltyCustomerTransactionMSFunctionalTests_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_CustomerMS.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_UAT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_UAT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_UAT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_UAT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}
+          AppInsightsName: ${{parameters.AppInsightsName_UAT}}
+          storageAccountName: ${{parameters.storageAccountName_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'CampaignMgmtFunctionalTests_UAT'
+    displayName: 'CampaignMgmtTests_UAT' 
+    dependsOn: UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_CampaignMgmt.yaml  
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+        
+
+  - stage: 'PromotionMgmtFunctionalTests_UAT'
+    displayName: 'PromotionMgmtTests_UAT' 
+    dependsOn: CampaignMgmtFunctionalTests_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_PromotionMgmt.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+         
+
+  - stage: 'loyaltyMbrMgmtFunctionalTests_UAT'
+    displayName: 'loyaltyMbrMgmtTests_UAT' 
+    dependsOn: PromotionMgmtFunctionalTests_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_MemberMgmt.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+     
+
+  - stage: 'SupplementarySilverFunctionalTests_UAT'
+    displayName: 'SuppSilverTests_UAT' 
+    dependsOn: loyaltyMbrMgmtFunctionalTests_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_SuppSilver.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+      
+
+  - stage: 'loyaltyContactNotesFunctionalTests_UAT'
+    displayName: 'ContactNotesTests_UAT' 
+    dependsOn: SupplementarySilverFunctionalTests_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_loyaltyContactNotes.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+
+
+  - stage: 'loyaltyAuditMgmtFunctionalTests_UAT'
+    displayName: 'AuditMgmtTests_UAT' 
+    dependsOn: loyaltyContactNotesFunctionalTests_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_AuditMgmt.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+
+
+  - stage: 'loyaltyCustomerFunctionalTests_UAT'
+    displayName: 'CustomerTests_UAT' 
+    dependsOn: loyaltyAuditMgmtFunctionalTests_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_Customer.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+
+
+  - stage: 'loyaltyCustomerTransactionMSFunctionalTests_UAT'
+    displayName: 'CustomerTransactionMS-Tests_UAT' 
+    dependsOn: loyaltyCustomerFunctionalTests_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_CustomerTxn.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+
+
+  - stage: 'loyaltyCustomerMSFunctionalTests_UAT'
+    displayName: 'CustomerMSTests_UAT' 
+    dependsOn: loyaltyCustomerTransactionMSFunctionalTests_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/loops/functionaltests_CustomerMS.yaml       
+        parameters:
+          buildFromSource: true
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+    
+
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_PRD}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_PRD}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_PROD}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_PROD}}        
+          serviceConnection: ${{variables.serviceConnection_PROD}}
+          subscriptionId: ${{variables.subscriptionId_PROD}}    
+          AppInsightsName: ${{parameters.AppInsightsName_PROD}}
+          storageAccountName: ${{parameters.storageAccountName_PROD}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "north europe"
+    },
+    "servicebusName": {
+      "value": "AVASEUNSBENDCORDERMGMT"
+    },
+    "topics": {
+      "value": [
+        "ndcorderchangerequesteventmessage",
+        "deleteorderchangeeventstoremessage",
+        "ndccancelpnreventmessage"
+      ]
+    },
+    "topicsubscription": {
+      "value": [
+        {
+          "name": "OrderChangeEventSubscriber",
+          "topic": "ndcorderchangerequesteventmessage"
+        },
+        {
+          "name": "SplitPnrEventSubscriber",
+          "topic": "ndcorderchangerequesteventmessage"
+        },
+        {
+          "name": "DeleteOrderChangeEventStoreMessageSubscriber",
+          "topic": "deleteorderchangeeventstoremessage"
+        },
+        {
+          "name": "ManageCustomerEventSubscriber",
+          "topic": "ndcorderchangerequesteventmessage"
+        },
+        {
+          "name": "CancelPnrEventMessageSubscriber",
+          "topic": "ndccancelpnreventmessage"
+        }
+      ]
+    },
+
+
+    "tags": {
+      "value": {
+        "APPLICATION NAME": "EAPI",
+        "DOMAIN": "API Enterprise",
+        "ENVIRONMENT": "UAT",
+        "CR": ""
+      }
+    }
+  }
+}

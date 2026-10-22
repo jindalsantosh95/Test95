@@ -1,0 +1,33 @@
+meta {
+  name: bookCreateOrder
+  type: graphql
+  seq: 17
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation bookCreateOrder($request: OrderCreateGraphQLRequestInput) {
+    bookCreateOrder(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {
+      "ccCheckConsent": false
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

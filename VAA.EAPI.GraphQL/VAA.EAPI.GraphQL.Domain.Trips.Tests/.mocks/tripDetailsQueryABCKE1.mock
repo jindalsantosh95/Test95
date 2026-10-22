@@ -1,0 +1,108 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/tripmicroservice/tripsList/search HTTP/1.1
+
+$[?(@.confirmationNum == 'ABCKE1')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "tripListResponse": [
+    {
+      "tripSearchRequest": {
+        "using": "PNR",
+        "confirmationNum": "ABCKE1",
+        "givenNames": "givenName",
+        "surname": "surName"
+      },
+      "tripDetails": {
+        "status": 200,
+        "booking": {
+          "id": "abcke1-booking",
+          "reservationType": "REVENUE",
+          "pos": {
+            "countryCode": "GB",
+            "currencyCode": "GBP"
+          },
+          "product": [
+            {
+              "bookingType": "AIRLINE",
+              "reference": {
+                "airlineDesignator": "VS",
+                "pnrLocator": "ABCKE1"
+              },
+              "slices": [
+                {
+                  "id": "1",
+                  "scheduledDepartureLocalDateTime": "2025-12-26T08:55:00",
+                  "scheduledDepartureUtcDateTime": "2025-12-26T08:55:00",
+                  "scheduledArrivalLocalDateTime": "2025-12-26T12:15:00",
+                  "scheduledArrivalUtcDateTime": "2025-12-26T17:15:00",
+                  "segments": [
+                    {
+                      "id": "1",
+                      "ordinal": 0,
+                      "operatingCarrier": {
+                        "flightNumber": "0003",
+                        "carrierCode": "KE",
+                        "carrierName": "Korean Air"
+                      },
+                      "marketingCarrier": {
+                        "flightNumber": "0003",
+                        "carrierCode": "VS",
+                        "carrierName": "Virgin Atlantic"
+                      },
+                      "scheduledDepartureLocalDateTime": "2025-12-26T08:55:00",
+                      "scheduledDepartureUtcDateTime": "2025-12-26T08:55:00",
+                      "scheduledArrivalLocalDateTime": "2025-12-26T12:15:00",
+                      "scheduledArrivalUtcDateTime": "2025-12-26T17:15:00",
+                      "origin": {
+                        "code": "LHR",
+                        "airportName": "Heathrow Airport",
+                        "cityName": "London Heathrow",
+                        "countryCode": "GB"
+                      },
+                      "destination": {
+                        "code": "JFK",
+                        "airportName": "John F Kennedy International",
+                        "cityName": "New York",
+                        "countryCode": "US"
+                      },
+                      "legs": [
+                        {
+                          "id": "1",
+                          "operating": {
+                            "flightNumber": "0003",
+                            "carrierCode": "KE",
+                            "carrierName": "Korean Air"
+                          },
+                          "scheduledDepartureLocalDateTime": "2025-12-26T08:55:00",
+                          "scheduledDepartureUtcDateTime": "2025-12-26T08:55:00",
+                          "scheduledArrivalLocalDateTime": "2025-12-26T12:15:00",
+                          "scheduledArrivalUtcDateTime": "2025-12-26T17:15:00",
+                          "seatSelectionType": "VIEW_SEAT"
+                        }
+                      ],
+                      "flightSegmentId": "1-1",
+                      "totalSegmentDuration": "PT8H20M"
+                    }
+                  ],
+                  "totalSliceDuration": "PT8H20M"
+                }
+              ]
+            }
+          ],
+          "passengers": [
+            {
+              "passengerId": "abcke1-passenger",
+              "firstName": "givenName",
+              "lastName": "surName",
+              "slices": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

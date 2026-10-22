@@ -1,0 +1,7 @@
+{
+  "query": "query GetSpecialAssistance($tripReservationId: String) { GetSpecialAssistance(tripReservationID: $tripReservationId) { passengers { passengerResourceId firstName lastName passengerSegments { flightSegment { segmentId ordinal operatingAirlines { code name } flightNumber marketingFlight { operatingSuffix flightNumber marketingAirlines { code name } } departureAirport { code name cityCode cityName } arrivalAirport { code name cityCode cityName } checkinStatus flightLegs { legId ordinal flightNumber scheduledDepartureLocal scheduledArrivalLocal } } serviceRequests { categoryCode categoryTitle categoryDetails { serviceCode serviceName isSelected isEligible features isChangeAllowed } isSegmentSelectEligible isServiceRequested } } } }}",
+  "variables": {
+    "tripReservationId": ""
+  },
+  "operationName": "GetSpecialAssistance"
+}

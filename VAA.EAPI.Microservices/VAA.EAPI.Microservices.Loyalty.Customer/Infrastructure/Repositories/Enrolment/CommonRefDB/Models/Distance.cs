@@ -1,0 +1,27 @@
+﻿using System;
+
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
+
+namespace VAA.EAPI.Microservices.Loyalty.Customer.Infrastructure.Repositories.Enrolment.CommonRefDB.Models
+{
+    public partial class Distance
+    {
+        public string RowId { get; set; }
+        public string Destination { get; set; }
+        public string DistanceInMiles { get; set; }
+        public string DistanceUom { get; set; }
+        public string Origin { get; set; }
+        public string OriginCountryCode { get; set; }
+        public string DestinationCountryCode { get; set; }
+        public string DestinationCountryName { get; set; }
+        public string OriginCountryName { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string LastUpdatedBy { get; set; }
+        public DateTime? LastUpdatedOn { get; set; }
+        public string SourceIdentifier { get; set; }
+        public string SourceSystem { get; set; }
+    }
+}

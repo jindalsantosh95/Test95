@@ -1,0 +1,1316 @@
+name: ai-delivery-sequence-goal-qa
+run-name: sequence-goal-qa ${{ inputs.coordinator_branch }} ${{ inputs.surface }} ${{ inputs.production_head_sha }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      coordinator_branch:
+        description: Coordinator branch that owns the active goal.
+        required: true
+        type: string
+      surface:
+        description: Delivery surface whose production PR is ready for QA.
+        required: true
+        type: choice
+        options: [Backend, MobileIos, MobileAndroid, WebUi]
+      production_head_sha:
+        description: Optional immutable production head supplied by the idempotent ledger dispatcher.
+        required: false
+        type: string
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sequence-goal-qa-${{ inputs.coordinator_branch }}-${{ inputs.surface }}
+  cancel-in-progress: false
+
+jobs:
+  resolve-delivery-agents:
+    name: Resolve delivery agents
+    runs-on: ubuntu-latest
+    outputs:
+      delivery_surfaces: ${{ steps.route.outputs.delivery_surfaces }}
+      development_agent: ${{ steps.route.outputs.development_agent }}
+      qa_agent: ${{ steps.route.outputs.qa_agent }}
+      qa_matrix: ${{ steps.route.outputs.qa_matrix }}
+      qa_count: ${{ steps.route.outputs.qa_count }}
+      remote_matrix: ${{ steps.route.outputs.remote_matrix }}
+      remote_count: ${{ steps.route.outputs.remote_count }}
+      has_diagrams: ${{ steps.route.outputs.has_diagrams }}
+      has_index: ${{ steps.route.outputs.has_index }}
+      has_inprogress: ${{ steps.route.outputs.has_inprogress }}
+      inprogress_list: ${{ steps.route.outputs.inprogress_list }}
+    steps:
+      - name: Detect sequence-goal GitHub App credentials
+        id: app-credentials
+        shell: pwsh
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+          APP_SLUG: ${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}
+        run: |
+          $hasAppId = -not [string]::IsNullOrWhiteSpace($env:APP_ID)
+          $hasPrivateKey = -not [string]::IsNullOrWhiteSpace($env:APP_PRIVATE_KEY)
+          if ($hasAppId -xor $hasPrivateKey) {
+            throw 'Sequence-goal GitHub App configuration is incomplete; both App ID and private key are required.'
+          }
+          if ($hasAppId -and [string]::IsNullOrWhiteSpace($env:APP_SLUG)) {
+            throw 'SEQUENCE_GOAL_GITHUB_APP_SLUG is required when sequence-goal GitHub App credentials are configured.'
+          }
+          "configured=$(($hasAppId -and $hasPrivateKey).ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Create cross-repository routing token
+        id: routing-token
+        if: steps.app-credentials.outputs.configured == 'true'
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          private-key: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+          owner: VAAD1ST
+
+      - name: Check out source for routing
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Resolve goal delivery surface
+        id: route
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ steps.routing-token.outputs.token || github.token }}
+          SEQUENCE_GOAL_COORDINATOR_REPOSITORY: ${{ github.repository }}
+          SEQUENCE_GOAL_WEBUI_REPOSITORY: ${{ vars.SEQUENCE_GOAL_WEBUI_REPOSITORY }}
+          SEQUENCE_GOAL_IOS_BASE_BRANCH: ${{ vars.SEQUENCE_GOAL_IOS_BASE_BRANCH }}
+          SEQUENCE_GOAL_ANDROID_BASE_BRANCH: ${{ vars.SEQUENCE_GOAL_ANDROID_BASE_BRANCH }}
+          SEQUENCE_GOAL_WEBUI_BASE_BRANCH: ${{ vars.SEQUENCE_GOAL_WEBUI_BASE_BRANCH }}
+          SEQUENCE_GOAL_GITHUB_APP_SLUG: ${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}
+          REQUESTED_SURFACE: ${{ inputs.surface }}
+        run: |
+          ./scripts/resolve-sequence-goal-delivery-agents.ps1 -RequestedSurface $env:REQUESTED_SURFACE -RequireProductionCheckpoint
+  validate-continuation:
+    name: Validate QA continuation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bind dispatch to coordinator ref
+        shell: pwsh
+        env:
+          COORDINATOR_BRANCH: ${{ inputs.coordinator_branch }}
+          DISPATCH_REF: ${{ github.ref_name }}
+        run: |
+          if ($env:COORDINATOR_BRANCH -ne $env:DISPATCH_REF) {
+            throw "QA coordinator '$($env:COORDINATOR_BRANCH)' does not match dispatch ref '$($env:DISPATCH_REF)'."
+          }
+          if ($env:COORDINATOR_BRANCH -eq 'main') { throw 'QA coordinator branch cannot be main.' }
+
+  deliver-automation-tests:
+    name: ${{ matrix.agent }}
+    needs: [resolve-delivery-agents, validate-continuation]
+    if: needs.resolve-delivery-agents.outputs.qa_count != '0' && needs.resolve-delivery-agents.outputs.has_inprogress == 'true'
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.resolve-delivery-agents.outputs.qa_matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(vars.SEQUENCE_GOAL_DELIVERY_JOB_TIMEOUT_MINUTES || '55') }}
+    env:
+      SEQUENCE_GOAL_MAX_CHANGED_FILES: ${{ vars.SEQUENCE_GOAL_MAX_CHANGED_FILES || '200' }}
+      SEQUENCE_GOAL_AGENT_TIMEOUT_MINUTES: ${{ vars.SEQUENCE_GOAL_AGENT_TIMEOUT_MINUTES || '40' }}
+      SEQUENCE_GOAL_VERIFY_TIMEOUT_MINUTES: ${{ vars.SEQUENCE_GOAL_VERIFY_TIMEOUT_MINUTES || '20' }}
+      QA_HAS_INPROGRESS: ${{ needs.resolve-delivery-agents.outputs.has_inprogress }}
+      QA_INPROGRESS_LIST: ${{ needs.resolve-delivery-agents.outputs.inprogress_list }}
+    steps:
+      - name: Detect sequence-goal GitHub App credentials
+        id: app-credentials
+        shell: pwsh
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        run: |
+          "configured=$(((-not [string]::IsNullOrWhiteSpace($env:APP_ID)) -and (-not [string]::IsNullOrWhiteSpace($env:APP_PRIVATE_KEY))).ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Create sequence-goal GitHub App token
+        id: app-token
+        if: steps.app-credentials.outputs.configured == 'true'
+        uses: actions/create-github-app-token@v2
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ env.APP_PRIVATE_KEY }}
+
+      - name: Create cross-repository read token for QA
+        id: cross-repo-token-qa
+        if: matrix.surface != 'Backend' && steps.app-credentials.outputs.configured == 'true'
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          private-key: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+          owner: VAAD1ST
+
+      - name: Check out generated implementation
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+          token: ${{ steps.app-token.outputs.token || github.token }}
+          persist-credentials: false
+
+      - name: Fetch active delivery refs
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ steps.cross-repo-token-qa.outputs.token || steps.app-token.outputs.token || github.token }}
+        run: |
+          $gitAuthHeader = "AUTHORIZATION: basic $([Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("x-access-token:$env:GH_TOKEN")))"
+          git config --local http.https://github.com/.extraheader $gitAuthHeader
+          $branchRef = "+refs/heads/$($env:GITHUB_REF_NAME):refs/remotes/origin/$($env:GITHUB_REF_NAME)"
+          git fetch --no-tags --unshallow origin +refs/heads/main:refs/remotes/origin/main $branchRef
+          $fetchExitCode = $LASTEXITCODE
+          git config --local --unset-all http.https://github.com/.extraheader 2>$null
+          if ($LASTEXITCODE -notin @(0, 5)) { throw 'Failed to remove Git authentication after fetching active delivery refs.' }
+          $global:LASTEXITCODE = 0
+          if ($fetchExitCode -ne 0) { throw 'Failed to fetch active delivery refs.' }
+
+      - name: Restore production-job context
+        id: detect
+        shell: pwsh
+        run: |
+          "has_diagrams=${{ needs.resolve-delivery-agents.outputs.has_diagrams }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "has_index=${{ needs.resolve-delivery-agents.outputs.has_index }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Restore InProgress goal context
+        id: inprogress
+        shell: pwsh
+        run: |
+          "has_inprogress=$env:QA_HAS_INPROGRESS" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "inprogress_list=$env:QA_INPROGRESS_LIST" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Download production-agent resource evidence
+        if: env.QA_HAS_INPROGRESS == 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          pattern: production-agent-resource-*-${{ github.run_id }}-${{ github.run_attempt }}
+          path: TestResults/agent-resource/
+          merge-multiple: true
+
+      - name: Download associated cross-repository PR evidence
+        if: env.QA_HAS_INPROGRESS == 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          pattern: associated-pr-*-${{ github.run_id }}-${{ github.run_attempt }}
+          path: TestResults/associated-prs
+          merge-multiple: true
+
+      - name: Set up .NET SDK for automation
+        if: env.QA_HAS_INPROGRESS == 'true'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Cache automation NuGet packages
+        if: env.QA_HAS_INPROGRESS == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('VAA.EAPI.Automation/**/*.csproj', 'VAA.EAPI.Automation/Directory.Packages.props') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore automation dependencies before generation
+        id: automation_restore
+        if: env.QA_HAS_INPROGRESS == 'true'
+        continue-on-error: true
+        timeout-minutes: ${{ fromJSON(vars.SEQUENCE_GOAL_VERIFY_TIMEOUT_MINUTES || '20') }}
+        shell: pwsh
+        run: dotnet restore VAA.EAPI.Automation/VAA.EAPI.Automation.sln
+
+      - name: Set up Node for automation agent
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_restore.outcome == 'success'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Codex CLI for automation agent
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_restore.outcome == 'success'
+        shell: pwsh
+        run: |
+          npm install -g @openai/codex@0.146.0
+          codex --version
+
+      - name: Create isolated QA agent checkout
+        id: isolated_checkout
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_restore.outcome == 'success'
+        shell: pwsh
+        env:
+          EXPECTED_PRODUCTION_HEAD: ${{ inputs.production_head_sha }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          function Get-CheckoutFingerprint {
+            param([Parameter(Mandatory)][string]$Root)
+            $entries = New-Object System.Collections.Generic.List[string]
+            $trackedPaths = @(& git -C $Root ls-files)
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to enumerate trusted checkout files.' }
+            foreach ($relativePath in $trackedPaths) {
+              $path = Join-Path $Root $relativePath
+              $item = Get-Item -LiteralPath $path -Force -ErrorAction Stop
+              if ($item.PSIsContainer -or $null -ne $item.LinkType -or ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                throw "Trusted checkout contains a non-regular tracked path: $relativePath"
+              }
+              $entries.Add("file|$($relativePath -replace '\\', '/')|$((Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash)") | Out-Null
+            }
+            $gitRoot = Join-Path $Root '.git'
+            Get-ChildItem -LiteralPath $gitRoot -Recurse -Force | Sort-Object FullName | ForEach-Object {
+              if ($null -ne $_.LinkType -or ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                throw "Trusted Git metadata contains a symbolic link or reparse point: $($_.FullName)"
+              }
+              $relativePath = [System.IO.Path]::GetRelativePath($gitRoot, $_.FullName) -replace '\\', '/'
+              $entryHash = if ($_.PSIsContainer) { '<directory>' } else { (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash }
+              $entries.Add("git|$relativePath|$entryHash") | Out-Null
+            }
+            [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes(($entries -join "`n"))))
+          }
+          $trustedRoot = (Resolve-Path -LiteralPath $env:GITHUB_WORKSPACE).Path
+          "trusted_fingerprint=$(Get-CheckoutFingerprint -Root $trustedRoot)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          $runnerTempRoot = (Resolve-Path -LiteralPath $env:RUNNER_TEMP).Path
+          $agentRoot = Join-Path $runnerTempRoot "sequence-goal-qa-agent-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.surface }}"
+          $agentFullPath = [System.IO.Path]::GetFullPath($agentRoot)
+          if (-not $agentFullPath.StartsWith($runnerTempRoot + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) {
+            throw 'QA agent checkout resolves outside RUNNER_TEMP.'
+          }
+          if ($null -ne (Get-Item -LiteralPath $agentFullPath -Force -ErrorAction SilentlyContinue)) {
+            throw 'Isolated QA agent checkout already exists.'
+          }
+          git clone --local --no-hardlinks --branch $env:GITHUB_REF_NAME --single-branch $env:GITHUB_WORKSPACE $agentFullPath
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to create the isolated QA agent checkout.' }
+          git -C $agentFullPath remote set-url origin "https://github.com/$($env:GITHUB_REPOSITORY).git"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to detach the isolated QA agent checkout from the trusted checkout.' }
+          git -C $agentFullPath fetch --no-tags $env:GITHUB_WORKSPACE +refs/remotes/origin/main:refs/remotes/origin/main
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to copy the trusted main reference into the isolated QA agent checkout.' }
+          $agentGitDirectory = [System.IO.Path]::GetFullPath((& git -C $agentFullPath rev-parse --path-format=absolute --absolute-git-dir).Trim())
+          $expectedGitDirectory = [System.IO.Path]::GetFullPath((Join-Path $agentFullPath '.git'))
+          if (-not $agentGitDirectory.Equals($expectedGitDirectory, [System.StringComparison]::OrdinalIgnoreCase)) {
+            throw 'Isolated QA agent checkout does not own independent Git metadata.'
+          }
+          $goalBaselineCommit = (git -C $agentFullPath rev-parse HEAD).Trim()
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot capture the pre-agent goal commit.' }
+          "goal_baseline_commit=$goalBaselineCommit" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          $gitBackupPath = "$agentFullPath.git-baseline"
+          Copy-Item -LiteralPath $expectedGitDirectory -Destination $gitBackupPath -Recurse
+          Get-ChildItem -LiteralPath $gitBackupPath -Recurse -Force | ForEach-Object {
+            if ($null -ne $_.LinkType -or ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+              throw "Isolated QA Git baseline contains a symbolic link or reparse point: $($_.FullName)"
+            }
+          }
+
+      - name: Generate automation tests for implementation
+        id: automation_agent
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_restore.outcome == 'success'
+        continue-on-error: true
+        timeout-minutes: ${{ fromJSON(vars.SEQUENCE_GOAL_AGENT_TIMEOUT_MINUTES || '40') }}
+        shell: pwsh
+        working-directory: ${{ runner.temp }}/sequence-goal-qa-agent-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.surface }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GH_TOKEN: ${{ steps.cross-repo-token-qa.outputs.token || steps.app-token.outputs.token || github.token }}
+          SEQUENCE_GOAL_GITHUB_APP_SLUG: ${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}
+          SEQUENCE_GOAL_AGENT_COMMAND_JSON: ${{ secrets.SEQUENCE_GOAL_AGENT_COMMAND_JSON }}
+          SEQUENCE_GOAL_AGENT_MODEL: ${{ vars.SEQUENCE_GOAL_AGENT_MODEL || 'gpt-6-sol' }}
+          DELIVERY_SURFACE: ${{ matrix.surface }}
+          DELIVERY_AGENT: ${{ matrix.agent }}
+          DELIVERY_REPOSITORY: ${{ matrix.repository }}
+          DELIVERY_BASE_BRANCH: ${{ matrix.base_branch }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          function Get-BoundedProductionDiff {
+            param(
+              [Parameter(Mandatory)][int]$PullRequestNumber,
+              [Parameter(Mandatory)][string]$Repository,
+              [Parameter(Mandatory)][int]$MaximumCharacters
+            )
+            if ($MaximumCharacters -le 0) { throw 'Production PR metadata exhausted the snapshot context budget.' }
+            $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+            $startInfo.FileName = 'gh'
+            $startInfo.UseShellExecute = $false
+            $startInfo.RedirectStandardOutput = $true
+            $startInfo.RedirectStandardError = $true
+            foreach ($argument in @('pr', 'diff', [string]$PullRequestNumber, '--repo', $Repository)) {
+              [void]$startInfo.ArgumentList.Add($argument)
+            }
+            $process = [System.Diagnostics.Process]::new()
+            $process.StartInfo = $startInfo
+            if (-not $process.Start()) { throw 'Failed to start bounded production PR diff capture.' }
+            $stderrTask = $process.StandardError.ReadToEndAsync()
+            $builder = [System.Text.StringBuilder]::new([Math]::Min($MaximumCharacters, 65536))
+            $truncationMarker = "`n... [production PR diff truncated to fit the QA agent context limit]"
+            $contentLimit = $MaximumCharacters - $truncationMarker.Length
+            if ($contentLimit -le 0) { throw 'Production PR diff budget cannot contain its truncation marker.' }
+            $truncated = $false
+            $buffer = [char[]]::new(8192)
+            try {
+              while (($read = $process.StandardOutput.Read($buffer, 0, $buffer.Length)) -gt 0) {
+                $remaining = $contentLimit - $builder.Length
+                if ($read -gt $remaining) {
+                  if ($remaining -gt 0) { [void]$builder.Append($buffer, 0, $remaining) }
+                  $truncated = $true
+                  try {
+                    if (-not $process.HasExited) { $process.Kill($true) }
+                  } catch [System.InvalidOperationException] {
+                    if (-not $process.HasExited) { throw }
+                  }
+                  break
+                }
+                [void]$builder.Append($buffer, 0, $read)
+              }
+              $process.WaitForExit()
+              $stderr = $stderrTask.GetAwaiter().GetResult()
+              if ($truncated) {
+                [void]$builder.Append($truncationMarker)
+                return $builder.ToString()
+              }
+              if ($process.ExitCode -ne 0) { throw "Failed to capture production PR diff: $stderr" }
+              return $builder.ToString()
+            } finally {
+              try {
+                if (-not $process.HasExited) { $process.Kill($true) }
+              } catch [System.InvalidOperationException] {
+                if (-not $process.HasExited) { throw }
+              }
+              $process.Dispose()
+            }
+          }
+          function Get-GitTrustState {
+            $worktreeRoot = (Resolve-Path -LiteralPath '.').Path
+            $worktreeGitEntryPath = Join-Path $worktreeRoot '.git'
+            $worktreeGitEntry = Get-Item -LiteralPath $worktreeGitEntryPath -Force -ErrorAction Stop
+            if ($null -ne $worktreeGitEntry.LinkType -or ($worktreeGitEntry.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+              throw 'Worktree .git entry cannot be a symbolic link or reparse point.'
+            }
+            $head = (& git rev-parse HEAD).Trim()
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to capture the QA worktree HEAD for trust validation.' }
+            $gitDirectory = (& git rev-parse --path-format=absolute --absolute-git-dir).Trim()
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to resolve the QA worktree Git directory.' }
+            $commonDirectory = (& git rev-parse --path-format=absolute --git-common-dir).Trim()
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to resolve the QA Git common directory.' }
+            $hooksDirectory = Join-Path $commonDirectory 'hooks'
+            foreach ($gitMetadataDirectory in @($commonDirectory, $hooksDirectory)) {
+              if (-not (Test-Path -LiteralPath $gitMetadataDirectory)) { continue }
+              $gitMetadataDirectoryItem = Get-Item -LiteralPath $gitMetadataDirectory -Force
+              if ($null -ne $gitMetadataDirectoryItem.LinkType -or ($gitMetadataDirectoryItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                throw "Protected Git metadata directory cannot be a symbolic link or reparse point: $gitMetadataDirectory"
+              }
+            }
+            $hookState = @()
+            if (Test-Path -LiteralPath $hooksDirectory) {
+              $hookState = @(Get-ChildItem -LiteralPath $hooksDirectory -Recurse -Force | ForEach-Object {
+                if ($null -ne $_.LinkType -or ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                  throw "Git hooks metadata contains a symbolic link or reparse point: $($_.FullName)"
+                }
+                [ordered]@{
+                  path = [System.IO.Path]::GetRelativePath($hooksDirectory, $_.FullName)
+                  kind = if ($_.PSIsContainer) { 'directory' } else { 'file' }
+                  hash = if ($_.PSIsContainer) { $null } else { (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash }
+                }
+              })
+            }
+            $infoExcludePath = Join-Path $commonDirectory 'info/exclude'
+            $protectedGitFiles = @(
+              $worktreeGitEntryPath
+              (Join-Path $commonDirectory 'config')
+              (Join-Path $gitDirectory 'config.worktree')
+              (Join-Path $gitDirectory 'index')
+              $infoExcludePath
+              (Join-Path $worktreeRoot 'scripts/publish-sequence-goal-qa-pr.ps1')
+              (Join-Path $worktreeRoot 'scripts/normalize-generated-line-endings.ps1')
+              (Join-Path $worktreeRoot 'scripts/format-generated-csharp.ps1')
+              (Join-Path $worktreeRoot 'scripts/promote-sequence-goal.ps1')
+            ) | ForEach-Object {
+              $protectedItem = Get-Item -LiteralPath $_ -Force -ErrorAction SilentlyContinue
+              if ($null -ne $protectedItem -and ($null -ne $protectedItem.LinkType -or ($protectedItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint))) {
+                throw "Protected Git metadata file cannot be a symbolic link or reparse point: $_"
+              }
+              [ordered]@{
+                path = $_
+                exists = $null -ne $protectedItem
+                hash = if ($null -ne $protectedItem -and -not $protectedItem.PSIsContainer) { (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash } else { $null }
+              }
+            }
+            [ordered]@{
+              head = $head
+              config = @(& git config --show-origin --show-scope --list) -join "`n"
+              remotes = @(& git remote -v) -join "`n"
+              hooks = $hookState
+              protectedGitFiles = @($protectedGitFiles)
+              infoExcludeExists = Test-Path -LiteralPath $infoExcludePath -PathType Leaf
+              infoExcludeHash = if (Test-Path -LiteralPath $infoExcludePath -PathType Leaf) { (Get-FileHash -LiteralPath $infoExcludePath -Algorithm SHA256).Hash } else { $null }
+            } | ConvertTo-Json -Depth 5 -Compress
+          }
+          function Get-ChangedGitTrustComponents {
+            param([Parameter(Mandatory)][string]$Before, [Parameter(Mandatory)][string]$After)
+            $beforeState = $Before | ConvertFrom-Json
+            $afterState = $After | ConvertFrom-Json
+            @('head', 'config', 'remotes', 'hooks', 'protectedGitFiles', 'infoExcludeExists', 'infoExcludeHash') | Where-Object {
+              (ConvertTo-Json -InputObject $beforeState.$_ -Depth 10 -Compress) -cne (ConvertTo-Json -InputObject $afterState.$_ -Depth 10 -Compress)
+            }
+          }
+
+          function Get-DirectoryFingerprint {
+            param([Parameter(Mandatory)][string]$Path)
+            $root = (Resolve-Path -LiteralPath $Path).Path
+            $entries = @(Get-ChildItem -LiteralPath $root -Recurse -Force | Sort-Object FullName | ForEach-Object {
+              if ($null -ne $_.LinkType -or ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                throw "Fingerprint source contains a symbolic link or reparse point: $($_.FullName)"
+              }
+              $relativePath = [System.IO.Path]::GetRelativePath($root, $_.FullName) -replace '\\', '/'
+              $entryHash = if ($_.PSIsContainer) { '<directory>' } else { (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash }
+              "$relativePath|$entryHash"
+            })
+            [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes(($entries -join "`n"))))
+          }
+          $controlledGitHubToken = $env:GH_TOKEN
+          $controlledOpenAiApiKey = $env:OPENAI_API_KEY
+          $controlledAgentCommandJson = $env:SEQUENCE_GOAL_AGENT_COMMAND_JSON
+          $gitAuthHeader = "AUTHORIZATION: basic $([Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("x-access-token:$controlledGitHubToken")))"
+          $diagrams = $env:QA_INPROGRESS_LIST.Split(';', [System.StringSplitOptions]::RemoveEmptyEntries)
+          $surface = $env:DELIVERY_SURFACE
+          $surfaceSlug = $surface.ToLowerInvariant()
+          $agent = $env:DELIVERY_AGENT
+          foreach ($diagram in $diagrams) {
+            $env:GH_TOKEN = $controlledGitHubToken
+            $env:SEQUENCE_GOAL_AGENT_COMMAND_JSON = $controlledAgentCommandJson
+            $coordinatorIdentity = "Associated sequence-goal delivery for ``$($env:GITHUB_REPOSITORY)@$($env:GITHUB_REF_NAME)``."
+            $surfaceIdentity = "- Surface: ``$surface``"
+            $hasExactLine = { param([string]$Body, [string]$Value) [regex]::IsMatch($Body, '(?m)^' + [regex]::Escape($Value) + '\s*$') }
+            $appSlug = $env:SEQUENCE_GOAL_GITHUB_APP_SLUG; $trustedAuthors = @('github-actions', 'github-actions[bot]'); if ($appSlug) { $trustedAuthors += @($appSlug, "${appSlug}[bot]", "app/$appSlug") }
+            $diagramText = Get-Content -LiteralPath $diagram -Raw
+            $associatedSection = [regex]::Match($diagramText, '(?ims)^## Associated delivery pull requests\s*(?<body>.*?)(?=^## |\z)').Groups['body'].Value
+            $productionRowPattern = '(?im)^\|\s*``?' + [regex]::Escape($surface) + '``?\s*\|\s*``?(?<repository>[^`]+)``?\s*\|\s*``?(?<base>[^`]+)``?\s*\|\s*``?(?<head>[^`]+)``?\s*\|\s*\[#(?<number>\d+)\]\((?<url>[^)]+)\)\s*\|'
+            $productionRows = @([regex]::Matches($associatedSection, $productionRowPattern))
+            if ($productionRows.Count -ne 1) { throw "Expected exactly one authenticated production PR row for $surface before QA generation." }
+            $productionRepository = $productionRows[0].Groups['repository'].Value
+            $productionBaseBranch = $productionRows[0].Groups['base'].Value
+            if ($productionRepository -cne $env:DELIVERY_REPOSITORY -or $productionBaseBranch -cne $env:DELIVERY_BASE_BRANCH) {
+              throw "Production PR ledger target for $surface does not match its configured repository and base branch."
+            }
+            $productionNumber = [int]$productionRows[0].Groups['number'].Value
+            $productionPrJson = gh pr view $productionNumber --repo $productionRepository --json number,url,title,state,mergedAt,headRefName,headRefOid,baseRefName,body,author,headRepository
+            if ($LASTEXITCODE -ne 0) { throw "Failed to capture authenticated production PR context for $productionRepository#$productionNumber." }
+            $productionPr = $productionPrJson | ConvertFrom-Json
+            if ($env:EXPECTED_PRODUCTION_HEAD -and ($env:EXPECTED_PRODUCTION_HEAD -cnotmatch '^[a-f0-9]{40}$' -or $productionPr.headRefOid -cne $env:EXPECTED_PRODUCTION_HEAD)) {
+              throw 'Queued QA belongs to a different production head; generation is denied.'
+            }
+            $productionMetadataMatches = (& $hasExactLine ([string]$productionPr.body) $coordinatorIdentity) -and
+              (& $hasExactLine ([string]$productionPr.body) $surfaceIdentity) -and
+              (& $hasExactLine ([string]$productionPr.body) '- Phase: `Production`')
+            if ($productionPr.url -ne $productionRows[0].Groups['url'].Value -or
+                $productionPr.state -notin @('OPEN', 'MERGED') -or
+                $productionPr.headRefName -ne $productionRows[0].Groups['head'].Value -or
+                $productionPr.baseRefName -ne $productionBaseBranch -or
+                $productionPr.headRepository.nameWithOwner -ne $productionRepository -or
+                $productionPr.author.login -notin $trustedAuthors -or
+                -not $productionMetadataMatches) {
+              throw "Production PR snapshot identity does not match the authenticated goal ledger for $surface."
+            }
+            $productionPrJsonText = $productionPrJson -join "`n"
+            . ./scripts/sequence-goal-production-readiness.ps1
+            if (-not (Test-ProductionReadiness -State (Read-DeliveryGoalState $env:GITHUB_REPOSITORY $env:GITHUB_REF_NAME $surface) -HeadSha $productionPr.headRefOid)) {
+              throw 'Production is not verified Complete at its current head. Resume production delivery before QA.'
+            }
+            # Record the QA branch in the goal document before any agent invocation.
+            $qaBranch = ./scripts/publish-sequence-goal-qa-pr.ps1 -PrepareOnly -CoordinatorBranch $env:GITHUB_REF_NAME -Surface $surface -Agent $agent -DiagramPath $diagram -Repository $env:GITHUB_REPOSITORY -ProductionRepository $productionRepository -ProductionPrNumber $productionNumber -ProductionHeadSha $productionPr.headRefOid
+            if ($null -eq $qaBranch -or [string]::IsNullOrWhiteSpace($qaBranch.headRefName)) { throw 'QA branch registration failed; agent execution denied.' }
+            if ($productionPrJsonText.Length -gt 100000) { throw 'Production PR metadata exceeds the 100,000-character agent-context limit.' }
+            $productionContextPrefix = @(
+              "Repository: $productionRepository"
+              "Pull request: $($productionPr.url)"
+              'Metadata JSON:'
+              '~~~~~~~~json'
+              $productionPrJsonText
+              '~~~~~~~~'
+              'Diff:'
+              '~~~~~~~~diff'
+            ) -join "`n"
+            $productionContextSuffix = "`n~~~~~~~~"
+            $maximumProductionDiffCharacters = 500000 - $productionContextPrefix.Length - $productionContextSuffix.Length - 1
+            if ($maximumProductionDiffCharacters -le 0) { throw 'Production PR snapshot framing exhausts the 500,000-character agent-context limit.' }
+            $productionDiffText = Get-BoundedProductionDiff `
+              -PullRequestNumber $productionNumber `
+              -Repository $productionRepository `
+              -MaximumCharacters $maximumProductionDiffCharacters
+            $productionPrRecheck = gh pr view $productionNumber --repo $productionRepository --json state,mergedAt,headRefName,headRefOid,baseRefName,body,author,headRepository | ConvertFrom-Json
+            if ($LASTEXITCODE -ne 0 -or
+                $productionPrRecheck.headRefOid -ne $productionPr.headRefOid -or
+                $productionPrRecheck.state -ne $productionPr.state -or
+                $productionPrRecheck.mergedAt -ne $productionPr.mergedAt -or
+                $productionPrRecheck.headRefName -ne $productionPr.headRefName -or
+                $productionPrRecheck.baseRefName -ne $productionPr.baseRefName -or
+                $productionPrRecheck.headRepository.nameWithOwner -ne $productionPr.headRepository.nameWithOwner -or
+                $productionPrRecheck.author.login -ne $productionPr.author.login -or
+                $productionPrRecheck.body -ne $productionPr.body) {
+              throw "Production PR changed while its authenticated snapshot was being captured for $surface."
+            }
+            $productionContextContent = "$productionContextPrefix`n$productionDiffText$productionContextSuffix"
+            if ($productionContextContent.Length -gt 500000) { throw 'Production PR snapshot exceeds the 500,000-character agent-context limit.' }
+            $productionContextDirectory = '.codex/agent-loop/production-context'
+            $productionContextPath = Join-Path $productionContextDirectory "$surface.md"
+            $agentExitCode = 1
+            $snapshotCreated = $false
+            $githubCommandFileState = @{}
+            $gitTrustState = $null
+            $gitBaselineFingerprint = $null
+            try {
+              foreach ($contextAncestor in @('.codex', '.codex/agent-loop', $productionContextDirectory)) {
+                $contextAncestorItem = Get-Item -LiteralPath $contextAncestor -Force -ErrorAction SilentlyContinue
+                if ($null -eq $contextAncestorItem) { continue }
+                if ($null -ne $contextAncestorItem.LinkType -or ($contextAncestorItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                  throw "Production context ancestor cannot be a symbolic link or reparse point: $contextAncestor"
+                }
+              }
+              if ($null -ne (Get-Item -LiteralPath $productionContextPath -Force -ErrorAction SilentlyContinue)) { throw 'Production context target already exists before snapshot creation.' }
+              New-Item -ItemType Directory -Force -Path $productionContextDirectory | Out-Null
+              $snapshotCreated = $true
+              $productionContextContent | Set-Content -LiteralPath $productionContextPath -Encoding UTF8 -NoNewline
+              $productionContextItem = Get-Item -LiteralPath $productionContextPath
+              if ($null -ne $productionContextItem.LinkType -or ($productionContextItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                throw 'Production context target became a symbolic link or reparse point.'
+              }
+              Remove-Item Env:GH_TOKEN -ErrorAction Stop
+              if (Test-Path Env:GH_TOKEN) { throw 'Failed to isolate GH_TOKEN before running the QA agent.' }
+              git config --local --unset-all http.https://github.com/.extraheader 2>$null
+              if ($LASTEXITCODE -notin @(0, 5)) { throw 'Failed to remove Git authentication before running the QA agent.' }
+              function Assert-NoLinkedCommandPath {
+                param([Parameter(Mandatory)][string]$Path, [Parameter(Mandatory)][string]$Message)
+                $fullCommandPath = [System.IO.Path]::GetFullPath($Path)
+                $commandPathRoot = [System.IO.Path]::GetPathRoot($fullCommandPath)
+                $commandWalkPath = $commandPathRoot
+                foreach ($commandPathPart in $fullCommandPath.Substring($commandPathRoot.Length).Split([System.IO.Path]::DirectorySeparatorChar, [System.StringSplitOptions]::RemoveEmptyEntries)) {
+                  $commandWalkPath = Join-Path $commandWalkPath $commandPathPart
+                  $commandEntry = Get-Item -LiteralPath $commandWalkPath -Force -ErrorAction SilentlyContinue
+                  if ($null -ne $commandEntry -and ($null -ne $commandEntry.LinkType -or ($commandEntry.Attributes -band [System.IO.FileAttributes]::ReparsePoint))) {
+                    throw "$Message`: $commandWalkPath"
+                  }
+                }
+              }
+              foreach ($commandVariable in @('GITHUB_ENV', 'GITHUB_PATH', 'GITHUB_OUTPUT', 'GITHUB_STEP_SUMMARY')) {
+                $commandPath = [System.Environment]::GetEnvironmentVariable($commandVariable, 'Process')
+                if ([string]::IsNullOrWhiteSpace($commandPath)) { continue }
+                Assert-NoLinkedCommandPath -Path $commandPath -Message 'GitHub Actions command path cannot contain a symbolic link or reparse point'
+                $githubCommandFileState[$commandVariable] = [ordered]@{
+                  path = $commandPath
+                  existed = Test-Path -LiteralPath $commandPath -PathType Leaf
+                  hash = if (Test-Path -LiteralPath $commandPath -PathType Leaf) { (Get-FileHash -LiteralPath $commandPath -Algorithm SHA256).Hash } else { $null }
+                }
+                Remove-Item "Env:$commandVariable" -ErrorAction Stop
+              }
+              $worktreeRoot = (Resolve-Path -LiteralPath '.').Path
+              $gitBaselinePath = "$worktreeRoot.git-baseline"
+              $gitBaselineFingerprint = Get-DirectoryFingerprint -Path $gitBaselinePath
+              $gitTrustState = Get-GitTrustState
+              $env:OPENAI_API_KEY = $controlledOpenAiApiKey
+              'agent_executed=true' | Out-File -FilePath $githubCommandFileState['GITHUB_OUTPUT'].path -Append
+              $githubCommandFileState['GITHUB_OUTPUT'].hash = (Get-FileHash -LiteralPath $githubCommandFileState['GITHUB_OUTPUT'].path -Algorithm SHA256).Hash
+              $diagramHash = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($diagram))).Substring(0, 12).ToLowerInvariant()
+              $evidenceBaseName = "sequence-goal-loop-$($env:GITHUB_RUN_ID)-automationtests-$surfaceSlug-$diagramHash"
+              $agentStartedDirectory = Join-Path $env:RUNNER_TEMP 'sequence-goal-qa-started'
+              New-Item -ItemType Directory -Force -Path $agentStartedDirectory | Out-Null
+              $global:LASTEXITCODE = 0
+              Set-Content -LiteralPath (Join-Path $agentStartedDirectory "$evidenceBaseName.started") -Value $evidenceBaseName -Encoding UTF8
+              ./scripts/run-sequence-goal-agent.ps1 `
+                -DiagramPath $diagram `
+                -BranchName $env:GITHUB_REF_NAME `
+                -DeliveryPhase AutomationTests `
+                -DeliverySurface $surface `
+                -ProductionContextPath $productionContextPath `
+                -UsagePath "TestResults/agent-resource/$evidenceBaseName.jsonl" `
+                -BudgetEvidencePath "TestResults/agent-resource/$evidenceBaseName.budget.json"
+              $agentExitCode = $LASTEXITCODE
+            } finally {
+              Remove-Item Env:OPENAI_API_KEY -ErrorAction SilentlyContinue
+              Remove-Item Env:CODEX_API_KEY -ErrorAction SilentlyContinue
+              Remove-Item Env:SEQUENCE_GOAL_AGENT_COMMAND_JSON -ErrorAction SilentlyContinue
+              [System.Environment]::SetEnvironmentVariable('OPENAI_API_KEY', $null, 'Process')
+              [System.Environment]::SetEnvironmentVariable('CODEX_API_KEY', $null, 'Process')
+              [System.Environment]::SetEnvironmentVariable('SEQUENCE_GOAL_AGENT_COMMAND_JSON', $null, 'Process')
+              $commandFileValidationError = $null
+              try {
+                foreach ($commandVariable in $githubCommandFileState.Keys) {
+                  $state = $githubCommandFileState[$commandVariable]
+                  foreach ($commandEntryPath in @((Split-Path -Parent $state.path), $state.path)) {
+                    $commandEntry = Get-Item -LiteralPath $commandEntryPath -Force -ErrorAction SilentlyContinue
+                    if ($null -ne $commandEntry -and ($null -ne $commandEntry.LinkType -or ($commandEntry.Attributes -band [System.IO.FileAttributes]::ReparsePoint))) {
+                      throw "QA agent replaced GitHub Actions command path with a symbolic link or reparse point: $commandEntryPath"
+                    }
+                  }
+                  $existsNow = Test-Path -LiteralPath $state.path -PathType Leaf
+                  $hashNow = if ($existsNow) { (Get-FileHash -LiteralPath $state.path -Algorithm SHA256).Hash } else { $null }
+                  if ($existsNow -ne $state.existed -or $hashNow -ne $state.hash) {
+                    throw "QA agent modified GitHub Actions command file $commandVariable."
+                  }
+                }
+              } catch {
+                $commandFileValidationError = $_
+              } finally { $global:LASTEXITCODE = 0 }
+              $gitTrustValidationError = $null
+              try {
+                $worktreeRoot = (Resolve-Path -LiteralPath '.').Path
+                $worktreeGitEntryPath = Join-Path $worktreeRoot '.git'
+                $worktreeGitEntry = Get-Item -LiteralPath $worktreeGitEntryPath -Force -ErrorAction SilentlyContinue
+                if ($null -ne $worktreeGitEntry -and ($null -ne $worktreeGitEntry.LinkType -or ($worktreeGitEntry.Attributes -band [System.IO.FileAttributes]::ReparsePoint))) {
+                  throw 'Disposable QA .git entry became a symbolic link or reparse point.'
+                }
+                $gitBackupPath = "$worktreeRoot.git-baseline"
+                $currentGitBaselineFingerprint = Get-DirectoryFingerprint -Path $gitBackupPath
+                if ([string]::IsNullOrWhiteSpace($gitBaselineFingerprint) -or $currentGitBaselineFingerprint -cne $gitBaselineFingerprint) {
+                  throw 'Disposable QA Git baseline changed during agent execution.'
+                }
+                if ($null -eq $worktreeGitEntry) {
+                  $gitBackupItem = Get-Item -LiteralPath $gitBackupPath -Force -ErrorAction Stop
+                  if (-not $gitBackupItem.PSIsContainer -or $null -ne $gitBackupItem.LinkType -or ($gitBackupItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                    throw 'Disposable QA Git baseline is not a regular directory.'
+                  }
+                  Get-ChildItem -LiteralPath $gitBackupPath -Recurse -Force | ForEach-Object {
+                    if ($null -ne $_.LinkType -or ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                      throw "Disposable QA Git baseline contains a symbolic link or reparse point: $($_.FullName)"
+                    }
+                  }
+                  Copy-Item -LiteralPath $gitBackupPath -Destination $worktreeGitEntryPath -Recurse
+                  Write-Warning 'QA agent removed disposable Git metadata; restored the clean baseline before change validation.'
+                }
+                $currentGitTrustState = Get-GitTrustState
+                $changedGitTrustComponents = if ([string]::IsNullOrWhiteSpace($gitTrustState)) { @('baseline') } else { @(Get-ChangedGitTrustComponents -Before $gitTrustState -After $currentGitTrustState) }
+                if ([string]::IsNullOrWhiteSpace($gitTrustState) -or $changedGitTrustComponents.Count -gt 0) {
+                  throw "QA agent modified protected Git state component(s): $($changedGitTrustComponents -join ', ')."
+                }
+              } catch {
+                $gitTrustValidationError = $_
+              }
+              $snapshotCleanupError = $null
+              try {
+                if ($null -ne (Get-Item -LiteralPath $productionContextPath -Force -ErrorAction SilentlyContinue)) {
+                  if (-not $snapshotCreated) { throw 'Refusing to remove a production context target not created by this invocation.' }
+                  foreach ($contextAncestor in @('.codex', '.codex/agent-loop', $productionContextDirectory)) {
+                    $contextAncestorItem = Get-Item -LiteralPath $contextAncestor -Force -ErrorAction SilentlyContinue
+                    if ($null -eq $contextAncestorItem) { continue }
+                    if ($null -ne $contextAncestorItem.LinkType -or ($contextAncestorItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                      throw "Cannot safely remove an unconsumed production snapshot through linked context ancestor: $contextAncestor"
+                    }
+                  }
+                  $remainingSnapshotItem = Get-Item -LiteralPath $productionContextPath -Force -ErrorAction Stop
+                  if ($null -ne $remainingSnapshotItem.LinkType -or ($remainingSnapshotItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                    throw 'Cannot safely remove an unconsumed production snapshot that became a link or reparse point.'
+                  }
+                  Remove-Item -LiteralPath $productionContextPath -Force -ErrorAction Stop
+                  if ($null -ne (Get-Item -LiteralPath $productionContextPath -Force -ErrorAction SilentlyContinue)) { throw 'Unconsumed production PR snapshot still exists after cleanup.' }
+                }
+              } catch {
+                $snapshotCleanupError = $_
+              } finally { $global:LASTEXITCODE = 0 }
+              if ($null -ne $commandFileValidationError) { throw $commandFileValidationError }
+              if ($null -ne $gitTrustValidationError) { throw $gitTrustValidationError }
+              if ($null -ne $snapshotCleanupError) { throw $snapshotCleanupError }
+            }
+            if ($agentExitCode -ne 0) { throw "$surface QA agent failed." }
+            ./scripts/normalize-generated-line-endings.ps1 -Base origin/main
+            ./scripts/format-generated-csharp.ps1 -Base origin/main
+            dotnet restore VAA.EAPI.Automation/VAA.EAPI.Automation.sln
+            if ($LASTEXITCODE -ne 0) { throw "$surface QA dependency restore failed." }
+            dotnet build VAA.EAPI.Automation/VAA.EAPI.Automation.sln -c Release --no-restore
+            if ($LASTEXITCODE -ne 0) { throw "$surface QA changes did not build." }
+            $postBuildGitTrustState = Get-GitTrustState
+            $postBuildChangedComponents = @(Get-ChangedGitTrustComponents -Before $gitTrustState -After $postBuildGitTrustState)
+            if ($postBuildChangedComponents.Count -gt 0) { throw "Post-build validation detected modified protected Git state component(s): $($postBuildChangedComponents -join ', ')." }
+            foreach ($commandVariable in $githubCommandFileState.Keys) {
+              $state = $githubCommandFileState[$commandVariable]
+              Assert-NoLinkedCommandPath -Path $state.path -Message 'Post-build validation detected a linked GitHub Actions command path'
+              $existsNow = Test-Path -LiteralPath $state.path -PathType Leaf
+              $hashNow = if ($existsNow) { (Get-FileHash -LiteralPath $state.path -Algorithm SHA256).Hash } else { $null }
+              if ($existsNow -ne $state.existed -or $hashNow -ne $state.hash) { throw "Post-build validation detected a modified GitHub Actions command file: $commandVariable" }
+            }
+            $trackedAgentChanges = @(git diff --name-only --no-renames HEAD)
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to inspect tracked QA agent changes.' }
+            $untrackedAgentChanges = @(git ls-files --others --exclude-standard)
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to inspect untracked QA agent changes.' }
+            $coordinatorGoalPaths = @($diagrams | ForEach-Object { $_ -replace '\\', '/' }) + @('docs/sequence-diagrams.md')
+            $unsafeAgentChanges = @($trackedAgentChanges; $untrackedAgentChanges) | ForEach-Object { ($_ -replace '\\', '/') } | Where-Object {
+              $_ -notmatch '^VAA\.EAPI\.Automation/' -and
+              $_ -cnotin $coordinatorGoalPaths
+            }
+            if ($unsafeAgentChanges.Count -gt 0) { throw "QA agent changed paths outside its publication allowlist: $($unsafeAgentChanges -join ', ')" }
+            $qaRepositoryRoot = (Resolve-Path -LiteralPath '.').Path
+            foreach ($agentChangedPath in @($trackedAgentChanges; $untrackedAgentChanges)) {
+              $candidatePath = [System.IO.Path]::GetFullPath((Join-Path $qaRepositoryRoot $agentChangedPath))
+              if (-not $candidatePath.StartsWith($qaRepositoryRoot + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) {
+                throw "QA agent changed a path outside the repository: $agentChangedPath"
+              }
+              $relativeParts = [System.IO.Path]::GetRelativePath($qaRepositoryRoot, $candidatePath).Split([System.IO.Path]::DirectorySeparatorChar)
+              $walkPath = $qaRepositoryRoot
+              foreach ($relativePart in $relativeParts) {
+                $walkPath = Join-Path $walkPath $relativePart
+                $walkItem = Get-Item -LiteralPath $walkPath -Force -ErrorAction SilentlyContinue
+                if ($null -ne $walkItem -and ($null -ne $walkItem.LinkType -or ($walkItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint))) {
+                  throw "QA agent changed a path through a symbolic link or reparse point: $agentChangedPath"
+                }
+              }
+            }
+            $runnerTempRoot = (Resolve-Path -LiteralPath $env:RUNNER_TEMP).Path
+            $handoffRoot = Join-Path $runnerTempRoot "sequence-goal-qa-handoff-$($env:GITHUB_RUN_ID)-$($env:GITHUB_RUN_ATTEMPT)-$($surface.ToLowerInvariant())"
+            $handoffFullPath = [System.IO.Path]::GetFullPath($handoffRoot)
+            if (-not $handoffFullPath.StartsWith($runnerTempRoot + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) {
+              throw 'QA publication handoff resolves outside RUNNER_TEMP.'
+            }
+            $existingHandoff = Get-Item -LiteralPath $handoffFullPath -Force -ErrorAction SilentlyContinue
+            if ($null -ne $existingHandoff) {
+              if ($null -ne $existingHandoff.LinkType -or ($existingHandoff.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) { throw 'QA publication handoff cannot be a link or reparse point.' }
+              Remove-Item -LiteralPath $handoffFullPath -Recurse -Force -ErrorAction Stop
+            }
+            $handoffFilesRoot = Join-Path $handoffFullPath 'files'
+            New-Item -ItemType Directory -Path $handoffFilesRoot -Force | Out-Null
+            $handoffPaths = @($trackedAgentChanges; $untrackedAgentChanges) |
+              ForEach-Object { ($_ -replace '\\', '/') } |
+              Sort-Object -Unique
+            $handoffEntries = @()
+            foreach ($handoffPath in $handoffPaths) {
+              $sourcePath = [System.IO.Path]::GetFullPath((Join-Path $qaRepositoryRoot $handoffPath))
+              if (-not $sourcePath.StartsWith($qaRepositoryRoot + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) { throw "QA handoff path resolves outside the repository: $handoffPath" }
+              $sourceItem = Get-Item -LiteralPath $sourcePath -Force -ErrorAction SilentlyContinue
+              if ($null -eq $sourceItem) {
+                $handoffEntries += [ordered]@{ path = $handoffPath; deleted = $true; sha256 = $null }
+                continue
+              }
+              if ($sourceItem.PSIsContainer -or $null -ne $sourceItem.LinkType -or ($sourceItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) { throw "QA handoff requires a regular file: $handoffPath" }
+              $handoffDestination = Join-Path $handoffFilesRoot $handoffPath
+              New-Item -ItemType Directory -Path (Split-Path -Parent $handoffDestination) -Force | Out-Null
+              Copy-Item -LiteralPath $sourcePath -Destination $handoffDestination -Force
+              $handoffEntries += [ordered]@{ path = $handoffPath; deleted = $false; sha256 = (Get-FileHash -LiteralPath $handoffDestination -Algorithm SHA256).Hash }
+            }
+            ConvertTo-Json -InputObject @($handoffEntries) -Depth 4 | Set-Content -LiteralPath (Join-Path $handoffFullPath 'manifest.json') -Encoding UTF8
+            $coordinatorHandoffRoot = Join-Path $handoffFullPath 'coordinator'
+            $coordinatorFilesRoot = Join-Path $coordinatorHandoffRoot 'files'
+            New-Item -ItemType Directory -Path $coordinatorFilesRoot -Force | Out-Null
+            $coordinatorEntries = @($handoffEntries | Where-Object { $_.path -cin $coordinatorGoalPaths })
+            foreach ($coordinatorEntry in $coordinatorEntries) {
+              if ([bool]$coordinatorEntry.deleted) { continue }
+              $coordinatorSource = Join-Path $handoffFilesRoot ([string]$coordinatorEntry.path)
+              $coordinatorDestination = Join-Path $coordinatorFilesRoot ([string]$coordinatorEntry.path)
+              New-Item -ItemType Directory -Path (Split-Path -Parent $coordinatorDestination) -Force | Out-Null
+              Copy-Item -LiteralPath $coordinatorSource -Destination $coordinatorDestination -Force
+            }
+            ConvertTo-Json -InputObject @($coordinatorEntries) -Depth 4 | Set-Content -LiteralPath (Join-Path $coordinatorHandoffRoot 'manifest.json') -Encoding UTF8
+            "coordinator_handoff_path=$coordinatorHandoffRoot" | Out-File -FilePath $githubCommandFileState['GITHUB_OUTPUT'].path -Append
+            [ordered]@{
+              repository = $productionRepository
+              number = $productionNumber
+              headSha = ([string]$productionPr.headRefOid).ToLowerInvariant()
+            } | ConvertTo-Json -Compress | Set-Content -LiteralPath (Join-Path $handoffFullPath 'production-checkpoint.json') -Encoding UTF8
+            $resourceHandoff = Join-Path $handoffFullPath 'agent-resource'
+            New-Item -ItemType Directory -Path $resourceHandoff -Force | Out-Null
+            foreach ($resourceDirectory in @('TestResults', 'TestResults/agent-resource')) {
+              $resourceDirectoryItem = Get-Item -LiteralPath $resourceDirectory -Force -ErrorAction SilentlyContinue
+              if ($null -ne $resourceDirectoryItem -and (-not $resourceDirectoryItem.PSIsContainer -or $null -ne $resourceDirectoryItem.LinkType -or ($resourceDirectoryItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint))) { throw "QA resource directory '$resourceDirectory' must be a regular directory." }
+            }
+            Get-ChildItem -LiteralPath 'TestResults/agent-resource' -File -ErrorAction SilentlyContinue |
+              Where-Object { $_.Name -match "(?i)-automationtests-$([regex]::Escape($surface))[-.]" -and $null -eq $_.LinkType -and -not ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint) } |
+              ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination $resourceHandoff -Force }
+          }
+
+      - name: Validate trusted checkout after QA agent
+        id: trusted_checkout_validation
+        if: always() && env.QA_HAS_INPROGRESS == 'true' && steps.automation_restore.outcome == 'success' && steps.isolated_checkout.outcome == 'success'
+        shell: pwsh
+        env:
+          EXPECTED_TRUSTED_FINGERPRINT: ${{ steps.isolated_checkout.outputs.trusted_fingerprint }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          function Get-CheckoutFingerprint {
+            param([Parameter(Mandatory)][string]$Root)
+            $entries = New-Object System.Collections.Generic.List[string]
+            $trackedPaths = @(& git -C $Root ls-files)
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to enumerate trusted checkout files after QA execution.' }
+            foreach ($relativePath in $trackedPaths) {
+              $path = Join-Path $Root $relativePath
+              $item = Get-Item -LiteralPath $path -Force -ErrorAction Stop
+              if ($item.PSIsContainer -or $null -ne $item.LinkType -or ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                throw "Trusted checkout contains a non-regular tracked path after QA execution: $relativePath"
+              }
+              $entries.Add("file|$($relativePath -replace '\\', '/')|$((Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash)") | Out-Null
+            }
+            $gitRoot = Join-Path $Root '.git'
+            $gitRootItem = Get-Item -LiteralPath $gitRoot -Force -ErrorAction Stop
+            if (-not $gitRootItem.PSIsContainer -or $null -ne $gitRootItem.LinkType -or ($gitRootItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+              throw 'Trusted checkout .git entry is not a regular directory after QA execution.'
+            }
+            Get-ChildItem -LiteralPath $gitRoot -Recurse -Force | Sort-Object FullName | ForEach-Object {
+              if ($null -ne $_.LinkType -or ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                throw "Trusted Git metadata contains a symbolic link or reparse point after QA execution: $($_.FullName)"
+              }
+              $relativePath = [System.IO.Path]::GetRelativePath($gitRoot, $_.FullName) -replace '\\', '/'
+              $entryHash = if ($_.PSIsContainer) { '<directory>' } else { (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash }
+              $entries.Add("git|$relativePath|$entryHash") | Out-Null
+            }
+            [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes(($entries -join "`n"))))
+          }
+          $trustedRoot = (Resolve-Path -LiteralPath $env:GITHUB_WORKSPACE).Path
+          $actualFingerprint = Get-CheckoutFingerprint -Root $trustedRoot
+          if ([string]::IsNullOrWhiteSpace($env:EXPECTED_TRUSTED_FINGERPRINT) -or $actualFingerprint -cne $env:EXPECTED_TRUSTED_FINGERPRINT) {
+            throw 'QA agent modified the trusted checkout; publication is blocked.'
+          }
+
+      - name: Stage QA execution evidence
+        if: always()
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          function Assert-NoLinkedPath {
+            param([Parameter(Mandatory)][string]$Root, [Parameter(Mandatory)][string]$Path)
+            $rootFullPath = [System.IO.Path]::GetFullPath($Root).TrimEnd([System.IO.Path]::DirectorySeparatorChar) + [System.IO.Path]::DirectorySeparatorChar
+            $pathFullPath = [System.IO.Path]::GetFullPath($Path)
+            if (-not $pathFullPath.StartsWith($rootFullPath, [System.StringComparison]::OrdinalIgnoreCase)) {
+              throw "QA evidence path resolves outside its expected root: $pathFullPath"
+            }
+            $current = $rootFullPath.TrimEnd([System.IO.Path]::DirectorySeparatorChar)
+            $relative = [System.IO.Path]::GetRelativePath($current, $pathFullPath)
+            foreach ($part in $relative.Split([System.IO.Path]::DirectorySeparatorChar, [System.StringSplitOptions]::RemoveEmptyEntries)) {
+              $current = Join-Path $current $part
+              $item = Get-Item -LiteralPath $current -Force -ErrorAction SilentlyContinue
+              if ($null -ne $item -and ($null -ne $item.LinkType -or ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint))) {
+                throw "QA evidence path contains a symbolic link or reparse point: $current"
+              }
+            }
+          }
+          $runnerTempRoot = (Resolve-Path -LiteralPath $env:RUNNER_TEMP).Path
+          $directory = Join-Path $env:RUNNER_TEMP 'sequence-goal-qa-attempt'
+          Assert-NoLinkedPath -Root $runnerTempRoot -Path $directory
+          $existingAttemptDirectory = Get-Item -LiteralPath $directory -Force -ErrorAction SilentlyContinue
+          if ($null -ne $existingAttemptDirectory) {
+            if (-not $existingAttemptDirectory.PSIsContainer) { throw 'QA attempt evidence root must be a regular directory.' }
+            Get-ChildItem -LiteralPath $directory -Recurse -Force | ForEach-Object {
+              if ($null -ne $_.LinkType -or ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                throw "QA attempt evidence root contains a symbolic link or reparse point: $($_.FullName)"
+              }
+            }
+            Remove-Item -LiteralPath $directory -Recurse -Force
+          }
+          New-Item -ItemType Directory -Force -Path $directory | Out-Null
+          $uploadRoot = Join-Path $env:RUNNER_TEMP 'sequence-goal-qa-upload'
+          Assert-NoLinkedPath -Root $runnerTempRoot -Path $uploadRoot
+          $existingUploadRoot = Get-Item -LiteralPath $uploadRoot -Force -ErrorAction SilentlyContinue
+          if ($null -ne $existingUploadRoot) {
+            if (-not $existingUploadRoot.PSIsContainer) { throw 'QA evidence upload root must be a regular directory.' }
+            Get-ChildItem -LiteralPath $uploadRoot -Recurse -Force | ForEach-Object {
+              if ($null -ne $_.LinkType -or ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                throw "QA evidence upload root contains a symbolic link or reparse point: $($_.FullName)"
+              }
+            }
+            Remove-Item -LiteralPath $uploadRoot -Recurse -Force
+          }
+          $resourceUploadDirectory = Join-Path $uploadRoot 'TestResults/agent-resource'
+          New-Item -ItemType Directory -Force -Path $resourceUploadDirectory | Out-Null
+          Assert-NoLinkedPath -Root $runnerTempRoot -Path $resourceUploadDirectory
+          $agentRoot = Join-Path $env:RUNNER_TEMP "sequence-goal-qa-agent-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.surface }}"
+          Assert-NoLinkedPath -Root $runnerTempRoot -Path $agentRoot
+          $startedDirectory = Join-Path $env:RUNNER_TEMP 'sequence-goal-qa-started'
+          Assert-NoLinkedPath -Root $runnerTempRoot -Path $startedDirectory
+          $surfaceSlug = '${{ matrix.surface }}'.ToLowerInvariant()
+          $startedMarkers = @(Get-ChildItem -LiteralPath $startedDirectory -Filter "sequence-goal-loop-${{ github.run_id }}-automationtests-$surfaceSlug-*.started" -File -Force -ErrorAction SilentlyContinue)
+          $allowedResourceNames = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+          foreach ($startedMarker in $startedMarkers) {
+            if ($null -ne $startedMarker.LinkType -or ($startedMarker.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+              throw "QA start marker cannot be a symbolic link or reparse point: $($startedMarker.FullName)"
+            }
+            $evidenceBaseName = [IO.Path]::GetFileNameWithoutExtension($startedMarker.Name)
+            foreach ($suffix in @('.jsonl', '.jsonl.outcome.json', '.budget.json')) {
+              [void]$allowedResourceNames.Add("$evidenceBaseName$suffix")
+            }
+          }
+          foreach ($evidenceDirectory in @('TestResults/agent-resource', 'TestResults/agent-command-logs')) {
+            $sourceDirectory = Join-Path $agentRoot $evidenceDirectory
+            Assert-NoLinkedPath -Root $agentRoot -Path $sourceDirectory
+            $sourceDirectoryItem = Get-Item -LiteralPath $sourceDirectory -Force -ErrorAction SilentlyContinue
+            if ($null -eq $sourceDirectoryItem) { continue }
+            if (-not $sourceDirectoryItem.PSIsContainer -or $null -ne $sourceDirectoryItem.LinkType -or ($sourceDirectoryItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+              throw "QA evidence source '$evidenceDirectory' must be a regular directory."
+            }
+            $targetDirectory = Join-Path $uploadRoot $evidenceDirectory
+            New-Item -ItemType Directory -Path $targetDirectory -Force | Out-Null
+            $sourceFiles = @(Get-ChildItem -LiteralPath $sourceDirectory -File -Force)
+            if ($evidenceDirectory -eq 'TestResults/agent-resource') {
+              $unexpectedResourceFiles = @($sourceFiles | Where-Object {
+                $_.Name -match "^sequence-goal-loop-${{ github.run_id }}-automationtests-$([regex]::Escape($surfaceSlug))-" -and
+                -not $allowedResourceNames.Contains($_.Name)
+              })
+              if ($unexpectedResourceFiles.Count -gt 0) {
+                throw "QA agent created unexpected resource evidence: $($unexpectedResourceFiles.Name -join ', ')"
+              }
+              $sourceFiles = @($sourceFiles | Where-Object { $allowedResourceNames.Contains($_.Name) })
+            }
+            $sourceFiles | ForEach-Object {
+              if ($null -ne $_.LinkType -or ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+                throw "QA evidence file cannot be a symbolic link or reparse point: $($_.FullName)"
+              }
+              Copy-Item -LiteralPath $_.FullName -Destination $targetDirectory -Force
+            }
+          }
+          $agentExecuted = $startedMarkers.Count -gt 0
+          [ordered]@{ surface = '${{ matrix.surface }}'; agentExecuted = $agentExecuted } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $directory '${{ matrix.surface }}.json') -Encoding UTF8
+          foreach ($startedMarker in $startedMarkers) {
+            $evidenceBaseName = [IO.Path]::GetFileNameWithoutExtension($startedMarker.Name)
+            Set-Content -LiteralPath (Join-Path $resourceUploadDirectory "$evidenceBaseName.executed") -Value 'agent-executed' -Encoding UTF8
+          }
+
+      - name: Upload QA attempt evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: automation-agent-attempt-${{ matrix.surface }}-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: ${{ runner.temp }}/sequence-goal-qa-attempt/${{ matrix.surface }}.json
+          if-no-files-found: error
+
+      - name: Ensure trusted QA publication checkout is absent
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_agent.outcome == 'success' && steps.trusted_checkout_validation.outcome == 'success'
+        shell: pwsh
+        run: |
+          $target = Join-Path $env:GITHUB_WORKSPACE 'trusted-qa-publication'
+          if ($null -ne (Get-Item -LiteralPath $target -Force -ErrorAction SilentlyContinue)) { throw 'Trusted QA publication checkout path already exists.' }
+
+      - name: Checkout trusted QA publication workspace
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_agent.outcome == 'success' && steps.trusted_checkout_validation.outcome == 'success'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+          persist-credentials: false
+          path: trusted-qa-publication
+          token: ${{ steps.app-token.outputs.token || github.token }}
+
+      - name: Fetch trusted QA comparison history
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_agent.outcome == 'success' && steps.trusted_checkout_validation.outcome == 'success'
+        shell: pwsh
+        working-directory: trusted-qa-publication
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $gitAuthHeader = 'AUTHORIZATION: basic ' + [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("x-access-token:$env:GH_TOKEN"))
+          git config --local http.https://github.com/.extraheader $gitAuthHeader
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to configure trusted QA fetch authentication.' }
+          try {
+            $branchRef = "+refs/heads/$($env:GITHUB_REF_NAME):refs/remotes/origin/$($env:GITHUB_REF_NAME)"
+            git fetch --no-tags --unshallow origin +refs/heads/main:refs/remotes/origin/main $branchRef
+            if ($LASTEXITCODE -ne 0) { throw 'Failed to fetch trusted QA comparison history.' }
+            git merge-base origin/main HEAD | Out-Null
+            if ($LASTEXITCODE -ne 0) { throw 'Trusted QA checkout has no merge base with main.' }
+          } finally {
+            git config --local --unset-all http.https://github.com/.extraheader
+            if ($LASTEXITCODE -notin @(0, 5)) { throw 'Failed to remove trusted QA fetch authentication.' }
+          }
+
+      - name: Apply validated QA handoff to trusted checkout
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_agent.outcome == 'success'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $trustedRoot = (Resolve-Path -LiteralPath 'trusted-qa-publication').Path
+          function Assert-RegularTargetPath {
+            param([string]$Path)
+            $relative = [System.IO.Path]::GetRelativePath($trustedRoot, $Path)
+            $current = $trustedRoot
+            foreach ($part in $relative.Split([System.IO.Path]::DirectorySeparatorChar, [System.StringSplitOptions]::RemoveEmptyEntries)) {
+              $current = Join-Path $current $part
+              $item = Get-Item -LiteralPath $current -Force -ErrorAction SilentlyContinue
+              if ($null -ne $item -and ($null -ne $item.LinkType -or ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint))) { throw "QA handoff target contains a symbolic link or reparse point: $current" }
+            }
+          }
+          $surfaceSlug = '${{ matrix.surface }}'.ToLowerInvariant()
+          $handoffRoot = Join-Path $env:RUNNER_TEMP "sequence-goal-qa-handoff-${{ github.run_id }}-${{ github.run_attempt }}-$surfaceSlug"
+          $manifestPath = Join-Path $handoffRoot 'manifest.json'
+          $entries = @(Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json)
+          foreach ($entry in $entries) {
+            $relativePath = [string]$entry.path -replace '\\', '/'
+            if ([System.IO.Path]::IsPathRooted($relativePath) -or $relativePath.Contains('..')) { throw "Invalid QA handoff path: $relativePath" }
+            $targetPath = [System.IO.Path]::GetFullPath((Join-Path $trustedRoot $relativePath))
+            if (-not $targetPath.StartsWith($trustedRoot + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) { throw "QA handoff target escapes trusted checkout: $relativePath" }
+            Assert-RegularTargetPath $targetPath
+            if ([bool]$entry.deleted) {
+              if (Test-Path -LiteralPath $targetPath -PathType Leaf) { Remove-Item -LiteralPath $targetPath -Force }
+              continue
+            }
+            $sourcePath = Join-Path (Join-Path $handoffRoot 'files') $relativePath
+            if ((Get-FileHash -LiteralPath $sourcePath -Algorithm SHA256).Hash -cne [string]$entry.sha256) { throw "QA handoff hash mismatch: $relativePath" }
+            New-Item -ItemType Directory -Path (Split-Path -Parent $targetPath) -Force | Out-Null
+            Assert-RegularTargetPath $targetPath
+            Copy-Item -LiteralPath $sourcePath -Destination $targetPath -Force
+          }
+          $resourceSource = Join-Path $handoffRoot 'agent-resource'
+          if (Test-Path -LiteralPath $resourceSource -PathType Container) {
+            $resourceTarget = Join-Path $trustedRoot 'TestResults/agent-resource'
+            New-Item -ItemType Directory -Path $resourceTarget -Force | Out-Null
+            Get-ChildItem -LiteralPath $resourceSource -File | ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination $resourceTarget -Force }
+          }
+
+      - name: Publish QA delivery from trusted checkout
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_agent.outcome == 'success'
+        shell: pwsh
+        working-directory: trusted-qa-publication
+        env:
+          GH_TOKEN: ${{ steps.cross-repo-token-qa.outputs.token || steps.app-token.outputs.token || github.token }}
+          SEQUENCE_GOAL_GITHUB_APP_SLUG: ${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $diagrams = $env:QA_INPROGRESS_LIST.Split(';', [System.StringSplitOptions]::RemoveEmptyEntries)
+          $handoffRoot = Join-Path $env:RUNNER_TEMP "sequence-goal-qa-handoff-${{ github.run_id }}-${{ github.run_attempt }}-$('${{ matrix.surface }}'.ToLowerInvariant())"
+          $productionCheckpoint = Get-Content -LiteralPath (Join-Path $handoffRoot 'production-checkpoint.json') -Raw | ConvertFrom-Json
+          foreach ($diagram in $diagrams) {
+            $publisherArguments = @{
+              CoordinatorBranch = $env:GITHUB_REF_NAME
+              Surface = '${{ matrix.surface }}'
+              Agent = '${{ matrix.agent }}'
+              DiagramPath = $diagram
+              Repository = '${{ github.repository }}'
+              ProductionRepository = [string]$productionCheckpoint.repository
+              ProductionPrNumber = [int]$productionCheckpoint.number
+              ProductionHeadSha = [string]$productionCheckpoint.headSha
+            }
+            ./scripts/publish-sequence-goal-qa-pr.ps1 @publisherArguments
+          }
+
+      - name: Upload validated coordinator goal changes
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_agent.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coordinator-goal-changes-${{ matrix.surface }}-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: ${{ steps.automation_agent.outputs.coordinator_handoff_path }}/
+          if-no-files-found: error
+
+      - name: Commit generated automation tests
+        id: commit_automation
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_agent.outcome == 'success'
+        continue-on-error: true
+        shell: pwsh
+        working-directory: trusted-qa-publication
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ('${{ steps.automation_restore.outcome }}' -ne 'success') {
+            throw 'Automation dependency restore failed before automation-test generation.'
+          }
+          if ('${{ steps.automation_agent.outcome }}' -ne 'success') {
+            throw 'Automation-test generation agent failed.'
+          }
+          $changedFiles = @(
+            @(git diff --name-only --no-renames HEAD)
+            @(git ls-files --others --exclude-standard)
+          ) | ForEach-Object { ($_ -replace '\\', '/') } | Sort-Object -Unique
+          $existingAutomationFiles = @(
+            git diff --name-only --no-renames origin/main...HEAD |
+            ForEach-Object { ($_ -replace '\\', '/') } |
+            Where-Object { $_ -match '^VAA\.EAPI\.Automation/' -and $_ -notmatch '^VAA\.EAPI\.Automation/docs/' }
+          )
+          $newAutomationFiles = @($changedFiles | Where-Object { $_ -match '^VAA\.EAPI\.Automation/' -and $_ -notmatch '^VAA\.EAPI\.Automation/docs/' })
+          $automationFiles = @($existingAutomationFiles + $newAutomationFiles | Sort-Object -Unique)
+          $allowedPatterns = @(
+            '^VAA\.EAPI\.Automation/',
+            '^docs/sequence-diagrams(?:\.md$|/)',
+            '^docs/behavior-harness\.md$'
+          )
+          $notAllowed = @($changedFiles | Where-Object { $file = $_; -not ($allowedPatterns | Where-Object { $file -match $_ }) })
+          if ($notAllowed.Count -gt 0) {
+            throw "Automation-test generation changed paths outside its allowlist: $($notAllowed -join ', ')"
+          }
+          if ($changedFiles.Count -gt [int]$env:SEQUENCE_GOAL_MAX_CHANGED_FILES) {
+            throw "Automation-test generation changed $($changedFiles.Count) files, exceeding SEQUENCE_GOAL_MAX_CHANGED_FILES=$env:SEQUENCE_GOAL_MAX_CHANGED_FILES."
+          }
+          foreach ($changedFile in $changedFiles) {
+            $commitRepositoryRoot = (Resolve-Path -LiteralPath '.').Path
+            $changedFullPath = [System.IO.Path]::GetFullPath((Join-Path $commitRepositoryRoot $changedFile))
+            $changedRelativeParts = [System.IO.Path]::GetRelativePath($commitRepositoryRoot, $changedFullPath).Split([System.IO.Path]::DirectorySeparatorChar)
+            $changedWalkPath = $commitRepositoryRoot
+            foreach ($changedRelativePart in $changedRelativeParts) {
+              $changedWalkPath = Join-Path $changedWalkPath $changedRelativePart
+              $changedWalkItem = Get-Item -LiteralPath $changedWalkPath -Force -ErrorAction SilentlyContinue
+              if ($null -ne $changedWalkItem -and ($null -ne $changedWalkItem.LinkType -or ($changedWalkItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint))) {
+                throw "Automation-test generation cannot stage a path through a symbolic link or reparse point: $changedFile"
+              }
+            }
+            $changedItem = Get-Item -LiteralPath $changedFile -Force -ErrorAction SilentlyContinue
+            if ($null -ne $changedItem -and ($null -ne $changedItem.LinkType -or ($changedItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint))) {
+              throw "Automation-test generation cannot publish a symbolic link or reparse point: $changedFile"
+            }
+          }
+
+          if ($automationFiles.Count -eq 0) {
+            Write-Host 'The isolated QA publisher already validated and recorded existing automation coverage; no coordinator changes are required.'
+            exit 0
+          }
+
+          if ($changedFiles.Count -eq 0) {
+            Write-Host "Existing automation coverage is already committed on this branch; continuing to build and verification."
+            exit 0
+          }
+
+          throw "Trusted QA publication left uncommitted coordinator-checkout changes after publishing the isolated QA PR: $($changedFiles -join ', ')"
+
+      - name: Pin published QA verification inputs
+        id: qa_verification
+        if: steps.inprogress.outputs.has_inprogress == 'true' && steps.commit_automation.outcome == 'success'
+        shell: pwsh
+        working-directory: trusted-qa-publication
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          . ./scripts/sequence-goal-production-readiness.ps1
+          $items = @(Get-ChildItem TestResults/associated-prs -Filter 'QA-*.json' -File | ForEach-Object { Get-Content $_.FullName -Raw | ConvertFrom-Json })
+          if ($items.Count -ne 1) { throw 'Expected one QA PR to verify.' }
+          $checkpoint = $items[0]
+          $pr = gh pr view $checkpoint.number --repo $checkpoint.repository --json headRefOid,headRefName,state | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0 -or $pr.headRefName -cne $checkpoint.headBranch -or $pr.state -ne 'OPEN') { throw 'QA PR changed before verification.' }
+          $diagrams = @($env:QA_INPROGRESS_LIST.Split(';', [System.StringSplitOptions]::RemoveEmptyEntries))
+          if ($diagrams.Count -ne 1) { throw 'Expected one QA goal.' }
+          $baseline = (git -C $env:GITHUB_WORKSPACE show "${{ steps.isolated_checkout.outputs.goal_baseline_commit }}:$($diagrams[0])") -join "`n"
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot read verified goal baseline.' }
+          $digest = Get-ProductionGoalDigest $baseline
+          $production = Read-DeliveryGoalState $checkpoint.coordinatorRepository $checkpoint.coordinatorBranch '${{ matrix.surface }}'
+          if ($production.currentGoalDigest -cne $digest -or -not (Test-ProductionReadiness $production $checkpoint.productionHeadSha)) { throw 'Goal or production changed before QA verification.' }
+          $gitAuthHeader = 'AUTHORIZATION: basic ' + [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("x-access-token:$env:GH_TOKEN"))
+          git -c http.https://github.com/.extraheader= -c "http.https://github.com/.extraheader=$gitAuthHeader" fetch --no-tags origin "refs/heads/$($checkpoint.headBranch)"
+          if ($LASTEXITCODE -ne 0 -or (git rev-parse FETCH_HEAD).Trim() -cne $pr.headRefOid) { throw 'QA head changed while preparing verification.' }
+          git worktree add --detach (Join-Path $env:GITHUB_WORKSPACE 'qa-verification') $pr.headRefOid
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot prepare pinned QA verification checkout.' }
+          "qa_head=$($pr.headRefOid)" | Out-File $env:GITHUB_OUTPUT -Append
+          "goal_digest=$digest" | Out-File $env:GITHUB_OUTPUT -Append
+
+      - name: Restore generated automation dependencies
+        id: generated_automation_restore
+        if: steps.inprogress.outputs.has_inprogress == 'true' && steps.commit_automation.outcome == 'success'
+        continue-on-error: true
+        timeout-minutes: ${{ fromJSON(vars.SEQUENCE_GOAL_VERIFY_TIMEOUT_MINUTES || '20') }}
+        shell: pwsh
+        working-directory: qa-verification
+        run: dotnet restore VAA.EAPI.Automation/VAA.EAPI.Automation.sln
+
+      - name: Build generated automation tests
+        id: automation_build
+        if: steps.inprogress.outputs.has_inprogress == 'true' && steps.commit_automation.outcome == 'success' && steps.generated_automation_restore.outcome == 'success'
+        continue-on-error: true
+        timeout-minutes: ${{ fromJSON(vars.SEQUENCE_GOAL_VERIFY_TIMEOUT_MINUTES || '20') }}
+        shell: pwsh
+        working-directory: qa-verification
+        run: dotnet build VAA.EAPI.Automation/VAA.EAPI.Automation.sln -c Release --no-restore
+
+      - name: Record QA delivery PRs in goal diagrams
+        if: env.QA_HAS_INPROGRESS == 'true' && steps.automation_agent.outcome == 'success' && steps.generated_automation_restore.outcome == 'success' && steps.automation_build.outcome == 'success'
+        shell: pwsh
+        working-directory: trusted-qa-publication
+        env:
+          GH_TOKEN: ${{ steps.cross-repo-token-qa.outputs.token || steps.app-token.outputs.token || github.token }}
+          SEQUENCE_GOAL_GITHUB_APP_SLUG: ${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $items = @(Get-ChildItem -LiteralPath 'TestResults/associated-prs' -Filter 'QA-*.json' -File | ForEach-Object {
+            Get-Content -LiteralPath $_.FullName -Raw | ConvertFrom-Json
+          })
+          if ($items.Count -ne 1) { throw "Expected one per-agent QA PR checkpoint; found $($items.Count)." }
+          $checkpoint = $items[0]
+          ./scripts/save-sequence-goal-delivery.ps1 -Evidence $checkpoint -GoalChangesDirectory '${{ steps.automation_agent.outputs.coordinator_handoff_path }}' -GoalBaselineRepository $env:GITHUB_WORKSPACE -GoalBaselineCommit '${{ steps.isolated_checkout.outputs.goal_baseline_commit }}' -VerifiedQaCommit '${{ steps.qa_verification.outputs.qa_head }}' -VerifiedGoalDigest '${{ steps.qa_verification.outputs.goal_digest }}'
+          ./scripts/dispatch-sequence-goal-qa.ps1 -Repository $checkpoint.coordinatorRepository -CoordinatorBranch $checkpoint.coordinatorBranch -Surface '${{ matrix.surface }}' -ProductionRepository $checkpoint.productionRepository -ProductionNumber ([int]$checkpoint.productionNumber) -PublishVerifiedOnly
+
+      - name: Report automation restore, generation, or build failure
+        if: steps.inprogress.outputs.has_inprogress == 'true' && (steps.automation_restore.outcome == 'failure' || steps.automation_agent.outcome == 'failure' || steps.commit_automation.outcome == 'failure' || steps.generated_automation_restore.outcome == 'failure' || steps.automation_build.outcome == 'failure')
+        shell: pwsh
+        run: |
+          throw 'Automation generation or verification failed. The workflow leaves the goal InProgress and does not publish failure evidence from a checkout that evaluated agent-controlled projects.'
+      - name: Upload automation-agent resource evidence
+        if: always() && steps.inprogress.outputs.has_inprogress == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: automation-agent-resource-${{ matrix.surface }}-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: |
+            ${{ runner.temp }}/sequence-goal-qa-upload/TestResults/agent-resource/sequence-goal-loop-${{ github.run_id }}-automationtests-*.jsonl
+            ${{ runner.temp }}/sequence-goal-qa-upload/TestResults/agent-resource/sequence-goal-loop-${{ github.run_id }}-automationtests-*.jsonl.outcome.json
+            ${{ runner.temp }}/sequence-goal-qa-upload/TestResults/agent-resource/sequence-goal-loop-${{ github.run_id }}-automationtests-*.budget.json
+            ${{ runner.temp }}/sequence-goal-qa-upload/TestResults/agent-resource/sequence-goal-loop-${{ github.run_id }}-automationtests-*.executed
+          if-no-files-found: ignore # Resume runs reuse retained child-PR resource decisions.
+
+      - name: Remove QA Git authentication
+        if: always()
+        shell: pwsh
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader 2>$null
+          if ($LASTEXITCODE -notin @(0, 5)) { throw 'Failed to remove QA Git authentication.' }
+          $global:LASTEXITCODE = 0
+
+      - name: Upload automation-agent command logs
+        if: always() && steps.inprogress.outputs.has_inprogress == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: automation-agent-command-logs-${{ matrix.surface }}-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 3
+          path: ${{ runner.temp }}/sequence-goal-qa-upload/TestResults/agent-command-logs/
+          if-no-files-found: ignore
+
+  retain-agent-resource-evidence:
+    name: Retain QA attempt resource evidence
+    needs: deliver-automation-tests
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - name: Detect coordinator GitHub App credentials
+        id: app-credentials
+        shell: pwsh
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        run: |
+          "configured=$(((-not [string]::IsNullOrWhiteSpace($env:APP_ID)) -and (-not [string]::IsNullOrWhiteSpace($env:APP_PRIVATE_KEY))).ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Create coordinator GitHub App token
+        id: app-token
+        if: steps.app-credentials.outputs.configured == 'true'
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          private-key: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+
+      - name: Check out coordinator workflow scripts
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+          token: ${{ steps.app-token.outputs.token || github.token }}
+
+      - name: Download QA attempt evidence
+        if: needs.deliver-automation-tests.result != 'skipped'
+        uses: actions/download-artifact@v4
+        with:
+          pattern: automation-agent-attempt-*-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sequence-goal-qa-attempt
+          merge-multiple: true
+
+      - name: Resolve QA resource expectation
+        id: qa_resource_expectation
+        if: needs.deliver-automation-tests.result != 'skipped'
+        shell: pwsh
+        run: |
+          $attempts = @(Get-ChildItem -LiteralPath '${{ runner.temp }}/sequence-goal-qa-attempt' -Filter '*.json' -File | ForEach-Object { Get-Content -LiteralPath $_.FullName -Raw | ConvertFrom-Json })
+          if ($attempts.Count -eq 0) { throw 'QA attempt evidence is missing.' }
+          "expect_budget=$(@($attempts | Where-Object agentExecuted).Count -gt 0)".ToLowerInvariant() | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Record attempt cost in goal document
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+        run: |
+          ./scripts/save-sequence-goal-resources.ps1 -Branch $env:GITHUB_REF_NAME -RunId '${{ github.run_id }}' -Attempt '${{ github.run_attempt }}' -ExpectBudget:('${{ steps.qa_resource_expectation.outputs.expect_budget || 'false' }}' -eq 'true')

@@ -1,0 +1,16 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements HTTP/1.1
+
+$[?(@.pnrLocator == 'E3SKJP')]
+
+###Response
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json; charset=utf-8
+
+[
+  {
+    "code": "travelrequirement_020_003",
+    "message": "Your domestic flight has no special travel requirements. However, government or health requirements may still apply. Please check at the airport.",
+    "title": ""
+  }
+]

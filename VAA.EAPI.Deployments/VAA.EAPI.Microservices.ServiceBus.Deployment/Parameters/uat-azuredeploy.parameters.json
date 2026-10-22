@@ -1,0 +1,130 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "north europe"
+    },
+    "servicebusName": {
+      "value": "avaseunsbsingleorderview"
+    },
+    "topics": {
+      "value": [
+        "Order",
+        "Ticket",
+        "Payment",
+        "Communication"
+      ]
+    },
+    "topicsubscription": {
+      "value": [
+        {
+          "name": "OrderCreateSubscriber",
+          "topic": "Order"
+        },
+        {
+          "name": "OrderStatusSubscriber",
+          "topic": "Order"
+        },
+        {
+          "name": "VoidTicketSubscriber",
+          "topic": "Ticket"
+        },
+        {
+          "name": "TicketOrderDetailSubscriber",
+          "topic": "Ticket"
+        },
+        {
+          "name": "VoidOrderDetailSubscriber",
+          "topic": "Ticket"
+        },
+        {
+          "name": "PaymentUpdateSubscriber",
+          "topic": "Payment"
+        },
+        {
+          "name": "VoidTransactionSubscriber",
+          "topic": "Payment"
+        },
+        {
+          "name": "VoidOrderUpdateSubscriber",
+          "topic": "Payment"
+        },
+        {
+          "name": "PaymentStatusSubscriber",
+          "topic": "Payment"
+        },
+        {
+          "name": "CPDBusinessErrorSubscriber",
+          "topic": "Communication"
+        }
+
+
+      ]
+    },
+    "correlation_rules": {
+      "value": [
+        {
+          "name": "VAA.Order.Notification.InitiateOrderCreate",
+          "topic": "Order",
+          "subscriptioname": "OrderCreateSubscriber"
+        },
+        {
+          "name": "VAA.Order.Data.OrderNotificationCreateStatus",
+          "topic": "Order",
+          "subscriptioname": "OrderStatusSubscriber"
+        },
+        {
+          "name": "VAA.AIS.Air4.VoidTicketFeeds",
+          "topic": "Ticket",
+          "subscriptioname": "VoidTicketSubscriber"
+        },
+        {
+          "name": "VAA.Order.Ticket.GetOrderDetail",
+          "topic": "Ticket",
+          "subscriptioname": "TicketOrderDetailSubscriber"
+        },
+        {
+          "name": "VAA.Order.Data.GetVoidTicketOrderDetail",
+          "topic": "Ticket",
+          "subscriptioname": "VoidOrderDetailSubscriber"
+        },
+        {
+          "name": "VAA.Order.Payment.InitiateOrderPaymentUpdate",
+          "topic": "Payment",
+          "subscriptioname": "PaymentUpdateSubscriber"
+        },
+        {
+          "name": "VAA.Order.Ticket.InitiateVoidTransaction",
+          "topic": "Payment",
+          "subscriptioname": "VoidTransactionSubscriber"
+        },
+        {
+          "name": "VAA.Order.Payment.InitiateVoidOrderUpdate",
+          "topic": "Payment",
+          "subscriptioname": "VoidOrderUpdateSubscriber"
+        },
+        {
+          "name": "VAA.Order.Data.OrderPaymentUpdateStatus",
+          "topic": "Payment",
+          "subscriptioname": "PaymentStatusSubscriber"
+        },
+        {
+          "name": "VAA.Order.Payment.InitiateCPDErrorCommunication",
+          "topic": "Communication",
+          "subscriptioname": "CPDBusinessErrorSubscriber"
+        }
+
+      ]
+    },
+
+    "tags": {
+      "value": {
+        "APPLICATION NAME": "EAPI",
+        "DOMAIN": "API Enterprise",
+        "ENVIRONMENT": "UAT",
+        "CR": ""
+      }
+    }
+  }
+}

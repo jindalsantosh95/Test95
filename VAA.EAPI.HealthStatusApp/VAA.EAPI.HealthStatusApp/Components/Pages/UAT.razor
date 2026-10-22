@@ -1,0 +1,270 @@
+﻿@page "/uat-dashboard"
+@attribute [Authorize(Policy = "RequireSpecificGroup")]
+@inject HttpClient Http
+@inject IDashboardFactory DashboardFactory
+@using Microsoft.Identity.Web
+@using VAA.EAPI.HealthStatusApp.Components.Partials
+@using VAA.EAPI.HealthStatusApp.Factories
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+@using VAA.EAPI.HealthStatusApp.SignalRClasses
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@inject ILogger<Index> Logger
+
+@if (isLoading)
+{
+    <div class="lds-roller" style="width: 100%; height: 16rem; display: flex; padding-top: 5rem; justify-content: center;">
+        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+}
+else
+{
+    @if (bannerText != null)
+    {
+        <div style="display:flex; justify-content:center;">
+            <div class="col-11" style="padding-top:15px;">
+                <TopBanner BannerText=@bannerText />
+            </div>
+        </div>
+    }
+
+    <div class="service-dashboard">
+        <div class="header__box header-home">
+            <div class="right-content">
+                <div class="btn-group">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="environmentDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Environment
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="environmentDropdown">
+                        <li><a class="dropdown-item" @onclick="() => RequestEnvHealthStatus(1)">Dev</a></li>
+                        <li><a class="dropdown-item" @onclick="() => RequestEnvHealthStatus(2)">Test</a></li>
+                        <li><a class="dropdown-item" @onclick="() => RequestEnvHealthStatus(3)">UAT</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding:20px;padding-bottom:0;">
+            <div class="col-md-3">
+                    <div class="card card-home" style="transition: opacity 0.3s;">
+                        <div class="card-header">
+                            Function Apps
+                        </div>
+                        <div class="card-body card-home-pie-body">
+                            <Pie Scores="@ApimPie"></Pie>
+                            @if (ApimPie?.TotalScore != 0)
+                            {
+                                <div class="ScoreText-width">
+                                    <a style="padding: 0 0 0 1rem;">@ApimPie?.FirstScore Healthy.</a>
+                                    <a style="padding: 0 0 0 1rem;">@ApimPie?.SecondScore Unhealthy.</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <p>Please Check Azure Portal.</p>
+                            }
+                        </div>
+                    </div>
+            </div>
+            <div class="col-md-3">
+                    <div class="card card-home">
+                        <div class="card-header">
+                            GraphQl
+                        </div>
+                        <div class="card-body card-home-pie-body">
+                            <Pie Scores="@GraphQlPie"></Pie>
+                            @if (GraphQlPie?.TotalScore != 0)
+                            {
+                                <div class="ScoreText-width">
+                                    <a style="padding: 0 0 0 1rem;">@GraphQlPie?.FirstScore Healthy.</a>
+                                    <a style="padding: 0 0 0 1rem;">@GraphQlPie?.SecondScore Unhealthy.</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <p>Please Check Azure Portal.</p>
+                            }
+                        </div>
+                    </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-home">
+                    <div class="card-header">
+                        Service Bus
+                    </div>
+                    <div class="card-body card-home-pie-body">
+                        <Pie Scores="@BusPie"></Pie>
+                        @if (BusPie?.TotalScore != 0)
+                        {
+                            <div class="ScoreText-width">
+                                <a style="padding: 0 0 0 1rem;">@BusPie?.FirstScore Healthy.</a>
+                                <a style="padding: 0 0 0 1rem;">@BusPie?.SecondScore Unhealthy.</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>Please Check Azure Portal.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-home">
+                    <div class="card-header">
+                        Cosmos Db Connections
+                    </div>
+                    <div class="card-body card-home-pie-body">
+                        <Pie Scores="@CosmosPie"></Pie>
+                        @if (CosmosPie?.TotalScore != 0)
+                        {
+                            <div class="ScoreText-width">
+                                <a style="padding: 0 0 0 1rem;">@CosmosPie?.FirstScore Healthy.</a>
+                                <a style="padding: 0 0 0 1rem;">@CosmosPie?.SecondScore Unhealthy.</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>Please Check Azure Portal.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="home-table">
+            <div class="card card-home-table">
+                <div class="card-header">
+                    Service Issues
+                </div>
+                <div class="card-body" style="max-height: calc(6 * 40px); overflow-y: auto;padding:1rem">
+                    @if (Issues is null || !Issues.Any())
+                    {
+                        <p class="col-12" style="text-align: center;">Any detail regarding Issues will appear here</p>
+                    }
+                    else
+                    {
+                        <table class="table" style="margin-bottom:5px;">
+                            <thead>
+                                <tr>
+                                    <th class="col-10">Service</th>
+                                    <th class="col-2">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var issue in Issues)
+                                {
+                                    <tr class="issue-row_home" style="cursor: pointer;">
+                                        <td class="col-5">@issue.Service</td>
+                                        <td class="col-1">@issue.StatusCode</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    private string bannerText;
+    private PieScoresModel ApimPie;
+    private PieScoresModel BusPie;
+    private PieScoresModel CosmosPie;
+    private PieScoresModel GraphQlPie;
+    private string EnvironmentTitle = "UAT";
+    private IEnumerable<DashboardIssue> Issues;
+    private bool isLoading = true;
+    private string InsightsText = "Connecting...";
+    private string InsightsHeartStyle = "bi-heart";
+    private bool isHandlerRegistered = false;
+    private bool _isSignalRInitialized = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        RequestEnvHealthStatus(3);
+    }
+
+    protected async Task RequestEnvHealthStatus(int environment)
+    {
+        try
+        {
+            isLoading = true;
+            StateHasChanged();
+
+            EnvironmentTitle = environment switch
+            {
+                1 => "Development",
+                2 => "Staging",
+                _ => "UAT"
+            };
+
+            var model = await DashboardFactory.GetEnvDashboadStatus(environment);
+
+            await UpdateInsightsEl(model.IsInsightsHealthy);
+            bannerText = model.BannerText == null ? "" : "Issue with " + model.BannerText;
+
+            ApimPie = model.ApimPie;
+            GraphQlPie = model.GraphQlPie;
+            CosmosPie = model.CosmosPie;
+            BusPie = model.ServiceBusPie;
+
+            Issues = model.DashboardIssues;
+            isLoading = false;
+
+            var title = EnvironmentTitle + " Dashboard";
+            await UpdateHeader(title, InsightsText, InsightsHeartStyle);
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching environment data: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task UpdateInsightsEl(bool IsHealthy)
+    {
+        if (IsHealthy)
+        {
+            InsightsHeartStyle = "bi-heart-pulse-fill";
+            InsightsText = "Insights App Healthy";
+        }
+        else
+        {
+            InsightsHeartStyle = "bi-heartbreak-fill";
+            InsightsText = "Insights App Unhealthy";
+        }
+    }
+
+
+    private async Task UpdateHeader(string title, string insightsText, string insightsHeartStyle)
+    {
+        await JSRuntime.InvokeVoidAsync("updateHeaderUAT", title, insightsText, insightsHeartStyle);
+    }
+}
+
+
+<script>
+    function updateHeaderUAT(title, insightsText, insightsHeartStyle) {
+        document.querySelector(".header-title").textContent = title;
+
+        if (insightsText) {
+            document.querySelector(".header-insights-label").textContent = insightsText;
+        }
+
+        if (insightsHeartStyle) {
+            const icon = document.querySelector(".insightsHeartStyle");
+            if (icon) {
+                icon.className = "bi " + insightsHeartStyle;
+            }
+        }
+    }
+</script>

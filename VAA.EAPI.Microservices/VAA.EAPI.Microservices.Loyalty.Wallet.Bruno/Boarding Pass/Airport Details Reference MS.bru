@@ -1,0 +1,57 @@
+meta {
+  name: Airport Details Reference MS
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{ref_ms_url}}/AirportDetail
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  const body = res.getBody();
+  
+  const originAirportCode = bru.getVar("originAirportCode");
+  const destinationAirportCode = bru.getVar("destinationAirportCode");
+  
+  const origin = body.find(a => a.airportCode === originAirportCode);
+  const destination = body.find(a => a.airportCode === destinationAirportCode);
+  
+  if (!origin) {
+    throw new Error(`Origin airport '${originAirportCode}' not found.`);
+  }
+  
+  if (!destination) {
+    throw new Error(`Destination airport '${destinationAirportCode}' not found.`);
+  }
+  
+  // Origin
+  bru.setVar("originAirportName", origin.airportName);
+  bru.setVar("originCityCode", origin.cityCode);
+  bru.setVar("originCityName", origin.cityName);
+  bru.setVar("originCountryCode", origin.countryCode);
+  bru.setVar("originCountryName", origin.countryName);
+  bru.setVar("originTimeZone", origin.timeZone);
+  
+  // Destination
+  bru.setVar("destinationAirportName", destination.airportName);
+  bru.setVar("destinationCityCode", destination.cityCode);
+  bru.setVar("destinationCityName", destination.cityName);
+  bru.setVar("destinationCountryCode", destination.countryCode);
+  bru.setVar("destinationCountryName", destination.countryName);
+  bru.setVar("destinationTimeZone", destination.timeZone);
+  
+  
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

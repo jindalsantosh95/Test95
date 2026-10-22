@@ -1,0 +1,32 @@
+meta {
+  name: seatMapQuery
+  type: graphql
+  seq: 57
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query seatMapQuery($tripReservationId: String, $segmentId: String) {
+    seatMapQuery(tripReservationId: $tripReservationId, segmentId: $segmentId) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "tripReservationId": "",
+    "segmentId": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

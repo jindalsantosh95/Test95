@@ -1,0 +1,201 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBooking HTTP/1.1
+
+$[?( @.bookingReference == '9000000' )]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+  "booking": {
+    "id": "9000000",
+    "summary": {
+      "vipBooking": false,
+      "travelDates": {
+        "startDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 30, day)}",
+        "endDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 45, day)}"
+      }
+    },
+    "payment": {
+      "deposit": 400.0,
+      "balanceDue": 72000.0,
+      "totalPriceToBePaid": 75000.0,
+      "totalPaidAmount": 3000.0,
+      "depositRealised": true,
+      "depositReceived": true,
+      "currencyCode": "GBP"
+    },
+    "status": "Confirmed","advisoryNotes": [
+      {
+        "number": "1",
+        "code": "DOCS",
+        "description": "Travel documents required",
+        "noteText": "All passengers must have a valid passport for the full duration of travel.",
+        "priority": "H",
+        "title": "Passport required",
+        "compulsory": true
+      },
+      {
+        "number": "2",
+        "code": "ESTA",
+        "description": "Entry requirements",
+        "noteText": "ESTA may be required for travel to the USA; check eligibility and apply in advance.",
+        "priority": "H",
+        "title": "USA ESTA",
+        "compulsory": true
+      },
+      {
+        "number": "3",
+        "code": "BAGGAGE",
+        "description": "Baggage and check-in",
+        "noteText": "Baggage allowances vary by carrier and ticket type. Review your allowance before travel.",
+        "priority": "M",
+        "title": "Baggage allowance",
+        "compulsory": false
+      },
+      {
+        "number": "4",
+        "code": "CHECKIN",
+        "description": "Online check-in advice",
+        "noteText": "Online check-in opens 24 hours before departure where available.",
+        "priority": "M",
+        "title": "Check-in",
+        "compulsory": false
+      }
+    ],
+    "holidayProducts": [
+      {
+        "summary": {
+          "productStatus": "CONFIRMED",
+          "name": "Example Hotel",
+          "highlight": "Deluxe Room",
+          "primaryAttribute": "LAX",
+          "secondaryAttribute": "",
+          "travelDates": {
+            "startDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 30, day)}",
+            "endDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 45, day)}"
+          },
+          "travelDuration": {
+            "duration": "15",
+            "durationType": "NIGHTS"
+          },
+          "discount": 0.0,
+          "startTime": "{DateTime(yyyy-MM-ddTHH:mm:ss, 30, day)}",
+          "endTime": "{DateTime(yyyy-MM-ddTHH:mm:ss, 45, day)}",
+          "travelTimings": {
+            "startTime": "{DateTime(yyyy-MM-ddTHH:mm:ss, 30, day)}",
+            "endTime": "{DateTime(yyyy-MM-ddTHH:mm:ss, 45, day)}"
+          },
+          "vipBooking": false
+        },
+        "bookedUser": "WEB BOOKING",
+        "bookedDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, -10, day)}",
+        "modifiedDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, -1, day)}",
+        "rate": {
+          "price": 75000.0,
+          "priceWithTax": 75000.0,
+          "tax": 0.0,
+          "basePrice": 75000.0,
+          "currencyInContract": "GBP",
+          "totalTax": 0.0,
+          "totalTaxBase": 0.0
+        },
+        "travellersComposition": {
+          "adultCount": 2,
+          "travellers": [
+            {
+              "firstName": "Test",
+              "lastName": "Clamping",
+              "leadTraveller": true,
+              "title": "Mr",
+              "dateOfBirth": "1988-11-29T00:00:00",
+              "gender": "M"
+            },
+            {
+              "firstName": "Test",
+              "lastName": "Clamping",
+              "leadTraveller": false,
+              "title": "Mrs",
+              "dateOfBirth": "1989-03-25T00:00:00",
+              "gender": "F"
+            }
+          ]
+        },
+        "hotelDetails": {
+          "roomDetails": [
+            {
+              "roomType": "Deluxe Room",
+              "boardBasis": "Room Only",
+              "roomNumber": "1",
+              "paxCount": 2,
+              "travellerInfo": {
+                "adultCount": 2,
+                "travellers": []
+              },
+              "rate": {
+                "price": 75000.0,
+                "priceWithTax": 75000.0,
+                "tax": 0.0,
+                "basePrice": 75000.0,
+                "totalTax": 0.0,
+                "totalTaxBase": 0.0
+              },
+              "mealPlanName": "Room Only"
+            }
+          ],
+          "name": "Example Hotel",
+          "hotelCode": "HTL-9000000",
+          "streetName": "1 Test Street",
+          "townCity": "Los Angeles",
+          "postcode": "90001",
+          "country": "USA",
+          "hotelAddress": "1 Test Street, Los Angeles, 90001, USA",
+          "destination": {
+            "cityCode": "LAX",
+            "cityName": "Los Angeles",
+            "countryCode": "US",
+            "countryName": "USA"
+          },
+          "startDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 30, day)}",
+          "endDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 45, day)}"
+        },
+        "isAncillaryProduct": false,
+        "tbxProductId": "HTL"
+      }
+    ],
+    "travellers": [
+      {
+        "firstName": "Test",
+        "lastName": "Clamping",
+        "leadTraveller": true,
+        "title": "Mr",
+        "dateOfBirth": "1988-11-29T00:00:00",
+        "gender": "M"
+      },
+      {
+        "firstName": "Test",
+        "lastName": "Clamping",
+        "leadTraveller": false,
+        "title": "Mrs",
+        "dateOfBirth": "1989-03-25T00:00:00",
+        "gender": "F"
+      }
+    ],
+    "holidayPackageDetails": {
+      "agentReference": "WEB BOOKING",
+      "balanceDueDate": "{DateTime(yyyy-MM-dd, 20, day)}",
+      "destination": {
+        "cityCode": "LAX",
+        "cityName": "Los Angeles",
+        "countryCode": "US",
+        "countryName": "USA"
+      }
+    }
+  },
+  "status": 200
+}

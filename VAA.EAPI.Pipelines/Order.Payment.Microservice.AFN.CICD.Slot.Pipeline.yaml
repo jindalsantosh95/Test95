@@ -1,0 +1,145 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Order.Payment*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Retail.Order.Payment*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Order.Payment.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Order.Payment*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Retail.Order.Payment*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Order.Payment.bruno
+
+variables: 
+  - group: Common_Variables
+  - group: performance_variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: AzureWebJobsStorage
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentPool1
+    value: 'EAPITestingAgent'       
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: subRootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: applicationName
+    value: 'Retail.Order.Payment'
+  - name: microserviceName
+    value: 'orderpaymentmicroservice'
+  - name: apimurlname
+    value: 'OrderPayment'
+  - name: productId
+    value: 'eapi-orderretrieve-microservice'          
+  - name: functionAppName_DEV
+    value: 'AVADEUNAFNORDERPAYMENTMICROSERV' 
+  - name: functionAppName_SIT
+    value: 'AVATEUNAFNORDERPAYMENTMICROSERV' 
+  - name: functionAppName_UAT
+    value: 'AVASEUNAFNORDERPAYMENTMICROSERV'
+  - name: functionAppName_SANDBOX
+    value: 'avaieunafnorderpaymentmicroserv'
+  - name: functionAppName_PRD
+    value: 'AVAPEUNAFNORDERPAYMENTMICROSERV'
+  - name: testRepoPath_SIT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'   
+  - name: testRepoPath_UAT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'                
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_apim.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)  
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      subscriptionId_Prod: $(subscriptionId_Prod)  
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_order_apim_sandbox_prfm.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_SANDBOX: $(agentPool1)
+      agentSpecification: $(agentSpecification) 
+      buildConfiguration: $(buildConfiguration)  
+      location: $(location)                     
+      applicationName: $(applicationName)  
+      microserviceName: $(microserviceName)
+      productId: $(productId)
+      apimurlname: $(apimurlname)
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      resourceGroupName_SANDBOX: $(resourceGroupName_SANDBOX)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      subscriptionId_Prod: $(subscriptionId_Prod)    
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_SANDBOX: $(functionAppName_SANDBOX)
+      functionAppName_PRD: $(functionAppName_PRD)       
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIM_Sandbox: $(APIM_Sandbox)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)
+      APIMResourceGroupName_Sandbox: $(APIMResourceGroupName_Sandbox)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)     
+      APIMServiceConnection_Sandbox: $(APIMServiceConnection_Sandbox)
+      APIMSubscriptionId_Sandbox: $(APIMSubscriptionId_Sandbox)           
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)    
+      WEBSITE_DNS_SERVER_SANDBOX: $(primaryDNS)
+      WEBSITE_DNS_ALT_SERVER_SANDBOX: $(secondaryDNS)    
+      #Performance Variables
+      functionAppName_PRFM: $(OrderPmt_functionAppName_PRFM)
+      appInsightsName_PRFM: $(OrderPmt_applicationInsigts_PRFM)
+      appInsightsKey_PRFM: $(OrderPmt_applicationInsigtsKey_PRFM)
+      storageAccName_PRFM: $(OrderPmt_storageacc_PRFM)
+      keyvault_PRFM: $(Keyvault_old_PRFM)
+      resourceGroupName_PRFM: $(Digital_Old_Rg)
+      AppServicePlanName_PRFM: $(AppServicePlanName)
+      StorageAccCnncstring_PRFM: $(OrderPmt_storageaccCnncString_PRFM)
+      

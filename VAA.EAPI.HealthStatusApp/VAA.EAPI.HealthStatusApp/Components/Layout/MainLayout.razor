@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+
+<div class="page">
+    <AuthorizeView Policy="RequireSpecificGroup">
+        <Authorized>
+            <header class="header">
+                <NavMenu />
+            </header>
+        </Authorized>
+    </AuthorizeView>
+    <main class="main-content">
+            <article class="content">
+                @Body
+            </article>
+        </main>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const navMenu = document.querySelector('.header');
+        const mainContent = document.querySelector('.main-content');
+
+        if (navMenu && mainContent) {
+            const updatePadding = () => {
+                const navHeight = navMenu.offsetHeight;
+                mainContent.style.paddingTop = `${navHeight}px`;
+            };
+
+            updatePadding();
+
+            window.addEventListener('resize', updatePadding);
+
+            const observer = new MutationObserver(updatePadding);
+            observer.observe(navMenu, { childList: true, subtree: true, attributes: true });
+        }
+    });
+
+</script>

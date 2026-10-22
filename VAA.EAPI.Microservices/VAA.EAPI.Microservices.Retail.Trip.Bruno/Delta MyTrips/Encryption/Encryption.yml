@@ -1,0 +1,29 @@
+info:
+  name: Encryption
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{delta_encryption}}/{{reservationResourceId}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: channelId
+      value: DC
+    - name: transactionId
+      value: NGT-MyTrips-{{$randomUUID}}
+    - name: appId
+      value: MyTrips
+    - name: deviceId
+      value: Andriod
+  body:
+    type: json
+    data: ""
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

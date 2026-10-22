@@ -1,0 +1,400 @@
+###Request
+POST https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements HTTP/1.1
+
+$[?(@.confirmationNum == 'HAND11')]
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "requirementsResourceId": "handcrafted-example-11-trm",
+    "checkin": false,
+    "travelRequirements": {
+        "id": "8f6b0622-c0bf-48b4-9141-111d4fe80b48",
+        "bookingReference": {
+            "id": "HAND11",
+            "creationDate": "2025-07-07T00:00:00Z"
+        },
+        "trips": [
+            {
+                "id": "05a6d1e9-a6fc-43a3-9cc0-8c80913863d7",
+                "ordinal": 0,
+                "departureStation": {
+                    "code": "MSP",
+                    "name": "Minneapolis/St. Paul, MN",
+                    "country": {
+                        "code": "US",
+                        "name": "United States of America",
+                        "isoAlpha3Code": "USA"
+                    },
+                    "city": {
+                        "name": "Minneapolis"
+                    }
+                },
+                "arrivalStation": {
+                    "code": "ATL",
+                    "name": "Atlanta-Intl, GA",
+                    "country": {
+                        "code": "US",
+                        "name": "United States of America",
+                        "isoAlpha3Code": "USA"
+                    },
+                    "city": {
+                        "name": "Atlanta"
+                    }
+                },
+                "firstDepartureLocalDate": "2025-07-30T07:45:00-04:00",
+                "lastArrivalLocalDate": "2025-07-30T12:40:00-04:00",
+                "segments": [
+                    {
+                        "id": "781b962d-d3e4-40a9-a164-4208ee7a3a3a",
+                        "ordinal": 1,
+                        "operatingCarrier": {
+                            "code": "DL",
+                            "name": "Delta Air Lines"
+                        },
+                        "flightNum": "0613",
+                        "marketingSegment": {
+                            "flightNum": "0613",
+                            "marketingCarrier": [
+                                {
+                                    "code": "DL",
+                                    "name": "Delta Air Lines"
+                                }
+                            ]
+                        },
+                        "legs": [
+                            {
+                                "id": "40555a02-f344-41cd-88a1-0a257a615522",
+                                "ordinal": 1,
+                                "departure": {
+                                    "station": {
+                                        "code": "MSP",
+                                        "name": "Minneapolis/St. Paul, MN",
+                                        "country": {
+                                            "code": "US",
+                                            "name": "United States of America",
+                                            "isoAlpha3Code": "USA"
+                                        },
+                                        "city": {
+                                            "name": "Minneapolis"
+                                        }
+                                    },
+                                    "estimatedDepartureLocalDateTime": "2025-07-30T07:45:00-04:00",
+                                    "scheduledDepartureLocalDateTime": "2025-07-30T07:45:00-04:00",
+                                    "estimatedDepartureUTCDateTime": "2025-07-30T11:45:00Z",
+                                    "scheduledDepartureUTCDateTime": "2025-07-30T11:45:00Z"
+                                },
+                                "arrival": {
+                                    "station": {
+                                        "code": "ATL",
+                                        "name": "Atlanta-Intl, GA",
+                                        "country": {
+                                            "code": "US",
+                                            "name": "United States of America",
+                                            "isoAlpha3Code": "USA"
+                                        },
+                                        "city": {
+                                            "name": "Atlanta"
+                                        }
+                                    },
+                                    "estimatedArrivalLocalDateTime": "2025-07-30T12:40:00-04:00",
+                                    "scheduledArrivalLocalDateTime": "2025-07-30T12:40:00-04:00",
+                                    "estimatedArrivalUTCDateTime": "2025-07-30T16:40:00Z",
+                                    "scheduledArrivalUTCDateTime": "2025-07-30T16:40:00Z"
+                                },
+                                "international": true
+                            }
+                        ],
+                        "international": true,
+                        "transportType": "AIR"
+                    }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": false
+            }
+        ],
+        "passengers": [
+            {
+                "passengerResourceId": "9d85b4af-0d7c-4095-9a93-62f07a02604d",
+                "givenNames": "IAN",
+                "surname": "TOMMINS",
+                "nameNum": "01.01",
+                "customerId": "9962652476088",
+                "birthDate": "1982-07-29T00:00:00Z",
+                "status": {
+                    "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "40555a02-f344-41cd-88a1-0a257a615522",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": true,
+                                                "verified": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "GOVERNMENT_HEALTH_FORM",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "acceptedLanguages": [
+                                                    "en"
+                                                ],
+                                                "acceptanceWindow": {},
+                                                "effectivity": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "effectiveUTCDate": "2022-02-24 00:00:00Z",
+                                                    "expirationUTCDate": "2122-02-24 00:00:00Z",
+                                                    "effectiveLocalDate": "2019-01-01 00:00:00Z",
+                                                    "expirationLocalDate": "2129-01-01 00:00:00Z"
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "links": [
+                                                    {
+                                                        "id": "2319b7a2-d308-4a49-8985-e3f77de49c57",
+                                                        "linkId": "AW_EDCard",
+                                                        "text": "Aruba ED Card",
+                                                        "href": "https://edcardaruba.aw/"
+                                                    }
+                                                ],
+                                                "ruleId": "LEG_INTL_AW-S1JFKAUA",
+                                                "digitalVerificationEligible": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "05a6d1e9-a6fc-43a3-9cc0-8c80913863d7",
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": true,
+                                                "verified": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "GOVERNMENT_HEALTH_FORM",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "acceptedLanguages": [
+                                                    "en"
+                                                ],
+                                                "acceptanceWindow": {},
+                                                "effectivity": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "effectiveUTCDate": "2022-02-24 00:00:00Z",
+                                                    "expirationUTCDate": "2122-02-24 00:00:00Z",
+                                                    "effectiveLocalDate": "2019-01-01 00:00:00Z",
+                                                    "expirationLocalDate": "2129-01-01 00:00:00Z"
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "links": [
+                                                    {
+                                                        "id": "2319b7a2-d308-4a49-8985-e3f77de49c57",
+                                                        "linkId": "AW_EDCard",
+                                                        "text": "Aruba ED Card",
+                                                        "href": "https://edcardaruba.aw/"
+                                                    }
+                                                ],
+                                                "ruleId": "LEG_INTL_AW-S1JFKAUA",
+                                                "digitalVerificationEligible": true
+                                            },
+                                            {
+                                                "requirementType": "SELF_DECLARATION_FORM",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "acceptanceWindow": {
+                                                    "from": "",
+                                                    "to": ""
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "country": {
+                                                    "code": "AW",
+                                                    "isoAlpha3Code": "ABW"
+                                                },
+                                                "links": [
+                                                    {
+                                                        "linkId": "INTLABW_VisaReq",
+                                                        "text": "Aruba Visa Requirement Check (Optional Third Party)",
+                                                        "href": "https://apply.joinsherpa.com/products?passport=USA&destinations=ABW&affiliateId=delta&language=en-US"
+                                                    }
+                                                ],
+                                                "ruleId": "dynamically_generated_LEG_INTL_AW",
+                                                "digitalVerificationEligible": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "exceptions": [
+                                    {
+                                        "code": "travelrequirement_030_011",
+                                        "displayCode": "ReturnOnwardTicketNeeded",
+                                        "message": "<p>You must have a return/onward ticket.</p>",
+                                        "developerMessage": "TIMATIC,<p>You must have a return/onward ticket.</p>",
+                                        "moreInfo": [
+                                            {
+                                                "code": "ADMISSION_AND_TRANSIT_RESTRICTIONS"
+                                            }
+                                        ],
+                                        "category": "VALIDATE",
+                                        "priority": 6
+                                    }
+                                ],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": false,
+                                "checkinEligible": false
+                            }
+                        ],
+                        "travelDocuments": [
+                            {
+                                "type": "PASSPORT",
+                                "subType": "P",
+                                "givenNames": "ONE",
+                                "surname": "TEST",
+                                "birthDate": "1982-07-29",
+                                "gender": {
+                                    "code": "M",
+                                    "name": "Male"
+                                },
+                                "number": "A15489785",
+                                "expirationDate": "2026-04-01",
+                                "issuingCountry": {
+                                    "code": "USA",
+                                    "name": "United States of America",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "nationality": {
+                                    "code": "USA",
+                                    "name": "United States of America",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "countryOfResidence": {
+                                    "code": "USA",
+                                    "name": "United States of America",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "methodOfDataEntry": "P",
+                                "documentFeature": "NONE",
+                                "sourceFromType": "PNR"
+                            }
+                        ],
+                        "contactInformation": [
+                            {
+                                "requirements": [
+                                    {
+                                        "type": "US_ADDRESS",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "PRIMARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "SECONDARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "EMAIL",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    }
+                                ],
+                                "address": {
+                                    "declined": false,
+                                    "streetAddress": "456 PARK AVE",
+                                    "countryCode": "USA",
+                                    "stateCode": "NY",
+                                    "cityCode": "NEW YORK",
+                                    "zipCode": "10022"
+                                    },
+                                "phone": [ {
+                                        "verified": true,
+                                        "preference": "PRIMARY",
+                                        "type": "MOBILE",
+                                        "countryCode": "44",
+                                        "phoneNumber": "0793277528"
+                                    }
+                                    ]
+                            }
+                        ],
+						"emergencyContact": [
+                            {
+                                "firstName": "TEST",
+                                "lastName": "NAME",
+                                "countryCode": "US",
+                                "phoneNumber": "88323488567890"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

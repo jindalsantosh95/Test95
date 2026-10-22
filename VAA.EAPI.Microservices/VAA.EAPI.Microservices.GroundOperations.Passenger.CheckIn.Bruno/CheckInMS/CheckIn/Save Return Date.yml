@@ -1,0 +1,46 @@
+info:
+  name: Save Return Date
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{checkinms}}/CheckIn/SaveReturnDate"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: "{\r
+
+      \    \"checkInId\": \"{{checkInId}}\",\r
+
+      \    \"returnDate\": \"2027-10-01\",\r
+
+      \    \"passengerId\": \"{{pax1_id}}\"\r
+
+      }"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: "var json = res.getBody();\r
+
+        \r
+
+        bru.setVar('checkInid', json.checkInid);\r
+
+        console.log(\"Num pax: \" + json.passengers.length);\r
+
+        bru.setVar(\"pax1_id\", json.passengers[0].passengerId);\r
+
+        bru.setVar(\"pax1_givennames\", json.passengers[0].givenNames);\r
+
+        bru.setVar(\"pax1_surname\", json.passengers[0].surname);"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

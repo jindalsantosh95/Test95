@@ -1,0 +1,24 @@
+meta {
+  name: Payment
+  seq: 2
+}
+
+auth {
+  mode: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: https://stage-snsapigateway2.vs01.vs.air4.com/v1/oauth/token
+  refresh_token_url: 
+  client_id: {{delta_payment_client_id}}
+  client_secret: {{delta_payment_client_secret}}
+  scope: 
+  credentials_placement: body
+  credentials_id: credentials
+  token_source: access_token
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
+}

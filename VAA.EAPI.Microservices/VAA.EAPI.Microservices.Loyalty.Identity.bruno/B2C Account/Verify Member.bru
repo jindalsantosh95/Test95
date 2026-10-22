@@ -1,0 +1,28 @@
+meta {
+  name: Verify Member
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{identity_base_url}}/verifyMember
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "memberNumber": "{{identity_member_number}}",
+    "emailAddress": "{{identity_email}}",
+    "password": "{{identity_password}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

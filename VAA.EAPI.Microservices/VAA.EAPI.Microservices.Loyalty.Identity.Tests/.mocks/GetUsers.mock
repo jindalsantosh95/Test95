@@ -1,0 +1,41 @@
+﻿###Request
+GET https://tempuri.org/v1.0/users/?$select=Identities,givenName,surname,id,objectId,userPrincipalName,accountEnabled,extension_b4e6641f44c644ea8b9a899e786c7579_memberStatus&$filter=Identities/any(x:x/issuer eq 'TestDomain' and issuerAssignedId eq '15008960612') HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users(identities,givenName,surname,id,objectId,userPrincipalName,accountEnabled,extension_b4e6641f44c644ea8b9a899e786c7579_MemberStatus)",
+    "value": [
+        {
+            "givenName": "TestFirstName",
+            "surname": "TestLastName",
+            "id": "84d4dda6-368f-4575-9470-0c84a45be868",
+            "userPrincipalName": "15008960612@avateunloyaltyfcb2c.onmicrosoft.com",
+            "accountEnabled": true,
+            "extension_b4e6641f44c644ea8b9a899e786c7579_MemberStatus": "Active",
+            "identities": [
+                {
+                    "signInType": "emailAddress",
+                    "issuer": "avateunloyaltyfcb2c.onmicrosoft.com",
+                    "issuerAssignedId": "new@test.com"
+                },
+                {
+                    "signInType": "username",
+                    "issuer": "avateunloyaltyfcb2c.onmicrosoft.com",
+                    "issuerAssignedId": "15008960612"
+                },
+                {
+                    "signInType": "userPrincipalName",
+                    "issuer": "avateunloyaltyfcb2c.onmicrosoft.com",
+                    "issuerAssignedId": "15008960612@avateunloyaltyfcb2c.onmicrosoft.com"
+                }
+            ]
+        }
+    ]
+}

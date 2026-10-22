@@ -1,0 +1,13 @@
+{
+  "query": "mutation SelectSeatMutation($selectSeatRequest: SeatSelectionRequestInput) { selectSeatMutation(selectSeatRequest: $selectSeatRequest) { tripReservationId pnrLocator flightSegment { id ordinal operatingCarrier { flightNumber carrierCode carrierName operationalSuffix } marketingCarrier { flightNumber carrierCode carrierName operationalSuffix } scheduledDepartureLocal scheduledDepartureUtc scheduledArrivalLocal scheduledArrivalUtc scheduledArrivalBasedOnDepartureLocal layoverDuration origin { terminalName code airportName cityName countryName countryCode } destination { terminalName code airportName cityName countryName countryCode } actionCode legs { id operating { flightNumber carrierCode carrierName operationalSuffix } marketing { flightNumber carrierCode carrierName operationalSuffix } scheduledDepartureLocal scheduledDepartureUtc scheduledArrivalLocal scheduledArrivalUtc scheduledArrivalBasedOnDepartureLocal onAirDuration status cabinClass { code productCode seatAssignmentType seatStatus name } aircraft { code name subfleetCode } seatAssignments { seat { row column name type actualCabinClass { code productCode seatAssignmentType seatStatus name } } } onGroundDuration } flightSegmentId operating { flightNumber carrierCode carriername } marketing { flightNumber carrierCode carriername } bookedCabinClass { code productCode seatAssignmentType seatStatus name } checkinStatus duration fareBasisCode } seatMap { seatOfferId classType equipment details configuration rows { rowNumber overWing columns { type seatNumber availability attributes offers { offerId offerItemId customerId productId productName fareProduct flightIdRef fareProductName } overWing marketingInfo { descText url } offSet missing pos economyComfort exitOverride overrideSeatType overrideSeatTypeTo } exitLeft exitRight } fareSummary { seatType min max currency brandId productId } } flightPassengerSeatMap { passengerId customerId segmentId seatOfferId firstName lastName seatNumber price { amount currency } pos linkedInfant { passengerId firstName lastName } selectedFareProductName isConfirmed } }}",
+  "variables": {
+    "selectSeatRequest": {
+      "tripReservationId": "",
+      "segmentId": "",
+      "passengerId": "",
+      "seatNumber": "",
+      "seatOfferId": ""
+    },
+    "operationName": "SelectSeatMutation"
+  }
+}

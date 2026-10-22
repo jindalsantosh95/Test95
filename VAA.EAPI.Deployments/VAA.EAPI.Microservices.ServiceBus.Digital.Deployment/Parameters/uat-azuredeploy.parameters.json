@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "north europe"
+    },
+    "servicebusName": {
+      "value": "vatueunnotificationsb01"
+    },
+    "topics": {
+      "value": [
+        "contentrequest",
+        "holidaysretailstores"
+      ]
+    },
+    "topicsubscription": {
+      "value": [
+        {
+          "name": "contentrequest",
+          "topic": "contentrequest"
+        },
+        {
+          "name": "holidaysretailstores",
+          "topic": "holidaysretailstores"
+        }
+      ]
+    },
+    "correlation_rules": {
+      "value": [
+        {
+          "name": "holidaystorecontent",
+          "topic": "holidaysretailstores",
+          "subscriptioname": "holidaysretailstores"
+        }
+
+      ]
+    },
+
+    "tags": {
+      "value": {
+        "APPLICATION NAME": "EAPI",
+        "DOMAIN": "Digital ServiceBus",
+        "ENVIRONMENT": "PROD",
+        "CR": ""
+      }
+    }
+  }
+}

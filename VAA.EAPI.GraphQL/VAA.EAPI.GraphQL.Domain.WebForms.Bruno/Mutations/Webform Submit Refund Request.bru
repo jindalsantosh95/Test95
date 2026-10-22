@@ -1,0 +1,48 @@
+meta {
+  name: Webform Submit Refund Request
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_public}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation WebformSubmitRefundRequest($request: RefundFormInput) {
+    webformSubmitRefundRequest(request: $request)
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {
+      "requester": {
+        "firstName": "sample",
+        "lastName": "sample",
+        "email": "sample@sample.com",
+        "reason": "Schedule disruption",
+        "bookingReference": "sample",
+        "bookingDate": "2000-01-01"
+      },
+      "entries": [
+        {
+          "passengerRef": "sample",
+          "passengerName": "sample",
+          "flightDate": "sample",
+          "flightNumber": 123,
+          "ticketNumber": "sample",
+          "couponNumber": "sample",
+          "claimNumber": ""
+        }
+      ]
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

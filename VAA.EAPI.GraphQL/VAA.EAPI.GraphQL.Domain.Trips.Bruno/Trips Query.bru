@@ -1,0 +1,72 @@
+meta {
+  name: Trips Query
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query TripsQuery {
+    Booking(
+      tripDetailsRequest: {
+        using: PNR
+        confirmationNum: "{{trips_pnr}}"
+        givenNames: "{{trips_given_names}}"
+        surname: "{{trips_surname}}"
+      }
+    ) {
+      status
+      id
+      reservationType
+      isAccountLinkedPNR
+      passengers {
+        id
+        givenNames
+        lastName
+        slices {
+          id
+          areTravelDocsComplete
+          travelDocsStatusSummary
+        }
+      }
+      product {
+        bookingType
+        reference {
+          pnrLocator
+        }
+        slices {
+          origin {
+            code
+          }
+          destination {
+            code
+          }
+          scheduledDepartureLocal
+          scheduledArrivalLocal
+          segments {
+            legs {
+              origin {
+                code
+              }
+              destination {
+                code
+              }
+              scheduledDepartureLocal
+              scheduledArrivalLocal
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,97 @@
+###Request
+GET https://stg.virginatlantic.com/cjs-checkout-api/v2/cpd/payment HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Set-Cookie: mmb-session=xyz; Path=/; Secure
+Set-Cookie: com.virginholidays.payment.v2=orig;Version=1;Path=/;SameSite=None;Secure;HttpOnly
+Set-Cookie: not-allowed=1; Path=/; Secure
+
+{
+  "type": "CPD",
+  "paymentSessions": [
+    {
+      "amountToPay": 3900.00,
+      "status": "PENDING",
+      "paymentAmount": {
+        "amountToPay": 3900.00,
+        "link": "https://stg.virginatlantic.com/cjs-checkout-api/v2/cpd/payment/amount"
+      },
+      "paymentLink": "https://stg.virginatlantic.com/cjs-checkout-api/v2/cpd/payment/hpp?id=1cluilGmAU93hZuK614-Yw",
+      "removeLink": "https://stg.virginatlantic.com/cjs-checkout-api/v2/cpd/payment"
+    }
+  ],
+  "milesPayment": {
+    "miles": null,
+    "amount": 0.00,
+    "increments": null,
+    "balance": null,
+    "available": null,
+    "exchangeRate": null,
+    "milesDetails": {
+      "membershipNumber": null,
+      "emailAddress": null,
+      "password": null,
+      "link": "https://stg.virginatlantic.com/cjs-checkout-api/v2/existing/miles"
+    },
+    "link": null
+  },
+  "billingInformation": {
+    "firstName": "",
+    "lastName": "",
+    "streetLineOne": "",
+    "streetLineTwo": "",
+    "townCity": "",
+    "postCode": "",
+    "emailAddress": "",
+    "country": "GB",
+    "link": "https://stg.virginatlantic.com/cjs-checkout-api/v2/apexx/payment/billingInformation"
+  },
+  "payPalSession": {
+    "paymentURI": null,
+    "orderId": null,
+    "authorizationFailed": null,
+    "payment": {
+      "amount": null,
+      "approveLink": null,
+      "resetLink": null,
+      "removeLink": null
+    }
+  },
+  "paymentDetails": {
+    "returnUrl": null,
+    "expiryUrl": null,
+    "link": null
+  },
+  "payPalPaymentDetails": {
+    "payPalClientUrl": null,
+    "link": "https://stg.virginatlantic.com/cjs-checkout-api/v2/payment/paypal/add"
+  },
+  "voucherPayment": {
+    "code": null,
+    "link": "https://stg.virginatlantic.com/cjs-checkout-api/v2/payment/voucher"
+  },
+  "totalAmountOnSessions": 3900.00,
+  "minDeposit": 0.01,
+  "displayDeposit": true,
+  "totalAmount": 3900.00,
+  "amountToPay": 3900.00,
+  "hasDirectDebit": false,
+  "cpdPayment": {
+    "paymentAmount": {
+      "amountToPay": 0.01,
+      "link": "https://stg.virginatlantic.com/cjs-checkout-api/v2/cpd/payment/amount"
+    },
+    "link": "https://stg.virginatlantic.com/cjs-checkout-api/v2/cpd/payment",
+    "addCardLink": null
+  },
+  "apexxPayment": null,
+  "directDebitLink": "https://stg.virginatlantic.com/cjs-checkout-api/v2/payment/direct-debit",
+  "link": "https://stg.virginatlantic.com/cjs-checkout-api/v2/cpd/payment",
+  "confirmationLink": null,
+  "summary": {
+    
+  },
+  "resourceType": "PAYMENT_SESSION"
+}

@@ -1,0 +1,51 @@
+{
+  "prNumber": 1742,
+  "branch": "codex/holidays-document-token-diagram-clean",
+  "base": "main",
+  "headSha": "e8888f5c6cda0664395250d56e15e1da65e5e352",
+  "runId": "32128336518",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/32128336518",
+  "collectedAtUtc": "2026-08-18T10:46:42.454Z",
+  "policy": {
+    "resolveHumanThreads": false,
+    "expectedDecisions": [
+      "agree",
+      "disagree",
+      "not-applicable"
+    ]
+  },
+  "comments": [
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6aEHXe",
+      "replyToCommentDatabaseId": 3803039653,
+      "author": "vaa-dimitris-dimitriou",
+      "body": "dont use HttpClientFactoryFixture class, instead register the xunit test httpclientfactory class in the xunit core project",
+      "path": "VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Trips.Tests/HolidayDocumentContractTests.cs",
+      "line": 17,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3803039653",
+      "decision": "agree",
+      "responseComment": "Agreed. The test now registers VAA.EAPI.GraphQL.Core.Xunit.Http.HttpClientFactory directly with the service collection and no longer uses HttpClientFactoryFixture.",
+      "actionSummary": "Removed the HttpClientFactoryFixture dependency, made the test constructor parameterless, and registered the GraphQL Core xUnit HttpClientFactory implementation directly for IHttpClientFactory."
+    }
+  ],
+  "resourceUsage": {
+    "workflow": "sequence-goal-human-comment-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 1454118,
+      "inputTokens": 1451159,
+      "cachedInputTokens": 1408768,
+      "outputTokens": 2959,
+      "reasoningOutputTokens": 266,
+      "estimatedUsd": 1.965833
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "1,454,118 tokens (1,451,159 input, 1,408,768 cached + 2,959 output, 266 reasoning); $1.965833 USD"
+  }
+}

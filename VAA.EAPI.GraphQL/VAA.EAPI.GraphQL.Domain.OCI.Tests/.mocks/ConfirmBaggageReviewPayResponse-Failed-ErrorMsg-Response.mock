@@ -1,0 +1,20 @@
+﻿###Request
+POST https://testresources.virginatlantic.com/dev/baggage/ConfirmBaggage HTTP/1.1
+
+$[?(@.paymentReferenceId == 'TestPaymentRefIdFailedSSCIResponse')]
+
+###Response
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+[
+  {
+    "title": "Baggage payment failed",
+    "message": "Baggage payment failed",
+    "developerMessage": "Unable to process bag payment. Please try again or contact an agent."
+  }
+]

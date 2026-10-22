@@ -1,0 +1,511 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "north europe"
+    },
+    "servicebusName": {
+      "value": "AVADEUNSBEAPICUSTOMER"
+    },
+    "topics": {
+      "value": [
+        "campaignmanagementeventmessages",
+        "ruleengineeventmessages",
+        "customertransactioneventmessages",
+        "loyaltymembermanagementeventmessages",
+        "customereventmessages",
+        "enrolcustomer",
+        "auditeventmessages",
+        "vredeventmessages",
+        "manageaccount",
+        "pdmeventmessages"
+      ]
+    },
+    "topicsubscription": {
+      "value": [
+        {
+          "name": "campaignpromotionlinkeventsubscriber",
+          "topic": "campaignmanagementeventmessages"
+        },
+        {
+          "name": "promotionmanagementcreateventsubscriber",
+          "topic": "campaignmanagementeventmessages"
+        },
+        {
+          "name": "campaignpromotiondelinkeventsubscriber",
+          "topic": "campaignmanagementeventmessages"
+        },
+        {
+          "name": "campaignmanagementcreateeventsubscriber",
+          "topic": "campaignmanagementeventmessages"
+        },
+        {
+          "name": "CombinedRuleSetMessageSubscriber",
+          "topic": "ruleengineeventmessages"
+        },
+        {
+          "name": "CreateTransactionMessageSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "DeleteTargetedMembershipMessageSubscriber",
+          "topic": "loyaltymembermanagementeventmessages"
+        },
+        {
+          "name": "CreateGroupDocumentMessageSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "UpdateGroupDocumentMessageSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "HouseholdDissolveEventSubscriber",
+          "topic": "loyaltymembermanagementeventmessages"
+        },
+        {
+          "name": "MemberStatusSubscriber",
+          "topic": "loyaltymembermanagementeventmessages"
+        },
+        {
+          "name": "LTGAwardEventSubscriber",
+          "topic": "loyaltymembermanagementeventmessages"
+        },
+        {
+          "name": "emailsubscriber",
+          "topic": "campaignmanagementeventmessages"
+        },
+
+        {
+          "name": "campaignassigneventsubscriber",
+          "topic": "campaignmanagementeventmessages"
+        },
+        {
+          "name": "MillionMilerAwardEventSubscriber",
+          "topic": "loyaltymembermanagementeventmessages"
+        },
+        {
+          "name": "AddressChangeEventSubscriber",
+          "topic": "loyaltymembermanagementeventmessages"
+        },
+        {
+          "name": "AddressUpdateNotificationEventSubscriber",
+          "topic": "loyaltymembermanagementeventmessages"
+        },
+        {
+          "name": "CustomerSearchUpdateEventSubscriber",
+          "topic": "customereventmessages"
+        },
+        {
+          "name": "CustomerUpdateEventSubscriber",
+          "topic": "customereventmessages"
+        },
+        {
+          "name": "AddressHistoryCreateEventSubscriber",
+          "topic": "customereventmessages"
+        },
+        {
+          "name": "enrolcustomerforwebmyasubscriber",
+          "topic": "enrolcustomer"
+        },
+        {
+          "name": "MemberTierUpdateEventSubscriber",
+          "topic": "loyaltymembermanagementeventmessages"
+        },
+        {
+          "name": "CreateAwardAuditEventSubscriber",
+          "topic": "auditeventmessages"
+        },
+        {
+          "name": "CreatePreferenceAuditEventSubscriber",
+          "topic": "auditeventmessages"
+        },
+        {
+          "name": "CreateCustomerProfileAuditEventSubscriber",
+          "topic": "auditeventmessages"
+        },
+        {
+          "name": "CreateOtherAuditEventSubscriber",
+          "topic": "auditeventmessages"
+        },
+        {
+          "name": "FCNumberToPNRResponseEventSubscriber",
+          "topic": "loyaltymembermanagementeventmessages"
+        },
+        {
+          "name": "CreateVredTransactionsSubscriber",
+          "topic": "vredeventmessages"
+        },
+        {
+          "name": "CancelVredTransactionsSubscriber",
+          "topic": "vredeventmessages"
+        },
+        {
+          "name": "CreatePartnerMembershipSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "CardLinkingAuditEventSubscriber",
+          "topic": "auditeventmessages"
+        },
+        {
+          "name": "UpdatePartnerMembershipSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "EnrichAuditDataWithCustDetailsEventSubscriber",
+          "topic": "customereventmessages"
+        },
+        {
+          "name": "CancelTransactionMessageSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "UpdateTransactionMessageSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "CreateMemberCustomAttributesEventSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "UpdateMemberCustomAttributesEventSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "EnrolCustomerPSDSSyncSubscriber",
+          "topic": "enrolCustomer"
+        },
+        {
+          "name": "UpdateAzureB2CProfileSubscriber",
+          "topic": "manageaccount"
+        },
+        {
+          "name": "ProductDataMessageSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "PartnerDataMessageSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "RedeemVoucherEventSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "RollbackVoucherRedemptionEventSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "UpdateVoucherRelatedTxnsPnrEventSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "UpdateVredTransactionPnrSubscriber",
+          "topic": "vredeventmessages"
+        },
+        {
+          "name": "VoucherUsageProactiveMonitoringEventSubscriber",
+          "topic": "customertransactioneventmessages"
+        },
+        {
+          "name": "MVTSubscriber",
+          "topic": "pdmeventmessages"
+        },
+        {
+          "name": "SkyTeamAutoAccrualSubscriber",
+          "topic": "pdmeventmessages"
+        },
+        {
+          "name": "SkyTeamAutoAccrualInboundSubscriber",
+          "topic": "loyaltymembermanagementeventmessages"
+        }
+      ]
+    },
+    "correlation_rules": {
+      "value": [
+        {
+          "name": "VAA.PowerApp.CampaignMgmt.LinkCampaignPromotion",
+          "topic": "campaignmanagementeventmessages",
+          "subscriptioname": "campaignpromotionlinkeventsubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.CampaignMgmt.CreatePromotion",
+          "topic": "campaignmanagementeventmessages",
+          "subscriptioname": "promotionmanagementcreateventsubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.CampaignMgmt.DelinkCampaignPromotion",
+          "topic": "campaignmanagementeventmessages",
+          "subscriptioname": "campaignpromotiondelinkeventsubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.CampaignMgmt.CreateCampaign",
+          "topic": "campaignmanagementeventmessages",
+          "subscriptioname": "campaignmanagementcreateeventsubscriber"
+        },
+        {
+          "name": "VAA.CustomerTxns.RuleEngine.CombinedRuleSetEvent",
+          "topic": "ruleengineeventmessages",
+          "subscriptioname": "CombinedRuleSetMessageSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.RuleEngine.CreateTransaction",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "CreateTransactionMessageSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.DeleteTargetedMembership",
+          "topic": "loyaltymembermanagementeventmessages",
+          "subscriptioname": "DeleteTargetedMembershipMessageSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.CreateGroupDocument",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "CreateGroupDocumentMessageSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.UpdateGroupDocument",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "UpdateGroupDocumentMessageSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.MemberMgmt.DelinkHouseholdAccounts",
+          "topic": "loyaltymembermanagementeventmessages",
+          "subscriptioname": "HouseholdDissolveEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Customer.MemberStatus",
+          "topic": "loyaltymembermanagementeventmessages",
+          "subscriptioname": "MemberStatusSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Customer.LTGAwardEvent",
+          "topic": "loyaltymembermanagementeventmessages",
+          "subscriptioname": "LTGAwardEventSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.CampaignMgmt.CampaignRegisterEvent",
+          "topic": "campaignmanagementeventmessages",
+          "subscriptioname": "emailsubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.CampaignMgmt.CampaignAssignEvent",
+          "topic": "campaignmanagementeventmessages",
+          "subscriptioname": "emailsubscriber"
+        },
+
+        {
+          "name": "VAA.Loyalty.CampaignMgmt.CampaignAssignEvent",
+          "topic": "campaignmanagementeventmessages",
+          "subscriptioname": "campaignassigneventsubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Customer.MillionMilerAwardEvent",
+          "topic": "loyaltymembermanagementeventmessages",
+          "subscriptioname": "MillionMilerAwardEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.MemberMgmt.AddressChange",
+          "topic": "loyaltymembermanagementeventmessages",
+          "subscriptioname": "AddressChangeEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.MemberMgmt.AddressUpdateNotification",
+          "topic": "loyaltymembermanagementeventmessages",
+          "subscriptioname": "AddressUpdateNotificationEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Customer.UpdateCustomerSearchDocument",
+          "topic": "customereventmessages",
+          "subscriptioname": "CustomerSearchUpdateEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Customer.UpdateCustomerDocument",
+          "topic": "customereventmessages",
+          "subscriptioname": "CustomerUpdateEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Customer.CreateAddressHistoryDocument",
+          "topic": "customereventmessages",
+          "subscriptioname": "AddressHistoryCreateEventSubscriber"
+        },
+        {
+          "name": "webmyaenrolcustomer",
+          "topic": "enrolcustomer",
+          "subscriptioname": "enrolcustomerforwebmyasubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Customer.MemberTierUpdateEvent",
+          "topic": "loyaltymembermanagementeventmessages",
+          "subscriptioname": "MemberTierUpdateEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Audit.AwardUpdateEvent",
+          "topic": "auditeventmessages",
+          "subscriptioname": "CreateAwardAuditEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Audit.AwardAudit",
+          "topic": "auditeventmessages",
+          "subscriptioname": "CreateAwardAuditEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Audit.PreferenceEvent",
+          "topic": "auditeventmessages",
+          "subscriptioname": "CreatePreferenceAuditEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Audit.CustomerProfileEvent",
+          "topic": "auditeventmessages",
+          "subscriptioname": "CreateCustomerProfileAuditEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Audit.OtherEvent",
+          "topic": "auditeventmessages",
+          "subscriptioname": "CreateOtherAuditEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.MemberMgmt.FCStampingResponseFile",
+          "topic": "loyaltymembermanagementeventmessages",
+          "subscriptioname": "FCNumberToPNRResponseEventSubscriber"
+        },
+        {
+          "name": "VAA.Vred.CreateTransaction",
+          "topic": "vredeventmessages",
+          "subscriptioname": "CreateVredTransactionsSubscriber"
+        },
+        {
+          "name": "VAA.Vred.CancelTransaction",
+          "topic": "vredeventmessages",
+          "subscriptioname": "CancelVredTransactionsSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.CreatePartnerMembership",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "CreatePartnerMembershipSubscriber"
+        },
+        {
+          "name": "VAA.VAA.Loyalty.Audit.CardLinkingAudit",
+          "topic": "auditeventmessages",
+          "subscriptioname": "CardLinkingAuditEventSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.UpdatePartnerMembership",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "UpdatePartnerMembershipSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.EnrichAuditDtWithCustDtls",
+          "topic": "customereventmessages",
+          "subscriptioname": "EnrichAuditDataWithCustDetailsEventSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.CreateTransaction",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "CreateTransactionMessageSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.CancelTransaction",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "CancelTransactionMessageSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.UpdateTransaction",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "UpdateTransactionMessageSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.CreateMemberCustomAttributes",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "CreateMemberCustomAttributesEventSubscriber"
+        },
+        {
+          "name": "VAA.PowerApp.Customer.UpdateMemberCustomAttributes",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "UpdateMemberCustomAttributesEventSubscriber"
+        },
+        {
+          "name": "PSDSSyncEvent",
+          "topic": "enrolCustomer",
+          "subscriptioname": "EnrolCustomerPSDSSyncSubscriber"
+        },
+        {
+          "name": "CustomerSyncEvent",
+          "topic": "enrolCustomer",
+          "subscriptioname": "EnrolCustomerPSDSSyncSubscriber"
+        },
+        {
+          "name": "VaUpgradeFlyingClub",
+          "topic": "enrolCustomer",
+          "subscriptioname": "EnrolCustomerPSDSSyncSubscriber"
+        },
+        {
+          "name": "UpdateAzureB2CProfile",
+          "topic": "manageaccount",
+          "subscriptioname": "UpdateAzureB2CProfileSubscriber"
+        },
+        {
+          "name": "LoyaltyProductReferenceData",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "ProductDataMessageSubscriber"
+        },
+        {
+          "name": "LoyaltyPartnerReferenceData",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "PartnerDataMessageSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Customer.RedeemVoucher",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "RedeemVoucherEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Customer.RollbackVoucherRedemption",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "RollbackVoucherRedemptionEventSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.Customer.UpdateVoucherRelatedTxnsPnr",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "UpdateVoucherRelatedTxnsPnrEventSubscriber"
+        },
+        {
+          "name": "VAA.Vred.UpdateTransactionPnr",
+          "topic": "vredeventmessages",
+          "subscriptioname": "UpdateVredTransactionPnrSubscriber"
+        },
+        {
+          "name": "VoucherUsageMonitoring",
+          "topic": "customertransactioneventmessages",
+          "subscriptioname": "VoucherUsageProactiveMonitoringEventSubscriber"
+        },
+        {
+          "name": "MVTMessages",
+          "topic": "pdmeventmessages",
+          "subscriptioname": "MVTSubscriber"
+        },
+        {
+          "name": "SkyTeamAutoAccrualMessages",
+          "topic": "pdmeventmessages",
+          "subscriptioname": "SkyTeamAutoAccrualSubscriber"
+        },
+        {
+          "name": "VAA.Loyalty.SkyTeam.InboundAutoAccrualRequest",
+          "topic": "loyaltymembermanagementeventmessages",
+          "subscriptioname": "SkyTeamAutoAccrualInboundSubscriber"
+        }
+      ]
+    },
+
+    "tags": {
+      "value": {
+        "APPLICATION NAME": "EAPI",
+        "DOMAIN": "API Enterprise",
+        "ENVIRONMENT": "DEV",
+        "CR": ""
+      }
+    }
+  }
+}

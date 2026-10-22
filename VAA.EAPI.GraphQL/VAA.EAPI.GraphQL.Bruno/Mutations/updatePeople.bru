@@ -1,0 +1,31 @@
+meta {
+  name: updatePeople
+  type: graphql
+  seq: 44
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation updatePeople($updatePeopleRequest: PassengerUpdateRequestInput) {
+    updatePeople(updatePeopleRequest: $updatePeopleRequest) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "updatePeopleRequest": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

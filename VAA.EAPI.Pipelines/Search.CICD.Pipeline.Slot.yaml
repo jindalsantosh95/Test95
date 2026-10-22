@@ -1,0 +1,160 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Web/VAA.EAPI.Web.Search*
+      - VAA.EAPI.Web/VAA.EAPI.Web.Common*
+    exclude: 
+      - VAA.EAPI.Web/VAA.EAPI.Web.Search.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Web/VAA.EAPI.Web.Search*
+      - VAA.EAPI.Web/VAA.EAPI.Web.Common*
+    exclude: 
+      - VAA.EAPI.Web/VAA.EAPI.Web.Search.bruno
+
+variables: 
+  - group: Common_Variables
+  - group: Search_Test5
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: AzureWebJobsStorage
+  - name: agentPool
+    value: 'Azure Pipelines'   
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.Web'  
+  - name: subRootPath
+    value: 'VAA.EAPI.Web'  
+  - name: applicationName
+    value: 'Search'
+  - name: microserviceName
+    value: 'Search' 
+  - name: apimurlname
+    value: 'Search'
+  - name: productId
+    value: 'EAPI-Search'  
+  - name: functionAppName_DT1
+    value: 'AVADEUNAFNBFFSRCHDT1'
+  - name: functionAppName_DT2
+    value: 'AVADEUNAFNBFFSRCHDT2'
+  - name: functionAppName_DT3
+    value: 'AVADEUNAFNBFFSRCHDT3'
+  - name: functionAppName_DT4
+    value: 'AVADEUNAFNBFFSRCHDT4'
+  - name: functionAppName_DT5
+    value: 'AVADEUNAFNBFFSRCHDT5'            
+  - name: functionAppName_DEV
+    value: 'avadeunafnwebbffsearch' 
+  - name: functionAppName_SIT
+    value: 'avateunafnwebbffsearch'
+  - name: functionAppName_UAT
+    value: 'avaseunafnwebbffsearch' 
+  - name: functionAppName_PRD
+    value: 'avapeunafnwebbffsearch'    
+  - name: testRepoPath_SIT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'   
+  - name: testRepoPath_UAT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'                
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_WebBFF_slot.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)  
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupNameWebBFF_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameWebBFF_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameWebBFF_UAT)
+      resourceGroupName_PROD: $(resourceGroupNameWebBFF_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      subscriptionId_Prod: $(subscriptionId_Prod)  
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_slot_apim_withproduct_NBF_test4.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      buildConfiguration: $(buildConfiguration)  
+      location: $(location)                     
+      applicationName: $(applicationName)  
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      productId: $(productId)
+      resourceGroupName_DT1: $(resourceGroupNameWebBFF_DT1)
+      resourceGroupName_DT2: $(resourceGroupNameWebBFF_DT2)
+      resourceGroupName_DT3: $(resourceGroupNameWebBFF_DT3)
+      resourceGroupName_DT4: $(resourceGroupNameWebBFF_DT4)
+      resourceGroupName_DEV: $(resourceGroupNameWebBFF_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameWebBFF_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameWebBFF_UAT)
+      resourceGroupName_PROD: $(resourceGroupNameWebBFF_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      functionAppName_DT1: $(functionAppName_DT1)
+      functionAppName_DT2: $(functionAppName_DT2)  
+      functionAppName_DT3: $(functionAppName_DT3)
+      functionAppName_DT4: $(functionAppName_DT4)
+      subscriptionId_Prod: $(subscriptionId_Prod)          
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_PRD: $(functionAppName_PRD)  
+      AppInsightsName_DT1 : $(AppInsightsName_DT1)
+      AppInsightsName_DT2 : $(AppInsightsName_DT2)
+      AppInsightsName_DT3 : $(AppInsightsName_DT3)
+      AppInsightsName_DT4 : $(AppInsightsName_DT4)
+      storageAccountName_Test1: $(storageAccountName_Test1)
+      storageAccountName_Test2: $(storageAccountName_Test2)
+      storageAccountName_Test3: $(storageAccountName_Test3)
+      storageAccountName_Test4: $(storageAccountName_Test4) 
+      KeyvaultName_DT1: $(vaultName_DT1)
+      KeyvaultName_DT2: $(vaultName_DT2)
+      KeyvaultName_DT3: $(vaultName_DT3)
+      KeyvaultName_DT4: $(vaultName_DT4)
+      appserviceplan_DT1: $(appserviceplan_DT1)
+      appserviceplan_DT2: $(appserviceplan_DT2)
+      appserviceplan_DT3: $(appserviceplan_DT3)
+      appserviceplan_DT4: $(appserviceplan_DT4)
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)                
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)    
+      VARIABLE_GROUP_NAME_NBF_DEV: "TESTING_NBF_DEV"
+      VARIABLE_GROUP_NAME_NBF_SIT: "TESTING_NBF_SIT"
+      VARIABLE_GROUP_NAME_NBF_UAT: "TESTING_NBF_UAT"    
+      sanityfile: functional_testing_Search.yaml           

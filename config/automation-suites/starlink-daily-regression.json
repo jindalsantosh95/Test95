@@ -1,0 +1,46 @@
+{
+  "$schema": "./schema.json",
+  "schemaVersion": 1,
+  "name": "Starlink Daily UI Regression",
+  "slug": "starlink-daily-regression",
+  "owner": "In-Flight Applications",
+  "projectPath": "VAA.EAPI.Automation/VAA.EAPI.Automation.InFlightApplications.UI/VAA.EAPI.Automation.InFlightApplications.UI.csproj",
+  "categories": [
+    "InFlightApplications-UI-Smoke",
+    "InFlightApplications-UI-Validation",
+    "InFlightApplications-UI-Journey",
+    "InFlightApplications-UI-Accessibility"
+  ],
+  "summaryConfigPath": "config/regression-summary/default/default-summary.json",
+  "slackConfigPath": "config/regression-summary/starlink/starlink-slack.json",
+  "timeoutMinutes": 90,
+  "runnerLabels": [
+    "self-hosted",
+    "Windows",
+    "eapi-automation"
+  ],
+  "requiredVariables": [
+    "IN_FLIGHT_APPLICATIONS_UI_BASE_URL"
+  ],
+  "allowedVariables": [
+    "IN_FLIGHT_APPLICATIONS_RUN_OTP_TESTS",
+    "IN_FLIGHT_APPLICATIONS_RUN_ACCOUNT_TESTS",
+    "SAB_RUN_MODE",
+    "SAB_BROWSER",
+    "SAB_HEADLESS",
+    "SAB_TRACE",
+    "SAB_BS_OS",
+    "SAB_BS_OS_VERSION",
+    "SAB_BS_BROWSER",
+    "SAB_BS_BROWSER_VERSION",
+    "SAB_BS_SESSION_NAME",
+    "BROWSERSTACK_PROJECT",
+    "BROWSERSTACK_BUILD",
+    "BROWSERSTACK_LOCAL"
+  ],
+  "requiredSecrets": [
+    "BROWSERSTACK_USERNAME",
+    "BROWSERSTACK_ACCESS_KEY",
+    "SLACK_WEBHOOK_URL_STARLINK"
+  ]
+}

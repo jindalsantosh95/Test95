@@ -1,0 +1,72 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Deployments/VAA.EAPI.APIMSubscription.Deployment*
+
+variables: 
+  - group: Common_Variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: APIM_Subscription
+  - name: agentPool
+    value: 'Azure Pipelines' 
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.Deployments'  
+  - name: subRootPath
+    value: 'VAA.EAPI.APIMSubscription.Deployment'  
+  - name: location
+    value: 'north europe'
+  - name: SubscriptionName
+    value: 'testsubkey'    
+  - name: productId
+    value: 'EAPI_TEST_PRODUCT'
+
+ 
+              
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: build.yml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)  
+      subRootPath: $(subRootPath)
+
+
+  # CD (Deployment) Pipeline
+  - template: release_subscription.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      buildConfiguration: $(buildConfiguration)  
+      location: $(location)                     
+      SubscriptionName: $(SubscriptionName)
+      OwnerName: $(OwnerName)
+      productId: $(productId)
+      firstName: $(firstName)
+      lastName: $(lastName)
+      email: $(email)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod) 
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)                
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+                                              

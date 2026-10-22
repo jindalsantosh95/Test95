@@ -1,0 +1,86 @@
+###Request
+GET https://test.blobstorage.net/TestContainerName/testblob.json?TestKey HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: plain/text; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Set-Cookie: ARRAffinity=73b6a3ac224b9145644e28a47f3f1000313254c5bdddc9080e4da8990870a8ef;Path=/;Domain=vs-awstest.aims.aero; secure; HttpOnly
+Date: Tue, 10 Jun 2025 11:14:18 GMT
+
+{
+	"allAboutBags":
+	{
+		"everyoneGets": [
+		{
+		  "title": "1 x 10kg carry-on bag",
+		  "description": [
+			"(2 x 10kg carry-on bag in Upper Class)",
+			"Max dimensions: 23 x 36 x 56cm"
+		  ],
+		  "iconType": "carry_on"
+		},
+		{
+		  "title": "1 x hand bag",
+		  "description": [
+			"Max dimensions: 40 x 30 x 15cm"
+		  ],
+		  "iconType": "hand_baggage"
+		}
+		],
+		"byCabin": [
+		{
+		  "title": "Checked bags by cabin",
+		  "description": [
+			"Max dimensions: 90 x 75 x 43cm"
+		  ],
+		  "iconType": "checked_bag"
+		},
+		{
+		  "title": "Economy Light",
+		  "description": [
+			"No checked bags included"
+		  ]
+		},
+		{
+		  "title": "Economy Classic & Delight",
+		  "description": [
+			"1 x 23kg checked bag"
+		  ]
+		},
+		{
+		  "title": "Premium",
+		  "description": [
+			"2 x 23kg checked bags"
+		  ]
+		},
+		{
+		  "title": "Upper Class",
+		  "description": [
+			"2 x 32kg checked bags"
+		  ]
+		}
+	  ]
+	}, 
+	"InfantBaggageAdvisory":
+	{
+		"title" : "Infant bag allowance",
+		"message": "Infants travelling on a lap (without their own seat) get one checked bag in all cabins, except Economy Light. Infant bags can be added at the airport with one of our team."
+	},
+	"AlreadyPurchasedBaggageAdvisory":
+	{
+		"message": "Bags have already been added for {name}. If you'd like to make changes, our team at the airport can help."
+	},
+	"UnsupportedCurrencyBaggageAdvisory":
+	{
+		"message": "If you'd like to purchase additional baggage please speak to our team at the airport."
+	},
+	"DisablePaidBaggageCurrencies": [
+		"INR", "MVR", "MXN", "THB"
+	]
+}

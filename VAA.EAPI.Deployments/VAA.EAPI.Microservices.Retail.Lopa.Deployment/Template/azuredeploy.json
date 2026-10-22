@@ -1,0 +1,269 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "LogicAppName": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "Environment": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "ActiveStatus": {
+      "defaultValue": "NonProd",
+      "type": "string"
+    },
+    "tags": { "type": "object" },
+    "O365Email": {
+      "defaultValue": "Paymentsdonotreply@fly.virgin.com",
+      "type": "string"
+    }
+  },
+  "variables": {
+    "O365ConnectionName": "office365-1",
+    "O365ConnectionId": "[concat('/subscriptions/',subscription().subscriptionId,'/providers/Microsoft.Web/locations/',resourceGroup().location,'/managedApis/office365')]",
+    "O365Connection_externalid": "[resourceId('Microsoft.Web/connections', variables('O365ConnectionName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/connections",
+      "apiVersion": "2016-06-01",
+      "location": "[resourceGroup().location]",
+      "name": "[variables('O365ConnectionName')]",
+      "tags": "[parameters('tags')]",
+      "kind": "V1",
+      "properties": {
+        "api": {
+          "id": "[variables('O365ConnectionId')]"
+        },
+        "displayName": "[parameters('O365Email')]"
+
+      }
+    },
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2017-07-01",
+      "name": "[parameters('LogicAppName')]",
+      "location": "northeurope",
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "state": "Enabled",
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "$connections": {
+              "defaultValue": {},
+              "type": "Object"
+            }
+          },
+          "triggers": {
+            "manual": {
+              "type": "Request",
+              "kind": "Http",
+              "inputs": {
+                "schema": {
+                  "properties": {
+                    "ccAddress": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object"
+                    },
+                    "fromAddress": {
+                      "type": "string"
+                    },
+                    "subject": {
+                      "type": "string"
+                    },
+                    "template": {
+                      "type": "string"
+                    },
+                    "toAddress": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "actions": {
+            "Condition": {
+              "actions": {
+                "Parse_JSON": {
+                  "runAfter": {},
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": "@triggerBody()?['data']",
+                    "schema": {
+                      "properties": {
+                        "cardNumber": {
+                          "type": "string"
+                        },
+                        "channel": {
+                          "type": "string"
+                        },
+                        "currency": {
+                          "type": "string"
+                        },
+                        "orderReference": {
+                          "type": "string"
+                        },
+                        "paymentMethod": {
+                          "type": "string"
+                        },
+                        "pnr": {
+                          "type": "string"
+                        },
+                        "reasonForCPDFailure": {
+                          "type": "string"
+                        },
+                        "refundRequestDateTime": {
+                          "type": "string"
+                        },
+                        "transactionAmount": {
+                          "type": "string"
+                        },
+                        "transactionDateTime": {
+                          "type": "string"
+                        },
+                        "transactionId": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                },
+                "Response": {
+                  "runAfter": {
+                    "Send_an_email_(V2)": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Response",
+                  "kind": "Http",
+                  "inputs": {
+                    "body": {
+                      "success": true
+                    },
+                    "schema": {
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "statusCode": 200
+                  }
+                },
+                "Send_an_email_(V2)": {
+                  "runAfter": {
+                    "Set_variable": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "body": {
+                      "Body": "<p>@{variables('EmailBody')}</p>",
+                      "Importance": "High",
+                      "IsHTML": true,
+                      "Subject": "@triggerBody()?['Subject']",
+                      "To": "@triggerBody()?['toAddress']"
+                    },
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['office365_1']['connectionId']"
+                      }
+                    },
+                    "method": "post",
+                    "path": "/v2/Mail"
+                  }
+                },
+                "Set_variable": {
+                  "runAfter": {
+                    "Parse_JSON": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "EmailBody",
+                    "value": "<p>Dear Team,</p>\n<p>Kindly note that the request to issue refund for has been rejected by the payment provider due to @{body('Parse_JSON')?['reasonForCPDFailure']}</p>\n<p>Details of the transaction:</p>\n<table style=\"border-collapse: collapse; width: 95.4019%; height: 180px;\" border=\"1\">\n<tbody>\n<tr style=\"height: 18px;\">\n<td style=\"width: 55.596%; height: 18px;\"><strong>Transaction Id</strong></td>\n<td style=\"width: 104.465%; height: 18px;\">@{body('Parse_JSON')?['transactionId']}</td>\n</tr>\n<tr style=\"height: 18px;\">\n<td style=\"width: 55.596%; height: 18px;\"><strong>Transaction creation date/time</strong></td>\n<td style=\"width: 104.465%; height: 18px;\">@{body('Parse_JSON')?['transactionDateTime']}</td>\n</tr>\n<tr style=\"height: 18px;\">\n<td style=\"width: 55.596%; height: 18px;\" width=\"312\"><strong>Trasanction Amount</strong></td>\n<td style=\"width: 104.465%; height: 18px;\" width=\"312\">@{body('Parse_JSON')?['transactionAmount']}</td>\n</tr>\n<tr style=\"height: 18px;\">\n<td style=\"width: 55.596%; height: 18px;\"><strong>PNR</strong></td>\n<td style=\"width: 104.465%; height: 18px;\">@{body('Parse_JSON')?['pnr']}</td>\n</tr>\n<tr style=\"height: 18px;\">\n<td style=\"width: 55.596%; height: 18px;\"><strong>Currency</strong></td>\n<td style=\"width: 104.465%; height: 18px;\">@{body('Parse_JSON')?['currency']}</td>\n</tr>\n<tr style=\"height: 18px;\">\n<td style=\"width: 55.596%; height: 18px;\"><strong>Refund request date/time</strong></td>\n<td style=\"width: 104.465%; height: 18px;\">@{body('Parse_JSON')?['refundRequestDateTime']}</td>\n</tr>\n<tr style=\"height: 18px;\">\n<td style=\"width: 55.596%; height: 18px;\"><strong>Card Number</strong></td>\n<td style=\"width: 104.465%; height: 18px;\">@{body('Parse_JSON')?['cardNumber']}</td>\n</tr>\n<tr style=\"height: 18px;\">\n<td style=\"width: 55.596%; height: 18px;\"><strong>Order Reference Number</strong></td>\n<td style=\"width: 104.465%; height: 18px;\">@{body('Parse_JSON')?['orderReference']}</td>\n</tr>\n<tr style=\"height: 18px;\">\n<td style=\"width: 55.596%; height: 18px;\"><strong>Channel</strong></td>\n<td style=\"width: 104.465%; height: 18px;\">@{body('Parse_JSON')?['channel']}</td>\n</tr>\n<tr>\n<td style=\"width: 55.596%;\"><strong>Payment Method</strong></td>\n<td style=\"width: 104.465%;\">@{body('Parse_JSON')?['paymentMethod']}</td>\n</tr>\n<tr style=\"height: 18px;\">\n<td style=\"width: 55.596%; height: 18px;\"><strong>Rejection Reason</strong></td>\n<td style=\"width: 104.465%; height: 18px;\">@{body('Parse_JSON')?['reasonForCPDFailure']}</td>\n</tr>\n</tbody>\n</table>\n<p style=\"font-weight: 400;\">&nbsp;</p>\n<p style=\"font-weight: 400;\">Regards,</p>\n<p style=\"font-weight: 400;\">SOV Team</p>"
+                  }
+                }
+              },
+              "runAfter": {
+                "Initialize_variable": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Response_2": {
+                    "runAfter": {},
+                    "type": "Response",
+                    "kind": "Http",
+                    "inputs": {
+                      "body": {
+                        "success": false
+                      },
+                      "schema": {
+                        "properties": {
+                          "success": {
+                            "type": "boolean"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "statusCode": 500
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@triggerBody()?['template']",
+                      "SOVGEN-01"
+                    ]
+                  }
+                ]
+              },
+              "type": "If"
+            },
+            "Initialize_variable": {
+              "runAfter": {},
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "EmailBody",
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {
+          "$connections": {
+            "value": {
+              "office365_1": {
+                "connectionId": "[variables('O365Connection_externalid')]",
+                "connectionName": "[variables('O365ConnectionName')]",
+                "id": "[variables('O365ConnectionId')]"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

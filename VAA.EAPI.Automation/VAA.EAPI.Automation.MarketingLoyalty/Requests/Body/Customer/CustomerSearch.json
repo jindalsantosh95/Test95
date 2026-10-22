@@ -1,0 +1,8 @@
+{
+  "query": "query LoyaltyCustomer($customerId: String, $memberNumber: String) {  loyaltyCustomer(customerId: $customerId, memberNumber: $memberNumber) {    customerId    firstName    lastName    gender    salutation    pronouns    nationality    loyaltyNumber    dateOfBirth    addressDetails {      addressType      addressLine1      addressLine2      addressLine3      companyName      city      postalCode      region      country      preferredFlag    }    contactDetails {      emailDetails {        EmailAddress        Flag_to_indicate_if_preferred_email        Description        Flag_to_indicate_if_Email_is_valid      }      phoneDetails {        phoneType        usage        countryCode        phoneNumber        preferredFlag        description      }    }    title    status    memberAccountType    headOfGroupMemberNumber    termsAndConditionsAccepted awardDetails {  awardId   awardNumber   awardValue  productName  startDate  expiryDate  } }}",
+  "variables": {
+    "customerId": "",
+    "memberNumber": ""
+  },
+  "operationName": "LoyaltyCustomer"
+}

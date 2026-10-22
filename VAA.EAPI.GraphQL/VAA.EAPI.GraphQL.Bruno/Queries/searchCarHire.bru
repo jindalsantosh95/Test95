@@ -1,0 +1,38 @@
+meta {
+  name: searchCarHire
+  type: graphql
+  seq: 45
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query searchCarHire($pickUpLocation: String!, $dropOffLocation: String!, $departureDate: DateTime!, $duration: Int!, $pickUpTime: String!, $dropOfftime: String!, $where: CarHireSearchResponseFilterInput, $order: [CarHireSearchResponseSortInput!]) {
+    searchCarHire(pickUpLocation: $pickUpLocation, dropOffLocation: $dropOffLocation, departureDate: $departureDate, duration: $duration, pickUpTime: $pickUpTime, dropOfftime: $dropOfftime, where: $where, order: $order) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "pickUpLocation": "",
+    "dropOffLocation": "",
+    "departureDate": "",
+    "duration": 0,
+    "pickUpTime": "",
+    "dropOfftime": "",
+    "where": {},
+    "order": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

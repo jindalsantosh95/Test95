@@ -1,0 +1,16 @@
+meta {
+  name: Flight Availability
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{offer_base_url}}/FlightAvailability/VS/{{flight_number}}/{{flight_date}}/LHR/JFK/GB
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 30000
+}

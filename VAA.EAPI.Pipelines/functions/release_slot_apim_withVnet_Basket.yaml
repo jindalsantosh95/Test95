@@ -1,0 +1,265 @@
+parameters:
+  agentPool: ''
+  agentPool_Sanity: ''
+  agentSpecification: ''
+  buildConfiguration: ''   
+  applicationName: ''
+  microserviceName: ''
+  #productId: '' 
+  apimurlname: ''
+  resourceGroupName_DEV: ''
+  resourceGroupName_SIT: ''
+  resourceGroupName_UAT: ''
+  resourceGroupName_PROD: ''
+  serviceConnection_NonProd: ''
+  serviceConnection_Prod: ''
+  subscriptionId_NonProd: ''
+  subscriptionId_Prod: ''   
+  functionAppName_DEV: ''
+  functionAppName_SIT: ''
+  functionAppName_UAT: ''
+  functionAppName_PRD: '' 
+  testRepoPath_SIT: ''
+  testRepoPath_UAT: ''
+  APIM_NonProd: ''
+  APIM_Prod: ''
+  APIMResourceGroupName_NonProd: ''  
+  APIMServiceConnection_NonProd: ''
+  APIMSubscriptionId_NonProd: ''
+  APIMResourceGroupName_Prod: ''    
+  APIMServiceConnection_Prod: ''
+  APIMSubscriptionId_Prod: ''
+  APIM_IP_DEV_SIT_UAT: '' 
+  APIM_IP_PRD: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''  
+  #Performance Variables
+  functionAppName_PRFM: ''
+  appInsightsName_PRFM: ''
+  storageAccName_PRFM: ''
+  keyvault_PRFM: ''
+  resourceGroupName_PRFM: ''
+  AppServicePlanName_PRFM: ''
+
+stages:                     
+
+  - stage: 'AFN_DEV'
+    displayName: 'AFN - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml  
+        parameters:
+          environment: 'DEV'
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          location: ${{parameters.location}}         
+          applicationName: ${{parameters.applicationName}}
+          functionAppName: ${{parameters.functionAppName_DEV}}                          
+          resourceGroupName: ${{parameters.resourceGroupName_DEV}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+        
+
+  - stage: 'APIM_DEV'     
+    displayName: 'APIM - DEV' 
+    dependsOn: AFN_DEV   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_Offer_apim.yaml
+        parameters:
+          apimEnv: 'DEV/'
+          apiEnv: '_DEV' 
+          apisEnv: 'dev'
+          stage: 'DEV'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}          
+          microserviceName: ${{parameters.microserviceName}}
+          apimurlname: ${{parameters.apimurlname}}
+          #productId: ${{parameters.productId}}    
+          functionAppName: ${{parameters.functionAppName_DEV}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_DEV}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}  
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}        
+
+  - stage: 'Testing_DEV'
+    displayName: 'BasketMs Sanity-DEV' 
+    dependsOn: APIM_DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_basket.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_DEV}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_DEV}}       
+
+  - stage: 'AFN_SIT'
+    displayName: 'AFN - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml
+        parameters:
+          environment: 'SIT' 
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}   
+          location: ${{parameters.location}}           
+          applicationName: ${{parameters.applicationName}}
+          functionAppName: ${{parameters.functionAppName_SIT}}                          
+          resourceGroupName: ${{parameters.resourceGroupName_SIT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+        
+
+  - stage: 'APIM_SIT'     
+    displayName: 'APIM - SIT' 
+    dependsOn: AFN_SIT   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_Offer_apim.yaml
+        parameters:
+          stage: 'SIT'  
+          apimEnv: 'SIT/'
+          apiEnv: '_SIT'   
+          apisEnv: 'sit'                               
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          microserviceName: ${{parameters.microserviceName}}  
+          apimurlname: ${{parameters.apimurlname}}
+          #productId: ${{parameters.productId}}                      
+          functionAppName: ${{parameters.functionAppName_SIT}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_SIT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}          
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}  
+          
+  - stage: 'Testing_SIT'
+    displayName: 'BasketMs Sanity-SIT' 
+    dependsOn: APIM_SIT   
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_basket.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool_Sanity}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_SIT}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_SIT}}                                            
+
+  - stage: 'AFN_UAT'
+    displayName: 'AFN - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml
+        parameters:
+          environment: 'UAT'          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}   
+          location: ${{parameters.location}}          
+          applicationName: ${{parameters.applicationName}}         
+          functionAppName: ${{parameters.functionAppName_UAT}}                          
+          resourceGroupName: ${{parameters.resourceGroupName_UAT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+      
+
+  - stage: 'APIM_UAT'
+    displayName: 'APIM - UAT' 
+    dependsOn: AFN_UAT   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_Offer_apim.yaml
+        parameters:
+          stage: 'UAT'   
+          apimEnv: 'UAT/'
+          apiEnv: '_UAT'      
+          apisEnv: 'uat'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}} 
+          microserviceName: ${{parameters.microserviceName}} 
+          apimurlname: ${{parameters.apimurlname}} 
+          #productId: ${{parameters.productId}}                     
+          functionAppName: ${{parameters.functionAppName_UAT}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_UAT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}           
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}} 
+          
+  - stage: 'Testing_UAT'
+    displayName: 'BasketMs Sanity-UAT' 
+    dependsOn: APIM_UAT   
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_basket.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool_Sanity}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_UAT}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_UAT}} 
+   
+  - stage: 'AFN_PRFM'
+    displayName: 'AFN - Performance' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_prfm_storage.yaml   
+        parameters:
+          environment: 'PRFM'          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}   
+          location: ${{parameters.location}}          
+          applicationName: ${{parameters.applicationName}}         
+          functionAppName: ${{parameters.functionAppName_PRFM}}
+          appInsightsName: ${{parameters.appInsightsName_PRFM}}
+          storageAccName: ${{parameters.storageAccName_PRFM}}
+          AppServicePlanName: ${{parameters.AppServicePlanName_PRFM}}
+          keyvault: ${{parameters.keyvault_PRFM}}
+          resourceGroupName: ${{parameters.resourceGroupName_PRFM}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}  
+
+  - stage: 'AFN_PROD'
+    displayName: 'AFN - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml
+        parameters:
+          environment: 'PROD'                     
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}   
+          location: ${{parameters.location}}         
+          applicationName: ${{parameters.applicationName}}
+          functionAppName: ${{parameters.functionAppName_PRD}}                          
+          resourceGroupName: ${{parameters.resourceGroupName_PROD}}       
+          serviceConnection: ${{parameters.serviceConnection_Prod}}
+          subscriptionId: ${{parameters.subscriptionId_Prod}}
+          APIM_IP: ${{parameters.APIM_IP_PRD}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+       
+
+  

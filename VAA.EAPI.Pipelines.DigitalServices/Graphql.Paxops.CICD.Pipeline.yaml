@@ -1,0 +1,155 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.PaxOps*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.PaxOps.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.PaxOps*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.PaxOps.bruno
+
+variables: 
+  
+  - group: Graphql_Digital
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: Graphql_Stitch
+  - name: agentPool
+    value: 'Azure Pipelines' 
+  - name: agentPool1
+    value: 'LoyaltySystems'  
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.GraphQL'  
+  - name: subRootPath
+    value: 'VAA.EAPI.GraphQL'  
+  - name: applicationName
+    value: 'PaxOps'
+  - name: microserviceName
+    value: 'PaxOps' 
+  - name: productId
+    value: 'Graphql-PaxOps' 
+  - name: apimurlname
+    value: 'PaxOps'            
+  - name: functionAppName_DEV
+    value: 'va-dv-eun-gqlpaxops-fn-01' 
+  - name: functionAppName_SIT
+    value: 'va-ts-eun-gqlpaxops-fn-01'
+  - name: functionAppName_UAT
+    value: 'va-tu-eun-gqlpaxops-fn-01'
+  - name: functionAppName_PROD
+    value: 'va-pr-eun-gqlpaxops-fn-01'
+
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions_digital/build_graphql_paxops.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupName_Gql_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_Gql_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_Gql_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_Gql_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)  
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_Prod: $(subscriptionId_Prod)
+
+
+  # CD (Deployment) Pipeline
+  - template: functions_digital/release_graphql_paxops.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_deployment: $(agentPool1)      
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      buildConfiguration: $(buildConfiguration)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)    
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_Prod: $(subscriptionId_Prod) 
+      resourceGroupName_DEV: $(resourceGroupName_Gql_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_Gql_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_Gql_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_Gql_PROD)
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_PROD: $(functionAppName_PROD)
+      AppInsightsName_DT5: $(AppInsightsName_DT5)
+      storageAccountName_DT5: $(storageAccountName_DT5)
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)
+      workspaceResourceId: $(workspaceResourceId)
+      workspaceResourceId_prod: $(workspaceResourceId_prod)
+      asename: $(asename)
+      asename_prod: $(asename_prod)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)
+      AppInsightsName_DEV: $(AppInsightsName_Paxops_DEV)
+      AppInsightsName_SIT: $(AppInsightsName_Paxops_SIT)
+      AppInsightsName_UAT: $(AppInsightsName_Paxops_UAT)
+      AppInsightsName_PROD: $(AppInsightsName_Paxops_PROD)
+      storageAccountName_DEV: $(storageAccountName_Paxops_DEV)
+      storageAccountName_SIT: $(storageAccountName_Paxops_SIT)
+      storageAccountName_UAT: $(storageAccountName_Paxops_UAT)
+      storageAccountName_PROD: $(storageAccountName_Paxops_PROD)
+      VARIABLE_GROUP_NAME_SCHEMA: "SchemaValidation_DEV"
+      VARIABLE_GROUP_NAME_NBF_DEV: "TESTING_NBF_DEV"
+      VARIABLE_GROUP_NAME_NBF_SIT: "TESTING_NBF_SIT"
+      VARIABLE_GROUP_NAME_NBF_UAT: "TESTING_NBF_UAT" 
+      SLACK_API_TOKEN: $(SLACK_API_TOKEN)
+      SLACK_TITLE: $(SLACK_TITLE_PAXOPS)
+      stitchfunctionAppName_DEV: $(stitchfunctionAppName_DEV)
+      stitchfunctionAppName_SIT: $(stitchfunctionAppName_SIT)
+      stitchfunctionAppName_UAT: $(stitchfunctionAppName_UAT)
+      stitchfunctionAppName_PROD: $(stitchfunctionAppName_PROD)
+      stitchrgname_DEV: $(stitchrgname_DEV)
+      stitchrgname_SIT: $(stitchrgname_SIT)
+      stitchrgname_UAT: $(stitchrgname_UAT)
+      stitchrgname_PROD: $(stitchrgname_PROD)
+      Redis_DEV: $(Redis_DEV)
+      Redis_SIT: $(Redis_SIT)
+      Redis_UAT: $(Redis_UAT)
+      Redis_PROD: $(Redis_PROD)

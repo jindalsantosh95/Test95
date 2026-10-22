@@ -1,0 +1,32 @@
+﻿using System.Collections.Generic;
+using VAA.EAPI.Domain.Entities.Common;
+
+namespace VAA.Facade.NDC.IFGFacade.Domain
+{
+    public class PaymentResponse
+    {
+        public IEnumerable<ErrorDetails> Errors { get; set; }
+        public string TransactionId { get; set; }
+        public double? Amount { get; set; }
+        public string OrderID { get; set; }
+        public string TransactionStatus { get; set; }
+        public string MaskedCardNumber { get; set; }
+        public string ExpiryDate { get; set; }
+        public string CardType { get; set; }
+        public string PaymentCommitedDateTime { get; set; }
+        public string TrackId { get; set; }
+        public int HttpStatus { get; set; }
+        public string Status { get; set; }
+        public string Type { get; set; }
+        public string Description { get; set; }
+        public string PaymentStatus { get; set; }
+        public string CaptureStatus { get; set; }
+        public AmountAuthorized AmountAuthorized { get; set; }
+    }
+
+    public class AmountAuthorized
+    {
+        public string Currency { get; set; }
+        public int Value { get; set; }
+    }
+}

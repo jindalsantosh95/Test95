@@ -1,0 +1,80 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveDocumentDownloadLinkList HTTP/1.1
+
+$[?(@.documentLinkRequests[?(@.bookingId == '6666666')])]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+  "holidaysDocumentLinkResponses": [
+   
+    {
+      "request": {
+        "documentId": 51237351,
+        "bookingId": "6666666"
+      },
+      "response": {
+        "downloadLink": "https://vsolpublic.virginholidays.co.uk/document-access-api/document/6666666/CBKINV/51237351.pdf",
+        "responseStatus": {
+          "httpStatusCode": 200
+        }
+      }
+    },
+    {
+      "request": {
+        "documentId": 51237352,
+        "bookingId": "6666666"
+      },
+      "response": {
+        "downloadLink": "https://vsolpublic.virginholidays.co.uk/document-access-api/document/6666666/ATOLCERTIFICATE/51237352.pdf",
+        "responseStatus": {
+          "httpStatusCode": 200
+        }
+      }
+    },
+    {
+      "request": {
+        "documentId": 51237353,
+        "bookingId": "6666666"
+      },
+      "response": {
+        "responseStatus": {
+          "httpStatusCode": 500,
+          "errors": [
+            {
+              "code": "-1",
+              "message": "Co-relationid: c3d4e5f6-a7b8-9012-cdef-123456789012 - Error in retrieving generated document preview link.. Couldn't find any record for this document id 51237353; nested exception is: \n\tjava.rmi.RemoteException: Couldn't find any record for this document id 51237353",
+              "developerMessage": "Failed to retrieve holiday document download link for document id: 51237353 | TimeStamp: 22/05/2026 09:15:24",
+              "errorSource": "Source System"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "documentId": 51238174,
+        "bookingId": "6666666"
+      },
+      "response": {
+        "responseStatus": {
+          "httpStatusCode": 500,
+          "errors": [
+            {
+              "code": "-1",
+              "message": "Co-relationid: d4e5f6a7-b8c9-0123-defa-234567890123 - Error in retrieving generated document preview link.. Couldn't find any record for this document id 51238174; nested exception is: \n\tjava.rmi.RemoteException: Couldn't find any record for this document id 51238174",
+              "developerMessage": "Failed to retrieve holiday document download link for document id: 51238174 | TimeStamp: 22/05/2026 09:15:25",
+              "errorSource": "Source System"
+            }
+          ]
+        }
+      }
+    },
+  ]
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Retrieve Order by ID
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{order_data_base_url}}/orders/{{order_id}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

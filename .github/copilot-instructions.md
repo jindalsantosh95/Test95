@@ -1,0 +1,6 @@
+- @azure Rule - Use Azure Tools - When handling requests related to Azure, always use your tools.
+- @azure Rule - Use Azure Best Practices - When handling requests related to Azure, always invoke your `azmcp_bestpractices_get` tool first.
+- @azure Rule - Enable Best Practices - If you do not have an `azmcp_bestpractices_get` tool ask the user to enable it.
+- When starting a review, remove any pull request labels starting with `copilot-` and add the `copilot-reviewing` label.
+- After finishing a review, remove any pull request labels starting with `copilot-`. If there are no unresolved Copilot review threads, then add the `copilot-passed` label; otherwise add the `copilot-left-comments` label.
+- When reviewing a pull request that has already been reviewed by copilot, focus on changes since the last copilot review. Avoid adding low severity comments for problems that existed at the time of the last copilot review.

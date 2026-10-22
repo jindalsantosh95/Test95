@@ -1,0 +1,32 @@
+meta {
+  name: Account Update Preference
+  type: graphql
+  seq: 11
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation AccountUpdatePreference {
+    updatePreference(
+      updatePreferenceRequest: {
+        updatedBy: "{{account_email}}"
+        preferences: [
+          {
+            preferenceType: VaaMarketingPermissions
+            preferenceValue: "Y"
+          }
+        ]
+      }
+    )
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Account Email Confirmation
+  type: graphql
+  seq: 10
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation AccountEmailConfirmation {
+    accountEmailConfirmation
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

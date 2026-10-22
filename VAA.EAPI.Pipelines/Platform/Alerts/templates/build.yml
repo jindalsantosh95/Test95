@@ -1,0 +1,25 @@
+parameters:
+ - name: buildConfiguration
+   type: string
+   default: 'debug'
+ - name: applicationName
+   type: string
+   default: 'debug'
+ - name: RootPath
+   type: string
+ - name: MicroserviceName
+   type: string
+
+steps:
+ - task: CopyFiles@2
+   displayName: 'Copy ARM Files'
+   inputs:
+    SourceFolder: '${{parameters.RootPath}}/${{parameters.applicationName}}.Deployment/${{parameters.MicroserviceName}}'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+        
+ - task: PublishBuildArtifacts@1
+   inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop' 
+    publishLocation: 'Container'   

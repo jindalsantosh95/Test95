@@ -1,0 +1,27 @@
+query Query($request: FareServiceRequestInput!) {
+  fareConditions(request: $request) {
+    rules {
+      segments {
+        origin {
+          code
+          cityName
+          countryName
+          airportName
+        }
+        destination {
+          code
+          cityName
+          countryName
+          airportName
+        }
+      }
+      detail {
+        categories {
+          category
+          text
+        }
+      }
+      fareBasisCode
+    }
+  }
+}

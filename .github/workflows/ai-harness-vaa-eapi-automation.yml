@@ -1,0 +1,157 @@
+# Harness engineering — PR gate for VAA.EAPI.Automation (Thread 5).
+# See VAA.EAPI.Automation/docs/HARNESS_ENGINEERING.md.
+#
+# This workflow is designed to be a *required* status check on `main`. Because
+# of that, it must NEVER end in a "skipped" state — GitHub treats a skipped
+# required check as pending forever, blocking unrelated PRs from merging.
+#
+# The pattern: trigger on every PR (no `paths:` filter on the trigger),
+# detect inside the job whether any VAA.EAPI.Automation/** files changed,
+# and no-op the expensive steps when they didn't. The job itself always
+# completes with success.
+#
+# To make this check required for merge, add `verify` to the branch
+# protection rule on `main` (GitHub UI: Settings → Branches → main → Require
+# status checks to pass before merging) once the workflow has run at least
+# once and GitHub has registered the check name.
+
+name: ai-harness-vaa-eapi-automation
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Cancel an in-flight run if the PR head moves on — we only care about the
+# latest commit.
+concurrency:
+  group: automation-harness-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify
+    # .gitattributes pins C# checkout to CRLF on every runner OS.
+    # Keep the format gate unchanged when running on Linux.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out source (PR merge commit / push HEAD)
+        uses: actions/checkout@v4
+        with:
+          # On `pull_request`, actions/checkout defaults to the synthetic merge
+          # ref (refs/pull/N/merge) — the state main *would* be in after merge.
+          # That's the right thing to verify; we don't override with the PR
+          # head SHA. On `push`, it's the branch HEAD.
+          #
+          # verify.ps1 diffs new .cs files against origin/main; full history
+          # ensures the merge-base resolves regardless of how the PR was
+          # branched. Also lets the detect-changes step compute its diff
+          # against the base ref without a second fetch.
+          fetch-depth: 0
+
+      - name: Reclaim runner disk space
+        shell: bash
+        run: |
+          df -h /
+          sudo rm -rf /usr/local/lib/android /usr/share/swift /opt/ghc
+          docker system prune --all --force || true
+          df -h /
+
+      - name: Detect relevant changes
+        id: detect
+        shell: pwsh
+        run: |
+          # Resolve the diff base ONCE here and emit it as a step output;
+          # the verify step downstream re-uses it as `-Base $base`.
+          #
+          # On `pull_request`, the base is github.base_ref (e.g. "main") on
+          # the origin remote. On `push`, `origin/main` is the *just-pushed*
+          # HEAD — diffing HEAD against itself would silently bypass the
+          # format gate on every direct push to main, so we use
+          # github.event.before (the previous tip of the branch we're pushing
+          # to) as the compare base instead.
+          $eventName = '${{ github.event_name }}'
+          if ($eventName -eq 'pull_request') {
+            $base = 'origin/${{ github.base_ref }}'
+          } else {
+            $base = '${{ github.event.before }}'
+          }
+          "base=$base" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+          # `2>$null` discards git's benign LF/CRLF-on-checkout warnings. We
+          # still must check the exit code ourselves — a real git failure
+          # (bad ref, corrupt index) would otherwise produce an empty file
+          # list and the detect step would silently set skip=true, falsely
+          # passing the verify gate without running it.
+          $changed = & git diff --name-only "$base" HEAD 2>$null
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "::error::git diff --name-only '$base' HEAD failed (exit $LASTEXITCODE). Cannot determine relevant changes; failing the verify gate rather than silently skipping it."
+            exit 1
+          }
+          # We care about anything under VAA.EAPI.Automation/ AND the
+          # workflow file itself (so edits to the gate retrigger it).
+          $relevant = @($changed | Where-Object {
+            $_ -like 'VAA.EAPI.Automation/*' -or
+            $_ -eq '.github/workflows/ai-harness-vaa-eapi-automation.yml'
+          })
+
+          if ($relevant.Count -eq 0) {
+            Write-Host "No VAA.EAPI.Automation/* (or workflow) changes — verify steps will no-op."
+            "skip=true"  | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          } else {
+            Write-Host "Relevant changes detected ($($relevant.Count) file(s)):"
+            $relevant | ForEach-Object { Write-Host "  $_" }
+            "skip=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          }
+
+      - name: Set up .NET SDK
+        if: steps.detect.outputs.skip == 'false'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Cache NuGet packages
+        if: steps.detect.outputs.skip == 'false'
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('VAA.EAPI.Automation/**/*.csproj', 'VAA.EAPI.Automation/Directory.Packages.props') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore dependencies
+        if: steps.detect.outputs.skip == 'false'
+        shell: pwsh
+        working-directory: VAA.EAPI.Automation
+        run: dotnet restore VAA.EAPI.Automation.sln
+
+      - name: Verify dotnet format is available
+        # `dotnet format` is bundled with the .NET SDK from 6.0 onwards (the
+        # standalone `dotnet-format` global tool was deprecated in favour of
+        # this in-box subcommand). Since we installed the SDK explicitly via
+        # actions/setup-dotnet above, `dotnet format` should always resolve —
+        # but if a future SDK image ever ships without it, this step makes
+        # the failure loud and obvious instead of a confusing error from
+        # inside verify.ps1.
+        if: steps.detect.outputs.skip == 'false'
+        shell: pwsh
+        run: dotnet format --version
+
+      - name: Run harness verify
+        # scripts/verify.ps1:
+        #   1. dotnet build (analyzer ratchet — any new warning code fails the build);
+        #   2. offline test suites (architecture fitness + Core behaviour);
+        #   3. dotnet format --verify-no-changes on .cs files added since `-Base`.
+        # All three must pass for the job to succeed.
+        #
+        # `-Base` is the same ref the detect step diffed against:
+        # `origin/main` on PR events, `github.event.before` on push events
+        # (so a direct push to main compares against the previous tip, not
+        # itself — see the detect step comment).
+        if: steps.detect.outputs.skip == 'false'
+        shell: pwsh
+        working-directory: VAA.EAPI.Automation
+        run: ./scripts/verify.ps1 -Base ${{ steps.detect.outputs.base }}

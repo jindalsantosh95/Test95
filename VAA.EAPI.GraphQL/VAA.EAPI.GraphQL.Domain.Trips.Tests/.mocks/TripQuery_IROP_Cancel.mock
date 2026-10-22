@@ -1,0 +1,143 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/tripmicroservice/trips/search HTTP/1.1
+
+$[?(@.confirmationNum == 'IROP01')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+  "booking": {
+    "id": "ccb161ee-bb14-443b-963e-692c057981bb",
+    "pos": {
+      "countryCode": "GB",
+      "currencyCode": "GBP"
+    },
+    "product": [
+      {
+        "bookingType": "AIRLINE",
+        "reference": {
+          "airlineDesignator": "VS",
+          "pnrLocator": "IROP01",
+          "createdDate": "2026-10-05T00:00:00"
+        },
+        "slices": [
+          {
+            "id": "1",
+            "ordinal": 0,
+            "scheduledDepartureLocalDateTime": "2026-10-06T10:40:00",
+            "scheduledDepartureUtcDateTime": "2026-10-06T09:40:00",
+            "scheduledArrivalLocalDateTime": "2026-10-07T00:00:00",
+            "scheduledArrivalUtcDateTime": "2026-10-06T18:30:00",
+            "origin": {
+              "code": "LHR",
+              "airportName": "Heathrow Airport",
+              "cityName": "London Heathrow",
+              "countryCode": "GB"
+            },
+            "destination": {
+              "code": "DEL",
+              "airportName": "Indira Gandhi International Airport",
+              "cityName": "Delhi",
+              "countryCode": "IN"
+            },
+            "segments": [
+              {
+                "id": "1",
+                "ordinal": 0,
+                "operatingCarrier": {
+                  "flightNumber": "0302",
+                  "carrierCode": "VS",
+                  "carrierName": "Virgin Atlantic",
+                  "operationalSuffix": "VS"
+                },
+                "marketingCarrier": {
+                  "flightNumber": "0302",
+                  "carrierCode": "VS",
+                  "carrierName": "Virgin Atlantic",
+                  "operationalSuffix": "VS"
+                },
+                "scheduledDepartureLocalDateTime": "2026-10-06T10:40:00",
+                "scheduledDepartureUtcDateTime": "2026-10-06T09:40:00",
+                "scheduledArrivalLocalDateTime": "2026-10-07T00:00:00",
+                "scheduledArrivalUtcDateTime": "2026-10-06T18:30:00",
+                "origin": {
+                  "code": "LHR",
+                  "airportName": "Heathrow Airport",
+                  "cityName": "London Heathrow",
+                  "countryCode": "GB"
+                },
+                "destination": {
+                  "code": "DEL",
+                  "airportName": "Indira Gandhi International Airport",
+                  "cityName": "Delhi",
+                  "countryCode": "IN"
+                },
+                "actionCode": "HK",
+                "legs": [
+                  {
+                    "id": "1",
+                    "operating": {
+                      "flightNumber": "0302",
+                      "carrierCode": "VS",
+                      "carrierName": "Virgin Atlantic"
+                    },
+                    "scheduledDepartureLocalDateTime": "2026-10-06T10:40:00",
+                    "scheduledDepartureUtcDateTime": "2026-10-06T09:40:00",
+                    "scheduledArrivalLocalDateTime": "2026-10-07T00:00:00",
+                    "scheduledArrivalUtcDateTime": "2026-10-06T18:30:00",
+                    "status": "ON_TIME",
+                    "cabinClass": {
+                      "code": "Y",
+                      "productCode": "VSCL",
+                      "name": "Economy Classic"
+                    }
+                  }
+                ],
+                "flightSegmentId": "1-1",
+                "totalSegmentDuration": "PT8H50M",
+                "operationalStatus": {
+                  "type": "IROP",
+                  "subType": "IROP Cancel Dirty No Protect"
+                }
+              }
+            ],
+            "totalSliceDuration": "PT8H50M",
+            "checkInEligible": true
+          }
+        ],
+        "checkInEligible": true
+      }
+    ],
+    "passengers": [
+      {
+        "customerId": "0000000000000",
+        "passengerId": "9f78bd9b-7070-4885-a055-4af7334d080a",
+        "lastName": "USER",
+        "firstName": "TEST",
+        "slices": [
+          {
+            "id": "1",
+            "segments": [
+              {
+                "id": "1",
+                "legs": [
+                  {
+                    "id": "1"
+                  }
+                ],
+                "checkinStatus": "NOT_CHECKED_IN"
+              }
+            ],
+            "checkinStatus": "NOT_CHECKED_IN"
+          }
+        ]
+      }
+    ]
+  }
+}

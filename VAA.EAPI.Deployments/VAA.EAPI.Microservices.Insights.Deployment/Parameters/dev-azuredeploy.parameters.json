@@ -1,0 +1,345 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "EnvironmentName": {
+      "value": "DEV"
+    },
+    "AppServicePlanName": {
+      "value": "AVADEUNASPORDER"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-D-EUN-ENTERPRISEAPI"
+    },
+    "FunctionAppName": {
+      "value": "AVADEUNAFNINSIGHTSMICROSERV"
+    },
+    "AppSettingKeyVaultUri": {
+      "value": "https://avadeunkveapis.vault.azure.net/"
+    },
+    "AppInsightsName": {
+      "value": "AVADEUNAIINSIGHTS"
+    },
+    "Appsettings:AppInsightsKey": {
+      "value": "0eb4c4af-66d4-48bf-b988-950fee4c2975"
+    },
+    "Appsettings:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=0eb4c4af-66d4-48bf-b988-950fee4c2975;IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    },
+    "Appsetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNINSIGHTSMICROSERV-Config-StorageAccount/)"
+    },
+    "Appsettings:WEBSITE_CONTENTSHARE": {
+      "value": "avadeunafninsightsmicroserv"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    //Slot Settings
+    "vaultName": {
+      "value": "AVADEUNKVEAPIS"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avadeunstinsightsms"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+
+    // App settings
+    "AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "HealthCheckSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/HealthCheckSubscriptionKey/)"
+    },
+    "HealthCheckAuthClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/HealthCheckAuthClientId/)"
+    },
+    "HealthCheckAuthClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/HealthCheckAuthClientSecret/)"
+    },
+    "EmailAuthClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/EmailAuthClientId/)"
+    },
+    "EmailAuthClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/EmailAuthClientSecret/)"
+    },
+    "ApimSubscriptionApiClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNEAPISECURITY-Config-MSAPIMSubscriptionAPIClientId/)"
+    },
+    "ApimSubscriptionApiClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNEAPISECURITY-Config-MSAPIMSubscriptionApiClientSecret/)"
+    },
+    "ShopsAwayAESSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNEAPISECURITY-Config-MSShopsAwayAESSecret/)"
+    },
+    "ApimSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNEAPISECURITY-Config-MSAPIMSubscriptionId/)"
+    },
+    "ApimSubscriptionApiResource": {
+      "value": "https://management.azure.com/"
+    },
+    "ApimHostName": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/ApimHostName/)"
+    },
+    "ApimEnvironment": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/ApimEnvironment/)"
+    },
+    "MetricsSubscriptionClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/MetricsSubscriptionClientId/)"
+    },
+    "MetricsSubscriptionClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/MetricsSubscriptionClientSecret/)"
+    },
+    "CustomerMicroserviceResourceId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/CustomerMicroservice-ResourceId/)"
+    },
+    "EmailMicroserviceResourceId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/EmailMicroservice-ResourceId/)"
+    },
+    "IdentityMicroserviceResourceId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/IdentityMicroservice-ResourceId/)"
+    },
+    "InRuleMicroserviceResourceId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/InruleMicroservice-ResourceId/)"
+    },
+    "VredMicroserviceResourceId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/VredMicroservice-ResourceId/)"
+    },
+    "CampaignManagementMicroserviceResourceId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/CampaignManagementMicroservice-ResourceId/)"
+    },
+    "EnrolmentMicroserviceResourceId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/EnrolmentMicroservice-ResourceId/)"
+    },
+    "CrmMicroserviceResourceId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/CrmMicroservice-ResourceId/)"
+    },
+    "LoyaltyPlanName": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/LoyaltyPlanName/)"
+    },
+    "LoyaltyPlanClient": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/LoyaltyPlanClient/)"
+    },
+    "LoyaltyPlanClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/LoyaltyPlanClientSecret/)"
+    },
+    "BasketPlanName": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/BasketPlanName/)"
+    },
+    "BasketPlanClient": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/BasketPlanClient/)"
+    },
+    "BasketPlanClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/BasketPlanClientSecret/)"
+    },
+    "OrderPlanName": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/OrderPlanName/)"
+    },
+    "OrderPlanClient": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/OrderPlanClient/)"
+    },
+    "OrderPlanClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/OrderPlanClientSecret/)"
+    },
+    "OfferPlanName": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/OfferPlanName/)"
+    },
+    "OfferPlanClient": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/OfferPlanClient/)"
+    },
+    "OfferPlanClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/OfferPlanClientSecret/)"
+    },
+    "GraphPlanName": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/GraphPlanName/)"
+    },
+    "GraphPlanClient": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/GraphPlanClient/)"
+    },
+    "GraphPlanClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/GraphPlanClientSecret/)"
+    },
+    "APIMPlanName": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/APIMPlanName/)"
+    },
+    "APIMPlanClient": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/APIMPlanClient/)"
+    },
+    "APIMPlanClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/APIMPlanClientSecret/)"
+    },
+    "CosmosClient": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/CosmosClientId/)"
+    },
+    "CosmosClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/CosmosClientSecret/)"
+    },
+    "MetricsSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/MetricsSubscriptionId/)"
+    },
+    "MetricsRedisApiVersion": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/MetricsRedisApiVersion/)"
+    },
+    "MetricsServiceBusApiVersion": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/MetricsServiceBusApiVersion/)"
+    },
+    "MetricsInsightsVersion": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/MetricsInsightsVersion/)"
+    },
+    "DevOpsPAT": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/DevOpsPAT/)"
+    },
+    "DevOpsBaseUrl": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/DevOpsBaseUrl/)"
+    },
+    "DevOpsProject": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/DevOpsProject/)"
+    },
+
+    //swagger settings
+    "AppsettingsOpenApi__DocTitle": {
+      "value": "Insights Microservice"
+    },
+    "AppsettingsOpenApi__Description": {
+      "value": "This API provides ability to Register and Update Insights"
+    },
+    "AppsettingsOpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "AppsettingsOpenApi__Version": {
+      "value": "v3"
+    },
+    "AppsettingsOpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "AppsettingsOpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "AppsettingsOpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "AppsettingsOpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/bb74c198-0a08-447b-8e7c-01a9c74dda93/.default"
+    },
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNEAPISECURITY-Config-MSAPIMSubscriptionAPIClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    // http client settings
+    "HttpClientTimeOutInMilliSeconds": {
+      "value": "30000"
+    },
+
+    // redis settings
+    "RedisConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Redis-Connection-String/)"
+    },
+    // ADO settings
+    "ADOPipelineServiceBus": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/ServiceBus-Connection-String-ADOPipeline/)"
+    },
+    "ADOPipelineSubscription": {
+      "value": "adopipelineevents-insightsms-odin"
+    },
+
+    // App settings monitor settings
+    "AppSettingsMonitor": {
+      "value": {
+        "SnapshotStorageConnectionString": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/avadeunafninsightsmicroserv-AppSettingsMonitorSnapshotStorageConnectionString/)",
+        "SnapshotStorageContainerName": "azure-app-settings-Snapshots",
+        "AppInsightsAppId": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/avadeunafninsightsmicroserv-AppSettingsMonitorAppInsightsAppId/)"
+      }
+    },
+
+    //Insight ms settings
+    "EapiMsClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/InsightMs-EapiMsClientID/)"
+    },
+    "EapiMSSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/InsightMs-EapiMSSecret/)"
+    },
+    "AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AAD:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "Insights",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Insights",
+        "ApplicationUsageIdList": "Insights"
+
+      }
+    }
+  }
+}

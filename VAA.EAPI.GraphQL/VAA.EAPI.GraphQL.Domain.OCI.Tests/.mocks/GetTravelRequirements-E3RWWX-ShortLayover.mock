@@ -1,0 +1,33 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements HTTP/1.1
+
+$[?(@.pnrLocator == 'E3RWWX')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "requirementsId": "short-layover-requirements",
+  "reference": { "pnrLocator": "E3RWWX" },
+  "passengers": [
+    {
+      "passengerId": "01.01|short-layover-passenger",
+      "givenNames": "PSGONECS",
+      "surname": "TEST",
+      "sliceRequirements": [
+        {
+          "sliceId": "short-layover-slice",
+          "passportRequired": true,
+          "overall": "TO_COMPLETE"
+        }
+      ]
+    }
+  ],
+  "slices": [
+    {
+      "sliceId": "short-layover-slice",
+      "segments": []
+    }
+  ]
+}

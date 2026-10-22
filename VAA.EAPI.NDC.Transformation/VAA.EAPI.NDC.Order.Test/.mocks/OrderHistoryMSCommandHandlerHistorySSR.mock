@@ -1,0 +1,321 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/NdcOrderSearch/OrderHistorySSR HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"docType": "Indirect",
+	"dataList": {
+		"originDestinationAssociations": [
+			{
+				"odLabel": "OD1",
+				"originDestination": {
+					"originAirport": "LHR",
+					"destinationAirport": "DEL",
+					"departureDate": "2026-11-14"
+				},
+				"journeyRefIds": [
+					"JOUR1"
+				],
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			}
+		],
+		"customerDetails": [
+			{
+				"custId": "ADULT_1",
+				"ptc": "ADT",
+				"firstName": "DAVID",
+				"lastName": "SMITH",
+				"gender": "U",
+				"dateOfBirth": "1931-03-18",
+				"contacts": {
+					"email": "TEST.SKYSCANNER@FLY.VIRGIN.COM",
+					"phone": "123456",
+					"phoneType": "H"
+				},
+				"firstNameNumber": "01",
+				"lastNameNumber": "01"
+			}
+		],
+		"orderInstructions": [
+			{
+				"itemType": "SSR",
+				"itemCode": "AVML",
+				"itemText": "FlightService/ADULT_1/SEG1/meal/AVML",
+				"instructionId": "OI1"
+			}
+		],
+		"segmentDetails": [
+			{
+				"odRefId": "OD1",
+				"segmentId": "SEG1",
+				"airCraft": "351",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "302",
+				"originAirportCode": "LHR",
+				"destinationAirportCode": "DEL",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-11-15T02:35:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-11-14T12:35:00"
+				},
+				"flightDuration": "00:08:30:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-14T12:35:00"
+						},
+						"legSequenceNumber": "1",
+						"originAirportCode": "LHR",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-15T02:35:00"
+						},
+						"destinationAirportCode": "DEL",
+						"legDuration": "00:08:30:00",
+						"legId": "LEG1",
+						"carrierAircraftTypeCode": "351",
+						"carrierAircraftTypeName": "351"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				},
+				"status": {
+					"code": "HK"
+				},
+				"ticketNotValidAfter": "2026-11-14",
+				"ticketNotValidBefore": "2026-11-14"
+			}
+		],
+		"priceClass": [
+			{
+				"id": "PC1",
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				}
+			}
+		],
+		"journey": [
+			{
+				"journeyId": "JOUR1",
+				"duration": "08:30",
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			}
+		]
+	},
+	"creationDateTime": {
+		"localDateTime": "3/18/2026 9:59:00 AM"
+	},
+	"orderNumber": {
+		"orderId": "VS932SPESVS26",
+		"ownerAirline": "VS"
+	},
+	"bookingReference": {
+		"rloc": "SPESVS",
+		"rlocCreateDate": "18Mar26",
+		"rlocCreateDateTime": "09:59:00",
+		"externalRecordLocator": "DSZ9M7",
+		"externalSystem": "1S"
+	},
+	"orderItems": [
+		{
+			"orderItemId": "VS932SPESVS26-1",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"originDestinationRefIds": [
+						"OD1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"priceClassRefIds": [
+						"PC1"
+					],
+					"serviceDefinitionRefIds": [
+						"SV1"
+					]
+				}
+			],
+			"accountableDocumentRefs": [
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520171437",
+					"issueDate": "2026-03-18",
+					"issueTime": "14:59:00",
+					"customerRefId": "ADULT_1",
+					"fareCalculation": "LON VS DEL313.70XGERB8LA NUC313.70END ROE0.733176",
+					"coupons": [
+						{
+							"segmentRefId": "SEG1",
+							"couponNumber": "1",
+							"ticketNumber": "9322520171437",
+							"couponStatus": "OPEN",
+							"fareBasis": "XGERB8LA",
+							"ticketExpirationDate": "14Nov26",
+							"ticketEffectiveDate": "14Nov26"
+						}
+					]
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			}
+		},
+		{
+			"orderItemId": "VS932SPESVS26-2",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"orderInstructionRefs": [
+						"OI1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					]
+				}
+			],
+			"priceDetails": [
+				{
+					"priceComponentType": "BasePrice",
+					"amount": {
+						"monetaryAmount": "0.00"
+					}
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			}
+		}
+	],
+	"orderStatus": "Confirmed",
+	"parties": {
+		"participants": [
+			{
+				"partyType": "Seller",
+				"name": "Skyscanner",
+				"agencyID": "91281035",
+				"ordinal": "1",
+				"pccCode": "6UOL",
+				"contacts": {
+					"email": "Bandaru.JeevanNagaSai@fly.virgin.com"
+				},
+				"isCreditCardAccepted": true,
+				"requestAgentType": "IATA"
+			}
+		]
+	},
+	"orderHistory": [
+		{
+			"dataList": {
+				"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVID",
+						"lastName": "SMITH",
+						"gender": "U",
+						"dateOfBirth": "1931-03-18",
+						"travelDocuments": [],
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"orderInstructions": [],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "302",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "DEL",
+						"classOfService": "T",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-15T02:35:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-14T12:35:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					}
+				]
+			},
+			"version": "1",
+			"changeDateTime": "2026-03-18T14:59:00Z",
+			"changeType": "OrderItemAdded"
+		},
+		{
+			"dataList": {
+				"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVID",
+						"lastName": "SMITH",
+						"gender": "U",
+						"dateOfBirth": "1931-03-18",
+						"travelDocuments": [],
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"orderInstructions": [
+					{
+						"itemCode": "AVML",
+						"itemText": "SSR",
+						"instructionId": "OI1"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "302",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "DEL",
+						"classOfService": "T",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-15T02:35:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-14T12:35:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					}
+				]
+			},
+			"version": "2",
+			"changeDateTime": "2026-03-18T15:07:00Z",
+			"changeType": "SpecialServiceRequestAdded"
+		}
+	],
+	"id": "VS932SPESVS26",
+	"partitionKey": "VS932SPESVS26"
+}

@@ -1,0 +1,30 @@
+info:
+  name: Get Vred Statements
+  type: http
+  seq: 3
+  tags:
+    - Member Data
+
+http:
+  method: GET
+  url: "{{baseUrl}}/VredStmts/{{memberNumber}}"
+  headers:
+    - name: Accept
+      value: application/json
+    - name: x-correlation-id
+      value: "VRED-Bruno-{{$randomUUID}}"
+    - name: api-channel
+      value: Bruno
+    - name: Authorization
+      value: "Bearer {{accessToken}}"
+      disabled: true
+    - name: Ocp-Apim-Subscription-Key
+      value: "{{ocpApimSubscriptionKey}}"
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

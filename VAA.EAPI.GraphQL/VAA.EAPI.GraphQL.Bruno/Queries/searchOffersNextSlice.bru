@@ -1,0 +1,34 @@
+meta {
+  name: searchOffersNextSlice
+  type: graphql
+  seq: 54
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query searchOffersNextSlice($request: SearchOffersNextSliceRequestInput!) {
+    searchOffersNextSlice(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {
+      "offerId": "",
+      "currentTripIndexId": 0
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,152 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.NDCHealthCheck*
+      
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*  
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.NDCHealthCheck.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.NDCHealthCheck*
+      
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*  
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.NDCHealthCheck.bruno
+
+variables: 
+  - group: APIM  
+  - group: APIM_IP
+  - group: Common_Variables
+  - group: Graphql_NDC_HealthCheck
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentPool1
+    value: 'LoyaltySystems'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'
+  - name: testRepoPath_SIT
+    value: ''   
+  - name: testRepoPath_UAT
+    value: ''      
+  - name: rootPath
+    value: 'VAA.EAPI.GraphQL'
+  - name: subRootPath
+    value: 'VAA.EAPI'    
+  - name: applicationName
+    value: 'GraphQL'
+  - name: functionAppName_DT5
+    value: 'AVADEUNAFNGRAPHQLNDCHealthDT5'
+  - name: functionAppName_DEV
+    value: 'AVADEUNAFNGRAPHQLNDCHealth'
+  - name: functionAppName_SIT
+    value: 'AVATEUNAFNGRAPHQLNDCHealth'
+  - name: functionAppName_UAT
+    value: 'AVASEUNAFNGRAPHQLNDCHealth'
+  - name: functionAppName_SANDBOX
+    value: 'AVAIEUNAFNGRAPHQLNDCHealth'  
+  - name: functionAppName_PRD
+    value: 'AVAPEUNAFNGRAPHQLNDCHealth'       
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/ndchealthcheck/build_ndchealthcheck.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      rootPath: $(rootPath)
+      location: $(location)
+      subRootPath: $(subRootPath)
+      applicationName: $(applicationName)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      resourceGroupName_DEV: $(resourceGroupNameGraphql_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameGraphql_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameGraphql_UAT)
+      resourceGroupName_SB: $(resourceGroupNameGraphql_SB)
+      resourceGroupName_PROD: $(resourceGroupNameGraphql_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+  # CD (Deployment) Pipeline
+  - template: functions/ndchealthcheck/release_ndchealthcheck_slot.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_SANDBOX: $(agentPool1)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)   
+      functionAppName_DT5: $(functionAppName_DT5)     
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_SANDBOX: $(functionAppName_SANDBOX)
+      functionAppName_PRD: $(functionAppName_PRD)
+      AppInsightsName_DEV: $(AppInsightsName_DEV)
+      AppInsightsName_SIT: $(AppInsightsName_SIT)
+      AppInsightsName_UAT: $(AppInsightsName_UAT)
+      AppInsightsName_SB: $(AppInsightsName_SB)
+      AppInsightsName_PROD: $(AppInsightsName_PROD)
+      storageAccountName_DEV: $(AzureWebJobsStorage_GQLNDCHealth_DEV)
+      storageAccountName_SIT: $(AzureWebJobsStorage_GQLNDCHealth_SIT)
+      storageAccountName_UAT: $(AzureWebJobsStorage_GQLNDCHealth_UAT)
+      storageAccountName_SB: $(AzureWebJobsStorage_GQLNDCHealth_SB)
+      storageAccountName_PROD: $(AzureWebJobsStorage_GQLNDCHealth_PROD)
+      VARIABLE_GROUP_NAME_SCHEMA: "SchemaValidation_DEV"
+      VARIABLE_GROUP_NAME_DEV: "TESTING_MYACCOUNT_VARIABLES_DEV"
+      VARIABLE_GROUP_NAME_SIT: "TESTING_MYACCOUNT_VARIABLES_SIT"
+      VARIABLE_GROUP_NAME_UAT: "TESTING_MYACCOUNT_VARIABLES_UAT"
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      location: $(location)
+      resourceGroupName_DT5: $(resourceGroupName_DT5)
+      AppInsightsName_DT5: $(AppInsightsName_DT5)
+      appserviceplan_DT5: $(appserviceplan_DT5)
+      KeyvaultName_DT5: $(KeyvaultName_DT5)
+      storageAccountName_DT5: $(storageAccountName_DT5)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)  
+      SLACK_API_TOKEN: $(SLACK_API_TOKEN)
+      SLACK_TITLE: $(SLACK_TITLE_NDCHEALTHCHECK)

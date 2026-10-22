@@ -1,0 +1,30 @@
+meta {
+  name: Assign Seats
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{delta_ssci}}/{{travelparty_id}}/seats
+  body: json
+  auth: inherit
+}
+
+headers {
+  ~appid: OCI
+}
+
+body:json {
+  {
+      "recordLocator": "{{record_locator}}"
+  }
+}
+
+vars:pre-request {
+  record_locator: dk6zjy
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,40 @@
+meta {
+  name: Save Passport Details (pax 4)
+  type: http
+  seq: 7
+}
+
+post {
+  url: https://stg.virginatlantic.com/PCCOciWeb/apiv2/travelparties/{{travelparty_id}}/passportdetails
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "firstNIN": "{{pax4_firstnin}}",
+      "lastNIN": "{{pax4_lastnin}}",
+      "passengerNINs": "{{pax4_lastnin}}.{{pax4_firstnin}}",
+      "documentType": "P",
+      "primaryDocumentProvidedFlag": true,
+      "verifiedByDelta": false,
+      "documentFirstName": "{{pax4_firstname}}",
+      "documentLastName": "{{pax4_lastname}}",
+      "documentNationality": "USA",
+      "documentGender": "M",
+      "documentBirthMonth": "01",
+      "documentBirthDay": "06",
+      "documentBirthYear": "2025",
+      "documentCountryOfResidence": "USA",
+      "documentNumber": "AS8548721",
+      "documentExpirationMonth": "04",
+      "documentExpirationDay": "04",
+      "documentExpirationYear": "2028",
+      "documentIssuingCountry": "USA"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,72 @@
+meta {
+  name: Enrol Basic Customer
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{customer_base_url}}/BasicEnrolment
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  channelId: {{customer_enrolment_channel}}
+  channeluserid: {{customer_channel_user_id}}
+}
+
+body:json {
+  {
+    "channelUserId": "{{customer_channel_user_id}}",
+    "customerDetails": {
+      "firstName": "{{customer_first_name}}",
+      "lastName": "{{customer_last_name}}",
+      "gender": "F",
+      "title": "Ms",
+      "nationality": "British",
+      "customerType": "Basic",
+      "dateOfBirth": "{{customer_date_of_birth}}",
+      "addressDetails": [
+        {
+          "addressType": "Home",
+          "addressLine1": "{{customer_address_line_1}}",
+          "city": "{{customer_city}}",
+          "postalCode": "{{customer_postal_code}}",
+          "country": "{{customer_country_code}}",
+          "preferredFlag": "Y",
+          "addressVerified": true
+        }
+      ],
+      "contactDetails": {
+        "emailDetails": [
+          {
+            "emailId": "{{customer_email}}",
+            "usage": "Personal",
+            "preferredFlag": "Y"
+          }
+        ],
+        "phoneDetails": [
+          {
+            "phoneType": "Mobile",
+            "usage": "Personal",
+            "countryCode": "{{customer_phone_country_code}}",
+            "phoneNumber": "{{customer_phone_number}}",
+            "preferredFlag": "Y"
+          }
+        ]
+      },
+      "loyaltyMember": {
+        "memberType": "Individual",
+        "testMember": true,
+        "mediaCode": "A50",
+        "termsAndConditionsAccepted": true
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

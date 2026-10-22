@@ -1,0 +1,22 @@
+meta {
+  name: Account Email Verification
+  type: graphql
+  seq: 9
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation AccountEmailVerification {
+    accountEmailVerification(activationToken: "{{account_activation_token}}")
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

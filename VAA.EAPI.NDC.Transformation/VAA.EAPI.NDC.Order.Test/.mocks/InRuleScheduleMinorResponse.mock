@@ -1,0 +1,31 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/inrule/disruptionrules HTTP/1.1
+
+$[?(@.event.correlationId == 'fef7a05d-1937-45dc-982d-4f5f6757338d')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "event": {
+    "eventId": "OCN-fef7a05d-1937-45dc-982d-4f5f6757338d",
+    "eventType": "SCHEDULE_CHANGE",
+    "eventVersion": "1",
+    "source": "SABRE_ENS",
+    "occurredAt": "2026-09-14T12:00:00Z",
+    "correlationId": "fef7a05d-1937-45dc-982d-4f5f6757338d"
+  },
+  "inRuleResponse": {
+    "value": "Accept",
+    "ruleId": "R5_SCH_Major",
+    "correlationId": "fef7a05d-1937-45dc-982d-4f5f6757338d"
+  },
+  "orderDetails": [
+    {
+      "orderId": "VS932OWWGYG26",
+      "rloc": "OWWGYG",
+      "segmentId": "SEG1"
+    }
+  ]
+}

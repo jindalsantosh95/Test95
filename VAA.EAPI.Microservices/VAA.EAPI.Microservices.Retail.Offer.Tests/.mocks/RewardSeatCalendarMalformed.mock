@@ -1,0 +1,19 @@
+###Request
+POST https://reward-calendar-ita.test/malformed HTTP/1.1
+Ocp-Apim-Subscription-Key: synthetic-test-key
+Content-Type: text/xml
+
+/search[@name='calendar' and @version='161']/inputs[@awardType='CINCO' and @awardRedeemerPTC='ADT']
+/search/inputs[not(@passengers) and count(paxType)=1 and count(fareFamilyToPrice)=3]
+/search/inputs[@countryIssued='GBR' and @countrySold='GBR' and @currency='GBP' and @salesCity='LON' and @nonstopOnly='true']
+/search/inputs/slice[@origin='LHR' and @destination='JFK' and @date='2027-01-10']
+/search/inputs/paxType/paxTypeCode[text()='ADT']
+/search/inputs/permittedCarrier[text()='VS']
+/search/inputs/fareFamilyToPrice[@name='AWARD-ECONOMY']
+/search/inputs/fareFamilyToPrice[@name='AWARD-COMFORT-PLUS-PREMIUM-ECONOMY']
+/search/inputs/fareFamilyToPrice[@name='AWARD-BUSINESS-FIRST']
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/xml; charset=utf-8
+
+<result><availSummary>

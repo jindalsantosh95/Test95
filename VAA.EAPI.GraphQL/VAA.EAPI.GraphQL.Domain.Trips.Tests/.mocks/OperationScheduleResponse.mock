@@ -1,0 +1,84 @@
+﻿###Request
+GET https://testresources.virginatlantic.com/enterprise/operationallogistics/managetheoperation/operationalschedule/flights?Airline_Code=VS&Local_Date_From=2026-01-16&Local_Date_To=2026-01-16&Direction=D&Origin_Airport_Code=LHR&limit=500&Flight_Number=103 HTTP/1.1
+
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "Flights": [
+        {
+            "Aircraft": {
+                "Registration": "G-VJAM",
+                "Model_Code": "351",
+                "Description": "Queen of Hearts",
+                "Name": "Queen of Hearts"
+            },
+            "Marketing_Flight_Number": {
+                "Airline_Code": "VS",
+                "Flight_Number": "0103",
+                "Suffix": "-"
+            },
+            "Operating_Flight_Number": {
+                "Airline_Code": "VS",
+                "Flight_Number": "0103"
+            },
+            "Legs": [
+                {
+                    "Leg_Id": "1",
+                    "Origin_Airport_Code": "LHR",
+                    "Destination_Airport_Code": "ATL",
+                    "Scheduled_Departure_Time": {
+                        "Local_Date_Time": "2026-01-16T10:45:00",
+                        "UTC_Date_Time": "2026-01-16T10:45:00"
+                    },
+                    "Scheduled_Arrival_Time": {
+                        "Local_Date_Time": "2026-01-16T15:15:00",
+                        "UTC_Date_Time": "2026-01-16T20:15:00"
+                    },
+                    "Actual_Departure_Time": {},
+                    "Actual_Arrival_Time": {},
+                    "Estimated_Departure_Time": {},
+                    "Estimated_Arrival_Time": {},
+                    "Wheels_Up": {},
+                    "Wheels_Down": {},
+                    "Departure_Status": "S",
+                    "Arrival_Status": "S",
+                    "Flight_Cancelled": "N",
+                    "Compartments": [
+                        {
+                            "Number": "1",
+                            "Code": "J",
+                            "Description": "Upper Class",
+                            "Capacity": "44",
+                            "Booked": "20"
+                        },
+                        {
+                            "Number": "2",
+                            "Code": "W",
+                            "Description": "Premium Economy",
+                            "Capacity": "56",
+                            "Booked": "23"
+                        },
+                        {
+                            "Number": "3",
+                            "Code": "Y",
+                            "Description": "Economy",
+                            "Capacity": "235",
+                            "Booked": "68"
+                        }
+                    ],
+                    "DelayCodes": [],
+                    "Wheels_Up_Status": "",
+                    "Wheels_Down_Status": ""
+                }
+            ],
+            "Turn_Around": ""
+        }
+    ]
+}

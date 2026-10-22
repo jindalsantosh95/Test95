@@ -1,0 +1,35 @@
+meta {
+  name: salesBanners
+  type: graphql
+  seq: 43
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query salesBanners($displayLocations: [String!]!, $request: SalesBannerRequestInput!, $returnAllMatches: Boolean!, $order: [SalesBannerSortInput!], $where: SalesBannerFilterInput) {
+    salesBanners(displayLocations: $displayLocations, request: $request, returnAllMatches: $returnAllMatches, order: $order, where: $where) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "displayLocations": [],
+    "request": {},
+    "returnAllMatches": false,
+    "order": null,
+    "where": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

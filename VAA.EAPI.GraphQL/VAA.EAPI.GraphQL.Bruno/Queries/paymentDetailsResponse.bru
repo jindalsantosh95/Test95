@@ -1,0 +1,31 @@
+meta {
+  name: paymentDetailsResponse
+  type: graphql
+  seq: 35
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query paymentDetailsResponse($basketId: String) {
+    paymentDetailsResponse(basketId: $basketId) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "basketId": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

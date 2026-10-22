@@ -1,0 +1,70 @@
+parameters:   
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''  
+  rootPath: ''
+  subRootPath: ''
+  solutionPath: ''
+  applicationName: ''
+  SPECTRAL_DSN: ''
+  SPECTRAL_KEY: ''
+
+stages: 
+  - stage: 'Build'
+    jobs: 
+      - job: 'Build'
+        displayName: 'Build'
+        pool:
+          name: ${{parameters.agentPool}} 
+          vmImage: ${{parameters.agentSpecification}}         
+          
+        
+        steps:
+          # Task to install DotNet Core SDK
+          - task: UseDotNet@2
+            displayName: 'Install DotNet Core SDK'
+            inputs:
+              packageType: 'sdk'
+              version: '10.0.x'
+
+          # Cache the global NuGet package folder. The GitHub Actions workflow
+          # uses the same strategy and avoids downloading the packages for all
+          # projects on every run.
+          - task: Cache@2
+            displayName: 'Cache NuGet packages'
+            inputs:
+              key: 'nuget | "$(Agent.OS)" | ${{ parameters.rootPath }}/Directory.Packages.props | ${{ parameters.rootPath }}/**/*.csproj'
+              restoreKeys: |
+                nuget | "$(Agent.OS)"
+              path: '$(UserProfile)\.nuget\packages'
+
+          # Restore and build the solution once. Building a recursive *.csproj
+          # glob restores/evaluates the same dependency graph repeatedly.
+          - task: DotNetCoreCLI@2
+            displayName: 'Restore automation solution'
+            inputs:
+              command: 'restore'
+              projects: '${{ parameters.rootPath }}/${{ parameters.solutionPath }}'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Build automation solution'
+            inputs:
+              command: 'build'
+              projects: '${{ parameters.rootPath }}/${{ parameters.solutionPath }}'
+              arguments: '--configuration ${{ parameters.buildConfiguration }} --no-restore'
+
+        # Task to copy the ARM files to artifactstagingdirectory
+          - task: CopyFiles@2
+            displayName: 'Copy ARM Files'
+            inputs:
+              SourceFolder: '${{ parameters.rootPath }}'
+              Contents: '**/bin/**'
+              TargetFolder: '$(build.ArtifactStagingDirectory)'
+
+        # PublishPipelineArtifact uses deduplicated storage and is substantially
+        # faster than the legacy PublishBuildArtifacts task for large trees.
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish Artifacts'
+            inputs:
+              targetPath: '$(Build.ArtifactStagingDirectory)'
+              artifact: 'drop'

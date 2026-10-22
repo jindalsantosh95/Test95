@@ -1,0 +1,23 @@
+meta {
+  name: accountGenerateWalletPass
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query accountGenerateWalletPass {
+    accountGenerateWalletPass
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

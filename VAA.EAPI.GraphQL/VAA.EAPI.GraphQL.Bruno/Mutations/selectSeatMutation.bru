@@ -1,0 +1,31 @@
+meta {
+  name: selectSeatMutation
+  type: graphql
+  seq: 38
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation selectSeatMutation($selectSeatRequest: SeatSelectionRequestInput) {
+    selectSeatMutation(selectSeatRequest: $selectSeatRequest) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "selectSeatRequest": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

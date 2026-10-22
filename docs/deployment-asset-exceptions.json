@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "reviewedAtUtc": "2026-10-08T16:37:49Z",
+  "approval": "User requested documented legacy exceptions during PR #2398 remediation; core templates and environment parameters remain required.",
+  "exceptions": [
+    {
+      "project": "VAA.Facade.AzureB2C",
+      "reason": "Legacy deployment has no separate slot or APIM templates; provision those assets in a separate deployment change before enabling those paths.",
+      "allowedMissingFiles": ["Template/azuredeploy_slot.json", "Template/azuredeploy_apim.json"]
+    },
+    {
+      "project": "VAA.Facade.EnrolmentFacade",
+      "reason": "Legacy deployment has no separate APIM template; API provisioning remains outside this upgrade.",
+      "allowedMissingFiles": ["Template/azuredeploy_apim.json"]
+    },
+    {
+      "project": "VAA.Facade.NDC.IFGFacade",
+      "reason": "Legacy deployment has no separate APIM template; API provisioning remains outside this upgrade.",
+      "allowedMissingFiles": ["Template/azuredeploy_apim.json"]
+    },
+    {
+      "project": "VAA.Facade.PDMFacade",
+      "reason": "Asset-only deployment: build_facade.yaml copies ARM files directly; no legacy Visual Studio deployment project, PowerShell deployment script or targets file is present.",
+      "allowedMissingFiles": ["VAA.Facade.PDMFacade.Deployment.deployproj", "Deploy-AzureResourceGroup.ps1", "Deployment.targets"]
+    },
+    {
+      "project": "VAA.EAPI.Microservices.GroundOperations.Passenger.CheckIn",
+      "reason": "The digital slot template is a supported deployment asset, not an exception. This exception covers only the missing standard slot template still expected by CheckIn.Microservice.CICD.Slot.Pipeline.yaml; repair or retire that path before using it.",
+      "allowedMissingFiles": ["Template/azuredeploy_slot.json"]
+    },
+    {
+      "project": "VAA.EAPI.Microservices.Loyalty.Sky",
+      "reason": "Legacy deployment has no slot template; slot provisioning remains outside this upgrade.",
+      "allowedMissingFiles": ["Template/azuredeploy_slot.json"]
+    },
+    {
+      "project": "VAA.EAPI.Microservices.FlightInformation",
+      "reason": "Legacy deployment has no separate slot or APIM templates; provision those assets in a separate deployment change before enabling those paths.",
+      "allowedMissingFiles": ["Template/azuredeploy_slot.json", "Template/azuredeploy_apim.json"]
+    }
+  ]
+}

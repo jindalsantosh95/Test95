@@ -1,0 +1,22 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBooking HTTP/1.1
+
+$[?( @.bookingReference == '3232333' )]
+
+###Response
+HTTP/1.1 400 BadRequest
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+[
+    {
+        "id": "f68d8a1d-9778-4542-bedb-e941e34de040",
+        "code": "G009",
+        "message": "There was an unexpected error.",
+        "developerMessage": "Miscellaneous technical error. | TimeStamp: 2/18/2026 5:59:20 PM",
+        "errorSource": "Source system"
+    }
+]

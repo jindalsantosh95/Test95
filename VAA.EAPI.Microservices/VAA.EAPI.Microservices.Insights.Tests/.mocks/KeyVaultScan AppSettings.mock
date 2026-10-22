@@ -1,0 +1,15 @@
+###Request
+POST https://management.azure.com/subscriptions/scan-subscription-id/resourceGroups/scan-resource-group/providers/Microsoft.Web/sites/scan-function-app/config/appsettings/list?api-version=2025-05-01 HTTP/1.1
+Authorization: Bearer KEYVAULT_SCAN_TOKEN
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json;
+
+{
+  "properties": {
+    "ResolvedSetting": "@Microsoft.KeyVault(VaultName=test-vault;SecretName=resolved)",
+    "UnresolvedSetting": "@Microsoft.KeyVault(VaultName=test-vault;SecretName=missing)",
+    "PlainSetting": "plain-value"
+  }
+}

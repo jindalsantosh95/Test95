@@ -1,0 +1,46 @@
+meta {
+  name: Account Flight Details
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query AccountFlightDetails {
+    accountFlightDetails(page: 1, pageSize: 10) {
+      flightSegmentDetails {
+        bookingReference
+        operatingAirlineName
+        operatingAirlineCode
+        flightNumber
+        dateOfFlight
+        scheduledDepartureTime
+        originAirportCode
+        originAirportName
+        destinationAirportCode
+        destinationAirportName
+        numberOfDaysToDeparture
+        showClaimsBanner
+        virginPoints
+        tierPoints
+      }
+      errorResponse {
+        message
+        extentions {
+          code
+          exception
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,20 @@
+parameters:
+  projects: ''
+  buildConfiguration: 'Release'
+
+steps:
+  - checkout: self
+    displayName: 'Checkout automation sources'
+
+  - task: UseDotNet@2
+    displayName: 'Install DotNet Core SDK'
+    inputs:
+      packageType: 'sdk'
+      version: '10.0.x'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build selected automation projects'
+    inputs:
+      command: 'build'
+      projects: ${{parameters.projects}}
+      arguments: '--configuration ${{parameters.buildConfiguration}}'

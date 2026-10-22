@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+
+        <!--To enable the Microsoft Testing Platform 'dotnet test' experience, add property: -->
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+
+        <!--To enable the Microsoft Testing Platform native command line experience, add property: -->
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+
+        <!--For more information on Microsoft Testing Platform support in xUnit.net, please visit: -->
+        <!--https://xunit.net/docs/getting-started/v3/microsoft-testing-platform-->
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include=".mocks\inrule-disruption-success.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\inrule-disruption-timestamp.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\inrule-disruption-failure.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\inrule-disruption-empty.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\inrule-disruption-null.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\inrule-disruption-malformed.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\inrule-disruption-missing-output.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+		<PackageReference Include="Moq" Version="4.20.72" />
+		<PackageReference Include="xunit.v3" Version="3.2.2" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\VAA.EAPI.Core.Functions\VAA.EAPI.Core.Functions.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.Core.Xunit\VAA.EAPI.Core.Xunit.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.Microservices.Framework.Tests\VAA.EAPI.Microservices.Framework.Tests.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.Microservices.Loyalty.RulesEngine\VAA.EAPI.Microservices.Loyalty.RulesEngine.csproj" />
+	</ItemGroup>
+
+</Project>

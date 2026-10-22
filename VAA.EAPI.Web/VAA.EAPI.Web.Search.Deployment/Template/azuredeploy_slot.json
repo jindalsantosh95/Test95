@@ -1,0 +1,787 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "type": "secureObject",
+      "defaultValue": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "",
+        "Site": "datadoghq.com",
+        "Environment": "",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+
+        "Tags": "",
+        "BaggageAllowList": "",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    // Deployment Settings
+    "FunctionAppName": {
+      "type": "String"
+    },
+    "EnvironmentName": {
+      "type": "string"
+    },
+    "ServerFarmIdRg": {
+      "type": "string"
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "vaultName": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    /*"AppSetting:AppInsightsKey": {
+      "type": "string"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "type": "string"
+    },*/
+    "ResourceGroupSubscriptionId": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "Object"
+    },
+    "SlotName": {
+      "type": "string"
+    },
+    "IPRestriction": {
+      "type": "string"
+    },
+    "actionGroupsServiceNow": {
+      "type": "string"
+    },
+    "actionGroupsEAPISupport": {
+      "type": "string"
+    },
+    "emailAddressServiceNow": {
+      "type": "string"
+    },
+    "emailAddressEAPISupport": {
+      "type": "string"
+    },
+
+    //vnet settings
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "type": "string"
+    },
+
+    // Azure Function Settings
+    "AppSetting:AzureWebJobsStorage": {
+      "type": "string"
+    },
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "type": "string"
+    },
+    /*"AppSetting:WEBSITE_CONTENTSHARE": {
+      "type": "string"
+    },*/
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "type": "string"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "type": "string"
+    },
+    "AppSetting:OperationsVisibilityMode": {
+      "type": "string"
+    },
+
+    // Azure Active Directory
+    "AppSetting:AAD:Authority": {
+      "type": "string"
+    },
+    "AppSetting:AAD:TenantId": {
+      "type": "string"
+    },
+    "AppSetting:AAD:TokenV1Issuer": {
+      "type": "string"
+    },
+
+    // Graph QL Microservice
+    "AppSetting:GraphQL:AppID": {
+      "type": "string"
+    },
+    "AppSetting:GraphQL:Url": {
+      "type": "string"
+    },
+    "AppSetting:GraphQL:ShowMockResponse": {
+      "type": "string"
+    },
+    "AppSetting:GraphQL:BaggageSummaryMockResponse": {
+      "type": "string"
+    },
+    "AppSetting:GraphQL:SearchOffersPqId": {
+      "type": "string"
+    },
+    "AppSetting:GraphQL:SearchOffersNextPqId": {
+      "type": "string"
+    },
+    "AppSetting:HttpClientTimeOut": {
+      "type": "string"
+    },
+    "AppSetting:GraphQL:OfferSearch:PqId": {
+      "type": "string"
+    },
+    "AppSetting:GraphQL:RetrieveBasketPqId": {
+      "type": "string"
+    },
+    "AppSetting:GraphQL:Brand:PqId": {
+      "type": "string"
+    },
+    "AppSetting:GraphQL:CarbonIndex:PqId": {
+      "type": "string"
+    },
+    "AppSetting:GraphQL:FareConditionsPqId": {
+      "type": "string"
+    },
+    "AppSetting:BookingCheckOutURL": {
+      "type": "string"
+    },
+
+
+    // Call Back Translation
+    "AppSetting:PostbackUrl": {
+      "type": "string"
+    },
+
+    // Delay used by microservice connecter when making get call after post
+    "AppSetting:TimeToWaitBeforeNextRecall": {
+      "type": "string"
+    },
+
+    // Redis cache
+    "AppSetting:RedisCacheConnectionString": {
+      "type": "string"
+    },
+    "AppSetting:RedisCacheExpiry": {
+      "type": "string"
+    },
+    // test basket settings
+    "KeyVaultUri": {
+      "type": "string"
+    },
+    "MicroServiceClientId": {
+      "type": "string"
+    },
+    "MicroServiceClientSecret": {
+      "type": "string"
+    },
+    "BasketUri": {
+      "type": "string"
+    },
+    "OfferSubscriptionAutomationKey": {
+      "type": "string"
+    },
+    "BasketSubscriptionAutomationKey": {
+      "type": "string"
+    },
+    "BasketLink": {
+      "type": "string"
+    },
+    "ContactLink": {
+      "type": "string"
+    },
+    "TermsLink": {
+      "type": "string"
+    },
+    "PassengerLink": {
+      "type": "string"
+    },
+    "BookCreateOrderPqId": {
+      "type": "string"
+    },
+    "OrderConfirmationMockResponse": {
+      "type": "string"
+    },
+    //swagger settings
+    "Appsettings:OpenApi__DocTitle": {
+      "type": "string"
+    },
+    "Appsettings:OpenApi__Description": {
+      "type": "string"
+    },
+    "Appsettings:OpenApi__DocVersion": {
+      "type": "string"
+    },
+    "Appsettings:OpenApi__Version": {
+      "type": "string"
+    },
+    "Appsettings:OpenApi__TokenUrl": {
+      "type": "string"
+    },
+    "Appsettings:OpenApi__Scope": {
+      "type": "string"
+    },
+    "Appsettings:OpenApi__ForceHttps": {
+      "type": "string"
+    },
+    "Appsettings:OpenApi__ForceHttp": {
+      "type": "string"
+    },
+    //Myaccount
+    "Appsettings:GraphQL:MemberDetailsPqId": {
+      "type": "string"
+    },
+    "Appsettings:GraphQL:MyAccountUrl": {
+      "type": "string"
+    }
+
+  },
+  "variables": {
+    "AppInsightsName": "[parameters('AppInsightsName')]",
+    "ResourceLocation": "[resourceGroup().location]",
+    "SiteResourceID": "[resourceId('Microsoft.Web/Sites', parameters('FunctionAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[variables('ResourceLocation')]",
+      "tags": "[parameters('Tags')]",
+      "sku": {
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "allowBlobPublicAccess": false
+      }
+    },
+    {
+      "type": "microsoft.insights/components",
+      "kind": "web",
+      "name": "[parameters('AppInsightsName')]",
+      "apiVersion": "2015-05-01",
+      "location": "[Variables('ResourceLocation')]",
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "applicationId": "[variables('SiteResourceID')]",
+        "Application_Type": "web"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "kind": "functionapp",
+      "name": "[parameters('FunctionAppName')]",
+      "apiVersion": "2021-03-01",
+      "location": "[variables('ResourceLocation')]",
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]"
+      },
+      "tags": "[parameters('Tags')]"
+    },
+    {
+      "type": "Microsoft.Web/sites/slots",
+      "kind": "functionapp",
+      "name": "[concat(parameters('FunctionAppName'), '/',parameters('SlotName'))]",
+      "apiVersion": "2021-03-01",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [ "[variables('SiteResourceID')]" ],
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('FunctionAppName'), '-',parameters('SlotName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('FunctionAppName'), '-',parameters('SlotName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "alwaysOn": true,
+          "appSettings": [
+            {
+              "name": "LoggingProvider",
+              "value": "[parameters('DataDog').LoggingProvider]"
+            },
+            {
+              "name": "DatadogLogsEndpoint",
+              "value": "[parameters('DataDog').LogsEndpoint]"
+            },
+            {
+              "name": "DatadogApiKey",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_API_KEY",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_SITE",
+              "value": "[parameters('DataDog').Site]"
+            },
+            {
+              "name": "DD_SERVICE",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "DD_ENV",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DD_VERSION",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DD_TRACE_ENABLED",
+              "value": "[string(parameters('DataDog').TraceEnabled)]"
+            },
+            {
+              "name": "DD_RUNTIME_METRICS_ENABLED",
+              "value": "[string(parameters('DataDog').RuntimeMetricsEnabled)]"
+            },
+            {
+              "name": "DatadogService",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "environment",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DatadogSource",
+              "value": "[parameters('DataDog').Source]"
+            },
+            {
+              "name": "DatadogVersion",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DatadogTags",
+              "value": "[parameters('DataDog').Tags]"
+            },
+            {
+              "name": "DatadogBaggageAllowList",
+              "value": "[parameters('DataDog').BaggageAllowList]"
+            },
+            {
+              "name": "DatadogMinimumLogLevel",
+              "value": "[parameters('DataDog').MinimumLogLevel]"
+            },
+            {
+              "name": "DatadogQueueCapacity",
+              "value": "[string(parameters('DataDog').QueueCapacity)]"
+            },
+            {
+              "name": "DatadogBatchSize",
+              "value": "[string(parameters('DataDog').BatchSize)]"
+            },
+            {
+              "name": "DatadogFlushIntervalMilliseconds",
+              "value": "[string(parameters('DataDog').FlushIntervalMilliseconds)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet-isolated"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('AppInsightsName')), '2014-04-01').InstrumentationKey]"
+            },
+            {
+              "name": "AzureWebJobsSecretStorageType",
+              "value": "[parameters('AppSetting:AzureWebJobsSecretStorageType')]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            /*{
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[parameters('AppSetting:WEBSITE_CONTENTSHARE')]"
+            },*/
+            {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('AppInsightsName')), '2020-02-02').ConnectionString]"
+            },
+            {
+              "name": "OperationsVisibilityMode",
+              "value": "[parameters('AppSetting:OperationsVisibilityMode')]"
+            },
+            //vnet settings
+            {
+              "name": "WEBSITE_VNET_ROUTE_ALL",
+              "value": "[parameters('Appsetting:WEBSITE_VNET_ROUTE_ALL')]"
+            },
+
+            {
+              "name": "WEBSITE_DNS_ALT_SERVER",
+              "value": "[parameters('Appsetting:WEBSITE_DNS_ALT_SERVER')]"
+            },
+            {
+              "name": "WEBSITE_DNS_SERVER",
+              "value": "[parameters('Appsetting:WEBSITE_DNS_SERVER')]"
+            },
+            // Azure Active Directory
+            {
+              "name": "AAD:Authority",
+              "value": "[parameters('AppSetting:AAD:Authority')]"
+            },
+            {
+              "name": "AAD:TenantId",
+              "value": "[parameters('AppSetting:AAD:TenantId')]"
+            },
+            {
+              "name": "AAD:TokenV1Issuer",
+              "value": "[parameters('AppSetting:AAD:TokenV1Issuer')]"
+            },
+            // Graph QL Microservice
+            {
+              "name": "GraphQL:AppID",
+              "value": "[parameters('AppSetting:GraphQL:AppID')]"
+            },
+            {
+              "name": "GraphQL:Url",
+              "value": "[parameters('AppSetting:GraphQL:Url')]"
+            },
+            {
+              "name": "GraphQL:ShowMockResponse",
+              "value": "[parameters('AppSetting:GraphQL:ShowMockResponse')]"
+            },
+            {
+              "name": "GraphQL:BaggageSummaryMockResponse",
+              "value": "[parameters('AppSetting:GraphQL:BaggageSummaryMockResponse')]"
+            },
+            {
+              "name": "GraphQL:SearchOffersPqId",
+              "value": "[parameters('AppSetting:GraphQL:SearchOffersPqId')]"
+            },
+            {
+              "name": "GraphQL:SearchOffersNextPqId",
+              "value": "[parameters('AppSetting:GraphQL:SearchOffersNextPqId')]"
+            },
+            {
+              "name": "HttpClientTimeOut",
+              "value": "[parameters('AppSetting:HttpClientTimeOut')]"
+            },
+
+            {
+              "name": "GraphQL:OfferSearch:PqId",
+              "value": "[parameters('AppSetting:GraphQL:OfferSearch:PqId')]"
+            },
+            {
+              "name": "GraphQL:RetrieveBasketPqId",
+              "value": "[parameters('AppSetting:GraphQL:RetrieveBasketPqId')]"
+            },
+            {
+              "name": "GraphQL:Brand:PqId",
+              "value": "[parameters('AppSetting:GraphQL:Brand:PqId')]"
+            },
+            {
+              "name": "GraphQL:CarbonIndex:PqId",
+              "value": "[parameters('AppSetting:GraphQL:CarbonIndex:PqId')]"
+            },
+            {
+              "name": "GraphQL:FareConditionsPqId",
+              "value": "[parameters('AppSetting:GraphQL:FareConditionsPqId')]"
+            },
+            {
+              "name": "BookingCheckOutURL",
+              "value": "[parameters('AppSetting:BookingCheckOutURL')]"
+            },
+            // Call Back Translation
+            {
+              "name": "PostbackUrl",
+              "value": "[parameters('AppSetting:PostbackUrl')]"
+            },
+            // Delay used by microservice connecter when making get call after post
+            {
+              "name": "TimeToWaitBeforeNextRecall",
+              "value": "[parameters('AppSetting:TimeToWaitBeforeNextRecall')]"
+            },
+
+            // Redis cache
+            {
+              "name": "RedisCacheConnectionString",
+              "value": "[parameters('AppSetting:RedisCacheConnectionString')]"
+            },
+            {
+              "name": "MemberManagement:RedisCacheExpiry",
+              "value": "[parameters('AppSetting:RedisCacheExpiry')]"
+            },
+
+            // test basket settings
+            {
+              "name": "env",
+              "value": "[parameters('EnvironmentName')]"
+            },
+            {
+              "name": "Environment",
+              "value": "[parameters('EnvironmentName')]"
+            },
+            {
+              "name": "KeyVaultUri",
+              "value": "[parameters('KeyVaultUri')]"
+            },
+            {
+              "name": "MicroServiceClientId",
+              "value": "[parameters('MicroServiceClientId')]"
+            },
+            {
+              "name": "MicroServiceClientSecret",
+              "value": "[parameters('MicroServiceClientSecret')]"
+            },
+            {
+              "name": "BasketUri",
+              "value": "[parameters('BasketUri')]"
+            },
+            {
+              "name": "OfferSubscriptionAutomationKey",
+              "value": "[parameters('OfferSubscriptionAutomationKey')]"
+            },
+            {
+              "name": "BasketSubscriptionAutomationKey",
+              "value": "[parameters('BasketSubscriptionAutomationKey')]"
+            },
+
+            //Basket links
+            {
+              "name": "BasketLink",
+              "value": "[parameters('BasketLink')]"
+            },
+            {
+              "name": "ContactLink",
+              "value": "[parameters('ContactLink')]"
+            },
+            {
+              "name": "TermsLink",
+              "value": "[parameters('TermsLink')]"
+            },
+            {
+              "name": "PassengerLink",
+              "value": "[parameters('PassengerLink')]"
+            },
+            {
+              "name": "BookCreateOrderPqId",
+              "value": "[parameters('BookCreateOrderPqId')]"
+            },
+            {
+              "name": "OrderConfirmationMockResponse",
+              "value": "[parameters('OrderConfirmationMockResponse')]"
+            },
+
+            //swagger settings
+            {
+              "name": "OpenApi__DocTitle",
+              "value": "[parameters('Appsettings:OpenApi__DocTitle')]"
+            },
+            {
+              "name": "OpenApi__Description",
+              "value": "[parameters('Appsettings:OpenApi__Description')]"
+            },
+            {
+              "name": "OpenApi__DocVersion",
+              "value": "[parameters('Appsettings:OpenApi__DocVersion')]"
+            },
+            {
+              "name": "OpenApi__Version",
+              "value": "[parameters('Appsettings:OpenApi__Version')]"
+            },
+            {
+              "name": "OpenApi__TokenUrl",
+              "value": "[parameters('Appsettings:OpenApi__TokenUrl')]"
+            },
+            {
+              "name": "OpenApi__Scope",
+              "value": "[parameters('Appsettings:OpenApi__Scope')]"
+            },
+            {
+              "name": "OpenApi__ForceHttps",
+              "value": "[parameters('Appsettings:OpenApi__ForceHttps')]"
+            },
+            {
+              "name": "OpenApi__ForceHttp",
+              "value": "[parameters('Appsettings:OpenApi__ForceHttp')]"
+            },
+            //Myaccount 
+            {
+              "name": "GraphQL:MyAccountUrl",
+              "value": "[parameters('Appsettings:GraphQL:MyAccountUrl')]"
+            },
+            {
+              "name": "GraphQL:MemberDetailsPqId",
+              "value": "[parameters('Appsettings:GraphQL:MemberDetailsPqId')]"
+            }
+          ]
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None"
+      },
+      "tags": "[parameters('Tags')]"
+    },
+    {
+      "type": "Microsoft.Web/sites/slots/config",
+      "apiVersion": "2021-03-01",
+      "name": "[concat(parameters('FunctionAppName'), '/',parameters('SlotName'),'/web')]",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName'))]",
+        "[variables('SiteResourceID')]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$[parameters('FunctionAppName')]__[parameters('SlotName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": false,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": true
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "[parameters('IPRestriction')]",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow_APIM",
+            "description": "Allow APIM access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "PreWarmedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/slots/hostNameBindings",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(parameters('FunctionAppName'), '/', parameters('SlotName'),'/', parameters('FunctionAppName'), '-',parameters('SlotName'),'.azurewebsites.net')]",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName'))]",
+        "[variables('SiteResourceID')]"
+      ],
+      "properties": {
+        "siteName": "[concat(parameters('FunctionAppName'),'(',parameters('SlotName'),')')]",
+        "hostNameType": "Verified"
+      }
+    },
+    
+    
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[concat(parameters('vaultName'), '/add')]",
+      "apiVersion": "2019-09-01",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[reference(concat('Microsoft.Web/sites/', parameters('FunctionAppName')), '2018-02-01','Full').identity.tenantId]",
+            "objectId": "[reference(concat('Microsoft.Web/sites/', parameters('FunctionAppName')), '2018-02-01','Full').identity.principalId]",
+            "permissions": {
+              "keys": [ "Get", "List" ],
+              "secrets": [ "Get", "List" ],
+              "certificates": [ "Get", "List" ],
+              "storage": [ "all" ]
+            }
+          }
+        ]
+      }
+    }
+    ]
+}

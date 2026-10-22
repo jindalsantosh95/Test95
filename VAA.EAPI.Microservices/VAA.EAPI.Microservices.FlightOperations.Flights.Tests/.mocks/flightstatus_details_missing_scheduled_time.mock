@@ -1,0 +1,9 @@
+###Request
+GET https://flight-status.test/flights/details?flightNumber=VS5&departureDate=2026-10-14&departureAirportCode=LHR HTTP/1.1
+x-vaa-flight-status: 1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{"flightNumber":"VS5","flightDate":"2026-10-14","segment":{"legs":[{"id":"leg-5","flightNumber":"VS5","departureAirport":{"code":"LHR"},"arrivalAirport":{"code":"JFK"},"status":{"statusDescription":"On time"}}]}}

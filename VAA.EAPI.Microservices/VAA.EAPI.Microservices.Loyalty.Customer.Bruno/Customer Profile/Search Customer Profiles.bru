@@ -1,0 +1,28 @@
+meta {
+  name: Search Customer Profiles
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{customer_base_url}}/customerProfileSearch
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "email": "{{customer_email}}",
+    "memberNumber": "{{customer_member_number}}",
+    "customerId": "{{customer_id}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

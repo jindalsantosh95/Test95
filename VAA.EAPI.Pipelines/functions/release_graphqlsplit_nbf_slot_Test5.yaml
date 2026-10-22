@@ -1,0 +1,432 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''   
+  testRepoPath_SIT: ''
+  testRepoPath_UAT: ''  
+  appserviceplan_DT1: ''
+  appserviceplan_DT2: ''
+  appserviceplan_DT3: ''
+  appserviceplan_DT4: ''
+  appserviceplan_DT5: ''
+  AppInsightsName_DT1: ''
+  AppInsightsName_DT2: ''
+  AppInsightsName_DT3: ''
+  AppInsightsName_DT4: ''
+  AppInsightsName_DT5: ''
+  KeyvaultName_DT1: ''
+  KeyvaultName_DT2: ''
+  KeyvaultName_DT3: ''
+  KeyvaultName_DT4: ''
+  KeyvaultName_DT5: ''
+  resourceGroupName_DT1: ''
+  resourceGroupName_DT2: ''
+  resourceGroupName_DT3: ''
+  resourceGroupName_DT4: ''
+  resourceGroupName_DT5: ''
+  resourceGroupName_DEV: ''
+  resourceGroupName_SIT: ''
+  resourceGroupName_UAT: ''
+  resourceGroupName_PROD: ''
+  serviceConnection_NonProd: ''
+  serviceConnection_Prod: ''
+  subscriptionId_NonProd: ''
+  subscriptionId_Prod: ''   
+  functionAppName_Secure_DEV: ''
+  functionAppName_Secure_SIT: ''
+  functionAppName_Secure_UAT: ''
+  functionAppName_Secure_PRD: ''
+  functionAppName_Public_DEV: ''
+  functionAppName_Public_SIT: ''
+  functionAppName_Public_UAT: ''
+  functionAppName_Public_PRD: ''
+  functionAppName_Secure_DT1: ''
+  functionAppName_Secure_DT2: ''
+  functionAppName_Secure_DT3: ''
+  functionAppName_Secure_DT4: ''
+  functionAppName_Secure_DT5: ''
+  functionAppName_Public_DT1: ''
+  functionAppName_Public_DT2: ''
+  functionAppName_Public_DT3: ''
+  functionAppName_Public_DT4: ''
+  functionAppName_Public_DT5: ''
+  storageAccountName_P_DT1: ''
+  storageAccountName_P_DT2: ''
+  storageAccountName_P_DT3: ''
+  storageAccountName_P_DT4: ''
+  storageAccountName_P_DT5: ''
+  storageAccountName_DEV: ''
+  storageAccountName_DEV_P: ''
+  storageAccountName_SIT: ''
+  storageAccountName_SIT_P: ''
+  storageAccountName_UAT: ''
+  storageAccountName_UAT_P: ''
+  storageAccountName_PROD: ''
+  storageAccountName_PROD_P: ''
+  storageAccountName_DT1: ''
+  storageAccountName_DT2: ''
+  storageAccountName_DT3: ''
+  storageAccountName_DT4: ''
+  storageAccountName_DT5: ''
+  VARIABLE_GROUP_NAME_SCHEMA: ''
+  VARIABLE_GROUP_NAME_NBF_DT1: ''
+  VARIABLE_GROUP_NAME_NBF_DT2: ''
+  VARIABLE_GROUP_NAME_NBF_DT3: ''
+  VARIABLE_GROUP_NAME_NBF_DT4: ''
+  VARIABLE_GROUP_NAME_NBF_DT5: ''
+  VARIABLE_GROUP_NAME_NBF_DEV: ''
+  VARIABLE_GROUP_NAME_NBF_SIT: ''
+  VARIABLE_GROUP_NAME_NBF_UAT: ''
+  APIM_IP_DEV_SIT_UAT: ''
+  APIM_IP_PRD: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''
+  SLACK_API_TOKEN: ''
+  SLACK_TITLE: ''
+
+
+stages:
+
+  - stage: 'PR_Test1'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - Test1' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_slot_Test5.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DT1}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DT1}} 
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          appserviceplan: ${{parameters.appserviceplan_DT1}}
+          keyvaultName: ${{parameters.KeyvaultName_DT1}}
+          environment: PR
+          pr_name: PR_Test1
+          location: ${{parameters.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_DT1}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_DT5}}
+          storageAccountName: ${{parameters.storageAccountName_DT1}}
+          storageAccountName_P: ${{parameters.storageAccountName_P_DT1}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+
+  - stage: 'Functional_Testing_NBF_DT1'
+    displayName: 'Functional Testing - NBF - DT1' 
+    dependsOn: PR_Test1
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_nbf.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_DT1}} 
+
+
+  - stage: 'PR_Test2'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - Test2' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_slot_Test5.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DT2}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DT2}}  
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: PR
+          pr_name: PR_Test2
+          location: ${{parameters.location}}          
+          appserviceplan: ${{parameters.appserviceplan_DT2}}
+          keyvaultName: ${{parameters.KeyvaultName_DT2}}
+          resourceGroupName: ${{parameters.resourceGroupName_DT2}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}  
+          AppInsightsName: ${{parameters.AppInsightsName_DT5}}
+          storageAccountName: ${{parameters.storageAccountName_DT2}}
+          storageAccountName_P: ${{parameters.storageAccountName_P_DT2}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'Functional_Testing_NBF_DT2'
+    displayName: 'Functional Testing - NBF - DT2' 
+    dependsOn: PR_Test2
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_nbf.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_DT2}} 
+
+  - stage: 'PR_Test3'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - Test3' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_slot_Test5.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DT3}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DT3}} 
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: PR
+          pr_name: PR_Test3
+          location: ${{parameters.location}}   
+          appserviceplan: ${{parameters.appserviceplan_DT3}}
+          keyvaultName: ${{parameters.KeyvaultName_DT3}}       
+          resourceGroupName: ${{parameters.resourceGroupName_DT3}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_DT5}}
+          storageAccountName: ${{parameters.storageAccountName_DT3}}
+          storageAccountName_P: ${{parameters.storageAccountName_P_DT3}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'Functional_Testing_NBF_DT3'
+    displayName: 'Functional Testing - NBF - DT3' 
+    dependsOn: PR_Test3
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_nbf.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_DT3}} 
+
+  - stage: 'PR_Test4'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - Test4' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_slot_Test5.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DT4}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DT4}}   
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: PR
+          pr_name: PR_Test4
+          location: ${{parameters.location}}          
+          appserviceplan: ${{parameters.appserviceplan_DT4}}
+          keyvaultName: ${{parameters.KeyvaultName_DT4}}
+          resourceGroupName: ${{parameters.resourceGroupName_DT4}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_DT5}}
+          storageAccountName: ${{parameters.storageAccountName_DT4}}
+          storageAccountName_P: ${{parameters.storageAccountName_P_DT4}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'Functional_Testing_NBF_DT4'
+    displayName: 'Functional Testing - NBF - DT4' 
+    dependsOn: PR_Test4
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_nbf.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_DT4}} 
+
+  - stage: 'PR_Test5'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - Test5' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_slot_Test5.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DT5}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DT5}}   
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: PR
+          pr_name: PR_Test5
+          location: ${{parameters.location}}          
+          appserviceplan: ${{parameters.appserviceplan_DT5}}
+          keyvaultName: ${{parameters.KeyvaultName_DT5}}
+          resourceGroupName: ${{parameters.resourceGroupName_DT5}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_DT5}}
+          storageAccountName: ${{parameters.storageAccountName_DT5}}
+          storageAccountName_P: ${{parameters.storageAccountName_P_DT5}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'Functional_Testing_NBF_DT5'
+    displayName: 'Functional Testing - NBF - DT5' 
+    dependsOn: PR_Test5
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_nbf.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_DT5}} 
+  
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_slot.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DEV}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DEV}}    
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment_DEV}}
+          location: ${{parameters.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_DEV}}
+          storageAccountName: ${{parameters.storageAccountName_DEV}}
+          storageAccountName_P: ${{parameters.storageAccountName_DEV_P}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'NBF_SchemaValidation_DEV'
+    displayName: 'NBF_SchemaValidation_DEV' 
+    dependsOn: DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_SchemaValidation.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SCHEMA}}
+          SLACK_API_TOKEN: ${{parameters.SLACK_API_TOKEN}}
+          SLACK_TITLE: ${{parameters.SLACK_TITLE}}
+
+
+  
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_slot.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_SIT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_SIT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_SIT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_SIT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_SIT}}
+          storageAccountName: ${{parameters.storageAccountName_SIT}}
+          storageAccountName_P: ${{parameters.storageAccountName_SIT_P}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'Functional_Testing_NBF_SIT'
+    displayName: 'Functional Testing - NBF - SIT' 
+    dependsOn: SIT  
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_nbf.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_SIT}}  
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_slot.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_UAT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_UAT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_UAT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_UAT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}
+          AppInsightsName: ${{parameters.AppInsightsName_UAT}}
+          storageAccountName: ${{parameters.storageAccountName_UAT}}
+          storageAccountName_P: ${{parameters.storageAccountName_UAT_P}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'Functional_Testing_NBF_UAT'
+    displayName: 'Functional Testing - NBF - UAT' 
+    dependsOn: UAT   
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_nbf.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_UAT}}
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_UAT}}   
+
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_slot.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_PRD}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_PRD}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_PROD}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_PROD}}        
+          serviceConnection: ${{variables.serviceConnection_PROD}}
+          subscriptionId: ${{variables.subscriptionId_PROD}}    
+          AppInsightsName: ${{parameters.AppInsightsName_PROD}}
+          storageAccountName: ${{parameters.storageAccountName_PROD}}  
+          storageAccountName_P: ${{parameters.storageAccountName_PROD_P}}
+          APIM_IP: ${{parameters.APIM_IP_PRD}} 
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}

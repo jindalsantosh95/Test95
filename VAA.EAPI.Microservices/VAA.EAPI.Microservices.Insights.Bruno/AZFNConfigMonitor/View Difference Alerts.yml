@@ -1,0 +1,19 @@
+info:
+  name: View Difference Alerts
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{baseUrl}}/appSettings/diffalerts?timeframe=0.01:00:00"
+  params:
+    - name: timeframe
+      value: 0.01:00:00
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

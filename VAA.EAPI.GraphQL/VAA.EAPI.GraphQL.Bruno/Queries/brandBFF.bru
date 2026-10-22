@@ -1,0 +1,31 @@
+meta {
+  name: brandBFF
+  type: graphql
+  seq: 15
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query brandBFF($request: BrandServiceRequestInput!) {
+    brandBFF(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

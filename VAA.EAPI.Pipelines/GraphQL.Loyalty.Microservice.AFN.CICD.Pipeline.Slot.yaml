@@ -1,0 +1,158 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:     
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.PaxOps*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.PaxOps*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty.bruno
+
+
+variables: 
+  - group: APIM  
+  - group: APIM_IP
+  - group: Common_Variables
+  - group: Graphql_Loyalty
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'    
+  - name: rootPath
+    value: 'VAA.EAPI.GraphQL'
+  - name: subRootPath
+    value: 'VAA.EAPI'    
+  - name: applicationName
+    value: 'GraphQL'
+  - name: functionAppName_Secure_DT5
+    value: 'AVADEUNAFNGRAPHQLLOYALTYDT5'
+  - name: functionAppName_Secure_DEV
+    value: 'AVADEUNAFNGRAPHQLLOYALTY'
+  - name: functionAppName_Secure_SIT
+    value: 'AVATEUNAFNGRAPHQLLOYALTY'
+  - name: functionAppName_Secure_UAT
+    value: 'AVASEUNAFNGRAPHQLLOYALTY'
+  - name: functionAppName_Secure_PRD
+    value: 'AVAPEUNAFNGRAPHQLLOYALTY' 
+  - name: functionAppName_Public_DT5
+    value: 'AVADEUNAFNGRAPHQLLOYALTYPDT5'   
+  - name: functionAppName_Public_DEV
+    value: 'AVADEUNAFNGRAPHQLLOYALTYP'
+  - name: functionAppName_Public_SIT
+    value: 'AVATEUNAFNGRAPHQLLOYALTYP'
+  - name: functionAppName_Public_UAT
+    value: 'AVASEUNAFNGRAPHQLLOYALTYP'
+  - name: functionAppName_Public_PRD
+    value: 'AVAPEUNAFNGRAPHQLLOYALTYP' 
+  - name: functionAppName_Public_PRD
+    value: 'AVAPEUNAFNGRAPHQLLOYALTYP'
+
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/loops/build_graphqlloyalty.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      rootPath: $(rootPath)
+      location: $(location)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName)
+      resourceGroupName_DEV: $(resourceGroupNameGraphql_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameGraphql_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameGraphql_UAT)
+      resourceGroupName_PROD: $(resourceGroupNameGraphql_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+
+   # CD (Deployment) Pipeline
+  - template: functions/loops/release_graphqlsplit_loyalty_Slot.yaml
+    parameters:
+      buildConfiguration: $(buildConfiguration)
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)   
+      functionAppName_Secure_DT5: $(functionAppName_Secure_DT5)        
+      functionAppName_Secure_DEV: $(functionAppName_Secure_DEV)
+      functionAppName_Secure_SIT: $(functionAppName_Secure_SIT)
+      functionAppName_Secure_UAT: $(functionAppName_Secure_UAT)
+      functionAppName_Secure_PRD: $(functionAppName_Secure_PRD)
+      functionAppName_Public_DT5: $(functionAppName_Public_DT5)
+      functionAppName_Public_DEV: $(functionAppName_Public_DEV)
+      functionAppName_Public_SIT: $(functionAppName_Public_SIT)
+      functionAppName_Public_UAT: $(functionAppName_Public_UAT)
+      functionAppName_Public_PRD: $(functionAppName_Public_PRD)
+      AppInsightsName_DEV: $(AppInsightsName_DEV)
+      AppInsightsName_SIT: $(AppInsightsName_SIT)
+      AppInsightsName_UAT: $(AppInsightsName_UAT)
+      AppInsightsName_PROD: $(AppInsightsName_PROD)
+      storageAccountName_DEV: $(storageAccountName_DEV)
+      storageAccountName_SIT: $(storageAccountName_SIT)
+      storageAccountName_UAT: $(storageAccountName_UAT)
+      storageAccountName_PROD: $(storageAccountName_PROD)
+      storageAccountName_DEV_P: $(storageAccountName_DEV_P)
+      storageAccountName_SIT_P: $(storageAccountName_SIT_P)
+      storageAccountName_UAT_P: $(storageAccountName_UAT_P)
+      storageAccountName_PROD_P: $(storageAccountName_PROD_P)
+      VARIABLE_GROUP_NAME_SCHEMA: "SchemaValidation_DEV"
+      VARIABLE_GROUP_NAME_DEV: "TESTING_LOYALTY_VARIABLES_DEV"
+      VARIABLE_GROUP_NAME_SIT: "TESTING_LOYALTY_VARIABLES_SIT"
+      VARIABLE_GROUP_NAME_UAT: "TESTING_LOYALTY_VARIABLES_UAT"
+      location: $(location)
+      resourceGroupName_DT5: $(resourceGroupName_DT5)
+      AppInsightsName_DT5: $(AppInsightsName_DT5)
+      appserviceplan_DT5: $(appserviceplan_DT5)
+      KeyvaultName_DT5: $(KeyvaultName_DT5)
+      storageAccountName_DT5: $(storageAccountName_DT5)
+      storageAccountName_P_DT5: $(storageAccountName_P_DT5)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)  
+      SLACK_API_TOKEN: $(SLACK_API_TOKEN)
+      SLACK_TITLE: $(SLACK_TITLE_LOYALTY)

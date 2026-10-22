@@ -1,0 +1,34 @@
+info:
+  name: Find
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: https://api.addressy.com/Capture/Interactive/Find/v1.20/json6.ws?Key={{gbKeyDefault}}&Countries=US&Text=124 59275
+  params:
+    - name: Key
+      value: "{{gbKeyDefault}}"
+      type: query
+    - name: container
+      value: us-lp|Ga1cJJoB1H6m_iwEaVOJ
+      type: query
+      disabled: true
+    - name: Countries
+      value: US
+      type: query
+    - name: Text
+      value: 124 59275
+      type: query
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: bru.setVar("addressId",res.body.Items[0].Id);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

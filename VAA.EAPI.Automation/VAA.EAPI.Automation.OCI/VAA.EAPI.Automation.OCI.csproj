@@ -1,0 +1,130 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VAA.EAPI.Automation.Book\VAA.EAPI.Automation.Book.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Automation.Core\VAA.EAPI.Automation.Core.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Automation.Core.UI\VAA.EAPI.Automation.Core.UI.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Automation.MyAccount\VAA.EAPI.Automation.MyAccount.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Automation.Search\VAA.EAPI.Automation.Search.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="VAA.EAPI.Infrastructure">
+      <HintPath>..\Assemblies\VAA.EAPI.Infrastructure.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="local.settings.local.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\CheckInGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\ConfirmBaggageGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\GenerateBoardingPassGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\GetBaggageDetailsGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\GetSecureFlightInfoGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\UpdateSecureFlightInfoGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\GetGenderDetails.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\GetNationalityDetails.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\GetPassportCountries.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\GetStatesOfUSA.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\GetTravelRequirementsGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\PaymentEligibilityCheckGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\RetrieveBoardingPassGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\SaveBaggageDetailsGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\SaveContactTracingGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\SaveEmergencyContactsGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\SaveEmergencyContactTravelRequirementsGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\SaveGovernmentFormTravelRequirementsGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\SavePassportGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\SavePassportTravelRequirementsGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\SaveSecondaryDocumentTravelRequirementsGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\SaveReturnDateGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\SelectPassengersGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\TravelRequirementsSaveContactTracingGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQL\TravelRequirementsSaveReturnDateGraphQLQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\Microservices\SaveContactTracing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\Microservices\SavePassportRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

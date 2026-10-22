@@ -1,0 +1,1294 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "type": "secureObject",
+      "defaultValue": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "",
+        "Site": "datadoghq.com",
+        "Environment": "",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "FunctionAppName": {
+      "type": "String"
+    },
+    "EnvironmentName": {
+      "type": "string"
+    },
+    "ServerFarmIdRg": {
+      "type": "string"
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "AzureWebJobsStorage": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_CONTENTSHARE": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": {
+      "type": "string"
+    },
+    /*"Appsetting:APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "type": "string"
+    },*/
+    "Appsetting:AuthenticationUrl": {
+      "type": "string"
+    },
+    "Appsetting:AuthorizationTokenType": {
+      "type": "string"
+    },
+    "AzureAd:ClientId": {
+      "type": "string"
+    },
+    "AzureAd:Instance": {
+      "type": "string"
+    },
+    "AzureAd:TenantId": {
+      "type": "string"
+    },
+    "AzureAd:TokenV1Issuer": {
+      "type": "string"
+    },
+    "AzureAdB2C:ClientId": {
+      "type": "string"
+    },
+    "AzureAdB2C:Instance": {
+      "type": "string"
+    },
+    "AzureAdB2C:TenantId": {
+      "type": "string"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "type": "string"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "type": "string"
+    },
+    "Appsetting:ClientId": {
+      "type": "string"
+    },
+    "Appsetting:ClientSecret": {
+      "type": "string"
+    },
+    "Appsetting:ReferenceDataMicroServiceDBKey": {
+      "type": "string"
+    },
+    "Appsetting:OTPGenerateTableName": {
+      "type": "string"
+    },
+    "Appsetting:RandomDigitMinValue": {
+      "type": "string"
+    },
+    "Appsetting:RandomDigitMaxValue": {
+      "type": "string"
+    },
+    "Appsetting:ContinuationTokenRandomDigitMinValue": {
+      "type": "string"
+    },
+    "Appsetting:ContinuationTokenRandomDigitMaxValue": {
+      "type": "string"
+    },
+    "Appsetting:OTPExpiryTimeLimit": {
+      "type": "string"
+    },
+    "Appsetting:OTPGenerationLimit": {
+      "type": "string"
+    },
+    "Appsetting:OTPEmailTemplate": {
+      "type": "string"
+    },
+    "Appsetting:OTPSignTemplate": {
+      "type": "string"
+    },
+    "Appsetting:EmailUpdateTemplate": {
+      "type": "string"
+    },
+    "Appsetting:CustomMemberStatusAttribute": {
+      "type": "string"
+    },
+    "Appsetting:CustomMemberTypeAttribute": {
+      "type": "string"
+    },
+    "Appsetting:CustomSecurityAnswer1Attribute": {
+      "type": "string"
+    },
+    "Appsetting:CustomSecurityAnswer2Attribute": {
+      "type": "string"
+    },
+    "Appsetting:CustomSecurityQuestion1Attribute": {
+      "type": "string"
+    },
+    "Appsetting:CustomSecurityQuestion2Attribute": {
+      "type": "string"
+    },
+    "Appsetting:CustomCustomerIdAttribute": {
+      "type": "string"
+    },
+    "Appsetting:AccountEnabled": {
+      "type": "string"
+    },
+    "Appsetting:OtherMails": {
+      "type": "string"
+    },
+    "Appsetting:DisplayName": {
+      "type": "string"
+    },
+    "Appsetting:GivenName": {
+      "type": "string"
+    },
+    "Appsetting:Identities": {
+      "type": "string"
+    },
+    "Appsetting:Surname": {
+      "type": "string"
+    },
+    "Appsetting:PasswordProfile": {
+      "type": "string"
+    },
+    "Appsetting:PasswordPolicies": {
+      "type": "string"
+    },
+    "Appsetting:SignInNames": {
+      "type": "string"
+    },
+    "Appsetting:ExtensionPrefix": {
+      "type": "string"
+    },
+    "Appsetting:IdentityEventHandlerTopicName": {
+      "type": "string"
+    },
+    "Appsetting:VredMarketingFeatureFlag": {
+      "type": "string"
+    },
+    "Appsetting:IdentityEventSubscriptionName": {
+      "type": "string"
+    },
+    "Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+      "type": "string"
+    },
+    "Appsetting:FUNCTIONS_WORKER_RUNTIME": {
+      "type": "string"
+    },
+    "Appsetting:GraphAPIUrl": {
+      "type": "string"
+    },
+    "Appsetting:GraphApiUrlVersion": {
+      "type": "string"
+    },
+    "Appsetting:GraphApiUrlProxyAddressVersion": {
+      "type": "string"
+    },
+    "Appsetting:SignInEmailAddress": {
+      "type": "string"
+    },
+    "Appsetting:SignInUserName": {
+      "type": "string"
+    },
+    "Appsetting:TenantId": {
+      "type": "string"
+    },
+    "Appsetting:version": {
+      "type": "string"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "type": "string"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "type": "string"
+    },
+    "Appsetting:Air4PnrCommonEndPoint": {
+      "type": "string"
+    },
+    "Appsetting:TicketingProcessV3EndPoint": {
+      "type": "string"
+    },
+    "Appsetting:KeyVaultUri": {
+      "type": "string"
+    },
+    "Appsetting:DeltaCertificateName": {
+      "type": "string"
+    },
+    "Appsetting:ApplicationId": {
+      "type": "string"
+    },
+    "Appsetting:RoleIndicator": {
+      "type": "string"
+    },
+    "Appsetting:SecurityId": {
+      "type": "string"
+    },
+    "Appsetting:TestLab": {
+      "type": "string"
+    },
+    "Appsetting:OptionNumberForDisplayRequest": {
+      "type": "string"
+    },
+    "Appsetting:ProvideResidualValue": {
+      "type": "string"
+    },
+    "Appsetting:TrustedSource": {
+      "type": "string"
+    },
+    "Appsetting:PoolType": {
+      "type": "string"
+    },
+    "Appsetting:AgentCityCode": {
+      "type": "string"
+    },
+    "Appsetting:IdentityAcquireToken:Secret": {
+      "type": "string"
+    },
+    "Appsetting:IdentityAcquireToken:Issuer": {
+      "type": "string"
+    },
+    "Appsetting:IdentityAcquireToken:Audience": {
+      "type": "string"
+    },
+    "Appsetting:IdentityAcquireToken:KeyId": {
+      "type": "string"
+    },
+    "Appsetting:IdentityAcquireToken:ExpiryMinutes": {
+      "type": "string"
+    },
+    "Appsetting:ActivationLink": {
+      "type": "string"
+    },
+    "Appsetting:CustomerSyncTopicName": {
+      "type": "string"
+    },
+    "Appsetting:EmailTriggerTopicName": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_RUN_FROM_PACKAGE": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_LOAD_USER_PROFILE": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "type": "string"
+    },
+    "IPRestriction": {
+      "type": "string"
+    },
+    "skuName": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "vaultName": {
+      "type": "string"
+    },
+    "ResourceGroupSubscriptionId": {
+      "type": "string"
+    },
+    "SlotName": {
+      "type": "string"
+    },
+    "actionGroupsServiceNow": {
+      "type": "string"
+    },
+    "actionGroupsEAPISupport": {
+      "type": "string"
+    },
+    "emailAddressServiceNow": {
+      "type": "string"
+    },
+    "emailAddressEAPISupport": {
+      "type": "string"
+    },
+    "Tags": {
+      "type": "Object"
+    },
+    "Appsetting:AllowTestEmail": {
+      "type": "string"
+    },
+    "Appsetting:TestEmailId": {
+      "type": "string"
+    },
+    "Appsetting:ActivationTokenExpirationLimit": {
+      "type": "string"
+    },
+    "Appsetting:RetryCounter": {
+      "type": "string"
+    },
+    "Appsetting:OTPDigitLength": {
+      "type": "string"
+    },
+    "Appsetting:OtpEntraDigitLength": {
+      "type": "string"
+    },
+    "Appsetting:MyAccountActivationTokenIssuer": {
+      "type": "string"
+    },
+    "Appsetting:MailNickName": {
+      "type": "string"
+    },
+    "Appsetting:Mail": {
+      "type": "string"
+    },
+    "Appsetting:B2CDomain": {
+      "type": "string"
+    },
+    "Appsetting:UserPrincipalName": {
+      "type": "string"
+    },
+    "Appsetting:OtpExpiryTimeSpan": {
+      "type": "string"
+    },
+    "Appsetting:OtpLimit": {
+      "type": "string"
+    },
+    "Appsetting:OTPCreation": {
+      "type": "string"
+    },
+    "Appsetting:VaAccEmailB2CLink": {
+      "type": "string"
+    },
+    "Appsetting:VaAccEmailTemplate": {
+      "type": "string"
+    },
+    //swagger settings
+    "AppsettingsOpenApi__Description": {
+      "type": "string"
+    },
+    "AppsettingsOpenApi__DocTitle": {
+      "type": "string"
+    },
+    "AppsettingsOpenApi__DocVersion": {
+      "type": "string"
+    },
+    "AppsettingsOpenApi__Version": {
+      "type": "string"
+    },
+    "AppsettingsOpenApi__ForceHttps": {
+      "type": "string"
+    },
+    "AppsettingsOpenApi__ForceHttp": {
+      "type": "string"
+    },
+    "AppsettingsOpenApi__TokenUrl": {
+      "type": "string"
+    },
+    "AppsettingsOpenApi__Scope": {
+      "type": "string"
+    },
+    "Appsetting:WelcomeEmailTemplate": {
+      "type": "string"
+    },
+    "Appsetting:EntraAPISubDomain": {
+      "type": "string"
+    },
+    "Appsetting:EntraAPIurlDomain": {
+      "type": "string"
+    },
+    "Appsetting:EntraClientId": {
+      "type": "string"
+    },
+    "Appsetting:EntraApiScope": {
+      "type": "string"
+    },
+    "Appsetting:EntraLogging": {
+      "type": "string"
+    },
+    "Appsetting:FlyingClubTokenIssuer": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "Appsetting:FlyingClubTokenAuthorizedParty": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "Appsetting:FlyingClubTokenAudience": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "Appsetting:FlyingClubTokenClaimType": {
+      "type": "string",
+      "defaultValue": "flying_club_account_number"
+    },
+    "Appsetting:FlyingClubTokenLifetimeSeconds": {
+      "type": "string",
+      "defaultValue": "300"
+    },
+    "Appsetting:FlyingClubTokenKeyVaultKeyId": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "Appsetting:RedisConnectionString": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "Appsetting:AccountLinkingTransactionClientId": { "type": "string" },
+    "Appsetting:AccountLinkingTransactionResource": { "type": "string" },
+    "Appsetting:AccountLinkingTrustedCallerApplicationId": { "type": "string", "defaultValue": "" },
+    "Appsetting:EntraTenantId": {
+      "type": "string"
+    },
+    "Appsetting:ValidationJwtKey": {
+      "type": "string"
+    },
+    "Appsetting:OtpTokenExpiryTime": {
+      "type": "string"
+    },
+    "UpdateAzureB2CProfileSubscriber": {
+      "type": "string"
+    },
+    "UpdateAzureB2CProfileTopicName": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "ResourceLocation": "[resourceGroup().location]",
+    "SiteResourceID": "[resourceId('Microsoft.Web/Sites', parameters('FunctionAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "microsoft.insights/components",
+      "kind": "web",
+      "name": "[parameters('AppInsightsName')]",
+      "apiVersion": "2020-02-02",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [ "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]" ],
+      "tags": "[parameters('Tags')]",
+      "properties": {
+        "applicationId": "[variables('SiteResourceID')]",
+        "Application_Type": "web"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[variables('ResourceLocation')]",
+      "sku": {
+        "name": "[parameters('skuName')]",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+
+        "allowBlobPublicAccess": false
+
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "kind": "functionapp",
+      "name": "[parameters('FunctionAppName')]",
+      "apiVersion": "2021-03-01",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [ "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]" ],
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]"
+      },
+      "tags": "[parameters('Tags')]"
+    },
+    {
+      "type": "Microsoft.Web/sites/slots",
+      "kind": "functionapp",
+      "name": "[concat(parameters('FunctionAppName'), '/',parameters('SlotName'))]",
+      "apiVersion": "2021-03-01",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [ "[variables('SiteResourceID')]" ],
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('FunctionAppName'), '-',parameters('SlotName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('FunctionAppName'), '-',parameters('SlotName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "alwaysOn": true,
+          "appSettings": [
+            {
+              "name": "LoggingProvider",
+              "value": "[parameters('DataDog').LoggingProvider]"
+            },
+            {
+              "name": "DatadogLogsEndpoint",
+              "value": "[parameters('DataDog').LogsEndpoint]"
+            },
+            {
+              "name": "DatadogApiKey",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_API_KEY",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_SITE",
+              "value": "[parameters('DataDog').Site]"
+            },
+            {
+              "name": "DD_SERVICE",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "DD_ENV",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DD_VERSION",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DD_TRACE_ENABLED",
+              "value": "[string(parameters('DataDog').TraceEnabled)]"
+            },
+            {
+              "name": "DD_RUNTIME_METRICS_ENABLED",
+              "value": "[string(parameters('DataDog').RuntimeMetricsEnabled)]"
+            },
+            {
+              "name": "DatadogService",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "environment",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DatadogSource",
+              "value": "[parameters('DataDog').Source]"
+            },
+            {
+              "name": "DatadogVersion",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DatadogTags",
+              "value": "[concat(parameters('DataDog').Tags, if(empty(parameters('DataDog').Tags), '', ','), 'cloud_provider:azure,subscription_id:', subscription().subscriptionId, ',resource_group:', resourceGroup().name, ',name:', parameters('FunctionAppName'), '/', parameters('SlotName'), ',type:microsoft.web/sites/slots,resource_id:', resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName')))]"
+            },
+            {
+              "name": "DatadogBaggageAllowList",
+              "value": "[parameters('DataDog').BaggageAllowList]"
+            },
+            {
+              "name": "DatadogMinimumLogLevel",
+              "value": "[parameters('DataDog').MinimumLogLevel]"
+            },
+            {
+              "name": "DatadogQueueCapacity",
+              "value": "[string(parameters('DataDog').QueueCapacity)]"
+            },
+            {
+              "name": "DatadogBatchSize",
+              "value": "[string(parameters('DataDog').BatchSize)]"
+            },
+            {
+              "name": "DatadogFlushIntervalMilliseconds",
+              "value": "[string(parameters('DataDog').FlushIntervalMilliseconds)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "[parameters('Appsetting:FUNCTIONS_EXTENSION_VERSION')]"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet-isolated"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[parameters('Appsetting:WEBSITE_CONTENTSHARE')]"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('AppInsightsName')), '2014-04-01').InstrumentationKey]"
+            },
+            {
+              "name": "AuthenticationUrl",
+              "value": "[parameters('Appsetting:AuthenticationUrl')]"
+            },
+            {
+              "name": "AuthorizationTokenType",
+              "value": "[parameters('Appsetting:AuthorizationTokenType')]"
+            },
+            {
+              "name": "AzureAd:ClientId",
+              "value": "[parameters('AzureAd:ClientId')]"
+            },
+            {
+              "name": "AzureAd:Instance",
+              "value": "[parameters('AzureAd:Instance')]"
+            },
+            {
+              "name": "AzureAd:TenantId",
+              "value": "[parameters('AzureAd:TenantId')]"
+            },
+            {
+              "name": "AzureAd:TokenV1Issuer",
+              "value": "[parameters('AzureAd:TokenV1Issuer')]"
+            },
+            {
+              "name": "AzureAdB2C:ClientId",
+              "value": "[parameters('AzureAdB2C:ClientId')]"
+            },
+            {
+              "name": "AzureAdB2C:Instance",
+              "value": "[parameters('AzureAdB2C:Instance')]"
+            },
+            {
+              "name": "AzureAdB2C:SignUpSignInPolicyId",
+              "value": "[parameters('AzureAdB2C:SignUpSignInPolicyId')]"
+            },
+            {
+              "name": "AzureAdB2C:TenantId",
+              "value": "[parameters('AzureAdB2C:TenantId')]"
+            },
+            {
+              "name": "AzureAdB2C:TokenV1Issuer",
+              "value": "[parameters('AzureAdB2C:TokenV1Issuer')]"
+            },
+            {
+              "name": "ClientId",
+              "value": "[parameters('Appsetting:ClientId')]"
+            },
+            {
+              "name": "ClientSecret",
+              "value": "[parameters('Appsetting:ClientSecret')]"
+            },
+            {
+              "name": "ReferenceDataMicroServiceDBKey",
+              "value": "[parameters('Appsetting:ReferenceDataMicroServiceDBKey')]"
+            },
+            {
+              "name": "OTPGenerateTableName",
+              "value": "[parameters('Appsetting:OTPGenerateTableName')]"
+            },
+            {
+              "name": "RandomDigitMinValue",
+              "value": "[parameters('Appsetting:RandomDigitMinValue')]"
+            },
+            {
+              "name": "RandomDigitMaxValue",
+              "value": "[parameters('Appsetting:RandomDigitMaxValue')]"
+            },
+            {
+              "name": "ContinuationTokenRandomDigitMinValue",
+              "value": "[parameters('Appsetting:ContinuationTokenRandomDigitMinValue')]"
+            },
+            {
+              "name": "ContinuationTokenRandomDigitMaxValue",
+              "value": "[parameters('Appsetting:ContinuationTokenRandomDigitMaxValue')]"
+            },
+            {
+              "name": "OTPGenerationLimit",
+              "value": "[parameters('Appsetting:OTPGenerationLimit')]"
+            },
+            {
+              "name": "OTPEmailTemplate",
+              "value": "[parameters('Appsetting:OTPEmailTemplate')]"
+            },
+            {
+              "name": "OTPSignTemplate",
+              "value": "[parameters('Appsetting:OTPSignTemplate')]"
+            },
+            {
+              "name": "EmailUpdateTemplate",
+              "value": "[parameters('Appsetting:EmailUpdateTemplate')]"
+            },
+            {
+              "name": "OTPExpiryTimeLimit",
+              "value": "[parameters('Appsetting:OTPExpiryTimeLimit')]"
+            },
+            {
+              "name": "CustomMemberStatusAttribute",
+              "value": "[parameters('Appsetting:CustomMemberStatusAttribute')]"
+            },
+            {
+              "name": "CustomMemberTypeAttribute",
+              "value": "[parameters('Appsetting:CustomMemberTypeAttribute')]"
+            },
+            {
+              "name": "CustomSecurityAnswer1Attribute",
+              "value": "[parameters('Appsetting:CustomSecurityAnswer1Attribute')]"
+            },
+            {
+              "name": "CustomSecurityAnswer2Attribute",
+              "value": "[parameters('Appsetting:CustomSecurityAnswer2Attribute')]"
+            },
+            {
+              "name": "CustomSecurityQuestion1Attribute",
+              "value": "[parameters('Appsetting:CustomSecurityQuestion1Attribute')]"
+            },
+            {
+              "name": "CustomSecurityQuestion2Attribute",
+              "value": "[parameters('Appsetting:CustomSecurityQuestion2Attribute')]"
+            },
+            {
+              "name": "CustomCustomerIdAttribute",
+              "value": "[parameters('Appsetting:CustomCustomerIdAttribute')]"
+            },
+            {
+              "name": "AccountEnabled",
+              "value": "[parameters('Appsetting:AccountEnabled')]"
+            },
+            {
+              "name": "SignInNames",
+              "value": "[parameters('Appsetting:SignInNames')]"
+            },
+            {
+              "name": "PasswordProfile",
+              "value": "[parameters('Appsetting:PasswordProfile')]"
+            },
+            {
+              "name": "PasswordPolicies",
+              "value": "[parameters('Appsetting:PasswordPolicies')]"
+            },
+            {
+              "name": "GivenName",
+              "value": "[parameters('Appsetting:GivenName')]"
+            },
+            {
+              "name": "Identities",
+              "value": "[parameters('Appsetting:Identities')]"
+            },
+            {
+              "name": "Surname",
+              "value": "[parameters('Appsetting:Surname')]"
+            },
+            {
+              "name": "DisplayName",
+              "value": "[parameters('Appsetting:DisplayName')]"
+            },
+            {
+              "name": "OtherMails",
+              "value": "[parameters('Appsetting:OtherMails')]"
+            },
+            {
+              "name": "ExtensionPrefix",
+              "value": "[parameters('Appsetting:ExtensionPrefix')]"
+            },
+            {
+              "name": "IdentityEventHandlerTopicName",
+              "value": "[parameters('Appsetting:IdentityEventHandlerTopicName')]"
+            },
+            {
+              "name": "VredMarketingFeatureFlag",
+              "value": "[parameters('Appsetting:VredMarketingFeatureFlag')]"
+            },
+            {
+              "name": "IdentityEventSubscriptionName",
+              "value": "[parameters('Appsetting:IdentityEventSubscriptionName')]"
+            },
+            {
+              "name": "GraphAPIUrl",
+              "value": "[parameters('Appsetting:GraphAPIUrl')]"
+            },
+            {
+              "name": "GraphApiUrlVersion",
+              "value": "[parameters('Appsetting:GraphApiUrlVersion')]"
+            },
+            {
+              "name": "GraphApiUrlProxyAddressVersion",
+              "value": "[parameters('Appsetting:GraphApiUrlProxyAddressVersion')]"
+            },
+            {
+              "name": "SignInEmailAddress",
+              "value": "[parameters('Appsetting:SignInEmailAddress')]"
+            },
+            {
+              "name": "SignInUserName",
+              "value": "[parameters('Appsetting:SignInUserName')]"
+            },
+            {
+              "name": "TenantId",
+              "value": "[parameters('Appsetting:TenantId')]"
+            },
+            {
+              "name": "version",
+              "value": "[parameters('Appsetting:version')]"
+            },
+            {
+              "name": "ServiceBusConnectionString",
+              "value": "[parameters('Appsetting:ServiceBusConnectionString')]"
+            },
+            {
+              "name": "ServiceBusTopicName",
+              "value": "[parameters('Appsetting:ServiceBusTopicName')]"
+            },
+            {
+              "name": "Air4PnrCommonEndPoint",
+              "value": "[parameters('Appsetting:Air4PnrCommonEndPoint')]"
+            },
+            {
+              "name": "TicketingProcessV3EndPoint",
+              "value": "[parameters('Appsetting:TicketingProcessV3EndPoint')]"
+            },
+            {
+              "name": "KeyVaultUri",
+              "value": "[parameters('Appsetting:KeyVaultUri')]"
+            },
+            {
+              "name": "DeltaCertificateName",
+              "value": "[parameters('Appsetting:DeltaCertificateName')]"
+            },
+            {
+              "name": "ApplicationId",
+              "value": "[parameters('Appsetting:ApplicationId')]"
+            },
+            {
+              "name": "RoleIndicator",
+              "value": "[parameters('Appsetting:RoleIndicator')]"
+            },
+            {
+              "name": "SecurityId",
+              "value": "[parameters('Appsetting:SecurityId')]"
+            },
+            {
+              "name": "TestLab",
+              "value": "[parameters('Appsetting:TestLab')]"
+            },
+            {
+              "name": "OptionNumberForDisplayRequest",
+              "value": "[parameters('Appsetting:OptionNumberForDisplayRequest')]"
+            },
+            {
+              "name": "ProvideResidualValue",
+              "value": "[parameters('Appsetting:ProvideResidualValue')]"
+            },
+            {
+              "name": "TrustedSource",
+              "value": "[parameters('Appsetting:TrustedSource')]"
+            },
+            {
+              "name": "PoolType",
+              "value": "[parameters('Appsetting:PoolType')]"
+            },
+            {
+              "name": "AgentCityCode",
+              "value": "[parameters('Appsetting:AgentCityCode')]"
+            },
+            {
+              "name": "IdentityAcquireToken:Secret",
+              "value": "[parameters('Appsetting:IdentityAcquireToken:Secret')]"
+            },
+            {
+              "name": "IdentityAcquireToken:Issuer",
+              "value": "[parameters('Appsetting:IdentityAcquireToken:Issuer')]"
+            },
+            {
+              "name": "IdentityAcquireToken:Audience",
+              "value": "[parameters('Appsetting:IdentityAcquireToken:Audience')]"
+            },
+            {
+              "name": "IdentityAcquireToken:KeyId",
+              "value": "[parameters('Appsetting:IdentityAcquireToken:KeyId')]"
+            },
+            {
+              "name": "IdentityAcquireToken:ExpiryMinutes",
+              "value": "[parameters('Appsetting:IdentityAcquireToken:ExpiryMinutes')]"
+            },
+            {
+              "name": "ActivationLink",
+              "value": "[parameters('Appsetting:ActivationLink')]"
+            },
+            {
+              "name": "CustomerSyncTopicName",
+              "value": "[parameters('Appsetting:CustomerSyncTopicName')]"
+            },
+            {
+              "name": "EmailTriggerTopicName",
+              "value": "[parameters('Appsetting:EmailTriggerTopicName')]"
+            },
+            {
+              "name": "MicroServiceDBKey",
+              "value": "[parameters('Appsetting:MicroServiceDBKey')]"
+            },
+            {
+              "name": "MicroServiceEventStoreTableName",
+              "value": "[parameters('Appsetting:MicroServiceEventStoreTableName')]"
+            },
+            {
+              "name": "AllowTestEmail",
+              "value": "[parameters('Appsetting:AllowTestEmail')]"
+            },
+            {
+              "name": "TestEmailId",
+              "value": "[parameters('Appsetting:TestEmailId')]"
+            },
+            {
+              "name": "ActivationTokenExpirationLimit",
+              "value": "[parameters('Appsetting:ActivationTokenExpirationLimit')]"
+            },
+            {
+              "name": "RetryCounter",
+              "value": "[parameters('Appsetting:RetryCounter')]"
+            },
+            {
+              "name": "OTPDigitLength",
+              "value": "[parameters('Appsetting:OTPDigitLength')]"
+            },
+            {
+              "name": "OtpEntraDigitLength",
+              "value": "[parameters('Appsetting:OtpEntraDigitLength')]"
+            },
+            {
+              "name": "MyAccountActivationTokenIssuer",
+              "value": "[parameters('Appsetting:MyAccountActivationTokenIssuer')]"
+            },
+            {
+              "name": "IdentityActivationTokenIssuer",
+              "value": "[parameters('Appsetting:MyAccountActivationTokenIssuer')]"
+            },
+            {
+              "name": "WEBSITE_DNS_ALT_SERVER",
+              "value": "[parameters('Appsetting:WEBSITE_DNS_ALT_SERVER')]"
+            },
+            {
+              "name": "WEBSITE_DNS_SERVER",
+              "value": "[parameters('Appsetting:WEBSITE_DNS_SERVER')]"
+            },
+            {
+              "name": "WEBSITE_LOAD_USER_PROFILE",
+              "value": "[parameters('Appsetting:WEBSITE_LOAD_USER_PROFILE')]"
+            },
+            {
+              "name": "WEBSITE_VNET_ROUTE_ALL",
+              "value": "[parameters('Appsetting:WEBSITE_VNET_ROUTE_ALL')]"
+            },
+            {
+              "name": "Mail",
+              "value": "[parameters('Appsetting:Mail')]"
+            },
+            {
+              "name": "MailNickName",
+              "value": "[parameters('Appsetting:MailNickName')]"
+            },
+            {
+              "name": "B2CDomain",
+              "value": "[parameters('Appsetting:B2CDomain')]"
+            },
+            {
+              "name": "UserPrincipalName",
+              "value": "[parameters('Appsetting:UserPrincipalName')]"
+            },
+            {
+              "name": "OtpExpiryTimeSpan",
+              "value": "[parameters('Appsetting:OtpExpiryTimeSpan')]"
+            },
+            {
+              "name": "OtpLimit",
+              "value": "[parameters('Appsetting:OtpLimit')]"
+            },
+            {
+              "name": "OTPCreation",
+              "value": "[parameters('Appsetting:OTPCreation')]"
+            },
+            {
+              "name": "VaAccEmailB2CLink",
+              "value": "[parameters('Appsetting:VaAccEmailB2CLink')]"
+            },
+            {
+              "name": "VaAccEmailTemplate",
+              "value": "[parameters('Appsetting:VaAccEmailTemplate')]"
+            },
+
+            //swagger settings
+            {
+              "name": "OpenApi__Description",
+              "value": "[parameters('AppsettingsOpenApi__Description')]"
+            },
+            {
+              "name": "OpenApi__DocTitle",
+              "value": "[parameters('AppsettingsOpenApi__DocTitle')]"
+            },
+            {
+              "name": "OpenApi__DocVersion",
+              "value": "[parameters('AppsettingsOpenApi__DocVersion')]"
+            },
+            {
+              "name": "OpenApi__ForceHttps",
+              "value": "[parameters('AppsettingsOpenApi__ForceHttps')]"
+            },
+            {
+              "name": "OpenApi__ForceHttp",
+              "value": "[parameters('AppsettingsOpenApi__ForceHttp')]"
+            },
+            {
+              "name": "OpenApi__TokenUrl",
+              "value": "[parameters('AppsettingsOpenApi__TokenUrl')]"
+            },
+            {
+              "name": "OpenApi__Scope",
+              "value": "[parameters('AppsettingsOpenApi__Scope')]"
+            },
+            {
+              "name": "WelcomeEmailTemplate",
+              "value": "[parameters('Appsetting:WelcomeEmailTemplate')]"
+            },
+            {
+              "name": "EntraAPISubDomain",
+              "value": "[parameters('Appsetting:EntraAPISubDomain')]"
+            },
+            {
+              "name": "EntraAPIurlDomain",
+              "value": "[parameters('Appsetting:EntraAPIurlDomain')]"
+            },
+            {
+              "name": "EntraClientId",
+              "value": "[parameters('Appsetting:EntraClientId')]"
+            },
+            {
+              "name": "EntraApiScope",
+              "value": "[parameters('Appsetting:EntraApiScope')]"
+            },
+            {
+              "name": "EntraLogging",
+              "value": "[parameters('Appsetting:EntraLogging')]"
+            },
+            {
+              "name": "FlyingClubToken:Issuer",
+              "value": "[parameters('Appsetting:FlyingClubTokenIssuer')]"
+            },
+            {
+              "name": "FlyingClubToken:AuthorizedParty",
+              "value": "[parameters('Appsetting:FlyingClubTokenAuthorizedParty')]"
+            },
+            {
+              "name": "FlyingClubToken:Audience",
+              "value": "[parameters('Appsetting:FlyingClubTokenAudience')]"
+            },
+            {
+              "name": "FlyingClubToken:FlyingClubClaimType",
+              "value": "[parameters('Appsetting:FlyingClubTokenClaimType')]"
+            },
+            {
+              "name": "FlyingClubToken:LifetimeSeconds",
+              "value": "[parameters('Appsetting:FlyingClubTokenLifetimeSeconds')]"
+            },
+            {
+              "name": "FlyingClubToken:KeyVaultKeyId",
+              "value": "[parameters('Appsetting:FlyingClubTokenKeyVaultKeyId')]"
+            },
+            {
+              "name": "RedisConnectionString",
+              "value": "[parameters('Appsetting:RedisConnectionString')]"
+            },
+            {
+              "name": "AccountLinking:TransactionAssertion:ClientId",
+              "value": "[parameters('Appsetting:AccountLinkingTransactionClientId')]"
+            },
+            {
+              "name": "AccountLinking:TransactionAssertion:Resource",
+              "value": "[parameters('Appsetting:AccountLinkingTransactionResource')]"
+            },
+            {
+              "name": "AccountLinking:TrustedCallerApplicationId",
+              "value": "[parameters('Appsetting:AccountLinkingTrustedCallerApplicationId')]"
+            },
+            {
+              "name": "EntraTenantId",
+              "value": "[parameters('Appsetting:EntraTenantId')]"
+            },
+            {
+              "name": "ValidationJwtKey",
+              "value": "[parameters('Appsetting:ValidationJwtKey')]"
+            },
+            {
+              "name": "OtpTokenExpiryTime",
+              "value": "[parameters('Appsetting:OtpTokenExpiryTime')]"
+            },
+            {
+              "name": "UpdateAzureB2CProfileSubscriber",
+              "value": "[parameters('UpdateAzureB2CProfileSubscriber')]"
+            },
+            {
+              "name": "UpdateAzureB2CProfileTopicName",
+              "value": "[parameters('UpdateAzureB2CProfileTopicName')]"
+            }
+          ]
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None" //,
+        //"virtualNetworkSubnetId": "[concat('/subscriptions/', parameters('ResourceGroupSubscriptionId'), '/resourceGroups/', parameters('vNetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vNetName'), '/subnets/', parameters('vNetSubnetName'))]"
+      },
+      "tags": "[parameters('Tags')]"
+    },
+    {
+      "type": "Microsoft.Web/sites/slots/config",
+      "apiVersion": "2021-03-01",
+      "name": "[concat(parameters('FunctionAppName'), '/',parameters('SlotName'),'/web')]",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName'))]",
+        "[variables('SiteResourceID')]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$[parameters('FunctionAppName')]__[parameters('SlotName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": false,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": true
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "[parameters('IPRestriction')]",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow_APIM",
+            "description": "Allow APIM access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "PreWarmedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/slots/hostNameBindings",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(parameters('FunctionAppName'), '/', parameters('SlotName'),'/', parameters('FunctionAppName'), '-',parameters('SlotName'),'.azurewebsites.net')]",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName'))]",
+        "[variables('SiteResourceID')]"
+      ],
+      "properties": {
+        "siteName": "[concat(parameters('FunctionAppName'),'(',parameters('SlotName'),')')]",
+        "hostNameType": "Verified"
+      }
+    },
+
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[concat(parameters('vaultName'), '/add')]",
+      "apiVersion": "2019-09-01",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[reference(resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName')), '2018-02-01','Full').identity.tenantId]",
+            "objectId": "[reference(resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName')), '2018-02-01','Full').identity.principalId]",
+            "permissions": {
+              "keys": [ "Get", "Sign", "Verify" ],
+              "secrets": [ "Get" ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

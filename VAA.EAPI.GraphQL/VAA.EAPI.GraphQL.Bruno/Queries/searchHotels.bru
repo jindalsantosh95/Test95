@@ -1,0 +1,36 @@
+meta {
+  name: searchHotels
+  type: graphql
+  seq: 48
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query searchHotels($location: String!, $depDate: DateTime!, $duration: Int!, $adults: Int!, $where: HolidaySearchResponseFilterInput, $order: [HolidaySearchResponseSortInput!]) {
+    searchHotels(location: $location, depDate: $depDate, duration: $duration, adults: $adults, where: $where, order: $order) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "location": "",
+    "depDate": "",
+    "duration": 0,
+    "adults": 0,
+    "where": {},
+    "order": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

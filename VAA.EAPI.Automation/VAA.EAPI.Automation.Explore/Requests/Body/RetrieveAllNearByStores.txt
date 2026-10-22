@@ -1,0 +1,66 @@
+query RetrieveAllNearByStores($searchParameter: String) {
+  RetrieveAllNearByStores(searchParameter:  $searchParameter) {
+    stores {
+      storeId
+      name
+      locationLabel
+      addressLine1
+      addressLine2
+      city
+      county
+      countryCode
+      postalCode
+      storeWorkHours {
+        day
+        openingTime
+        closingTime
+      }
+      latitude
+      longitude
+      featuredImage {
+        src
+        alt
+      }
+      cardImages {
+        src
+        alt
+      }
+      distance
+      drivingTime
+      isNew
+      isClosest
+      fullDetails {
+        details {
+          phone
+          emailAddress
+          address {
+            addressLine1
+            addressLine2
+            city
+            county
+            countryCode
+            postalCode
+          }
+        }
+        openingHours {
+          isOpenNow
+          weeklyHours {
+            day
+            hours
+          }
+          specialHours {
+            label
+            date
+          }
+        }
+        services {
+          inStoreFacilities
+          accessibilityFeatures {
+            name
+            value
+          }
+        }
+      }
+    }
+  }
+}

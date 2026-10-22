@@ -1,0 +1,179 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*  
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Paxops*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account.bruno
+
+variables: 
+  - group: APIM  
+  - group: APIM_IP
+  - group: Common_Variables
+  - group: Graphql_Myaccount
+  - group: performance_variables
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'
+  - name: testRepoPath_SIT
+    value: ''   
+  - name: testRepoPath_UAT
+    value: ''      
+  - name: rootPath
+    value: 'VAA.EAPI.GraphQL'
+  - name: subRootPath
+    value: 'VAA.EAPI'    
+  - name: applicationName
+    value: 'GraphQL'
+  - name: functionAppName_Secure_DT5
+    value: 'AVADEUNAFNGRAPHQLMYACCOUNTDT5'
+  - name: functionAppName_Secure_DEV
+    value: 'AVADEUNAFNGRAPHQLMYACCOUNT'
+  - name: functionAppName_Secure_SIT
+    value: 'AVATEUNAFNGRAPHQLMYACCOUNT'
+  - name: functionAppName_Secure_UAT
+    value: 'AVASEUNAFNGRAPHQLMYACCOUNT'
+  - name: functionAppName_Secure_PRD
+    value: 'AVAPEUNAFNGRAPHQLMYACCOUNT'  
+  - name: functionAppName_Public_DT5
+    value: 'AVADEUNAFNGRAPHQLMYACCOUNTPDT5'  
+  - name: functionAppName_Public_DEV
+    value: 'AVADEUNAFNGRAPHQLMYACCOUNTP'
+  - name: functionAppName_Public_SIT
+    value: 'AVATEUNAFNGRAPHQLMYACCOUNTP'
+  - name: functionAppName_Public_UAT
+    value: 'AVASEUNAFNGRAPHQLMYACCOUNTP'
+  - name: functionAppName_Public_PRD
+    value: 'AVAPEUNAFNGRAPHQLMYACCOUNTP'      
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/myaccount/build_graphqlmyaccount.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      rootPath: $(rootPath)
+      location: $(location)
+      subRootPath: $(subRootPath)
+      applicationName: $(applicationName)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      resourceGroupName_DEV: $(resourceGroupNameGraphql_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameGraphql_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameGraphql_UAT)
+      resourceGroupName_PROD: $(resourceGroupNameGraphql_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+  # CD (Deployment) Pipeline
+  - template: functions/myaccount/release_graphqlsplit_myaccount_slot.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)   
+      functionAppName_Secure_DT5: $(functionAppName_Secure_DT5)     
+      functionAppName_Secure_DEV: $(functionAppName_Secure_DEV)
+      functionAppName_Secure_SIT: $(functionAppName_Secure_SIT)
+      functionAppName_Secure_UAT: $(functionAppName_Secure_UAT)
+      functionAppName_Secure_PRD: $(functionAppName_Secure_PRD)
+      functionAppName_Public_DT5: $(functionAppName_Public_DT5)
+      functionAppName_Public_DEV: $(functionAppName_Public_DEV)
+      functionAppName_Public_SIT: $(functionAppName_Public_SIT)
+      functionAppName_Public_UAT: $(functionAppName_Public_UAT)
+      functionAppName_Public_PRD: $(functionAppName_Public_PRD)
+      AppInsightsName_DEV: $(AppInsightsName_DEV)
+      AppInsightsName_SIT: $(AppInsightsName_SIT)
+      AppInsightsName_UAT: $(AppInsightsName_UAT)
+      AppInsightsName_PROD: $(AppInsightsName_PROD)
+      storageAccountName_DEV: $(storageAccountName_DEV)
+      storageAccountName_SIT: $(storageAccountName_SIT)
+      storageAccountName_UAT: $(storageAccountName_UAT)
+      storageAccountName_PROD: $(storageAccountName_PROD)
+      storageAccountName_DEV_P: $(storageAccountName_DEV_P)
+      storageAccountName_SIT_P: $(storageAccountName_SIT_P)
+      storageAccountName_UAT_P: $(storageAccountName_UAT_P)
+      storageAccountName_PROD_P: $(storageAccountName_PROD_P)
+      VARIABLE_GROUP_NAME_SCHEMA: "SchemaValidation_DEV"
+      VARIABLE_GROUP_NAME_DEV: "TESTING_MYACCOUNT_VARIABLES_DEV"
+      VARIABLE_GROUP_NAME_SIT: "TESTING_MYACCOUNT_VARIABLES_SIT"
+      VARIABLE_GROUP_NAME_UAT: "TESTING_MYACCOUNT_VARIABLES_UAT"
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      location: $(location)
+      resourceGroupName_DT5: $(resourceGroupName_DT5)
+      AppInsightsName_DT5: $(AppInsightsName_DT5)
+      appserviceplan_DT5: $(appserviceplan_DT5)
+      KeyvaultName_DT5: $(KeyvaultName_DT5)
+      storageAccountName_DT5: $(storageAccountName_DT5)
+      storageAccountName_P_DT5: $(storageAccountName_P_DT5)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)  
+      SLACK_API_TOKEN: $(SLACK_API_TOKEN)
+      SLACK_TITLE: $(SLACK_TITLE_MYACCOUNT)
+      #Performance Variables
+      functionAppName_PRFM: $(Myacc_functionAppName_PRFM)
+      functionAppName_sec_PRFM: $(MyaccSec_functionAppName_PRFM)
+      appInsightsName_PRFM: $(Myacc_applicationInsigts_PRFM)
+      appInsightsName_sec_PRFM: $(Myaccsec_applicationInsigts_PRFM)
+      storageAccName_PRFM: $(Myacc_storageacc_PRFM)
+      storageAccName_sec_PRFM: $(Myaccsec_storageacc_PRFM)
+      keyvault_PRFM: $(Keyvault_old_PRFM)
+      resourceGroupName_PRFM: $(Digital_Old_Rg)
+      PaxopsMs_URL: $(PaxopsMs_URL)
+      TripsMs_URL: $(TripsMs_URL)
+      TripsMs_OcpSubID: $(TripsMs_OcpSubID)
+      BookingIdJwtKey: $(BookingIdJwtKey)
+      PaxopsMs_OcpSubID: $(PaxopsMs_OcpSubID)
+      CheckInIdJwtKey: $(CheckInIdJwtKey)
+  
+            

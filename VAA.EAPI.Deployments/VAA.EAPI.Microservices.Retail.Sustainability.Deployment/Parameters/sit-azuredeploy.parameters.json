@@ -1,0 +1,187 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sit",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "SIT"
+    },
+    "FunctionAppName": {
+      "value": "avateunafnsustainmicro"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-T-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVATEUNASPEAPIBRAND"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "AppInsightsName": {
+      "value": "avateunaisustainms"
+    },
+    "vaultName": {
+      "value": "AVATEUNKVEMS"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=07f9e23a-c7ed-4bdb-b4ac-3b017a988790;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "07f9e23a-c7ed-4bdb-b4ac-3b017a988790"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avateunstsustainms"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "KeyVaultUri": {
+      "value": "https://avateunkvems.vault.azure.net/"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    /*"AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNCRMMICROSERV-Config-StorageAccount/)"
+    },*/
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": " https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": " https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Sustainability Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to fetch Carbon footprint for a specific flight and cabin from Third party CHOOSE API."
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": " https://testresources.virginatlantic.com/sustainmicroservice/"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/avateunafnsustainmicro-config-clientid/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    //Third party settings
+
+    "Appsetting:AuthenticationUrl": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:ChoooseTenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Sustain-ChoooseTenantId/)"
+    },
+    "Appsetting:ChoooseClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/SustainMs-ChoooseClientId/)"
+    },
+    "Appsetting:ChoooseClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/SustainMs-ChoooseClientSecret/)"
+    },
+    "Appsetting:ChoooseClientScope": {
+      "value": "https://partner-test.api.chooose.today/.default"
+    },
+    "Appsetting:ChoooseUri": {
+      "value": "https://partner-test.api.chooose.today/v1/footprint/flights/?passengers={0}"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "SustainbilityAPI",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Sustainability API AFN",
+        "ApplicationUsageIdList": "avateunafnsustainmicro"
+      }
+    }
+  }
+}

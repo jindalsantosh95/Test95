@@ -1,0 +1,33 @@
+meta {
+  name: SaveReturnDate
+  type: graphql
+  seq: 32
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation SaveReturnDate($saveReturnDateRequest: SaveReturnDateRequestInput) {
+    SaveReturnDate(saveReturnDateRequest: $saveReturnDateRequest) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "saveReturnDateRequest": {
+      "noReturnDate": false
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,58 @@
+meta {
+  name: Enrol Virgin Account Customer
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{customer_base_url}}/VaEnrolment
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "customerDetails": {
+      "id": "{{customer_id}}",
+      "customerId": "{{customer_id}}",
+      "channelUserId": "{{customer_channel_user_id}}",
+      "firstName": "{{customer_first_name}}",
+      "lastName": "{{customer_last_name}}",
+      "gender": "F",
+      "title": "Ms",
+      "customerType": "VirginAccount",
+      "dateOfBirth": "{{customer_date_of_birth}}",
+      "contactDetails": {
+        "emailDetails": [
+          {
+            "emailId": "{{customer_email}}",
+            "usage": "Personal",
+            "preferredFlag": "Y"
+          }
+        ],
+        "phoneDetails": [
+          {
+            "phoneType": "Mobile",
+            "usage": "Personal",
+            "countryCode": "{{customer_phone_country_code}}",
+            "phoneNumber": "{{customer_phone_number}}",
+            "preferredFlag": "Y"
+          }
+        ]
+      },
+      "enrollmentChannel": "{{customer_enrolment_channel}}",
+      "mediaCode": "VAC",
+      "memberType": "Individual",
+      "testMember": true
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

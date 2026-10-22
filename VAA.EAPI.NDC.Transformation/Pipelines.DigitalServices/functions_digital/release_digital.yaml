@@ -1,0 +1,175 @@
+parameters:
+  agentPool: ''
+  agentPool_deployment: ''
+  agentPool_SANDBOX: ''
+  agentSpecification: ''
+  applicationName: ''
+  microserviceName: ''
+  apimurlname: ''
+  buildConfiguration: ''
+  functionAppName_DEV: ''
+  functionAppName_SIT: ''
+  functionAppName_UAT: ''
+  functionAppName_SANDBOX: ''
+  functionAppName_Preview: ''
+  functionAppName_PROD: ''
+  APIM_IP_DEV_SIT_UAT: '' 
+  APIM_IP_PRD: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''
+  WEBSITE_DNS_ALT_SERVER_SANDBOX: ''
+  WEBSITE_DNS_SERVER_SANDBOX: ''
+  AzureWebJobsStorage_SANDBOX: ''
+  workspaceResourceId: ''
+  workspaceResourceId_prod: ''
+  APIM_NonProd: ''
+  serviceConnection_NonProd: ''
+  serviceConnection_Prod: ''
+  APIMResourceGroupName_NonProd: ''  
+  APIMServiceConnection_NonProd: ''
+  APIMSubscriptionId_NonProd: ''
+  asename: ''
+  asename_prod: ''
+  VARIABLE_GROUP_NAME_DEV: ''
+  VARIABLE_GROUP_NAME_SIT: ''
+  VARIABLE_GROUP_NAME_UAT: ''
+
+
+stages:
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/variables_digital/DEV.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/functions_digital/deployment_digital.yaml    
+        parameters:
+          functionAppName: ${{parameters.functionAppName_DEV}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}     
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/variables_digital/SIT.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/functions_digital/deployment_digital.yaml     
+        parameters:
+          functionAppName: ${{parameters.functionAppName_SIT}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}     
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/variables_digital/UAT.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/functions_digital/deployment_digital.yaml    
+        parameters:
+          functionAppName: ${{parameters.functionAppName_UAT}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}     
+
+  - stage: 'AFN_SANDBOX'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/variables_digital/SANDBOX.yaml
+    displayName: 'Deployment - SANDBOX' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/functions_digital/deployment_sandbox.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_SANDBOX}}
+          agentPool: ${{parameters.agentPool_SANDBOX}}
+          agentSpecification: ${{parameters.agentSpecification}}                
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER_SANDBOX}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER_SANDBOX}}
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_SANDBOX}}
+
+  - stage: 'AFN_Preview'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/variables_digital/PREVIEW.yaml
+    displayName: 'Deployment - preview' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/functions_digital/deployment_sandbox.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_Preview}}
+          agentPool: ${{parameters.agentPool_SANDBOX}}
+          agentSpecification: ${{parameters.agentSpecification}}                
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER_SANDBOX}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER_SANDBOX}}
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_SANDBOX}}
+
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/variables_digital/PROD.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines.DigitalServices/functions_digital/deployment_digital.yaml  
+        parameters:
+          functionAppName: ${{parameters.functionAppName_PROD}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}   
+          APIM_IP: ${{parameters.APIM_IP_PRD}}  
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}  
+          workspaceResourceId: ${{parameters.workspaceResourceId_prod}}        

@@ -1,0 +1,46 @@
+meta {
+  name: Sign In
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{identity_base_url}}/SignIn
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "email": "{{identity_email}}",
+    "flyingClubNumber": "{{identity_member_number}}",
+    "password": "{{identity_password}}",
+    "otp": ""
+  }
+}
+
+script:post-response {
+  var body = res.getBody();
+  
+  if (body && body.accessToken) {
+    bru.setVar("access_token", body.accessToken);
+  }
+  if (body && body.refreshToken) {
+    bru.setVar("refresh_token", body.refreshToken);
+  }
+  if (body && body.idToken) {
+    bru.setVar("id_token", body.idToken);
+  }
+  if (body && body.continuationToken) {
+    bru.setVar("continuation_token", body.continuationToken);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

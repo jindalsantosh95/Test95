@@ -1,0 +1,53 @@
+﻿namespace VAA.EAPI.Microservices.Retail.Order.Ticket.Domain.Enums
+{
+    public enum Air4TicketFeedTable
+    {
+        EVENT_HDR,
+        ET_TKT_DOC,
+        ET_TKT_DOC_SRC,
+        ET_TKDC_ELCR_ADR,
+        ET_ELCR_MSG,
+        ET_TKDC_GPHC_ADR,
+        ET_TKT_DOC_PH_ADR,
+        ET_TKT_DOC_RLN,
+        ET_TKT_DOC_SPTML,
+        ET_TKT_DOC_WAVR,
+        ET_MISC_DOC,
+        ET_MISC_DOC_PRT_LN,
+        ET_MISC_DOC_ATVY,
+        ET_MDOC_ATVY_DTL,
+        ET_TKDC_BKG_RLOCR,
+        ET_TKT_DOC_POS_SRC,
+        ET_TKT_DOC_CHRG,
+        ET_TKDC_ACTB_CHRG,
+        ET_TKT_DOC_CMSN,
+        ET_TKT_DOC_TX_FAX,
+        ET_TKDC_EXCG_RLN,
+        ET_TKDC_EXRSDL_TX,
+        ET_TKDC_FARE_CALTN,
+        ET_TKDC_PMT_COLTN,
+        ET_TKT_DOC_PMT,
+        ET_TKDC_PMT_RMRK,
+        ET_TKDC_RTRNS_RLN,
+        ET_TKT_DOC_RSPN,
+        ET_TKDC_SDSTT_RMRK,
+        ET_TKDC_RFND_TRNS,
+        ET_TKDC_RTRNS_CHRG,
+        ET_TKDC_RTRNS_CMSN,
+        ET_TKDC_RTRNS_PMT,
+        ET_TDTN_AGY_RSN,
+        ET_CPN,
+        ET_CPN_SRC,
+        ET_CPN_ST,
+        ET_CPN_ST_SRC,
+        ET_CPN_CRR_ROLE,
+        ET_CPN_RLN,
+        ET_CPN_RLN_HST,
+        ET_TKDC_CPN_EXRLN,
+        ET_REISS_CPN_FLWN_ITIN,
+        ET_TKT_DOC_SEC,
+        Optional_Record
+
+
+    }
+}

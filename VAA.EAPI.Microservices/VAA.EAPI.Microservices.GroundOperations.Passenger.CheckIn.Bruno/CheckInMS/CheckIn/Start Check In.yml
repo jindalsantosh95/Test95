@@ -1,0 +1,92 @@
+info:
+  name: Start Check In
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{checkinms}}/CheckIn"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: "{\r
+
+      \    \"pnrLocator\": \"{{pnrLocator}}\",\r
+
+      \    \"originCode\": \"{{origin}}\",\r
+
+      //  \"givenNames\": \"AMIT\",         \"surname\": \"SINGH\"\r
+
+      //  \"givenNames\": \"ANTHONY\",         \"surname\": \"DSILVA\"\r
+
+      //  \"givenNames\": \"BARTHOLOMEW\",     \"surname\": \"PALMERTOMPKINSON\"\r
+
+      //  \"givenNames\": \"DIANNE\",          \"surname\": \"VITKO\"\r
+
+      //  \"givenNames\": \"DONN\",          \"surname\": \"WESTLEY\"\r
+
+      //  \"givenNames\": \"HAROLD\",          \"surname\": \"KELLERMAN\"\r
+
+      //  \"givenNames\": \"INGRID\",          \"surname\": \"MARYLN\"\r
+
+      //  \"givenNames\": \"KATHLINE\",         \"surname\": \"GONTERMAN\"\r
+
+      \  \"givenNames\": \"{{pax1_givennames}}\",          \"surname\": \"{{pax1_surname}}\"\r
+
+      //  \"givenNames\": \"MALCOM\",          \"surname\": \"MCLAMORE\"\r
+
+      //  \"givenNames\": \"RICHARD\",         \"surname\": \"PRONTO\"\r
+
+      \ // \"givenNames\": \"SHANTELLE\",         \"surname\": \"CRONKHITE\"\r
+
+      //  \"givenNames\": \"SHERIE\",          \"surname\": \"SCHLOTTERBECK\"\r
+
+      //  \"givenNames\": \"SHELDON\",         \"surname\": \"ELBERT\"\r
+
+      //  \"givenNames\": \"TEMIKA\",          \"surname\": \"ECHEVERRY\"\r
+
+      //  \"givenNames\": \"TESTING\",         \"surname\": \"ESTAA\"\r
+
+      //  \"givenNames\": \"VIRGIN\",          \"surname\": \"TESTONE\"\r
+
+      //  \"givenNames\": \"VENKATESHWARANS\", \"surname\": \"PANCHAPAKESAN\"\r
+
+      }"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: "var json = res.getBody();\r
+
+        \r
+
+        bru.setVar('checkInId', json.checkInId);\r
+
+        console.log(\"Num pax: \" + json.passengers.length);\r
+
+        bru.setVar(\"pax1_id\", json.passengers[0].passengerId);\r
+
+        bru.setVar(\"pax1_givennames\", json.passengers[0].givenNames);\r
+
+        bru.setVar(\"pax1_surname\", json.passengers[0].surname);\r
+
+        \r
+
+        if (json.passengers.length > 1) { // Check if there is a second passenger\r
+
+        bru.setVar(\"pax2_id\", json.passengers[1].passengerId);\r
+
+        bru.setVar(\"pax2_givennames\", json.passengers[1].givenNames);\r
+
+        bru.setVar(\"pax2_surname\", json.passengers[1].surname);\r
+
+        }"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,22 @@
+meta {
+  name: Account Points Dot Com Details
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query AccountPointsDotComDetails {
+    accountPointDotComDetails(onBehalf: "{{account_member_number}}")
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

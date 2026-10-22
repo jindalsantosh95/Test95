@@ -1,0 +1,66 @@
+meta {
+  name: Register
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{identity_base_url}}/Register
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "customerDetails": {
+      "firstName": "{{identity_first_name}}",
+      "lastName": "{{identity_last_name}}",
+      "gender": "{{identity_gender}}",
+      "dateOfBirth": "{{identity_date_of_birth}}",
+      "password": "{{identity_password}}",
+      "fcNumber": "{{identity_member_number}}",
+      "customerId": "{{identity_customer_id}}",
+      "customerType": "Loyalty",
+      "status": "ACTIVE",
+      "contactDetails": {
+        "emailDetails": [
+          {
+            "emailId": "{{identity_email}}",
+            "preferredFlag": "Y"
+          }
+        ],
+        "phoneDetails": [
+          {
+            "countryCode": "{{identity_phone_country_code}}",
+            "phoneNumber": "{{identity_phone_number}}",
+            "preferredFlag": "Y"
+          }
+        ]
+      },
+      "addressDetails": [
+        {
+          "addressLine1": "{{identity_address_line1}}",
+          "city": "{{identity_city}}",
+          "country": "{{identity_country_code}}",
+          "postalCode": "{{identity_postal_code}}",
+          "preferredFlag": "Y"
+        }
+      ],
+      "loyaltyMember": {
+        "memberType": "Individual",
+        "enrollmentChannel": "{{identity_enrolment_channel}}",
+        "termsAndConditionsAccepted": true,
+        "flyingClubCardNumber": "{{identity_member_number}}"
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

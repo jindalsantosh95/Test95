@@ -1,0 +1,27 @@
+meta {
+  name: Validate PCM Eligibility
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query ValidatePcmEligibility {
+    validatePcmEligibility(uniqueId: "{{account_unique_id}}") {
+      valid
+      claimed
+      fcNumber
+      claimedDateTime
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

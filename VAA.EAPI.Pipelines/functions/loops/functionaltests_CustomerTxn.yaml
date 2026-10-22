@@ -1,0 +1,74 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  variableGroupName: ''
+  environment: ''
+  buildFromSource: false
+  sourceFolder: 'D:\a\1/testAutomation'
+
+jobs: 
+- job: 'CustomerTransactionMS_Testing'
+  displayName: 'CustomerTrans'
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}
+  variables:
+    - group: ${{parameters.variableGroupName}}
+ 
+  steps:
+    - ${{ if eq(parameters.buildFromSource, true) }}:
+      - template: /VAA.EAPI.Pipelines/functions/build_selected_automation.yaml
+        parameters:
+          buildConfiguration: ${{parameters.buildConfiguration}}
+          projects: 'VAA.EAPI.Automation/VAA.EAPI.Automation.MarketingLoyalty/VAA.EAPI.Automation.MarketingLoyalty.csproj'
+    - ${{ else }}:
+      - download: current
+        artifact: testAutomation
+          
+
+   # Task to copy the automation files to artifactstagingdirectory
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+      inputs:
+       ${{ if eq(parameters.buildFromSource, true) }}:
+         SourceFolder: '$(Build.SourcesDirectory)/VAA.EAPI.Automation'
+       ${{ else }}:
+         SourceFolder: ${{parameters.sourceFolder}}
+       Contents: |
+         **/*
+       TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      
+
+    - task: VSTest@2
+      displayName: 'CustomerTransactionMS-TestSuite'
+      inputs:
+        testAssemblyVer2: |
+         **\VAA.EAPI.Automation.MarketingLoyalty.dll
+         **\*Tests.dll
+         !**\obj\**
+        searchFolder: '$(Build.ArtifactStagingDirectory)'
+        testFiltercriteria: 'Category=CustomerTransactionMSRegression'
+        testRunTitle: 'CustomerTransactionMS-TestSuite'
+        rerunFailedTests: true
+        rerunType: basedOnTestFailureCount
+        rerunMaxAttempts: 1
+      continueOnError: true
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results **/Log_For_*.txt'
+      inputs:
+        ResultsFormat: XUnit
+        testResultsFiles: '**/Log_For_*.txt'    
+
+    - task: epsteam.EmailReportExtension.EmailReport.EmailReport@1
+      displayName: 'Send Email Report Always'
+      inputs:
+        subject: '[{environmentStatus}] {passPercentage} CustomerTransactionMS-TestSuite Tests passed in $(env) stage for $(Build.BuildNumber) '
+        includeInToSectionStr: 2
+        toAddress: 'DF_TestingTeam@fly.virgin.com'
+        defaultDomain: VirginAtlantic365.onmicrosoft.com
+        includeCommits: false
+        includeOthersInTotal: true
+        enableTLS: true
+        smtpConnectionEndpoint: EmailServices

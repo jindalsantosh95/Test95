@@ -1,0 +1,47 @@
+meta {
+  name: summaryResponse
+  type: graphql
+  seq: 60
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query summaryResponse($basketId: String) {
+    summaryResponse(basketId: $basketId) {
+      voucherApplied
+      hasSufficientPoints
+      voucherPoints
+      pointsToPay
+      voucherDetails {
+        redemptionOptions {
+          optionId
+          appliedVouchers {
+            voucherId
+            pointsUsed
+          }
+        }
+      }
+      voucherRedemptionSelection {
+        selectedVoucherIds
+        selectedOptionId
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "basketId": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

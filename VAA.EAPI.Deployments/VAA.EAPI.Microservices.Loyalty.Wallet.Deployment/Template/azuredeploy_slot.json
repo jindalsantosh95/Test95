@@ -1,0 +1,876 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "type": "secureObject",
+      "defaultValue": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "",
+        "Site": "datadoghq.com",
+        "Environment": "",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    // Deployment Settings
+    "FunctionAppName": {
+      "type": "String"
+    },
+    "EnvironmentName": {
+      "type": "string"
+    },
+    "ServerFarmIdRg": {
+      "type": "string"
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "vaultName": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "ResourceGroupSubscriptionId": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "Object"
+    },
+    "SlotName": {
+      "type": "string"
+    },
+    "IPRestriction": {
+      "type": "string"
+    },
+    "Appsetting:KeyVaultUri": {
+      "type": "string"
+    },
+    // Azure Function Settings
+    "AppSetting:AzureWebJobsStorage": {
+      "type": "string"
+    },
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "type": "string"
+    },
+    "AppSetting:WEBSITE_CONTENTSHARE": {
+      "type": "string"
+    },
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "type": "string"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "type": "string"
+    },
+    // Swagger / OpenApi
+    "Appsetting:OpenApi__Scope": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Description": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Version": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "type": "string"
+    },
+    "Appsetting:AAD:TenantId": {
+      "type": "string"
+    },
+    "Appsetting:AAD:Authority": {
+      "type": "string"
+    },
+    "Appsetting:EapiMsClientID": {
+      "type": "string"
+    },
+    "Appsetting:EapiMSSecret": {
+      "type": "string"
+    },
+    //Wallet settings
+    "Appsetting:PassTypeIdentifier": {
+      "type": "string"
+    },
+    "Appsetting:TeamIdentifier": {
+      "type": "string"
+    },
+    "Appsetting:PassbookCertificate": {
+      "type": "string"
+    },
+    "AppSetting:APNSPushCertificate": {
+      "type": "string"
+    },
+    "Appsetting:AppleWalletCertificate": {
+      "type": "string"
+    },
+    "Appsetting:WalletBlobUrl": {
+      "type": "string"
+    },
+    "Appsetting:Red_Background_RGB": {
+      "type": "string"
+    },
+    "Appsetting:Gold_Background_RGB": {
+      "type": "string"
+    },
+    "Appsetting:Silver_Background_RGB": {
+      "type": "string"
+    },
+    "Appsetting:WalletDBConnectionString": {
+      "type": "string"
+    },
+    "Appsetting:RegisterPassTable": {
+      "type": "string"
+    },
+    "Appsetting:PushPassTable": {
+      "type": "string"
+    },
+    "Appsetting:WalletNotificationResponseUrl": {
+      "type": "string"
+    },
+    "Appsetting:RecordCount": {
+      "type": "string"
+    },
+    "Appsetting:ResponsePollingCount": {
+      "type": "string"
+    },
+    "Appsetting:ResponseDelayTimeInMS": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "type": "string"
+    },
+    "Appsetting:WalletGeneratePassUrl": {
+      "type": "string"
+    },
+    "AppSetting:WalletFacadeAppId": {
+      "type": "string"
+    },
+    "AppSetting:CustomerMsUrl": {
+      "type": "string"
+    },
+    "AppSetting:CustomerAppId": {
+      "type": "string"
+    },
+    "AppSetting:CustomerTransUrl": {
+      "type": "string"
+    },
+    "AppSetting:CustomerTransAppId": {
+      "type": "string"
+    },
+    "AppSetting:EapiOcpSubId": {
+      "type": "string"
+    },
+    "AppSetting:PushNotificationKeyId": {
+      "type": "string"
+    },
+    "AppSetting:IsDevelopmentServer": {
+      "type": "bool"
+    },
+    "AppSetting:AppleApiDevEndpoint": {
+      "type": "string"
+    },
+    "AppSetting:AppleApiProdEndpoint": {
+      "type": "string"
+    },
+    "AppSetting:AppleApiDevPort": {
+      "type": "string"
+    },
+    "AppSetting:AppleApiProdPort": {
+      "type": "string"
+    },
+    "AppSetting:ServiceBusConnectionString": {
+      "type": "string"
+    },
+    "AppSetting:AirshipFlightEndpoint": {
+      "type": "string"
+    },
+    "AppSetting:AirshipWalletLinkEndpoint": {
+      "type": "string"
+    },
+    "AppSetting:AirShipWalletAdaptivePassUrlPrefix": {
+      "type": "string"
+    },
+    "AppSetting:AirshipTokenValue": {
+      "type": "string"
+    },
+    "AppSetting:RedisConnectionString": {
+      "type": "string"
+    },
+    "AppSetting:BoardingPassSlidingExpiryHours": {
+      "type": "string"
+    },
+    "AppSetting:SecureProgramImageUrl": {
+      "type": "string"
+    },
+    "AppSetting:SkyPriorityImgUrl": {
+      "type": "string"
+    },
+    "AppSetting:TSAPreImgUrl": {
+      "type": "string"
+    },
+    "AppSetting:AirshipIosPremiumTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipIosUpperTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipIosDLTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipIosOATemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipAndroidPremiumTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipAndroidUpperTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipAndroidDLTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipAndroidOATemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipIosEconomyTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipAndroidEconomyTemplate": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "AppInsightsName": "[parameters('AppInsightsName')]",
+    "ResourceLocation": "[resourceGroup().location]",
+    "SiteResourceID": "[resourceId('Microsoft.Web/Sites', parameters('FunctionAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[variables('ResourceLocation')]",
+      "tags": "[parameters('Tags')]",
+      "sku": {
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "allowBlobPublicAccess": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "kind": "functionapp",
+      "name": "[parameters('FunctionAppName')]",
+      "apiVersion": "2021-03-01",
+      "location": "[variables('ResourceLocation')]",
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]"
+      },
+      "tags": "[parameters('Tags')]"
+    },
+    {
+      "type": "Microsoft.Web/sites/slots",
+      "kind": "functionapp",
+      "name": "[concat(parameters('FunctionAppName'), '/',parameters('SlotName'))]",
+      "apiVersion": "2021-03-01",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [ "[variables('SiteResourceID')]" ],
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('FunctionAppName'), '-',parameters('SlotName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('FunctionAppName'), '-',parameters('SlotName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "alwaysOn": true,
+          "appSettings": [
+            {
+              "name": "LoggingProvider",
+              "value": "[parameters('DataDog').LoggingProvider]"
+            },
+            {
+              "name": "DatadogLogsEndpoint",
+              "value": "[parameters('DataDog').LogsEndpoint]"
+            },
+            {
+              "name": "DatadogApiKey",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_API_KEY",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_SITE",
+              "value": "[parameters('DataDog').Site]"
+            },
+            {
+              "name": "DD_SERVICE",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "DD_ENV",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DD_VERSION",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DD_TRACE_ENABLED",
+              "value": "[string(parameters('DataDog').TraceEnabled)]"
+            },
+            {
+              "name": "DD_RUNTIME_METRICS_ENABLED",
+              "value": "[string(parameters('DataDog').RuntimeMetricsEnabled)]"
+            },
+            {
+              "name": "DatadogService",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "environment",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DatadogSource",
+              "value": "[parameters('DataDog').Source]"
+            },
+            {
+              "name": "DatadogVersion",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DatadogTags",
+              "value": "[concat(parameters('DataDog').Tags, if(empty(parameters('DataDog').Tags), '', ','), 'cloud_provider:azure,subscription_id:', subscription().subscriptionId, ',resource_group:', resourceGroup().name, ',name:', parameters('FunctionAppName'), '/', parameters('SlotName'), ',type:microsoft.web/sites/slots,resource_id:', resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName')))]"
+            },
+            {
+              "name": "DatadogBaggageAllowList",
+              "value": "[parameters('DataDog').BaggageAllowList]"
+            },
+            {
+              "name": "DatadogMinimumLogLevel",
+              "value": "[parameters('DataDog').MinimumLogLevel]"
+            },
+            {
+              "name": "DatadogQueueCapacity",
+              "value": "[string(parameters('DataDog').QueueCapacity)]"
+            },
+            {
+              "name": "DatadogBatchSize",
+              "value": "[string(parameters('DataDog').BatchSize)]"
+            },
+            {
+              "name": "DatadogFlushIntervalMilliseconds",
+              "value": "[string(parameters('DataDog').FlushIntervalMilliseconds)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
+            },
+            {
+              "name": "WEBSITE_LOAD_USER_PROFILE",
+              "value": "1"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet-isolated"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('AppInsightsName')), '2014-04-01').InstrumentationKey]"
+            },
+            {
+              "name": "AzureWebJobsSecretStorageType",
+              "value": "[parameters('AppSetting:AzureWebJobsSecretStorageType')]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[parameters('AppSetting:WEBSITE_CONTENTSHARE')]"
+            },
+            {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('AppInsightsName')), '2020-02-02').ConnectionString]"
+            },
+            {
+              "name": "KeyVaultUri",
+              "value": "[parameters('Appsetting:KeyVaultUri')]"
+            },
+            //Wallet MS Settings
+            {
+              "name": "PassTypeIdentifier",
+              "value": "[parameters('AppSetting:PassTypeIdentifier')]"
+            },
+            {
+              "name": "TeamIdentifier",
+              "value": "[parameters('AppSetting:TeamIdentifier')]"
+            },
+            {
+              "name": "PassbookCertificate",
+              "value": "[parameters('AppSetting:PassbookCertificate')]"
+            },
+            {
+              "name": "AppleWalletCertificate",
+              "value": "[parameters('AppSetting:AppleWalletCertificate')]"
+            },
+            {
+              "name": "APNSPushCertificate",
+              "value": "[parameters('AppSetting:APNSPushCertificate')]"
+            },
+            {
+              "name": "WalletBlobUrl",
+              "value": "[parameters('AppSetting:WalletBlobUrl')]"
+            },
+            {
+              "name": "Red_Background_RGB",
+              "value": "[parameters('AppSetting:Red_Background_RGB')]"
+            },
+            {
+              "name": "Gold_Background_RGB",
+              "value": "[parameters('AppSetting:Gold_Background_RGB')]"
+            },
+            {
+              "name": "Silver_Background_RGB",
+              "value": "[parameters('AppSetting:Silver_Background_RGB')]"
+            },
+            {
+              "name": "WalletDBConnectionString",
+              "value": "[parameters('AppSetting:WalletDBConnectionString')]"
+            },
+            {
+              "name": "RegisterPassTable",
+              "value": "[parameters('AppSetting:RegisterPassTable')]"
+            },
+            {
+              "name": "PushPassTable",
+              "value": "[parameters('AppSetting:PushPassTable')]"
+            },
+            {
+              "name": "WalletNotificationResponseUrl",
+              "value": "[parameters('AppSetting:WalletNotificationResponseUrl')]"
+            },
+            {
+              "name": "RecordCount",
+              "value": "[parameters('AppSetting:RecordCount')]"
+            },
+            {
+              "name": "ResponsePollingCount",
+              "value": "[parameters('AppSetting:ResponsePollingCount')]"
+            },
+            {
+              "name": "ResponseDelayTimeInMS",
+              "value": "[parameters('AppSetting:ResponseDelayTimeInMS')]"
+            },
+            {
+              "name": "MicroServiceDBKey",
+              "value": "[parameters('AppSetting:MicroServiceDBKey')]"
+            },
+            {
+              "name": "MicroServiceEventStoreTableName",
+              "value": "[parameters('AppSetting:MicroServiceEventStoreTableName')]"
+            },
+            {
+              "name": "MicroServiceResponseTableName",
+              "value": "[parameters('AppSetting:MicroServiceResponseTableName')]"
+            },
+            {
+              "name": "WalletGeneratePassUrl",
+              "value": "[parameters('AppSetting:WalletGeneratePassUrl')]"
+            },
+            {
+              "name": "WalletFacadeAppId",
+              "value": "[parameters('AppSetting:WalletFacadeAppId')]"
+            },
+            {
+              "name": "AAD:TenantId",
+              "value": "[parameters('Appsetting:AAD:TenantId')]"
+            },
+            {
+              "name": "AAD:Authority",
+              "value": "[parameters('Appsetting:AAD:Authority')]"
+            },
+            {
+              "name": "EapiMsClientID",
+              "value": "[parameters('Appsetting:EapiMsClientID')]"
+            },
+            {
+              "name": "EapiMSSecret",
+              "value": "[parameters('Appsetting:EapiMSSecret')]"
+            },
+            {
+              "name": "CustomerMsUrl",
+              "value": "[parameters('AppSetting:CustomerMsUrl')]"
+            },
+            {
+              "name": "CustomerAppId",
+              "value": "[parameters('AppSetting:CustomerAppId')]"
+            },
+            {
+              "name": "CustomerTransUrl",
+              "value": "[parameters('AppSetting:CustomerTransUrl')]"
+            },
+            {
+              "name": "CustomerTransAppId",
+              "value": "[parameters('AppSetting:CustomerTransAppId')]"
+            },
+            {
+              "name": "EapiOcpSubId",
+              "value": "[parameters('AppSetting:EapiOcpSubId')]"
+            },
+            {
+              "name": "PushNotificationKeyId",
+              "value": "[parameters('AppSetting:PushNotificationKeyId')]"
+            },
+            {
+              "name": "IsDevelopmentServer",
+              "value": "[parameters('AppSetting:IsDevelopmentServer')]"
+            },
+            {
+              "name": "AppleApiDevEndpoint",
+              "value": "[parameters('AppSetting:AppleApiDevEndpoint')]"
+            },
+            {
+              "name": "AppleApiProdEndpoint",
+              "value": "[parameters('AppSetting:AppleApiProdEndpoint')]"
+            },
+            {
+              "name": "AppleApiDevPort",
+              "value": "[parameters('AppSetting:AppleApiDevPort')]"
+            },
+            {
+              "name": "AppleApiProdPort",
+              "value": "[parameters('AppSetting:AppleApiProdPort')]"
+            },
+            {
+              "name": "ServiceBusConnectionString",
+              "value": "[parameters('AppSetting:ServiceBusConnectionString')]"
+            },
+            {
+              "name": "AirshipFlightEndpoint",
+              "value": "[parameters('AppSetting:AirshipFlightEndpoint')]"
+            },
+            {
+              "name": "AirshipWalletLinkEndpoint",
+              "value": "[parameters('AppSetting:AirshipWalletLinkEndpoint')]"
+            },
+            {
+              "name": "AirShipWalletAdaptivePassUrlPrefix",
+              "value": "[parameters('AppSetting:AirShipWalletAdaptivePassUrlPrefix')]"
+            },
+            {
+              "name": "AirshipTokenValue",
+              "value": "[parameters('AppSetting:AirshipTokenValue')]"
+            },
+            {
+              "name": "RedisConnectionString",
+              "value": "[parameters('AppSetting:RedisConnectionString')]"
+            },
+            {
+              "name": "BoardingPassSlidingExpiryHours",
+              "value": "[parameters('AppSetting:BoardingPassSlidingExpiryHours')]"
+            },
+            {
+              "name": "SecureProgramImageUrl",
+              "value": "[parameters('AppSetting:SecureProgramImageUrl')]"
+            },
+            {
+              "name": "SkyPriorityImgUrl",
+              "value": "[parameters('AppSetting:SkyPriorityImgUrl')]"
+            },
+            {
+              "name": "TSAPreImgUrl",
+              "value": "[parameters('AppSetting:TSAPreImgUrl')]"
+            },
+            {
+              "name": "AirshipIosPremiumTemplate",
+              "value": "[parameters('AppSetting:AirshipIosPremiumTemplate')]"
+            },
+            {
+              "name": "AirshipIosUpperTemplate",
+              "value": "[parameters('AppSetting:AirshipIosUpperTemplate')]"
+            },
+            {
+              "name": "AirshipIosDLTemplate",
+              "value": "[parameters('AppSetting:AirshipIosDLTemplate')]"
+            },
+            {
+              "name": "AirshipIosOATemplate",
+              "value": "[parameters('AppSetting:AirshipIosOATemplate')]"
+            },
+            {
+              "name": "AirshipAndroidPremiumTemplate",
+              "value": "[parameters('AppSetting:AirshipAndroidPremiumTemplate')]"
+            },
+            {
+              "name": "AirshipAndroidUpperTemplate",
+              "value": "[parameters('AppSetting:AirshipAndroidUpperTemplate')]"
+            },
+            {
+              "name": "AirshipAndroidDLTemplate",
+              "value": "[parameters('AppSetting:AirshipAndroidDLTemplate')]"
+            },
+            {
+              "name": "AirshipAndroidOATemplate",
+              "value": "[parameters('AppSetting:AirshipAndroidOATemplate')]"
+            },
+            {
+              "name": "AirshipIosEconomyTemplate",
+              "value": "[parameters('AppSetting:AirshipIosEconomyTemplate')]"
+            },
+            {
+              "name": "AirshipAndroidEconomyTemplate",
+              "value": "[parameters('AppSetting:AirshipAndroidEconomyTemplate')]"
+            },
+            //Swagger settings
+            {
+              "name": "OpenApi__Scope",
+              "value": "[parameters('Appsetting:OpenApi__Scope')]"
+            },
+            {
+              "name": "OpenApi__TokenUrl",
+              "value": "[parameters('Appsetting:OpenApi__TokenUrl')]"
+            },
+            {
+              "name": "OpenApi__DocTitle",
+              "value": "[parameters('Appsetting:OpenApi__DocTitle')]"
+            },
+            {
+              "name": "OpenApi__Description",
+              "value": "[parameters('Appsetting:OpenApi__Description')]"
+            },
+            {
+              "name": "OpenApi__DocVersion",
+              "value": "[parameters('Appsetting:OpenApi__DocVersion')]"
+            },
+            {
+              "name": "OpenApi__HostNames",
+              "value": "[parameters('Appsetting:OpenApi__HostNames')]"
+            },
+            {
+              "name": "OpenApi__Version",
+              "value": "[parameters('Appsetting:OpenApi__Version')]"
+            },
+            {
+              "name": "OpenApi__ForceHttps",
+              "value": "[parameters('Appsetting:OpenApi__ForceHttps')]"
+            },
+            {
+              "name": "OpenApi__ForceHttp",
+              "value": "[parameters('Appsetting:OpenApi__ForceHttp')]"
+            }
+
+
+          ]
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None"
+      },
+      "tags": "[parameters('Tags')]"
+    },
+    {
+      "type": "Microsoft.Web/sites/slots/config",
+      "apiVersion": "2021-03-01",
+      "name": "[concat(parameters('FunctionAppName'), '/',parameters('SlotName'),'/web')]",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName'))]",
+        "[variables('SiteResourceID')]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$[parameters('FunctionAppName')]__[parameters('SlotName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": false,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": true
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "[parameters('IPRestriction')]",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow_APIM",
+            "description": "Allow APIM access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "PreWarmedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/slots/hostNameBindings",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(parameters('FunctionAppName'), '/', parameters('SlotName'),'/', parameters('FunctionAppName'), '-',parameters('SlotName'),'.azurewebsites.net')]",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName'))]",
+        "[variables('SiteResourceID')]"
+      ],
+      "properties": {
+        "siteName": "[concat(parameters('FunctionAppName'),'(',parameters('SlotName'),')')]",
+        "hostNameType": "Verified"
+      }
+    },
+
+    {
+      "type": "microsoft.insights/components",
+      "kind": "web",
+      "name": "[parameters('AppInsightsName')]",
+      "apiVersion": "2020-02-02",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [ "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]" ],
+      "tags": "[parameters('Tags')]",
+      "properties": {
+        "applicationId": "[variables('SiteResourceID')]",
+        "Application_Type": "web"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[concat(parameters('vaultName'), '/add')]",
+      "apiVersion": "2019-09-01",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[reference(concat('Microsoft.Web/sites/', parameters('FunctionAppName')), '2018-02-01','Full').identity.tenantId]",
+            "objectId": "[reference(concat('Microsoft.Web/sites/', parameters('FunctionAppName')), '2018-02-01','Full').identity.principalId]",
+            "permissions": {
+              "keys": [ "Get", "List" ],
+              "secrets": [ "Get", "List" ],
+              "certificates": [ "Get", "List" ],
+              "storage": [ "all" ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+meta {
+  name: vholsLogin
+  type: graphql
+  seq: 66
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query vholsLogin($request: LoginRequestInput!) {
+    vholsLogin(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {
+      "surname": "",
+      "dateOfBirth": "",
+      "bookingReference": ""
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

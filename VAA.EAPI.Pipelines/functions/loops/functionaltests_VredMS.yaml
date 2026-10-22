@@ -1,0 +1,64 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  variableGroupName: ''
+  environment: ''
+  sourceFolder: 'D:\a\1/testAutomation'
+
+jobs: 
+- job: 'VRedMS_Testing'
+  displayName: 'VRedMS-TestSuite'  
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}
+  variables:
+    - group: ${{parameters.variableGroupName}}
+ 
+  steps:
+   - download: current
+     artifact: testAutomation       
+          
+
+   # Task to copy files to artifactstagingdirectory
+   - task: CopyFiles@2
+     displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+     inputs:
+       SourceFolder: ${{parameters.sourceFolder}}
+       Contents: |
+         **/*
+       TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+
+   - task: VSTest@2
+     displayName: 'VsTest - VRedMS-TestSuite'
+     inputs:
+       testAssemblyVer2: |
+         **\VAA.EAPI.Automation.MarketingLoyalty.dll
+         **\*Tests.dll
+         !**\obj\**
+       searchFolder: '$(Build.ArtifactStagingDirectory)'
+       testFiltercriteria: 'Category=VRedMSRegression'
+       testRunTitle: 'VRedMS-TestSuite'
+       rerunFailedTests: true
+       rerunType: basedOnTestFailureCount
+       rerunMaxAttempts: 2
+     continueOnError: true
+  
+   - task: PublishTestResults@2
+     displayName: 'Publish Test Results **/Log_For_*.txt'
+     inputs:
+       testResultsFormat: XUnit
+       testResultsFiles: '**/Log_For_*.txt'    
+
+   - task: epsteam.EmailReportExtension.EmailReport.EmailReport@1
+     displayName: 'Send Email Report Always'
+     inputs:
+       subject: '[{environmentStatus}] {passPercentage} VRedMS Tests passed in $(env) stage for $(Build.BuildNumber) '
+       includeInToSectionStr: 2
+       toAddress: 'DF_TestingTeam@fly.virgin.com'
+       defaultDomain: VirginAtlantic365.onmicrosoft.com
+       includeCommits: false
+       includeOthersInTotal: true
+       enableTLS: true
+       smtpConnectionEndpoint: EmailServices

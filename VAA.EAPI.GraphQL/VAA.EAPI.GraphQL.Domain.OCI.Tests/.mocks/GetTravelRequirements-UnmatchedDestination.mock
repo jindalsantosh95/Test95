@@ -1,0 +1,35 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements HTTP/1.1
+
+$[?(@.pnrLocator == 'CITYNULL')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "requirementsId": "eee76cc3-30b5-483d-91ff-2a56c36fb84f",
+  "applyEmergencyContactToAllPax": false,
+  "reference": {
+    "pnrLocator": "CITYNULL",
+    "createdDate": "2026-09-17"
+  },
+  "passengers": [
+    {
+      "passengerId": "01.01|83ce7127-7534-46c0-9e18-80920837369b",
+      "givenNames": "CITY",
+      "surname": "TEST",
+      "sliceRequirements": []
+    }
+  ],
+  "slices": [
+    {
+      "sliceId": "ffe9b2e8-58e5-42d1-85e0-3cd8bd3b56c5",
+      "destination": {
+        "code": "ZZZ",
+        "airportName": "Unknown Airport"
+      },
+      "segments": []
+    }
+  ]
+}

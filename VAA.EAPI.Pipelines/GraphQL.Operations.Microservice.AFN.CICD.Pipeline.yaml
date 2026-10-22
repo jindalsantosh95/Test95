@@ -1,0 +1,137 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.NDCHealthCheck*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*  
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.NDCHealthCheck*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*  
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations.bruno
+
+variables: 
+  - group: APIM  
+  - group: APIM_IP
+  - group: Common_Variables
+  - group: Graphql_Operations
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'
+  - name: testRepoPath_SIT
+    value: ''   
+  - name: testRepoPath_UAT
+    value: ''      
+  - name: rootPath
+    value: 'VAA.EAPI.GraphQL'
+  - name: subRootPath
+    value: 'VAA.EAPI'    
+  - name: applicationName
+    value: 'GraphQL'
+  - name: functionAppName_Secure_DEV
+    value: 'AVADEUNAFNGRAPHQLOPERATIONS'
+  - name: functionAppName_Secure_SIT
+    value: 'AVATEUNAFNGRAPHQLOPERATIONS'
+  - name: functionAppName_Secure_UAT
+    value: 'AVASEUNAFNGRAPHQLOPERATIONS'
+  - name: functionAppName_Secure_PRD
+    value: 'AVAPEUNAFNGRAPHQLOPERATIONS'    
+  - name: functionAppName_Public_DEV
+    value: 'AVADEUNAFNGRAPHQLOPERATIONSP'
+  - name: functionAppName_Public_SIT
+    value: 'AVATEUNAFNGRAPHQLOPERATIONSP'
+  - name: functionAppName_Public_UAT
+    value: 'AVASEUNAFNGRAPHQLOPERATIONSP'
+  - name: functionAppName_Public_PRD
+    value: 'AVAPEUNAFNGRAPHQLOPERATIONSP'      
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_graphqloperations.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      rootPath: $(rootPath)
+      location: $(location)
+      subRootPath: $(subRootPath)
+      applicationName: $(applicationName)
+      resourceGroupName_DEV: $(resourceGroupNameGraphql_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameGraphql_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameGraphql_UAT)
+      resourceGroupName_PROD: $(resourceGroupNameGraphql_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_graphqlsplit.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)        
+      functionAppName_Secure_DEV: $(functionAppName_Secure_DEV)
+      functionAppName_Secure_SIT: $(functionAppName_Secure_SIT)
+      functionAppName_Secure_UAT: $(functionAppName_Secure_UAT)
+      functionAppName_Secure_PRD: $(functionAppName_Secure_PRD)
+      functionAppName_Public_DEV: $(functionAppName_Public_DEV)
+      functionAppName_Public_SIT: $(functionAppName_Public_SIT)
+      functionAppName_Public_UAT: $(functionAppName_Public_UAT)
+      functionAppName_Public_PRD: $(functionAppName_Public_PRD)
+      AppInsightsName_DEV: $(AppInsightsName_DEV)
+      AppInsightsName_SIT: $(AppInsightsName_SIT)
+      AppInsightsName_UAT: $(AppInsightsName_UAT)
+      AppInsightsName_PROD: $(AppInsightsName_PROD)
+      storageAccountName_DEV: $(storageAccountName_DEV)
+      storageAccountName_SIT: $(storageAccountName_SIT)
+      storageAccountName_UAT: $(storageAccountName_UAT)
+      storageAccountName_PROD: $(storageAccountName_PROD)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER) 
+  
+            

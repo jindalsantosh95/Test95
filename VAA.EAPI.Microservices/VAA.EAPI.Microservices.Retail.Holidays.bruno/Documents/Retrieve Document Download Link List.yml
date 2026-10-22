@@ -1,0 +1,31 @@
+info:
+  name: Retrieve Document Download Link List
+  type: http
+  seq: 4
+  tags:
+    - Documents
+
+http:
+  method: POST
+  url: "{{baseUrl}}/retrieveDocumentDownloadLinkList"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "documentLinkRequests": [
+          {
+            "documentId": {{documentId}},
+            "bookingId": "{{bookingReference}}"
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

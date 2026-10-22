@@ -1,0 +1,116 @@
+<style>
+    label {
+        width: 30%;
+        display: inline-block;
+        margin-top: 15px;
+    }
+    input {
+        margin-top: 15px;
+    }
+    .banner {
+        border: 1px solid blue;
+        margin-top: 30px;
+        padding: 15px;
+    }
+    .banner:nth-child(2)::before {
+        content: "The below banners were matched, but will not be shown as they have have a larger ranking than the banner above.";
+        background-color: #ccc;
+        margin: -15px;
+        display: block;
+        padding: 15px;
+        margin-top: -100px;
+        margin-bottom: 45px;
+    }
+    .banner:nth-child(2) {
+        margin-top: 100px;
+    }
+    .banner:not(:first-child) {
+        opacity: .5;
+    }
+</style>
+
+<div style="margin: 30px auto; width: 600px;">
+    <form>
+        <label>GraphQL URL</label>
+        <input type="text" name="graphQlUrl" value="http://localhost:7073/api/v1/GraphQL" size="40" />
+        <input type=button value="Dev" onclick="document.querySelector('input[name=graphQlUrl]').value='https://testresources.virginatlantic.com/dev/graphql/v1/public'" /><br />
+        <label>Display location</label>
+        <select name="displayLocation"><option value="search-top">Top of Search Results</option></select><br />
+        <label>Origin Airport</label>
+        <input type="text" name="originAirport" size="5" /><br />
+        <label>Destination Airport</label>
+        <input type="text" name="destinationAirport" size="5" /><br />
+        <label>Direction</label>
+        <select name="flightDirection"><option value="outbound">Outbound</option><option value="inbound">Inbound</option><option value="one-way">One Way</option></select><br />
+        <label>Departure Date</label>
+        <input type="text" name="departureDate" placeholder="yyyy-mm-dd" /><br />
+        <label>Return Date</label>
+        <input type="text" name="returnDate" placeholder="yyyy-mm-dd" /><br />
+        <label>Num Adults</label>
+        <input type="number" name="numAdults" size="5" /><br />
+        <label>Num Teens</label>
+        <input type="number" name="numTeens" size="5" /><br />
+        <label>Num Children</label>
+        <input type="number" name="numChildren" size="5" /><br />
+        <label>Num Infants</label>
+        <input type="number" name="numInfants" size="5" /><br />
+    </form>
+
+    <button id="getSalesBanners">Get Sales Banners</button>
+
+    <div id="output"></div>
+</div>
+
+<script>
+    async function getSalesBanners() {
+        document.querySelector("#output").innerHTML = "<div class='banner'>Loading...</div>";
+        var request = "";
+        if (document.querySelector("input[name=originAirport]").value) {
+            request += "originAirport: \"" + document.querySelector("input[name=originAirport]").value + "\", ";
+        }
+        if (document.querySelector("input[name=destinationAirport]").value) {
+            request += "destinationAirport: \"" + document.querySelector("input[name=destinationAirport]").value + "\" ";
+        }
+        if (document.querySelector("input[name=departureDate]").value) {
+            request += "departureDate: \"" + document.querySelector("input[name=departureDate]").value + "\" ";
+        }
+        if (document.querySelector("input[name=returnDate]").value) {
+            request += "returnDate: \"" + document.querySelector("input[name=returnDate]").value + "\" ";
+        }
+        if (document.querySelector("select[name=flightDirection]").value) {
+            request += "flightDirection: \"" + document.querySelector("select[name=flightDirection]").value + "\" ";
+        }
+        if (document.querySelector("input[name=numAdults]").value) {
+            request += "numAdults: \"" + document.querySelector("input[name=numAdults]").value + "\" ";
+        }
+        if (document.querySelector("input[name=numTeens]").value) {
+            request += "numTeens: \"" + document.querySelector("input[name=numTeens]").value + "\" ";
+        }
+        if (document.querySelector("input[name=numChildren]").value) {
+            request += "numChildren: \"" + document.querySelector("input[name=numChildren]").value + "\" ";
+        }
+        if (document.querySelector("input[name=numInfants]").value) {
+            request += "numInfants: \"" + document.querySelector("input[name=numInfants]").value + "\" ";
+        }
+
+        try {
+            var response = await fetch(document.querySelector("input[name=graphQlUrl]").value, {
+                method: "POST",
+                body: JSON.stringify({
+                    "query": "query salesBanners {salesBanners(displayLocations: [\"" + document.querySelector("select[name=displayLocation]").value + "\"], request: { " + request + "}, returnAllMatches: true) { title bodyHtml image imageAltText } }"
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            });
+            var responseJson = await response.json();
+            document.querySelector("#output").innerHTML = "";
+            responseJson.data.salesBanners.forEach(function (banner) {
+                document.querySelector("#output").innerHTML += "<div class='banner'><h4>" + banner.title + "</h4>" + banner.bodyHtml + "</div>";
+            });
+        } catch (error) {
+            document.querySelector("#output").innerHTML = "<div class=\"banner\" style=\"background-color: salmon; border-color: red;\">" + error + "</div>";
+        }
+    }
+    document.querySelector("#getSalesBanners").addEventListener("click", async () => getSalesBanners());
+</script>

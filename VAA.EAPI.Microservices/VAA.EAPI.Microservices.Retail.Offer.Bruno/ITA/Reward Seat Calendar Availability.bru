@@ -1,0 +1,50 @@
+meta {
+  name: Reward Seat Calendar Availability
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{offer_base_url}}/reward-seat-calendar-availability
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  x-reward-seat-deadline-ms: 25000
+}
+
+body:json {
+  {
+    "origin": "LHR",
+    "destination": "JFK",
+    "anchorDate": "{{reward_anchor_date}}",
+    "intervalStart": "{{reward_interval_start}}",
+    "intervalEnd": "{{reward_interval_end}}"
+  }
+}
+
+script:pre-request {
+  const start = new Date();
+  start.setHours(12, 0, 0, 0);
+  start.setDate(start.getDate() + 30);
+
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+
+  const formatDate = date => [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0')
+  ].join('-');
+
+  bru.setVar('reward_anchor_date', formatDate(start));
+  bru.setVar('reward_interval_start', formatDate(start));
+  bru.setVar('reward_interval_end', formatDate(end));
+}
+
+settings {
+  encodeUrl: true
+  timeout: 30000
+}

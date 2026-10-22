@@ -1,0 +1,149 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "FunctionAppName": {
+      "value": "avapeunafnloyaltysky"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPI-LOYALTY"
+    },
+    "AppInsightsName": {
+      "value": "avapeunailoyaltysky"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "Appsetting:SkyTeamOnlineRetroCreditEndPoint": {
+      "value": "https://apigateway.skyteam.com/onlineretrocredit/v2.1"
+    },
+    "Appsetting:SkyEndpointUserName": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNLOYALTYSKY-Config-SkyEndpointUserName/)"
+    },
+    "Appsetting:SkyEndpointPwd": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNLOYALTYSKY-Config-SkyEndpointPwd/)"
+    },
+    "Appsetting:TimeOutTimeSpan": {
+      "value": "00:01:40"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "Appsetting:AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avapeunstloyaltysky"
+    },
+    "Appsetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+
+    //Azure AD
+    "Appsettings:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNLOYALTYSKY-Config-AzureAdClientId/)"
+    },
+    "Appsettings:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "Appsettings:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsettings:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    //Azure B2C Settings
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNLOYALTYSKY-Config-AzureAdClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Loyalty Sky Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "VAA Loyalty Sky Microservice ."
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "Sky ms",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "PROD",
+        "Purpose": "PDM ms",
+        "ApplicationUsageIdList": "avapeunafnloyaltysky"
+      }
+    }
+  }
+}

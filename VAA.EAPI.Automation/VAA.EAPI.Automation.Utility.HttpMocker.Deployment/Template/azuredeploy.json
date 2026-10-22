@@ -1,0 +1,327 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "FunctionAppName": {
+      "type": "String"
+    },
+    "EnvironmentName": {
+      "type": "string"
+    },
+    "ServerFarmIdRg": {
+      "type": "string"
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "workspacename": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "vaultName": {
+      "type": "string"
+    },
+    "ResourceGroupSubscriptionId": {
+      "type": "string"
+    },
+    "resourceurl": {
+      "type": "string"
+    },
+    "resourceurlPost": {
+      "type": "string"
+    },
+
+    // Azure Function Settings
+    "AppSetting:AzureWebJobsStorage": {
+      "type": "string"
+    },
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "type": "string"
+    },
+    /*"AppSetting:WEBSITE_CONTENTSHARE": {
+      "type": "string"
+    },*/
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "type": "string"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "type": "string"
+    },
+
+    // Http HttpMocker settings
+    "HttpMocker.MockStorageService.Source": {
+      "type": "string"
+    },
+    "HttpMocker.AzureBlobContainerService.Uri": {
+      "type": "string"
+    },
+    "HttpMocker.AzureBlobContainerService.Container": {
+      "type": "string"
+    },
+    "HttpMocker.AzureBlobContainerService.Sas": {
+      "type": "string"
+    },
+
+    "tags": {
+      "type": "Object"
+    }
+  },
+  "variables": {
+    "AppInsightsName": "[parameters('AppInsightsName')]",
+    "ResourceLocation": "[resourceGroup().location]",
+    "SiteResourceID": "[resourceId('Microsoft.Web/Sites', parameters('FunctionAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[variables('ResourceLocation')]",
+      "tags": "[parameters('Tags')]",
+      "sku": {
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "allowBlobPublicAccess": false
+      }
+    },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2021-06-01",
+      "name": "[parameters('workspacename')]",
+      "location": "[variables('ResourceLocation')]",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "kind": "web",
+      "apiVersion": "2020-02-02",
+      "name": "[parameters('AppInsightsName')]",
+      "location": "[Variables('ResourceLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspacename'))]"
+      ],
+      "properties": {
+        "Application_Type": "web",
+        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('FunctionAppName')]",
+      "location": "[variables('ResourceLocation')]",
+      "kind": "functionapp",
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('FunctionAppName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('FunctionAppName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId(parameters('ServerFarmIdRg'), 'Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet-isolated"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('AppInsightsName')), '2014-04-01').InstrumentationKey]"
+            },
+            {
+              "name": "AzureWebJobsSecretStorageType",
+              "value": "[parameters('AppSetting:AzureWebJobsSecretStorageType')]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            /*{
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[parameters('AppSetting:WEBSITE_CONTENTSHARE')]"
+            },*/
+            {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('AppInsightsName')), '2020-02-02').ConnectionString]"
+            },
+
+            // Http HttpMocker settings
+            {
+              "name": "HttpMocker.MockStorageService.Source",
+              "value": "[parameters('HttpMocker.MockStorageService.Source')]"
+            },
+            {
+              "name": "HttpMocker.AzureBlobContainerService.Uri",
+              "value": "[parameters('HttpMocker.AzureBlobContainerService.Uri')]"
+            },
+            {
+              "name": "HttpMocker.AzureBlobContainerService.Container",
+              "value": "[parameters('HttpMocker.AzureBlobContainerService.Container')]"
+            },
+            {
+              "name": "HttpMocker.AzureBlobContainerService.Sas",
+              "value": "[parameters('HttpMocker.AzureBlobContainerService.Sas')]"
+            }
+          ]
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/web')]",
+      "location": "North Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$[parameters('FunctionAppName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": false,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": true
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "reservedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/', parameters('FunctionAppName'), '.azurewebsites.net')]",
+      "location": "North Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+      ],
+      "properties": {
+        "siteName": "[parameters('FunctionAppName')]",
+        "hostNameType": "Verified"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[concat(parameters('vaultName'), '/add')]",
+      "apiVersion": "2019-09-01",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[reference(concat('Microsoft.Web/sites/', parameters('FunctionAppName')), '2018-02-01','Full').identity.tenantId]",
+            "objectId": "[reference(concat('Microsoft.Web/sites/', parameters('FunctionAppName')), '2018-02-01','Full').identity.principalId]",
+            "permissions": {
+              "keys": [ "Get", "List" ],
+              "secrets": [ "Get", "List" ],
+              "certificates": [ "Get", "List" ],
+              "storage": [ "all" ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

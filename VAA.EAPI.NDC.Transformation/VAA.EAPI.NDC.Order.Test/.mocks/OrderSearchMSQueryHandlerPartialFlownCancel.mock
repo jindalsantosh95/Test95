@@ -1,0 +1,476 @@
+###Request
+GET https://Testresources.virginatlantic.com/dev/NdcOrderSearch/OrderSearch HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+
+{
+	"docType": "Indirect",
+	"dataList": {
+		"originDestinationAssociations": [
+			{
+				"odLabel": "OD1",
+				"originDestination": {
+					"originAirport": "LHR",
+					"destinationAirport": "JFK",
+					"departureDate": "2026-08-24"
+				},
+				"journeyRefIds": [
+					"JOUR1"
+				],
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			},
+			{
+				"odLabel": "OD2",
+				"originDestination": {
+					"originAirport": "JFK",
+					"destinationAirport": "LHR",
+					"departureDate": "2026-09-01"
+				},
+				"journeyRefIds": [
+					"JOUR2"
+				],
+				"flightSegmentRefIds": [
+					"SEG2"
+				]
+			}
+		],
+		"customerDetails": [
+			{
+				"custId": "ADULT_1",
+				"ptc": "ADT",
+				"firstName": "DAVID",
+				"lastName": "SMITH",
+				"gender": "U",
+				"dateOfBirth": "1939-08-24",
+				"contacts": {
+					"email": "HINA.KAUSER@FLY.VIRGIN.COM",
+					"phone": "1234567890",
+					"phoneType": "H"
+				},
+				"firstNameNumber": "01",
+				"lastNameNumber": "01"
+			}
+		],
+		"orderInstructions": [],
+		"segmentDetails": [
+			{
+				"odRefId": "OD1",
+				"segmentId": "SEG1",
+				"airCraft": "333",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "9",
+				"originAirportCode": "LHR",
+				"destinationAirportCode": "JFK",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-08-24T14:05:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-08-24T11:20:00"
+				},
+				"flightDuration": "00:07:45:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-08-24T11:20:00"
+						},
+						"legSequenceNumber": "1",
+						"originAirportCode": "LHR",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-08-24T14:05:00"
+						},
+						"destinationAirportCode": "JFK",
+						"legDuration": "00:07:45:00",
+						"legId": "LEG1",
+						"carrierAircraftTypeCode": "333",
+						"carrierAircraftTypeName": "333"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				},
+				"fareBasis": "LYH0D8LA",
+				"status": {
+					"code": "HK"
+				},
+				"ticketNotValidAfter": "2026-08-24",
+				"ticketNotValidBefore": "2026-08-24"
+			},
+			{
+				"odRefId": "OD2",
+				"segmentId": "SEG2",
+				"airCraft": "339",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "4030",
+				"operatingCarrier": "DL",
+				"operatingFlightNumber": "3",
+				"originAirportCode": "JFK",
+				"destinationAirportCode": "LHR",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-09-02T10:20:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-09-01T22:00:00"
+				},
+				"flightDuration": "00:07:20:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-09-01T22:00:00"
+						},
+						"legSequenceNumber": "2",
+						"originAirportCode": "JFK",
+						"operatingCarrier": "DL",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-09-02T10:20:00"
+						},
+						"destinationAirportCode": "LHR",
+						"legDuration": "00:07:20:00",
+						"legId": "LEG2",
+						"carrierAircraftTypeCode": "339",
+						"carrierAircraftTypeName": "339"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				},
+				"fareBasis": "MYJ0D8LA",
+				"status": {
+					"code": "HK"
+				},
+				"ticketNotValidAfter": "2026-09-01",
+				"ticketNotValidBefore": "2026-09-01"
+			}
+		],
+		"priceClass": [
+			{
+				"id": "PC1",
+				"fareBasisCode": "LYH0D8LA",
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				}
+			},
+			{
+				"id": "PC2",
+				"fareBasisCode": "MYJ0D8LA",
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				}
+			}
+		],
+		"journey": [
+			{
+				"journeyId": "JOUR1",
+				"duration": "07:45",
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			},
+			{
+				"journeyId": "JOUR2",
+				"duration": "07:20",
+				"flightSegmentRefIds": [
+					"SEG2"
+				]
+			}
+		]
+	},
+	"creationDateTime": {
+		"utcDateTime": "2026-08-24T05:52:00Z"
+	},
+	"orderNumber": {
+		"orderId": "VS932SIXTLB26",
+		"ownerAirline": "VS"
+	},
+	"bookingReference": {
+		"rloc": "SIXTLB",
+		"rlocCreateDate": "24Aug26",
+		"rlocCreateDateTime": "00:52:00",
+		"externalRecordLocator": "CSALV8",
+		"externalSystem": "1S"
+	},
+	"orderItems": [
+		{
+			"orderItemId": "VS932SIXTLB26-1",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"originDestinationRefIds": [
+						"OD1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"priceClassRefIds": [
+						"PC1"
+					],
+					"serviceDefinitionRefIds": [
+						"SV1"
+					]
+				},
+				{
+					"serviceId": "SV2",
+					"product": {
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"originDestinationRefIds": [
+						"OD2"
+					],
+					"segmentRefIds": [
+						"SEG2"
+					],
+					"priceClassRefIds": [
+						"PC2"
+					],
+					"serviceDefinitionRefIds": [
+						"SV2"
+					]
+				}
+			],
+			"priceDetails": [
+				{
+					"priceComponentType": "BasePrice",
+					"amount": {
+						"monetaryAmount": "1590.89",
+						"baseCurrency": "GBP",
+						"decimalPrecisionCount": 2
+					}
+				},
+				{
+					"priceComponentType": "BaseFare",
+					"amount": {
+						"monetaryAmount": "1029.00",
+						"baseCurrency": "GBP",
+						"decimalPrecisionCount": 2
+					}
+				},
+				{
+					"priceComponentType": "TotalTax",
+					"amount": {
+						"monetaryAmount": "561.89",
+						"baseCurrency": "GBP",
+						"decimalPrecisionCount": 2
+					},
+					"taxBreakup": [
+						{
+							"code": "GB",
+							"amount": {
+								"monetaryAmount": "102.00",
+								"baseCurrency": "GBP",
+								"decimalPrecisionCount": 2
+							}
+						},
+						{
+							"code": "UB",
+							"amount": {
+								"monetaryAmount": "50.79",
+								"baseCurrency": "GBP",
+								"decimalPrecisionCount": 2
+							}
+						},
+						{
+							"code": "US",
+							"amount": {
+								"monetaryAmount": "34.40",
+								"baseCurrency": "GBP",
+								"decimalPrecisionCount": 2
+							}
+						},
+						{
+							"code": "XA",
+							"amount": {
+								"monetaryAmount": "2.80",
+								"baseCurrency": "GBP",
+								"decimalPrecisionCount": 2
+							}
+						},
+						{
+							"code": "XY",
+							"amount": {
+								"monetaryAmount": "5.10",
+								"baseCurrency": "GBP",
+								"decimalPrecisionCount": 2
+							}
+						},
+						{
+							"code": "YC",
+							"amount": {
+								"monetaryAmount": "5.40",
+								"baseCurrency": "GBP",
+								"decimalPrecisionCount": 2
+							}
+						},
+						{
+							"code": "YQ",
+							"amount": {
+								"monetaryAmount": "340.00",
+								"baseCurrency": "GBP",
+								"decimalPrecisionCount": 2
+							}
+						},
+						{
+							"code": "YR",
+							"amount": {
+								"monetaryAmount": "14.00",
+								"baseCurrency": "GBP",
+								"decimalPrecisionCount": 2
+							}
+						},
+						{
+							"code": "AY",
+							"amount": {
+								"monetaryAmount": "4.10",
+								"baseCurrency": "GBP",
+								"decimalPrecisionCount": 2
+							}
+						},
+						{
+							"code": "XF",
+							"amount": {
+								"monetaryAmount": "3.30",
+								"baseCurrency": "GBP",
+								"decimalPrecisionCount": 2
+							}
+						}
+					]
+				}
+			],
+			"accountableDocumentRefs": [
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520403550",
+					"issueDate": "2026-08-24",
+					"issueTime": "06:53:00",
+					"customerRefId": "ADULT_1",
+					"fareCalculation": "LON VS NYC M843.62LYH0D8LA VS LON M532.77MYJ0D8LA NUC1376.39END ROE0.747967 XFJFK4.5",
+					"coupons": [
+						{
+							"segmentRefId": "SEG1",
+							"couponNumber": "1",
+							"ticketNumber": "9322520403550",
+							"couponStatus": "USED",
+							"fareBasis": "LYH0D8LA",
+							"ticketExpirationDate": "24Aug26",
+							"ticketEffectiveDate": "24Aug26"
+						},
+						{
+							"segmentRefId": "SEG2",
+							"couponNumber": "2",
+							"ticketNumber": "9322520403550",
+							"couponStatus": "OPEN",
+							"fareBasis": "MYJ0D8LA",
+							"ticketExpirationDate": "01Sep26",
+							"ticketEffectiveDate": "01Sep26"
+						}
+					]
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			}
+		},
+		{
+			"orderItemId": "VS932SIXTLB26-2",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productType": "Seat"
+					},
+					"currentSeatAssignment": "53D",
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"originDestinationRefIds": [
+						"OD1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"priceClassRefIds": [
+						"PC1"
+					]
+				}
+			],
+			"priceDetails": [
+				{
+					"priceComponentType": "BasePrice",
+					"amount": {
+						"monetaryAmount": "0.00",
+						"baseCurrency": "GBP"
+					}
+				}
+			],
+			"accountableDocumentRefs": [
+				{
+					"documentType": "EMD",
+					"issueDate": "2026-08-24",
+					"customerRefId": "ADULT_1",
+					"fareCalculation": "1LON VS NYC M843.62LYH0D8LA VS LON M532.77MYJ0D8LA NUC1376.39END ROE0.747967 XFJFK4.5",
+					"coupons": [
+						{
+							"segmentRefId": "SEG1",
+							"couponNumber": "1",
+							"ticketNumber": "9322520403550",
+							"couponStatus": "F",
+							"fareBasis": "LYH0D8LA"
+						}
+					]
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			}
+		}
+	],
+	"orderStatus": "Confirmed",
+	"warnings": [],
+	"parties": {
+		"participants": [
+			{
+				"partyType": "Seller",
+				"name": "Skyscanner",
+				"agencyID": "91281035",
+				"ordinal": "1",
+				"pccCode": "6UOL",
+				"contacts": {
+					"email": "Bandaru.JeevanNagaSai@fly.virgin.com"
+				},
+				"isCreditCardAccepted": true,
+				"requestAgentType": "IATA"
+			}
+		]
+	},
+	"orderRemarks": [
+		{
+			"text": "XXTAW/"
+		}
+	],
+	"id": "VS932SIXTLB26",
+	"partitionKey": "VS932SIXTLB26"
+}

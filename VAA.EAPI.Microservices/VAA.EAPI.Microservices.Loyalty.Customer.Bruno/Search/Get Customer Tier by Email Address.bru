@@ -1,0 +1,16 @@
+meta {
+  name: Get Customer Tier by Email Address
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{customer_base_url}}/customerSearchByEmail/{{customer_email}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

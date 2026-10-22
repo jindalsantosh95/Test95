@@ -1,0 +1,10 @@
+{
+  "query": "query FindTripByFlightDate($pnr: String!, $flightDate: String!, $givenName: String!, $surname: String!) { FindTripByFlightDate(pnr: $pnr, flightDate: $flightDate, givenName: $givenName, surname: $surname) { id passengers { firstName lastName } product { reference { pnrLocator bookingDate } checkInEligible accessibleTravelEligible slices { segments { marketingCarrier { carrierCode flightNumber } origin { code } destination { code } scheduledArrivalUtcDateTime } } } } }",
+  "variables": {
+    "pnr": null,
+    "flightDate": null,
+    "givenName": null,
+    "surname": null
+  },
+  "operationName": "FindTripByFlightDate"
+}

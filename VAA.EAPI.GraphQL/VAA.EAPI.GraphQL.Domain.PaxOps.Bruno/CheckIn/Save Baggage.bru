@@ -1,0 +1,34 @@
+meta {
+  name: Save Baggage
+  type: graphql
+  seq: 7
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SaveBaggage {
+      SaveBaggage(request: { checkInId: "{{checkInId}}", selectedBaggageOffer: [{
+              passengerNiN: "{{passengerNiN}}",
+              baggageOfferId: "{{1stFreeBaggageOfferId}}",
+              baggageCount: {{1stFreeBaggageCount}},
+              totalPrice: {{1stFreeBaggagePrice}},
+              decimalPrecisionCount: {{1stFreeBaggageDecimalPrecisionCount}}
+      }],
+      emailAddress: "{{emailAddress}}"
+      }) 
+    {
+          checkInId
+    }
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

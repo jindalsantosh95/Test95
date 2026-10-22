@@ -1,0 +1,22 @@
+meta {
+  name: update bags
+  type: http
+  seq: 12
+}
+
+patch {
+  url: {{delta_ssci}}/{{travelparty_id}}/addBags
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "pendingPayment": {{pending_payment}}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,280 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "FunctionAppName": {
+      "value": "avapeunafnwallet"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPI-COMMON"
+    },
+    "AppInsightsName": {
+      "value": "avapeunaiwallet"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "Appsetting:AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "Appsetting:KeyVaultUri": {
+      "value": "https://avapeunkvems.vault.azure.net/"
+    },
+    "storageAccountName": {
+      "value": "avapeunstwallet"
+    },
+    "Appsetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSetting:WEBSITE_CONTENTSHARE": {
+      "value": "avapeunafnwallet"
+    },
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/2b812f93-ac9a-4076-b085-9b6aff727505/User_impersonation"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Wallet Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This endpoint will provide wallet  details ."
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "Appsetting:AAD:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:EapiMsClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-EapiMsClientId/)"
+    },
+    "Appsetting:EapiMSSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-EapiMsSecret/)"
+    },
+    //Wallet settings
+    "AppSetting:PassTypeIdentifier": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-PassTypeIdentifier/)"
+    },
+    "AppSetting:TeamIdentifier": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-TeamIdentifier/)"
+    },
+    "AppSetting:PassbookCertificate": {
+      "value": "PassbookCertificate"
+    },
+    "AppSetting:AppleWalletCertificate": {
+      "value": "AppleWalletCertificate"
+    },
+    "AppSetting:APNSPushCertificate": {
+      "value": "APNSPushCertificate"
+    },
+    "AppSetting:WalletBlobUrl": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/WalletBlobUrl/)"
+    },
+    "AppSetting:Red_Background_RGB": {
+      "value": "rgb(218, 5, 48)"
+    },
+    "AppSetting:Gold_Background_RGB": {
+      "value": "rgb(165, 139, 66)"
+    },
+    "AppSetting:Silver_Background_RGB": {
+      "value": "rgb(137, 149, 157)"
+    },
+    "AppSetting:WalletDBConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-StorageAccount/)"
+    },
+    "AppSetting:RegisterPassTable": {
+      "value": "WalletPassTable"
+    },
+    "AppSetting:PushPassTable": {
+      "value": "PushPassTable"
+    },
+    "AppSetting:WalletNotificationResponseUrl": {
+      "value": "https://resources.virginatlantic.com/Walletmicroservice/WalletNotificationResponse/{CorrelationId}"
+    },
+    "AppSetting:RecordCount": {
+      "value": "1000"
+    },
+    "AppSetting:ResponsePollingCount": {
+      "value": "50"
+    },
+    "AppSetting:ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-StorageAccount/)"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "WalletEventStore"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "value": "WalletResponse"
+    },
+    "AppSetting:WalletGeneratePassUrl": {
+      "value": "https://resources.virginatlantic.com/RunTheOperation/"
+    },
+    "AppSetting:WalletFacadeAppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-WalletFacadeAppId/)"
+    },
+    "AppSetting:CustomerMsUrl": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/"
+    },
+    "AppSetting:CustomerAppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-CustomerAppId/)"
+    },
+    "AppSetting:CustomerTransUrl": {
+      "value": "https://resources.virginatlantic.com/customertransactions/"
+    },
+    "AppSetting:CustomerTransAppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-CustomerTransAppId/)"
+    },
+    "AppSetting:EapiOcpSubId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-EapiOcpSubId/)"
+    },
+    "AppSetting:PushNotificationKeyId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-PushNotificationKeyId/)"
+    },
+    "AppSetting:IsDevelopmentServer": {
+      "value": false
+    },
+    "AppSetting:AppleApiDevEndpoint": {
+      "value": "https://api.sandbox.push.apple.com"
+    },
+    "AppSetting:AppleApiProdEndpoint": {
+      "value": "https://api.push.apple.com"
+    },
+    "AppSetting:AppleApiDevPort": {
+      "value": "2197"
+    },
+    "AppSetting:AppleApiProdPort": {
+      "value": "443"
+    },
+    "AppSetting:AirshipFlightEndpoint": {
+      "value": "https://wallet-api.asnapieu.com/v1/flights/project/id/boarding_pass_live/id"
+    },
+    "AppSetting:AirshipWalletLinkEndpoint": {
+      "value": "https://wallet-api.asnapieu.com/v1/links/adaptive/multiple/project/221"
+    },
+    "AppSetting:AirShipWalletAdaptivePassUrlPrefix": {
+      "value": "https://wallet-api.asnapieu.com/v1/pass/adaptive"
+    },
+    "AppSetting:AirshipTokenValue": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-AirshipTokenValue/)"
+    },
+    "AppSetting:RedisConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-Redisconnectionstring/)"
+    },
+    "AppSetting:BoardingPassSlidingExpiryHours": {
+      "value": "48"
+    },
+    "AppSetting:SecureProgramImageUrl": {
+      "value": "https://vaabrowse.virginatlantic.com/content/dam/vaa-home/grouped-boarding-pass-badges.png"
+    },
+    "AppSetting:SkyPriorityImgUrl": {
+      "value": "http://vaabrowse.virginatlantic.com/content/dam/vaa-home/sky-priority-badge.png"
+    },
+    "AppSetting:TSAPreImgUrl": {
+      "value": "http://vaabrowse.virginatlantic.com/content/dam/vaa-home/tsa-pre-badge.png"
+    },
+    "AppSetting:AirshipIosPremiumTemplate": {
+      "value": "337012"
+    },
+    "AppSetting:AirshipIosUpperTemplate": {
+      "value": "337015"
+    },
+    "AppSetting:AirshipIosDLTemplate": {
+      "value": "337013"
+    },
+    "AppSetting:AirshipIosOATemplate": {
+      "value": "337014"
+    },
+    "AppSetting:AirshipAndroidPremiumTemplate": {
+      "value": "337016"
+    },
+    "AppSetting:AirshipAndroidUpperTemplate": {
+      "value": "337017"
+    },
+    "AppSetting:AirshipAndroidDLTemplate": {
+      "value": "337018"
+    },
+    "AppSetting:AirshipAndroidOATemplate": {
+      "value": "337019"
+    },
+    "AppSetting:AirshipIosEconomyTemplate": {
+      "value": "337010"
+    },
+    "AppSetting:AirshipAndroidEconomyTemplate": {
+      "value": "337011"
+    },
+    "AppSetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwallet-Config-ServiceBusConnectionString/)"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "Wallet ms",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "PROD",
+        "Purpose": "Wallet ms",
+        "ApplicationUsageIdList": "avapeunafnwallet"
+      }
+    }
+  }
+}

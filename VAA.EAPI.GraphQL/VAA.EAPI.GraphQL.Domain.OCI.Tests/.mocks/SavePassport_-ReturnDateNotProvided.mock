@@ -1,0 +1,154 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/CheckIn/savePassport HTTP/1.1
+
+$[?(@.passengerId == '01.01|49f4da79-c207-4c46-a3a8-833e140cfde9|9999225479295|3487bb6a-b781-48a9-acf2-1def8b0475gA')]
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "travelPartyId": "TEST02-Id-SSCI",
+    "requirementsId": "TEST02-Id-TRM",
+    "reference": {
+        "pnrLocator": "FEIOWM",
+        "createdDate": "2025-09-29"
+    },
+    "passengers": [
+        {
+            "passengerId": "01.01|49f4da79-c207-4c46-a3a8-833e140cfde9|9999225479295|3487bb6a-b781-48a9-acf2-1def8b0475gA",
+            "givenNames": "TESTING",
+            "surname": "ESTAB",
+            "dateOfBirth": "2011-09-29",
+            "email": "DPD1KF@EXAMPLE.COM",
+            "phone": {
+                "countryCode": "",
+                "number": "447462737411"
+            },
+            "documents": [
+                {
+                    "documentType": "PASSPORT",
+                    "givenNames": "TESTING",
+                    "surname": "ESTAB",
+                    "dateOfBirth": "2011-09-29",
+                    "gender": {
+                        "code": "M"
+                    },
+                    "documentNumber": "315476765",
+                    "expirationDate": "2032-11-06",
+                    "issuingCountry": {
+                        "code": "USA"
+                    },
+                    "nationality": {
+                        "code": "USA"
+                    },
+                    "countryOfResidence": {
+                        "code": "USA"
+                    }
+                }
+            ],
+            "requirements": {
+                "passportProvided": true,
+                "passportVerified": false,
+                "contactTracing": "NOT_REQUIRED",
+                "returnDateStatus": "REQUIRED",
+                "returnDate": null,
+                "checkinEligible": true,
+                "passportErrors": [],
+                "secondaryDocumentStatus": "REQUIRED",
+                "overall": "PART_COMPLETE"
+            },
+            "emergencyContact": {},
+            "contactTracing": {
+                "inTransit": false,
+                "email": "DPD1KF@EXAMPLE.COM",
+                "noEmail": false,
+                "primaryPhoneNumber": "447462737411",
+                "primaryPhoneNumberCountryCode": ""
+            }
+        }
+    ],
+    "currentSlice": {
+        "sliceId": "f4da05ea-51dd-4304-b639-4ee7050ce867",
+        "scheduledDepartureLocalDateTime": "2025-10-03T11:40:00",
+        "scheduledDepartureUtcDateTime": "2025-10-03T10:40:00",
+        "scheduledArrivalLocalDateTime": "2025-10-04T01:40:00",
+        "scheduledArrivalUtcDateTime": "2025-10-03T20:10:00",
+        "origin": {
+            "terminalName": "Terminal 3",
+            "code": "LHR",
+            "airportName": "Heathrow Airport",
+            "countryCode": "GBR"
+        },
+        "destination": {
+            "code": "BOM",
+            "airportName": "Chhatrapati Shivaji Intl",
+            "countryCode": "IND"
+        },
+        "segments": [
+            {
+                "segmentId": "efcd1a02-58bd-45b9-aaa4-da658d85ca36",
+                "ordinal": 1,
+                "operatingCarrier": {
+                    "flightNum": "0358",
+                    "carrierCode": "VS",
+                    "carrierName": "Virgin Atlantic"
+                },
+                "marketingCarrier": {
+                    "flightNum": "0358",
+                    "carrierCode": "VS",
+                    "carrierName": "Virgin Atlantic"
+                },
+                "scheduledDepartureLocalDateTime": "2025-10-03T11:40:00",
+                "scheduledDepartureUtcDateTime": "2025-10-03T10:40:00",
+                "scheduledArrivalLocalDateTime": "2025-10-04T01:40:00",
+                "scheduledArrivalUtcDateTime": "2025-10-03T20:10:00",
+                "origin": {
+                    "terminalName": "Terminal 3",
+                    "code": "LHR",
+                    "airportName": "Heathrow Airport",
+                    "countryCode": "GBR"
+                },
+                "destination": {
+                    "code": "BOM",
+                    "airportName": "Chhatrapati Shivaji Intl",
+                    "countryCode": "IND"
+                },
+                "legs": [
+                    {
+                        "legId": "3a5c49da-01b7-47fd-9f28-334ca55ae8ed",
+                        "ordinal": 1,
+                        "scheduledDepartureLocalDateTime": "2025-10-03T11:40:00",
+                        "scheduledDepartureUtcDateTime": "2025-10-03T10:40:00",
+                        "scheduledArrivalLocalDateTime": "2025-10-04T01:40:00",
+                        "scheduledArrivalUtcDateTime": "2025-10-03T20:10:00",
+                        "origin": {
+                            "code": "LHR",
+                            "airportName": "Heathrow Airport",
+                            "countryCode": "GBR"
+                        },
+                        "destination": {
+                            "code": "BOM",
+                            "airportName": "Chhatrapati Shivaji Intl",
+                            "countryCode": "IND"
+                        },
+                        "distanceMiles": 4480,
+                        "flightDuration": "9H 30M",
+                        "aircraftTypeName": "Boeing 787-9",
+                        "status": "On time"
+                    }
+                ]
+            }
+        ]
+    },
+    "onlineCheckInStatus": {
+        "available": true
+    },
+    "applyEmergencyContactToAllPax": true,
+    "applyContactTracingToAllPax": true,
+    "secondaryDocumentationErrors": null
+}

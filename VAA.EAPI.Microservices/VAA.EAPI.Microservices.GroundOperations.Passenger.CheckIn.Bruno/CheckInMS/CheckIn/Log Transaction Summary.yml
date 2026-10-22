@@ -1,0 +1,40 @@
+info:
+  name: Log Transaction Summary
+  type: http
+  seq: 12
+
+http:
+  method: POST
+  url: "{{checkinms}}/CheckIn/TransactionSummary"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: "{\r
+
+      \    \"travelPartyId\": \"{{travelPartyId}}\",\r
+
+      \    \"recordLocator\": \"{{pnrLocator}}\",\r
+
+      \    \"originAirportCode\": \"{{origin}}\",\r
+
+      \    \"transactionError\": \"redirectJVPartner\"\r
+
+      }"
+  auth: inherit
+
+runtime:
+  variables:
+    - name: travelPartyId
+      value: ""
+    - name: pnrLocator
+      value: CJADUR
+    - name: origin
+      value: LHR
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

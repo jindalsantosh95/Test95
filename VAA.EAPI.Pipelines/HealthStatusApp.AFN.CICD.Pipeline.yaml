@@ -1,0 +1,108 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.HealthStatusApp/VAA.EAPI.HealthStatusApp*
+      - VAA.EAPI.HealthStatusApp/VAA.EAPI.HealthStatusApp.Deployment*
+    exclude: 
+      - VAA.EAPI.HealthStatusApp/VAA.EAPI.HealthStatusApp.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.HealthStatusApp/VAA.EAPI.HealthStatusApp*
+      - VAA.EAPI.HealthStatusApp/VAA.EAPI.HealthStatusApp.Deployment*
+    exclude: 
+      - VAA.EAPI.HealthStatusApp/VAA.EAPI.HealthStatusApp.bruno
+
+variables: 
+  - group: Common_Variables
+  - group: AzureWebJobsStorage
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines'    
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release' 
+  - name: testRepoPath_SIT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'   
+  - name: testRepoPath_UAT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'     
+  - name: rootPath
+    value: 'VAA.EAPI.HealthStatusApp' 
+  - name: subRootPath
+    value: 'VAA.EAPI.HealthStatusApp'   
+  - name: applicationName
+    value: 'HealthStatusApp'
+  - name: microserviceName
+    value: 'HealthStatusApp' 
+  - name: productId
+    value: 'EAPI-HealthStatusApp'  
+  - name:  appServiceName_DEV
+    value: 'avadeunwaservicedashboard' 
+  - name:  appServiceName_SIT
+    value: 'avateunawaservicedashboard' 
+  - name:  appServiceName_UAT
+    value: 'avaseunawaservicedashboard' 
+  - name:  appServiceName_PRD
+    value: 'avapeunawaservicedashboard'         
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_unittest_HealthStatus.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location) 
+      rootPath: $(rootPath)  
+      subRootPath: $(subRootPath)
+      applicationName: $(applicationName)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      subscriptionId_Prod: $(subscriptionId_Prod)  
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_apim_nonslot_product_withoutvnet_HealthStatus.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      buildConfiguration: $(buildConfiguration)  
+      location: $(location)                     
+      applicationName: $(applicationName)  
+      microserviceName: $(microserviceName)
+      productId: $(productId)
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      subscriptionId_Prod: $(subscriptionId_Prod)          
+      appServiceName_DEV: $(appServiceName_DEV)
+      appServiceName_SIT: $(appServiceName_SIT)
+      appServiceName_UAT: $(appServiceName_UAT)
+      appServiceName_PRD: $(appServiceName_PRD)  
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)        
+      WEBSITE_DNS_ALT_SERVER_SANDBOX: $(secondaryDNS)
+      WEBSITE_DNS_SERVER_SANDBOX: $(primaryDNS)

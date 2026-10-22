@@ -1,0 +1,101 @@
+parameters:
+  agentPool: ''
+  agentPool_deployment: ''
+  agentSpecification: ''
+  applicationName: ''
+  functionAppName: ''
+  environment: ''
+  location: ''
+  resourceGroupName: ''
+  serviceConnection: ''
+  subscriptionId: ''
+  APIM_IP: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''   
+  workspaceResourceId: ''
+
+jobs: 
+- deployment: '${{parameters.environment}}'      
+  
+  pool:
+    name: ${{parameters.agentPool_deployment}} 
+    vmImage: ${{parameters.agentSpecification}}  
+  
+  environment: ${{parameters.environment}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop      
+
+        # Task to create the Function App      
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create Function App'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.serviceConnection}}
+            subscriptionid: ${{parameters.subscriptionId}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}
+            location:  ${{parameters.location}}
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy_slot.json
+            csmParametersFile: $(Pipeline.workspace)/drop/Parameters/${{parameters.environment}}-azuredeploy.parameters.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -workspaceResourceId ${{parameters.workspaceResourceId}} -WEBSITE_DNS_ALT_SERVER ${{parameters.WEBSITE_DNS_ALT_SERVER}} -WEBSITE_DNS_SERVER ${{parameters.WEBSITE_DNS_SERVER}} 
+
+        # Task to deploy to the Slot Function App
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy to ${{parameters.functionAppName}} Function App' 
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            appType: 'functionApp'
+            appName: ${{parameters.functionAppName}}
+            resourceGroupName: ${{parameters.resourceGroupName}}
+            package: '$(Pipeline.workspace)/drop/*.zip'
+            deploymentMethod: 'runFromPackage' 
+            deployToSlotOrASE: true                
+            slotName: DS
+        
+        # Task to Start the Slot Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start Azure App Service (Slot): ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionAppName}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}            
+            SpecifySlotOrASE: true
+            Slot: DS  
+
+        # Task to Start Swap with Preview in Prod Function App
+        - task: AzureAppServiceManage@0
+          displayName: Start Swap with Preview'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Swap With Preview'
+            WebAppName: ${{parameters.functionAppName}}
+            resourceGroupName:  ${{parameters.resourceGroupName}} 
+            SourceSlot: DS
+            PreserveVnet: true
+
+        # Task to Complete the Swap with Prod Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Complete Swap slot to Env'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Complete Swap'
+            WebAppName: ${{parameters.functionAppName}}
+            resourceGroupName:  ${{parameters.resourceGroupName}} 
+            SourceSlot: DS
+            PreserveVnet: true
+
+        # Task to Stop the Slot Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop Azure App Service (Slot): ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName}}
+            resourceGroupName:  ${{parameters.resourceGroupName}} 
+            SpecifySlotOrASE: true
+            Slot: DS
+    

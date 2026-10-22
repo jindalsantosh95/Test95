@@ -1,0 +1,9 @@
+{
+  "query": "query RetrieveBooking($bookingRef: String!, $firstName: String!, $lastName: String!) {\n  retrieveBooking(bookingRef: $bookingRef, firstName: $firstName, lastName: $lastName) {\n    recordLocator\n    bookingDate\n    segments {\n      cabin\n      departure\n      destination\n      eligibility\n      marketingFlight {\n        airlineCode\n        number\n      }\n      operatingFlight {\n        airlineCode\n        number\n      }\n      origin\n      segmentID\n    }\n    passengers {\n      firstName\n      frequentFlyerNumber\n      lastName\n      passengerId\n      selectedMeal\n    }\n  }\n}",
+  "variables": {
+    "bookingRef": "",
+    "firstName": "",
+    "lastName": ""
+  },
+  "operationName": "RetrieveBooking"
+}

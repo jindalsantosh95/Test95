@@ -1,0 +1,42 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+
+    "AppInsightsName": {
+      "value": "AVASEUNAILOYALTYMBRMGMT"
+    },
+    "actionGroupsname": {
+      "value": "LOOPS_ProjectTeam_Email"
+    },
+    "actionGroupsshortname": {
+      "value": "Loops_Email"
+    },
+    "emailAddress": {
+      "value": "DF_MarketingLoyaltyTCSTeam@fly.virgin.com"
+    },
+    "alertname": {
+      "value": "for_LoyaltyMember_Operations"
+    },
+    "ResourceLocation": {
+      "value": "North Europe"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEAPI"
+    },
+    "queryrules": {
+      "value": "exceptions \n| where operation_Name in (\"Partners\", \"HouseholdDetails\", \"GetLoyaltyMember\", \"HouseholdDissolveEventSubscriber\", \"LinkAccount\", \"BirthdayBonusDailyTimer\", \"TargetedMembershipDeleteMessageSubscriber\", \"DelinkAccountMemberStatusUpdateEventSubscriber\", \"LTGAwardEventSubscriber\", \"MillionMilerAwardEventSubscriber\", \"BirthdayEmailDailyTimer\") \n | summarize count() by operation_Name"
+    },
+    "Tags": {
+      "value": {
+        "APPLICATION NAME": "Loops-LoyaltyMember",
+        "DOMAIN": "API Enterprise",
+        "ENVIRONMENT": "DEV",
+        "CR": ""
+      }
+    }
+  }
+}

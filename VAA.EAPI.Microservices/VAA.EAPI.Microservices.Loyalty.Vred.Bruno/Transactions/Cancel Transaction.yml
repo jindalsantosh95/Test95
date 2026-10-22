@@ -1,0 +1,45 @@
+info:
+  name: Cancel Transaction
+  type: http
+  seq: 3
+  tags:
+    - Transactions
+
+http:
+  method: POST
+  url: "{{baseUrl}}/VredTransaction/Cancel"
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+    - name: x-correlation-id
+      value: "VRED-Bruno-{{$randomUUID}}"
+    - name: api-channel
+      value: Bruno
+    - name: Authorization
+      value: "Bearer {{accessToken}}"
+      disabled: true
+    - name: Ocp-Apim-Subscription-Key
+      value: "{{ocpApimSubscriptionKey}}"
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "transactionId": "{{transactionId}}",
+        "activityDate": "{{activityDate}}",
+        "transactionChannel": "WEB",
+        "memberNumber": "{{memberNumber}}",
+        "cancellationReason": "Synthetic cancellation from the Vred Bruno collection",
+        "createdBy": "Bruno",
+        "updatedBy": "Bruno",
+        "comments": "Synthetic Bruno cancellation"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

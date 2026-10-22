@@ -1,0 +1,41 @@
+﻿###Request
+GET https://tempuri.org/v1.0/users HTTP/1.1
+
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users",
+    "value": [
+        {
+            "id": "12345678-1234-1234-1234-123456789012",
+            "businessPhones": ["+44 20 7946 0958"],
+            "displayName": "User One",
+            "givenName": "User",
+            "mail": "user1@example.com",
+            "surname": "One",
+            "userPrincipalName": "user1@example.com",
+            "accountEnabled": true,
+            "jobTitle": "Software Developer",
+            "department": "Engineering"
+        },
+        {
+            "id": "87654321-4321-4321-4321-210987654321",
+            "businessPhones": ["+44 20 7946 0959"],
+            "displayName": "User Two",
+            "givenName": "User",
+            "mail": "user2@example.com",
+            "surname": "Two",
+            "userPrincipalName": "user2@example.com",
+            "accountEnabled": true,
+            "jobTitle": "Product Manager",
+            "department": "Product"
+        }
+    ]
+}

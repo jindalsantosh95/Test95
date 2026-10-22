@@ -1,0 +1,204 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "DEV"
+    },
+    "FunctionAppName": {
+      "value": "AVADEUNAFNFLTSRV"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-D-EUN-ENTERPRISEAPI"
+    },
+    "AppServicePlanName": {
+      "value": "AVADEUNASPEAPI"
+    },
+    "AppInsightsName": {
+      "value": "AVADEUNAIFLTSRV"
+    },
+    "vaultName": {
+      "value": "AVADEUNKVEAPIS"
+    },
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNFLTSRV-Config-StorageAccount/)"
+    },
+    "APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "7d55e3f3-6210-44ef-b66c-743b91ad47f1"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avadeunstfltsrv"
+    },
+    "cosmosDbName": {
+      "value": "avadeuncmdbfltsrv"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "CosmosSqlDBConnectionMode": {
+      "value": "Gateway"
+    },
+    "OfferExpiryLimitInMinutes": {
+      "value": "20"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "CommonCachingAbsoluteExpirationInDay": {
+      "value": "1"
+    },
+    "CommonCachingSlidingExpirationInDay": {
+      "value": "1"
+    },
+    "MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNFLTSRV-Config-StorageAccount/)"
+    },
+
+    //SSR Settings for MyTrips
+    "Appsetting:x-air4_mytrips_test": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/x-air4-mytrips-test/)"
+    },
+    "Appsetting:DlSSRUri": {
+      "value": "https://specialservicerequest-api-si.vs01.vs.air4.com/v1/ssrs"
+    },
+
+    "Appsetting:DeltaClientIdValue": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/avadeunafntripmicroservice-DeltaClientIdValue/)"
+    },
+    "Appsetting:DeltaClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/avadeunafntripmicroservice-DeltaClientSecret/)"
+    },
+    "Appsetting:DeltaAir4TokenEndpoint": {
+      "value": "https://ssaasi.vs01.vs.air4.com/as/token.oauth2"
+    },
+    "Appsetting:SwitchToPrivateEndpoints": {
+      "value": true
+    },
+    "Appsetting:DlMySSRPrivateUri": {
+      "value": "https://specialservicerequest-api-si.vs01.vs.air4.com/v1/ssr-auth/ssrs/"
+    },
+
+    "AppSetting:RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNVALIDATIONMICROSERV-Redis-Connectionstring/)"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API- Flight Services Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides Flight Service Offer Details"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/Agency/Validate"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": false
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": true
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNFLTSRV-Config-StorageAccount/)"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avadeunafnfltsrv-7f202aa3"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED": {
+      "value": "1"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "DeltaCertificateName": {
+      "value": "NdcDLSoaCertificate"
+    },
+    "KeyVaultUri": {
+      "value": "https://avadeunkveapis.vault.azure.net/"
+    },
+    "ApplicationId": {
+      "value": "DC"
+    },
+    "TestLab": {
+      "value": "TVTH"
+    },
+    "DebugOptions": {
+      "value": "N"
+    },
+    "Air4PnrCommonEndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:31063/pnrcommon/v6"
+    },
+    "SpecialServiceRequestV4EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:31052/specialservicerequest/v4"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "FlightServices",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Flight Services API AFN",
+        "ApplicationUsageIdList": "AVADEUNAFNFLTSRV"
+      }
+    }
+  }
+}

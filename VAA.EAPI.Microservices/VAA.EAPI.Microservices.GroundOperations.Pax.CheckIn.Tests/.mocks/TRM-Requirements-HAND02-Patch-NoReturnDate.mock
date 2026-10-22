@@ -1,0 +1,365 @@
+###Request
+PATCH https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements/handcrafted-example-03-trm HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "requirementsResourceId": "handcrafted-example-03-trm",
+    "checkin": false,
+    "travelRequirements": {
+        "id": "1694d409-15b5-4de0-a2a2-241e0185550a",
+        "bookingReference": {
+            "id": "GXPDFV",
+            "creationDate": "2025-09-30T00:00:00Z"
+        },
+        "trips": [
+            {
+                "id": "e6c6385c-b389-478b-a7c0-9ebf9224e902",
+                "ordinal": 0,
+                "departureStation": {
+                    "code": "LHR",
+                    "name": "Heathrow Airport",
+                    "country": {
+                        "code": "GB",
+                        "isoAlpha3Code": "GBR"
+                    }
+                },
+                "arrivalStation": {
+                    "code": "SEA",
+                    "name": "Tacoma International",
+                    "country": {
+                        "code": "US",
+                        "isoAlpha3Code": "USA"
+                    }
+                },
+                "firstDepartureLocalDate": "2025-10-01T13:25:00+01:00",
+                "lastArrivalLocalDate": "2025-10-01T15:30:00-07:00",
+                "segments": [
+                    {
+                        "id": "9854802f-7e08-4c20-b784-656a40acf573",
+                        "ordinal": 1,
+                        "operatingCarrier": {
+                            "code": "VS",
+                            "name": "Virgin Atlantic"
+                        },
+                        "flightNum": "0105",
+                        "marketingSegment": {
+                            "flightNum": "0105",
+                            "marketingCarrier": [
+                                {
+                                    "code": "VS",
+                                    "name": "Virgin Atlantic"
+                                }
+                            ]
+                        },
+                        "legs": [
+                            {
+                                "id": "148808c3-580f-4935-a935-7c308d4908f2",
+                                "ordinal": 1,
+                                "departure": {
+                                    "station": {
+                                        "code": "LHR",
+                                        "name": "Heathrow Airport",
+                                        "country": {
+                                            "code": "GB",
+                                            "isoAlpha3Code": "GBR"
+                                        }
+                                    },
+                                    "estimatedDepartureLocalDateTime": "2025-10-01T13:25:00+01:00",
+                                    "scheduledDepartureLocalDateTime": "2025-10-01T13:25:00+01:00",
+                                    "estimatedDepartureUTCDateTime": "2025-10-01T12:25:00Z",
+                                    "scheduledDepartureUTCDateTime": "2025-10-01T12:25:00Z"
+                                },
+                                "arrival": {
+                                    "station": {
+                                        "code": "SEA",
+                                        "name": "Tacoma International",
+                                        "country": {
+                                            "code": "US",
+                                            "isoAlpha3Code": "USA"
+                                        }
+                                    },
+                                    "estimatedArrivalLocalDateTime": "2025-10-01T15:30:00-07:00",
+                                    "scheduledArrivalLocalDateTime": "2025-10-01T15:30:00-07:00",
+                                    "estimatedArrivalUTCDateTime": "2025-10-01T22:30:00Z",
+                                    "scheduledArrivalUTCDateTime": "2025-10-01T22:30:00Z"
+                                },
+                                "international": true
+                            }
+                        ],
+                        "international": true,
+                        "transportType": "AIR"
+                    }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": true
+            }
+        ],
+        "passengers": [
+            {
+                "passengerResourceId": "98f6213c-967b-43df-aa9b-9eb6bde499e9",
+                "givenNames": "BRADLY",
+                "surname": "HAESE",
+                "nameNum": "01.01",
+                "customerId": "9999219264604",
+                "birthDate": "1992-09-30T00:00:00Z",
+                "status": {
+                    "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "148808c3-580f-4935-a935-7c308d4908f2",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": true,
+                                                "returnDateDeclined": true,
+                                                "verified": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "CONTACT_TRACING",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "acceptanceWindow": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "from": "PT72H",
+                                                    "to": ""
+                                                },
+                                                "effectivity": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "effectiveUTCDate": "2021-11-08 04:01:00Z",
+                                                    "expirationUTCDate": "2029-11-08 00:00:00Z",
+                                                    "effectiveLocalDate": "2021-11-08 00:00:00Z",
+                                                    "expirationLocalDate": "2029-11-08 00:00:00Z"
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "ruleId": "LEG_INTL_US-S1LHRSEA",
+                                                "digitalVerificationEligible": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "e6c6385c-b389-478b-a7c0-9ebf9224e902",
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": true,
+                                                "returnDateDeclined": true,
+                                                "verified": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "CONTACT_TRACING",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "acceptanceWindow": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "from": "PT72H",
+                                                    "to": ""
+                                                },
+                                                "effectivity": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "effectiveUTCDate": "2021-11-08 04:01:00Z",
+                                                    "expirationUTCDate": "2029-11-08 00:00:00Z",
+                                                    "effectiveLocalDate": "2021-11-08 00:00:00Z",
+                                                    "expirationLocalDate": "2029-11-08 00:00:00Z"
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "ruleId": "LEG_INTL_US-S1LHRSEA",
+                                                "digitalVerificationEligible": false
+                                            },
+                                            {
+                                                "requirementType": "SELF_DECLARATION_FORM",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "acceptanceWindow": {
+                                                    "from": "",
+                                                    "to": ""
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "country": {
+                                                    "code": "US",
+                                                    "isoAlpha3Code": "USA"
+                                                },
+                                                "links": [
+                                                    {
+                                                        "linkId": "INTLUSA_VisaReq",
+                                                        "text": "United States of America (the) Travel Advice Page",
+                                                        "href": "https://help.virginatlantic.com/gb/en/travel-advice.html"
+                                                    }
+                                                ],
+                                                "ruleId": "dynamically_generated_LEG_INTL_US",
+                                                "digitalVerificationEligible": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "exceptions": [
+                                    {
+                                        "code": "travelrequirement_030_011",
+                                        "displayCode": "ReturnOnwardTicketNeeded",
+                                        "message": "<p>Passengers with an ESTA authorization must have a return/onward ticket.</p>",
+                                        "developerMessage": "TIMATIC,<p>Passengers with an ESTA authorization must have a return/onward ticket.</p>",
+                                        "moreInfo": [
+                                            {
+                                                "code": "ADMISSION_AND_TRANSIT_RESTRICTIONS"
+                                            }
+                                        ],
+                                        "category": "VALIDATE",
+                                        "priority": 5
+                                    }
+                                ],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": false,
+                                "checkinEligible": false
+                            }
+                        ],
+                        "travelDocuments": [
+                            {
+                                "type": "PASSPORT",
+                                "subType": "P",
+                                "givenNames": "BRADLY",
+                                "surname": "HAESE",
+                                "birthDate": "1992-09-30",
+                                "gender": {
+                                    "code": "M",
+                                    "name": "Male"
+                                },
+                                "number": "856107885",
+                                "expirationDate": "2032-11-03",
+                                "issuingCountry": {
+                                    "code": "GBR",
+                                    "name": "United Kingdom",
+                                    "isoAlpha2Code": "GB"
+                                },
+                                "nationality": {
+                                    "code": "GBR",
+                                    "name": "United Kingdom",
+                                    "isoAlpha2Code": "GB"
+                                },
+                                "countryOfResidence": {
+                                    "code": "GBR",
+                                    "name": "United Kingdom",
+                                    "isoAlpha2Code": "GB"
+                                },
+                                "methodOfDataEntry": "P",
+                                "documentFeature": "NONE",
+                                "sourceFromType": "PNR"
+                            }
+                        ],
+                        "contactInformation": [
+                            {
+                                "requirements": [
+                                    {
+                                        "type": "US_ADDRESS",
+                                        "required": true,
+                                        "allowEmpty": false
+                                    },
+                                    {
+                                        "type": "PRIMARY_PHONE",
+                                        "required": true,
+                                        "allowEmpty": false
+                                    },
+                                    {
+                                        "type": "SECONDARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "EMAIL",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    }
+                                ],
+                                "address": {},
+                                "email": [
+                                    {
+                                        "verified": false,
+                                        "value": "ET0X3H@EXAMPLE.COM"
+                                    }
+                                ],
+                                "phone": [
+                                    {
+                                        "verified": false,
+                                        "preference": "PRIMARY",
+                                        "type": "MOBILE",
+                                        "countryCode": "",
+                                        "phoneNumber": "447463863291"
+                                    }
+                                ]
+                            }
+                        ],
+                        "emergencyContact": [
+                            {}
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

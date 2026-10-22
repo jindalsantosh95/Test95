@@ -1,0 +1,21 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/tripmicroservice/trips/search HTTP/1.1
+
+$[?(@.confirmationNum == 'EB9XBQ')]
+
+###Response
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+[
+    {
+        "code": "ROR5003",
+        "message": "System Error",
+        "developerMessage": "org.jboss.resteasy.client.exception.ResteasyInternalServerErrorException: HTTP 500 Internal Server Error | ErrorID: 4da83a1b-30da-4c83-8f80-ad3ef9f9c097 | TimeStamp: 04/12/2025 18:23:33",
+        "errorSource": "Delta"
+    }
+]

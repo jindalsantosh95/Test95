@@ -1,0 +1,1415 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBookingList HTTP/1.1
+
+$[?(@.bookingReference == '6999383')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"tripListResponse": [
+		{
+			"tripSearchRequest": {
+				"using": "HOLIDAYS",
+				"surname": "TEST",
+				"bookingReference": "6999383",
+				"dateOfBirth": "1996-04-21"
+			},
+			"tripDetails": {
+				"booking": {
+					"id": "6999383",
+					"summary": {
+						"availabilityStatus": "AVAILABLE",
+						"productStatus": "CONFIRMED",
+						"name": "Package",
+						"primaryAttribute": "",
+						"secondaryAttribute": "",
+						"travelDates": {
+							"startDate": "{DateTime(yyyy-MM-dd, -30, year)}",
+							"endDate": "{DateTime(yyyy-MM-dd, -20, year)}"
+						},
+						"travelDuration": {
+							"duration": "16",
+							"durationType": "DAYS"
+						},
+						"discount": 120.0,
+						"vipBooking": false
+					},
+					"payment": {
+						"deposit": 1659.7,
+						"totalPriceToBePaid": 1659.7,
+						"totalPaidAmount": 1659.7,
+						"depositRealised": true,
+						"depositReceived": true,
+						"currencyCode": "GBP"
+					},
+					"status": "Confirmed [ TK ]",
+					"holidayProducts": [
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "VS",
+								"highlight": "ECONOMY CLASSIC/ECONOMY CLASSIC",
+								"primaryAttribute": "MAN",
+								"secondaryAttribute": "MCO",
+								"travelDates": {
+									"startDate": "2026-01-31T00:00:00",
+									"endDate": "2026-02-15T00:00:00"
+								},
+								"discount": 120.0,
+								"vipBooking": false
+							},
+							"bookedUser": "WEB BOOKING",
+							"bookedDate": "2026-01-18T00:00:00",
+							"modifiedDate": "2026-01-18T00:00:00",
+							"rate": {
+								"price": 1230.76,
+								"priceWithTax": 1230.76,
+								"tax": 730.54,
+								"basePrice": 1230.76,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Brian",
+										"lastName": "Oliver",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1959-09-24T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Sharon",
+										"lastName": "Oliver",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1960-02-14T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"flightDetails": {
+								"sectors": [
+									{
+										"origin": {
+											"code": "MAN"
+										},
+										"destination": {
+											"code": "MCO"
+										},
+										"segments": [
+											{
+												"operatingCarrier": {
+													"flightNumber": "73",
+													"carrierCode": "VS"
+												},
+												"marketingCarrier": {
+													"carrierCode": "VS"
+												},
+												"scheduledDepartureLocal": "2026-01-31T10:25:00",
+												"scheduledArrivalLocal": "2026-01-31T14:40:00",
+												"origin": {
+													"code": "MAN"
+												},
+												"destination": {
+													"code": "MCO"
+												},
+												"legs": [
+													{
+														"operating": {
+															"flightNumber": "73",
+															"carrierCode": "VS"
+														},
+														"marketing": {
+															"carrierCode": "VS"
+														},
+														"scheduledDepartureLocal": "2026-01-31T10:25:00",
+														"scheduledArrivalLocal": "2026-01-31T14:40:00",
+														"origin": {
+															"code": "MAN"
+														},
+														"destination": {
+															"code": "MCO"
+														},
+														"onAirDuration": "555",
+														"aircraft": {
+															"subfleetCode": "351"
+														}
+													}
+												]
+											}
+										],
+										"scheduledDepartureLocal": "2026-01-31T10:25:00",
+										"scheduledArrivalLocal": "2026-01-31T14:40:00"
+									},
+									{
+										"origin": {
+											"code": "MCO"
+										},
+										"destination": {
+											"code": "MAN"
+										},
+										"segments": [
+											{
+												"operatingCarrier": {
+													"flightNumber": "74",
+													"carrierCode": "VS"
+												},
+												"marketingCarrier": {
+													"carrierCode": "VS"
+												},
+												"scheduledDepartureLocal": "2026-02-14T18:59:00",
+												"scheduledArrivalLocal": "2026-02-15T07:55:00",
+												"origin": {
+													"code": "MCO"
+												},
+												"destination": {
+													"code": "MAN"
+												},
+												"legs": [
+													{
+														"operating": {
+															"flightNumber": "74",
+															"carrierCode": "VS"
+														},
+														"marketing": {
+															"carrierCode": "VS"
+														},
+														"scheduledDepartureLocal": "2026-02-14T18:59:00",
+														"scheduledArrivalLocal": "2026-02-15T07:55:00",
+														"origin": {
+															"code": "MCO"
+														},
+														"destination": {
+															"code": "MAN"
+														},
+														"onAirDuration": "476",
+														"aircraft": {
+															"subfleetCode": "351"
+														}
+													}
+												]
+											}
+										],
+										"scheduledDepartureLocal": "2026-02-14T18:59:00",
+										"scheduledArrivalLocal": "2026-02-15T07:55:00"
+									}
+								],
+								"airlineLocator": {
+									"pnrLocator": "FCDTGI"
+								},
+								"isBookingSourceAir4": true
+							},
+							"isAncillaryProduct": false,
+							"tbxProductType": "FLT",
+							"tbxProductId": "FLT~1"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "Chevrolet - Spark or similar",
+								"highlight": "(Economy Car)",
+								"primaryAttribute": "Orlando International Airport",
+								"secondaryAttribute": "Orlando International Airport",
+								"travelDates": {
+									"startDate": "2026-01-31T00:00:00",
+									"endDate": "2026-02-14T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "14",
+									"durationType": "DAYS"
+								},
+								"discount": 0.0,
+								"startTime": "2026-01-31T16:40:00",
+								"endTime": "2026-02-14T15:59:00",
+								"travelTimings": {
+									"startTime": "2026-01-31T16:40:00",
+									"endTime": "2026-02-14T15:59:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "WEB BOOKING",
+							"bookedDate": "2026-01-18T00:00:00",
+							"modifiedDate": "2026-01-20T00:00:00",
+							"rate": {
+								"price": 371.75,
+								"priceWithTax": 371.75,
+								"tax": 0.0,
+								"basePrice": 371.75,
+								"currencyInContract": "USD",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Brian",
+										"lastName": "Oliver",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1959-09-24T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Sharon",
+										"lastName": "Oliver",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1960-02-14T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"carDetails": {
+								"name": " - ",
+								"model": "Spark or similar",
+								"make": "Chevrolet",
+								"class": "EDAR",
+								"className": "(Economy Car)",
+								"type": "C",
+								"typeName": "4 Door",
+								"maxBaggage": 2,
+								"transmissionType": "Automatic",
+								"pickUpLocations": [
+									{
+										"cityCode": "ORL",
+										"cityName": "Orlando ",
+										"countryCode": "US",
+										"countryName": "USA",
+										"address": "Hertz\n\n*Car pick up/drop off is A side*\n\nOrlando International Airport\n1 Airport Blvd\nORLANDO\nFL 32812\n\nOpening times\n 24/7"
+									}
+								],
+								"returnLocations": [
+									{
+										"cityCode": "ORL",
+										"cityName": "Orlando ",
+										"countryCode": "US",
+										"countryName": "USA",
+										"address": "Hertz\n\n*Car pick up/drop off is A side*\n\nOrlando International Airport\n1 Airport Blvd\nORLANDO\nFL 32812\n\nOpening times\n 24/7"
+									}
+								],
+								"destination": {
+									"cityCode": "ORL",
+									"cityName": "Orlando ",
+									"countryCode": "US",
+									"countryName": "USA",
+									"stateCode": "FL",
+									"stateName": "Florida"
+								},
+								"selectedPickupLocation": {
+									"cityCode": "ORL",
+									"cityName": "Orlando ",
+									"countryCode": "US",
+									"countryName": "USA",
+									"address": "Hertz\n\n*Car pick up/drop off is A side*\n\nOrlando International Airport\n1 Airport Blvd\nORLANDO\nFL 32812\n\nOpening times\n 24/7"
+								},
+								"selectedReturnLocation": {
+									"cityCode": "ORL",
+									"cityName": "Orlando ",
+									"countryCode": "US",
+									"countryName": "USA",
+									"address": "Hertz\n\n*Car pick up/drop off is A side*\n\nOrlando International Airport\n1 Airport Blvd\nORLANDO\nFL 32812\n\nOpening times\n 24/7"
+								},
+								"contractType": "CAR_HIRE"
+							},
+							"isAncillaryProduct": false,
+							"tbxProductType": "CAR",
+							"tbxProductId": "CAR~1"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "Codegen Booking Fee",
+								"highlight": "Codegen Booking Fee",
+								"primaryAttribute": "Forced Components - Hidden",
+								"travelDates": {
+									"startDate": "2026-01-31T00:00:00",
+									"endDate": "2026-01-31T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.0,
+								"startTime": "2026-01-31T00:00:00",
+								"endTime": "2026-01-31T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-01-31T00:00:00",
+									"endTime": "2026-01-31T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "WEB BOOKING",
+							"bookedDate": "2026-01-18T00:00:00",
+							"modifiedDate": "2026-01-18T00:00:00",
+							"rate": {
+								"price": 3.0,
+								"priceWithTax": 3.0,
+								"tax": 0.0,
+								"basePrice": 3.0,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Brian",
+										"lastName": "Oliver",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1959-09-24T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Sharon",
+										"lastName": "Oliver",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1960-02-14T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "FCHIDDEN",
+								"elementGroupName": "Forced Components - Hidden",
+								"destination": {}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~1"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "Florida Core",
+								"highlight": "Florida Core",
+								"primaryAttribute": "Forced Components - Hidden",
+								"travelDates": {
+									"startDate": "2026-01-31T00:00:00",
+									"endDate": "2026-01-31T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.0,
+								"startTime": "2026-01-31T00:00:00",
+								"endTime": "2026-01-31T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-01-31T00:00:00",
+									"endTime": "2026-01-31T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "WEB BOOKING",
+							"bookedDate": "2026-01-18T00:00:00",
+							"modifiedDate": "2026-01-18T00:00:00",
+							"rate": {
+								"price": 25.18,
+								"priceWithTax": 25.18,
+								"tax": 0.0,
+								"basePrice": 25.18,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Brian",
+										"lastName": "Oliver",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1959-09-24T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Sharon",
+										"lastName": "Oliver",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1960-02-14T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "FCHIDDEN",
+								"elementGroupName": "Forced Components - Hidden",
+								"destination": {
+									"countryCode": "US",
+									"countryName": "USA"
+								}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~2"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "Florida Resort Contact",
+								"highlight": "Florida Contact Details",
+								"primaryAttribute": "Resort Contact",
+								"travelDates": {
+									"startDate": "2026-01-31T00:00:00",
+									"endDate": "2026-01-31T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.0,
+								"startTime": "2026-01-31T00:00:00",
+								"endTime": "2026-01-31T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-01-31T00:00:00",
+									"endTime": "2026-01-31T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "WEB BOOKING",
+							"bookedDate": "2026-01-18T00:00:00",
+							"modifiedDate": "2026-01-18T00:00:00",
+							"rate": {
+								"price": 0.01,
+								"priceWithTax": 0.01,
+								"tax": 0.0,
+								"basePrice": 0.01,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Brian",
+										"lastName": "Oliver",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1959-09-24T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Sharon",
+										"lastName": "Oliver",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1960-02-14T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "RCD",
+								"elementGroupName": "Resort Contact",
+								"destination": {
+									"countryCode": "US",
+									"countryName": "USA"
+								}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~3"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "ATOL protected",
+								"highlight": "ATOL protected",
+								"primaryAttribute": "Atol protected",
+								"travelDates": {
+									"startDate": "2026-01-31T00:00:00",
+									"endDate": "2026-01-31T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.0,
+								"startTime": "2026-01-31T00:00:00",
+								"endTime": "2026-01-31T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-01-31T00:00:00",
+									"endTime": "2026-01-31T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "WEB BOOKING",
+							"bookedDate": "2026-01-18T00:00:00",
+							"modifiedDate": "2026-01-18T00:00:00",
+							"rate": {
+								"price": 5.0,
+								"priceWithTax": 5.0,
+								"tax": 0.0,
+								"basePrice": 5.0,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Brian",
+										"lastName": "Oliver",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1959-09-24T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Sharon",
+										"lastName": "Oliver",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1960-02-14T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "ATOLLEVY",
+								"elementGroupName": "Atol protected",
+								"destination": {}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~4"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "KSP - Florida",
+								"highlight": "KSP - Florida",
+								"primaryAttribute": "Forced Components - Hidden",
+								"travelDates": {
+									"startDate": "2026-01-31T00:00:00",
+									"endDate": "2026-01-31T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.0,
+								"startTime": "2026-01-31T00:00:00",
+								"endTime": "2026-01-31T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-01-31T00:00:00",
+									"endTime": "2026-01-31T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "WEB BOOKING",
+							"bookedDate": "2026-01-18T00:00:00",
+							"modifiedDate": "2026-01-18T00:00:00",
+							"rate": {
+								"price": 24.0,
+								"priceWithTax": 24.0,
+								"tax": 0.0,
+								"basePrice": 24.0,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Brian",
+										"lastName": "Oliver",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1959-09-24T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Sharon",
+										"lastName": "Oliver",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1960-02-14T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "FCHIDDEN",
+								"elementGroupName": "Forced Components - Hidden",
+								"destination": {}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~5"
+						}
+					],
+					"travellers": [
+						{
+							"firstName": "Brian",
+							"lastName": "Oliver",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1959-09-24T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Sharon",
+							"lastName": "Oliver",
+							"leadTraveller": false,
+							"title": "Mrs",
+							"dateOfBirth": "1960-02-14T00:00:00",
+							"gender": "F"
+						}
+					],
+					"holidayPackageDetails": {
+						"agentReference": "WEB BOOKING",
+						"definiteDueDate": "2026-01-18T00:00:00",
+						"definiteDate": "2026-01-18T00:00:00",
+						"firmDueDate": "2026-01-18T00:00:00",
+						"firmDate": "2026-01-18T00:00:00",
+						"balanceDueDate": "2026-01-18T00:00:00",
+						"destination": {
+							"cityCode": "ORL",
+							"cityName": "Orlando ",
+							"countryCode": "US",
+							"countryName": "USA"
+						}
+					}
+				},
+				"status": 200
+			}
+		},
+		{
+			"tripSearchRequest": {
+				"using": "HOLIDAYS",
+				"surname": "TEST",
+				"bookingReference": "6661909",
+				"dateOfBirth": "1996-04-21"
+			},
+			"tripDetails": {
+				"booking": {
+					"id": "6661909",
+					"summary": {
+						"availabilityStatus": "AVAILABLE",
+						"productStatus": "CONFIRMED",
+						"name": "Package",
+						"primaryAttribute": "",
+						"secondaryAttribute": "",
+						"travelDates": {
+							"startDate": "{DateTime(yyyy-MM-dd, -30, year)}",
+							"endDate": "{DateTime(yyyy-MM-dd, -20, year)}"
+						},
+						"travelDuration": {
+							"duration": "16",
+							"durationType": "DAYS"
+						},
+						"discount": 0.0,
+						"vipBooking": false
+					},
+					"payment": {
+						"deposit": 350.0,
+						"balanceDue": 14777.04,
+						"totalPriceToBePaid": 15127.04,
+						"totalPaidAmount": 350.0,
+						"depositRealised": true,
+						"depositReceived": true,
+						"currencyCode": "GBP"
+					},
+					"status": "Confirmed",
+					"holidayProducts": [
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "VS",
+								"highlight": "ECONOMY CLASSIC/ECONOMY CLASSIC",
+								"primaryAttribute": "LHR",
+								"secondaryAttribute": "BGI",
+								"travelDates": {
+									"startDate": "2026-03-20T00:00:00",
+									"endDate": "2026-04-03T00:00:00"
+								},
+								"discount": 0.0,
+								"vipBooking": false
+							},
+							"bookedUser": "489196",
+							"bookedDate": "2024-11-21T00:00:00",
+							"modifiedDate": "2024-11-21T00:00:00",
+							"rate": {
+								"price": 3532.54,
+								"priceWithTax": 3532.54,
+								"tax": 915.32,
+								"basePrice": 3532.54,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Simon",
+										"lastName": "Carter",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1965-10-08T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Nicola",
+										"lastName": "Carter",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1964-02-23T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"flightDetails": {
+								"sectors": [
+									{
+										"origin": {
+											"code": "LHR"
+										},
+										"destination": {
+											"code": "BGI"
+										},
+										"segments": [
+											{
+												"operatingCarrier": {
+													"flightNumber": "197",
+													"carrierCode": "VS"
+												},
+												"marketingCarrier": {
+													"carrierCode": "VS"
+												},
+												"scheduledDepartureLocal": "2026-02-15T09:35:00",
+												"scheduledArrivalLocal": "2026-02-15T14:55:00",
+												"origin": {
+													"code": "LHR"
+												},
+												"destination": {
+													"code": "BGI"
+												},
+												"legs": [
+													{
+														"operating": {
+															"flightNumber": "197",
+															"carrierCode": "VS"
+														},
+														"marketing": {
+															"carrierCode": "VS"
+														},
+														"scheduledDepartureLocal": "2026-02-15T09:35:00",
+														"scheduledArrivalLocal": "2026-02-15T14:55:00",
+														"origin": {
+															"code": "LHR"
+														},
+														"destination": {
+															"code": "BGI"
+														},
+														"onAirDuration": "0",
+														"aircraft": {}
+													}
+												]
+											}
+										],
+										"scheduledDepartureLocal": "2026-02-15T09:35:00",
+										"scheduledArrivalLocal": "2026-02-15T14:55:00"
+									},
+									{
+										"origin": {
+											"code": "BGI"
+										},
+										"destination": {
+											"code": "LHR"
+										},
+										"segments": [
+											{
+												"operatingCarrier": {
+													"flightNumber": "132",
+													"carrierCode": "VS"
+												},
+												"marketingCarrier": {
+													"carrierCode": "VS"
+												},
+												"scheduledDepartureLocal": "2026-03-01T19:40:00",
+												"scheduledArrivalLocal": "2026-03-02T07:50:00",
+												"origin": {
+													"code": "BGI"
+												},
+												"destination": {
+													"code": "LHR"
+												},
+												"legs": [
+													{
+														"operating": {
+															"flightNumber": "132",
+															"carrierCode": "VS"
+														},
+														"marketing": {
+															"carrierCode": "VS"
+														},
+														"scheduledDepartureLocal": "2026-03-01T19:40:00",
+														"scheduledArrivalLocal": "2026-03-02T07:50:00",
+														"origin": {
+															"code": "BGI"
+														},
+														"destination": {
+															"code": "LHR"
+														},
+														"onAirDuration": "0",
+														"aircraft": {}
+													}
+												]
+											}
+										],
+										"scheduledDepartureLocal": "2026-03-01T19:40:00",
+										"scheduledArrivalLocal": "2026-03-02T07:50:00"
+									}
+								],
+								"airlineLocator": {
+									"pnrLocator": ""
+								},
+								"isBookingSourceAir4": true
+							},
+							"isAncillaryProduct": false,
+							"tbxProductType": "FLT",
+							"tbxProductId": "FLT~2"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "Sugar Bay Barbados",
+								"highlight": "Deluxe Ocean Front",
+								"primaryAttribute": "All Inclusive",
+								"secondaryAttribute": "Deluxe Ocean Front (TWN 2 0 0) x 1",
+								"travelDates": {
+									"startDate": "2026-02-15T00:00:00",
+									"endDate": "2026-03-01T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "14",
+									"durationType": "NIGHTS"
+								},
+								"discount": 0.0,
+								"startTime": "2026-02-15T15:00:00",
+								"endTime": "2026-03-01T11:00:00",
+								"travelTimings": {
+									"startTime": "2026-02-15T15:00:00",
+									"endTime": "2026-03-01T11:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "489196",
+							"bookedDate": "2024-11-21T00:00:00",
+							"modifiedDate": "2025-02-07T00:00:00",
+							"rate": {
+								"price": 11536.03,
+								"priceWithTax": 11536.03,
+								"tax": 0.0,
+								"basePrice": 11536.03,
+								"currencyInContract": "USD",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Simon",
+										"lastName": "Carter",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1965-10-08T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Nicola",
+										"lastName": "Carter",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1964-02-23T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"hotelDetails": {
+								"roomDetails": [
+									{
+										"roomType": "Deluxe Ocean Front",
+										"boardBasis": "All Inclusive",
+										"roomNumber": "1",
+										"paxCount": 2,
+										"travellerInfo": {
+											"adultCount": 2,
+											"travellers": []
+										},
+										"rate": {
+											"price": 11536.03,
+											"priceWithTax": 11536.03,
+											"tax": 0.0,
+											"basePrice": 0.0,
+											"totalTax": 0.0,
+											"totalTaxBase": 0.0
+										},
+										"mealPlanName": "All Inclusive"
+									}
+								],
+								"name": "Sugar Bay Barbados - Deluxe Ocean Front",
+								"startDate": "2026-02-15T15:00:00",
+								"endDate": "2026-03-01T11:00:00"
+							},
+							"isAncillaryProduct": false,
+							"tbxProductType": "HTL",
+							"tbxProductId": "HTL~2"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "Codegen Booking Fee",
+								"highlight": "Codegen Booking Fee",
+								"primaryAttribute": "Forced Components - Hidden",
+								"travelDates": {
+									"startDate": "2026-02-15T00:00:00",
+									"endDate": "2026-02-15T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.0,
+								"startTime": "2026-02-15T00:00:00",
+								"endTime": "2026-02-15T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-02-15T00:00:00",
+									"endTime": "2026-02-15T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "489196",
+							"bookedDate": "2024-11-21T00:00:00",
+							"modifiedDate": "2024-11-21T00:00:00",
+							"rate": {
+								"price": 3.0,
+								"priceWithTax": 3.0,
+								"tax": 0.0,
+								"basePrice": 3.0,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Simon",
+										"lastName": "Carter",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1965-10-08T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Nicola",
+										"lastName": "Carter",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1964-02-23T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "FCHIDDEN",
+								"elementGroupName": "Forced Components - Hidden",
+								"destination": {}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~8"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "BGI Resort Contact",
+								"highlight": "BGI Contact Details",
+								"primaryAttribute": "Resort Contact",
+								"travelDates": {
+									"startDate": "2026-02-15T00:00:00",
+									"endDate": "2026-02-15T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.0,
+								"startTime": "2026-02-15T00:00:00",
+								"endTime": "2026-02-15T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-02-15T00:00:00",
+									"endTime": "2026-02-15T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "489196",
+							"bookedDate": "2024-11-21T00:00:00",
+							"modifiedDate": "2024-11-21T00:00:00",
+							"rate": {
+								"price": 0.01,
+								"priceWithTax": 0.01,
+								"tax": 0.0,
+								"basePrice": 0.01,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Simon",
+										"lastName": "Carter",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1965-10-08T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Nicola",
+										"lastName": "Carter",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1964-02-23T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "RCD",
+								"elementGroupName": "Resort Contact",
+								"destination": {
+									"countryCode": "BB",
+									"countryName": "Barbados"
+								}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~10"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "Barbados Reps/Handling Charge",
+								"highlight": "Handling/Reps Fees Caribbean",
+								"primaryAttribute": "Handling/Reps Fees",
+								"travelDates": {
+									"startDate": "2026-02-15T00:00:00",
+									"endDate": "2026-02-15T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.0,
+								"startTime": "2026-02-15T00:00:00",
+								"endTime": "2026-02-15T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-02-15T00:00:00",
+									"endTime": "2026-02-15T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "489196",
+							"bookedDate": "2024-11-21T00:00:00",
+							"modifiedDate": "2024-11-21T00:00:00",
+							"rate": {
+								"price": 14.84,
+								"priceWithTax": 14.84,
+								"tax": 0.0,
+								"basePrice": 14.84,
+								"currencyInContract": "USD",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Simon",
+										"lastName": "Carter",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1965-10-08T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Nicola",
+										"lastName": "Carter",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1964-02-23T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "HREPFEES",
+								"elementGroupName": "Handling/Reps Fees",
+								"destination": {
+									"countryCode": "BB",
+									"countryName": "Barbados"
+								}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~11"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "Caribbean Core",
+								"highlight": "Caribbean Core",
+								"primaryAttribute": "Forced Components - Hidden",
+								"travelDates": {
+									"startDate": "2026-02-15T00:00:00",
+									"endDate": "2026-02-15T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.0,
+								"startTime": "2026-02-15T00:00:00",
+								"endTime": "2026-02-15T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-02-15T00:00:00",
+									"endTime": "2026-02-15T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "489196",
+							"bookedDate": "2024-11-21T00:00:00",
+							"modifiedDate": "2024-11-21T00:00:00",
+							"rate": {
+								"price": 35.62,
+								"priceWithTax": 35.62,
+								"tax": 0.0,
+								"basePrice": 35.62,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Simon",
+										"lastName": "Carter",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1965-10-08T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Nicola",
+										"lastName": "Carter",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1964-02-23T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "FCHIDDEN",
+								"elementGroupName": "Forced Components - Hidden",
+								"destination": {}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~12"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "ATOL protected",
+								"highlight": "ATOL protected",
+								"primaryAttribute": "Atol protected",
+								"travelDates": {
+									"startDate": "2026-02-15T00:00:00",
+									"endDate": "2026-02-15T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.0,
+								"startTime": "2026-02-15T00:00:00",
+								"endTime": "2026-02-15T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-02-15T00:00:00",
+									"endTime": "2026-02-15T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "489196",
+							"bookedDate": "2024-11-21T00:00:00",
+							"modifiedDate": "2024-11-21T00:00:00",
+							"rate": {
+								"price": 5.0,
+								"priceWithTax": 5.0,
+								"tax": 0.0,
+								"basePrice": 5.0,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Simon",
+										"lastName": "Carter",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1965-10-08T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Nicola",
+										"lastName": "Carter",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1964-02-23T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "ATOLLEVY",
+								"elementGroupName": "Atol protected",
+								"destination": {}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~13"
+						},
+						{
+							"summary": {
+								"productStatus": "CONFIRMED",
+								"name": "Own Transport Arrangements",
+								"highlight": "OWN TRANSPORT ARRANGEMENTS",
+								"primaryAttribute": "Own Transport Arrangements",
+								"travelDates": {
+									"startDate": "2026-02-15T00:00:00",
+									"endDate": "2026-02-15T00:00:00"
+								},
+								"travelDuration": {
+									"duration": "0",
+									"durationType": "NA"
+								},
+								"discount": 0.01,
+								"startTime": "2026-02-15T00:00:00",
+								"endTime": "2026-02-15T00:00:00",
+								"travelTimings": {
+									"startTime": "2026-02-15T00:00:00",
+									"endTime": "2026-02-15T00:00:00"
+								},
+								"vipBooking": false
+							},
+							"bookedUser": "489196",
+							"bookedDate": "2024-11-21T00:00:00",
+							"modifiedDate": "2024-11-21T00:00:00",
+							"rate": {
+								"price": 0.0,
+								"priceWithTax": 0.0,
+								"tax": 0.0,
+								"basePrice": 0.0,
+								"currencyInContract": "GBP",
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"travellersComposition": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"firstName": "Simon",
+										"lastName": "Carter",
+										"leadTraveller": true,
+										"title": "Mr",
+										"dateOfBirth": "1965-10-08T00:00:00",
+										"gender": "M"
+									},
+									{
+										"firstName": "Nicola",
+										"lastName": "Carter",
+										"leadTraveller": false,
+										"title": "Mrs",
+										"dateOfBirth": "1964-02-23T00:00:00",
+										"gender": "F"
+									}
+								]
+							},
+							"genericProductDetails": {
+								"elementGroup": "OWA",
+								"elementGroupName": "Own Transport Arrangements",
+								"destination": {}
+							},
+							"isAncillaryProduct": true,
+							"tbxProductType": "GEN",
+							"tbxProductId": "GEN~16"
+						}
+					],
+					"travellers": [
+						{
+							"firstName": "Simon",
+							"lastName": "Carter",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1965-10-08T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Nicola",
+							"lastName": "Carter",
+							"leadTraveller": false,
+							"title": "Mrs",
+							"dateOfBirth": "1964-02-23T00:00:00",
+							"gender": "F"
+						}
+					],
+					"holidayPackageDetails": {
+						"agentReference": "WEB BOOKING",
+						"definiteDueDate": "2024-11-21T00:00:00",
+						"definiteDate": "2024-11-21T00:00:00",
+						"firmDueDate": "2024-11-21T00:00:00",
+						"firmDate": "2024-11-21T00:00:00",
+						"balanceDueDate": "2025-11-23T00:00:00",
+						"destination": {
+							"cityCode": "BGI",
+							"cityName": "Barbados",
+							"countryCode": "BB",
+							"countryName": "Barbados"
+						}
+					}
+				},
+				"status": 200
+			}
+		}
+	]
+}

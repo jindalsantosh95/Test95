@@ -1,0 +1,36 @@
+info:
+  name: Save No Return Date
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{checkinms}}/TravelRequirements/SaveReturnDate"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: |-
+      {
+          "requirementsId": "{{requirementsId}}",
+          "passengerId": "{{pax1_id}}",
+          "noReturnDate": true
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        var json = res.getBody();
+
+        if (json?.requirementsId) {
+          bru.setVar("requirementsId", json.requirementsId);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

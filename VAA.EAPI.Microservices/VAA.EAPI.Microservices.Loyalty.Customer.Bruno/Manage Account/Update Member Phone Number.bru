@@ -1,0 +1,29 @@
+meta {
+  name: Update Member Phone Number
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{customer_base_url}}/UpdateMemberPhoneNumber
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "customerId": "{{customer_id}}",
+    "fcNumber": "{{customer_member_number}}",
+    "phoneNumber": "{{customer_phone_number}}",
+    "countryCode": "{{customer_phone_country_code}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

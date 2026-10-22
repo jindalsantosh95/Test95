@@ -1,0 +1,59 @@
+info:
+  name: Save Contact Tracing
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{checkinms}}/TravelRequirements/SaveContactTracing"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: |-
+      {
+          "requirementsId": "{{requirementsId}}",
+          "sliceId": "{{slice1_id}}",
+          "contactTracing": {
+              "passengerId": "{{pax1_id}}",
+              "streetAddress": "456 Park Ave",
+              "city": "New York",
+              "state": "NY",
+              "zip": "10001",
+              "email": "traveller@example.test",
+              "inTransit": false,
+              "noEmail": false,
+              "noSecondaryPhoneNumber": false,
+              "primaryPhoneNumber": "5550100",
+              "primaryPhoneNumberCountryCode": "1",
+              "secondaryPhoneNumber": "5550101",
+              "secondaryPhoneNumberCountryCode": "1"
+          }
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        var json = res.getBody();
+
+        if (json?.requirementsId) {
+          bru.setVar("requirementsId", json.requirementsId);
+        }
+
+        const passengers = json?.passengers ?? [];
+        const pax1 = passengers[0];
+
+        if (pax1) {
+          bru.setVar("pax1_id", pax1.passengerId);
+          bru.setVar("pax1_givennames", pax1.givenNames);
+          bru.setVar("pax1_surname", pax1.surname);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

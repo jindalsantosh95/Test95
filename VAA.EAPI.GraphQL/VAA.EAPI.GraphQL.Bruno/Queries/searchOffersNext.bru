@@ -1,0 +1,31 @@
+meta {
+  name: searchOffersNext
+  type: graphql
+  seq: 52
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query searchOffersNext($request: FlightOfferNextRequestInput!) {
+    searchOffersNext(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

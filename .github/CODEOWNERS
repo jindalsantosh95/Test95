@@ -1,0 +1,24 @@
+# Default owner for files without a more specific rule. CODEOWNERS uses the
+# last matching pattern, so this catch-all must remain before specialist rules.
+* @vaad1st/eapi-reviewers
+
+# DevOps-owned pipeline definitions.
+/VAA.EAPI.Pipelines/ @vaad1st/eapi-devops-reviewers
+/VAA.EAPI.Pipelines.DigitalServices/ @vaad1st/eapi-devops-reviewers
+
+# Deployments need both infrastructure and service review. Multiple owners for
+# one pattern must be declared on the same line.
+/VAA.EAPI.Deployments/ @vaad1st/eapi-devops-reviewers @vaad1st/eapi-microservices-reviewers
+
+# Microservice and API implementations.
+/VAA.EAPI.Facade/ @vaad1st/eapi-microservices-reviewers
+/VAA.EAPI.GraphQL/ @vaad1st/eapi-microservices-reviewers
+/VAA.EAPI.Integration.Agents/ @vaad1st/eapi-microservices-reviewers
+/VAA.EAPI.LoungeManagement/ @vaad1st/eapi-microservices-reviewers
+/VAA.EAPI.Microservices/ @vaad1st/eapi-microservices-reviewers
+/VAA.EAPI.NDC.Transformation/ @vaad1st/eapi-microservices-reviewers
+/VAA.EAPI.Orchastration/ @vaad1st/eapi-microservices-reviewers
+/VAA.EAPI.Web/ @vaad1st/eapi-microservices-reviewers
+
+# Automation solution.
+/VAA.EAPI.Automation/ @vaad1st/eapi-automation-reviewers

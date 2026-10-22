@@ -1,0 +1,29 @@
+meta {
+  name: accountEmailVerification
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation accountEmailVerification($activationToken: String) {
+    accountEmailVerification(activationToken: $activationToken)
+  }
+}
+
+body:graphql:vars {
+  {
+    "activationToken": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,20 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements/savepassport HTTP/1.1
+
+$[?(@.passengerId == '01.01|TRM-Expired-Document')]
+
+###Response
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+[
+    {
+        "code": "travelrequirement_030_006",
+        "message": "This passport has expired, so we can’t complete your check in. You’ll need to use a valid passport to continue.",
+        "title": "Something's not quite right"
+    }
+]

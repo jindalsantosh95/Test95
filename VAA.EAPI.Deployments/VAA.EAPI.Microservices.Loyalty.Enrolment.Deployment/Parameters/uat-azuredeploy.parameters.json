@@ -1,0 +1,316 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPCUSTOMERM"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVASEUNAFNENROLMENTMICROSERV"
+    },
+    "AppInsightsName": {
+      "value": "AVASEUNAICUSTOMERMS"
+    },
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-StorageAccount/eab419cc9a0c459cb2db9c7bfc06ffc3)"
+    },
+    "appsettingsWEBSITE_CONTENTAZUREFILECONNECTIONSTRING": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-StorageAccount/eab419cc9a0c459cb2db9c7bfc06ffc3)"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=73853322-7317-4092-a5ac-746f8d185ef6;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/"
+    },
+    "appsettingsWEBSITE_CONTENTSHARE": {
+      "value": "avaseunafnenrolmentmicroserv"
+    },
+    "Appsetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "Appsetting:SCV:CommonRefDBConnString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-CommonRefDBConnString/)"
+    },
+    "Appsetting:accountCode": {
+      "value": "YKS01"
+    },
+    "Appsetting:api": {
+      "value": "revenue"
+    },
+    "Appsetting:APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "73853322-7317-4092-a5ac-746f8d185ef6"
+    },
+    "Appsetting:AuthenticationUrl": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:AzureAd:Domain": {
+      "value": ""
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-AzureAD-ClientId/50be90718e4b45a999d389ab37dcb135)"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:AuthorizationTokenType": {
+      "value": "Bearer"
+    },
+    "Appsetting:AzureADEndpoint": {
+      "value": "https://login.microsoftonline.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "Appsetting:SCV:CustDB:AuthKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-SCV-CustDB-AuthKey/a5262652c9f34bd8a47c494261d8b059)"
+    },
+    "Appsetting:SCV:CustDB": {
+      "value": "CustomerDB_Acc"
+    },
+    "Appsetting:SCV:CustDB:CustColCntnr": {
+      "value": "CustomerCollection"
+    },
+    "Appsetting:SCV:CustDB:CustHstryColCntnr": {
+      "value": "CustomerHistoryCollection"
+    },
+    "Appsetting:SCV:CustDB:CustSearchColCntnr": {
+      "value": "CustomerCollection"
+    },
+    "Appsetting:CosmosSqlDBConnectionMode": {
+      "value": "Direct"
+    },
+    "Appsetting:SCV:CustDB:EndPoint": {
+      "value": "https://avadeuncmdbcustomer.documents.azure.com:443/"
+    },
+    "Appsetting:FCNumberGenAPIURL": {
+      "value": "https://Testresources.virginatlantic.com/RunTheOperation/CustomerManagement/loyaltynumber"
+    },
+    "Appsetting:FCNumberGenAPIURLOCPKeyValue": {
+      "value": "53dfe11df53145cebd611c1f15cad65d"
+    },
+    "Appsetting:FCNumberGenAPIClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-FCNumberGenAPIClientID/)"
+    },
+    "Appsetting:FCNumberGenAPIClientSecretValue": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-FCNumberGenAPIClientSecretValue/)"
+    },
+    "Appsetting:FCNumberGenAPIResource": {
+      "value": "6274fea4-3776-409c-a889-2762faa0adaf"
+    },
+    "Appsetting:ParentAgeLimit": {
+      "value": "18"
+    },
+    "Appsetting:CustomerAgeLimit": {
+      "value": "12"
+    },
+    "Appsetting:DatabaseID": {
+      "value": "https://database.windows.net/.default"
+    },
+    "Appsetting:BLobStorageConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-BLobStorageConnectionString/)"
+    },
+    "Appsetting:BlobStorageContainerName": {
+      "value": "emailblacklist-identityfacade"
+    },
+    "Appsetting:CommonCachingSlidingExpirationInDay": {
+      "value": "7"
+    },
+    "Appsetting:CommonCachingAbsoluteExpirationInDay": {
+      "value": "7"
+    },
+    "Appsetting:AzureEventTopicEndpoint": {
+      "value": "https://avaseunegenrolment.northeurope-1.eventgrid.azure.net/api/events"
+    },
+    "Appsetting:AzureEventTopicKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-AzureEventTopicKey/b05a6c073620487a97d8c665d6280a20)"
+    },
+    "Appsetting:EventTopicType": {
+      "value": "CustomerEnrolmentInitiated"
+    },
+    "Appsetting:EnrolmentResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/EnrolmentMicroservice/enrolment/response/{correlationid}"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-StorageAccount/eab419cc9a0c459cb2db9c7bfc06ffc3)"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "EnrolmentMSEventStore"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "value": "EnrolmentResponse"
+    },
+    "AppSetting:ResponseThresholdInSec": {
+      "value": "50"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-ServiceBusConnectionString/8acc02826477455a9fd2acc1b55ba8df)"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "value": "enrolcustomer"
+    },
+    "Appsetting:ResponseThreadDelayInSec": {
+      "value": "3"
+    },
+    "Appsetting:ResponsePollingCount": {
+      "value": "50"
+    },
+    "Appsetting:ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "Appsetting:VredCustomerAgeLimit": {
+      "value": "12"
+    },
+    "Appsetting:DefaultVAAMarketingPreferenceValue": {
+      "value": "Y"
+    },
+    "Appsetting:DefaultVAPartnersMarketingPreferenceValue": {
+      "value": "N"
+    },
+    "Appsetting:PowerAppChannelID": {
+      "value": "POWERAPP"
+    },
+    "Appsetting:DeltaChannelID": {
+      "value": "DELTA.COM"
+    },
+    "Appsetting:WebMyaChannelID": {
+      "value": "WEB-MYA"
+    },
+    "Appsetting:VredChannelID": {
+      "value": "VRED"
+    },
+    "Appsetting:EnrolmentAgeLimit": {
+      "value": "18"
+    },
+    "Appsetting:EnrolmentEventType": {
+      "value": "EnrolmentEventType"
+    },
+    "Appsetting:WebSiteChannelId": {
+      "value": "WEB"
+    },
+    "Appsetting:BlacklistedEmailsFileName": {
+      "value": "backlisted-emails.json"
+    },
+    "AppsettingSCV:CustTxnDB:MmbrPrfleContnr": {
+      "value": "CustomerDetailsCollection"
+    },
+    "AppsettingSCV:CustTxnDB:EndPoint": {
+      "value": "https://avadeuncmdbcustomertransactions.documents.azure.com:443/"
+    },
+    "AppsettingSCV:CustTxnDB": {
+      "value": "CustomerTransactionsDB_Acc"
+    },
+    "Appsetting:PostCodeMandatoryCountryList": {
+      "value": "GB|US"
+    },
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+     "OpenApi__DocTitle": {
+      "value": "Enterprise API-Order Search Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This API provides ability to sSearchearch information of an Order&apos"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v4"
+    },
+    "OpenApi__ForceHttps": {
+      "value": true
+    },
+    "OpenApi__ForceHttp": {
+      "value": true
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "skuName": {
+      "value": "Standard_RAGRS"
+    },
+    "storageAccountName": {
+      "value": "avaseunstenrolmentms"
+    },
+    "vaultName": {
+      "value": "AVASEUNKVEMS"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNENROLMENTMICROSERV-Config-AzureAD-ClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Enrolment API AFN",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

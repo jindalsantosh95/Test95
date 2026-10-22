@@ -1,0 +1,148 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+        <OutputType>Exe</OutputType>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DefineConstants>$(DefineConstants);HOTCHOCOLATE_13</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(ImplicitUsings)' == 'enable'">
+        <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
+        <Using Include="Microsoft.Azure.Functions.Extensions.DependencyInjection" />
+        <Using Include="Microsoft.Extensions.DependencyInjection" />
+        <Using Include="VAA.EAPI.GraphQL.Stitch" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\accountMemberDetails.graphql" Link="PersistedQueryStore\accountMemberDetails.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\bookOrderCreate.graphql" Link="PersistedQueryStore\bookOrderCreate.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\bookUpdatePaymentStatusPqId.graphql" Link="PersistedQueryStore\bookUpdatePaymentStatusPqId.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\brand.graphql" Link="PersistedQueryStore\brand.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\brandBFF.graphql" Link="PersistedQueryStore\brandBFF.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\carbonIndexBFF.graphql" Link="PersistedQueryStore\carbonIndexBFF.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\fareConditions.graphql" Link="PersistedQueryStore\fareConditions.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\orderPaymentReferenceId.graphql" Link="PersistedQueryStore\orderPaymentReferenceId.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\orderResponse.graphql" Link="PersistedQueryStore\orderResponse.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\paymentDetailsResponsePqId.graphql" Link="PersistedQueryStore\paymentDetailsResponsePqId.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\retrieveBasket.graphql" Link="PersistedQueryStore\retrieveBasket.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\retrieveBasketDetailsPqId.graphql" Link="PersistedQueryStore\retrieveBasketDetailsPqId.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\retrieveCountries.graphql" Link="PersistedQueryStore\retrieveCountries.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\retrieveFQTProgrammes.graphql" Link="PersistedQueryStore\retrieveFQTProgrammes.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\retrieveSeatMap.graphql" Link="PersistedQueryStore\retrieveSeatMap.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\retrieveSummaryResponse.graphql" Link="PersistedQueryStore\retrieveSummaryResponse.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\searchBookingSession.graphql" Link="PersistedQueryStore\searchBookingSession.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\searchFare.graphql" Link="PersistedQueryStore\searchFare.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\searchFilterOffers.graphql" Link="PersistedQueryStore\searchFilterOffers.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\searchOffersBFF.graphql" Link="PersistedQueryStore\searchOffersBFF.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\searchOffersNextBFF.graphql" Link="PersistedQueryStore\searchOffersNextBFF.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\searchSummary.graphql" Link="PersistedQueryStore\searchSummary.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\searchSummaryBFF.graphql" Link="PersistedQueryStore\searchSummaryBFF.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\searchSummaryDeepLink.graphql" Link="PersistedQueryStore\searchSummaryDeepLink.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\selectSeat.graphql" Link="PersistedQueryStore\selectSeat.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\updateContactDetailsPqId.graphql" Link="PersistedQueryStore\updateContactDetailsPqId.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\updatePassengerMuationReqPqId.graphql" Link="PersistedQueryStore\updatePassengerMuationReqPqId.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\VAA.EAPI.GraphQL\PersistedQueryStore\UpdateTnCMutationPqId.graphql" Link="PersistedQueryStore\UpdateTnCMutationPqId.graphql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="HotChocolate.Data" />
+        <PackageReference Include="HotChocolate.Stitching" />
+        <PackageReference Include="HotChocolate.Types" />
+        <PackageReference Include="HotChocolate.Types.NodaTime" />
+        <PackageReference Include="HotChocolate.AzureFunctions.IsolatedProcess" />
+        <PackageReference Include="HotChocolate.Types.Analyzers">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Azure.Functions.Worker" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Warmup" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" />
+        <PackageReference Include="Microsoft.ApplicationInsights" />
+        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" />
+        <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" />
+        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" />
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
+        <PackageReference Include="Microsoft.OpenApi" />
+        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi.Core" />
+        <PackageReference Include="Selenium.Support" />
+        <PackageReference Include="Selenium.WebDriver" />
+        <PackageReference Include="Selenium.WebDriver.ChromeDriver" Condition="'$(Configuration)' == 'Debug'" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="host.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="local.settings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+    </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../NativeWebSockets/NativeSubscriptionRegistry.cs" Link="Core/WebSockets/NativeSubscriptionRegistry.cs" />
+    <Compile Include="../NativeWebSockets/RedisSubscriptionSessionStore.cs" Link="FunctionHost/WebSockets/RedisSubscriptionSessionStore.cs" />
+  </ItemGroup>
+  <Import Project="../NativeWebSocketHost.targets" />
+</Project>

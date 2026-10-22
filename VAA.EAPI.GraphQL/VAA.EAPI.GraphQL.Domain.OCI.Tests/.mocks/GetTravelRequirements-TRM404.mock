@@ -1,0 +1,16 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements HTTP/1.1
+
+$[?(@.pnrLocator == 'TRM404')]
+
+###Response
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json; charset=utf-8
+
+[
+  {
+    "code": "HTTP_404",
+    "message": "We can’t load the travel documents step at the moment. Please try again shortly.",
+    "title": "Something went a little off course"
+  }
+]

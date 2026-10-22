@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "reviewedAtUtc": "2026-08-07T00:00:00Z",
+  "maxReviewAgeDays": 90,
+  "profiles": {
+    "docs-local": {
+      "description": "Minimum isolated environment for repository /docs verification and harness exercises.",
+      "requiredCommands": ["git", "pwsh", "dotnet"],
+      "minimumMajorVersions": { "git": 2, "pwsh": 5, "dotnet": 8 },
+      "worktreeRequired": true,
+      "networkPolicy": "deny-by-default; network is used only by an explicitly invoked workflow or approved tool",
+      "secretPolicy": "no secret values in repository files, prompts, logs, traces, or retained harness evidence",
+      "writableRoots": ["TestResults"],
+      "evidenceRoot": "TestResults/agent-tool-environment",
+      "cleanup": "run-scoped evidence is ignored and may be deleted after its retention or diagnostic need ends"
+    },
+    "codex-ci": {
+      "description": "Additional commands required by enrolled GitHub Codex workflows.",
+      "requiredCommands": ["git", "pwsh", "dotnet", "gh", "codex"],
+      "minimumMajorVersions": { "git": 2, "pwsh": 7, "dotnet": 8, "gh": 2 },
+      "pinnedCommandVersions": { "codex": "0.146.0" },
+      "worktreeRequired": true,
+      "networkPolicy": "workflow-scoped access to GitHub and the configured model provider only",
+      "secretPolicy": "GitHub and model credentials are injected by the workflow and never persisted as evidence",
+      "writableRoots": ["TestResults"],
+      "evidenceRoot": "TestResults/agent-tool-environment",
+      "cleanup": "ephemeral runner teardown plus explicit artifact retention policy"
+    }
+  }
+}

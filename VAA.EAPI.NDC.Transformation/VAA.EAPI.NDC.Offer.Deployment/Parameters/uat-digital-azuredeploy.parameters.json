@@ -1,0 +1,276 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+
+    "environment": {
+      "value": "UAT"
+    },
+    "AppServicePlanName": {
+      "value": "vatueunaspndc01"
+    },
+    "functionappName": {
+      "value": "va-tu-eun-ndcoffer-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-tu-eun-ndctrans-kv-01"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "UAT",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vatueunndcoffersa01"
+    },
+    "AppInsightsName": {
+      "value": "va-tu-eun-ndcoffer-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    // OpenApi
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Ndc Offer API"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "ValidationMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/validation/Agency/Validation"
+    },
+    "ValidationMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/ValidationMSSubscriptionKey/)"
+    },
+    "AgentRegistrationEnvironment": {
+      "value": "NONPROD"
+    },
+    "AppChannelName": {
+      "value": "NDC"
+    },
+    "DebugOptions": {
+      "value": "Y"
+    },
+    "HistoryOnFlag": {
+      "value": "Y"
+    },
+    "BrandMSUrl": {
+      "value": "https://testresources.virginatlantic.com/UAT/brandmicroservice/brand"
+    },
+    "BrandMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/BrandMSSubscriptionKey/)"
+    },
+    "ConfigurationMSBSPMarketCurrencyEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/ConfigurationMicroservice/BSPMarketCurrency"
+    },
+    "ConfigurationMSBSPMarketPaymentEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/ConfigurationMicroservice/BSPMarketPayment"
+    },
+    "ConfigurationMSPccCurrencyEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/ConfigurationMicroservice/PccCurrency"
+    },
+    "ConfigurationMSPricingLocationEndpoint": {
+      "value": "https://testresources.virginatlantic.com/UAT/ConfigurationMicroservice/PricingLocation"
+    },
+    "ConfigurationMSReshopFareFamilyEndpoint": {
+      "value": "https://testresources.virginatlantic.com/UAT/ConfigurationMicroservice/Configurations/ReshopFareFamily"
+    },
+    "ConfigurationMSFareFamilyEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/ConfigurationMicroservice/FareFamily"
+    },
+    "ConfigurationMSPOSCurrencyEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/ConfigurationMicroservice/PosCurrency/"
+    },
+    "ConfigurationMSUpsellOffersEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/ConfigurationMicroservice/UpsellOffers"
+    },
+    "ConfigurationMSOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/ConfigurationMSOcpKey/)"
+    },
+    "SeatMSUrl": {
+      "value": "https://testresources.virginatlantic.com/UAT/seatmicroservice/retrieveseatmap"
+    },
+    "SeatMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/SeatMSSubscriptionKey/)"
+    },
+    "seatOfferIDMaxLength": {
+      "value": "300"
+    },
+    "FlightServicesMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/flightservicesmicroservice/flightServiceOffer/flightServiceDetails"
+    },
+    "FlightServicesMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/FlightServicesMSSubscriptionKey/)"
+    },
+    "OfferMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/OfferMSSubscriptionKey/)"
+    },
+    "OrderDataMSEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/orderdata/orders/"
+    },
+    "OrderDataMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/OrderDataMSSubscriptionKey/)"
+    },
+    "OrderReshopEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/Offer/order/reshopbundle"
+    },
+    "OfferMSReshopNameCorrectionEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/Offer/order/namechange"
+    },
+    "CheckAgentTktAuthority": {
+      "value": true
+    },
+    "OfferSearchEndPoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/Offer/offers/"
+    },
+    "OfferPriceMSEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/Offer/offers/price"
+    },
+    "AirshoppingOfferEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/Offer/offers"
+    },
+    "CalendarSearchEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/Offer/FlexibleDatesSearch"
+    },
+    "Analytics:ServiceBus:ConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/AnalyticsServiceBusConnectionString/)"
+    },
+    "Air4OrderSearchMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/ordersearchmicroservice/order/search"
+    },
+    "Air4OrderSearchMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/Air4OrderSearchMSSubscriptionKey/)"
+    },
+    "OrderSearchMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderSearch/"
+    },
+    "OrderSearchMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/OrderSearchMSSubscriptionKey/)"
+    },
+    "SkipGdsAgentValidation": {
+      "value": "true"
+    },
+    "resourceurl": {
+      "value": "Cache:get:https://Testresources.virginatlantic.com/UAT"
+    },
+    "resourceurlPost": {
+      "value": "Cache:post:https://Testresources.virginatlantic.com/UAT"
+    },
+    "RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/RedisCacheConnectionString/)"
+    },
+    "ReferenceMSAirportDetailsEndpoint": {
+      "value": "https://testresources.virginatlantic.com/UAT/ReferenceMicroservice/AirportDetail"
+    },
+    "ReferenceMSOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndctrans-kv-01.vault.azure.net/secrets/ReferenceMSOcpKey/)"
+    },
+    "OrderQuoteEndpoint": {
+      "value": "https://testresources.virginatlantic.com/UAT/digital/Offer/Order/Reprice"
+    },
+    "OfferMSReshopCancelEndpoint": {
+      "value": "https://testresources.virginatlantic.com/uat/digital/Offer/order/CancelReshop"
+    },
+    "ReshopDisruptionTicketValidityWindowInDays": {
+      "value": "365"
+    },
+    "ValidationMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/digital/Validation/heartbeat"
+    },
+    "ConfigMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/Configurationmicroservice/heartbeat"
+    },
+    "OfferMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/digital/Offer/heartbeat"
+    },
+    "BrandMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/Brandmicroservice/heartbeat"
+    },
+    "SeatMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/seatmicroservice/heartbeat"
+    },
+    "FlightServicesMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/FlightServicesmicroservice/heartbeat"
+    },
+    "OrderDataMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/orderdata/heartbeat"
+    },
+    "Air4OrderSearchMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/ordersearchmicroservice/heartbeat"
+    },
+    "OrderSearchMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/digital/NdcOrderSearch/heartbeat"
+    },
+    "ConfigurationMSITAFareTypeCodeEndpoint": {
+      "value": "https://testresources.virginatlantic.com/uat/ConfigurationMicroservice/ITAPaxTypeCodes"
+    },
+    "ConfigurationMSTtlRulesEndpoint": {
+      "value": "https://testresources.virginatlantic.com/uat/ConfigurationMicroservice/TtlRules"
+    },
+    "ConfigurationMSTtlEnabledCityEndpoint": {
+      "value": "https://testresources.virginatlantic.com/uat/ConfigurationMicroservice/TtlEnabledCity"
+    },
+    "ConfigurationMSClidEndpoint": {
+      "value": "https://testresources.virginatlantic.com/uat/ConfigurationMicroservice/CLID"
+    },
+    "ReferenceMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/ReferenceMicroservice/heartbeat"
+    }
+  }
+}

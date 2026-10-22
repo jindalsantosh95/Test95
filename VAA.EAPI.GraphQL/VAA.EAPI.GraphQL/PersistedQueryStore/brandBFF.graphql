@@ -1,0 +1,31 @@
+﻿query BrandBFF($request: BrandServiceRequestInput!) {
+  brandBFF(request: $request) {
+    cabinDetails {
+      legs {
+        leg
+        origin
+        destination
+        fareFamilyType
+        operatedBy
+        dominantCabinName
+        heroImageURI
+        seatSelection
+        seatPitch
+        checkedBags
+        carryOnBags
+        bookingClass
+        freshFoods
+        beverages
+        boardingPriority
+        checkInPriority
+        loungeAccess
+        dominantLeg
+      }
+    }
+    links {
+      rel
+      href
+    }
+    legs
+  }
+}

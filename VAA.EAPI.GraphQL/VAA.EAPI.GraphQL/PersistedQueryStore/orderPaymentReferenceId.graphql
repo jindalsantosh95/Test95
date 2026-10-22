@@ -1,0 +1,173 @@
+mutation orderPaymentReferenceId($request: OrderPaymentRequestInput!) {
+    orderPaymentReferenceId(request:$request)
+    {
+        type
+        totalAmountOnSessions
+        minDeposit
+        totalAmount
+        amountToPay
+        paymentSessions
+        {
+            amountToPay
+            paymentLink
+
+        }
+
+        summary {
+      voucherBalance
+      voucherAmount
+      tracking {
+        bookingReference
+        emailAddress
+        acceptPost
+        acceptTelephone
+        acceptEmail
+        acceptTextMessage
+      }
+      tours
+      cruises
+      seatsNotBooked
+      voucherExpiry
+      partyComposition {
+        adults
+        children
+        teens
+        infants
+        total
+      }
+      membershipMiles
+      bookingType
+      pennies
+      minDeposit
+      voucherRemaining
+      resortFees
+      ineligibleMember
+      promotionalDiscount
+      includes {
+        hotel
+        villa
+        flight
+        car
+        transfer
+        extras
+        disneyExtras
+        vRoom
+        additional
+      }
+      inactivePromotionalDiscount
+      membershipTierMiles
+      directDebit
+      totalPriceWithoutDiscount
+      cars
+      name
+      pricePerPerson
+      minimumMembershipMiles
+      totalPrice
+      priceCurrency
+      balanceDueDate
+      locationDescription
+      membershipDiscount
+      extras
+      paymentAmount
+      termsAndConditions
+      duration
+      returnDate
+      onlineDiscount
+      membershipMilesMultiplier
+      transfers
+      locationId
+      milesExchangeRate
+      upSellShown
+      membershipNumberType
+      discountType
+      departureDate
+      outboundFlights {
+        airlineName
+        flightNumber
+        airline
+        departing {
+          iata
+          name
+        }
+        arriving {
+          iata
+          name
+        }
+        departingAt
+        arrivingAt
+        cabinClass
+        sectors {
+        sectorId
+          airlineName
+          flightNumber
+          airline
+          departing {
+            iata
+            name
+          }
+          arriving {
+            iata
+            name
+          }
+          departingAt
+          arrivingAt
+          cabinClass
+          pnr
+        }
+      }
+
+      lastChanceUpSellOptions
+      inboundFlights {
+        airlineName
+        flightNumber
+        airline
+        departing {
+          iata
+          name
+        }
+        arriving {
+          iata
+          name
+        }
+        departingAt
+        arrivingAt
+        cabinClass
+        sectors {
+        sectorId
+          airlineName
+          flightNumber
+          airline
+          departing {
+            iata
+            name
+          }
+          arriving {
+            iata
+            name
+          }
+          departingAt
+          arrivingAt
+          cabinClass
+          pnr
+        }
+      }
+
+      milesAvailable
+      locationName
+      balanceDue
+      lastChanceAddons
+      milesBalance
+      membershipNumber
+      hotels
+      upSell
+      milesIncrements
+      promotionalCodeValue
+      selectedPayWithPointsOption {
+        amount
+        currencyCode
+        loyaltyPoints
+      } 
+    }
+
+    }
+}

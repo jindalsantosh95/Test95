@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VAA.EAPI.Automation.Book\VAA.EAPI.Automation.Book.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Automation.OCI\VAA.EAPI.Automation.OCI.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Automation.Trips\VAA.EAPI.Automation.Trips.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\VAA.EAPI.Automation.Search\Requests\Body\GraphQl\*.txt"
+             Link="Requests\Body\GraphQl\%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\VAA.EAPI.Automation.Book\Requests\Body\GraphQl\**\*.json"
+             Link="Requests\Body\GraphQl\%(RecursiveDir)%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

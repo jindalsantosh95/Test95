@@ -1,0 +1,102 @@
+{
+  "query": "mutation Mutation($request: CreateCustomerAccountRequestInput) {\n  accountEnrolMember(request: $request) {\n    customerId\n    memberDetails {\n      memberNumber\n    }\n  }\n}",
+  "variables": {
+    "request": {
+      "customerDetails": {
+        "customerAttribute": [
+          {
+            "type": "IphoneApp",
+            "value": "test"
+          }
+        ],
+        "preferences": [
+          {
+            "preferenceType": "VaaMarketingPermissions",
+            "preferenceValue": "Y"
+          },
+          {
+            "preferenceType": "VaPartnersMarketingPermissions",
+            "preferenceValue": "Y"
+          },
+          {
+            "preferenceType": "VaGroupMarketingPermissions",
+            "preferenceValue": "Y"
+          },
+          {
+            "preferenceType": "PreferredPartnerFFP",
+            "preferenceValue": "DL"
+          }
+        ],
+        "travelProfile": { "reasonForTravel": "Business" },
+        "loyaltyMember": {
+          "enrollmentChannel": "",
+          "termsAndConditionsAccepted": true,
+          "status": "Active",
+          "programName": "VirginAtlanticFlyingClub",
+          "memberType": "Individual",
+          "mediaCode": "",
+          "guardianDetails": {
+            "name": "Alexander",
+            "dateOfBirth": "1997-11-01",
+            "cardNumber": "1075810877",
+            "phoneDetails": {
+              "phoneType": "Landline",
+              "usage": "Business",
+              "countryCode": "44",
+              "phoneNumber": "9898987787",
+              "preferredFlag": "Y",
+              "description": "Personal Phone"
+            },
+            "emailDetails": {
+              "usage": "Business",
+              "emailId": "alex.123613@noreply.com",
+              "preferredFlag": "Y",
+              "description": "Personal Email"
+            },
+            "guardianTermsAndConditionsAccepted": true
+          }
+        },
+        "addressDetails": [
+          {
+            "addressType": "Home",
+            "country": "",
+            "region": "NY",
+            "addressLine1": "",
+            "city": "Southampton",
+            "postalCode": "",
+            "preferredFlag": "Y",
+            "addressVerified": true
+          }
+        ],
+        "dateOfBirth": "1996-01-12",
+        "password": "Virgin123",
+        "gender": "M",
+        "firstName": "",
+        "lastName": "",
+        "contactDetails": {
+          "emailDetails": [
+            {
+              "usage": "Personal",
+              "emailId": "",
+              "preferredFlag": "Y"
+            }
+          ],
+          "phoneDetails": [
+            {
+              "phoneType": "Mobile",
+              "usage": "Personal",
+              "countryCode": "44",
+              "phoneNumber": "7878787878",
+              "preferredFlag": "Y"
+            }
+          ]
+        },
+        "customerType": "Loyalty"
+      },
+      "channelUserId": "123456",
+      "channelId": "",
+      "enrolmentToken": ""
+    }
+  },
+  "operationName": "Mutation"
+}

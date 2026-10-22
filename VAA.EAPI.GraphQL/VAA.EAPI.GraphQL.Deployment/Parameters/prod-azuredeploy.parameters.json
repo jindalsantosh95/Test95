@@ -1,0 +1,1089 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "NativeWebSocketsConfiguration": {
+      "value": {
+        "startupHookPath": "",
+        "existingStartupHooks": "",
+        "workerProcessCount": "1",
+        "path": "/api/v1/GraphQL/ws"
+      }
+    },
+    "NativeWebSocketsBridgeSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/GraphQL-Native-WebSocket-Bridge-Secret/)"
+    },
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "FunctionAppName": {
+      "value": "AVAPEUNAFNGRAPHQL"
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-EnterpiseGraphQL"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPENTGRAPHQL"
+    },
+    "AppInsightsName": {
+      "value": "AVAPEUNAIENTGRAPHQL"
+    },
+    "storageAccountName": {
+      "value": "avapeunsagraphqlms"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVENTGRAPHQL"
+    },
+    "AppSetting:AppInsightsKey": {
+      "value": "b3af4afd-145a-4f32-9537-2c4f4b912b69"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=b3af4afd-145a-4f32-9537-2c4f4b912b69;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "https://avapeunkventgraphql.vault.azure.net/secrets/Common-config-RGSubscription-Id/"
+    },
+    "resourceurl": {
+      "value": "Cache:get:https://resources.virginatlantic.com"
+    },
+    "resourceurlPost": {
+      "value": "Cache:post:https://resources.virginatlantic.com"
+    },
+
+    // Azure B2C Active Directory
+    "AzureAB2C": {
+      "value": {
+        "Authority": "https://identity.virginatlantic.com",
+        "TenantId": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AzureAB2C-TenantId/)",
+        "AB2COpenIdConnection": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AzureAB2C-AB2COpenIdConnection/)",
+        "AB2CAudience": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AzureAB2C-AB2CAudience/)"
+      }
+    },
+
+    // Azure Active Directory Entra
+    "AppSetting:AAD:EntraTenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/Common-Config-AzureAd-EntraTenantId/)"
+    },
+
+    // Azure Active Directory
+    "AppSetting:AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AppSetting:AAD:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AppSetting:AAD:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+
+    // Graph QL Microservice
+    "AppSetting:EAPIGraph:AppID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-EAPIGraphAppID/)"
+    },
+    "AppSetting:EnrolmentTokenFlag": {
+      "value": true
+    },
+    "AppSetting:YoungFlyerAgeLimit": {
+      "value": 18
+    },
+    "AppSetting:EnableUnder18StandardEnrolmentBlock": {
+      "value": false
+    },
+    "AppSetting:EAPIGraph:ClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-EAPIGraph-ClientSecret/)"
+    },
+    "AppSetting:CommonEAPIOcpAPIMKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/EAPI-OcpAPIMKey/)"
+    },
+    "AppSetting:AllowIntrospection": {
+      "value": "true"
+    },
+    "AppSetting:PersistedQueryStore": {
+      "value": "PersistedQueryStore"
+    },
+    "AppSetting:GraphqlTimeOutInSeconds": {
+      "value": 100
+    },
+
+    // Customer Transactions Microservice
+    "AppSetting:CustTrans:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-CustTrans-AppId/)"
+    },
+    "AppSetting:CustTrans:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-CustTrans-OcpSubID/)"
+    },
+    "AppSetting:CustTrans:MsUrl": {
+      "value": "https://resources.virginatlantic.com/customertransactions/"
+    },
+
+    //VRED Microservice
+    "AppSetting:VRed:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNVREDMICROSERV-Config-OcpApimSubscriptionKey/)"
+    },
+    "AppSetting:VRed:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-VRedMSAppId/)"
+    },
+    "AppSetting:VRed:MsUrl": {
+      "value": "https://digital.virginatlantic.com/vred"
+    },
+
+    //Wallet Microservice
+    "AppSetting:Myaccount:WalletGeneratePassURL": {
+      "value": "https://resources.virginatlantic.com/walletMicroService/"
+    },
+    "AppSetting:Wallet:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-WalletAppId/)"
+    },
+
+    //Security Microservice
+    "AppSetting:MyAccount:SecurityMSURLForGetTokenForShopsAway": {
+      "value": "https://resources.virginatlantic.com/securitymicroservice/GetTokenForShopsAway"
+    },
+    "AppSetting:Security:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-SecurityMSAppId/)"
+    },
+
+    // Customer Microservice
+    "AppSetting:Customer:BasicEnrolmentUrl": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/BasicEnrolment"
+    },
+    "AppSetting:Customer:MsUrl": {
+      "value": "https://resources.virginatlantic.com/customermicroservice"
+    },
+    "AppSetting:Customer:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-Customer-AppId/)"
+    },
+    "AppSetting:Customer:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-Customer-OcpSubID/)"
+    },
+    "AppSetting:Customer:UrlGetbyCustID": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/customer/{customerid}"
+    },
+    "AppSetting:Customer:UrlGetByMemNum": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/customer/loyalty/{memberid}"
+    },
+    "AppSetting:CustomerMSURLForValidateMemberStatus": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/ValidateMemberStatus"
+    },
+    "AppSetting:ManageAccount:UpdatePhoneNumber": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/UpdateMemberPhoneNumber"
+    },
+
+    // Ref Data API (Siebel Exit)
+    "AppSetting:RefDataAPI:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/GraphQL-RefDataAPI-AppId/)"
+    },
+    "AppSetting:RefDataAPI:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-RefDataAPI-OcpSubID/)"
+    },
+    "AppSetting:RefDataAPI:GenericUrl": {
+      "value": "https://resources.virginatlantic.com/LoyaltyManagement/Enterprise/ReferenceManagement/reference/{0}"
+    },
+    "AppSetting:RefDataAPI:CacheTimeSpan": {
+      "value": "0.04:00:00"
+    },
+    "AppSetting:Reference:MsUrl": {
+      "value": "https://resources.virginatlantic.com/ReferenceMicroservice/"
+    },
+    "AppSetting:LoyaltySync:MsUrl": {
+      "value": "https://resources.virginatlantic.com/LoyaltysyncMicroservice/"
+    },
+    "AppSetting:LoyaltySync:OcpSubId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-LoyaltySync-OcpApimSubscriptionKey/)"
+    },
+    // Loyalty Sync MS
+    "AppSetting:LoyaltySync:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-LoyaltySyncMSAppId/)"
+    },
+    // Holiday Search Microservice
+    "AppSetting:HolidaySearch:Url": {
+      "value": "https://www.virginholidays.co.uk/cjs-search-api/search"
+    },
+
+    // VHols Query API
+    "VHolsQueryAPI": {
+      "value": {
+        "Login": "",
+        "Refresh": "",
+        "Forgot": "",
+        "Retrieve": "",
+        "Content": "http://vsolauth.grn.virginholidays.co.uk/content-api/v2/{type}/{id}"
+      }
+    },
+
+    // Order Data
+    "AppSetting:OrderDataMs:FutureBookingUrl": {
+      "value": "https://resources.virginatlantic.com/orderdata/FutureBookings"
+    },
+    "AppSetting:EnableOrderSearchFlightService": {
+      "value": true
+    },
+
+    // Order Search Microservice
+    "AppSetting:OrderSearch:Url": {
+      "value": "https://resources.virginatlantic.com/ordersearchmicroservice/order/search"
+    },
+    "AppSetting:OrderSearch:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-OrderSearchAppId/)"
+    },
+    "AppSetting:OrderSearch:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-OrderSearchOcpSubKey/)"
+    },
+    "AppSetting:MyAccount:FutureBookingUrl": {
+      "value": "https://resources.virginatlantic.com/ordersearchmicroservice/FutureBookings"
+    },
+    "AppSetting:OrderSearch:MSUrl": {
+      "value": "https://resources.virginatlantic.com/OrderSearchMicroservice/"
+    },
+
+    // CRM Microservice
+    "AppSetting:CRMMS:Url": {
+      "value": "https://resources.virginatlantic.com/crmmicroservice/UpdatePayment"
+    },
+    "AppSetting:CRMMS:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-CRMMSAppId/)"
+    },
+    "AppSetting:CRMMS:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-CRMMSOcpSubID/)"
+    },
+    "AppSetting:CRMMS:EnableResponseUrl": {
+      "value": "Y"
+    },
+
+    // Offer Microservice
+    "AppSetting:Offer:Url": {
+      "value": "https://resources.virginatlantic.com/OfferMicroservice/offers"
+    },
+    "AppSetting:Offer:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-OfferAppId/)"
+    },
+    "AppSetting:Offer:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-OfferOcpSubKey/)"
+    },
+
+    // Reprice Microservice
+    "AppSetting:Reprice:Url": {
+      "value": "https://resources.virginatlantic.com/OfferMicroservice/offers/price"
+    },
+    "AppSetting:Reprice:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-OfferAppId/)"
+    },
+    "AppSetting:Reprice:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-OfferOcpSubKey/)"
+    },
+
+    //Identity Acquire Token    
+    "AppSetting:Identity:Issuer": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-IdentityIssuer/)"
+    },
+    "AppSetting:FlyingClubToken:Issuer": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-FlyingClubTokenIssuer/)"
+    },
+    "AppSetting:Identity:IdentityActivationTokenIssuer": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-RegisterIssuer/)"
+    },
+    "AppSetting:Identity:SignKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-IdentitySignKey/)"
+    },
+    "AppSetting:Identity:OcpSubId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-IdentityOcpSubId/)"
+    },
+
+    // CampaignManagement
+    "Appsetting:CampaignManagement:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-CampaignManagementAppId/)"
+    },
+    "Appsetting:CampaignManagement:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-CampaignManagementOcpSubID/)"
+    },
+    "Appsetting:CampaignManagement:CampaignManagementMsUrl": {
+      "value": "https://resources.virginatlantic.com/campaignmanagement/"
+    },
+    "Appsetting:CampaignManagement:AssignCampaignCode": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-CampaignManagementAssignCampaignCode/)"
+    },
+    "Appsetting:CampaignManagement:AssignCampaignId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-CampaignManagementAssignCampaignId/)"
+    },
+    // Loyalty Transaction Management
+    "Appsetting:ListOfStatusForAccrual": {
+      "value": "Active,Frozen,ActivePending,Expired,Inactive"
+    },
+    "AppSetting:Loyalty:RetroFlightActivityNoOfDays": {
+      "value": "-190"
+    },
+    "Appsetting:CommonCachingAbsoluteExpiration": {
+      "value": "12:00:00"
+    },
+    "Appsetting:CommonCachingSlidingExpiration": {
+      "value": "12:00:00"
+    },
+    "AppSetting:AddressSearchbyPostcode:MsUrl": {
+      "value": "https://resources.virginatlantic.com/addresslookupmicroservice/"
+    },
+
+    //MemberManagement
+    "AppSetting:MemberManagement:MsUrl": {
+      "value": "https://resources.virginatlantic.com/loyaltymembermanagement"
+    },
+    "AppSetting:MemberManagement:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNKVENTGRAPHQL-MemberManagementAppId/)"
+    },
+    "AppSetting:MemberManagement:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNKVENTGRAPHQL-MemberManagementOcpSubID/)"
+    },
+
+    // Delay used by microservice connecter when making get call after post
+    "AppSetting:TimeToWaitBeforeNextRecall": {
+      "value": "50"
+    },
+
+    // Redis cache
+    //Redis Connection string is intentionally set to blank to disable the caching in prod.
+    "AppSetting:RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-RedisCacheConnectionString/)"
+    },
+    "AppSetting:McpCallerContextApplicationId": { "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-McpCallerContextApplicationId/)" },
+
+    // GetBooking
+    "AppSetting:GetBooking:Url": {
+      "value": "https://resources.virginatlantic.com/ordersearchmicroservice/GetBooking"
+    },
+
+    //CreateCustomer
+    "AppSetting:Enrolment:Url": {
+      "value": "https://resources.virginatlantic.com/EnrolmentMicroservice/BasicEnrolment"
+    },
+    "AppSetting:Enrolment:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-EnrolmentAppId/)"
+    },
+    "AppSetting:Enrolment:OcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-EnrolmentOcpKey/)"
+    },
+
+    //EmailMs
+    "AppSetting:MyAccount:EmailMSURLForPasswordResetConfirmation": {
+      "value": "https://resources.virginatlantic.com/emailmicroservice/SendPasswordResetConfirmation"
+    },
+    "AppSetting:Email:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-EmailAppId/)"
+    },
+    "AppSetting:MyAccount:PasswordResetConfirmationTemplate": {
+      "value": "vaaLoyaltyFCGEN14e"
+    },
+
+    // Operations | Passenger Manifest
+    "PassengerManifestSettings": {
+      "value": {
+        "Url": "https://resources.virginatlantic.com/CustomerManifest/api/CustomerManifest?CarrierCode={carriercode}&FlightDate={fltdte}&FlightNumber={fltno}&FlightOrigin={origin}",
+        "AppId": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-OperationsPassengerManifestAppId/)",
+        "OcpKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-OperationsPassengerManifestOcpKey/)",
+        "AcceptHeader": "application/json;version=2"
+      }
+    },
+
+    //App Settings Security MicroService - APIM Subscription
+    "APIMSubscriptionSettings": {
+      "value": {
+        "CreateUrl": "https://resources.virginatlantic.com/securitymicroservice/apim/subscription/{channel}/{environment}",
+        "GetUrl": "https://resources.virginatlantic.com/securitymicroservice/apim/subscription/{channel}/{environment}/{subscriptionid}",
+        "UpdateUrl": "https://resources.virginatlantic.com/securitymicroservice/apim/subscription/{channel}/{environment}/{subscriptionid}",
+        "DeleteUrl": "https://resources.virginatlantic.com/securitymicroservice/apim/subscription/{channel}/{environment}/{subscriptionid}",
+        "AppId": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNSBEAPISECURITY-Config-SecurityMSAppId/)",
+        "OcpKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNSBEAPISECURITY-Config-SecurityMSOcpKey/)"
+      }
+    },
+    //App Settings Security MicroService - APIM Subscription
+
+    // Azure Function Settings
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSetting:AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-StorageAccount/)"
+    },
+    /*"AppSetting:WEBSITE_CONTENTSHARE": {
+      "value": "avapeunafngraphql-ds"
+    },*/
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "AppSetting:OperationsVisibilityMode": {
+      "value": "Public|Secure"
+    },
+
+    // My Account - Loyalty Enrolment
+    "AppSetting:MyAccount:EnableMockResponseForLoyaltySignUp": {
+      "value": false
+    },
+    "AppSetting:EnableCustomerMs": {
+      "value": true
+    },    
+    "AppSetting:MyAccount:EnrolmentSignUp:URL": {
+      "value": "https://resources.virginatlantic.com/EnrolmentMicroservice/Enrolment"
+    },
+    "AppSetting:MyAccount:AllowMemberToEnrolToAzureB2C": {
+      "value": true
+    },
+    "AppSetting:MyAccount:EnableMockResponseForPointDotCom": {
+      "value": false
+    },
+    "AppSetting:EnableMockResponseForVACLoginOverview": {
+      "value": false
+    },
+    "AppSetting:Identity:MsUrl": {
+      "value": "https://resources.virginatlantic.com/identitymicroservice"
+    },
+    "AppSetting:MyAccount:IdentityMSURLForVerifyMemberInAzureB2C": {
+      "value": "https://resources.virginatlantic.com/identitymicroservice/VerifyMember"
+    },
+    "AppSetting:MyAccount:IdentityMSURLForVerifyEmailtoAzureB2C": {
+      "value": "https://resources.virginatlantic.com/identitymicroservice/VerifyEmail"
+    },
+    "AppSetting:MyAccount:EnableMockResponseForEnrolment": {
+      "value": false
+    },
+    "AppSetting:MyAccount:AddressLookUpURLForAddressDetails": {
+      "value": "https://resources.virginatlantic.com/addresslookupmicroservice/addressDetails"
+    },
+    "AppSetting:AddressLookup:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-AddressLookUpMSAppId/)"
+    },
+    "AddressLookupV3": {
+      "value": {
+        "ApimUrl": "https://resources.virginatlantic.com/addresslookupmicroservice"
+      }
+    },
+    "AppSetting:MyAccount:DeDupFCGenUrl": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/GenerateFcNumber"
+    },
+    "AppSetting:MyAccount:MobileEnrolment:MinimumIosVersion": {
+      "value": "1.10.0"
+    },
+    "AppSetting:MyAccount:MobileEnrolment:MinimumAndroidVersion": {
+      "value": "1.10.0"
+    },
+    "AppSetting:EnableAzureEndpointAddressDetails": {
+      "value": true
+    },
+    "AppSetting:MyAccount:AddressLookUpURLForAddressDetailsV2": {
+      "value": "https://resources.virginatlantic.com/addresslookupmicroservice/AddressDetailsV2"
+    },
+    "AppSetting:MyAccount:CustomerMSURLForMemberDetails": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/customerdocument/account/{memberNumber}"
+    },
+    "AppSetting:MyAccount:CustomerMSURLForEmailUpdate": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/{memberNumber}/UpdateEmailAddress"
+    },
+    "AppSetting:MyAccount:InflightConnectivityMSURL": {
+      "value": "https://digital.virginatlantic.com/inflightconnectivity"
+    },
+    "AppSetting:MyAccount:InflightConnectivityExpiry": {
+      "value": 30
+    },
+    "AppSetting:MyAccount:InflightConnectivityLimitedExpiry": {
+      "value": 10
+    },
+    "AppSetting:MyAccount:InflightConnectivityOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/inflightconn-Config-SecurityMSOcpKey/)"
+    },
+    "AppSetting:MyAccount:CustomerMSUrlForUpdateMemberAddress": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/{CustomerId}/UpdateMemberAddress"
+    },
+    "AppSetting:MyAccount:PostCodeMandatoryCountryList": {
+      "value": "GB|US"
+    },
+    "AppSetting:MyAccount:EnableMockResponseForPartnersFlightsPointsClaim": {
+      "value": false
+    },
+
+
+    // Identity MS - Password Validator
+    "AppSetting:IdentityMS:OcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-IdentityMSOcpKey/)"
+    },
+    "AppSetting:IdentityMS:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-IdentityMSAppId/)"
+    },
+
+    // TravelPlus [Search / Book]
+    "Appsetting:Search:TravelPlus:FlightSearch:Url": {
+      "value": "https://travelplus.virginatlantic.com/travelplus/flight-search-api/"
+    },
+    "Appsetting:Search:TravelPlus:CookieHeaders": {
+      "value": "set-cookie"
+    },
+    "Appsetting:Search:TravelPlus:CookiePrefix": {
+      "value": "com.virginholidays"
+    },
+    "Appsetting:Search:TravelPlus:Connection": {
+      "value": "keep-alive"
+    },
+    "Appsetting:Search:TravelPlus:Accept": {
+      "value": "*/*"
+    },
+    "Appsetting:Search:TravelPlus:ContentType": {
+      "value": "application/json"
+    },
+    "Appsetting:Search:PostBackUrl": {
+      "value": "https://resources.virginatlantic.com/search"
+    },
+
+
+    //Book [Order]
+    "AppSetting:BookOrder:CreateUrl": {
+      "value": "https://resources.virginatlantic.com/OrderMicroservice/orders"
+    },
+    "AppSetting:BookOrder:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-BookOrder-OcpSubID/)"
+    },
+
+    //Book [Offer]
+    "AppSetting:Book:Offer:Url": {
+      "value": "https://resources.virginatlantic.com/Offermicroservice/offers/{offerId}"
+    },
+    "AppSetting:Book:Offer:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Book-Offer-OcpSubID/)"
+    },
+    "AppSetting:Book:OfferMS:ChannelId": {
+      "value": "DCOM"
+    },
+
+    //Book [Basket]
+    "AppSetting:BasketMSRetrieveUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}"
+    },
+    "AppSetting:BasketMSUpdatePassengerUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}/People/{peopleid}"
+    },
+    "AppSetting:EnableAutoMatch": {
+      "value": true
+    },
+    "AppSetting:BasketMSUpdateContactUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}/contact"
+    },
+    "AppSetting:BasketMSUpdateTermsUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}/terms"
+    },
+    "AppSetting:BasketMSOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-BasketMSOcpKey/)"
+    },
+    "AppSetting:BasketMSUpdateOfferIDUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}/offer/{offerId}"
+    },
+    "AppSetting:BasketMSUpdateSelectedOfferUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}/offer"
+    },
+    "AppSetting:BasketMSCreateUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket"
+    },
+    "AppSetting:BasketMSUpdatePaymentUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}/payment"
+    },
+    "AppSetting:BasketMSDeleteUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}"
+    },
+    "AppSetting:BasketMSOrderStatusUpdateUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}/order"
+    },
+    "AppSetting:BasketMSUpdateSeatOfferUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}/seat"
+    },
+    "AppSetting:BasketMSSetFlightSummaryUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}/summaryupdate"
+    },
+    "AppSetting:BasketMSUpdateMembershipUrl": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/{basket}/membership"
+    },
+    "AppSetting:BasketMS:Url": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket/"
+    },
+    "AppSetting:Seat:MSUrl": {
+      "value": "https://resources.virginatlantic.com/SeatMicroservice/"
+    },
+    "AppSetting:BookSeatMSOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQLPBookSeatMsOcpKey/)"
+    },
+    "AppSetting:BookSeatMSUrl": {
+      "value": "https://resources.virginatlantic.com/seatmicroservice/retrieveseatmap"
+    },
+    "AppSetting:BookRetrieveSeatOfferUrl": {
+      "value": "https://resources.virginatlantic.com/seatmicroservice/seatOffer/{seatOfferId}"
+    },
+    "AppSetting:BookUpdateSeatOfferMSUrl": {
+      "value": "https://resources.virginatlantic.com/seatmicroservice/seatOffer/seatUpdate"
+    },
+    "AppSetting:LOPAMSOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQLPBookLOPAMSOcpKey/)"
+    },
+    "AppSetting:LOPAMSUrl": {
+      "value": "https://resources.virginatlantic.com/lopaMicroservice/{fleetTypeCode}/{equipmentCode}/Lopa"
+    },
+    "AppSetting:DelayTimeInMS": {
+      "value": 10000
+    },
+    "AppSetting:PollingCount": {
+      "value": 2
+    },
+    "AppSetting:InsuranceMSOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQLPBookInsuranceMSOcpKey/)"
+    },
+    "AppSetting:InsuranceMSUrl": {
+      "value": "https://resources.virginatlantic.com/Insurance/InsuranceQuote"
+    },
+    //Book [Payment]
+    "AppSetting:PaymentMS:Url": {
+      "value": "https://resources.virginatlantic.com/orderpaymentmicroservice/order/payment/"
+    },
+    "AppSetting:Book:PaymentMS:Url": {
+      "value": "https://resources.virginatlantic.com/orderpaymentmicroservice/order/payment/paymentDetails/{paymentReferenceId}"
+    },
+    "AppSetting:Book:OrderPaymentReferenceIdMS:Url": {
+      "value": "https://resources.virginatlantic.com/orderpaymentmicroservice/order/payment/paymentReferenceId"
+    },
+    "AppSetting:Book:PaymentMS:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQLPBookPaymentOcpKey/)"
+    },
+    "AppSetting:Book:PaymentCaptureMS:Url": {
+      "value": "https://resources.virginatlantic.com/orderpaymentmicroservice/order/payment/capture"
+    },
+    "AppSetting:Book:PaymentVoidMS:Url": {
+      "value": "https://resources.virginatlantic.com/orderpaymentmicroservice/order/payment/void"
+    },
+    "AppSetting:Book:PaymentCaptureMS:VendorId": {
+      "value": "CPD"
+    },
+    "AppSetting:Book:VRed:VirginPoints": {
+      "value": "https://digital.virginatlantic.com/vred/{memberID}/VirginPoints"
+    },
+    "AppSetting:Book:VRed:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQLBook-Config-VRedMSAppId/)"
+    },
+    //Book ReferenceMS
+    "ReferenceMSAirportDetailsUrl": {
+      "value": "https://resources.virginatlantic.com/ReferenceMicroservice/airportdetail"
+    },
+    "ReferenceMSAirlineDetailsUrl": {
+      "value": "https://resources.virginatlantic.com/ReferenceMicroservice/airlinedetails"
+    },
+    "ReferenceMSCabinDetailsUrl": {
+      "value": "https://resources.virginatlantic.com/ReferenceMicroservice/CabinDetails"
+    },
+    "ReferenceMSAircraftDetailsUrl": {
+      "value": "https://resources.virginatlantic.com/ReferenceMicroservice/aircraftDetails"
+    },
+    "ReferenceMSCountriesUrl": {
+      "value": "https://resources.virginatlantic.com/ReferenceMicroservice/Countries"
+    },
+    "ReferenceMSFQTUrl": {
+      "value": "https://resources.virginatlantic.com/ReferenceMicroservice/FQTPrograms"
+    },
+    "ReferenceMSMobileFeaturesUrl": {
+      "value": "https://resources.virginatlantic.com/ReferenceMicroservice/MobileFeatures"
+    },
+    "ReferenceMSOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-BookReferenceMS-OcpKey/)"
+    },
+    "ReferenceMSAir4CurrencyNumberUrl": {
+      "value": "https://resources.virginatlantic.com/ReferenceMicroservice/Air4CurrencyNumberDetails"
+    },
+    //OfferMS(Search)
+    "Appsetting:Search:OfferMS:URL": {
+      "value": "https://resources.virginatlantic.com/OfferMicroservice/Offers/"
+    },
+    "RewardSeatOfferCalendarEndpoint": {
+      "value": "https://resources.virginatlantic.com/OfferMicroservice/internal/reward-seat-calendar-availability"
+    },
+    "Appsetting:Search:OfferMS:OCPKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-SearchOfferMS-OCPKey/)"
+    },
+    "Appsetting:Search:OfferMS:ChannelId": {
+      "value": "DCOM"
+    },
+
+    // Alerts
+    "Alerting": {
+      "value": {
+        "actionGroupsServiceNow": "ServiceNow",
+        "actionGroupsEAPISupport": "EAPI.Support",
+        "emailAddressServiceNow": "virginatlantictest@service-now.com",
+        "emailAddressEAPISupport": "eapi.support@fly.virgin.com"
+      }
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    "Appsetting:VredMarketingFeatureFlag": {
+      "value": "N"
+    },
+
+    // Reference Micro Service
+    "Appsetting:RefDataMS:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-RefDataMS-AppId/)"
+    },
+    "Appsetting:RefDataMS:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-RefDataMS-OcpSubID/)"
+    },
+    "Appsetting:RefDataMS:GenericUrl": {
+      "value": "https://resources.virginatlantic.com/ReferenceMicroservice/{0}"
+    },
+    "Appsetting:RefDataMS:CacheTimeSpan": {
+      "value": "0.00:01:30"
+    },
+
+    //BrandMS
+    "Appsetting:Search:BrandMS:URL": {
+      "value": "https://resources.virginatlantic.com/brandmicroservice/brand"
+    },
+    "Appsetting:Search:BrandMS:OCPKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-BrandMS-OCPKey/)"
+    },
+
+    //InRule (RuleEngineMS)
+    "Appsetting:InRule:Url": {
+      "value": "https://resources.virginatlantic.com/inrule/"
+    },
+    "Appsetting:InRule:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-InRule-AppId/)"
+    },
+    "Appsetting:InRule:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-InRule-OcpSubID/)"
+    },
+
+    //Skyteam 
+    "Appsetting:SkyMs:GenericUrl": {
+      "value": "https://resources.virginatlantic.com/SkyMs/"
+    },
+    "Appsetting:SkyMs:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-SkyMs-AppId/)"
+    },
+    "Appsetting:SkyMs:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-SkyMs-OcpSubID/)"
+    },
+
+
+    //customer retrieval 
+    "Appsetting:Customer:AddressHistoryRetrievalUrl": {
+      "value": "https://resources.virginatlantic.com/CustomerMicroservice/{customerId}/addressHistory"
+    },
+
+    //customer contact
+    "Customer:ContactHistoryRetrievalUrl": {
+      "value": "https://resources.virginatlantic.com/CustomerMicroservice/{customerId}/contactHistory"
+    },
+    "Customer:CustomerDocByCustIdUrl": {
+      "value": "https://resources.virginatlantic.com/CustomerMicroservice/customerdocument/{customerId}"
+    },
+
+    "EnableCabinFilters": {
+      "value": false
+    },
+    "EnableDepartureTimesFilters": {
+      "value": true
+    },
+    "EnableConnectionsFilters": {
+      "value": true
+    },
+    "EnableAirlineFilters": {
+      "value": true
+    },
+    "EnableVACEnrolment": {
+      "value": "false"
+    },
+    "EnableEarnPointCalculator": {
+      "value": "false"
+    },
+    "EnableVoucherRedemption": {
+      "value": "false"
+    },
+    //loyalty audit app settings
+    "Appsetting:Audit:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-AuditMS-AppId/)"
+    },
+    "Appsetting:Audit:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-AuditMS-OCPKey/)"
+    },
+    "Appsetting:Audit:MsUrl": {
+      "value": "https://resources.virginatlantic.com/LoyaltyAuditManagement"
+    },
+
+    //Search Ms 
+    "Appsetting:Search:SustainMS:URL": {
+      "value": "https://resources.virginatlantic.com/sustainmicroservice/Sustainability"
+    },
+    "Appsetting:Search:SustainMS:OCPKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/SustainMS-OCPKey/)"
+    },
+    "Appsetting:Search:EnableCarbonIndexIntegration": {
+      "value": false
+    },
+
+    // PDM MS
+    "Appsetting:PdmMSUrl": {
+      "value": "https://resources.virginatlantic.com/pdmms"
+    },
+    "Appsetting:PdmMSAppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Pdm-AppId/)"
+    },
+
+    //InRule MS
+    "Appsetting:InRuleMSUrl": {
+      "value": "https://resources.virginatlantic.com/inrule"
+    },
+    "Appsetting:InRuleMSAppID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-InRule-AppId/)"
+    },
+
+    //Analytics Ms
+    "Analytics": {
+      "value": {
+        "Url": "https://resources.virginatlantic.com/analyticsMicroservice/track",
+        "OcpSubId": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AanalyticsMs-OcpSubId/)"
+      }
+    },
+
+    //NDC Threshold Settings
+    "NDCHealth": {
+      "value": {
+        "NDCHealthReportUrl": "https://resources.virginatlantic.com/HealthMS/HealthReport",
+        "NDCHealthReportSubKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/NDCHealthReportSubKey/)",
+        "LowThreshold": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/LowThreshold/)",
+        "Threshold": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/Threshold/)",
+        "HighThreshold": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/HighThreshold/)",
+        "PaymentFacadeHeartBeatUrl": "https://digital.virginatlantic.com/IFG/heartbeat",
+        "PaymentFacadeSubKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/PaymentFacadeSubKey/)",
+        "PaymentFacadeTokenClientId": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/PaymentFacadeTokenClientId/)",
+        "PaymentFacadeTokenClientSecret": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/PaymentFacadeTokenClientSecret/)",
+        "PaymentFacadeTokenResource": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/PaymentFacadeTokenResource/)",
+        "PaymentFacadeTokenUrl": "https://login.microsoftonline.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/token"
+      }
+    },
+
+    //FEAPI Settings
+    "FEAPI": {
+      "value": {
+        "AppId": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/FEAPI-AppId/)",
+        "OcpKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/FEAPI-OcpKey/)",
+        "CreateCreditManualAdjustment": "https://resources.virginatlantic.com/FCLoyaltyApp/members/{accountNumber}/creditAdjustments/manual",
+        "CreateManualRedempton": "https://resources.virginatlantic.com/FCLoyaltyApp/members/{accountNumber}/redemptions/manual",
+        "CancelTransaction": "https://resources.virginatlantic.com/FCLoyaltyApp/transactions/cancellations"
+      }
+    },
+
+    //OrderData Microservice
+    "OrderData": {
+      "value": {
+        "AppId": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-OrderSearchAppId/)",
+        "MSUrl": "https://resources.virginatlantic.com/orderdata",
+        "OcpSubID": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/OrderData-OcpSubID/)"
+      }
+    },
+
+    //TRIP MS
+    "TRIPMS": {
+      "value": {
+        "MSUrl": "https://digital.virginatlantic.com/Trips",
+        "OcpSubID": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/TripMS-OcpSubID/)",
+        "BookingIdJwtKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/TripMS-BookingIdJwtKey/)"
+      }
+    },
+
+    //Trip Settings
+    "TripSettings": {
+      "value": {
+        "HertzManageBookingUrl": "https://www.hertz.com/us/en/virgin-checkin",
+        "KoreanAirlineOperatedHelpText": "If you'd like to choose or request a seat or a meal, our Virgin Atlantic Customer Centre will be happy to help.",
+        "OtherAirlineOperatedHelpText": "For full support to view and update your information, please contact the operating airline directly.",
+        "AllowedDocumentTypes": "CBKINV,VATINVOICE,ITINERARYDOCUMENT,BKGCONFEMAIL,ATOLCERTIFICATE,ATOLRECEIPT,TRVDOC,TRVDOCEML,VIAVOUEMAIL",
+        "HiddenElementGroups": "FCHIDDEN,OWA,OWAWC,OWAEC,RCD,RETAILBOOK,ATOLLEVY,ADVANCE,LOWDEP,CCBF,STBF,BOOKFEE,HREPFEES",
+        "EnableSeatDeletion": false,
+        "PopsOpenDaysBeforeDeparture": 7,
+        "PopsCloseDaysBeforeDeparture": 1,
+        "FlightOpsUrl": "https://digital.virginatlantic.com/fltopsflights",
+        "FlightOpsOcpSubID": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/FlightOps-OcpSubID/)",
+        "FlightOpsMaxConcurrentScheduleRequests": 8,
+        "HolidayProvider": {
+          "HolidaysMs": {
+            "Url": "https://digital.virginatlantic.com/holidays",
+            "OcpSubID": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/HolidaysMs-OcpSubID/)"
+          }
+        },
+        "HolidayMaxPaymentAmountInGBP": 50000,
+        "PaymentProvider": {
+          "HolidayPayment": {
+            "Url": "https://digital.virginatlantic.com/orderpaymentmicroservice/",
+            "OcpKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/HolidayPayment-OcpKey/)"
+          }
+        }
+      }
+    },
+
+    //FlightService MS
+    "FlightServiceMS": {
+      "value": {
+        "MSUrl": "https://resources.virginatlantic.com/flightservicesmicroservice",
+        "OcpSubID": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/FlightServiceMS-OcpSubID/)"
+      }
+    },
+
+    //CheckIn Microservice
+    "CheckIn": {
+      "value": {
+        "MSUrl": "https://digital.virginatlantic.com/Paxops",
+        "OcpSubID": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/CheckInMS-OcpSubId/)",
+        "CheckInIdJwtKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/CheckIn-CheckInIdJwtKey/)",
+        "RequirementIdExpiryTimeinMin": "20",
+        "TravelPartyIdExpiryTimeinMin": "20",
+        "BasketIdExpiryTimeinMin": "20",
+        "PaxOpsJwtTokenExpiryTimeinDays": "1"
+      }
+    },
+
+    //CheckIn Microservice
+    "Baggage": {
+      "value": {
+        "MSUrl": "https://digital.virginatlantic.com/baggage",
+        "OcpSubID": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/BaggageMS-OcpSubId/)",
+        "OciTripType": "OLCI"
+      }
+    },
+
+    // Content Service
+    "ContentService": {
+      "value": {
+        "Url": "https://digital.virginatlantic.com/content/",
+        "Ocp": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/Content-MS-OCP-Key/)"
+      }
+    },
+
+    //AirportInfo Query
+    "AirportInfoQuery:RoutesApi": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AirportInfoQuery-RoutesApi/)"
+    },
+
+    //Order Management 
+    "OrderManagement": {
+      "value": {
+        "MsUrl": "https://resources.virginatlantic.com/Ordermanagementmicroservice/order/",
+        "AppId": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/OrderManagement-AppId/)",
+        "OcpKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/OrderManagement-OcpKey/)"
+      }
+    },
+
+    //Retailing
+    "Retailing": {
+      "value": {
+        "ChannelId": "NDC",
+        "OrderDataProvider": {
+          "OrderDataMsUri": "https://resources.virginatlantic.com/orderdata",
+          "OcpKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/OrderData-OcpSubID/)"
+        },
+        "CateringProvider": {
+          "CateringMsUri": "https://digital.virginatlantic.com/fltopscatering",
+          "OcpKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/CateringOcpKey/)"
+        },
+        "OrderSearchProvider": {
+          "OrderSearchMsUri": "https://resources.virginatlantic.com/ordersearchmicroservice",
+          "OcpKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/AVAPEUNAFNGRAPHQL-Config-OrderSearchOcpSubKey/)"
+        },
+        "MealServiceProvider": {
+          "FlightServiceMsUri": "https://resources.virginatlantic.com/flightservicesmicroservice",
+          "OcpKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/MealFlightServiceOcpKey/)"
+        }
+      }
+    },
+
+    // MockDelegatingHandler
+    "MockDelegatingHandler": {
+      "value": {
+        "Enabled": "false",
+        "MockServiceUri": ""
+      }
+    },
+
+    //vnet settings 
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+
+    //Validate txn 
+    "ValidateTxnSettings": {
+      "value": {
+        "DelayInMS": "200",
+        "RetryLimit": "30"
+      }
+    },
+
+    //NDCHealthCheck
+    "NDCHeartbeatSettings": {
+      "value": {
+        "OfferUrl": "https://resources.virginatlantic.com/SalesAndRevenueManagement/OrderShopping/OfferManagement/v2/heartbeat",
+        "OrderUrl": "https://resources.virginatlantic.com/SalesAndRevenueManagement/OrderShopping/OrderManagement/v2/heartbeat"
+      }
+    },
+    
+    //Store appointment
+    "StoreLocator": {
+      "value": {
+        "MsUrl": "https://digital.virginatlantic.com/storeappointment",
+        "OcpSubID": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/StoreLocator-OcpSubID/)"
+
+      }
+    },
+    //CRMRefund
+    "CRMRefund": {
+      "value": {
+        "Status": {
+          "Url": "https://digital.virginatlantic.com/refunds/status"
+        },
+        "Submit": {
+          "Url": "https://digital.virginatlantic.com/refunds/submit"
+        },
+        "OcpKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/Refund-OcpSubID/)",
+        "AppId": "@Microsoft.KeyVault(SecretUri=https://avapeunkventgraphql.vault.azure.net/secrets/Refund-AppId/)"
+      }
+    },
+
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "PROD",
+        "Purpose": "Graph QL For Enterprise Microservices",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

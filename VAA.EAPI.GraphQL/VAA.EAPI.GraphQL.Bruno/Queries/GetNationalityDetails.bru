@@ -1,0 +1,25 @@
+meta {
+  name: GetNationalityDetails
+  type: graphql
+  seq: 25
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query GetNationalityDetails {
+    GetNationalityDetails {
+      __typename
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

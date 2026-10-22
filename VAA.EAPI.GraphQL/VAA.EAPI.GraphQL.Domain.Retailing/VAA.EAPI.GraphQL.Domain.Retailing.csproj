@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="bin\**" />
+        <Compile Remove="VAA\**" />
+        <EmbeddedResource Remove="bin\**" />
+        <EmbeddedResource Remove="VAA\**" />
+        <None Remove="bin\**" />
+        <None Remove="VAA\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="6.0.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="HotChocolate" Version="12.22.6" />
+        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.22.6" />
+        <PackageReference Include="HotChocolate.Data" Version="12.22.6" />
+        <PackageReference Include="HotChocolate.Types" Version="12.22.6" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.50.0" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi.Core" Version="1.5.1" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.12" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.12.1" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
+        <PackageReference Include="System.ServiceModel.Http" Version="8.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\VAA.EAPI.GraphQL.Common\VAA.EAPI.GraphQL.Common.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.GraphQL.Infrastructure\VAA.EAPI.GraphQL.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="MockResponse\TripsDetailsMockData.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <GraphQlBinDir>$(MSBuildProjectDirectory)\..\VAA.EAPI.GraphQL\bin\$(Configuration)\$(TargetFramework)</GraphQlBinDir>
+        <GraphQlRestBinDir>$(MSBuildProjectDirectory)\..\VAA.EAPI.GraphQL.Rest\bin\$(Configuration)\$(TargetFramework)</GraphQlRestBinDir>
+    </PropertyGroup>
+
+    <Target Name="PostBuild" AfterTargets="Build">
+        <ItemGroup>
+            <PostBuildFiles Include="$(TargetDir)**\*" />
+        </ItemGroup>
+
+        <MakeDir Directories="$(GraphQlBinDir);$(GraphQlRestBinDir)" />
+
+        <Copy
+            SourceFiles="@(PostBuildFiles)"
+            DestinationFiles="@(PostBuildFiles->'$(GraphQlBinDir)\%(RecursiveDir)%(Filename)%(Extension)')"
+            SkipUnchangedFiles="true"
+            Retries="5"
+            RetryDelayMilliseconds="200" />
+
+        <Copy
+            SourceFiles="@(PostBuildFiles)"
+            DestinationFiles="@(PostBuildFiles->'$(GraphQlRestBinDir)\%(RecursiveDir)%(Filename)%(Extension)')"
+            SkipUnchangedFiles="true"
+            Retries="5"
+            RetryDelayMilliseconds="200" />
+    </Target>
+
+</Project>

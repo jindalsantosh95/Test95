@@ -1,0 +1,56 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  variableGroupName: ''
+  environment: ''
+  buildFromSource: false
+  sourceFolder: 'D:\a\1/testAutomation'
+
+jobs: 
+- job: 'MemberMgmt_Testing'
+  displayName: 'MemberMgmt' 
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}
+  variables:
+    - group: ${{parameters.variableGroupName}}
+ 
+  steps:
+    - ${{ if eq(parameters.buildFromSource, true) }}:
+      - template: /VAA.EAPI.Pipelines/functions/build_selected_automation.yaml
+        parameters:
+          buildConfiguration: ${{parameters.buildConfiguration}}
+          projects: 'VAA.EAPI.Automation/VAA.EAPI.Automation.MarketingLoyalty/VAA.EAPI.Automation.MarketingLoyalty.csproj'
+    - ${{ else }}:
+      - download: current
+        artifact: testAutomation
+          
+
+  # Task to copy the automation files to artifactstagingdirectory
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+      inputs:
+        ${{ if eq(parameters.buildFromSource, true) }}:
+          SourceFolder: '$(Build.SourcesDirectory)/VAA.EAPI.Automation'
+        ${{ else }}:
+          SourceFolder: ${{parameters.sourceFolder}}
+        Contents: |
+          **/*
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      
+
+    - task: VSTest@2
+      displayName: 'LoyaltyMemberManagement-TestSuite'
+      inputs:
+        testAssemblyVer2: |
+         **\VAA.EAPI.Automation.MarketingLoyalty.dll
+         **\*Tests.dll
+         !**\obj\**
+        searchFolder: '$(Build.ArtifactStagingDirectory)'
+        testFiltercriteria: 'Category=LoyaltyMemberManagement-Regression'
+        testRunTitle: 'LoyaltyMemberManagement-TestSuite'
+        rerunFailedTests: true
+        rerunType: basedOnTestFailureCount
+        rerunMaxAttempts: 1
+      continueOnError: true

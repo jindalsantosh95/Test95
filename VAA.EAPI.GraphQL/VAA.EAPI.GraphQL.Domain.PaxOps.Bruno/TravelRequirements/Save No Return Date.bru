@@ -1,0 +1,67 @@
+meta {
+  name: Save No Return Date
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation TravelRequirementsSaveNoReturnDate {
+    TravelRequirementsSaveReturnDate(
+      request: {
+        travelRequirementsId: "{{travelRequirementsId}}"
+        passengerId: "{{pax1_Id}}"
+        noReturnDate: true
+      }
+    ) {
+      travelRequirementsId
+      applyEmergencyContactToAllPax
+      reference {
+        pnrLocator
+        createdDate
+      }
+      passengers {
+        passengerId
+        givenNames
+        surname
+        dateOfBirth
+        sliceRequirements {
+          sliceId
+          overall
+          returnDateStatus
+          isReturnDateDeclined
+          returnDate
+          passportErrors {
+            code
+            message
+            category
+            displayCode
+          }
+        }
+      }
+      slices {
+        sliceId
+        scheduledDepartureLocalDateTime
+        scheduledArrivalLocalDateTime
+        origin {
+          code
+          countryCode
+        }
+        destination {
+          code
+          countryCode
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

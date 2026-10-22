@@ -1,0 +1,181 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/NdcOrderSearch/OrderSearch/VS932SHGKTK26 HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"docType": "Indirect",
+	"dataList": {
+		"originDestinationAssociations": [
+			{
+				"odLabel": "OD1",
+				"originDestination": {
+					"originAirport": "LHR",
+					"destinationAirport": "BGI",
+					"departureDate": "2026-12-23"
+				},
+				"journeyRefIds": [
+					"JOUR1"
+				],
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			}
+		],
+		"customerDetails": [
+			{
+				"custId": "ADULT_1",
+				"ptc": "ADT",
+				"firstName": "DAVID",
+				"lastName": "SMITH",
+				"gender": "X",
+				"dateOfBirth": "2009-06-25",
+				"contacts": {
+					"email": "TEST.SKYSCANNER@FLY.VIRGIN.COM",
+					"phone": "1234567891",
+					"phoneType": "H"
+				},
+				"firstNameNumber": "01",
+				"lastNameNumber": "01"
+			}
+		],
+		"orderInstructions": [],
+		"segmentDetails": [
+			{
+				"odRefId": "OD1",
+				"segmentId": "SEG1",
+				"airCraft": "333",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "131",
+				"originAirportCode": "LHR",
+				"destinationAirportCode": "BGI",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-12-23T13:20:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-12-23T08:00:00"
+				},
+				"flightDuration": "00:09:20:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-12-23T08:00:00"
+						},
+						"legSequenceNumber": "1",
+						"originAirportCode": "LHR",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-12-23T13:20:00"
+						},
+						"destinationAirportCode": "BGI",
+						"legDuration": "00:09:20:00",
+						"legId": "LEG1",
+						"carrierAircraftTypeCode": "333",
+						"carrierAircraftTypeName": "333"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				},
+				"status": {
+					"code": "HK"
+				},
+				"ticketNotValidAfter": "2026-12-23",
+				"ticketNotValidBefore": "2026-12-23"
+			}
+		],
+		"priceClass": [
+			{
+				"id": "PC1",
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				}
+			}
+		],
+		"journey": [
+			{
+				"journeyId": "JOUR1",
+				"duration": "09:20",
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			}
+		]
+	},
+	"creationDateTime": {
+		"utcDateTime": "2026-06-25T11:35:00Z"
+	},
+	"orderNumber": {
+		"orderId": "VS932SHGKTK26",
+		"ownerAirline": "VS"
+	},
+	"bookingReference": {
+		"rloc": "SHGKTK",
+		"rlocCreateDate": "25Jun26",
+		"rlocCreateDateTime": "06:35:00",
+		"externalRecordLocator": "C8GXMZ",
+		"externalSystem": "1S"
+	},
+	"timeLimits": [
+		{
+			"limit": "2026-06-28 11:00:00 AM"
+		}
+	],
+	"orderItems": [
+		{
+			"orderItemId": "VS932SHGKTK26-1",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"originDestinationRefIds": [
+						"OD1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"serviceDefinitionRefIds": [
+						"SV1"
+					]
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			}
+		}
+	],
+	"orderStatus": "",
+	"warnings": [],
+	"parties": {
+		"participants": [
+			{
+				"partyType": "Seller",
+				"name": "Skyscanner",
+				"agencyID": "91281035",
+				"ordinal": "1",
+				"pccCode": "6UOL",
+				"contacts": {
+					"email": "Bandaru.JeevanNagaSai@fly.virgin.com"
+				},
+				"isCreditCardAccepted": true,
+				"requestAgentType": "IATA"
+			}
+		]
+	},
+	"id": "VS932SHGKTK26",
+	"partitionKey": "VS932SHGKTK26"
+}

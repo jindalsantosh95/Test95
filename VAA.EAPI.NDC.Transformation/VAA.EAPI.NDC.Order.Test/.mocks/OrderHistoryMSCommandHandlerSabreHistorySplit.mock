@@ -1,0 +1,310 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/NdcOrderSearch/OrderHistorySplit HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"docType": "Indirect",
+	"dataList": {
+		"originDestinationAssociations": [
+			{
+				"odLabel": "OD1",
+				"originDestination": {
+					"originAirport": "LHR",
+					"destinationAirport": "ATL",
+					"departureDate": "2026-09-08"
+				},
+				"journeyRefIds": [
+					"JOUR1"
+				],
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			}
+		],
+		"customerDetails": [
+			{
+				"custId": "ADULT_2",
+				"ptc": "ADT",
+				"firstName": "DAVIDYGIDX",
+				"lastName": "SMITHMNFYL",
+				"gender": "U",
+				"dateOfBirth": "1942-02-12",
+				"firstNameNumber": "01",
+				"lastNameNumber": "01"
+			}
+		],
+		"orderInstructions": [],
+		"segmentDetails": [
+			{
+				"odRefId": "OD1",
+				"segmentId": "SEG1",
+				"airCraft": "351",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "103",
+				"originAirportCode": "LHR",
+				"destinationAirportCode": "ATL",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-09-08T15:25:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-09-08T11:15:00"
+				},
+				"flightDuration": "00:09:10:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-09-08T11:15:00"
+						},
+						"legSequenceNumber": "1",
+						"originAirportCode": "LHR",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-09-08T15:25:00"
+						},
+						"destinationAirportCode": "ATL",
+						"legDuration": "00:09:10:00",
+						"legId": "LEG1",
+						"carrierAircraftTypeCode": "351",
+						"carrierAircraftTypeName": "351"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				},
+				"status": {
+					"code": "HK"
+				}
+			}
+		],
+		"priceClass": [
+			{
+				"id": "PC1",
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				}
+			}
+		],
+		"journey": [
+			{
+				"journeyId": "JOUR1",
+				"duration": "09:10",
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			}
+		]
+	},
+	"creationDateTime": {
+		"localDateTime": "12/02/2026 07:11:00"
+	},
+	"orderNumber": {
+		"orderId": "VS932SVRJZC26",
+		"ownerAirline": "VS"
+	},
+	"bookingReference": {
+		"rloc": "SVRJZC",
+		"rlocCreateDate": "12Feb26",
+		"rlocCreateDateTime": "07:11:00",
+		"externalRecordLocator": "E2G4MZ",
+		"externalSystem": "1S"
+	},
+	"orderItems": [
+		{
+			"orderItemId": "VS932SVRJZC26-1",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_2"
+					],
+					"originDestinationRefIds": [
+						"OD1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"priceClassRefIds": [
+						"PC1"
+					],
+					"serviceDefinitionRefIds": [
+						"SV1"
+					]
+				}
+			],
+			"accountableDocumentRefs": [
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520117100",
+					"issueDate": "2026-02-12",
+					"issueTime": "13:11:00",
+					"customerRefId": "ADULT_2"
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			}
+		}
+	],
+	"orderStatus": "Confirmed",
+	"parties": {
+		"participants": [
+			{
+				"partyType": "Seller",
+				"name": "Skyscanner",
+				"agencyID": "91281035",
+				"ordinal": "1",
+				"pccCode": "6UOL",
+				"contacts": {
+					"email": "Bandaru.JeevanNagaSai@fly.virgin.com"
+				},
+				"isCreditCardAccepted": true,
+				"requestAgentType": "IATA"
+			}
+		]
+	},
+	"orderHistory": [
+		{
+			"dataList": {
+				"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVIDYGIDX",
+						"lastName": "SMITHMNFYL",
+						"gender": "U",
+						"dateOfBirth": "1942-02-12",
+						"travelDocuments": [],
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "103",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "ATL",
+						"classOfService": "T",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-09-08T15:25:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-09-08T11:15:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					}
+				]
+			},
+			"version": "1",
+			"changeDateTime": "2026-02-12T07:11:00Z",
+			"changeType": "DocumentExchanged"
+		},
+		{
+			"dataList": {
+				"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVIDYGIDX",
+						"lastName": "SMITHMNFYL",
+						"gender": "U",
+						"dateOfBirth": "1942-02-12",
+						"travelDocuments": [],
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "103",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "ATL",
+						"classOfService": "T",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-09-08T15:25:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-09-08T11:15:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					}
+				]
+			},
+			"version": "2",
+			"changeDateTime": "2026-02-12T07:12:00Z",
+			"changeType": "UNKNOWN"
+		},
+		{
+			"dataList": {
+				"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVIDYGIDX",
+						"lastName": "SMITHMNFYL",
+						"gender": "U",
+						"dateOfBirth": "1942-02-12",
+						"travelDocuments": [],
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "103",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "ATL",
+						"classOfService": "T",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-09-08T15:25:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-09-08T11:15:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					}
+				]
+			},
+			"bookingReference": {
+				"rloc": "SVRJZC",
+				"splitRLOC": {
+					"parentRLOC": "SEMXHJ",
+					"parentRLOCLink": true,
+					"childRLOCDetails": [
+						{
+							"childRLOC": "SVRJZC",
+							"childRLOCLink": true
+						}
+					]
+				},
+				"externalSystem": "1S"
+			},
+			"version": "3",
+			"changeDateTime": "2026-02-12T07:13:00Z",
+			"changeType": "SplitPNR"
+		}
+	],
+	"id": "VS932SVRJZC26-History",
+	"partitionKey": "VS932SVRJZC26"
+}

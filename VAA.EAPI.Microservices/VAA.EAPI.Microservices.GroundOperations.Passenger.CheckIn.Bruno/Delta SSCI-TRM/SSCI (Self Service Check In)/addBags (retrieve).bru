@@ -1,0 +1,84 @@
+meta {
+  name: addBags (retrieve)
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{delta_ssci}}/{{travelparty_id}}/addBags?testlab=TVTH&X-VirginAtlantic_appname_Test=afa0893645aa8eb651843a9ad038de8181363aaaacf7a21d2343575f22d1f094
+  body: json
+  auth: inherit
+}
+
+params:query {
+  testlab: TVTH
+  X-VirginAtlantic_appname_Test: afa0893645aa8eb651843a9ad038de8181363aaaacf7a21d2343575f22d1f094
+}
+
+script:post-response {
+  var json = res.getBody();
+  
+  console.log("Num pax: " + json.passengerBagInfo.length);
+  bru.setVar("pax1_Nin", json.passengerBagInfo[0].firstNIN + "." + json.passengerBagInfo[0].lastNIN);
+  if (json.passengerBagInfo[0].baggagePrices)
+  {  
+      console.log("Num bag offers for pax 1: " + json.passengerBagInfo[0].baggagePrices.length);
+      bru.setVar("pax1_bag1_price", json.passengerBagInfo[0].baggagePrices[0].baggagePrice);
+    console.log(bru.getVar("pax1_bag1_price"));
+      bru.setVar("pax1_bag1_offerid", json.passengerBagInfo[0].baggagePrices[0].offerItemId);
+      bru.setVar("pax1_bag2_price", json.passengerBagInfo[0].baggagePrices[1].baggagePrice);
+      bru.setVar("pax1_bag2_offerid", json.passengerBagInfo[0].baggagePrices[1].offerItemId);
+      bru.setVar("pax1_bag3_price", json.passengerBagInfo[0].baggagePrices[2].baggagePrice);
+      bru.setVar("pax1_bag3_offerid", json.passengerBagInfo[0].baggagePrices[2].offerItemId);
+      bru.setVar("pax1_bag4_price", json.passengerBagInfo[0].baggagePrices[3].baggagePrice);
+      bru.setVar("pax1_bag4_offerid", json.passengerBagInfo[0].baggagePrices[3].offerItemId);
+  }
+  else {
+      console.log("No bag offers returned for pax 1");
+  }
+  
+  if (json.passengerBagInfo.length > 1 && json.passengerBagInfo[1].baggagePrices != null)
+  {
+  bru.setVar("pax2_Nin", json.passengerBagInfo[1].firstNIN + "." + json.passengerBagInfo[1].lastNIN);
+  bru.setVar("pax2_bag1_price", json.passengerBagInfo[1].baggagePrices[0].baggagePrice);
+  bru.setVar("pax2_bag1_offerid", json.passengerBagInfo[1].baggagePrices[0].offerItemId);
+  bru.setVar("pax2_bag2_price", json.passengerBagInfo[1].baggagePrices[1].baggagePrice);
+  bru.setVar("pax2_bag2_offerid", json.passengerBagInfo[1].baggagePrices[1].offerItemId);
+  bru.setVar("pax2_bag3_price", json.passengerBagInfo[1].baggagePrices[2].baggagePrice);
+  bru.setVar("pax2_bag3_offerid", json.passengerBagInfo[1].baggagePrices[2].offerItemId);
+  bru.setVar("pax2_bag4_price", json.passengerBagInfo[1].baggagePrices[3].baggagePrice);
+  bru.setVar("pax2_bag4_offerid", json.passengerBagInfo[1].baggagePrices[3].offerItemId);
+  }
+  
+  if (json.passengerBagInfo.length > 2 && json.passengerBagInfo[2].baggagePrices != null)
+  {
+  bru.setVar("pax3_Nin", json.passengerBagInfo[2].firstNIN + "." + json.passengerBagInfo[2].lastNIN);
+  bru.setVar("pax3_bag1_price", json.passengerBagInfo[2].baggagePrices[0].baggagePrice);
+  bru.setVar("pax3_bag1_offerid", json.passengerBagInfo[2].baggagePrices[0].offerItemId);
+  bru.setVar("pax3_bag2_price", json.passengerBagInfo[2].baggagePrices[1].baggagePrice);
+  bru.setVar("pax3_bag2_offerid", json.passengerBagInfo[2].baggagePrices[1].offerItemId);
+  bru.setVar("pax3_bag3_price", json.passengerBagInfo[2].baggagePrices[2].baggagePrice);
+  bru.setVar("pax3_bag3_offerid", json.passengerBagInfo[2].baggagePrices[2].offerItemId);
+  bru.setVar("pax3_bag4_price", json.passengerBagInfo[2].baggagePrices[3].baggagePrice);
+  bru.setVar("pax3_bag4_offerid", json.passengerBagInfo[2].baggagePrices[3].offerItemId);
+  }
+  
+  if (json.passengerBagInfo.length > 3 && json.passengerBagInfo[3].baggagePrices != null)
+  {
+  bru.setVar("pax4_Nin", json.passengerBagInfo[2].firstNIN + "." + json.passengerBagInfo[2].lastNIN);
+  bru.setVar("pax4_bag1_price", json.passengerBagInfo[3].baggagePrices[0].baggagePrice);
+  bru.setVar("pax4_bag1_offerid", json.passengerBagInfo[3].baggagePrices[0].offerItemId);
+  bru.setVar("pax4_bag2_price", json.passengerBagInfo[3].baggagePrices[1].baggagePrice);
+  bru.setVar("pax4_bag2_offerid", json.passengerBagInfo[3].baggagePrices[1].offerItemId);
+  bru.setVar("pax4_bag3_price", json.passengerBagInfo[3].baggagePrices[2].baggagePrice);
+  bru.setVar("pax4_bag3_offerid", json.passengerBagInfo[3].baggagePrices[2].offerItemId);
+    console.log('pax 4');
+  bru.setVar("pax4_bag4_price", json.passengerBagInfo[3].baggagePrices[3].baggagePrice);
+  bru.setVar("pax4_bag4_offerid", json.passengerBagInfo[3].baggagePrices[3].offerItemId);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

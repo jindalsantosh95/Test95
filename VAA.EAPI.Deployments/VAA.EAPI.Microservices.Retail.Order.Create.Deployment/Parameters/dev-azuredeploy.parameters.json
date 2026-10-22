@@ -1,0 +1,245 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "FunctionAppName": {
+      "value": "AVADEUNAFNORDERCREATEMICROSERV"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-D-EUN-ENTERPRISEAPI"
+    },
+    "AppServicePlanName": {
+      "value": "AVADEUNASPORDER"
+    },
+    "AppInsightsName": {
+      "value": "AVADEUNAIORDERCREATE"
+    },
+    "APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "ba0859fa-bfd4-4192-8f46-1e839e15160a"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avadeunstordercreatems"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "KeyVaultUri": {
+      "value": "https://avadeunkveapis.vault.azure.net/"
+    },
+    "vaultName": {
+      "value": "AVADEUNKVEAPIS"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avadeunstordercreatems"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNORDERCREATEMICROSERV-Config-AzureAd-ClientID/)"
+    },
+    "vNetName": {
+      "value": "acnpeunVnetcns001"
+    },
+    "vNetResourceGroupName": {
+      "value": "RG-CN-P-EUN-CommonNetworking-001"
+    },
+    "vNetSubnetName": {
+      "value": "AVADEUNASPORDER-Subnet"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "BookingProcessV3EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:31060/bookingprocess/v3"
+    },
+    "DeltaCertificateName": {
+      "value": "NdcDLSoaCertificate"
+    },
+    "ApplicationId": {
+      "value": "ND"
+    },
+    "RoleIndicator": {
+      "value": "RESNDCSALES"
+    },
+    "SecurityId": {
+      "value": "D027954"
+    },
+    "TestLab": {
+      "value": "TVTH"
+    },
+    "PoolType": {
+      "value": "STAMPING/VAA/NEW/DIST/CAPABILITY"
+    },
+    "PrinterData": {
+      "value": "14450A"
+    },
+    "AgentCityCode": {
+      "value": "LON"
+    },
+    "DebugOptions": {
+      "value": "Y"
+    },
+    "PnrCommonV6EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:31063/pnrcommon/v6"
+    },
+    "TicketingProcessV3EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:37531/ticketingprocess/v3"
+    },
+    "OrderCreateResponseUrl": {
+      "value": "https://avadeunafnordercreatemicroserv.azurewebsites.net/api/order/response/{correlationid}"
+    },
+    "ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNORDERCREATEMICROSERV-Config-ServiceBusConnectionString/)"
+    },
+    "MicroServiceDBKey": {
+      "value": ""
+    },
+    "MicroServiceEventStoreTableName": {
+      "value": "OrderCreateEventStore"
+    },
+    "MicroServiceResponseTableName": {
+      "value": "OrderCreateResponse"
+    },
+    "ResponsePollingCount": {
+      "value": "50"
+    },
+    "ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "OrderCreateEventType": {
+      "value": "OrderCreate"
+    },
+    "OrderCreateEventSubject": {
+      "value": "OrderCreate"
+    },
+    "ServiceBusTopicName": {
+      "value": "createorder"
+    },
+    //swagger settings
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Order Create Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to Store Order information of a customer&apos;s booking in Single order view system"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/e702ec87-acb8-4184-a7da-3b47b8a2ce6e/User_impersonation"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": false
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": true
+    },
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNORDERCREATEMICROSERV-Config-AzureAd-ClientID/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    // Analytics
+    "Analytics:ServiceBus:ConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Analytics-ServiceBus-ConnectionString/)"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "CRM API",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the CRM API AFN",
+        "ApplicationUsageIdList": "AVADEUNAFNORDERCREATEMICROSERV"
+      }
+    }
+  }
+}

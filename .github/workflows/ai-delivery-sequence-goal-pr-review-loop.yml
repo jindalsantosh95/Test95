@@ -1,0 +1,791 @@
+﻿name: ai-delivery-sequence-goal-pr-review-loop
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to process.
+        required: true
+        type: number
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+  statuses: read
+
+jobs:
+  review-loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      SEQUENCE_GOAL_REVIEW_MAX_ATTEMPTS: 1
+      SEQUENCE_GOAL_REVIEW_MAX_CHANGED_FILES: 100
+      SEQUENCE_GOAL_REVIEW_AGENT_TIMEOUT_MINUTES: 15
+      SEQUENCE_GOAL_REVIEW_VERIFY_TIMEOUT_MINUTES: 15
+    concurrency:
+      group: sequence-goal-pr-mutation-${{ github.event.inputs.pr_number || github.run_id }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Detect sequence-goal GitHub App credentials
+        id: app-credentials
+        shell: pwsh
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        run: |
+          "configured=$(((-not [string]::IsNullOrWhiteSpace($env:APP_ID)) -and (-not [string]::IsNullOrWhiteSpace($env:APP_PRIVATE_KEY))).ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Create sequence-goal GitHub App token
+        id: app-token
+        if: steps.app-credentials.outputs.configured == 'true'
+        uses: actions/create-github-app-token@v2
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ env.APP_PRIVATE_KEY }}
+
+      - name: Enforce attempt budget
+        shell: pwsh
+        run: |
+          if ([int]'${{ github.run_attempt }}' -gt [int]$env:SEQUENCE_GOAL_REVIEW_MAX_ATTEMPTS) {
+            throw "Review loop exceeded its attempt budget of $env:SEQUENCE_GOAL_REVIEW_MAX_ATTEMPTS. Triage the previous run before starting a new workflow run."
+          }
+
+      - name: Resolve PR context
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            let prNumber = null;
+            if (context.payload.pull_request?.number) {
+              prNumber = context.payload.pull_request.number;
+            } else if (context.payload.review?.pull_request_url) {
+              const match = context.payload.review.pull_request_url.match(/\/pulls\/(\d+)$/);
+              prNumber = match ? Number(match[1]) : null;
+            } else if (context.payload.comment?.pull_request_url) {
+              const match = context.payload.comment.pull_request_url.match(/\/pulls\/(\d+)$/);
+              prNumber = match ? Number(match[1]) : null;
+            } else if (context.payload.inputs?.pr_number) {
+              prNumber = Number(context.payload.inputs.pr_number);
+            }
+
+            if (!prNumber) {
+              core.setOutput("should_process", "false");
+              core.info("No pull request context found.");
+              return;
+            }
+
+            const { data: pullRequest } = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: prNumber
+            });
+
+            const isSequenceGoalPr = (pullRequest.body || "").includes("Automated PR raised by the sequence goal loop after goal completion.");
+            const isSameRepositoryBranch = pullRequest.head.repo?.full_name === `${owner}/${repo}`;
+            const appSlug = "${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}";
+            const isTrustedAuthor = new Set(["github-actions", "github-actions[bot]", appSlug, `${appSlug}[bot]`]).has(pullRequest.user?.login || "");
+            const headBranch = pullRequest.head.ref || "";
+            const hasEligibleHeadBranch = headBranch !== "" && headBranch !== "main";
+            const targetsMain = pullRequest.base.ref === "main";
+            const isOpen = pullRequest.state === "open";
+
+            core.setOutput("number", String(prNumber));
+            core.setOutput("head_ref", pullRequest.head.ref);
+            core.setOutput("head_sha", pullRequest.head.sha);
+            core.setOutput("base_ref", pullRequest.base.ref);
+            core.setOutput("should_process", String(isSequenceGoalPr && isSameRepositoryBranch && isTrustedAuthor && hasEligibleHeadBranch && targetsMain && isOpen));
+            core.setOutput("skip_reason", !isSequenceGoalPr
+              ? "PR is not a sequence-goal delivery PR."
+              : !isSameRepositoryBranch
+                ? "PR head is not in this repository; refusing to run write-capable agent loop."
+                : !isTrustedAuthor
+                  ? "PR author is not trusted for write-capable sequence-goal automation."
+                  : !hasEligibleHeadBranch
+                    ? "PR head branch must be a non-main branch."
+                    : !targetsMain
+                      ? "PR does not target main."
+                    : !isOpen
+                      ? "PR is not open."
+                      : "");
+
+      - name: Check out PR head
+        if: steps.pr.outputs.should_process == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr.outputs.head_ref }}
+          fetch-depth: 1
+          token: ${{ steps.app-token.outputs.token || github.token }}
+
+      - name: Fetch PR and base history
+        if: steps.pr.outputs.should_process == 'true'
+        shell: pwsh
+        env:
+          PR_HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+          PR_BASE_REF: ${{ steps.pr.outputs.base_ref }}
+        run: |
+          if ((git rev-parse --is-shallow-repository) -eq 'true') {
+            git fetch --no-tags --unshallow origin
+          }
+          git fetch --no-tags origin `
+            "+refs/heads/$($env:PR_HEAD_REF):refs/remotes/origin/$($env:PR_HEAD_REF)" `
+            "+refs/heads/$($env:PR_BASE_REF):refs/remotes/origin/$($env:PR_BASE_REF)"
+
+      - name: Collect review state
+        id: state
+        if: steps.pr.outputs.should_process == 'true'
+        uses: actions/github-script@v7
+        env:
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        with:
+          script: |
+            const fs = require("fs");
+            const path = require("path");
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = Number("${{ steps.pr.outputs.number }}");
+            const aiAuthors = new Set([
+              "copilot",
+              "copilot[bot]",
+              "copilot-pull-request-reviewer",
+              "copilot-pull-request-reviewer[bot]",
+              "codex",
+              "codex[bot]",
+              "github-actions[bot]"
+            ]);
+            const generatedHumanCommentMarker = "<!-- sequence-goal-open-points human-comment -->";
+            const isAiAuthor = login => aiAuthors.has((login || "").toLowerCase());
+            const isAiComment = comment =>
+              isAiAuthor(comment?.author?.login || comment?.user?.login)
+              && !(comment?.body || "").includes(generatedHumanCommentMarker);
+            const isUserAuthored = login =>
+              !isAiAuthor(login) && !String(login || "").toLowerCase().endsWith("[bot]");
+
+            const { data: pullRequest } = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: prNumber
+            });
+
+            const reviews = await github.paginate(github.rest.pulls.listReviews, {
+              owner,
+              repo,
+              pull_number: prNumber,
+              per_page: 100
+            });
+            const reviewComments = await github.paginate(github.rest.pulls.listReviewComments, {
+              owner,
+              repo,
+              pull_number: prNumber,
+              per_page: 100
+            });
+            const reviewCommentById = new Map(reviewComments
+              .filter(Boolean)
+              .map(comment => [comment.id, comment]));
+            const getRootCommentId = commentId => {
+              const seen = new Set();
+              let currentCommentId = commentId;
+              while (currentCommentId && !seen.has(currentCommentId)) {
+                seen.add(currentCommentId);
+                const parentCommentId = reviewCommentById.get(currentCommentId)?.in_reply_to_id;
+                if (!parentCommentId) return currentCommentId;
+                currentCommentId = parentCommentId;
+              }
+              return commentId;
+            };
+            const commentsByRootCommentId = new Map();
+            for (const comment of reviewComments.filter(Boolean)) {
+              const rootCommentId = getRootCommentId(comment.id);
+              const comments = commentsByRootCommentId.get(rootCommentId) || [];
+              comments.push(comment);
+              commentsByRootCommentId.set(rootCommentId, comments);
+            }
+            const userAuthoredThreadRoots = new Set(reviewComments
+              .filter(comment => isUserAuthored(comment.user?.login))
+              .map(comment => getRootCommentId(comment.id)));
+
+            const latestReviewByUser = new Map();
+            for (const review of reviews) {
+              const login = review.user?.login || "unknown";
+              latestReviewByUser.set(login, review);
+            }
+
+            const approvals = [...latestReviewByUser.values()]
+              .filter(review => review.state === "APPROVED" && !isAiAuthor(review.user?.login));
+
+            const query = `
+              query($owner: String!, $repo: String!, $prNumber: Int!, $threadCursor: String) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequest(number: $prNumber) {
+                    id
+                    number
+                    reviewDecision
+                    reviewThreads(first: 100, after: $threadCursor) {
+                      pageInfo { hasNextPage endCursor }
+                      nodes {
+                        id
+                        isResolved
+                        path
+                        line
+                        startLine
+                        comments(first: 20) {
+                          nodes {
+                            id
+                            databaseId
+                            author { login }
+                            body
+                            path
+                            line
+                            url
+                            createdAt
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `;
+
+            const reviewThreads = [];
+            let threadCursor = null;
+            let prNode = null;
+            do {
+              const result = await github.graphql(query, { owner, repo, prNumber, threadCursor });
+              prNode = result.repository.pullRequest;
+              reviewThreads.push(...prNode.reviewThreads.nodes);
+              threadCursor = prNode.reviewThreads.pageInfo.hasNextPage
+                ? prNode.reviewThreads.pageInfo.endCursor
+                : null;
+            } while (threadCursor);
+
+            const unresolvedAiThreads = reviewThreads
+              .filter(thread => !thread.isResolved)
+              .map(thread => {
+                const reviewThreadCommentId = thread.comments.nodes.find(comment => comment?.databaseId)?.databaseId;
+                const rootCommentId = reviewThreadCommentId
+                  ? getRootCommentId(reviewThreadCommentId)
+                  : null;
+                const threadComments = rootCommentId
+                  ? commentsByRootCommentId.get(rootCommentId) || []
+                  : [];
+                const firstAiComment = threadComments.find(isAiComment);
+                return {
+                  thread,
+                  rootCommentId,
+                  firstAiComment,
+                  containsUserComment: rootCommentId
+                    ? userAuthoredThreadRoots.has(rootCommentId)
+                    : true
+                };
+              })
+              .filter(candidate => candidate.firstAiComment && !candidate.containsUserComment)
+              .map(candidate => {
+                const { thread, firstAiComment } = candidate;
+                return {
+                  threadId: thread.id,
+                  replyToCommentDatabaseId: firstAiComment?.id,
+                  path: thread.path || firstAiComment?.path || null,
+                  line: thread.line || firstAiComment?.line || null,
+                  url: firstAiComment?.html_url || null,
+                  author: firstAiComment?.user?.login || null,
+                  body: firstAiComment?.body || "",
+                  containsUserComment: candidate.containsUserComment,
+                  decision: null,
+                  resolutionComment: null
+                };
+              });
+
+            const rawCheckRuns = await github.paginate(
+              github.rest.checks.listForRef,
+              {
+                owner,
+                repo,
+                ref: pullRequest.head.sha,
+                per_page: 100
+              }
+            );
+            const checkRuns = rawCheckRuns
+              .flatMap(item => item?.check_runs || item || [])
+              .filter(Boolean);
+            const relevantCheckRuns = checkRuns
+              .filter(run => run.name && run.name !== "review-loop")
+              .map(run => ({
+                name: run.name,
+                status: run.status,
+                conclusion: run.conclusion,
+                url: run.html_url
+              }));
+
+            const status = await github.rest.repos.getCombinedStatusForRef({
+              owner,
+              repo,
+              ref: pullRequest.head.sha
+            });
+
+            const evidenceDir = ".codex/agent-loop/pr-reviews";
+            fs.mkdirSync(evidenceDir, { recursive: true });
+            const runAttempt = Number(process.env.RUN_ATTEMPT);
+            const evidencePath = path.join(evidenceDir, `pr-${prNumber}-${context.runId}-${runAttempt}.json`).replace(/\\/g, "/");
+            const immutablePath = path.join(process.env.RUNNER_TEMP, `pr-review-${prNumber}-${context.runId}-${runAttempt}-immutable.json`);
+            const evidence = {
+              prNumber,
+              branch: pullRequest.head.ref,
+              base: pullRequest.base.ref,
+              headSha: pullRequest.head.sha,
+              runId: String(context.runId),
+              runAttempt,
+              runUrl: `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`,
+              collectedAtUtc: new Date().toISOString(),
+              approved: approvals.length > 0,
+              reviewDecision: prNode.reviewDecision,
+              approvals: approvals.map(review => ({
+                author: review.user?.login,
+                submittedAt: review.submitted_at,
+                htmlUrl: review.html_url
+              })),
+              unresolvedAiThreads,
+              checks: {
+                combinedStatus: status.data.state,
+                checkRuns: relevantCheckRuns
+              }
+            };
+
+            fs.writeFileSync(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`, "utf8");
+            fs.writeFileSync(immutablePath, `${JSON.stringify(evidence, null, 2)}\n`, "utf8");
+            core.setOutput("evidence_path", evidencePath);
+            core.setOutput("immutable_path", immutablePath);
+            core.setOutput("immutable_sha256", require("crypto").createHash("sha256").update(fs.readFileSync(immutablePath)).digest("hex"));
+            core.setOutput("has_ai_threads", String(unresolvedAiThreads.length > 0));
+            core.setOutput("approved", String(evidence.approved));
+            core.info(`Unresolved AI threads: ${unresolvedAiThreads.length}`);
+            core.info(`Approved: ${evidence.approved}`);
+
+      - name: Set up Node for Codex CLI
+        if: steps.state.outputs.has_ai_threads == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Codex CLI
+        if: steps.state.outputs.has_ai_threads == 'true'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          npm install -g @openai/codex@0.146.0
+          codex --version
+
+      - name: Run PR review agent
+        if: steps.state.outputs.has_ai_threads == 'true'
+        timeout-minutes: 30
+        shell: pwsh
+        env:
+          PR_HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SEQUENCE_GOAL_REVIEW_AGENT_COMMAND_JSON: ${{ secrets.SEQUENCE_GOAL_REVIEW_AGENT_COMMAND_JSON }}
+          SEQUENCE_GOAL_REVIEW_AGENT_MODEL: ${{ vars.SEQUENCE_GOAL_REVIEW_AGENT_MODEL || 'gpt-6-sol' }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:OPENAI_API_KEY)) {
+            throw "OPENAI_API_KEY secret is required for autonomous AI review handling."
+          }
+
+          ./scripts/run-sequence-goal-pr-review-agent.ps1 `
+            -PrNumber ${{ steps.pr.outputs.number }} `
+            -ReviewEvidencePath '${{ steps.state.outputs.evidence_path }}' `
+            -BranchName $env:PR_HEAD_REF
+
+      - name: Upload PR-review resource and cost evidence
+        if: always() && steps.state.outputs.has_ai_threads == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-resource-sequence-goal-pr-review-loop-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          path: TestResults/agent-resource/
+
+      - name: Validate review decisions
+        if: steps.state.outputs.has_ai_threads == 'true'
+        shell: pwsh
+        env:
+          IMMUTABLE_PATH: ${{ steps.state.outputs.immutable_path }}
+          IMMUTABLE_SHA256: ${{ steps.state.outputs.immutable_sha256 }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidencePath = '${{ steps.state.outputs.evidence_path }}'
+          $evidence = Get-Content -LiteralPath $evidencePath -Raw | ConvertFrom-Json
+          $actualImmutableSha256 = (Get-FileHash -LiteralPath $env:IMMUTABLE_PATH -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actualImmutableSha256 -cne $env:IMMUTABLE_SHA256.ToLowerInvariant()) { throw 'Workflow-owned AI review identity snapshot changed after collection.' }
+          $immutable = Get-Content -LiteralPath $env:IMMUTABLE_PATH -Raw | ConvertFrom-Json
+          $rootFields = @('prNumber','branch','base','headSha','runId','runAttempt')
+          foreach ($field in $rootFields) { if ($evidence.$field -cne $immutable.$field) { throw "Agent changed workflow-owned AI review root identity field '$field'." } }
+          $identityFields = @('threadId','replyToCommentDatabaseId','path','line','url','author','body','containsUserComment')
+          $identity = { param($items) @($items | ForEach-Object { $item = [ordered]@{}; foreach ($field in $identityFields) { $item[$field] = $_.$field }; [pscustomobject]$item }) | ConvertTo-Json -Depth 10 -Compress }
+          if ((& $identity $evidence.unresolvedAiThreads) -cne (& $identity $immutable.unresolvedAiThreads)) { throw 'Agent changed workflow-owned AI review thread identity fields.' }
+          $protectedPatterns = @(
+            '^\.github/', '^\.githooks/', '^\.codex/hooks/', '^\.codex/skills/',
+            '(^|/)local\.settings.*\.json$', '(^|/)appsettings.*\.json$',
+            '(^|/)serviceDependencies/', '(^|/)PublishProfiles/'
+          )
+          $reviewableHarnessPatterns = @(
+            '^\.github/workflows/ai-delivery-sequence-goal-[^/]+\.yml$',
+            '^scripts/check-harness-rules\.ps1$'
+          )
+          $failures = @()
+          foreach ($thread in @($evidence.unresolvedAiThreads)) {
+            $path = ([string]$thread.path) -replace '\\', '/'
+            $isReviewableHarnessPath = ($reviewableHarnessPatterns | Where-Object { $path -match $_ }).Count -gt 0
+            if (-not [string]::IsNullOrWhiteSpace($path) -and -not $isReviewableHarnessPath -and ($protectedPatterns | Where-Object { $path -match $_ }).Count -gt 0) {
+              $thread.decision = 'not-applicable'
+              $thread.resolutionComment = "This feedback targets protected automation path '$path'. The reviewer agent did not mutate that path; a human maintainer must assess and apply any change. Other safe review feedback was processed normally."
+            }
+            if ([string]::IsNullOrWhiteSpace([string]$thread.decision) -or $thread.decision -notin @('valid', 'invalid', 'not-applicable')) {
+              $failures += "Thread $($thread.threadId) must set decision to valid, invalid, or not-applicable."
+            }
+            if ([string]::IsNullOrWhiteSpace([string]$thread.resolutionComment)) {
+              $failures += "Thread $($thread.threadId) must include a resolutionComment."
+            }
+          }
+
+          if ($failures.Count -gt 0) {
+            throw ($failures -join '; ')
+          }
+          $evidence | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $evidencePath -Encoding utf8
+
+      - name: Validate generated review changes
+        if: steps.state.outputs.has_ai_threads == 'true'
+        id: generated
+        shell: pwsh
+        env:
+          PR_HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          ./scripts/normalize-generated-line-endings.ps1 -Base origin/main
+
+          $currentEvidence = ('${{ steps.state.outputs.evidence_path }}' -replace '\\', '/')
+          $otherEvidence = @(@(& git diff --cached --name-only --no-renames; & git diff --name-only --no-renames HEAD; & git ls-files --others --exclude-standard) |
+            ForEach-Object { $_ -replace '\\', '/' } |
+            Where-Object { $_ -match '^\.codex/agent-loop/pr-reviews/pr-.*\.json$' -and $_ -cne $currentEvidence } |
+            Sort-Object -Unique)
+          foreach ($file in $otherEvidence) {
+            git ls-files --error-unmatch -- $file 2>$null | Out-Null
+            if ($LASTEXITCODE -eq 0) { git restore --source=HEAD --staged --worktree -- $file }
+            elseif (Test-Path -LiteralPath $file -PathType Leaf) { Remove-Item -LiteralPath $file -Force }
+          }
+
+          $changedFiles = @(
+            @(& git diff --cached --name-only --no-renames; & git diff --name-only --no-renames HEAD; & git ls-files --others --exclude-standard) |
+            ForEach-Object { $_ -replace '\\', '/' } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Sort-Object -Unique
+          )
+
+          if ($changedFiles.Count -eq 0) {
+            "has_changes=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Host "Review agent produced no file changes."
+            exit 0
+          }
+
+          if ($changedFiles.Count -gt [int]$env:SEQUENCE_GOAL_REVIEW_MAX_CHANGED_FILES) {
+            throw "Review agent changed $($changedFiles.Count) files, above SEQUENCE_GOAL_REVIEW_MAX_CHANGED_FILES=$env:SEQUENCE_GOAL_REVIEW_MAX_CHANGED_FILES."
+          }
+
+          $allowPatterns = @(
+            ('^{0}$' -f [regex]::Escape($currentEvidence)),
+            '^docs/',
+            '^\.github/workflows/ai-delivery-sequence-goal-[^/]+\.yml$',
+            '^scripts/check-harness-rules\.ps1$',
+            '^scripts/(resolve-verify-scopes|run-sequence-goal-agent)\.ps1$',
+            '^VAA\.EAPI\.[^/]+/',
+            '^VAA\.EAPI\.Automation/'
+          )
+          $blockedPatterns = @(
+            '^\.github/',
+            '^\.githooks/',
+            '^\.codex/hooks/',
+            '^\.codex/skills/',
+            '(^|/)local\.settings.*\.json$',
+            '(^|/)appsettings.*\.json$',
+            '(^|/)serviceDependencies/',
+            '(^|/)PublishProfiles/'
+          )
+          $reviewableHarnessPatterns = @(
+            '^\.github/workflows/ai-delivery-sequence-goal-[^/]+\.yml$',
+            '^scripts/check-harness-rules\.ps1$'
+          )
+
+          function Reset-BlockedChanges {
+            param([string[]]$Patterns, [string[]]$AllowedPatterns)
+
+            $dirtyFiles = @(@(& git diff --cached --name-only --no-renames; & git diff --name-only --no-renames HEAD; & git ls-files --others --exclude-standard)) |
+              ForEach-Object { $_ -replace '\\', '/' } |
+              Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+              Sort-Object -Unique
+
+            foreach ($file in $dirtyFiles) {
+              if (($AllowedPatterns | Where-Object { $file -match $_ }).Count -gt 0) {
+                continue
+              }
+              if (($Patterns | Where-Object { $file -match $_ }).Count -eq 0) {
+                continue
+              }
+
+              git ls-files --error-unmatch -- $file 2>$null | Out-Null
+              if ($LASTEXITCODE -eq 0) {
+                git restore --source=HEAD --staged --worktree -- $file
+              } elseif (Test-Path -LiteralPath $file -PathType Leaf) {
+                Remove-Item -LiteralPath $file -Force
+              }
+              Write-Host "Discarded protected-path change from reviewer agent: $file"
+            }
+          }
+
+          Reset-BlockedChanges -Patterns $blockedPatterns -AllowedPatterns $reviewableHarnessPatterns
+          $changedFiles = @(
+            @(& git diff --cached --name-only --no-renames; & git diff --name-only --no-renames HEAD; & git ls-files --others --exclude-standard) |
+            ForEach-Object { $_ -replace '\\', '/' } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Sort-Object -Unique
+          )
+
+          if ($changedFiles.Count -eq 0) {
+            "has_changes=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Host "Review agent produced no file changes after discarding protected-path changes."
+            exit 0
+          }
+
+          $blocked = @()
+          foreach ($file in $changedFiles) {
+            $isReviewableHarnessPath = ($reviewableHarnessPatterns | Where-Object { $file -match $_ }).Count -gt 0
+            if (-not $isReviewableHarnessPath -and ($blockedPatterns | Where-Object { $file -match $_ }).Count -gt 0) {
+              $blocked += "$file (blocked sensitive path)"
+              continue
+            }
+            if (($allowPatterns | Where-Object { $file -match $_ }).Count -eq 0) {
+              $blocked += "$file (not allowlisted)"
+            }
+          }
+
+          if ($blocked.Count -gt 0) {
+            throw "Review agent produced blocked changes: $($blocked -join '; ')"
+          }
+
+          foreach ($file in $changedFiles) {
+            git add -A -- $file
+          }
+
+          "has_changes=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Verify review changes
+        if: steps.state.outputs.has_ai_threads == 'true' && steps.generated.outputs.has_changes == 'true'
+        timeout-minutes: 15
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $reviewChangedFiles = @(
+            & git diff --cached --name-only --diff-filter=ACMRD |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+          )
+          if ($reviewChangedFiles.Count -eq 0) {
+            throw 'Reviewer verification was requested without staged reviewer changes.'
+          }
+
+          $reviewMarkdownFiles = @($reviewChangedFiles | Where-Object { $_.EndsWith('.md', [StringComparison]::OrdinalIgnoreCase) -and (Test-Path -LiteralPath $_ -PathType Leaf) })
+          if ($reviewMarkdownFiles.Count -gt 0) {
+            try {
+              & ./scripts/check-mermaid-diagrams.ps1 -Path $reviewMarkdownFiles
+            } catch {
+              throw "Mermaid render validation failed for reviewer-generated Markdown changes: $($_.Exception.Message)"
+            }
+          }
+
+          $scopesJson = & ./scripts/resolve-verify-scopes.ps1 -ChangedFiles $reviewChangedFiles
+          $scopes = @($scopesJson | ConvertFrom-Json)
+          if ($scopes.Count -eq 0) {
+            $scopes = @([PSCustomObject]@{ kind = 'ScopePath'; path = '.' })
+          }
+
+          foreach ($scope in $scopes) {
+            $kind = [string]$scope.kind
+            $path = [string]$scope.path
+            if ($kind -eq 'SolutionPath') {
+              & ./scripts/verify.ps1 -SolutionPath $path -SkipBuild
+            } elseif ($kind -eq 'ProjectPath') {
+              & ./scripts/verify.ps1 -ProjectPath $path -SkipBuild
+            } elseif ($kind -eq 'ScopePath') {
+              & ./scripts/verify.ps1 -ScopePath $path -SkipBuild -SkipDeploymentCheck
+            } else {
+              throw "Unknown verify scope kind '$kind'."
+            }
+
+            if ($LASTEXITCODE -ne 0) {
+              throw "Verification failed for $kind '$path'."
+            }
+          }
+
+      - name: Commit review changes
+        if: steps.state.outputs.has_ai_threads == 'true' && steps.generated.outputs.has_changes == 'true'
+        shell: pwsh
+        env:
+          PR_HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ((git diff --cached --name-only).Length -eq 0) {
+            Write-Host "No staged review changes to commit."
+            exit 0
+          }
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "fix(sequence-goal): address AI review feedback"
+          $branch = $env:PR_HEAD_REF
+          git push origin "HEAD:$branch"
+          if ($LASTEXITCODE -ne 0) {
+            throw "PR head moved during review; refusing to rebase stale review decisions. Monitoring will recollect the current head."
+          }
+
+      - name: Persist handled review evidence in coordinator PR
+        id: persist_evidence
+        if: steps.state.outputs.has_ai_threads == 'true'
+        shell: pwsh
+        env:
+          PR_HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $expectedHead = (git rev-parse HEAD).Trim()
+          $livePr = gh pr view ${{ steps.pr.outputs.number }} --repo '${{ github.repository }}' --json state,headRefOid | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0 -or $livePr.state -ne 'OPEN' -or $livePr.headRefOid -ne $expectedHead) { throw 'PR became terminal or changed head before review evidence finalization.' }
+          $remote = @(git ls-remote --heads origin "refs/heads/$env:PR_HEAD_REF")
+          if ($LASTEXITCODE -ne 0 -or $remote.Count -ne 1 -or ($remote[0] -split '\s+')[0] -ne $expectedHead) { throw 'PR head changed before review evidence finalization; monitoring will recollect it.' }
+          ./scripts/finalize-sequence-goal-pr-evidence.ps1 -PrNumber ${{ steps.pr.outputs.number }} -EvidencePath '${{ steps.state.outputs.evidence_path }}' -RetainEvidence
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to finalize review evidence.' }
+          git diff --quiet
+          $diffExitCode = $LASTEXITCODE
+          if ($diffExitCode -eq 0) {
+            Write-Host 'Review evidence batch was already finalized; continuing from the unchanged coordinator head.'
+            "finalized_head=$expectedHead" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            exit 0
+          }
+          if ($diffExitCode -ne 1) { throw "Failed to inspect finalized review evidence (git diff exit code $diffExitCode)." }
+          git config user.name "github-actions[bot]"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to configure the Git user name.' }
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to configure the Git user email.' }
+          git add -A -- docs/sequence-diagrams '${{ steps.state.outputs.evidence_path }}'
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to stage finalized review evidence.' }
+          git commit -m "chore(sequence-goal): finalize PR review evidence"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to commit finalized review evidence.' }
+          git push origin "HEAD:$env:PR_HEAD_REF"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to push finalized review evidence.' }
+          "finalized_head=$((git rev-parse HEAD).Trim())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Resolve handled AI review threads
+        if: steps.state.outputs.has_ai_threads == 'true'
+        uses: actions/github-script@v7
+        env:
+          EXPECTED_FINALIZED_HEAD: ${{ steps.persist_evidence.outputs.finalized_head }}
+        with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
+          script: |
+            const fs = require("fs");
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = Number("${{ steps.pr.outputs.number }}");
+            const evidencePath = "${{ steps.state.outputs.evidence_path }}";
+            const evidence = JSON.parse(fs.readFileSync(evidencePath, "utf8"));
+            const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+            const resources = evidence.resourceUsage;
+            const assertThreadHasNoUserComment = async threadId => {
+              const aiAuthors = new Set(["copilot", "copilot[bot]", "copilot-pull-request-reviewer", "copilot-pull-request-reviewer[bot]", "codex", "codex[bot]"]);
+              let cursor = null;
+              do {
+                const result = await github.graphql(`query($threadId: ID!, $cursor: String) { node(id: $threadId) { ... on PullRequestReviewThread { comments(first: 100, after: $cursor) { nodes { author { login } } pageInfo { hasNextPage endCursor } } } } }`, { threadId, cursor });
+                const comments = result.node?.comments;
+                if (!comments) throw new Error(`Review thread ${threadId} could not be refreshed.`);
+                if ((comments.nodes || []).some(comment => { const login = String(comment.author?.login || "").toLowerCase(); return !aiAuthors.has(login) && !login.endsWith("[bot]"); })) throw new Error(`Review thread ${threadId} now contains user feedback; leaving it unresolved.`);
+                cursor = comments.pageInfo.hasNextPage ? comments.pageInfo.endCursor : null;
+              } while (cursor);
+            };
+
+            for (const thread of evidence.unresolvedAiThreads || []) {
+              const { data: currentPr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
+              if (currentPr.state !== "open" || currentPr.head.sha !== process.env.EXPECTED_FINALIZED_HEAD) throw new Error(`PR became terminal or changed head before resolving review feedback; expected open at ${process.env.EXPECTED_FINALIZED_HEAD}, found ${currentPr.state} at ${currentPr.head.sha}.`);
+              const decision = thread.decision || "not-applicable";
+              const resolutionComment = thread.resolutionComment || "Reviewed by the sequence-goal PR review loop.";
+              const resourceKind = decision === "valid" ? "Agent fix/review resources" : "Agent review resources";
+              const resourceLines = resources ? [
+                `${resourceKind} maximum budget: ${resources.maximumLabel}`,
+                `${resourceKind} actual: ${resources.actualLabel}`
+              ] : [];
+              const body = [
+                `[from-codex] ${resolutionComment}`,
+                "",
+                `Decision: ${decision}`,
+                ...resourceLines,
+                `Evidence: ${runUrl}`
+              ].join("\n");
+
+              if (thread.replyToCommentDatabaseId) {
+                await github.rest.pulls.createReplyForReviewComment({
+                  owner,
+                  repo,
+                  pull_number: prNumber,
+                  comment_id: thread.replyToCommentDatabaseId,
+                  body
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: prNumber,
+                  body
+                });
+              }
+
+              if (thread.containsUserComment) {
+                core.info(`Left review thread ${thread.threadId} unresolved because it contains a user-authored comment.`);
+                continue;
+              }
+
+              await assertThreadHasNoUserComment(thread.threadId);
+
+              await github.graphql(`
+                mutation($threadId: ID!) {
+                  resolveReviewThread(input: { threadId: $threadId }) {
+                    thread { id isResolved }
+                  }
+                }
+              `, { threadId: thread.threadId });
+            }
+
+      - name: Continue monitoring until approved
+        if: steps.pr.outputs.should_process == 'true' && steps.state.outputs.approved != 'true'
+        shell: pwsh
+        run: |
+          Write-Host "Sequence-goal PR review loop is waiting for approval to main. Scheduled monitoring will continue until the PR is merged or closed."
+
+      - name: Approval complete
+        if: steps.pr.outputs.should_process == 'true' && steps.state.outputs.approved == 'true' && steps.state.outputs.has_ai_threads != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number("${{ steps.pr.outputs.number }}"),
+              body: `[from-codex] Sequence-goal PR review loop is complete: no unresolved AI review threads remain and the PR is approved for main.`
+            });
+
+      - name: Skip summary
+        if: steps.pr.outputs.should_process != 'true'
+        shell: pwsh
+        run: |
+          Write-Host "${{ steps.pr.outputs.skip_reason }}"
+

@@ -1,0 +1,87 @@
+﻿@if (IsVisible)
+{
+    <div class="modal" tabindex="-1" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document" style="width: 80%; max-width: 80%; display: flex; align-items: center; justify-content: center; height: 100vh;">
+            <div class="modal-content" style="width: 100%; max-height: 90vh; overflow: hidden;">
+                <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <a href="@ServiceUrl" class="modal-title-link" style="text-decoration: none; display: flex; align-items: center;">
+                        <h5 class="modal-title" style="margin: 0; display: inline-block;">@ServiceName</h5>
+                        <i class="bi bi-chevron-right" style="font-size: larger; align-self: stretch;"></i>
+                    </a>
+                    <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 1rem; overflow-y: auto;">
+                    <!-- Service Bus Table -->
+                    <div style="flex: 1 1 30%; min-width: 300px; border: 2px solid purple; border-radius: 20px; padding: 1rem;">
+                        <table id="serviceBusTable" class="display" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th> <i class="bi bi-mailbox-flag"></i> Service Bus</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in ServiceBusRows)
+                                {
+                                    <tr class="parent-row">
+                                        <td>@row.Key</td>
+                                        <td><i class="@GetStatus(row.Value)"></i></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Cosmos Table -->
+                    <div style="flex: 1 1 30%; min-width: 300px; border: 2px solid purple; border-radius: 20px; padding: 1rem;">
+                        <table id="cosmosTable" class="display" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th><i class="bi bi-database"></i> Cosmos</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in CosmosRows)
+                                {
+                                    <tr class="parent-row">
+                                        <td>@row.Key</td>
+                                        <td><i class="@GetStatus(row.Value)"></i></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string? ServiceName { get; set; }
+    [Parameter] public string? ServiceUrl { get; set; }
+    [Parameter] public Dictionary<string, bool> ServiceBusRows { get; set; }
+    [Parameter] public Dictionary<string, bool> CosmosRows { get; set; }
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public EventCallback<bool> IsVisibleChanged { get; set; }
+
+    private void CloseModal()
+    {
+        IsVisible = false;
+        IsVisibleChanged.InvokeAsync(IsVisible);
+    }
+
+
+    private string GetStatus(bool ishealthy)
+    {
+        if (ishealthy)
+        {
+            return "bi bi-check-circle";
+        }
+        else
+        {
+            return "bi bi-x-octagon-fill bi-lg";
+        }
+    }
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "FunctionAppName": {
+      "value": "AVAPEUNAFNHTTPMOCKER"
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-EnterpiseHttpMocker"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPENTHTTPMOCKER"
+    },
+    "workspacename": {
+      "value": "avapeunlaweapi"
+    },
+    "AppInsightsName": {
+      "value": "AVAPEUNAIENTHTTPMOCKER"
+    },
+    "storageAccountName": {
+      "value": "avapeunsahttpmockerms"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVENTHTTPMOCKER"
+    },
+    "AppSetting:AppInsightsKey": {
+      "value": "b3af4afd-145a-4f32-9537-2c4f4b912b69"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=b3af4afd-145a-4f32-9537-2c4f4b912b69;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "https://avapeunkventhttpmocker.vault.azure.net/secrets/Common-config-RGSubscription-Id/"
+    },
+    "resourceurl": {
+      "value": "Cache:get:https://resources.virginatlantic.com"
+    },
+    "resourceurlPost": {
+      "value": "Cache:post:https://resources.virginatlantic.com"
+    },
+
+    // Azure Function Settings
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSetting:AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventhttpmocker.vault.azure.net/secrets/HttpMocker-StorageAccount/)"
+    },
+    /*"AppSetting:WEBSITE_CONTENTSHARE": {
+      "value": "avapeunafnhttpmocker-ds"
+    },*/
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+
+
+    // Http HttpMocker settings
+    "HttpMocker.MockStorageService.Source": {
+      "value": "AzureStorage"
+    },
+
+    "HttpMocker.AzureBlobContainerService.Uri": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventhttpmocker.vault.azure.net/secrets/HttpMocker-AzureBlobContainerService-Uri/)"
+    },
+
+    "HttpMocker.AzureBlobContainerService.Container": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventhttpmocker.vault.azure.net/secrets/HttpMocker-AzureBlobContainerService-Container/)"
+    },
+
+    "HttpMocker.AzureBlobContainerService.Sas": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkventhttpmocker.vault.azure.net/secrets/HttpMocker-AzureBlobContainerService-Sas/)"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "PROD",
+        "Purpose": "Http mocking service For Enterprise Microservices",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

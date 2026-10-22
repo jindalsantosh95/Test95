@@ -1,0 +1,42 @@
+query RetrieveHouseHoldAccount($retrieveHhAccountRequest: RetrieveHHAccountRequestInput) {
+  retrieveHouseHoldAccount(retrieveHHAccountRequest: $retrieveHhAccountRequest) {
+    name
+    totalPoints
+    leaderInfo {
+      firstName
+      lastName
+      fCNumber
+      totalPoints
+      tierCode
+    }
+    linkedMemberInfo {
+      firstName
+      lastName
+      fCNumber
+      totalPoints
+      tierCode
+      isYoungFlyer
+    }
+    otherLinkedMemberInfo {
+      firstName
+      lastName
+      totalPoints
+      tierCode
+      isYoungFlyer
+    }
+    pageResponse
+    inviteeInfo {
+      firstName
+      lastName
+      fCNumber
+      tierCode
+    }
+    inviterInfo {
+      firstName
+      lastName
+      fCNumber
+    }
+    totalMemberandInviteesCount
+  }
+}
+

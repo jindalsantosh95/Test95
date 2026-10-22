@@ -1,0 +1,89 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+@inject NavigationManager Navigation
+
+@rendermode InteractiveServer
+
+<table class="table tt-table" style="margin-bottom:0px;">
+    <thead>
+        <tr>
+            <th style="padding:0 .5rem" class="col-9">Service (With Issue)</th>
+            <th style="padding:0 .5rem" class="col-3">Status</th>
+        </tr>
+    </thead>
+</table>
+@if (Issues == null || !Issues.Any())
+{
+    <p class="col-12" style="text-align: center;">Any detail regarding Issues will appear here</p>
+}
+else
+{
+    <div class="scroll-container-tt" style="width:100%" onmouseover="pauseScrollTT()" onmouseout="startScrollTT()">
+        <div class="table-wrapper-tt">
+            <table id="tableTT" class="table tiny-table-scroll" style="animation-duration: @ScrollTimeInSeconds;table-layout: fixed;">
+                <tbody>
+                    @foreach (var issue in Issues)
+                    {
+                        <tr>
+                            <td class="col-9">@issue.Service</td>
+                            <td class="col-3">
+                                @GetStatusText(issue.StatusCode)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IEnumerable<DashboardIssue> Issues { get; set; }
+    private string ScrollTimeInSeconds => Issues == null || Issues.Count() < 5 ? "0s" : (4 * Issues.Count()) + "s";
+
+    private string GetStatusText(int? statusCode) => statusCode switch
+    {
+        0 => "Unhealthy",
+        1 => "Degraded",
+        2 => "Healthy",
+        _ => statusCode?.ToString() ?? "Unhealthy"
+    };
+}
+
+<style>
+    .scroll-container-tt {
+        height: 10rem;
+        overflow: hidden;
+        border: 1px solid #ddd;
+    }
+
+    .table-wrapper-tt {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .tiny-table-scroll {
+        animation: scroll-tt linear infinite;
+    }
+
+</style>
+
+<script>
+    let tableTT = null;
+    document.addEventListener('DOMContentLoaded', function () {
+        tableTT = document.querySelector('.tiny-table-scroll');
+        adjustTableHeightTT();
+        window.addEventListener('resize', adjustTableHeightTT);
+    });
+    function adjustTableHeightTT() {
+        const container = document.querySelector('.scroll-container-tt');
+        tableTT.style.height = container.offsetHeight * 2 + 'px';
+    }
+    function pauseScrollTT() {
+        document.querySelector('.tiny-table-scroll').style.animationPlayState = 'paused';
+    }
+    function startScrollTT() {
+        document.querySelector('.tiny-table-scroll').style.animationPlayState = 'running';
+    }
+</script>

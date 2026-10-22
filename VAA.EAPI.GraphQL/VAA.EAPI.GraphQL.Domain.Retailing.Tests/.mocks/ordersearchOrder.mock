@@ -1,0 +1,63 @@
+﻿###Request
+POST https://tempuri.org/order/search HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+"customerDetails": [
+        {
+            "custId": "Passenger1",
+            "ptc": "ADT",
+            "firstName": "Bob",
+            "lastName": "Smith",
+            "firstNameNumber": "01",
+            "lastNameNumber": "01",
+            "loyaltyMemberDetails":
+            {
+            "memberNumber":"9106309454"
+            }
+        }
+    ],
+    "segmentDetails": [
+        {
+            "marketingCarrier": "VS",
+            "marketingFlightNumber": "321",
+			"operatingCarrier": "VS",
+            "operatingFlightNumber": "123",
+            "originAirportCode": "LHR",
+            "DestinationAirportCode":"JFK",
+            "classOfService": "O",
+            "scheduledArrivalTime": {
+                "utcDateTime": "",
+                "localDateTime": "2026-07-22T14:40"
+            },
+            "scheduledDepartureTime": {
+                "utcDateTime": "",
+                "localDateTime": "2025-10-10T12:00"
+            },
+            "segmentNumber": "01",
+            "segmentId": "Segement1",
+
+            "cabinType": {
+                "cabinCode": "5",
+                "cabinName": "Economy"
+            },
+        },           
+    ],
+    
+    "bookingReferences": {
+        "airlineDesignator": "VS",
+        "rloc": "PNR1234",
+        "rlocCreateDate": "10OCT25",
+        "externalRecordLocator": ""
+    },
+}
+ 
+           
+           

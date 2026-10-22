@@ -1,0 +1,30 @@
+###Request
+GET https://management.azure.com/subscriptions/scan-subscription-id/resourceGroups/scan-resource-group/providers/Microsoft.Web/sites/scan-function-app/config/configreferences/appsettings?api-version=2025-05-01 HTTP/1.1
+Authorization: Bearer KEYVAULT_SCAN_TOKEN
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json;
+
+{
+  "value": [
+    {
+      "name": "ResolvedSetting",
+      "properties": {
+        "status": "Resolved"
+      }
+    },
+    {
+      "name": "UnresolvedSetting",
+      "properties": {
+        "status": "SecretNotFound"
+      }
+    },
+    {
+      "name": "PlainSetting",
+      "properties": {
+        "status": "SecretNotFound"
+      }
+    }
+  ]
+}

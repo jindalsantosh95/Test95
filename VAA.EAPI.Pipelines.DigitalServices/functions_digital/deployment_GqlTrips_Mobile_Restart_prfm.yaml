@@ -1,0 +1,129 @@
+parameters:
+  agentPool: ''
+  agentPool_deployment: ''
+  agentSpecification: ''
+  applicationName: ''
+  functionAppName: ''
+  functionAppName_secure: ''
+  environment: ''
+  location: ''
+  resourceGroupName: ''
+  serviceConnection: ''
+  subscriptionId: ''
+  APIM_IP: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''   
+  workspaceResourceId: ''
+  appInsightsName: ''
+  storageAccName: ''
+  appInsightsName_secure: ''
+  storageAccName_secure: ''
+  stitchfunctionAppName: ''
+  stitchrgname: ''
+  Redis_ConnectionString: ''
+  TripsMs_URL: ''
+  PaxopsMs_URL: ''
+  TripsMs_OcpSubID: ''
+  BookingIdJwtKey: ''
+  PaxopsMs_OcpSubID: ''
+  CheckInIdJwtKey: ''
+  ASPName: ''
+
+
+jobs: 
+- deployment: '${{parameters.environment}}'      
+  
+  pool:
+    name: ${{parameters.agentPool_deployment}} 
+    vmImage: ${{parameters.agentSpecification}}  
+  
+  environment: ${{parameters.environment}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop      
+
+        # Task to create the Public Function App      
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create Function App'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.serviceConnection}}
+            subscriptionid: ${{parameters.subscriptionId}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}
+            location:  ${{parameters.location}}
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy_digital.json
+            csmParametersFile: $(Pipeline.workspace)/drop/Parameters/uat-digital-azuredeploy.parameters.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -OperationsVisibilityMode Public -AppServicePlanName ${{parameters.ASPName}} -TRIPMS {"MSUrl":"$(TripsMs_URL)","OcpSubID":"$(TripsMs_OcpSubID)","BookingIdJwtKey":"$(BookingIdJwtKey)"} -CheckIn {"MSUrl":"$(PaxopsMs_URL)","OcpSubID":"$(PaxopsMs_OcpSubID)","CheckInIdJwtKey":"$(CheckInIdJwtKey)","RequirementIdExpiryTimeinMin":"20","TravelPartyIdExpiryTimeinMin":"20","BasketIdExpiryTimeinMin":"20"} -keyVaultName ${{parameters.keyvaultName}} -workspaceResourceId ${{parameters.workspaceResourceId}} -RedisCacheConnectionString ${{parameters.Redis_ConnectionString}} -functionappName ${{parameters.functionAppName}} -AppInsightsName ${{parameters.appInsightsName}} -storageaccountName ${{parameters.storageAccName}} -WEBSITE_DNS_SERVER ${{parameters.WEBSITE_DNS_SERVER}} -WEBSITE_DNS_ALT_SERVER ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+
+        # Task to stop the Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop Azure App Service: ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName}}
+
+        # Task to deploy the Function App
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy to Function APP' 
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            appType: 'functionApp'
+            appName: ${{parameters.functionAppName}}
+            deployToSlotOrASE: true
+            resourceGroupName: ${{parameters.resourceGroupName}}
+            package: '$(Pipeline.workspace)/drop/*.zip'
+            deploymentMethod: 'runFromPackage'     
+
+        # Task to start the Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start Azure App Service: ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionAppName}}
+
+        # Task to Create Secure Function App      
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create Secure Function App'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.serviceConnection}}
+            subscriptionid: ${{parameters.subscriptionId}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}
+            location:  ${{parameters.location}}
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy_digital.json
+            csmParametersFile: $(Pipeline.workspace)/drop/Parameters/uat-digital-azuredeploy.parameters.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -OperationsVisibilityMode Secure -AppServicePlanName ${{parameters.ASPName}} -TRIPMS {"MSUrl":"$(TripsMs_URL)","OcpSubID":"$(TripsMs_OcpSubID)","BookingIdJwtKey":"$(BookingIdJwtKey)"} -CheckIn {"MSUrl":"$(PaxopsMs_URL)","OcpSubID":"$(PaxopsMs_OcpSubID)","CheckInIdJwtKey":"$(CheckInIdJwtKey)","RequirementIdExpiryTimeinMin":"20","TravelPartyIdExpiryTimeinMin":"20","BasketIdExpiryTimeinMin":"20"} -keyVaultName ${{parameters.keyvaultName}} -workspaceResourceId ${{parameters.workspaceResourceId}} -RedisCacheConnectionString ${{parameters.Redis_ConnectionString}} -functionappName ${{parameters.functionAppName_secure}} -AppInsightsName ${{parameters.appInsightsName_secure}} -storageaccountName ${{parameters.storageAccName_secure}} -WEBSITE_DNS_SERVER ${{parameters.WEBSITE_DNS_SERVER}} -WEBSITE_DNS_ALT_SERVER ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+
+        # Task to stop the Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop Azure App Service: ${{parameters.functionAppName_secure}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName_secure}}
+
+        # Task to deploy the Function App
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy to Function APP' 
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            appType: 'functionApp'
+            appName: ${{parameters.functionAppName_secure}}
+            deployToSlotOrASE: true
+            resourceGroupName: ${{parameters.resourceGroupName}}
+            package: '$(Pipeline.workspace)/drop/*.zip'
+            deploymentMethod: 'runFromPackage'     
+
+        # Task to start the Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start Azure App Service: ${{parameters.functionAppName_secure}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionAppName_secure}}
+

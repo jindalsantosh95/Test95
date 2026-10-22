@@ -1,0 +1,80 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "APIMName": {
+      "type": "string"
+    },
+    "productId": {
+      "type": "string"
+    },
+    "SubscriptionName": {
+      "type": "string"
+    },
+    "OwnerName": {
+      "type": "string"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "registDate": {
+      "type": "string",
+      "defaultValue": "[utcNow('u')]"
+    }
+
+  },
+
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service/products",
+      "name": "[concat(parameters('APIMName'), '/' ,parameters('productId'))]",
+      "apiVersion": "2017-03-01",
+      "properties": {
+        "displayName": "[parameters('productId')]",
+        "description": "Subscribers have completely unlimited access to the API. Administrator approval is required.",
+        "terms": null,
+        "subscriptionRequired": true,
+        "approvalRequired": true,
+        "subscriptionsLimit": 1,
+        "state": "published"
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/users",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', parameters('OwnerName'))]",
+      "properties": {
+        "firstName": "[parameters('firstName')]",
+        "lastName": "[parameters('lastName')]",
+        "email": "[parameters('email')]",
+        "state": "active",
+        "registrationDate": "[parameters('registDate')]",
+        "identities": [
+          {
+            "provider": "Basic",
+            "id": "[parameters('email')]"
+          }
+        ]
+      }
+
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/subscriptions",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', parameters('SubscriptionName'))]",
+      "properties": {
+        "ownerId": "[resourceId('Microsoft.ApiManagement/service/users', parameters('APIMName'), parameters('OwnerName'))]",
+        "scope": "[resourceId('Microsoft.ApiManagement/service/products', parameters('APIMName'), parameters('productId'))]",
+        "displayName": "[parameters('SubscriptionName')]",
+        "state": "active",
+        "allowTracing": false
+      }
+    }
+  ]
+}

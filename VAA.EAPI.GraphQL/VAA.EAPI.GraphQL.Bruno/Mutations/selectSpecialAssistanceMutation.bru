@@ -1,0 +1,35 @@
+meta {
+  name: selectSpecialAssistanceMutation
+  type: graphql
+  seq: 39
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation selectSpecialAssistanceMutation($tripReservationId: String, $segmentIds: [String], $passengerId: String, $ssrCode: String, $ssrCategoryCode: String) {
+    selectSpecialAssistanceMutation(tripReservationId: $tripReservationId, segmentIds: $segmentIds, passengerId: $passengerId, ssrCode: $ssrCode, ssrCategoryCode: $ssrCategoryCode) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "tripReservationId": "",
+    "segmentIds": null,
+    "passengerId": "",
+    "ssrCode": "",
+    "ssrCategoryCode": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

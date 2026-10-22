@@ -1,0 +1,12 @@
+{
+  "query": "mutation SeatPaymentMutation($request: PaymentRequestInput) { seatPaymentMutation(request: $request) { paymentReferenceId hppLink amount { monetaryAmount baseCurrency } paymentDetails { paymentReferenceId paymentDetails { formOfPaymentId formOfPayments amount { monetaryAmount baseCurrency currencyId decimalPrecisionCount priceDifference priceDifferenceSign } bspMethod cardMethod { cardType cardNumber isTokenised issueDate expiryDate cardholderName cvv authenticationData { eci cavv xid serverTransactionId dsTransactionId dsAuthenticationVersionText validationStatusText } cardNetworkCode maskedCardNumber cardBrandCode } payer { firstName lastName payerContacts { email phone countrycode phoneAreaNumber phoneType countryDailingCode } payerAddress { addressType addressLine1 addressLine2 addressLine3 city postalCode region country departureCity } loyaltyMemberDetails { memberType programName memberNumber memberTierCode status programCode payWithPoints } loyaltyMemberTravelling payerType } billingAddress { addressType addressLine1 addressLine2 addressLine3 city postalCode region country departureCity } voucherMethod { voucherType issuer voucherNumber issueDate expiryDate percentage } paymentCardAuthentication { eci cavv xid serverTransactionId dsTransactionId dsAuthenticationVersionText validationStatusText } paymentReferenceId paymentStatus vendorPaymentTransactionId parentPaymentReferenceId paymentCardAuthorization { approvalCode paymentReferenceId vendorPaymentTransactionId parentPaymentReferenceId vendorPaymentReferenceId responseCode sourceName acquirerReferenceDataText transactionCurrencyCode storedCredentialIndicator } paymentRemarks { itemType code text } financialInstitution { accountHolderName providerId returnUrl address { addressType addressLine1 addressLine2 addressLine3 city postalCode region country departureCity } } milesPoints milesEquivalentPrice { monetaryAmount baseCurrency currencyId decimalPrecisionCount priceDifference priceDifferenceSign } paymentCommitmentDateTime } parentPaymentReferenceId } parentPaymentReferenceId }}",
+  "variables": {
+    "request": {
+      "tripReservationId": "",
+      "paymentSuccessLink": "",
+      "paymentFailureLink": "",
+      "emailAddress": ""
+    },
+    "operationName": "SeatPaymentMutation"
+  }
+}

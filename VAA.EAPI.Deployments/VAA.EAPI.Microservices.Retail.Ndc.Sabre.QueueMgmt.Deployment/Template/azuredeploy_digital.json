@@ -1,0 +1,421 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "type": "secureObject",
+      "defaultValue": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "",
+        "Site": "datadoghq.com",
+        "Environment": "",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "type": "string"
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "functionappName": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "aseRg": {
+      "type": "string"
+    },
+    "aseName": {
+      "type": "string"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
+    "KeyVaultUri": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "object"
+    },
+    "SlotName": {
+      "type": "string"
+    },
+    "WEBSITE_DNS_SERVER": {
+      "type": "string"
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "type": "string"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "type": "string"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Description": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Version": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "type": "string"
+    },
+    "storageaccountName": {
+      "type": "string"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "type": "string"
+    },
+    "WORKSPACE_NAME": {
+      "type": "string"
+    },
+    "workspaceResourceId": {
+      "type": "string"
+    },
+    "SabreEndpoint": {
+      "type": "string"
+    },
+    "FromPartyId": {
+      "type": "string"
+    },
+    "ToPartyId": {
+      "type": "string"
+    },
+    "Domain": {
+      "type": "string"
+    },
+    "ConversationId": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "[parameters('storageaccountName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "sku": {
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "allowBlobPublicAccess": false
+      }
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2020-02-02",
+      "name": "[parameters('AppInsightsName')]",
+      "location": "[parameters('location')]",
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web",
+        "WorkspaceResourceId": "[parameters('workspaceResourceId')]"
+      },
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('functionappName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "kind": "functionapp",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "serverFarmId": "[resourceId(parameters('aseRg'), 'Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "hostingEnvironmentProfile": "[resourceId(parameters('aseRg'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "LoggingProvider",
+              "value": "[parameters('DataDog').LoggingProvider]"
+            },
+            {
+              "name": "DatadogLogsEndpoint",
+              "value": "[parameters('DataDog').LogsEndpoint]"
+            },
+            {
+              "name": "DatadogApiKey",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_API_KEY",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_SITE",
+              "value": "[parameters('DataDog').Site]"
+            },
+            {
+              "name": "DD_SERVICE",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "DD_ENV",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DD_VERSION",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DD_TRACE_ENABLED",
+              "value": "[string(parameters('DataDog').TraceEnabled)]"
+            },
+            {
+              "name": "DD_RUNTIME_METRICS_ENABLED",
+              "value": "[string(parameters('DataDog').RuntimeMetricsEnabled)]"
+            },
+            {
+              "name": "DatadogService",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "environment",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DatadogSource",
+              "value": "[parameters('DataDog').Source]"
+            },
+            {
+              "name": "DatadogVersion",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DatadogTags",
+              "value": "[concat(parameters('DataDog').Tags, if(empty(parameters('DataDog').Tags), '', ','), 'cloud_provider:azure,subscription_id:', subscription().subscriptionId, ',resource_group:', resourceGroup().name, ',name:', parameters('functionappName'), ',type:microsoft.web/sites,resource_id:', resourceId('Microsoft.Web/sites', parameters('functionappName')))]"
+            },
+            {
+              "name": "DatadogBaggageAllowList",
+              "value": "[parameters('DataDog').BaggageAllowList]"
+            },
+            {
+              "name": "DatadogMinimumLogLevel",
+              "value": "[parameters('DataDog').MinimumLogLevel]"
+            },
+            {
+              "name": "DatadogQueueCapacity",
+              "value": "[string(parameters('DataDog').QueueCapacity)]"
+            },
+            {
+              "name": "DatadogBatchSize",
+              "value": "[string(parameters('DataDog').BatchSize)]"
+            },
+            {
+              "name": "DatadogFlushIntervalMilliseconds",
+              "value": "[string(parameters('DataDog').FlushIntervalMilliseconds)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageaccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountName')), '2019-06-01').keys[0].value)]"
+            }
+          ]
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('functionappName'), '/web')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('functionappName'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "[parameters('functionappName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": false,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": false
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "FtpsOnly",
+        "reservedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2021-03-01",
+      "name": "[concat(parameters('functionappName'),'/','appsettings')]",
+      "kind": "functionapp,workflowapp",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('functionappName'))]"
+      ],
+      "properties": {
+        "FUNCTIONS_EXTENSION_VERSION": "~4",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+        "WEBSITE_CONTENTOVERVNET": "1",
+        "WEBSITE_VNET_ROUTE_ALL": "1",
+        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', parameters('AppInsightsName')), '2014-04-01').InstrumentationKey]",
+        "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(resourceId('Microsoft.Insights/components', parameters('AppInsightsName')), '2020-02-02').ConnectionString]",
+        "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageaccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]",
+        "WEBSITE_DNS_SERVER": "[parameters('WEBSITE_DNS_SERVER')]",
+        "WEBSITE_DNS_ALT_SERVER": "[parameters('WEBSITE_DNS_ALT_SERVER')]",
+        "WEBSITE_RUN_FROM_PACKAGE": "[parameters('WEBSITE_RUN_FROM_PACKAGE')]",
+        "WEBSITE_LOAD_USER_PROFILE": "[parameters('WEBSITE_LOAD_USER_PROFILE')]",
+        "AzureWebJobsSecretStorageType": "Files",
+        "OpenApi__Scope": "[parameters('Appsetting:OpenApi__Scope')]",
+        "OpenApi__TokenUrl": "[parameters('Appsetting:OpenApi__TokenUrl')]",
+        "OpenApi__DocTitle": "[parameters('Appsetting:OpenApi__DocTitle')]",
+        "OpenApi__Description": "[parameters('Appsetting:OpenApi__Description')]",
+        "OpenApi__DocVersion": "[parameters('Appsetting:OpenApi__DocVersion')]",
+        "OpenApi__Version": "[parameters('Appsetting:OpenApi__Version')]",
+        "OpenApi__ForceHttps": "[parameters('Appsetting:OpenApi__ForceHttps')]",
+        "OpenApi__ForceHttp": "[parameters('Appsetting:OpenApi__ForceHttp')]",
+        "OpenApi__HostNames": "[parameters('Appsetting:OpenApi__HostNames')]",
+        "SabreEndpoint": "[parameters('SabreEndpoint')]",
+        "ConversationId": "[parameters('ConversationId')]",
+        "FromPartyId": "[parameters('FromPartyId')]",
+        "ToPartyId": "[parameters('ToPartyId')]",
+        "Domain": "[parameters('Domain')]",
+        "KeyVaultUri": "[parameters('KeyVaultUri')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "apiVersion": "2015-06-01",
+      "name": "[concat(parameters('keyvaultName'),'/add')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('functionappName'))]"
+      ],
+      "properties": {
+        "accessPolicies": [
+          {
+            "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionappName')), '2019-08-01', 'full').identity.principalId]",
+            "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionappName')), '2019-08-01', 'full').identity.tenantId]",
+            "permissions": {
+              "secrets": [ "Get", "List" ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2016-10-01",
+      "name": "[format('{0}/{1}', parameters('keyVaultName'),concat('functionappkey-',parameters('environment')))]",
+      "dependsOn": [
+        "[parameters('functionappName')]"
+      ],
+      "properties": {
+        "value": "[listkeys(concat(resourceId(resourceGroup().name, 'Microsoft.Web/sites', parameters('functionappName')), '/host/default'), '2018-11-01').functionKeys.default]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Future Bookings by Flying Club Number
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{order_data_base_url}}/FutureBookings
+  body: none
+  auth: inherit
+}
+
+headers {
+  FCNumber: {{flying_club_number}}
+  Email:
+  PhoneNo:
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

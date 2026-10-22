@@ -1,0 +1,157 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "Dev"
+    },
+    "AppServicePlanName": {
+      "value": "vadveunaspdigital01"
+    },
+    "functionappName": {
+      "value": "VA-DV-EUN-FOFLTS-FN-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-dv-eun-fltops-kv-01"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "FLIGHT OPS FLIGHT",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "DEV",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vadveunfltopflightssa01"
+    },
+    "AppInsightsName": {
+      "value": "va-dv-eun-fltopsflights-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    //swagger settings
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-Flights Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This endpoint will provide Flights information for flight operations"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    // AIMS Settings
+    "Aims": {
+      "value": {
+        "Username": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-fltops-kv-01.vault.azure.net/secrets/FlightOperations-Flights-Aims-Username/)",
+        "Password": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-fltops-kv-01.vault.azure.net/secrets/FlightOperations-Flights-Aims-Password/)",
+        "Apim": {
+          "Url": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-fltops-kv-01.vault.azure.net/secrets/FlightOperations-Flights-Aims-Apim-Url/)",
+          "OcpSubscriptionKey": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-fltops-kv-01.vault.azure.net/secrets/FlightOperations-Flights-Aims-Apim-OcpSubscriptionKey/)"
+        }
+      }
+    },
+
+    // MockDelegatingHandler
+    "MockDelegatingHandler": {
+      "value": {
+        "Enabled": false,
+        "MockServiceUri": "https://Testresources.virginatlantic.com/dev/mock"
+      }
+    },
+
+    // Flight Status Settings
+    "FlightStatus": {
+      "value": {
+        "DeltaServiceLayerBaseUrl": "https://www.virginatlantic.com",
+        "RequestTimeoutSeconds": 20,
+        "EnrichmentDeadlineSeconds": 8,
+        "MaxRetries": 2,
+        "MaxConcurrentDownstreamRequests": 8
+      }
+    },
+
+    // Flight Operation Settings
+    "FlightOperation": {
+      "value": {
+        "OperationalScheduleAPIClientId": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-fltops-kv-01.vault.azure.net/secrets/FlightOperations-OperationalScheduleAPIClientId/)",
+        "OperationalScheduleAPIClientSecret": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-fltops-kv-01.vault.azure.net/secrets/FlightOperations-OperationalScheduleAPIClientSecret/)",
+        "OperationalScheduleAPIResource": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-fltops-kv-01.vault.azure.net/secrets/FlightOperations-OperationalScheduleAPIResource/)",
+        "OperationalScheduleAPIAuthority": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-fltops-kv-01.vault.azure.net/secrets/FlightOperations-OperationalScheduleAPIAuthority/)",
+        "AircraftCategorySqlDbConnectionString": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-fltops-kv-01.vault.azure.net/secrets/FlightOperations-Flights-AircraftCategorySqlDbConnectionString/)",
+        "APIM": {
+          "Url": "https://testresources.virginatlantic.com/enterprise/operationallogistics/managetheoperation/operationalschedule/flights?Airline_Code={Airline_Code}&Local_Date_From={Local_Date_From}&Local_Date_To={Local_Date_To}&Direction=D&Origin_Airport_Code={Origin_Airport_Code}&limit=500&Flight_Number={Flight_Number}",
+          "OcpSubscriptionKey": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-fltops-kv-01.vault.azure.net/secrets/FlightOperations-APIM-OcpSubscriptionKey/)"
+        }
+      }
+    }
+  }
+}

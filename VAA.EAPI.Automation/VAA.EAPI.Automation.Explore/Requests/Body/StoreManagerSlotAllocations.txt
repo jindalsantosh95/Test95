@@ -1,0 +1,24 @@
+query StoreManagerSlotAllocations($storeId: String!, $slotId: String!, $startAt: String!) {
+  storeManagerSlotAllocations(storeId: $storeId, slotId: $slotId, startAt: $startAt) {
+    id
+    windowId
+    slotId
+    storeId
+    startAt
+    endAt
+    capacity
+    bookedCount
+    remainingCapacity
+    allocations {
+      id
+      windowId
+      slotId
+      storeId
+      allocationIndex
+      status
+      reason
+      bookingId
+      customerRef
+    }
+  }
+}

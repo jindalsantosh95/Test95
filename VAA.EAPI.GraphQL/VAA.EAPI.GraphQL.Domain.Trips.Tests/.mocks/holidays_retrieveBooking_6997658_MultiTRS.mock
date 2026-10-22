@@ -1,0 +1,959 @@
+﻿###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBooking HTTP/1.1
+
+$[?( @.bookingReference == '6997658' )]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+
+{
+    "booking": {
+        "id": "6997658",
+        "summary": {
+            "availabilityStatus": "AVAILABLE",
+            "productStatus": "CONFIRMED",
+            "name": "Package",
+            "primaryAttribute": "",
+            "secondaryAttribute": "",
+            "travelDates": {
+                "startDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 30, day)}",
+                "endDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 45, day)}"
+            },
+            "travelDuration": {
+                "duration": "13",
+                "durationType": "DAYS"
+            },
+            "discount": 0.0,
+            "vipBooking": false
+        },
+        "payment": {
+            "deposit": 150.0,
+            "balanceDue": 8897.37,
+            "totalPriceToBePaid": 9047.37,
+            "totalPaidAmount": 150.0,
+            "depositRealised": true,
+            "depositReceived": true,
+            "currencyCode": "GBP"
+        },
+        "status": "Confirmed",
+        "holidayProducts": [
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "VS",
+                    "highlight": "ECONOMY CLASSIC/ECONOMY CLASSIC",
+                    "primaryAttribute": "LHR",
+                    "secondaryAttribute": "ANU",
+                    "travelDates": {
+                        "startDate": "2026-12-22T00:00:00",
+                        "endDate": "2027-01-03T00:00:00"
+                    },
+                    "discount": 0.0,
+                    "vipBooking": false
+                },
+                "bookedUser": "456546",
+                "bookedDate": "2026-01-18T00:00:00",
+                "modifiedDate": "2026-01-25T00:00:00",
+                "rate": {
+                    "price": 3177.64,
+                    "priceWithTax": 3177.64,
+                    "tax": 951.32,
+                    "basePrice": 3177.64,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Diane",
+                            "lastName": "Bull",
+                            "leadTraveller": true,
+                            "title": "Miss",
+                            "dateOfBirth": "1964-11-17T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Trevor",
+                            "lastName": "Easton",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1957-12-24T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "flightDetails": {
+                    "sectors": [
+                        {
+                            "origin": {
+                                "code": "LHR"
+                            },
+                            "destination": {
+                                "code": "ANU"
+                            },
+                            "segments": [
+                                {
+                                    "operatingCarrier": {
+                                        "flightNumber": "133",
+                                        "carrierCode": ""
+                                    },
+                                    "marketingCarrier": {
+                                        "carrierCode": "VS"
+                                    },
+                                    "scheduledDepartureLocal": "2026-12-22T14:30:00",
+                                    "scheduledArrivalLocal": "2026-12-22T19:30:00",
+                                    "origin": {
+                                        "code": "LHR"
+                                    },
+                                    "destination": {
+                                        "code": "ANU"
+                                    },
+                                    "legs": [
+                                        {
+                                            "operating": {
+                                                "flightNumber": "133",
+                                                "carrierCode": ""
+                                            },
+                                            "marketing": {
+                                                "carrierCode": "VS"
+                                            },
+                                            "scheduledDepartureLocal": "2026-12-22T14:30:00",
+                                            "scheduledArrivalLocal": "2026-12-22T19:30:00",
+                                            "origin": {
+                                                "code": "LHR"
+                                            },
+                                            "destination": {
+                                                "code": "ANU"
+                                            },
+                                            "onAirDuration": "0",
+                                            "aircraft": {}
+                                        }
+                                    ]
+                                }
+                            ],
+                            "scheduledDepartureLocal": "2026-12-22T14:30:00",
+                            "scheduledArrivalLocal": "2026-12-22T19:30:00"
+                        },
+                        {
+                            "origin": {
+                                "code": "ANU"
+                            },
+                            "destination": {
+                                "code": "LHR"
+                            },
+                            "segments": [
+                                {
+                                    "operatingCarrier": {
+                                        "flightNumber": "134",
+                                        "carrierCode": "VS"
+                                    },
+                                    "marketingCarrier": {
+                                        "carrierCode": "VS"
+                                    },
+                                    "scheduledDepartureLocal": "2027-01-02T21:20:00",
+                                    "scheduledArrivalLocal": "2027-01-03T09:35:00",
+                                    "origin": {
+                                        "code": "ANU"
+                                    },
+                                    "destination": {
+                                        "code": "LHR"
+                                    },
+                                    "legs": [
+                                        {
+                                            "operating": {
+                                                "flightNumber": "134",
+                                                "carrierCode": "VS"
+                                            },
+                                            "marketing": {
+                                                "carrierCode": "VS"
+                                            },
+                                            "scheduledDepartureLocal": "2027-01-02T21:20:00",
+                                            "scheduledArrivalLocal": "2027-01-03T09:35:00",
+                                            "origin": {
+                                                "code": "ANU"
+                                            },
+                                            "destination": {
+                                                "code": "LHR"
+                                            },
+                                            "onAirDuration": "0",
+                                            "aircraft": {}
+                                        }
+                                    ]
+                                }
+                            ],
+                            "scheduledDepartureLocal": "2027-01-02T21:20:00",
+                            "scheduledArrivalLocal": "2027-01-03T09:35:00"
+                        }
+                    ],
+                    "airlineLocator": {
+                        "pnrLocator": "EH5ZRW"
+                    },
+                    "isBookingSourceAir4": true
+                },
+                "isAncillaryProduct": false,
+                "tbxProductType": "FLT",
+                "tbxProductId": "FLT~1"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "The Verandah, Antigua",
+                    "highlight": "Waterfront Suite King Waterfront View",
+                    "primaryAttribute": "All Inclusive",
+                    "secondaryAttribute": "Waterfront Suite King Waterfront View (2 0 0) x 1",
+                    "travelDates": {
+                        "startDate": "2026-12-22T00:00:00",
+                        "endDate": "2027-01-02T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "11",
+                        "durationType": "NIGHTS"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-12-22T14:00:00",
+                    "endTime": "2027-01-02T10:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-12-22T14:00:00",
+                        "endTime": "2027-01-02T10:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "456546",
+                "bookedDate": "2026-01-18T00:00:00",
+                "modifiedDate": "2026-01-19T00:00:00",
+                "rate": {
+                    "price": 5723.08,
+                    "priceWithTax": 5723.08,
+                    "tax": 0.0,
+                    "basePrice": 5723.08,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Diane",
+                            "lastName": "Bull",
+                            "leadTraveller": true,
+                            "title": "Miss",
+                            "dateOfBirth": "1964-11-17T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Trevor",
+                            "lastName": "Easton",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1957-12-24T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "hotelDetails": {
+                    "roomDetails": [
+                        {
+                            "roomType": "Waterfront Suite King Waterfront View",
+                            "boardBasis": "All Inclusive",
+                            "roomNumber": "1",
+                            "paxCount": 2,
+                            "travellerInfo": {
+                                "adultCount": 2,
+                                "travellers": [
+                                    {
+                                        "leadTraveller": true,
+                                        "dateOfBirth": "1964-11-17T00:00:00"
+                                    },
+                                    {
+                                        "leadTraveller": false,
+                                        "dateOfBirth": "1957-12-24T00:00:00"
+                                    }
+                                ]
+                            },
+                            "rate": {
+                                "price": 5723.08,
+                                "priceWithTax": 5723.08,
+                                "tax": 0.0,
+                                "basePrice": 0.0,
+                                "totalTax": 0.0,
+                                "totalTaxBase": 0.0
+                            },
+                            "mealPlanName": "All Inclusive"
+                        }
+                    ],
+                    "name": "The Verandah, Antigua - Waterfront Suite King Waterfront View",
+                    "startDate": "2026-12-22T14:00:00",
+                    "endDate": "2027-01-02T10:00:00",
+                    "hotelCode": "H1109",
+                    "accommodationType": "H",
+                    "hotelAddress": "The Verandah\nLong Bay\nPO BOX 54\n",
+                    "destination": {
+                        "cityCode": "ANU",
+                        "cityName": "Antigua",
+                        "countryCode": "AG",
+                        "countryName": "Antigua and Barbuda"
+                    }
+                },
+                "isAncillaryProduct": false,
+                "tbxProductType": "HTL",
+                "tbxProductId": "HTL~22"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Codegen Booking Fee",
+                    "highlight": "Codegen Booking Fee",
+                    "primaryAttribute": "Forced Components - Hidden",
+                    "travelDates": {
+                        "startDate": "2026-12-22T00:00:00",
+                        "endDate": "2026-12-22T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-12-22T00:00:00",
+                    "endTime": "2026-12-22T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-12-22T00:00:00",
+                        "endTime": "2026-12-22T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden"
+                },
+                "bookedUser": "456546",
+                "bookedDate": "2026-01-18T00:00:00",
+                "modifiedDate": "2026-01-18T00:00:00",
+                "rate": {
+                    "price": 3.0,
+                    "priceWithTax": 3.0,
+                    "tax": 0.0,
+                    "basePrice": 3.0,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Diane",
+                            "lastName": "Bull",
+                            "leadTraveller": true,
+                            "title": "Miss",
+                            "dateOfBirth": "1964-11-17T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Trevor",
+                            "lastName": "Easton",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1957-12-24T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~1"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "ANU Resort Contact",
+                    "highlight": "ANU Contact Details",
+                    "primaryAttribute": "Resort Contact",
+                    "travelDates": {
+                        "startDate": "2026-12-22T00:00:00",
+                        "endDate": "2026-12-22T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-12-22T00:00:00",
+                    "endTime": "2026-12-22T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-12-22T00:00:00",
+                        "endTime": "2026-12-22T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "RCD",
+                    "elementGroupName": "Resort Contact"
+                },
+                "bookedUser": "456546",
+                "bookedDate": "2026-01-18T00:00:00",
+                "modifiedDate": "2026-01-18T00:00:00",
+                "rate": {
+                    "price": 0.01,
+                    "priceWithTax": 0.01,
+                    "tax": 0.0,
+                    "basePrice": 0.01,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Diane",
+                            "lastName": "Bull",
+                            "leadTraveller": true,
+                            "title": "Miss",
+                            "dateOfBirth": "1964-11-17T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Trevor",
+                            "lastName": "Easton",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1957-12-24T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "RCD",
+                    "elementGroupName": "Resort Contact",
+                    "destination": {
+                        "countryCode": "AG",
+                        "countryName": "Antigua and Barbuda"
+                    },
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~2"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Caribbean Core",
+                    "highlight": "Caribbean Core",
+                    "primaryAttribute": "Forced Components - Hidden",
+                    "travelDates": {
+                        "startDate": "2026-12-22T00:00:00",
+                        "endDate": "2026-12-22T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-12-22T00:00:00",
+                    "endTime": "2026-12-22T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-12-22T00:00:00",
+                        "endTime": "2026-12-22T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden"
+                },
+                "bookedUser": "456546",
+                "bookedDate": "2026-01-18T00:00:00",
+                "modifiedDate": "2026-01-18T00:00:00",
+                "rate": {
+                    "price": 35.62,
+                    "priceWithTax": 35.62,
+                    "tax": 0.0,
+                    "basePrice": 35.62,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Diane",
+                            "lastName": "Bull",
+                            "leadTraveller": true,
+                            "title": "Miss",
+                            "dateOfBirth": "1964-11-17T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Trevor",
+                            "lastName": "Easton",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1957-12-24T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~3"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Antigua Reps/Handling Charge",
+                    "highlight": "Handling/Reps Fees Caribbean",
+                    "primaryAttribute": "Handling/Reps Fees",
+                    "travelDates": {
+                        "startDate": "2026-12-22T00:00:00",
+                        "endDate": "2026-12-22T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-12-22T00:00:00",
+                    "endTime": "2026-12-22T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-12-22T00:00:00",
+                        "endTime": "2026-12-22T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "HREPFEES",
+                    "elementGroupName": "Handling/Reps Fees"
+                },
+                "bookedUser": "456546",
+                "bookedDate": "2026-01-18T00:00:00",
+                "modifiedDate": "2026-01-18T00:00:00",
+                "rate": {
+                    "price": 16.7,
+                    "priceWithTax": 16.7,
+                    "tax": 0.0,
+                    "basePrice": 16.7,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Diane",
+                            "lastName": "Bull",
+                            "leadTraveller": true,
+                            "title": "Miss",
+                            "dateOfBirth": "1964-11-17T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Trevor",
+                            "lastName": "Easton",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1957-12-24T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "HREPFEES",
+                    "elementGroupName": "Handling/Reps Fees",
+                    "destination": {
+                        "countryCode": "AG",
+                        "countryName": "Antigua and Barbuda"
+                    },
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~4"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "ATOL protected",
+                    "highlight": "ATOL protected",
+                    "primaryAttribute": "Atol protected",
+                    "travelDates": {
+                        "startDate": "2026-12-22T00:00:00",
+                        "endDate": "2026-12-22T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-12-22T00:00:00",
+                    "endTime": "2026-12-22T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-12-22T00:00:00",
+                        "endTime": "2026-12-22T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "ATOLLEVY",
+                    "elementGroupName": "Atol protected"
+                },
+                "bookedUser": "456546",
+                "bookedDate": "2026-01-18T00:00:00",
+                "modifiedDate": "2026-01-18T00:00:00",
+                "rate": {
+                    "price": 5.0,
+                    "priceWithTax": 5.0,
+                    "tax": 0.0,
+                    "basePrice": 5.0,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Diane",
+                            "lastName": "Bull",
+                            "leadTraveller": true,
+                            "title": "Miss",
+                            "dateOfBirth": "1964-11-17T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Trevor",
+                            "lastName": "Easton",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1957-12-24T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "ATOLLEVY",
+                    "elementGroupName": "Atol protected",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~5"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Call Centre Booking Fee (Non-Refundable)",
+                    "highlight": "Call Centre Booking Fee",
+                    "primaryAttribute": "Call Centre Booking Fee",
+                    "travelDates": {
+                        "startDate": "2026-12-22T00:00:00",
+                        "endDate": "2026-12-22T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-12-22T00:00:00",
+                    "endTime": "2026-12-22T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-12-22T00:00:00",
+                        "endTime": "2026-12-22T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "CCBF",
+                    "elementGroupName": "Call Centre Booking Fee"
+                },
+                "bookedUser": "456546",
+                "bookedDate": "2026-01-18T00:00:00",
+                "modifiedDate": "2026-01-18T00:00:00",
+                "rate": {
+                    "price": 50.0,
+                    "priceWithTax": 50.0,
+                    "tax": 0.0,
+                    "basePrice": 50.0,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Diane",
+                            "lastName": "Bull",
+                            "leadTraveller": true,
+                            "title": "Miss",
+                            "dateOfBirth": "1964-11-17T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Trevor",
+                            "lastName": "Easton",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1957-12-24T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "CCBF",
+                    "elementGroupName": "Call Centre Booking Fee",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~6"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Antigua Apt to East Coast Hotels - SIC (Virgin Flights Only)",
+                    "highlight": "Seat in Coach",
+                    "primaryAttribute": "Antigua Airport , Antigua , Antigua and Barbuda",
+                    "secondaryAttribute": "The Verandah, Antigua , Antigua , Antigua and Barbuda",
+                    "travelDates": {
+                        "startDate": "2026-12-22T00:00:00",
+                        "endDate": "2026-12-22T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "MINUTES"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-12-22T00:00:00",
+                    "endTime": "2026-12-22T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-12-22T00:00:00",
+                        "endTime": "2026-12-22T00:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "456546",
+                "bookedDate": "2026-01-18T00:00:00",
+                "modifiedDate": "2026-01-18T00:00:00",
+                "rate": {
+                    "price": 43.16,
+                    "priceWithTax": 43.16,
+                    "tax": 0.0,
+                    "basePrice": 43.16,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Diane",
+                            "lastName": "Bull",
+                            "leadTraveller": true,
+                            "title": "Miss",
+                            "dateOfBirth": "1964-11-17T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Trevor",
+                            "lastName": "Easton",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1957-12-24T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "TRANSFER",
+                    "elementGroupName": "Transfer",
+                    "pickupPoints": [
+                        {
+                            "code": "ANU",
+                            "type": "AIRPORT",
+                            "cityCode": "ANU",
+                            "cityName": "Antigua",
+                            "countryName": "Antigua and Barbuda"
+                        }
+                    ],
+                    "dropoffPoints": [
+                        {
+                            "code": "H1109",
+                            "type": "HOTEL",
+                            "cityCode": "ANU"
+                        }
+                    ],
+                    "destination": {
+                        "cityCode": "ANU",
+                        "cityName": "Antigua",
+                        "countryCode": "AG",
+                        "countryName": "Antigua and Barbuda"
+                    },
+                    "selectedPickupPoint": {
+                        "code": "ANU",
+                        "type": "AIRPORT",
+                        "cityCode": "ANU",
+                        "cityName": "Antigua",
+                        "countryName": "Antigua and Barbuda"
+                    },
+                    "selectedDropoffPoint": {
+                        "code": "H1109",
+                        "type": "HOTEL",
+                        "cityCode": "ANU"
+                    },
+                    "isElementGroupDetailsOverridden": true
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "TRS",
+                "tbxProductId": "TRS~11"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "East Coast Hotels to Antigua Apt - SIC (Virgin Flights Only)",
+                    "highlight": "Seat in Coach",
+                    "primaryAttribute": "The Verandah, Antigua , Antigua , Antigua and Barbuda",
+                    "secondaryAttribute": "Antigua Airport , Antigua , Antigua and Barbuda",
+                    "travelDates": {
+                        "startDate": "2027-01-02T00:00:00",
+                        "endDate": "2027-01-02T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "MINUTES"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2027-01-02T00:00:00",
+                    "endTime": "2027-01-02T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2027-01-02T00:00:00",
+                        "endTime": "2027-01-02T00:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "456546",
+                "bookedDate": "2026-01-18T00:00:00",
+                "modifiedDate": "2026-01-18T00:00:00",
+                "rate": {
+                    "price": 43.16,
+                    "priceWithTax": 43.16,
+                    "tax": 0.0,
+                    "basePrice": 43.16,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Diane",
+                            "lastName": "Bull",
+                            "leadTraveller": true,
+                            "title": "Miss",
+                            "dateOfBirth": "1964-11-17T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Trevor",
+                            "lastName": "Easton",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1957-12-24T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "TRANSFER",
+                    "elementGroupName": "Transfer",
+                    "pickupPoints": [
+                        {
+                            "code": "H1109",
+                            "type": "HOTEL",
+                            "cityCode": "ANU"
+                        }
+                    ],
+                    "dropoffPoints": [
+                        {
+                            "code": "ANU",
+                            "type": "AIRPORT",
+                            "cityCode": "ANU",
+                            "cityName": "Antigua",
+                            "countryName": "Antigua and Barbuda"
+                        }
+                    ],
+                    "destination": {
+                        "cityCode": "ANU",
+                        "cityName": "Antigua",
+                        "countryCode": "AG",
+                        "countryName": "Antigua and Barbuda"
+                    },
+                    "selectedPickupPoint": {
+                        "code": "H1109",
+                        "type": "HOTEL",
+                        "cityCode": "ANU"
+                    },
+                    "selectedDropoffPoint": {
+                        "code": "ANU",
+                        "type": "AIRPORT",
+                        "cityCode": "ANU",
+                        "cityName": "Antigua",
+                        "countryName": "Antigua and Barbuda"
+                    },
+                    "isElementGroupDetailsOverridden": true
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "TRS",
+                "tbxProductId": "TRS~12"
+            }
+        ],
+        "travellers": [
+            {
+                "firstName": "Diane",
+                "lastName": "Bull",
+                "leadTraveller": true,
+                "title": "Miss",
+                "dateOfBirth": "1964-11-17T00:00:00",
+                "gender": "F"
+            },
+            {
+                "firstName": "Trevor",
+                "lastName": "Easton",
+                "leadTraveller": false,
+                "title": "Mr",
+                "dateOfBirth": "1957-12-24T00:00:00",
+                "gender": "M"
+            }
+        ],
+        "holidayPackageDetails": {
+            "agentReference": "456546",
+            "definiteDueDate": "2026-01-18T00:00:00",
+            "definiteDate": "2026-01-18T00:00:00",
+            "firmDueDate": "2026-01-18T00:00:00",
+            "firmDate": "2026-01-18T00:00:00",
+            "balanceDueDate": "2026-09-29T00:00:00",
+            "destination": {
+                "cityCode": "ANU",
+                "cityName": "Antigua",
+                "countryCode": "AG",
+                "countryName": "Antigua and Barbuda"
+            }
+        }
+    },
+    "status": 200
+}

@@ -1,0 +1,1195 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBooking HTTP/1.1
+
+$[?( @.bookingReference == '7004639' )]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"booking": {
+		"id": "7004639",
+		"summary": {
+			"availabilityStatus": "AVAILABLE",
+			"productStatus": "CONFIRMED",
+			"name": "Package",
+			"primaryAttribute": "",
+			"secondaryAttribute": "",
+			"travelDates": {
+				"startDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 30, day)}",
+				"endDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 45, day)}"
+			},
+			"travelDuration": {
+				"duration": "15",
+				"durationType": "DAYS"
+			},
+			"discount": 0.0,
+			"vipBooking": false
+		},
+		"payment": {
+			"deposit": 396.19,
+			"balanceDue": 4353.17,
+			"totalPriceToBePaid": 4753.17,
+			"totalPaidAmount": 400.0,
+			"depositRealised": true,
+			"depositReceived": true,
+			"currencyCode": "GBP"
+		},
+		"status": "Confirmed",
+		"holidayProducts": [
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "VS",
+					"highlight": "ECONOMY CLASSIC/MAIN CABIN",
+					"primaryAttribute": "MAN",
+					"secondaryAttribute": "LAS",
+					"travelDates": {
+						"startDate": "2026-09-27T00:00:00",
+						"endDate": "2026-10-11T00:00:00"
+					},
+					"discount": 0.0,
+					"vipBooking": false
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 1634.25,
+					"priceWithTax": 1634.25,
+					"tax": 878.52,
+					"basePrice": 1634.25,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"flightDetails": {
+					"sectors": [
+						{
+							"origin": {
+								"code": "MAN"
+							},
+							"destination": {
+								"code": "LAS"
+							},
+							"segments": [
+								{
+									"operatingCarrier": {
+										"flightNumber": "85",
+										"carrierCode": "VS"
+									},
+									"marketingCarrier": {
+										"carrierCode": "VS"
+									},
+									"scheduledDepartureLocal": "2026-09-27T14:00:00",
+									"scheduledArrivalLocal": "2026-09-27T16:20:00",
+									"origin": {
+										"code": "MAN"
+									},
+									"destination": {
+										"code": "LAS"
+									},
+									"legs": [
+										{
+											"operating": {
+												"flightNumber": "85",
+												"carrierCode": "VS"
+											},
+											"marketing": {
+												"carrierCode": "VS"
+											},
+											"scheduledDepartureLocal": "2026-09-27T14:00:00",
+											"scheduledArrivalLocal": "2026-09-27T16:20:00",
+											"origin": {
+												"code": "MAN"
+											},
+											"destination": {
+												"code": "LAS"
+											},
+											"onAirDuration": "620",
+											"aircraft": {
+												"subfleetCode": "351"
+											}
+										}
+									]
+								}
+							],
+							"scheduledDepartureLocal": "2026-09-27T14:00:00",
+							"scheduledArrivalLocal": "2026-09-27T16:20:00"
+						},
+						{
+							"origin": {
+								"code": "LAX"
+							},
+							"destination": {
+								"code": "JFK"
+							},
+							"segments": [
+								{
+									"operatingCarrier": {
+										"flightNumber": "979",
+										"carrierCode": "DL"
+									},
+									"marketingCarrier": {
+										"carrierCode": "DL"
+									},
+									"scheduledDepartureLocal": "2026-10-07T07:00:00",
+									"scheduledArrivalLocal": "2026-10-07T15:25:00",
+									"origin": {
+										"code": "LAX"
+									},
+									"destination": {
+										"code": "JFK"
+									},
+									"legs": [
+										{
+											"operating": {
+												"flightNumber": "979",
+												"carrierCode": "DL"
+											},
+											"marketing": {
+												"carrierCode": "DL"
+											},
+											"scheduledDepartureLocal": "2026-10-07T07:00:00",
+											"scheduledArrivalLocal": "2026-10-07T15:25:00",
+											"origin": {
+												"code": "LAX"
+											},
+											"destination": {
+												"code": "JFK"
+											},
+											"onAirDuration": "325",
+											"aircraft": {
+												"subfleetCode": "764"
+											}
+										}
+									]
+								}
+							],
+							"scheduledDepartureLocal": "2026-10-07T07:00:00",
+							"scheduledArrivalLocal": "2026-10-07T15:25:00"
+						},
+						{
+							"origin": {
+								"code": "JFK"
+							},
+							"destination": {
+								"code": "MAN"
+							},
+							"segments": [
+								{
+									"operatingCarrier": {
+										"flightNumber": "5980",
+										"carrierCode": "VS"
+									},
+									"marketingCarrier": {
+										"carrierCode": "DL"
+									},
+									"scheduledDepartureLocal": "2026-10-10T20:05:00",
+									"scheduledArrivalLocal": "2026-10-11T08:00:00",
+									"origin": {
+										"code": "JFK"
+									},
+									"destination": {
+										"code": "MAN"
+									},
+									"legs": [
+										{
+											"operating": {
+												"flightNumber": "5980",
+												"carrierCode": "VS"
+											},
+											"marketing": {
+												"carrierCode": "DL"
+											},
+											"scheduledDepartureLocal": "2026-10-10T20:05:00",
+											"scheduledArrivalLocal": "2026-10-11T08:00:00",
+											"origin": {
+												"code": "JFK"
+											},
+											"destination": {
+												"code": "MAN"
+											},
+											"onAirDuration": "415",
+											"aircraft": {
+												"subfleetCode": "351"
+											}
+										}
+									]
+								}
+							],
+							"scheduledDepartureLocal": "2026-10-10T20:05:00",
+							"scheduledArrivalLocal": "2026-10-11T08:00:00"
+						}
+					],
+					"airlineLocator": {
+						"pnrLocator": "EMTZYO"
+					}
+				},
+				"isAncillaryProduct": false,
+				"tbxProductType": "FLT",
+				"tbxProductId": "FLT~2"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Park MGM Las Vegas",
+					"highlight": "Park MGM Two Queen - Double",
+					"primaryAttribute": "Room Only",
+					"secondaryAttribute": "Park MGM Two Queen - Double (2 0 0) x 1",
+					"travelDates": {
+						"startDate": "2026-09-27T00:00:00",
+						"endDate": "2026-10-02T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "5",
+						"durationType": "NIGHTS"
+					},
+					"discount": 0.0,
+					"startTime": "2026-09-27T15:00:00",
+					"endTime": "2026-10-02T11:00:00",
+					"travelTimings": {
+						"startTime": "2026-09-27T15:00:00",
+						"endTime": "2026-10-02T11:00:00"
+					},
+					"vipBooking": false
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 343.01,
+					"priceWithTax": 343.01,
+					"tax": 0.0,
+					"basePrice": 343.01,
+					"currencyInContract": "USD",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"hotelDetails": {
+					"roomDetails": [
+						{
+							"roomType": "Park MGM Two Queen - Double",
+							"boardBasis": "Room Only",
+							"roomNumber": "1",
+							"paxCount": 2,
+							"travellerInfo": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"leadTraveller": true,
+										"dateOfBirth": "1983-08-14T00:00:00"
+									},
+									{
+										"leadTraveller": false,
+										"dateOfBirth": "1988-03-05T00:00:00"
+									}
+								]
+							},
+							"rate": {
+								"price": 343.01,
+								"priceWithTax": 343.01,
+								"tax": 0.0,
+								"basePrice": 0.0,
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"mealPlanName": "Room Only"
+						}
+					],
+					"name": "Park MGM Las Vegas - Park MGM Two Queen - Double",
+					"startDate": "2026-09-27T15:00:00",
+					"endDate": "2026-10-02T11:00:00",
+					"hotelCode": "H1412",
+					"accommodationType": "H",
+					"hotelAddress": "C/O Bonotel\nLas Vegas Blvd\nNevada 89109",
+					"destination": {
+						"cityCode": "LAS",
+						"cityName": "Las Vegas",
+						"countryCode": "US",
+						"countryName": "USA",
+						"stateCode": "NV",
+						"stateName": "Nevada"
+					}
+				},
+				"isAncillaryProduct": false,
+				"tbxProductType": "HTL",
+				"tbxProductId": "HTL~5"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "The Garland",
+					"highlight": "DELUXE KING BED-COMP WIFI-PRIVATE BALCONY-FLAT SCREEN TV-FRIDGE-IN ROOM SAFE-COFFEE AND TEA MAKER- ",
+					"primaryAttribute": "Room Only",
+					"secondaryAttribute": "DELUXE KING BED-COMP WIFI-PRIVATE BALCONY-FLAT SCREEN TV-FRIDGE-IN ROOM SAFE-COFFEE AND TEA MAKER-  (2 0 0) x 1",
+					"travelDates": {
+						"startDate": "2026-10-02T00:00:00",
+						"endDate": "2026-10-07T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "5",
+						"durationType": "NIGHTS"
+					},
+					"discount": 0.0,
+					"startTime": "2026-10-02T14:00:00",
+					"endTime": "2026-10-07T10:00:00",
+					"travelTimings": {
+						"startTime": "2026-10-02T14:00:00",
+						"endTime": "2026-10-07T10:00:00"
+					},
+					"vipBooking": false
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 1099.86,
+					"priceWithTax": 1099.86,
+					"tax": 0.0,
+					"basePrice": 1099.86,
+					"currencyInContract": "USD",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"hotelDetails": {
+					"roomDetails": [
+						{
+							"roomType": "DELUXE KING BED-COMP WIFI-PRIVATE BALCONY-FLAT SCREEN TV-FRIDGE-IN ROOM SAFE-COFFEE AND TEA MAKER- ",
+							"boardBasis": "Room Only",
+							"roomNumber": "1",
+							"paxCount": 2,
+							"travellerInfo": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"leadTraveller": false,
+										"dateOfBirth": "1988-03-05T00:00:00"
+									},
+									{
+										"leadTraveller": true,
+										"dateOfBirth": "1983-08-14T00:00:00"
+									}
+								]
+							},
+							"rate": {
+								"price": 1099.86,
+								"priceWithTax": 1099.86,
+								"tax": 0.0,
+								"basePrice": 0.0,
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"mealPlanName": "Room Only"
+						}
+					],
+					"name": "The Garland - DELUXE KING BED-COMP WIFI-PRIVATE BALCONY-FLAT SCREEN TV-FRIDGE-IN ROOM SAFE-COFFEE AND TEA MAKER- ",
+					"startDate": "2026-10-02T14:00:00",
+					"endDate": "2026-10-07T10:00:00",
+					"hotelCode": "H4240",
+					"accommodationType": "H",
+					"hotelAddress": "4222 Vineland Avenue, \nNorth Hollywood, \nCalifornia , \nCA",
+					"destination": {
+						"cityCode": "LAX",
+						"cityName": "Los Angeles",
+						"countryCode": "US",
+						"countryName": "USA",
+						"stateCode": "CA",
+						"stateName": "California"
+					}
+				},
+				"isAncillaryProduct": false,
+				"tbxProductType": "HTL",
+				"tbxProductId": "HTL~11"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "RIU Plaza Manhattan Times Square",
+					"highlight": "Deluxe King",
+					"primaryAttribute": "Bed and Breakfast",
+					"secondaryAttribute": "Deluxe King (2 0 0) x 1",
+					"travelDates": {
+						"startDate": "2026-10-07T00:00:00",
+						"endDate": "2026-10-10T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "3",
+						"durationType": "NIGHTS"
+					},
+					"discount": 0.0,
+					"startTime": "2026-10-07T14:00:00",
+					"endTime": "2026-10-10T10:00:00",
+					"travelTimings": {
+						"startTime": "2026-10-07T14:00:00",
+						"endTime": "2026-10-10T10:00:00"
+					},
+					"vipBooking": false
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 936.81,
+					"priceWithTax": 936.81,
+					"tax": 0.0,
+					"basePrice": 936.81,
+					"currencyInContract": "USD",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"hotelDetails": {
+					"roomDetails": [
+						{
+							"roomType": "Deluxe King",
+							"boardBasis": "Bed and Breakfast",
+							"roomNumber": "1",
+							"paxCount": 2,
+							"travellerInfo": {
+								"adultCount": 2,
+								"travellers": [
+									{
+										"leadTraveller": true,
+										"dateOfBirth": "1983-08-14T00:00:00"
+									},
+									{
+										"leadTraveller": false,
+										"dateOfBirth": "1988-03-05T00:00:00"
+									}
+								]
+							},
+							"rate": {
+								"price": 936.81,
+								"priceWithTax": 936.81,
+								"tax": 0.0,
+								"basePrice": 0.0,
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"mealPlanName": "Bed and Breakfast"
+						}
+					],
+					"name": "RIU Plaza Manhattan Times Square - Deluxe King",
+					"startDate": "2026-10-07T14:00:00",
+					"endDate": "2026-10-10T10:00:00",
+					"hotelCode": "HS84831",
+					"accommodationType": "H",
+					"hotelAddress": "145 WEST, 47TH STREET",
+					"destination": {
+						"cityCode": "NYC",
+						"cityName": "New York",
+						"countryCode": "US",
+						"countryName": "USA",
+						"stateCode": "NY",
+						"stateName": "New York"
+					}
+				},
+				"isAncillaryProduct": false,
+				"tbxProductType": "HTL",
+				"tbxProductId": "HTL~12"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Chevrolet Tahoe or similar",
+					"highlight": "Fullsize",
+					"primaryAttribute": "Las Vegas Harry Reid Intl Airport",
+					"secondaryAttribute": "Los Angeles International Airport",
+					"travelDates": {
+						"startDate": "2026-10-02T00:00:00",
+						"endDate": "2026-10-07T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "5",
+						"durationType": "DAYS"
+					},
+					"discount": 0.0,
+					"startTime": "2026-10-02T10:00:00",
+					"endTime": "2026-10-07T05:00:00",
+					"travelTimings": {
+						"startTime": "2026-10-02T10:00:00",
+						"endTime": "2026-10-07T05:00:00"
+					},
+					"vipBooking": false
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 459.84,
+					"priceWithTax": 459.84,
+					"tax": 0.0,
+					"basePrice": 459.84,
+					"currencyInContract": "USD",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"carDetails": {
+					"name": " - ",
+					"model": "Tahoe or similar",
+					"make": "Chevrolet",
+					"className": "Fullsize",
+					"typeName": "SUV",
+					"transmissionType": "Automatic",
+					"pickUpLocations": [
+						{
+							"cityCode": "LAS",
+							"cityName": "Las Vegas",
+							"countryCode": "US",
+							"countryName": "USA",
+							"address": "7135 Gilespie Street, Las Vegas, Nv, 7135 Gilespie Street, Las Vegas, 89119-1256, Nv, Nevada"
+						}
+					],
+					"returnLocations": [
+						{
+							"cityCode": "LAX",
+							"cityName": "Los Angeles",
+							"countryCode": "US",
+							"countryName": "USA",
+							"address": "5251 W 98th St #573, Los Angeles, Ca, Los Angeles Ap, 90045, Ca, California"
+						}
+					],
+					"destination": {
+						"cityCode": "LAS",
+						"cityName": "Las Vegas",
+						"countryCode": "US",
+						"countryName": "USA",
+						"stateCode": "NV",
+						"stateName": "Nevada"
+					},
+					"selectedPickupLocation": {
+						"cityCode": "LAS",
+						"cityName": "Las Vegas",
+						"countryCode": "US",
+						"countryName": "USA",
+						"address": "7135 Gilespie Street, Las Vegas, Nv, 7135 Gilespie Street, Las Vegas, 89119-1256, Nv, Nevada"
+					},
+					"selectedReturnLocation": {
+						"cityCode": "LAX",
+						"cityName": "Los Angeles",
+						"countryCode": "US",
+						"countryName": "USA",
+						"address": "5251 W 98th St #573, Los Angeles, Ca, Los Angeles Ap, 90045, Ca, California"
+					}
+				},
+				"isAncillaryProduct": false,
+				"tbxProductType": "CAR",
+				"tbxProductId": "CAR~3"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "04-10-2026",
+					"highlight": "Universal 1 Day, 2nd Day Free Ticket",
+					"primaryAttribute": " EXP - USA",
+					"travelDates": {
+						"startDate": "2026-10-04T00:00:00",
+						"endDate": "2026-10-04T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "1",
+						"durationType": "DAYS"
+					},
+					"discount": 0.0,
+					"startTime": "2026-10-04T00:00:00",
+					"endTime": "2026-10-04T00:00:00",
+					"travelTimings": {
+						"startTime": "2026-10-04T00:00:00",
+						"endTime": "2026-10-04T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "USAEXC",
+					"elementGroupName": " EXP - USA"
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 196.19,
+					"priceWithTax": 196.19,
+					"tax": 0.0,
+					"basePrice": 196.19,
+					"currencyInContract": "USD",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"isAncillaryProduct": false,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~16"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "West Coast USA Contact",
+					"highlight": "West Coast USA Contact Details",
+					"primaryAttribute": "Resort Contact",
+					"travelDates": {
+						"startDate": "2026-09-27T00:00:00",
+						"endDate": "2026-09-27T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2026-09-27T00:00:00",
+					"endTime": "2026-09-27T00:00:00",
+					"travelTimings": {
+						"startTime": "2026-09-27T00:00:00",
+						"endTime": "2026-09-27T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "RCD",
+					"elementGroupName": "Resort Contact"
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 0.01,
+					"priceWithTax": 0.01,
+					"tax": 0.0,
+					"basePrice": 0.01,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "RCD",
+					"elementGroupName": "Resort Contact",
+					"destination": {
+						"countryCode": "US",
+						"countryName": "USA"
+					}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~9"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Codegen Booking Fee",
+					"highlight": "Codegen Booking Fee",
+					"primaryAttribute": "Forced Components - Hidden",
+					"travelDates": {
+						"startDate": "2026-09-27T00:00:00",
+						"endDate": "2026-09-27T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2026-09-27T00:00:00",
+					"endTime": "2026-09-27T00:00:00",
+					"travelTimings": {
+						"startTime": "2026-09-27T00:00:00",
+						"endTime": "2026-09-27T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "FCHIDDEN",
+					"elementGroupName": "Forced Components - Hidden"
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 3.0,
+					"priceWithTax": 3.0,
+					"tax": 0.0,
+					"basePrice": 3.0,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "FCHIDDEN",
+					"elementGroupName": "Forced Components - Hidden",
+					"destination": {}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~10"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Florida Core",
+					"highlight": "Florida Core",
+					"primaryAttribute": "Forced Components - Hidden",
+					"travelDates": {
+						"startDate": "2026-09-27T00:00:00",
+						"endDate": "2026-09-27T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2026-09-27T00:00:00",
+					"endTime": "2026-09-27T00:00:00",
+					"travelTimings": {
+						"startTime": "2026-09-27T00:00:00",
+						"endTime": "2026-09-27T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "FCHIDDEN",
+					"elementGroupName": "Forced Components - Hidden"
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 25.18,
+					"priceWithTax": 25.18,
+					"tax": 0.0,
+					"basePrice": 25.18,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "FCHIDDEN",
+					"elementGroupName": "Forced Components - Hidden",
+					"destination": {
+						"countryCode": "US",
+						"countryName": "USA"
+					}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~11"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Retail Booking Fee (Non Refundable)",
+					"highlight": "Retail Booking Fee",
+					"primaryAttribute": "Retail Booking Fee",
+					"travelDates": {
+						"startDate": "2026-09-27T00:00:00",
+						"endDate": "2026-09-27T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2026-09-27T00:00:00",
+					"endTime": "2026-09-27T00:00:00",
+					"travelTimings": {
+						"startTime": "2026-09-27T00:00:00",
+						"endTime": "2026-09-27T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "RETAILBOOK",
+					"elementGroupName": "Retail Booking Fee"
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 50.0,
+					"priceWithTax": 50.0,
+					"tax": 0.0,
+					"basePrice": 50.0,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "RETAILBOOK",
+					"elementGroupName": "Retail Booking Fee",
+					"destination": {}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~12"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Own Transport Arrangements Return",
+					"highlight": "Own Transport Arrangements - West Coast",
+					"primaryAttribute": "Own Transport Arrangements - West Coast",
+					"travelDates": {
+						"startDate": "2026-09-27T00:00:00",
+						"endDate": "2026-09-27T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2026-09-27T00:00:00",
+					"endTime": "2026-09-27T00:00:00",
+					"travelTimings": {
+						"startTime": "2026-09-27T00:00:00",
+						"endTime": "2026-09-27T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "OWAWC",
+					"elementGroupName": "Own Transport Arrangements - West Coast"
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 0.02,
+					"priceWithTax": 0.02,
+					"tax": 0.0,
+					"basePrice": 0.02,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "OWAWC",
+					"elementGroupName": "Own Transport Arrangements - West Coast",
+					"destination": {
+						"countryCode": "US",
+						"countryName": "USA"
+					}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~13"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "ATOL protected",
+					"highlight": "ATOL protected",
+					"primaryAttribute": "Atol protected",
+					"travelDates": {
+						"startDate": "2026-09-27T00:00:00",
+						"endDate": "2026-09-27T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2026-09-27T00:00:00",
+					"endTime": "2026-09-27T00:00:00",
+					"travelTimings": {
+						"startTime": "2026-09-27T00:00:00",
+						"endTime": "2026-09-27T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "ATOLLEVY",
+					"elementGroupName": "Atol protected"
+				},
+				"bookedUser": "479327",
+				"bookedDate": "2026-01-25T00:00:00",
+				"modifiedDate": "2026-01-25T00:00:00",
+				"rate": {
+					"price": 5.0,
+					"priceWithTax": 5.0,
+					"tax": 0.0,
+					"basePrice": 5.0,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"travellers": [
+						{
+							"firstName": "Alan",
+							"lastName": "Green",
+							"leadTraveller": true,
+							"title": "Mr",
+							"dateOfBirth": "1983-08-14T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Kevin",
+							"lastName": "Roberts",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1988-03-05T00:00:00",
+							"gender": "M"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "ATOLLEVY",
+					"elementGroupName": "Atol protected",
+					"destination": {}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~14"
+			}
+		],
+		"travellers": [
+			{
+				"firstName": "Alan",
+				"lastName": "Green",
+				"leadTraveller": true,
+				"title": "Mr",
+				"dateOfBirth": "1983-08-14T00:00:00",
+				"gender": "M"
+			},
+			{
+				"firstName": "Kevin",
+				"lastName": "Roberts",
+				"leadTraveller": false,
+				"title": "Mr",
+				"dateOfBirth": "1988-03-05T00:00:00",
+				"gender": "M"
+			}
+		],
+		"holidayPackageDetails": {
+			"agentReference": "479327",
+			"definiteDueDate": "2026-01-25T00:00:00",
+			"definiteDate": "2026-01-25T00:00:00",
+			"firmDueDate": "2026-01-25T00:00:00",
+			"firmDate": "2026-01-25T00:00:00",
+			"balanceDueDate": "2026-07-05T00:00:00",
+			"destination": {
+				"countryCode": "US",
+				"countryName": "USA"
+			}
+		}
+	},
+	"status": 200
+}

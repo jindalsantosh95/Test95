@@ -1,0 +1,600 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.12.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+		<PackageReference Include="Moq" Version="4.20.72" />
+		<PackageReference Include="xunit" Version="2.9.3" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Core.Functions\VAA.EAPI.GraphQL.Core.Functions.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Core.Xunit\VAA.EAPI.GraphQL.Core.Xunit.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Domain.Trips\VAA.EAPI.GraphQL.Domain.Trips.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Framework.Tests\VAA.EAPI.GraphQL.Framework.Tests.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Infrastructure\VAA.EAPI.GraphQL.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include=".mocks\GetTravelRequirements.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\Content-HotelH1126.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\Content_vaa-sales-banners.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\059d790f-23a3-4b6d-899f-e0e7610f3ea4_UpdateBasketStatus.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\6775a735-c8bd-4900-9a64-422a7ca8f824_UpdateBasketStatus.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\7759ccf6-3e45-40be-901b-e76b009ef230_UpdateBasketStatus_CJBR8A - Copy.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\87d3b31e-e585-4a8d-a958-1d3e2b3b37b6_UpdateBasketStatus.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\9dc99361-dd15-49f1-b24b-cf5859ba49ce_UpdateBasketStatus.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6833025- CarDetails.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6833026- CarDetails_NonHertz.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6833127-CarProductId.mock">
+		 <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None> 
+	  <None Include=".mocks\holidays_retrieveBooking_7003024- leadpaxMissingInFlight.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_7007912_touchdown_supported.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+		<None Include=".mocks\holidays_retrieveBooking_6834428- HotelDisney.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\holidays_retrieveDocumentDownloadLinks - 6997658.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>	
+	  <None Include=".mocks\PaymentMethodDetails.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\c07eefb5-dfc3-45c5-8cfc-19c8dae25830_UpdateBasketStatus.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\deeplinkUrl_ManageHoliday.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\deeplinkUrl_ConciergeTripAware.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\futureBookingsMock.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBookingList_4545454 and 5656565_OneErrorOneSuccess.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBookingList_1212121 and 2323232_AllErrors_.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6874038.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6874036.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBookingList_6999383 and 6661909_Expired.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBookingList_6661908.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBookingList_6666666.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6836033.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6834316.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6996567.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6996164.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_9000000_MaxPaymentClamping.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6999383.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6999382.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6997721.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+		<None Include=".mocks\holidays_retrieveBooking_6997310.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\holidays_retrieveBooking_6996566.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\holidays_retrieveBooking_6997658_MultiTRS.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\holidays_retrieveBooking_7004639.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\holidays_retrieveBooking_7003539.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	  <None Include=".mocks\holidays_retrieveBooking_6996219.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBookingList_6996219_Starlink.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_6609014.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_3232333.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveBooking_1234567890.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveDocument - 6666666.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveDocumentDownloadLinks - 6666666.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveDocument - 6997658.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidays_retrieveDocument_404.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OperationScheduleResponseMS.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OperationScheduleResponseTripQuery.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OperationScheduleResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\StarlinkEligibilityResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\StarlinkEligibilityFalse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\StarlinkEligibilityError.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OperationScheduleEmpty.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OperationScheduleError.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OperationScheduleStarlinkFalse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OperationScheduleStarlinkError.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\deeplinkUrl_FlightDisruption.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\deeplinkUrl_BaggageAllowance.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\deeplinkUrl_GB_MissingPOS.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\deeplinkUrl_GB.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\DeleteBasketSeatFulfilment_CJBR8A.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\orderDataTripDetails.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AirlineRefData.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CreateBasket.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GeneratePostDetailsforDeeplink.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\getUpsellOfferDetails.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\9dc99361-dd15-49f1-b24b-cf5859ba49ce_UpdatePaymentStatusInBasket.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\87d3b31e-e585-4a8d-a958-1d3e2b3b37b6_GetBasket.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PrePRIGetBasketResponseDL.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\7759ccf6-3e45-40be-901b-e76b009ef230_UpadatePaymentStatusInBasket_CJBR8A.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\7759ccf6-3e45-40be-901b-e76b009ef230_SeatConfirmationBasket_CJBR8A.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\c07eefb5-dfc3-45c5-8cfc-19c8dae25830_GetBasket.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\6775a735-c8bd-4900-9a64-422a7ca8f824_UpdatePaymentinbasket.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\5e056f19-30f0-44f4-9cbd-cbc4418f8b21_UpdateBasketStatus.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PrePRIUpdateContactInBasketResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SeatFulfilment_DQUGT6.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SeatFulfilment_FullFailed.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SeatFulfilment_IncompleteSuccessResponse_CJBR8A.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\seatMapResponse__ENA4MI_multiPax.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\059d790f-23a3-4b6d-899f-e0e7610f3ea4_GetBasket.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SeatUpgradePostSelectionBasket_ENA4MI.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SeatUpgradePreSelectionBasket_ENA4MI.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SeatUpgradePreSelectionBasket.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SeatUpgradePostSelectionBasket.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\passengerInfo.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ssrUnitTestMockUnder24Hr.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryC58TMB_IROP.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryAHDHDJ.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryCNYBNV.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryC4F2RI.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryDD4XOH.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryDNC6NH.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryESYTV3.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryDZUM2G.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryETNWM4.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryEB9XBI.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryEB9XBQ.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryDZ76P3.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holidayDetailsQueryListResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryFCDTGI.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryEH5ZRW.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryDNC6NL.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryListResponse - C6QBPT_C6SBDQ.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryListResponse-DVSQLF.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryListResponse-EOBR7J.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryListResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryFD2D96.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryFD2D95.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryC58TMB.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripQueryABCKE1.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripDetailsQueryABCKE1.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripQueryABC002.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripQueryABC003.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripQueryABC001.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripQueryABC000.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripQueryABC321.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\TripQuery_IROP_Cancel.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripQueryABC123.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripQueryABCXYZ.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\tripQueryABCDEF.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\DestinationAEMContent.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CurrencyRefData.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\DeleteBasketPostPartialFulfilment.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\DeleteBasketPostPaidSeatFulfilment.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\DeleteBasketPostFulfilment.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\DeleteBasketSeatConfirmationFreeSeatFulfilment.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\Lopa_351-L5H.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CabinRefDataMock.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PostPaymentPRIGetBasketResponsePaidSeat.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PostPRIGetBasketResponsePaymentStatusMutation.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PRIGetBasketResponsePaymentStatusMutation.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GetBasketResponseFreeSeatsPaymentStatusMutation.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PRIPaymentDetailsPartialSeats.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\5e056f19-30f0-44f4-9cbd-cbc4418f8b21_GetBasket.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+		<None Include=".mocks\9dc99361-dd15-49f1-b24b-cf5859ba49ce_GetBasket.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\PRIPaymentDetails.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\PostPRIPaymentDetails.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\DeleteBasketSeatFulfilment.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\PrePRIGetBasketResponseCurrencyNumberMissing.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\PrePRIGetBasketResponseCurrencyCodeMissing.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\6775a735-c8bd-4900-9a64-422a7ca8f824_GetBasketPartialSeatFulfilment.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\SeatFulfilment_Partial.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	  <None Include=".mocks\PostPRIGetBasketResponseFreeSeats.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PostPRIGetBasketResponseFreePaid.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PostPRIGetBasketResponseSeatSelection.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PrePRIGetBasketResponseFreePaid.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PrePRIGetBasketResponseFreeSeats.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\seatMapResponsePartialSeats.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\seatMapResponsePostSeatSelect.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\seatMapResponsePaidSeatsFreePaid.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\seatMapResponseFreeSeatsFreePaid.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\seatMapResponseFreeSeats.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\seatMapResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PostPRIGetBasketResponsePaidSeat.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PostPRIGetBasketResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PrePRIGetBasketResponsePaidSeat.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PrePRIGetBasketResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PRIGeneration.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\holiday_payment_pending.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\LoyaltyProgramsMockData.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\getLoyaltyMemberDetails.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\updateLoyaltyMemberDetails.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AirportRefDataMock.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\deleteAllEligibleSegmetsMealMSresponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\editAllEligibleSegmetsMealMSresponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\addLoyaltyMemberDetails.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\editMealMSresponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\retrieveSSRMealMSresponse_DeleteTest.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\retrieveSSRMealMSresponse_EditApplyAllTest.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ssrMealRefDataMock.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\retrieveSSRMealMSresponse_EditOneEligibleMeal.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ssrUnitTestMock.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+		  <None Include=".mocks\holidays_retrieveBooking_singleSliceHolidayFlights.mock">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </None>
+		  <None Include=".mocks\holidays_retrieveBooking_9999998_UnsupportedFlightCarrierName.mock">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </None>
+		  <None Include=".mocks\holidays_retrieveBooking_7777777.mock">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </None>
+		  <None Include=".mocks\holidays_retrieveBookingList_7777777.mock">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </None>
+		  <None Include=".mocks\tripDetailsQueryListResponse_AB1CDE.pastSliceMissing.mock">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </None>
+		  <None Include=".mocks\holidays_retrieveBookingList_singleSliceHolidayFlights.mock">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </None>
+		  <None Include=".mocks\holidays_retrieveBookingList_9999998_UnsupportedFlightCarrierName.mock">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </None>
+		  <None Include=".mocks\holidays_retrieveBooking_8883814.mock">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </None>
+		  <None Include=".mocks\holidays_retrieveBookingList_8883814.mock">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </None>
+		  <None Include=".mocks\tripDetailsQueryListResponse_singleSliceHolidayFlights.mock">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </None>
+	</ItemGroup>
+
+  <ItemGroup>
+    <None Include=".mocks\scvBooking_*.mock" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+</Project>
+

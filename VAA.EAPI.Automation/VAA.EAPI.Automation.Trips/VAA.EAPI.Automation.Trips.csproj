@@ -1,0 +1,142 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Tests\Holidays\Microservices\**" />
+	  <EmbeddedResource Remove="Tests\Holidays\Microservices\**" />
+	  <None Remove="Tests\Holidays\Microservices\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Azure.Cosmos.Table" />
+		<PackageReference Include="Microsoft.Data.SqlClient" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Xunit.SkippableFact" />
+		<PackageReference Include="xunit" />
+		<PackageReference Include="xunit.runner.visualstudio">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\VAA.EAPI.Automation.Book\VAA.EAPI.Automation.Book.csproj" />
+	  <ProjectReference Include="..\VAA.EAPI.Automation.Core.Delta\VAA.EAPI.Automation.Core.Delta.csproj" />
+	  <ProjectReference Include="..\VAA.EAPI.Automation.Core.UI\VAA.EAPI.Automation.Core.UI.csproj" />
+	  <ProjectReference Include="..\VAA.EAPI.Automation.Core\VAA.EAPI.Automation.Core.csproj" />
+	  <ProjectReference Include="..\VAA.EAPI.Automation.MyAccount\VAA.EAPI.Automation.MyAccount.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="VAA.EAPI.Infrastructure">
+			<HintPath>..\Assemblies\VAA.EAPI.Infrastructure.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="local.settings.local.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AIR4Services\MyTrips\TravelReservations.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\MYA\AccountMemberSignInVAC.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\TripDetailsLoggedInUserToken.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\MYA\AccountMemberSignIn.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\DeepLinksSecure.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\DeepLinks.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\SpecialAssistance\UpdateSpecialAssistancea.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\TripDetails.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\FindTripByFlightDate.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Content\Content.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\GetFlyReadyStatus.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Seats\SeatMap.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Seats\PaymentStatusMutation.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Seats\SeatPaymentMutation.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\ManageLoyalty\ManageLoyaltyMember.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\ManageLoyalty\LoyaltyProgramDetails.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Seats\SeatFulfilmentMutation.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Seats\SelectSeatMutation.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\SpecialAssistance\UpdateSpecialAssistance.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\SpecialAssistance\UpdateSpecialMeals.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\SpecialAssistance\GetSpecialMeals.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\SpecialAssistance\GetSpecialAssistance.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Booking.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Holidays\RetrieveHolidayBooking.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Holidays\HolidayPaymentMutation.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Holidays\RetrieveHolidayBookingDocumentDetails.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\Holidays\RetrieveHolidayBookingDocument.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Trips\UpsellOffers\GetUpsellOffers.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Microservices\TripSearch.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Microservices\SkyTeamClaimDetails.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Microservices\BookingDetails.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+</Project>

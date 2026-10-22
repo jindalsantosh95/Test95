@@ -1,0 +1,17 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements/SaveContactTracing HTTP/1.1
+
+$[?(@.contactTracing[0].passengerId == '01.01|business-error-resource-id')]
+
+###Response
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+[
+  {
+    "code": "travelrequirement_011_001",
+    "title": "Something went a little off course",
+    "message": "We can’t load the travel documents step at the moment. Please try again shortly."
+  }
+]

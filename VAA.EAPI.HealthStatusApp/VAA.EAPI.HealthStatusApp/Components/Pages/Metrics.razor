@@ -1,0 +1,375 @@
+﻿@page "/metrics"
+@attribute [Authorize(Policy = "RequireSpecificGroup")]
+@inject HttpClient Http
+@using Microsoft.ApplicationInsights
+@inject ISignalRService SignalRService
+@inject IMetricsTableFactory MetricsFactory
+@using VAA.EAPI.HealthStatusApp.Components.Partials
+@using Microsoft.AspNetCore.SignalR.Client
+@using VAA.EAPI.HealthStatusApp.Factories
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+@using VAA.EAPI.HealthStatusApp.SignalRClasses
+@rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+@inject ILogger<Index> Logger
+
+<div class="service-dashboard" @onmousemove="UpdatelastActivityTime" style="padding:2rem;">
+    <div class="accordion" id="accordion" style="border: 2px solid #61126b;border-radius: 10px;">
+        <div class="accordion-item">
+            <h2 class="accordion-header position-relative" id="heading1">
+                <button class="accordion-button flex-grow-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne" @onclick="() => HandleTabChange(1)">
+                    .COM Dashboard
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordion">
+                <div class="card card-body grid">
+                    @if (DotComViewModel != null)
+                    {
+                        <MetricsServicePlanSection TabName="Service Plan Metrics" DotComViewModel="@DotComViewModel" />
+                    }
+                    else
+                    {
+                        <span class="g-col-12">Fetching .COM Dashboard Data from last 24hrs ...</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+    
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading2">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                        aria-expanded="false" aria-controls="collapseTwo" @onclick="() => HandleTabChange(2)">
+                    Azure Cache
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion">
+                <div class="card card-body grid">
+                    <MetricsRedisSection TabName="RedisMetrics" Models="@RedisModels" />
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading3">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                        aria-expanded="false" aria-controls="collapseThree" @onclick="() => HandleTabChange(3)">
+                    Service Bus
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordion">
+                <div class="card card-body grid">
+                    <MetricsServiceBusSection TabName="ServiceBusMetrics" Models="@ServiceBusModels" />
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading4">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour"
+                        aria-expanded="false" aria-controls="collapseFour" @onclick="() => HandleTabChange(4)">
+                    Deployments
+                </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordion">
+                <div class="card card-body grid">
+                    <MetricsDeploymentSection TabName="DeploymentMetrics" Models="@DeploymentModels" />
+                </div>
+            </div>
+        </div>
+
+
+        <div class="accordion-item">
+            <h2 class="accordion-header position-relative" id="heading5">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive"
+                        aria-expanded="false" aria-controls="collapseFive" @onclick="() => HandleTabChange(5)">
+                    Heimdall
+                </button>
+                <button class="bi bi-arrow-repeat refresh-btn" @onclick="RefreshHeimdallDataWithDefault">
+                </button>
+                <select class="form-select dropdown-btn" @bind="SelectedDropdownValue">
+                    <option value="1">1 Hour</option>
+                    <option value="2">12 Hours</option>
+                    <option value="3">24 hours</option>
+                    <option value="4">7 Days</option>
+                    <option value="5">14 Days</option>
+                </select>
+            </h2>
+            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion">
+                <div class="card">
+                    @if (HeimdallModel != null)
+                    {
+                        <HeimdallSection TabName="HeimdallData" Model="@HeimdallModel" />
+                    }
+                    else
+                    {
+                        <span class="g-col-12" style="align-self: center;">Fetching Heimdall Data ...</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int currentTab = 1;
+    private DotComModel DotComViewModel { get; set; }
+    private IEnumerable<RedisCacheMetricsModel> RedisModels { get; set; } = new List<RedisCacheMetricsModel>();
+    private IEnumerable<ServiceBusMetricsModel> ServiceBusModels { get; set; } = new List<ServiceBusMetricsModel>();
+    private IEnumerable<DeploymentMetricsModel> DeploymentModels { get; set; } = new List<DeploymentMetricsModel>();
+    private AppInsightsMetricsModel HeimdallModel { get; set; }
+    private readonly TimeSpan inactivityThreshold = TimeSpan.FromSeconds(30);
+    private DateTime lastActivityTime;
+    private bool isInactive = false;
+    private bool isHandlerRegistered = false;
+    private CancellationTokenSource inactivityCancellationTokenSource;
+
+    private int SelectedDropdownValue
+    {
+        get => _selectedDropdownValue;
+        set
+        {
+            if (_selectedDropdownValue != value)
+            {
+                _selectedDropdownValue = value;
+                _ = OnDropdownValueChanged(_selectedDropdownValue);
+            }
+        }
+    }
+    private int _selectedDropdownValue = 3;
+
+    private async Task HandleTabChange(int tab)
+    {
+        currentTab = tab;
+
+        var models = await MetricsFactory.GetMetricsTable();
+
+        if (tab == 1)
+            DotComViewModel = models.DotComModel;
+
+        if (tab == 5)
+            HeimdallModel = await MetricsFactory.GetHeimdallData("1d");
+
+        if (tab == 2)
+            RedisModels = models.RedisCacheMetricsModels ?? new List<RedisCacheMetricsModel>();
+
+        if (tab == 3)
+            ServiceBusModels = models.ServiceBusMetricsModels ?? new List<ServiceBusMetricsModel>();
+
+        if (tab == 4)
+            DeploymentModels = await MetricsFactory.GetDeploymentMetrics();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                await UpdateHeader("Metrics Dashboard");
+
+                var models = await MetricsFactory.GetMetricsTable();
+                DotComViewModel = models.DotComModel;
+                RedisModels = models.RedisCacheMetricsModels ?? new List<RedisCacheMetricsModel>();
+                ServiceBusModels = models.ServiceBusMetricsModels ?? new List<ServiceBusMetricsModel>();
+
+                await InvokeAsync(StateHasChanged);
+
+                lastActivityTime = DateTime.Now;
+                _ = MonitorInactivity();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error fetching metrics");
+            }
+        }
+    }
+
+    private async Task RefreshHeimdallDataWithDefault()
+    {
+        try
+        {
+            SelectedDropdownValue = 3;
+
+            HeimdallModel = null;
+            await InvokeAsync(StateHasChanged);
+
+            HeimdallModel = await MetricsFactory.GetHeimdallData("1d");
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error refreshing Heimdall data");
+        }
+    }
+
+    private async Task OnDropdownValueChanged(int newValue)
+    {
+        try
+        {
+            SelectedDropdownValue = newValue;
+
+            string timespan = SelectedDropdownValue switch
+            {
+                1 => "1h",
+                2 => "12h",
+                3 => "24h",
+                4 => "7d",
+                5 => "14d",
+                _ => "1d"
+            };
+
+            HeimdallModel = null;
+            await InvokeAsync(StateHasChanged);
+
+            HeimdallModel = await MetricsFactory.GetHeimdallData(timespan);
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error handling dropdown value change");
+        }
+    }
+
+    private async Task MonitorInactivity()
+    {
+        inactivityCancellationTokenSource?.Cancel();
+        inactivityCancellationTokenSource = new CancellationTokenSource();
+        var token = inactivityCancellationTokenSource.Token;
+
+        try
+        {
+            while (!token.IsCancellationRequested)
+            {
+                await Task.Delay(1000, token);
+
+                if ((DateTime.Now - lastActivityTime) > TimeSpan.FromSeconds(30) && currentTab == 1)
+                {
+                    await JSRuntime.InvokeVoidAsync("startPageScroll");
+
+                    for (int i = 0; i < 30; i++)
+                    {
+                        await Task.Delay(1000, token);
+                        if ((DateTime.Now - lastActivityTime) < TimeSpan.FromSeconds(30))
+                        {
+                            await JSRuntime.InvokeVoidAsync("stopPageScroll");
+                            return;
+                        }
+                    }
+
+                    await MoveToNextTabOrRedirect();
+                }
+                else if (currentTab != 1 && (DateTime.Now - lastActivityTime) > TimeSpan.FromSeconds(45))
+                {
+                    await MoveToNextTabOrRedirect();
+                }
+            }
+        }
+        catch (TaskCanceledException)
+        {
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error monitoring inactivity");
+        }
+    }
+
+    private async Task MoveToNextTabOrRedirect()
+    {
+        await JSRuntime.InvokeVoidAsync("stopPageScroll");
+        await JSRuntime.InvokeVoidAsync("scrollToTop");
+
+        if (currentTab < 5)
+        {
+            currentTab++;
+            lastActivityTime = DateTime.Now;
+            await JSRuntime.InvokeVoidAsync("triggerAccordionClick", currentTab);
+        }
+        else
+        {
+            await DisposeAsync();
+            Navigation.NavigateTo("tvdashboard");
+        }
+    }
+
+    private void UpdatelastActivityTime()
+    {
+        lastActivityTime = DateTime.Now;
+        inactivityCancellationTokenSource?.Cancel();
+        _ = MonitorInactivity(); 
+        JSRuntime.InvokeVoidAsync("stopPageScroll");
+    }
+
+
+
+    private async Task UpdateHeader(string title)
+    {
+        await JSRuntime.InvokeVoidAsync("updateHeaderTitle", title);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            inactivityCancellationTokenSource?.Cancel();
+            inactivityCancellationTokenSource?.Dispose();
+            inactivityCancellationTokenSource = null;
+            await Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error during component disposal");
+        }
+    }
+}
+
+<script>
+    let scrollInterval;
+    let isScrolling = false;
+
+    function updateHeaderTitle(title) {
+        document.querySelector(".header-title").textContent = title;
+    }
+
+    function triggerAccordionClick(tabIndex) {
+        stopPageScroll();
+        scrollToTop();
+
+        const accordionButton = document.querySelector(`#heading${tabIndex} button`);
+        if (accordionButton) {
+            accordionButton.click();
+        }
+    }
+
+    function startPageScroll() {
+        if (isScrolling) return;
+        isScrolling = true;
+
+        scrollInterval = setInterval(() => {
+            window.scrollBy(0, 2);
+            if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+                clearInterval(scrollInterval);
+                isScrolling = false;
+            }
+        }, 50);
+    }
+
+    function stopPageScroll() {
+        clearInterval(scrollInterval);
+        isScrolling = false;
+    }
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    document.addEventListener("mousemove", function () {
+        stopPageScroll();
+    });
+</script>
+

@@ -1,0 +1,443 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements HTTP/1.1
+
+$[?(@.pnrLocator == 'CNMLQN')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+  "requirementsId": "c4aeb9a7-744e-4d04-aa61-ae8318841195",
+  "reference": {
+    "pnrLocator": "CNMLQN",
+    "createdDate": "2026-05-31"
+  },
+  "passengers": [
+    {
+      "passengerId": "01.01|cf552df8-dcc2-4f3c-b022-a61823260ca3",
+      "passengerFirstNin": "01",
+      "passengerLastNin": "01",
+      "givenNames": "TRAVELONE",
+      "surname": "TEST",
+      "dateOfBirth": "1987-01-11",
+      "phone": {
+        "countryCode": "",
+        "number": "783243242"
+      },
+      "documents": [
+        {
+          "documentType": "PASSPORT",
+          "givenNames": "AATRAVELONEAA",
+          "surname": "TEST",
+          "dateOfBirth": "1987-01-11",
+          "gender": {
+            "code": "X"
+          },
+          "documentNumber": "917084441",
+          "expirationDate": "2025-05-13",
+          "issuingCountry": {
+            "code": "USA"
+          },
+          "nationality": {
+            "code": "USA"
+          },
+          "countryOfResidence": {
+            "code": "USA"
+          }
+        }
+      ],
+      "sliceRequirements": [
+        {
+          "sliceId": "e6470866-7208-4d31-9859-6b8f831c63fa",
+          "passportProvided": false,
+          "passportVerified": false,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "NOT_REQUIRED",
+          "unhappyPassport": true,
+          "passportErrors": [
+            {
+              "code": "travelrequirement_030_006",
+              "message": "This passport has expired, so we can’t complete your check in. You’ll need to use a valid passport to continue.",
+              "displayCode": "PassportExpiredBeforeDeparture",
+              "category": "ERROR",
+              "title": "Something's not quite right"
+            },
+            {
+              "code": "travelrequirement_030_002",
+              "message": "The given name(s) you entered doesn’t match your booking. Please check and try again.",
+              "displayCode": "FirstNameMismatch",
+              "category": "ERROR",
+              "title": "Something's not quite right"
+            }
+          ],
+          "overall": "TO_COMPLETE"
+        },
+        {
+          "sliceId": "d1bc54dd-2f06-4866-8265-ce8065bed1ed",
+          "passportProvided": false,
+          "passportVerified": false,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "NOT_REQUIRED",
+          "unhappyPassport": true,
+          "passportErrors": [
+            {
+              "code": "travelrequirement_030_006",
+              "message": "This passport has expired, so we can’t complete your check in. You’ll need to use a valid passport to continue.",
+              "displayCode": "PassportExpiredBeforeDeparture",
+              "category": "ERROR",
+              "title": "Something's not quite right"
+            },
+            {
+              "code": "travelrequirement_030_002",
+              "message": "The given name(s) you entered doesn’t match your booking. Please check and try again.",
+              "displayCode": "FirstNameMismatch",
+              "category": "ERROR",
+              "title": "Something's not quite right"
+            }
+          ],
+          "overall": "TO_COMPLETE"
+        }
+      ],
+      "emergencyContact": {},
+      "contactTracing": {
+        "inTransit": false,
+        "noEmail": false,
+        "primaryPhoneNumber": "783243242",
+        "primaryPhoneNumberCountryCode": "",
+        "noSecondaryPhoneNumber": false
+      }
+    },
+    {
+      "passengerId": "02.01|f7309912-b10c-4a76-b602-0cfc12c3352e",
+      "passengerFirstNin": "01",
+      "passengerLastNin": "02",
+      "givenNames": "TRAVELTWO",
+      "surname": "TEST",
+      "dateOfBirth": "1986-10-29",
+      "phone": {
+        "countryCode": "",
+        "number": "783243242"
+      },
+      "documents": [
+        {
+          "documentType": "PASSPORT",
+          "givenNames": "TRAVELTWO",
+          "surname": "TEST",
+          "dateOfBirth": "1986-10-29",
+          "gender": {
+            "code": "F"
+          },
+          "documentNumber": "925519773",
+          "expirationDate": "2031-06-01",
+          "issuingCountry": {
+            "code": "GBR"
+          },
+          "nationality": {
+            "code": "GBR"
+          },
+          "countryOfResidence": {
+            "code": "GBR"
+          }
+        }
+      ],
+      "sliceRequirements": [
+        {
+          "sliceId": "e6470866-7208-4d31-9859-6b8f831c63fa",
+          "passportProvided": true,
+          "passportVerified": false,
+          "contactTracing": "TO_COMPLETE",
+          "returnDateStatus": "NOT_REQUIRED",
+          "passportErrors": [
+            {
+              "code": "SecondaryDocETARequirement",
+              "message": "We need to check a few travel documents in person before you can fly. To travel to the U.S., you’ll need a ESTA or other approved entry document. If you’re not travelling under the Visa Waiver Program, you will need to show additional documents like a Resident Card or U.S. Visa when you check in at the airport.",
+              "title": "We can't complete check in online"
+            }
+          ],
+          "secondaryDocumentStatus": "REQUIRED",
+          "secondaryDocumentStatusForETA": true,
+          "overall": "PART_COMPLETE"
+        },
+        {
+          "sliceId": "d1bc54dd-2f06-4866-8265-ce8065bed1ed",
+          "passportProvided": true,
+          "passportVerified": false,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "NOT_REQUIRED",
+          "checkinEligible": true,
+          "passportErrors": [],
+          "secondaryDocumentStatus": "NOT_REQUIRED",
+          "overall": "PART_COMPLETE"
+        }
+      ],
+      "emergencyContact": {},
+      "contactTracing": {
+        "inTransit": false,
+        "noEmail": false,
+        "primaryPhoneNumber": "783243242",
+        "primaryPhoneNumberCountryCode": "",
+        "noSecondaryPhoneNumber": false
+      }
+    },
+    {
+      "passengerId": "03.01|44c47625-4701-47fe-bfc0-8247521aa7eb",
+      "passengerFirstNin": "01",
+      "passengerLastNin": "03",
+      "givenNames": "TRAVELTHREE",
+      "surname": "TEST",
+      "dateOfBirth": "1986-10-22",
+      "phone": {
+        "countryCode": "",
+        "number": "783243242"
+      },
+      "documents": [
+        {
+          "documentType": "PASSPORT",
+          "givenNames": "TRAVELTHREE",
+          "surname": "TEST",
+          "dateOfBirth": "1986-10-22",
+          "gender": {
+            "code": "M"
+          },
+          "documentNumber": "982323103",
+          "expirationDate": "2029-01-11",
+          "issuingCountry": {
+            "code": "IND"
+          },
+          "nationality": {
+            "code": "IND"
+          },
+          "countryOfResidence": {
+            "code": "IND"
+          }
+        }
+      ],
+      "sliceRequirements": [
+        {
+          "sliceId": "e6470866-7208-4d31-9859-6b8f831c63fa",
+          "passportProvided": true,
+          "passportVerified": false,
+          "contactTracing": "TO_COMPLETE",
+          "returnDateStatus": "NOT_REQUIRED",
+          "passportErrors": [
+            {
+              "code": "SecondaryDocNonETARequirement",
+              "message": "Travellers who aren’t citizens need to show a valid visa or entry document. You’ll just need to present this when you check in with our airport team.",
+              "title": "We can't complete check in online"
+            }
+          ],
+          "secondaryDocumentStatus": "REQUIRED",
+          "overall": "PART_COMPLETE"
+        },
+        {
+          "sliceId": "d1bc54dd-2f06-4866-8265-ce8065bed1ed",
+          "passportProvided": true,
+          "passportVerified": false,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "NOT_REQUIRED",
+          "checkinEligible": true,
+          "passportErrors": [
+            {
+              "code": "SecondaryDocNonETARequirement",
+              "message": "Travellers who aren’t citizens need to show a valid visa or entry document. You’ll just need to present this when you check in with our airport team.",
+              "title": "We can't complete check in online"
+            }
+          ],
+          "secondaryDocumentStatus": "REQUIRED",
+          "overall": "PART_COMPLETE"
+        }
+      ],
+      "emergencyContact": {},
+      "contactTracing": {
+        "inTransit": false,
+        "noEmail": false,
+        "primaryPhoneNumber": "783243242",
+        "primaryPhoneNumberCountryCode": "",
+        "noSecondaryPhoneNumber": false
+      }
+    },
+    {
+      "passengerId": "04.01|b84b9149-8be0-4b16-983c-ee10aec7de8e",
+      "passengerFirstNin": "01",
+      "passengerLastNin": "04",
+      "givenNames": "TRAVELFOUR",
+      "surname": "TEST",
+      "dateOfBirth": "1987-04-16",
+      "phone": {
+        "countryCode": "",
+        "number": "783243242"
+      },
+      "documents": [],
+      "sliceRequirements": [
+        {
+          "sliceId": "e6470866-7208-4d31-9859-6b8f831c63fa",
+          "passportProvided": false,
+          "passportVerified": false,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "PROVIDE_PASSPORT_FIRST",
+          "passportErrors": [],
+          "secondaryDocumentStatus": "PROVIDE_PASSPORT_FIRST",
+          "overall": "TO_COMPLETE"
+        },
+        {
+          "sliceId": "d1bc54dd-2f06-4866-8265-ce8065bed1ed",
+          "passportProvided": false,
+          "passportVerified": false,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "PROVIDE_PASSPORT_FIRST",
+          "passportErrors": [],
+          "secondaryDocumentStatus": "PROVIDE_PASSPORT_FIRST",
+          "overall": "TO_COMPLETE"
+        }
+      ],
+      "contactTracing": {
+        "inTransit": false,
+        "noEmail": false,
+        "primaryPhoneNumber": "783243242",
+        "primaryPhoneNumberCountryCode": "",
+        "noSecondaryPhoneNumber": false
+      }
+    }
+  ],
+  "slices": [
+    {
+      "sliceId": "e6470866-7208-4d31-9859-6b8f831c63fa",
+      "scheduledDepartureLocalDateTime": "2026-06-10T08:20:00",
+      "scheduledDepartureUtcDateTime": "2026-06-10T07:20:00",
+      "scheduledArrivalLocalDateTime": "2026-06-10T11:30:00",
+      "scheduledArrivalUtcDateTime": "2026-06-10T15:30:00",
+      "origin": {
+        "code": "LHR",
+        "airportName": "Heathrow Airport",
+        "countryCode": "GBR"
+      },
+      "destination": {
+        "code": "JFK",
+        "airportName": "John F Kennedy International",
+        "countryCode": "USA"
+      },
+      "segments": [
+        {
+          "segmentId": "040cb70f-f9a3-472e-9ae7-a0ebbdbaf502",
+          "ordinal": 1,
+          "operatingCarrier": {
+            "flightNum": "0003",
+            "carrierCode": "VS",
+            "carrierName": "Virgin Atlantic"
+          },
+          "marketingCarrier": {
+            "flightNum": "0003",
+            "carrierCode": "VS",
+            "carrierName": "Virgin Atlantic"
+          },
+          "scheduledDepartureLocalDateTime": "2026-06-10T08:20:00",
+          "scheduledDepartureUtcDateTime": "2026-06-10T07:20:00",
+          "scheduledArrivalLocalDateTime": "2026-06-10T11:30:00",
+          "scheduledArrivalUtcDateTime": "2026-06-10T15:30:00",
+          "origin": {
+            "code": "LHR",
+            "airportName": "Heathrow Airport",
+            "countryCode": "GBR"
+          },
+          "destination": {
+            "code": "JFK",
+            "airportName": "John F Kennedy International",
+            "countryCode": "USA"
+          },
+          "legs": [
+            {
+              "legId": "ad086049-80a8-4d25-b762-680366c46bbd",
+              "ordinal": 1,
+              "scheduledDepartureLocalDateTime": "2026-06-10T08:20:00",
+              "scheduledDepartureUtcDateTime": "2026-06-10T07:20:00",
+              "scheduledArrivalLocalDateTime": "2026-06-10T11:30:00",
+              "scheduledArrivalUtcDateTime": "2026-06-10T15:30:00",
+              "origin": {
+                "code": "LHR",
+                "airportName": "Heathrow Airport",
+                "countryCode": "GBR"
+              },
+              "destination": {
+                "code": "JFK",
+                "airportName": "John F Kennedy International",
+                "countryCode": "USA"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sliceId": "d1bc54dd-2f06-4866-8265-ce8065bed1ed",
+      "scheduledDepartureLocalDateTime": "2026-06-15T08:15:00",
+      "scheduledDepartureUtcDateTime": "2026-06-15T12:15:00",
+      "scheduledArrivalLocalDateTime": "2026-06-15T20:10:00",
+      "scheduledArrivalUtcDateTime": "2026-06-15T19:10:00",
+      "origin": {
+        "code": "JFK",
+        "airportName": "John F Kennedy International",
+        "countryCode": "USA"
+      },
+      "destination": {
+        "code": "LHR",
+        "airportName": "Heathrow Airport",
+        "countryCode": "GBR"
+      },
+      "segments": [
+        {
+          "segmentId": "11bd2300-4fd8-4a15-ae6c-8895b8fbbc92",
+          "ordinal": 2,
+          "operatingCarrier": {
+            "flightNum": "0026",
+            "carrierCode": "VS",
+            "carrierName": "Virgin Atlantic"
+          },
+          "marketingCarrier": {
+            "flightNum": "0026",
+            "carrierCode": "VS",
+            "carrierName": "Virgin Atlantic"
+          },
+          "scheduledDepartureLocalDateTime": "2026-06-15T08:15:00",
+          "scheduledDepartureUtcDateTime": "2026-06-15T12:15:00",
+          "scheduledArrivalLocalDateTime": "2026-06-15T20:10:00",
+          "scheduledArrivalUtcDateTime": "2026-06-15T19:10:00",
+          "origin": {
+            "code": "JFK",
+            "airportName": "John F Kennedy International",
+            "countryCode": "USA"
+          },
+          "destination": {
+            "code": "LHR",
+            "airportName": "Heathrow Airport",
+            "countryCode": "GBR"
+          },
+          "legs": [
+            {
+              "legId": "92ced43c-581d-4b29-9f37-66605c999ae4",
+              "ordinal": 2,
+              "scheduledDepartureLocalDateTime": "2026-06-15T08:15:00",
+              "scheduledDepartureUtcDateTime": "2026-06-15T12:15:00",
+              "scheduledArrivalLocalDateTime": "2026-06-15T20:10:00",
+              "scheduledArrivalUtcDateTime": "2026-06-15T19:10:00",
+              "origin": {
+                "code": "JFK",
+                "airportName": "John F Kennedy International",
+                "countryCode": "USA"
+              },
+              "destination": {
+                "code": "LHR",
+                "airportName": "Heathrow Airport",
+                "countryCode": "GBR"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

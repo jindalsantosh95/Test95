@@ -1,0 +1,32 @@
+meta {
+  name: claimVSPoints
+  type: graphql
+  seq: 20
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation claimVSPoints($ticketNumber: String, $fcNumber: String) {
+    claimVSPoints(ticketNumber: $ticketNumber, fcNumber: $fcNumber) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "ticketNumber": "",
+    "fcNumber": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

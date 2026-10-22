@@ -1,0 +1,133 @@
+name: Automation - Trips UI Regression Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: "Target environment for the Trips UI tests"
+        required: true
+        default: "sit"
+        type: choice
+        options:
+          - dev
+          - sit
+          - uat
+  schedule:
+    - cron: "0 4 * * 1-5"
+
+concurrency:
+  group: trips-ui-regression-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  trips-ui-regression:
+    name: Trips UI Regression (${{ github.event.inputs.target_environment || 'sit' }})
+    environment: ${{ github.event.inputs.target_environment || 'sit' }}
+    runs-on: [self-hosted, Windows, eapi-automation]
+    timeout-minutes: 60
+    env:
+      TARGET_ENVIRONMENT: ${{ github.event.inputs.target_environment || 'sit' }}
+      TRIPS_UI_BASE_URL: ${{ vars.TRIPS_UI_BASE_URL || 'https://vaa-test1.virginatlantic.com/my-trips-dev' }}
+      TRIPS_UI_RUN_MODE: BrowserStack
+      TRIPS_UI_BROWSER: chromium
+      TRIPS_UI_HEADLESS: "true"
+      SAB_RUN_MODE: BrowserStack
+      SAB_BS_OS: Windows
+      SAB_BS_OS_VERSION: "11"
+      SAB_BS_BROWSER: chrome
+      SAB_BS_BROWSER_VERSION: latest
+      SAB_BS_SESSION_NAME: Trips UI - Regression Run
+      BROWSERSTACK_PROJECT: Virgin Atlantic Web - Trips UI
+      BROWSERSTACK_BUILD: Trips UI - ${{ github.run_number }}
+      BROWSERSTACK_LOCAL: "false"
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      KeyVaultUrl: ${{ secrets.KEY_VAULT_URL }}
+      KeyVaultTenantId: ${{ secrets.KEY_VAULT_TENANT_ID }}
+      KeyVaultClientId: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+      KeyVaultClientSecret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+      HAS_SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_TRIPS != '' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore VAA.EAPI.Automation/VAA.EAPI.Automation.Trips.UI/VAA.EAPI.Automation.Trips.UI.csproj
+
+      - name: Build
+        run: dotnet build VAA.EAPI.Automation/VAA.EAPI.Automation.Trips.UI/VAA.EAPI.Automation.Trips.UI.csproj -c Release --no-restore
+
+      - name: Validate BrowserStack credentials
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:BROWSERSTACK_USERNAME) -or [string]::IsNullOrWhiteSpace($env:BROWSERSTACK_ACCESS_KEY)) {
+            throw "BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY secrets are required."
+          }
+
+      - name: Run Trips UI tests
+        id: run_tests
+        shell: pwsh
+        working-directory: VAA.EAPI.Automation/VAA.EAPI.Automation.Trips.UI
+        run: |
+          New-Item -ItemType Directory -Force -Path TestResults | Out-Null
+          dotnet test .\VAA.EAPI.Automation.Trips.UI.csproj -c Release --no-build `
+            --filter "Category=Trips-UI-Regression" `
+            --results-directory TestResults `
+            --logger "trx;LogFileName=trips-ui-regression.trx"
+
+      - name: Analyse test results
+        if: always()
+        shell: pwsh
+        run: |
+          $trx = "VAA.EAPI.Automation/VAA.EAPI.Automation.Trips.UI/TestResults/trips-ui-regression.trx"
+          if (Test-Path -LiteralPath $trx) {
+            ./scripts/analyse-test-run-results.ps1 -TrxPath $trx -SuiteName "Trips UI Regression" -EnvironmentName $env:TARGET_ENVIRONMENT | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          } else {
+            "## Trips UI Regression`n`nNo TRX result was produced." | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          }
+
+      - name: Upload Trips UI results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trips-ui-regression-results-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            VAA.EAPI.Automation/VAA.EAPI.Automation.Trips.UI/TestResults/**
+            VAA.EAPI.Automation/VAA.EAPI.Automation.Trips.UI/TestResults/playwright-*/**
+          retention-days: 7
+
+      - name: Notify Slack
+        if: always() && env.HAS_SLACK_WEBHOOK == 'true'
+        shell: pwsh
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TRIPS }}
+          JOB_STATUS: ${{ job.status }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          $emoji = if ($env:JOB_STATUS -eq 'success') { ':white_check_mark:' } elseif ($env:JOB_STATUS -eq 'failure') { ':x:' } else { ':warning:' }
+          $payload = @{ text = "$emoji Trips UI Regression ($env:JOB_STATUS) - $($env:TARGET_ENVIRONMENT)`n$($env:RUN_URL)" } | ConvertTo-Json
+          Invoke-RestMethod -Method Post -Uri $env:SLACK_WEBHOOK_URL -ContentType 'application/json' -Body $payload
+
+      - name: Clean generated runner files
+        if: always()
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $automationRoot = Join-Path $env:GITHUB_WORKSPACE "VAA.EAPI.Automation"
+          if (Test-Path -LiteralPath $automationRoot) {
+            Get-ChildItem -LiteralPath $automationRoot -Directory -Recurse -Force -ErrorAction SilentlyContinue |
+              Where-Object { $_.Name -in @("bin", "obj", "TestResults") } |
+              Sort-Object { $_.FullName.Length } -Descending |
+              ForEach-Object {
+                Remove-Item -LiteralPath $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
+              }
+          }

@@ -1,0 +1,86 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Offer*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Retail.Offer*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Offer.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Offer*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Retail.Offer*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Offer.bruno
+
+variables: 
+  - group: AzureWebJobsStorage
+  - group: APIM_IP
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'    
+  - name: rootPath
+    value: 'VAA.EAPI.Microservices'
+  - name: subRootPath
+    value: 'VAA.EAPI.Microservices'    
+  - name: applicationName
+    value: 'Retail.Offer'
+  - name: functionAppName_DEV
+    value: 'AVADEUNAFNOFFERMICROSERV'
+  - name: functionAppName_SIT
+    value: 'AVATEUNAFNOFFERMICROSERV'
+  - name: functionAppName_UAT
+    value: 'AVASEUNAFNOFFERMICROSERV'
+  - name: functionAppName_PRD
+    value: 'AVAPEUNAFNOFFERMICROSERV'
+  - name: slotName
+    value: 'DS'     
+  - name: testRepoPath_SIT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'   
+  - name: testRepoPath_UAT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'           
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      applicationName: $(applicationName)
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_slot.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)      
+      applicationName: $(applicationName)   
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)         
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_PRD: $(functionAppName_PRD)  
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)
+      AzureWebJobsStorage_DEV: $(AzureWebJobsStorage_Offer_DEV)
+      AzureWebJobsStorage_SIT: $(AzureWebJobsStorage_Offer_SIT)
+      AzureWebJobsStorage_UAT: $(AzureWebJobsStorage_Offer_UAT)   
+      AzureWebJobsStorage_PROD: $(AzureWebJobsStorage_Offer_PROD)

@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+	  <PackageReference Include="CSharpFunctionalExtensions" Version="3.6.0" />
+	  <PackageReference Include="FluentValidation" Version="11.10.0" />
+	  <PackageReference Include="MediatR" Version="12.4.1" />
+	  <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.50.0" />
+	  <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Abstractions" Version="1.3.0" />
+	  <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.2.0" />
+	  <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.5" />
+  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\VAA.EAPI.Common\VAA.EAPI.Common.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.Domain\VAA.EAPI.Domain.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.Infrastructure\VAA.EAPI.Infrastructure.csproj" />
+	</ItemGroup>
+  <ItemGroup>
+    <None Update="host.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+    <None Update="Response.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
+  </ItemGroup>
+</Project>

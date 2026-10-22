@@ -1,0 +1,73 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/tripmicroservice/tripsList/search HTTP/1.1
+
+$[?(@.confirmationNum == 'AB1CDE')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "tripListResponse": [
+    {
+      "tripSearchRequest": {
+        "using": "PNR",
+        "confirmationNum": "AB1CDE",
+        "givenNames": "TEST",
+        "surname": "USER"
+      },
+      "tripDetails": {
+        "booking": {
+          "id": "trip-ab1cde",
+          "pos": { "countryCode": "GB", "currencyCode": "GBP" },
+          "reservationType": "STD",
+          "passengers": [
+            { "givenNames": "TEST", "surname": "USER", "id": "p1" }
+          ],
+          "product": [
+            {
+              "bookingType": "AIRLINE",
+              "status": "CONFIRMED",
+              "reference": {
+                "pnrLocator": "AB1CDE",
+                "orderId": "ORDER-THREE",
+                "airlineDesignator": "VS",
+                "createdDate": "2025-10-11T00:00:00"
+              },
+              "slices": [
+                {
+                  "id": "1",
+                  "scheduledDepartureLocalDateTime": "{DateTime(yyyy-MM-ddT20:30:00, 12, day)}",
+                  "scheduledDepartureUtcDateTime": "{DateTime(yyyy-MM-ddT00:30:00, 13, day)}",
+                  "scheduledArrivalLocalDateTime": "{DateTime(yyyy-MM-ddT09:40:00, 13, day)}",
+                  "scheduledArrivalUtcDateTime": "{DateTime(yyyy-MM-ddT13:40:00, 13, day)}",
+                  "origin": { "code": "MCO", "terminalName": "Terminal 2" },
+                  "destination": { "code": "MAN", "terminalName": "Terminal 4" },
+                  "segments": [
+                    {
+                      "id": "1",
+                      "ordinal": 0,
+                      "scheduledDepartureLocalDateTime": "{DateTime(yyyy-MM-ddT20:30:00, 12, day)}",
+                      "scheduledDepartureUtcDateTime": "{DateTime(yyyy-MM-ddT00:30:00, 13, day)}",
+                      "scheduledArrivalLocalDateTime": "{DateTime(yyyy-MM-ddT09:40:00, 13, day)}",
+                      "scheduledArrivalUtcDateTime": "{DateTime(yyyy-MM-ddT13:40:00, 13, day)}",
+                      "scheduledArrivalBasedOnDepartureLocalDateTime": "{DateTime(yyyy-MM-ddT09:40:00, 13, day)}",
+                      "operatingCarrier": { "carrierCode": "VS", "flightNumber": "076" },
+                      "marketingCarrier": { "carrierCode": "VS", "flightNumber": "076" },
+                      "origin": { "code": "MCO", "terminalName": "Terminal 2" },
+                      "destination": { "code": "MAN", "terminalName": "Terminal 4" },
+                      "legs": [
+                        { "id": "1", "status": "ON_TIME", "origin": { "code": "MCO", "terminalName": "Terminal 2" }, "destination": { "code": "MAN", "terminalName": "Terminal 4" } }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "status": 200
+      }
+    }
+  ]
+}

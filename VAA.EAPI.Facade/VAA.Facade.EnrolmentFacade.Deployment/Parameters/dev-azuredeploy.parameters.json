@@ -1,0 +1,140 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "AppServicePlanName": {
+      "value": "AVADEUNASPEAPI"
+    },
+    "EnvironmentName": {
+      "value": "DEV"
+    },
+    "FunctionAppName": {
+      "value": "AVADEUNAFNENROLMENT"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-D-EUN-ENTERPRISEAPI"
+    },
+    "AppInsightsName": {
+      "value": "AVADEUNAICUSTOMERMGMT"
+    },
+    "AppsettingAppInsightsKey": {
+      "value": "7cae02b5-44f8-430c-8263-889548b786e0"
+    },
+    "AppSettingAzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNENROLMENT-Config-StorageAccount/)"
+    },
+    "AppsettingAuthorizationTokenType": {
+      "value": "Bearer"
+    },
+    "AppsettingAzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNENROLMENT-Config-AzureAd-ClientId/)"
+    },
+    "AppsettingAzureAd:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AppsettingAuthenticationUrl": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AppsettingAzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AppsettingAzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "AppsettingRetrieveEnrolmentAPIAuthority": {
+      "value": "client_credentials"
+    },
+    "AppsettingRetrieveEnrolmentAPIClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNENROLMENT-Config-RetrieveEnrolmentApiClientId/)"
+    },
+    "AppsettingRetrieveEnrolmentAPIClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNENROLMENT-Config-RetrieveEnrolmentApiClientSecret/)"
+    },
+    "AppsettingRetrieveCustomerApiResource": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNENROLMENT-Config-RetrieveCustomerApiResource/)"
+    },
+    "AppsettingRetrieveCustomerEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/dev/microservices/Enrolment"
+    },    
+    "AppsettingRetryAttempts": {
+      "value": "3"
+    },
+    "AppsettingRetrieveEnrolmentOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNENROLMENT-Config-RetrieveEnrolmentOcpKey/)"
+    },
+    "AppsettingAzureADEndpoint": {
+      "value": "https://login.microsoftonline.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AppsettingFUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppsettingFUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "AppsettingEnrolmentSubject": {
+      "value": "Enrolment"
+    },
+    "AppsettingEventType": {
+      "value": "EnrolmentEventType"
+    },
+    "AppsettingAzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNENROLMENT-Config-AzureAdB2C-ClientId/)"
+    },
+    "AppsettingAzureAdB2C:Instance": {
+      "value": "https://b2cEAPIAzureAD.b2clogin.com"
+    },
+    "AppsettingAzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNENROLMENT-Config-AzureAdB2C-TenantId/)"
+    },
+    "AppsettingAuthUrl": {
+      "value": "https://login.staging.loyalty.virgin.com/oauth/token%22"
+    },
+    "AppsettingAzureAdB2C:SignUpSignInPolicyId": {
+      "value": "B2C_1_eapib2cdemoSignin"
+    },
+    "AppsettingGraphQL:PnrLinkMutationEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/dev/GraphQL/MyAccount/public"
+    },
+    "AppsettingAuthAudience": {
+      "value": "https://api.staging.loyalty.virgin.com/"
+    },
+    "AppsettingAuthClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNENROLMENT-Config-AuthClientID/)"
+    },
+    "AppsettingAuthClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNENROLMENT-Config-AuthClientSecret/)"
+    },
+    "AppsettingAzureAd:Domain": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Customer API AFN",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNCUSTOMERAPI\\\"\\\\]}\\\"\""
+      }
+    },
+    //slot settings
+    "vaultName": {
+      "value": "AVADEUNKVEAPIS"
+    },
+    "storageAccountName": {
+      "value": "avadeunstenrofacadapi"
+    },
+    "SlotName": {
+      "value": "DS"
+    }
+  }
+}

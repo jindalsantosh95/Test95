@@ -1,0 +1,69 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  applicationName: ''
+  functionAppName: ''
+  environment: ''
+  location: ''
+  resourceGroupName: ''
+  serviceConnection: ''
+  subscriptionId: ''
+  APIM_IP: ''
+ 
+
+jobs: 
+- deployment: '${{parameters.environment}}'      
+  
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}  
+  
+  environment: ${{parameters.environment}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop      
+
+        # Task to create the Function App      
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create Function App'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.serviceConnection}}
+            subscriptionid: ${{parameters.subscriptionId}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}
+            location:  ${{parameters.location}}
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy.json
+            csmParametersFile: $(Pipeline.workspace)/drop/Parameters/${{parameters.environment}}-azuredeploy.parameters.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -IPRestriction ${{parameters.APIM_IP}}     
+
+        # Task to stop the Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop Azure App Service: ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName}}
+
+        # Task to deploy the Function App
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy to Function APP' 
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            appType: 'functionApp'
+            appName: ${{parameters.functionAppName}}
+            deployToSlotOrASE: true
+            resourceGroupName: ${{parameters.resourceGroupName}}
+            package: '$(Pipeline.workspace)/drop/*.zip'
+            deploymentMethod: 'runFromPackage'     
+
+        # Task to start the Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start Azure App Service: ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionAppName}}
+    

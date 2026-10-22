@@ -1,0 +1,16 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/loyaltymembermanagement/HouseHoldAccountValidation HTTP/1.1
+
+$[?(@.individualFcNumber == 'invalid-member')]
+
+###Response
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json; charset=utf-8
+
+[
+  {
+    "code": "10164",
+    "message": "Invited FC member number is not recognised",
+    "errorSource": "Consuming application"
+  }
+]

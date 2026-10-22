@@ -1,0 +1,156 @@
+{
+  "prNumber": 1731,
+  "branch": "codex/vaa-eapi-under18-enrolment-diagram-retry-15",
+  "base": "main",
+  "headSha": "ec641e568e602a60027d13ddbfe841bd64ea1f2b",
+  "runId": "33498885691",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/33498885691",
+  "collectedAtUtc": "2026-09-01T10:46:02.778Z",
+  "approved": false,
+  "reviewDecision": null,
+  "approvals": [],
+  "unresolvedAiThreads": [
+    {
+      "threadId": "PRRT_kwDORKRjBc6eEd4g",
+      "replyToCommentDatabaseId": 3903282859,
+      "path": "VAA.EAPI.Microservices/VAA.EAPI.Infrastructure.Email.Tests/EmailRecipientPolicyTests.cs",
+      "line": 18,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1731#discussion_r3903282859",
+      "author": "copilot-pull-request-reviewer",
+      "body": "This test case expects suppression for `@YOUNGFLYER.VIRGIN.com`, but EmailRecipientPolicy only suppresses the exact dummy domain `U18.virgin.com` (case-insensitive). As written, this InlineData will fail (or will encode an incorrect contract).",
+      "decision": "valid",
+      "resolutionComment": "Replaced the unsupported YOUNGFLYER.VIRGIN.com test input with a mixed-case U18.virgin.com address, preserving case-insensitivity coverage while matching the policy's exact dummy-domain contract."
+    },
+    {
+      "threadId": "PRRT_kwDORKRjBc6eEd5B",
+      "replyToCommentDatabaseId": 3903282902,
+      "path": "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Loyalty.Identity.bruno/B2C Account/Register Young Flyer.bru",
+      "line": 33,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1731#discussion_r3903282902",
+      "author": "copilot-pull-request-reviewer",
+      "body": "The RegisterYoungFlyer handler requires the managed-child dummy email to be marked non-deliverable (`Valid == \"N\"`). This Bruno request omits `valid`, so it will be rejected as an invalid_request when exercised.",
+      "decision": "valid",
+      "resolutionComment": "Added valid: N to the Young Flyer Bruno email entry so the example satisfies the handler's managed-child non-deliverable email contract."
+    }
+  ],
+  "checks": {
+    "combinedStatus": "pending",
+    "checkRuns": [
+      {
+        "name": "detect-scopes",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33498993929/job/99827786086"
+      },
+      {
+        "name": "verify",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33498993782/job/99827773098"
+      },
+      {
+        "name": "Verify and complete goal",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33499012983/job/99827744372"
+      },
+      {
+        "name": "qa-rob-ai",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33499012983/job/99827743621"
+      },
+      {
+        "name": "dev-jim-ai",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33499012983/job/99827742803"
+      },
+      {
+        "name": "verify-docs-agent-loop",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33498993943/job/99827723141"
+      },
+      {
+        "name": "build",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33498993917/job/99827714809"
+      },
+      {
+        "name": "Wiz Vulnerability Scanner",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99827692881"
+      },
+      {
+        "name": "Wiz IaC Scanner",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99827692507"
+      },
+      {
+        "name": "Wiz Data Scanner",
+        "status": "completed",
+        "conclusion": "neutral",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99827692399"
+      },
+      {
+        "name": "Wiz Secret Scanner",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/runs/99827692376"
+      },
+      {
+        "name": "review",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33498993982/job/99827686784"
+      },
+      {
+        "name": "review-team-labels",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33498994207/job/99827686074"
+      },
+      {
+        "name": "harness-coverage",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33498993941/job/99827684597"
+      },
+      {
+        "name": "closed-loop-gate",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33498993824/job/99827684056"
+      },
+      {
+        "name": "high-risk-autolabel",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/33498993750/job/99827683895"
+      }
+    ]
+  },
+  "resourceUsage": {
+    "workflow": "sequence-goal-pr-review-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 2585955,
+      "inputTokens": 2582062,
+      "cachedInputTokens": 2529899,
+      "outputTokens": 3893,
+      "reasoningOutputTokens": 362,
+      "estimatedUsd": 3.226714
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "2,585,955 tokens (2,582,062 input, 2,529,899 cached + 3,893 output, 362 reasoning); $3.23 USD"
+  }
+}

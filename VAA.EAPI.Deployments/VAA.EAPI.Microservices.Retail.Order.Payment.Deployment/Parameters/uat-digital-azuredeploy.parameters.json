@@ -1,0 +1,444 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "UAT"
+    },
+    "AppServicePlanName": {
+      "value": "vatueunaspndc01"
+    },
+    "functionappName": {
+      "value": "va-tu-eun-paymentms-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-tu-eun-payment-kv-01"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "Retail.Order.Payment",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "UAT",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vatueunpaymentmssa01"
+    },
+    "AppInsightsName": {
+      "value": "va-tu-eun-paymentms-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": "/subscriptions/136c18f0-0f7c-4b20-b245-8af5688551b0/resourceGroups/rg-va-d-eun-law-018/providers/microsoft.operationalinsights/workspaces/avadeunlaw018"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    // OpenApi
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Order Payment Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to add payment information of a customer&apos;s booking  against order reference in Single order view system"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": "https://digital-test.virginatlantic.com/dev/digital/orderpaymentmicroservice/,https://digital-test.virginatlantic.com/sit/digital/orderpaymentmicroservice/,https://digital-test.virginatlantic.com/uat/digital/orderpaymentmicroservice/,https://digital.virginatlantic.com/orderpaymentmicroservice/"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "OrderPaymentResponseUrl": {
+      "value": "https://digital-test.virginatlantic.com/uat/digital/orderpaymentmicroservice/order/payment/status/{correlationid}"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-AzureAd-ClientID/)"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-ServiceBusConnectionString/)"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "value": "Payment"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "OrderPaymentEventStore"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "value": "OrderPaymentResponse"
+    },
+    "Appsetting:ReferenceDataMicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-ReferenceDataMicroServiceDBKey/)"
+    },
+    "Appsetting:CommonCachingSlidingExpirationInDay": {
+      "value": "1"
+    },
+    "Appsetting:commoncachingabsoluteexpirationinday": {
+      "value": "1"
+    },
+    "Appsetting:OrderPaymentStatusEventHandlerTopicName": {
+      "value": "Payment"
+    },
+    "Appsetting:OrderPaymentStatusEventSubscriptionName": {
+      "value": "PaymentStatusSubscriber"
+    },
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-AzureAd-ClientID/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:MockOrderPaymentService": {
+      "value": "false"
+    },
+    "Appsetting:EnableMultiplePayment": {
+      "value": "false"
+    },
+    "Appsetting:PaymentStatusRetryAfterValue": {
+      "value": "2"
+    },
+    "Appsetting:VoidTransactionSubscriptionName": {
+      "value": "VoidTransactionSubscriber"
+    },
+    "Appsetting:DeltaMpiApiAuthority": {
+      "value": "https://stage-snsapigateway2.vs01.vs.air4.com/v1/oauth/token"
+    },
+    "Appsetting:DeltaMPIApiClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Delta-MPIApiClientId/)"
+    },
+    "Appsetting:DeltaMPIApiClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Delta-MPIApiClientSecret/)"
+    },
+    "Appsetting:DeltaMpiApiUrl": {
+      "value": "https://stage-snsapigateway2.vs01.vs.air4.com/paymentManagement/v1/formsOfPayments/3ds/MPI"
+    },
+    "Air4HppPaymentLink": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-Air4HppPaymentLink/)"
+    },
+    "Appsetting:Air4PaymentStagingEnvPar": {
+      "value": "stga-paymentapi.vs.air4.com"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "DlPaymentAuthenticationUrl": {
+      "value": "https://stage-snsapigateway.vs01.vs.air4.com/v1/oauth/token"
+    },
+    "DlPaymentApiApplicationId": {
+      "value": "DC"
+    },
+    "DlPaymentApiChannelId": {
+      "value": "DFWEB"
+    },
+    "DlPaymentApiGenerateRefIdUri": {
+      "value": "https://stage-snsapigateway.vs01.vs.air4.com/paymentManagement/v1/paymentReferenceId"
+    },
+    "DlPaymentClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-DlPaymentClientId/)"
+    },
+    "DlPaymentClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-DlPaymentClientSecret/)"
+    },
+    "PRIMockEnabled": {
+      "value": "false"
+    },
+    "DlPaymentobjectName": {
+      "value": "FormOfPayment"
+    },
+    "DlPaymentApiGetPaymentDetailsUrl": {
+      "value": "https://stage-snsapigateway.vs01.vs.air4.com/paymentManagement/v1/paymentDetails/{paymentReferenceId}"
+    },
+    "DlPaymentDetailMockEnabled": {
+      "value": "false"
+    },
+    "DlPaymentPurchasePath": {
+      "value": "DFWEBBOOKING"
+    },
+    "DlPaymentApiFormsOfPaymentsUrl": {
+      "value": "https://stage-snsapigateway.vs01.vs.air4.com/paymentManagement/v1/formsOfPayments"
+    },
+    "DlPaymentApiVoidUrl": {
+      "value": "https://stage-snsapigateway.vs01.vs.air4.com/paymentManagement/v1/formsOfPayments/void"
+    },
+    "MockVoidPaymentService": {
+      "value": "false"
+    },
+    "DlPaymentApiCaptureUrl": {
+      "value": "https://stage-snsapigateway.vs01.vs.air4.com/paymentManagement/v1/formsOfPayments/capture"
+    },
+    "MspFinancialInstAccountHolderName": {
+      "value": "VAA MSP"
+    },
+    "MspFinancialInstProviderId": {
+      "value": "000"
+    },
+    "MspFinancialInstReturnUrl": {
+      "value": "https://stage-snsapigateway2.vs01.vs.air4.com/paymentManagement/v1/formsOfPayments"
+    },
+    "MspFinancialInstcountryCode": {
+      "value": "GB"
+    },
+    "DlGooglePay": {
+      "value": "GOOGLEPAY"
+    },
+    "DlformsOfPaymentsGooglePay": {
+      "value": "GOOGLE_PAY"
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+
+    //Insurance Purchase
+    "DlPaymentApiPurchaseInsuranceUri": {
+      "value": "https://stage-snsapigateway.vs01.vs.air4.com/paymentManagement/v1/purchaseMerchProducts"
+    },
+    "AllianzProviderName": {
+      "value": "Virgin Atlantic"
+    },
+    "DlPurchaseInsuranceUsername": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/avaseunafninsurancems-AllianzQuoteCreateUsername/)"
+    },
+    "DlPurchaseInsurancePassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/avaseunafninsurancems-AllianzQuoteCreatePassword/)"
+    },
+    "DlPaymentClearDetailsUrl": {
+      "value": "https://stage-snsapigateway.vs01.vs.air4.com/paymentManagement/v1/clearPciData"
+    },
+    "ServiceBusTopicClearPaymentDetails": {
+      "value": "clearpaymentdetailsmessage"
+    },
+    "EnableClearCVV": {
+      "value": "true"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+
+    //CPD
+    "CPDSaltkey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-CPDSaltKey/)"
+    },
+    "CPDAuthUsername": {
+      "value": "virgin"
+    },
+    "CPDAuthPassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-CPDPassword/)"
+    },
+    "CPDInitializeRequestUrl": {
+      "value": "https://va1.uat-01.cellpointmobile.net/mpoint/initialize-payment"
+    },
+    "CPDAuthorizeRequestUrl": {
+      "value": "https://va1.uat-01.cellpointmobile.net/mpoint/authorize-payment"
+    },
+    "CPDCaptureRequestUrl": {
+      "value": "https://va1.uat-01.cellpointmobile.net/mpoint/update-order-data"
+    },
+    "CPDRefundRequestUrl": {
+      "value": "https://va1.uat-01.cellpointmobile.net/mpoint/refund"
+    },
+    "CPDGetTransactionStatusRequestUrl": {
+      "value": "https://va1.uat-01.cellpointmobile.net/mpoint/get-transaction-status"
+    },
+    "PaymentCollection": {
+      "value": "PaymentStoreCollection"
+    },
+    "PaymentDatabaseName": {
+      "value": "PaymentDB_UAT"
+    },
+    "PaymentDBEndpoint": {
+      "value": "https://va-dv-eun-payment-cosdb-01.documents.azure.com:443/"
+    },
+    "CPDAccount": {
+      "value": "123000"
+    },
+    "CPDMotoAccount": {
+      "value": "123001"
+    },
+    "CPDClientId": {
+      "value": "12300"
+    },
+    "CpdBlobStorageUri": {
+      "value": "https://vatueunpaymentmssa01.blob.core.windows.net"
+    },
+    "CpdContainerName": {
+      "value": "cpddata"
+    },
+    "CpdCountryBlob": {
+      "value": "Countries.json"
+    },
+    "CpdBlobStorageSaSKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-CpdBlobStorageSaSKey)"
+    },
+    "RetryCount": {
+      "value": "3"
+    },
+    "BlobConnString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-StorageAccount/)"
+    },
+    "RpaNtdhContainerName": {
+      "value": "rpa-ntdh-feed"
+    },
+    "GetPaymentDocQuery": {
+      "value": "SELECT * from c where c.OrderId = @OrderId and c.Status not in ('Payment Not Authorized', 'Payment authorized') and c.DocType != 'PaymentRefundDoc'"
+    },
+    "GetRefundPaymentDocQuery": {
+      "value": "SELECT * from c where c.OrderId = @OrderId and c.DocType = 'PaymentRefundDoc'"
+    },
+    "VredAuthenticationUrl": {
+      "value": "https://idp.b2b.model.red.virgin.com/oauth2/token"
+    },
+    "VredApiClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-VredApiClientId)"
+    },
+    "VredApiClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-VredApiClientSecret)"
+    },
+    "VredEngagementUrl": {
+      "value": "https://b2b.model.red.virgin.com/v1/engagement"
+    },
+    "CreatePaymentDocumentResponseUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/digital/orderpaymentmicroservice/CreatePaymentDocument/Response/{correlationid}"
+    },
+    "ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "ResponsePollingCount": {
+      "value": "50"
+    },
+    "SynchronyAuthenticationUrl": {
+      "value": "https://api-stg.syf.com/v1/oauth2/token"
+    },
+    "SynchronyApiClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-SynchronyApiClientId)"
+    },
+    "SynchronyApiClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-SynchronyApiClientSecret)"
+    },
+    "SynchronyDataShareAPIUrl": {
+      "value": "https://api-stg.syf.com/v1/credit/apply/datashare/"
+    },
+    "SynchronyEncryptionPublicKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-payment-kv-01.vault.azure.net/secrets/va-tu-eun-paymentms-fn-01-Config-SynchronyPublicKey)"
+    },
+    "SynchronyAcorId": {
+      "value": "ARVRNCCF183539092610"
+    },
+    "SynchronySiteCode": {
+      "value": "VAOM100SC"
+    },
+    "MobileViewPaymentUrl": {
+      "value": "https://stg.virginatlantic.com/flight-only/mobile-payments"
+    },
+    "ARCEcomAccount": {
+      "value": "123002"
+    },
+    "ARCMotoAccount": {
+      "value": "123003"
+    },
+
+    //Holiday Payment Gateway
+    "CjsCheckoutPaymentAppUrl": {
+      "value": "https://stg.virginatlantic.com/cjs-checkout-api/v2/payment/app"
+    },
+    "CjsCheckoutPaymentAppVersion": {
+      "value": "1.0.0"
+    },
+    "MmbQueryLoginUrl": {
+      "value": "https://vsolpublic-uat.webdev.vholsinternal.co.uk/mmb-query-api/login"
+    },
+    "CjsCheckoutPaymentAmountUrl": {
+      "value": "https://stg.virginatlantic.com/cjs-checkout-api/v2/cpd/payment/amount"
+    }
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    // Deployment Settings
+    "FunctionAppName": {
+      "value": "AVASEUNAFNWEBBFF"
+    },
+    "EnvironmentName": {
+      "value": "UAT"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPORDERMS"
+    },
+    "AppInsightsName": {
+      "value": "AVASEUNAIWEBFACADE"
+    },
+    "storageAccountName": {
+      "value": "avaseunstwebfacade"
+    },
+    "vaultName": {
+      "value": "AVASEUNKVEMS"
+    },
+
+    "ResourceGroupSubscriptionId": {
+      "value": "https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "BFF for Web Search and Book",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    // Azure Function Settings
+    "AppSetting:AzureWebJobsStorage": {
+      "value": ""
+    },
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSetting:WEBSITE_CONTENTSHARE": {
+      "value": "avaseunafnwebbff"
+    },
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "AppSetting:OperationsVisibilityMode": {
+      "value": "Public|Secure"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+
+    // Azure Active Directory
+    "AppSetting:AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AppSetting:AAD:TenantId": {
+      "value": "6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8"
+    },
+    "AppSetting:AAD:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    // Graph QL Microservice
+    "AppSetting:GraphQL:AppID": {
+      "value": ""
+    },
+    "AppSetting:GraphQL:Url": {
+      "value": "https://testresources.virginatlantic.com/uat/GraphQL/v1/public"
+    },
+    "AppSetting:GraphQL:ShowMockResponse": {
+      "value": "true"
+    },
+    "AppSetting:GraphQL:SearchOffersPqId": {
+      "value": "searchOffersBFF"
+    },
+    "AppSetting:GraphQL:SearchOffersNextPqId": {
+      "value": "searchOffersNextBFF"
+    },
+    "AppSetting:HttpClientTimeOut": {
+      "value": "00:01:30"
+    },
+    "AppSetting:GraphQL:RetrieveBasketPqId": {
+      "value": "retrieveBasket"
+    },
+    "AppSetting:GraphQL:SearchSummaryPqId": {
+      "value": "offerPrice"
+    },
+
+    // Call Back Translation
+    "AppSetting:PostbackUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/SearchAndBook"
+    },
+
+
+    // Delay used by microservice connecter when making get call after post
+    "AppSetting:TimeToWaitBeforeNextRecall": {
+      "value": ""
+    },
+
+    // Redis cache
+    "AppSetting:RedisCacheConnectionString": {
+      "value": ""
+    },
+    "AppSetting:RedisCacheExpiry": {
+      "value": ""
+    },
+    // test basket settings
+    "KeyVaultUri": {
+      "value": "https://avaseunkvems.vault.azure.net/"
+    },
+    "MicroServiceClientId": {
+      "value": "Common-Config-AutomationTestClientId"
+    },
+    "MicroServiceClientSecret": {
+      "value": "Common-Config-AutomationTestClientSecret"
+    },
+    "BasketUri": {
+      "value": "https://Testresources.virginatlantic.com/UAT/basketmicroservice/basket"
+    },
+    "OfferSubscriptionAutomationKey": {
+      "value": "AVASEUNAFNOFFERMICROSERV-Subscription-Automation-Key"
+    },
+    "BasketSubscriptionAutomationKey": {
+      "value": "AVASEUNAFNBASKETMICROSERV-Subscription-Automation-Key"
+    },
+    //Basket Links
+    "BasketLink": {
+      "value": "https://Testresources.virginatlantic.com/uat/SearchAndBook/basket"
+    },
+    "ContactLink": {
+      "value": "https://Testresources.virginatlantic.com/uat/SearchAndBook/contact"
+    },
+    "TermsLink": {
+      "value": "https://Testresources.virginatlantic.com/uat/SearchAndBook/terms"
+    },
+    "PassengerLink": {
+      "value": "https://Testresources.virginatlantic.com/uat/SearchAndBook/passenger/"
+    },
+    "BookCreateOrderPqId": {
+      "value": "bookOrderCreate"
+    },
+    "OrderConfirmationMockResponse": {
+      "value": "false"
+    },
+
+    //payment
+    "OrderPaymentRefIdPqId": {
+      "value": "orderPaymentReferenceId"
+    },
+    "PaymentRefIdRequestMockResponse": {
+      "value": "false"
+    },
+    "BffPaymentConfirmationLink": {
+      "value": "https://testresources.virginatlantic.com/uat/searchandbook/confirmation"
+    },
+    "BffPaymentAmountLink": {
+      "value": "https://testresources.virginatlantic.com/uat/searchandbook/payment/amount"
+    },
+    "BffPaymentLink": {
+      "value": "https://testresources.virginatlantic.com/uat/searchandbook/payment"
+    },
+    "OrderResponsePqId": {
+      "value": "orderResponse"
+    },
+    "OrderConfirmationMockResponseFromCache": {
+      "value": false
+    }
+  }
+}

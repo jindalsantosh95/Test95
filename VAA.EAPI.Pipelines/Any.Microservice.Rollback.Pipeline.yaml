@@ -1,0 +1,20 @@
+variables: 
+  - group: Rollback
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentSpecification
+    value: 'windows-latest'    
+
+stages:
+  # Rollback Pipeline
+  - stage: 'Rollback'
+    displayName: 'Rollback' 
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/rollback.yaml   
+        parameters:
+          agentPool: $(agentPool)
+          agentSpecification: $(agentSpecification)        
+          environment: $(environment)
+          functionAppName: $(functionAppName)            
+          resourceGroupName: $(resourceGroupName)
+          serviceConnection: $(serviceConnection)

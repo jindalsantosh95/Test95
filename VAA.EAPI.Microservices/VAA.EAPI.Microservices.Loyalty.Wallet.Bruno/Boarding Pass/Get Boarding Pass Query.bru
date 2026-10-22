@@ -1,0 +1,92 @@
+meta {
+  name: Get Boarding Pass Query
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query GetBoardingPass {
+      GetBoardingPass(
+          pnrLocator: ""
+          originCode: ""
+          givenNames: ""
+          surname: ""
+      ) {
+          checkInStatus
+          boardingPasses {
+              pnrLocator
+              givenNames
+              surname
+              passengerNIN
+              seatNumber
+              zone
+              terminal
+              operatingAirlineName
+              marketingAirlineName
+              operatingFlightNumber
+              marketingFlightNumber
+              destinationAirportCode
+              originAirportCode
+              departureDateTime
+              departureLocal
+              qrCodeData
+              verificationStatusMessage
+              templateCode
+              cabinName
+              gate
+              boardingTime
+              boardingTimeLocalTime
+              showSkyPriority
+              showTsaPre
+              flightStatusCode
+              infantName
+              checkedIn
+            	tierCode
+            	androidBoardingPassWalletLink
+            	iosBoardingPassWalletLink
+              boardingPassAdaptiveLink
+          }
+      }
+  }
+  
+}
+
+tests {
+  const body = res.getBody();
+  
+  const bp = body.data.GetBoardingPass.boardingPasses[0];
+  
+  function flatten(obj, prefix = "") {
+    for (const [key, value] of Object.entries(obj)) {
+      const varName = prefix ? `${prefix}_${key}` : key;
+  
+      if (value === null || value === undefined) {
+        bru.setVar(varName, "");
+      }
+      else if (typeof value === "object" && !Array.isArray(value)) {
+        // nested object → flatten deeper
+        flatten(value, varName);
+      }
+      else if (Array.isArray(value)) {
+        // arrays → store as JSON string
+        bru.setVar(varName, JSON.stringify(value));
+      }
+      else {
+        bru.setVar(varName, value);
+      }
+    }
+  }
+  
+  flatten(bp);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

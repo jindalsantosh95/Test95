@@ -1,0 +1,31 @@
+meta {
+  name: getFlyReadyStatus
+  type: graphql
+  seq: 23
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query getFlyReadyStatus($tripReservationID: String) {
+    getFlyReadyStatus(tripReservationID: $tripReservationID) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "tripReservationID": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

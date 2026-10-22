@@ -1,0 +1,367 @@
+name: Automation - Book GraphQL Ad-hoc Journey
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: Target environment
+        required: true
+        default: sit
+        type: choice
+        options: [dev, sit, uat]
+      origin:
+        description: Origin airport code (for example LHR)
+        required: true
+        default: LHR
+        type: string
+      destination:
+        description: Destination airport code (for example JFK)
+        required: true
+        default: JFK
+        type: string
+      journey_type:
+        description: Journey type
+        required: true
+        default: Return
+        type: choice
+        options: [OneWay, Return]
+      marketing_airline:
+        description: Marketing airline used to select the offer
+        required: true
+        default: VS
+        type: choice
+        options: [VS, DL, AF, KL, KE]
+      required_operating_airline:
+        description: Optional operating airline required on a leg (use a different code for mixed-carrier journeys)
+        required: false
+        type: string
+      adults:
+        description: Adults
+        required: true
+        default: "1"
+        type: string
+      teens:
+        description: Teens
+        required: true
+        default: "0"
+        type: string
+      children:
+        description: Children
+        required: true
+        default: "0"
+        type: string
+      infants:
+        description: Infants
+        required: true
+        default: "0"
+        type: string
+      booking_type:
+        description: Booking type
+        required: true
+        default: Revenue
+        type: choice
+        options: [Revenue, Redemption, PayWithPoints]
+      customer_state:
+        description: Customer state for Revenue bookings (points bookings always log in)
+        required: true
+        default: Guest
+        type: choice
+        options: [Guest, LoggedIn]
+      loyalty_tier:
+        description: Flying Club tier for logged-in and points bookings
+        required: false
+        default: Red
+        type: choice
+        options: [Red, Silver, Gold]
+      pay_with_points_amount:
+        description: Required for PayWithPoints
+        required: false
+        type: string
+      seat_mode:
+        description: Seat selection
+        required: true
+        default: None
+        type: choice
+        options: [None, OneWay, AllSectors]
+      seat_product:
+        description: Product used when seats are selected
+        required: false
+        default: Standard Seat
+        type: choice
+        options:
+          - Standard Seat
+          - Preferred Seat - Economy Cabin
+          - Economy Delight seat
+          - Premium Economy Cabin Seat
+          - Upper Class seat
+      cabin:
+        description: Cabin used when seats are selected
+        required: false
+        default: VSCL
+        type: choice
+        options: [VSCL, VSDT, VSPE, VSUP]
+      payment_method:
+        description: Payment method
+        required: true
+        default: Card
+        type: choice
+        options: [Card, PayPal, ThreeDS]
+      hpp_mode:
+        description: HPP browser driver
+        required: true
+        default: playwright
+        type: choice
+        options: [playwright, selenium]
+      hpp_headless:
+        description: Run Playwright HPP without a visible browser
+        required: true
+        default: true
+        type: boolean
+
+concurrency:
+  group: book-graphql-ad-hoc-${{ github.actor }}
+  cancel-in-progress: false
+
+jobs:
+  run-journey:
+    name: "${{ inputs.origin }}-${{ inputs.destination }} ${{ inputs.journey_type }} (${{ inputs.target_environment }})"
+    runs-on: [self-hosted, Windows, eapi-automation]
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: powershell
+    env:
+      env: ${{ inputs.target_environment }}
+      BaseUrl: ${{ vars.BASE_URL }}
+      graphQlSearch: ${{ vars.GRAPHQL_SEARCH_PATH }}
+      graphQlBook: ${{ vars.GRAPHQL_BOOK_PATH }}
+      graphQlMyAccountPublic: ${{ vars.GRAPHQL_MYACCOUNT_PUBLIC_PATH }}
+      BookHppAutomationMode: ${{ inputs.hpp_mode }}
+      BookHppPlaywrightHeadless: ${{ inputs.hpp_headless }}
+      BOOK_AD_HOC_SCENARIO_FILE: ${{ github.workspace }}\TestInput\book-ad-hoc-scenario.json
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - name: Build and validate scenario
+        shell: powershell
+        env:
+          INPUTS_JSON: ${{ toJson(inputs) }}
+        run: |
+          $inputs = $env:INPUTS_JSON | ConvertFrom-Json
+          $passengerValues = @($inputs.adults, $inputs.teens, $inputs.children, $inputs.infants)
+          foreach ($value in $passengerValues) {
+            $parsed = 0
+            if (-not [int]::TryParse($value, [ref]$parsed) -or $parsed -lt 0) {
+              throw "Passenger counts must be whole numbers of zero or more. Invalid value: '$value'."
+            }
+          }
+          if (([int]$inputs.adults + [int]$inputs.teens + [int]$inputs.children) -lt 1) {
+            throw "At least one adult, teen or child passenger is required."
+          }
+          $requiresLogin = $inputs.booking_type -in @("Redemption", "PayWithPoints") -or $inputs.customer_state -eq "LoggedIn"
+          if ($requiresLogin -and [string]::IsNullOrWhiteSpace($inputs.loyalty_tier)) {
+            throw "A loyalty tier is required for logged-in and points bookings."
+          }
+          if ($inputs.booking_type -eq "PayWithPoints") {
+            $pointsAmount = 0
+            if ([string]::IsNullOrWhiteSpace($inputs.pay_with_points_amount) -or
+                -not [int]::TryParse($inputs.pay_with_points_amount, [ref]$pointsAmount) -or
+                $pointsAmount -le 0) {
+              throw "A points amount is required for PayWithPoints and must be a whole number greater than zero."
+            }
+          }
+
+          $scenario = [ordered]@{
+            testName = "QA ad-hoc $($inputs.origin)-$($inputs.destination) $($inputs.journey_type)"
+            origin = $inputs.origin.ToUpperInvariant()
+            destination = $inputs.destination.ToUpperInvariant()
+            journeyType = $inputs.journey_type
+            fareFamily = if ($inputs.booking_type -eq "Redemption") { "AWARDECONOMY" } else { "ECON" }
+            flightType = $inputs.marketing_airline
+            adults = [int]$inputs.adults
+            teens = [int]$inputs.teens
+            children = [int]$inputs.children
+            infants = [int]$inputs.infants
+            bookingType = $inputs.booking_type
+            paymentMethod = $inputs.payment_method
+            seatMode = $inputs.seat_mode
+            categories = @("LocalRun")
+            writeToAzure = $true
+          }
+          if ($requiresLogin) { $scenario.loyaltyTierCode = $inputs.loyalty_tier }
+          if ($inputs.customer_state -eq "LoggedIn" -and $inputs.booking_type -eq "Revenue") {
+            $scenario.isLoggedIn = $true
+            $scenario.minLoyaltyPoints = 0
+          }
+          if ($requiresLogin) { $scenario.useRetryHelperForLoyalty = $true }
+          if ($inputs.booking_type -eq "PayWithPoints") { $scenario.payWithPointsAmount = $inputs.pay_with_points_amount }
+          if ($inputs.seat_mode -ne "None") {
+            $scenario.seatProductName = $inputs.seat_product
+            $scenario.cabinName = $inputs.cabin
+            $scenario.hasPaidSeat = $true
+            $scenario.validateSeatCountInPnr = $true
+          }
+          if (-not [string]::IsNullOrWhiteSpace($inputs.required_operating_airline)) {
+            $scenario.requiredLegOperatingAirlineCode = $inputs.required_operating_airline.ToUpperInvariant()
+          }
+
+          New-Item -ItemType Directory -Path "TestInput" -Force | Out-Null
+          @{ scenarios = @($scenario) } | ConvertTo-Json -Depth 8 | Set-Content -Path $env:BOOK_AD_HOC_SCENARIO_FILE -Encoding utf8
+          $schema = "VAA.EAPI.Automation/VAA.EAPI.Automation.Book/Tests/NewBookFlow/GraphQL/EndtoEnd/e2e-scenario-schema.json"
+          $testJson = Get-Command Test-Json -ErrorAction SilentlyContinue
+          if ($null -ne $testJson) {
+            if (-not (Test-Json -Path $env:BOOK_AD_HOC_SCENARIO_FILE -SchemaFile $schema)) {
+              throw "Generated scenario does not satisfy the Book E2E schema."
+            }
+          }
+          else {
+            Write-Host "Test-Json is unavailable in Windows PowerShell; structural deserialization will be enforced by the Book test loader."
+          }
+          $codeFence = '```'
+          $summary = "## Requested Book journey`n$codeFence" + "json`n" +
+            (Get-Content $env:BOOK_AD_HOC_SCENARIO_FILE -Raw) + "`n$codeFence"
+          $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Display .NET SDK
+        run: dotnet --info
+
+      - name: Restore
+        run: dotnet restore VAA.EAPI.Automation/VAA.EAPI.Automation.Book/VAA.EAPI.Automation.Book.csproj
+
+      - name: Build
+        run: dotnet build VAA.EAPI.Automation/VAA.EAPI.Automation.Book/VAA.EAPI.Automation.Book.csproj -c Release --no-restore
+
+      - name: Run requested Book journey
+        env:
+          KeyVaultUrl: ${{ secrets.KEY_VAULT_URL }}
+          KeyVaultTenantId: ${{ secrets.KEY_VAULT_TENANT_ID }}
+          KeyVaultClientId: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+          KeyVaultClientSecret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+          HPP_PAGE_ALLOWED_ORIGINS: ${{ vars.HPP_PAGE_ALLOWED_ORIGINS || 'https://enterprisepaymentshpp-si.vs01.vs.air4.com' }}
+          HPP_HEADER_ALLOWED_ORIGINS: ${{ vars.HPP_HEADER_ALLOWED_ORIGINS || 'https://enterprisepaymentshppapi-si.vs01.vs.air4.com,https://stg.virginatlantic.com' }}
+          HppVaaDigitalFirstToken: ${{ secrets.HPP_VAA_DIGITAL_FIRST_TOKEN }}
+          HppDeltaEnterprisePaymentsToken: ${{ secrets.HPP_DELTA_ENTERPRISE_PAYMENTS_TOKEN }}
+        run: |
+          dotnet test "VAA.EAPI.Automation/VAA.EAPI.Automation.Book/VAA.EAPI.Automation.Book.csproj" `
+            -c Release `
+            --no-build `
+            --filter "Category=Book-AdHoc" `
+            --results-directory "TestResults" `
+            --logger "trx;LogFileName=Book-graphql-ad-hoc-$env:env.trx"
+
+      - name: Publish clear test summary
+        if: always()
+        run: |
+          $trxFile = Get-ChildItem -Path "TestResults" -Filter "*.trx" -File -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTimeUtc -Descending |
+            Select-Object -First 1
+
+          if ($null -eq $trxFile) {
+            "## Book GraphQL ad-hoc result`n`nNo TRX result was produced. Check the preceding setup and build steps." |
+              Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          }
+          else {
+            try {
+              [xml]$trx = Get-Content -LiteralPath $trxFile.FullName -Raw -ErrorAction Stop
+              $resultSummary = $trx.TestRun.ResultSummary
+              $counters = $resultSummary.Counters
+              if ($null -eq $resultSummary -or $null -eq $counters) {
+                throw "TRX is missing TestRun.ResultSummary.Counters."
+              }
+
+              $outcome = [string]$resultSummary.outcome
+              $total = if ($null -eq $counters.total) { 0 } else { [int]$counters.total }
+              $passed = if ($null -eq $counters.passed) { 0 } else { [int]$counters.passed }
+              $failed = if ($null -eq $counters.failed) { 0 } else { [int]$counters.failed }
+              $results = @($trx.TestRun.Results.UnitTestResult)
+              $combinedOutput = ($results | ForEach-Object {
+                "$($_.Output.StdOut)`n$($_.Output.ErrorInfo.Message)`n$($_.Output.StdErr)"
+              }) -join "`n"
+              $pnrMatches = [regex]::Matches(
+                $combinedOutput,
+                'Book PNR Detail:\s*Scenario=(?<scenario>.*?)\s*\|\s*PNR=(?<pnr>[A-Z0-9]{5,8})\s*\|\s*Last Name=(?<lastName>[^\r\n|]+)',
+                [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+
+              $lines = @(
+                "## Book GraphQL ad-hoc result",
+                "",
+                "| Result | Environment | Total | Passed | Failed |",
+                "| --- | --- | ---: | ---: | ---: |",
+                "| **$outcome** | **$env:env** | **$total** | **$passed** | **$failed** |",
+                "",
+                "### Booking confirmation"
+              )
+              if ($pnrMatches.Count -eq 0) {
+                $lines += "No PNR was captured. If the test failed, see the failure analysis below; if it passed, inspect the TRX because the reporting marker was missing."
+              }
+              else {
+                $lines += "| Scenario | PNR | Lead passenger surname |"
+                $lines += "| --- | --- | --- |"
+                foreach ($match in $pnrMatches) {
+                  $scenarioName = $match.Groups['scenario'].Value.Trim().Replace('|', '/')
+                  $pnr = $match.Groups['pnr'].Value.Trim()
+                  $lastName = $match.Groups['lastName'].Value.Trim().Replace('|', '/')
+                  $lines += "| $scenarioName | **$pnr** | **$lastName** |"
+                }
+              }
+              $lines -join "`n" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+            }
+            catch {
+              "## Book GraphQL ad-hoc result`n`nThe TRX could not be summarised: $($_.Exception.Message)`n`nThe failure analyser output follows." |
+                Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+            }
+
+            & "scripts/analyse-test-run-results.ps1" `
+              -ResultsDirectory "TestResults" `
+              -SuiteName "Book GraphQL Ad-hoc" `
+              -EnvironmentName $env:env |
+              Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          }
+
+      - name: Upload scenario and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: book-graphql-ad-hoc-${{ inputs.target_environment }}-${{ github.run_number }}
+          path: |
+            TestInput/book-ad-hoc-scenario.json
+            TestResults/*.trx
+            VAA.EAPI.Automation/TestResults/playwright/**
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Clean generated runner files
+        if: always()
+        continue-on-error: true
+        shell: powershell
+        run: |
+          $generatedPaths = @(
+            (Join-Path $env:GITHUB_WORKSPACE "TestResults"),
+            (Join-Path $env:GITHUB_WORKSPACE "TestInput")
+          )
+
+          foreach ($path in $generatedPaths) {
+            if (Test-Path -LiteralPath $path) {
+              Remove-Item -LiteralPath $path -Recurse -Force -ErrorAction SilentlyContinue
+            }
+          }
+
+          $automationRoot = Join-Path $env:GITHUB_WORKSPACE "VAA.EAPI.Automation"
+          if (Test-Path -LiteralPath $automationRoot) {
+            Get-ChildItem -LiteralPath $automationRoot -Directory -Recurse -Force -ErrorAction SilentlyContinue |
+              Where-Object { $_.Name -in @("bin", "obj", "TestResults") } |
+              Sort-Object { $_.FullName.Length } -Descending |
+              ForEach-Object {
+                Remove-Item -LiteralPath $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
+              }
+          }

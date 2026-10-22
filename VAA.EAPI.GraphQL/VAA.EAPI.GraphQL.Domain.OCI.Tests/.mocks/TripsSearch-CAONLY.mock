@@ -1,0 +1,29 @@
+###Request
+POST https://testresources.virginatlantic.com/DEV/digital/Trip/trips/search HTTP/1.1
+
+$[?(@.confirmationNum == 'CAONLY')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "booking": {
+    "id": "Test-booking-Id",
+    "product": [
+      {
+        "slices": [
+          {
+            "segments": [
+              {
+                "origin": { "countryCode": "GB" },
+                "destination": { "countryCode": "CA" }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "status": 200
+}

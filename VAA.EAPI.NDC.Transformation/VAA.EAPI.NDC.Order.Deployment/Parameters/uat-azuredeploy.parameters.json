@@ -1,0 +1,431 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": { "value": { "LoggingProvider": "AppInsights", "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs", "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)", "Site": "datadoghq.com", "Environment": "uat", "Source": "csharp", "Version": "", "TraceEnabled": true, "RuntimeMetricsEnabled": true,"Tags": "", "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel", "MinimumLogLevel": "Information", "QueueCapacity": 5000, "BatchSize": 100, "FlushIntervalMilliseconds": 2000 } },
+    "FunctionAppName": {
+      "value": "AVASEUNAFNNDCORDER"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-NDCTRANSFORMATION"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPNDCTRANSFORMATION"
+    },
+    "AppInsightsName": {
+      "value": "AVASEUNAINDCORDER"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://AVASEUNKVNDCTRANSFORM.vault.azure.net/secrets/AVASEUNAFNONDCORDER-Config-StorageAccount/)"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "NDC Order API"
+    },
+    "OpenApi__Description": {
+      "value": "This API provides creats an Order&apos"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": true
+    },
+    "OpenApi__ForceHttp": {
+      "value": true
+    },
+    "OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/ordermgtmicroservice/"
+    },
+    "ValidationMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/validationmicroservice/Agency/Validation"
+    },
+    "ValidationMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/ValidationMSSubscriptionKey/)"
+    },
+    "AgentRegistrationEnvironment": {
+      "value": "NONPROD"
+    },
+    "OfferMSDocEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/Offer/offers/"
+    },
+    "OrderDataMSOrderListEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/uat/orderdata/orderList"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avaseunafnndcorder-ds"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "AppChannelName": {
+      "value": "NDC"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "skuName": {
+      "value": "Standard_RAGRS"
+    },
+    "storageAccountName": {
+      "value": "avaseunstndcorder"
+    },
+    "vaultName": {
+      "value": "AVASEUNKVNDCTRANSFORM"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "DebugOptions": {
+      "value": "Y"
+    },
+    "HistoryOnFlag": {
+      "value": "Y"
+    },
+    "OfferMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/OfferMSSubscriptionKey/)"
+    },
+    "BrandMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/brandmicroservice/brand"
+    },
+    "BrandMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/BrandMSSubscriptionKey/)"
+    },
+    "SeatMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/SeatMicroservice/seatOffer"
+    },
+    "SeatMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/SeatMSSubscriptionKey/)"
+    },
+    "FlightServicesMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/flightservicesmicroservice/flightServiceOffer/"
+    },
+    "FlightServicesMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/FlightServicesMSSubscriptionKey/)"
+    },
+    "ConfigurationMSPricingLocationUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/SalesAndRevenueManagement/OrderShopping/OfferManagement/Config/PricingLocation"
+    },
+    "ConfigurationMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/ConfigurationMSSubscriptionKey/)"
+    },
+    "ConfigurationMSPOSCurrencyEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/UAT/ConfigurationMicroservice/PosCurrency/"
+    },
+    "SeatMSofferUrl": {
+      "value": "https://TestResources.virginatlantic.com/uat/SalesAndRevenueManagement/OrderShopping/OfferManagement/Seat"
+    },
+    "Analytics:ServiceBus:ConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/AnalyticsServiceBusConnectionString/)"
+    },
+    "OrderDataMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/OrderDataMSSubscriptionKey/)"
+    },
+    "OrderDataMSEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/uat/orderdata/orders/"
+    },
+    "OrderSearchMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/NdcOrderSearch/OrderSearch"
+    },
+    "InRuleUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/inrule/disruptionrules"
+    },
+    "PublishOrderDocUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/NdcOrderSearch/PublishOrderDoc"
+    },
+    "OrderSearchMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/OrderSearchMSSubscriptionKey/)"
+    },
+    "InRuleSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/InRuleSubscriptionKey/)"
+    },
+    "InRuleEnabled": {
+      "value": "false"
+    },
+    "InRuleScope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/f1df1886-f232-49bd-a74d-cd3d5043b488"
+    },
+    "EapiMsClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/NdcOrder-EapiMsClientID/)"
+    },
+    "EapiMSSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/NdcOrder-EapiMSSecret/)"
+    },
+    "AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AAD:TenantId": {
+      "value": "6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8"
+    },
+    "OrderSearchMSOrderHistoryUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/NdcOrderSearch/OrderHistory"
+    },
+    "OrderMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/OrderMSSubscriptionKey/)"
+    },
+    "OrderMSCreateUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderMS/OrderCreate"
+    },
+    "OrderMSResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderMS/order/response/{correlationid}"
+    },
+    "Air4OrderSearchMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/ordersearchmicroservice/order/search"
+    },
+    "Air4OrderSearchMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/Air4OrderSearchMSSubscriptionKey/)"
+    },
+    "OrderChangeMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderManagement/order/"
+    },
+    "OrderChangeMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/OrderChangeMSSubscriptionKey/)"
+    },
+    "OrderCancelMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderManagement/ordercancel"
+    },
+    "OrderCancelMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/OrderCancelMSSubscriptionKey/)"
+    },
+    "ManageCustomerMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderManagement/order/customers"
+    },
+    "OrderTicketMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderDocument/order/ticket"
+    },
+    "OrderTicketMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/OrderTicketMSSubscriptionKey/)"
+    },
+    "SkipGDSAgentValidation": {
+      "value": "true"
+    },
+    "RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/RedisCacheConnectionString/)"
+    },
+    "resourceurl": {
+      "value": "Cache:get:https://Testresources.virginatlantic.com/uat"
+    },
+    "resourceurlPost": {
+      "value": "Cache:post:https://Testresources.virginatlantic.com/uat"
+    },
+    "IFGAgentFOPLookUpSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://AVASEUNKVNDCTRANSFORM.vault.azure.net/secrets/IFGAgentFOPLookUpSubscriptionKey/)"
+    },
+    "IFGAgentFopLookUpUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/validationmicroservice/IFGAgentFopLookUp"
+    },
+    "PaymentMSCaptureUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/orderpaymentmicroservice/CapturePayment"
+    },
+    "PaymentMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://AVASEUNKVNDCTRANSFORM.vault.azure.net/secrets/PaymentMSSubscriptionKey/)"
+    },
+    "PaymentMSAuthorizeUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/orderpaymentmicroservice/AuthorizePayment"
+    },
+    "PaymentIFGMSAuthorizeUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/IFGPayment/IFGAuthorizePayment"
+    },
+    "PaymentIFGMSOrderUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/IFGPayment/IFGOrderPayment"
+    },
+    "PaymentIFGMSExchangeUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/IFGPayment/IFGPaymentOrderExchange"
+    },
+    "PaymentIFGMSOrderRefundUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/IFGPayment/IFGPaymentOrderRefund"
+    },
+    "PaymentIFGMSAuthorizeCancelUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/IFGPayment/IFGPaymentAuthorizeCancel"
+    },
+    "PaymentIFGMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/PaymentIFGMSSubscriptionKey/)"
+    },
+    "ReferenceMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/ReferenceMicroservice/"
+    },
+    "ReferenceMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://AVASEUNKVNDCTRANSFORM.vault.azure.net/secrets/ReferenceMSSubscriptionKey/)"
+    },
+    "SeatMSSeatFulfilmentUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/SeatMicroservice/SeatFulfilment"
+    },
+    "SeatMSRetrieveSeatMapUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/seatmicroservice/retrieveseatmap"
+    },
+    "SplitPnrMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderManagement/SplitPNR"
+    },
+    "PublishSplitOrderHistoryUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderManagement/PublishOrderDoc"
+    },
+    "OrderMgmtMSUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/Ordermanagementmicroservice/order/"
+    },
+    "OrderMgmtMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://AVASEUNKVNDCTRANSFORM.vault.azure.net/secrets/OrderMgmtMSSubscriptionKey/)"
+    },
+    "PaymentMSRefundUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/orderpaymentmicroservice/RefundPayment"
+    },
+    "OrderDataMSUpdateEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/uat/orderdata/order"
+    },
+    "CancelReshopOfferMSDocEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/Offer/CancelReshopOffers/"
+    },
+    "ConfigurationMSBSPMarketCurrencyEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/uat/ConfigurationMicroservice/BSPMarketCurrency"
+    },
+    "ConfigurationMSCityCodeEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/uat/ConfigurationMicroservice/CityCode"
+    },
+    "ConfigurationMSBSPMarketPaymentEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/uat/ConfigurationMicroservice/BSPMarketPayment"
+    },
+    "PaymentMSRetrieveUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/orderpaymentmicroservice/payment/"
+    },
+    "ValidationMSAgencyOCNDetailsUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/validationmicroservice/AgencyOCNDetails/"
+    },
+    "EmailMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://AVASEUNKVNDCTRANSFORM.vault.azure.net/secrets/EmailMSSubscriptionKey/)"
+    },
+    "OrderNotificationMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderNotification/OrderChangeNotif"
+    },
+    "OrderNotificationMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://AVASEUNKVNDCTRANSFORM.vault.azure.net/secrets/OrderNotificationMSSubscriptionKey/)"
+    },
+    "NdcQueueMgmtFetchDuplicatePnrsUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcQueueMgmt/FetchDuplicatePnrs"
+    },
+    "NdcQueueMgmtRemoveDuplicatePnrsUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcQueueMgmt/RemoveDuplicatePnrs"
+    },
+    "NdcQueueMgmtSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://AVASEUNKVNDCTRANSFORM.vault.azure.net/secrets/NdcQueueMgmtSubscriptionKey/)"
+    },
+    "ValidationMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/Validationmicroservice/heartbeat"
+    },
+    "ConfigMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/Configurationmicroservice/heartbeat"
+    },
+    "OfferMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/Offer/heartbeat"
+    },
+    "BrandMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/Brandmicroservice/heartbeat"
+    },
+    "SeatMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/seatmicroservice/heartbeat"
+    },
+    "FlightServicesMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/FlightServicesmicroservice/heartbeat"
+    },
+    "OrderDataMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/orderdata/heartbeat"
+    },
+    "Air4OrderSearchMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/ordersearchmicroservice/heartbeat"
+    },
+    "OrderSearchMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/NdcOrderSearch/heartbeat"
+    },
+    "ReferenceMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/ReferenceMicroservice/heartbeat"
+    },
+    "OrderTicketMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderDocument/heartbeat"
+    },
+    "OrderMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderMS/heartbeat"
+    },
+    "OrderMgmtMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderManagement/heartbeat"
+    },
+    "EmailMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/emailmicroservice/heartbeat"
+    },
+    "PaymentMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/orderpaymentmicroservice/heartbeat"
+    },
+    "OrderNotificationMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/NdcOrderNotification/heartbeat"
+    },
+    "Air4OrderMgmtMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/Ordermanagementmicroservice/heartbeat"
+    },
+    "PaymentMSSplitPnrUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/orderpaymentmicroservice/SplitPnrPayment"
+    },
+    "OrderListFilterDateRange": {
+      "value": "180"
+    },
+    "TicketStockNumber": {
+      "value": "932"
+    },
+    "CreatePaymentDocumentUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/orderpaymentmicroservice/CreatePaymentDocument"
+    },
+    "EmailMSSendOrderEmailUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/emailmicroservice/SendOrderEmail"
+    },
+    "ARCPaymentMSUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/digital/ARCPayment/"
+    },
+    "ARCPaymentMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/ARCPaymentMSSubscriptionKey/)"
+    },
+    "IsIfgIntegrated": {
+      "value": "true"
+    },
+    "ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndctransform.vault.azure.net/secrets/AVASEUNSBENDCORDERMS-ServiceBusConnectionString/)"
+    },
+    "IFGPaymentMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/IFGPayment/heartbeat"
+    },
+    "ARCPaymentMSHeartBeatUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/digital/ARCPayment/heartbeat"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "Order API",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Order API AFN",
+        "ApplicationUsageIdList": "AVASEUNAFNNDCORDER"
+      }
+    }
+  }
+}

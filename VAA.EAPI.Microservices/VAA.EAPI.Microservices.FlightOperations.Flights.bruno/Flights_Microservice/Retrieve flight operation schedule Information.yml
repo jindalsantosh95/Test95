@@ -1,0 +1,237 @@
+info:
+  name: Retrieve flight operation schedule Information
+  type: http
+  seq: 2
+  tags:
+    - Flights_Microservice
+
+http:
+  method: POST
+  url: "{{baseUrl}}/operationalschedule"
+  body:
+    type: json
+    data: |-
+      {
+        "airlineCode": "",
+        "flightNumber": 0,
+        "localDateFrom": "",
+        "localDateTo": "",
+        "direction": "",
+        "limit": 0,
+        "originAirportCode": "",
+        "destinationAirportCode": ""
+      }
+  auth:
+    type: oauth2
+    flow: client_credentials
+    accessTokenUrl: https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token
+    refreshTokenUrl: "{{oauth_refresh_url}}"
+    credentials:
+      clientId: "{{oauth_client_id}}"
+      clientSecret: "{{oauth_client_secret}}"
+      placement: header
+    scope: https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation
+    tokenConfig:
+      placement:
+        header: Bearer
+      source: access_token
+    settings:
+      autoFetchToken: false
+      autoRefreshToken: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 Response
+    description: OK
+    request:
+      url: "{{baseUrl}}/operationalschedule"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "airlineCode": "",
+            "flightNumber": 0,
+            "localDateFrom": "",
+            "localDateTo": "",
+            "direction": "",
+            "limit": 0,
+            "originAirportCode": "",
+            "destinationAirportCode": ""
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "flights": [
+              {
+                "aircraft": {
+                  "registration": "",
+                  "Model_Code": "",
+                  "description": "",
+                  "name": ""
+                },
+                "Marketing_Flight_Number": {
+                  "Airline_Code": "",
+                  "Flight_Number": "",
+                  "suffix": ""
+                },
+                "Operating_Flight_Number": {
+                  "Airline_Code": "",
+                  "Flight_Number": ""
+                },
+                "legs": [
+                  {
+                    "Leg_Id": "",
+                    "Origin_Airport_Code": "",
+                    "Destination_Airport_Code": "",
+                    "Scheduled_Departure_Time": {
+                      "Local_Date_Time": "",
+                      "UTC_Date_Time": ""
+                    },
+                    "Scheduled_Arrival_Time": {
+                      "Local_Date_Time": "",
+                      "UTC_Date_Time": ""
+                    },
+                    "Actual_Departure_Time": {
+                      "Local_Date_Time": "",
+                      "UTC_Date_Time": ""
+                    },
+                    "Actual_Arrival_Time": {
+                      "Local_Date_Time": "",
+                      "UTC_Date_Time": ""
+                    },
+                    "Estimated_Departure_Time": {
+                      "Local_Date_Time": "",
+                      "UTC_Date_Time": ""
+                    },
+                    "Estimated_Arrival_Time": {
+                      "Local_Date_Time": "",
+                      "UTC_Date_Time": ""
+                    },
+                    "Wheels_Up": {
+                      "Local_Date_Time": "",
+                      "UTC_Date_Time": ""
+                    },
+                    "Wheels_Down": {
+                      "Local_Date_Time": "",
+                      "UTC_Date_Time": ""
+                    },
+                    "Departure_Status": "",
+                    "Arrival_Status": "",
+                    "Flight_Cancelled": "",
+                    "compartments": [
+                      {
+                        "number": "",
+                        "code": "",
+                        "description": "",
+                        "capacity": "",
+                        "booked": ""
+                      }
+                    ],
+                    "delayCodes": [
+                      {}
+                    ],
+                    "Wheels_Up_Status": "",
+                    "Wheels_Down_Status": ""
+                  }
+                ],
+                "Turn_Around": ""
+              }
+            ]
+          }
+  - name: 401 Response
+    description: Unauthorized
+    request:
+      url: "{{baseUrl}}/operationalschedule"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "airlineCode": "",
+            "flightNumber": 0,
+            "localDateFrom": "",
+            "localDateTo": "",
+            "direction": "",
+            "limit": 0,
+            "originAirportCode": "",
+            "destinationAirportCode": ""
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          [
+            {
+              "id": "",
+              "code": "",
+              "message": "",
+              "developerMessage": "",
+              "errorSource": "",
+              "statusText": "",
+              "tagText": "",
+              "exceptionType": "",
+              "exceptionCode": "",
+              "url": "",
+              "title": ""
+            }
+          ]
+  - name: 500 Response
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/operationalschedule"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "airlineCode": "",
+            "flightNumber": 0,
+            "localDateFrom": "",
+            "localDateTo": "",
+            "direction": "",
+            "limit": 0,
+            "originAirportCode": "",
+            "destinationAirportCode": ""
+          }
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          [
+            {
+              "id": "",
+              "code": "",
+              "message": "",
+              "developerMessage": "",
+              "errorSource": "",
+              "statusText": "",
+              "tagText": "",
+              "exceptionType": "",
+              "exceptionCode": "",
+              "url": "",
+              "title": ""
+            }
+          ]

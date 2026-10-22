@@ -1,0 +1,196 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "FunctionAppName": {
+      "value": "AVAPEUNAFNOPERATIONSMICROSERVICE"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPI-ORDER"
+    },
+    "AppInsightsName": {
+      "value": "AVAPEUNAIOPERATIONMS"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "e74c8214-3582-460b-b5bd-1b62a4e6a05d"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avapeunstoperationms"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "KeyVaultUri": {
+      "value": "https://avadeunkveapis.vault.azure.net/"
+    },
+
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avapeunstoperationms"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+
+    "IPRestriction": {
+      "value": ""
+    },
+    "vNetName": {
+      "value": "apcmeunvncns002"
+    },
+    "vNetResourceGroupName": {
+      "value": "RG-CM-P-EUN-CommonNetworking-002"
+    },
+    "vNetSubnetName": {
+      "value": "AVAPEUNASPEAPI-ORDER-Subnet"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "Operations API",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "PROD",
+        "Purpose": "Support functions for the Operations API AFN",
+        "ApplicationUsageIdList": "AVAPEUNAFNOPERATIONSMICROSERVICE"
+      }
+    },
+    // Azure Active Directory
+    "Appsetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkveapis.vault.azure.net/secrets/AVAPEUNAFNOPERATIONSMICROSERVICE-Config-AzureAd-ClientId/)"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkveapis.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    // Open API / Swagger
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/a20229af-036d-4fbe-b960-86a115c69c5a/User_impersonation"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Operations Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "Microservice to provide information related to operations (flight, crew etc)"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": false
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": true
+    },
+    // Airport Info Provider
+    "Appsetting:AirportInfo:URL": {
+      "value": "https://www.virginatlantic.com/util/airports/ALL/asc"
+    },
+    "Appsetting:AirportInfo:Accept": {
+      "value": "application/json"
+    },
+    "Appsetting:AirportInfo:Agent": {
+      "value": "Chrome/109.0.0.0"
+    },
+    "Appsetting:AirportInfo:Cache": {
+      "value": "0.00:00:10"
+    },
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkveapis.vault.azure.net/secrets/AVAPEUNAFNOPERATIONSMICROSERVICE-Config-AzureAd-ClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    }
+  }
+}

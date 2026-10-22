@@ -1,0 +1,30 @@
+meta {
+  name: accountInviteMember
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation accountInviteMember($inviteeFcNumber: String, $groupName: String) {
+    accountInviteMember(inviteeFcNumber: $inviteeFcNumber, groupName: $groupName)
+  }
+}
+
+body:graphql:vars {
+  {
+    "inviteeFcNumber": "",
+    "groupName": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

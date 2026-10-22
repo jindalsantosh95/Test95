@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/VAAD1ST/eapi/config/automation-suites/schema.json",
+  "title": "EAPI automation suite",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "name", "slug", "owner", "projectPath", "categories"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "owner": { "type": "string", "minLength": 1 },
+    "projectPath": { "type": "string", "pattern": "^VAA\\.EAPI\\.Automation/.+\\.csproj$" },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+$" }
+    },
+    "testFilter": { "type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9_.=&|()~-]+$" },
+    "summaryConfigPath": { "type": "string" },
+    "slackConfigPath": { "type": "string" },
+    "slackSecretName": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+    "timeoutMinutes": { "type": "integer", "minimum": 1, "maximum": 360 },
+    "runnerLabels": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "requiredVariables": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+    },
+    "allowedVariables": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+    },
+    "requiredSecrets": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+meta {
+  name: claimPartnerFlightPoints
+  type: graphql
+  seq: 19
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation claimPartnerFlightPoints($request: SkyFlightsPointsClaimRequestInput) {
+    claimPartnerFlightPoints(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

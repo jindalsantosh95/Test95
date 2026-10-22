@@ -1,0 +1,141 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": {
+      "value": "SANDBOX"
+    },
+    "AppServicePlanName": {
+      "value": "avaieunasp001"
+    },
+    "appName": {
+      "value": "AVAIEUNAFNIFGFACADE"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-i-eun-ase-001"
+    },
+    "aseName": {
+      "value": "avaieunase001"
+    },
+    "keyVaultName": {
+      "value": "AVAIEUNKVNDCFACADE"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "NDC IFG FACADE",
+        "DOMAIN": "NDC",
+        "ENVIRONMENT": "DEV",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "appinsightname": {
+      "value": "avaieunaiifgfacade"
+    },
+    "storageaccountName": {
+      "value": "avaieunstifgfacade"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+
+    "AppSetting:OpenApi__Description": {
+      "value": "This API provides ability to communicate between NDC transformation layer and Order Payment Microservice"
+    },
+    "AppSetting:OpenApi__HostNames": {
+      "value": "https://ndcdeveloper.virginatlantic.com/SB/IFG/"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Facade Layer - NDC IFG Facade"
+    },
+    "AppSetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "AppSetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "AppSetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "AppSetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "AppSetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/4fdc51ad-c193-49df-8ce5-52145112fc3a/.default"
+    },
+    "AppSetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkvndcfacade.vault.azure.net/secrets/avaieunafnifgfacade-Config-AzureAd-ClientId/)"
+    },
+    "Appsetting:AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkvndcfacade.vault.azure.net/secrets/avaieunafnifgfacade-Config-AzureAdb2c-ClientId/)"
+    },
+    "Appsetting:AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "Appsetting:AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkvndcfacade.vault.azure.net/secrets/avaieunafnifgfacade-Config-AzureAdb2c-TenantId/)"
+    },
+    "Appsetting:AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkvndcfacade.vault.azure.net/secrets/avaieunafnifgfacade-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "KeyVaultUri": {
+      "value": "https://avaieunkv001.vault.azure.net/"
+    },
+    "vaultName": {
+      "value": "avaieunkv001"
+    },
+    "WEBSITE_DNS_SERVER_SANDBOX": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "WEBSITE_DNS_ALT_SERVER_SANDBOX": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server)"
+    },
+    "workspacename": {
+      "value": "avaieunlaweapi"
+    },
+    "ReferenceMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkvndcfacade.vault.azure.net/secrets/avaieunafnifgfacade-Config-ReferenceMSSubscriptionKey/)"
+    },
+    "ReferenceMSUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/ReferenceMicroservice/"
+    },
+    "PaymentMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkvndcfacade.vault.azure.net/secrets/PaymentMSSubscriptionKey/)"
+    },
+    "PaymentMSUrl": {
+      "value": "https://ndcdeveloper.virginatlantic.com/SB/orderpaymentmicroservice/"
+    },
+    "OrderDataMSEndpoint": {
+      "value": "https://ndcdeveloper.virginatlantic.com/sb/orderdata/orders/"
+    },
+    "OrderDataMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkvndcfacade.vault.azure.net/secrets/OrderDataMSSubscriptionKey/)"
+    }
+  }
+}

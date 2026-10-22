@@ -1,0 +1,942 @@
+{
+  "schemaVersion": 1,
+  "feature": "SearchAndBook",
+  "paymentFailureDetection": {
+    "scope": "Shared happy-path payment preparation, HPP opening and booking-confirmation waits.",
+    "terminalMarkers": ["NativeFlightPaymentErrorTitle", "NativeFlightPaymentErrorMessage", "NativeFlightPaymentErrorPage", "NativeFlightPaymentRetryButton"],
+    "behaviour": "Any visible owned terminal marker fails on the current poll; legacy inline error fallback remains. Existing teardown captures configured evidence. No payment retry or recovery click; payment capture status and backend cause remain unconfirmed. Controlled-error assertions are separate.",
+    "qualification": "Dedicated-screen extension offline-tested; no live payment rerun for this change."
+  },
+  "reviewTotalContract": {
+    "mvpScope": "Visual/accessibility validation is manual. PWP eligibility/selection and unspecified banner variants are outside this ticket. TC56 prepares no-payment back/re-entry coverage, awaiting qualification. Fare destination/route IDs are missing; confirm whether linked fare itinerary satisfies the itinerary criterion. No iOS changes made.",
+    "scope": "Shared complete guest/member checkout verifies the pre-HPP review before payment submission. Reads combined English price rows only within the owned summary-card container.",
+    "assertions": "Flights plus taxes plus optional seats equal total; currency and reward points retained; total equals pre-seat Summary plus displayed seat charge; no seat row on no-seat flow; guest excludes PWP; enabled fare-conditions link and Continue; exact English fare-link, international-payment guidance and Continue copy.",
+    "qualification": "578 offline/retry checks passed. Local TC43 retry on 20 October passed single-adult GBP paid-seat detail/cart/Review assertions and copy checks, then submitted HPP. Review: flights 514 + taxes 399 + seat 40 = GBP 953, Summary GBP 913. Overall test failed after dedicated payment/booking status error; detector missed new error screen and timed out. No payment retry; backend cause unconfirmed. Other journey variants and BrowserStack remain unqualified.",
+    "seatPriceEvidence": "Single-adult GBP checkout retains the selected seat detail price before confirmation; verifies seat-cart charge and trip-total increase; compares Review seat charge to retained evidence. Explicit Free permits zero/no seat row; missing paid row or missing evidence fails. Not independently compared with backend pricing; other currencies and multi-sector/passenger seat checkout remain unqualified.",
+    "gaps": "No independent backend tax split; no itinerary on current Review page; fare destination lacks owned ID; payment back invalidates session and needs dedicated cancellation/re-entry coverage; passenger count on Review, banner configurations, PWP apply/remove and visual/accessibility qualification remain open. Visual baseline and bounds must be approved. Controlled-error checkout bypasses happy-path review assertions."
+  },
+  "preparedConfirmationWarnings": {
+    "readiness": "Draft",
+    "fixture": "ConfirmationWarningCase",
+    "scope": "Six offline-tested warning fragments only, not runnable UI scenarios or complete GraphQL responses. Excluded from release coverage and packs.",
+    "cases": [
+      { "name": "AllSeatsFailed", "codes": ["W001"] },
+      { "name": "SomeSeatsFailed", "codes": ["W002"] },
+      { "name": "Proximity", "codes": ["W003"] },
+      { "name": "AllSeatsFailedWithProximity", "codes": ["W001", "W003"] },
+      { "name": "SomeSeatsFailedWithProximity", "codes": ["W002", "W003"] },
+      { "name": "NoWarnings", "codes": [] }
+    ],
+    "outcome": "Confirmation remains visible. Display every backend-returned warning message and no unrelated warning; combined cases must display both returned messages, without enforcing order. W003 is information, not a hard stop. No-warning control has no warning. W001 and W002 are mutually exclusive. Exact message content comes from the response, not app-owned wording.",
+    "blockedOn": "Publish iOS warning selection/mapping/display and stable observation IDs; add and qualify a narrowly guarded successful-confirmation proxy mode. Existing error-only proxy cannot consume these fragments.",
+    "safety": "No payment or live run enabled. Future synthetic confirmation must never be reported as a real booking or used in Trips/My Booking. No financial reconciliation claim."
+  },
+  "accountEntryContract": {
+    "recovery": "Guest setup and login share at most three Account taps. Only an unobserved destination permits a re-tap; two recovery actions maximum, recorded through MobileHealingPolicy. Credential/logout/business actions are outside recovery.",
+    "loadError": "Fail immediately on the visible Account load error. Temporary exact English accessible-name fallback: Something went a little off course. Replace with an app-owned Account error ID when delivered; missing ID remains an app-readiness gap.",
+    "qualification": "15 October local TC05 stopped at Account load error before calendar assertions. TC05/TC32 requalification pending; no claim of BrowserStack resolution."
+  },
+  "calendarNavigationContract": {
+    "scope": "Automation-only hardening after isolated BrowserStack Loyalty TC02 reproduced its four-second range-settling timeout on 13 October.",
+    "rangeSelection": "Departure first. No return-month preflight or earlier anchor. At most two requested-departure taps with observed state transitions; assert exact requested departure and return before confirming.",
+    "scrollSafety": "Use observed viewport/footer bounds and a measured gutter outside all visible day cells. Execute a continuous W3C touch swipe with no pre-movement hold; XCTest drag duration is a press duration, not movement time. Halve travel on each observed direction reversal, down to one eighth, within the unchanged attempt bound. Missing geometry or gutter fails without a gesture. Scrolling must preserve selection; fully contained stable enabled day cells are required for taps.",
+    "qualification": "13 October iPhone 17 Pro/iOS 26.5: original hold-and-drag reproduced an unintended November 8 departure locally. No-hold swipe passed TC02 calendar/fare stages; TC02 then failed on the missing insufficient-points warning. After bounded overshoot correction, cross-month TC36 passed twice consecutively (calendar-local-edit-20261013-b and -c); 470 offline/retry checks and scoped harness passed. Android/BrowserStack qualification and TC05 boundary-date requalification remain outstanding."
+  },
+  "developImpactReview": {
+    "iosDevelopSha": "b4697b474473f690d618c765f86265e3f72ce84f",
+    "document": "IOS-DEVELOP-REVIEW-20261016.md",
+    "status": "Focused source review, not whole-source baseline refresh or live qualification. Pack membership unchanged.",
+    "confirmation": "TC01/TC03/TC43/TC48 and Loyalty TC01 share exact submitted count and ordered-name assertions before Trips. Guests use entered names; member checkout uses the leased identity. All populated native values must agree. Requires new confirmation build; live qualification pending.",
+    "insufficientPoints": "Loyalty TC02 remains unchanged and enrolled. iOS #1277 removed its required warning and disabled-Continue guard. Product clarification required; do not auto-heal or waive.",
+    "openGaps": ["Receipt amounts and confirmation flight/seat details", "Hosted payment dismiss/reopen", "PWP apply/remove and minimum balance", "Retained seats after refreshed offers", "Child guidance Choose seats accessibility identifier and live qualification", "W003 confirmation warning qualification"]
+  },
+  "seatSelectionContract": {
+    "profilingStatus": "TC47 passed locally on 7 October in 3m32s including lifecycle (3m24s body), versus 5m59s (5m43s body). Per-call mobile: source excludes visible,accessible for discovery only; snapshot time fell from 128.26s to 1.68s combined. Fresh live pre-tap visibility/enabled/geometry/hittability and immediate Payment/error detection retained. 369 offline checks passed. One local comparison only; wider pack and BrowserStack remain pending. See SEATS-COVERAGE.md and TestResults/seats-tc47-source-speed-local-20261007/local.trx.",
+    "coverageReview": {
+      "document": "SEATS-COVERAGE.md",
+      "iosDevelopSha": "b4697b474473f690d618c765f86265e3f72ce84f",
+      "status": "iOS #1311 adds linked-infant text to the adult passenger card; TC49 now requires '+ infant' while retaining one independently assignable passenger. iOS #1318 adds the child guidance sheet, but its Choose seats action has no app-owned identifier, so proximity coverage remains blocked. No live rerun, BrowserStack or measured Swift coverage claim."
+    },
+    "fare": "Economy Classic (iOS excludes ECONOMY-LIGHT/ECOLIGHT and only permits VS/DL operating carriers)",
+    "heading": "seatSelection.navigationHeader",
+    "seatPrefix": "seatSelection.seat.",
+    "passenger": "seatSelection.passenger.0",
+    "secondPassenger": "seatSelection.passenger.1",
+    "passengerCount": "seatSelection.passengers",
+    "seatPrice": "seatSelection.seatPrice",
+    "viewport": "seatSelection.viewport",
+    "viewportStatus": "Added in iOS PR1273 commit 79e040a3 and found locally. Automation intersects viewport/window/header/cart bounds, filters snapshot geometry before at most eight candidate lookups per viewport and permits at most three native drags within the measured safe area. Invalid geometry fails without interaction; taps require native hittability. Unexpected Payment fails immediately. TC47 passed locally on 7 October with one drag; other scenarios, repeated-run stability and BrowserStack remain pending.",
+    "tripTotal": "seatSelection.tripTotal",
+    "detailPrice": "seatSelection.detail.price",
+    "confirm": "seatSelection.selectSeat",
+    "detailSheet": "seatSelection.detailSheet",
+    "detailClose": "seatSelection.detail.close",
+    "legend": "seatSelection.legend",
+    "legendClose": "seatSelection.legend.close",
+    "childGuidanceSheet": "seatSelection.childGuidanceSheet",
+    "childGuidanceActionGap": "The required Choose seats button has no app-owned accessibility identifier in iOS develop b4697b47. Do not use English text, XPath or coordinates; add a stable action ID before implementing the child scenario.",
+    "childGuidanceCopyGap": "TC51/52/54 prove the app-owned guidance sheet is displayed. Exact title, supervision and position copy cannot be asserted without app-owned IDs on those text elements; do not locate English strings directly.",
+    "childGuidanceUnavailableMapGap": "An eligible outbound sector whose retrieved map resolves unavailable before an eligible inbound requires deterministic seat-map data or a supported hook. Do not use random live inventory as a pass condition.",
+    "knownBlocker": "The 6 October detail-ID collision was repaired in iOS PR1273. TC43 selected and assigned a seat on 7 October, then failed payment preparation. Legend/close and lifecycle require separate qualification; no coordinate fallbacks.",
+    "continue": "seatSelection.continue",
+    "loadError": "seatSelection.error",
+    "loadErrorCopyScope": "The current iOS runtime propagates seatSelection.error to the unavailable-state container and its accessible descendants. FAULT-TC10/12 resolve only that owned ID and require all three approved messages, including the My Trips supporting paragraph. No XPath or unscoped text locator is used.",
+    "retry": "seatSelection.retry",
+    "loading": "seatSelection.loading",
+    "submissionError": "seatSelection.submissionError",
+    "controlledErrorScope": "FAULT-TC10/12 inject retrieveSeatMap for outbound/inbound return sectors and assert all three approved messages within the owned unavailable-state group, no Retry, loading absent and Continue progression. TC10 proves a normal inbound map opens after outbound failure; TC12 uses an unsupported outbound and proves inbound failure continues to payment without payment action. FAULT-TC11 retains its selectSeat draft-assignment assertion. Opt-in Draft; live qualification pending.",
+    "scope": "TC43 requires one adult and one seat sector; select an enabled offered seat, confirm and verify exact assignment before submission. Fail on unavailable/error or payment bypass. No post-payment seat-fulfilment assertion yet.",
+    "flags": "Keep 850100-search-native-entry; omit 850101-search-native-skip-seat-selection. Persisted developer overrides must also leave skip disabled."
+  },
+  "paymentEntryContract": {
+    "heading": "NativeFlightPaymentHeading",
+    "continueButton": "NativeFlightContinueToPaymentButton",
+    "failureButton": "NativeFlightPaymentRetryButton",
+    "controlledPostHppError": "NativeFlightPaymentErrorPage",
+    "controlledPostHppTitle": "NativeFlightPaymentErrorTitle",
+    "controlledPostHppMessage": "NativeFlightPaymentErrorMessage",
+    "controlledPostHppReturnToSearch": "NativeFlightPaymentErrorReturnToSearch",
+    "controlledPostHppScope": "FAULT-TC07/08/09 assert update-payment-status error, create-order error and create-order timeout respectively using owned page/title/message/Return IDs and exact native labels. Separate AllowPostHppTestPayment opt-in required. HPP is only setup; no payment retry or Return action. Confirmation renders existing order data, not a separate retrieval call. Draft. TC07 passed locally on 19 October against iOS PR1331 0dd5d294; TC08/09 and BrowserStack qualification pending.",
+    "behaviour": "Recognise payment entry after passenger submission, wait for enabled Continue, and fail without retry on a visible retry ID or inline payment failure during preparation, HPP opening and confirmation polling.",
+    "inlineErrorGap": "No owned inline error ID is currently available. NativePaymentFailure temporarily recognises the English We could not complete your booking / Try secure payment again copy on native static text or buttons. Replace the fallback when the app exposes an error ID; do not retry payment."
+  },
+  "passengerGenderContract": {
+    "iOSControl": "native Menu",
+    "fieldIdentifier": "PassengerDetailsPassenger{oneBasedIndex}Gender",
+    "selection": "Exactly one visible enabled native button with the complete requested English label; verify the visible field value after dismissal.",
+    "gap": "Menu option IDs are not exposed by iOS develop. Replace the page-local exact-label exception with app-owned option IDs when available. DOB remains a separate wheel control."
+  },
+  "platforms": {
+    "iOS": "supported",
+    "Android": "planned"
+  },
+  "selectors": {
+    "paymentSummaryCard": "NativeFlightPaymentSummaryCard",
+    "paymentFareConditionsLink": "NativeFlightPaymentFareConditionsLink",
+    "paymentGuidance": "NativeFlightPaymentGuidance",
+    "paymentBackButton": "NativeFlightPaymentBackButton",
+    "cardPresentationPage": "NativeFlightCardPresentationCheckPage",
+    "cardPresentationHeading": "NativeFlightCardPresentationCheckHeading",
+    "cardPresentationIntroduction": "NativeFlightCardPresentationCheckIntroduction",
+    "cardPresentationDetails": "NativeFlightCardPresentationCheckDetails",
+    "cardPresentationCancel": "NativeFlightCardPresentationCheckCancel",
+    "cardPresentationAgree": "NativeFlightCardPresentationCheckAgree",
+    "journeyTypePicker": "NativeFlightSearchJourneyTypePicker",
+    "flyingFromButton": "NativeFlightSearchFlyingFromButton",
+    "flyingToButton": "NativeFlightSearchFlyingToButton",
+    "originAirportSearchField": "NativeFlightSearchOriginAirportSearchField",
+    "destinationAirportSearchField": "NativeFlightSearchDestinationAirportSearchField",
+    "whenButton": "NativeFlightSearchWhenButton",
+    "whoButton": "NativeFlightSearchWhoButton",
+    "searchFlightsButton": "NativeFlightSearchSearchFlightsButton",
+    "rewardSearchToggle": "NativeFlightSearchRewardToggle",
+    "calendar": "NativeFlightCalendar",
+    "discountCodeButton": "NativeFlightSearchDiscountCodeButton",
+    "discountCodeFieldContainer": "NativeFlightDiscountCodeFieldContainer",
+    "discountCodeTextField": "NativeFlightDiscountCodeTextField",
+    "discountCodeApplyButton": "NativeFlightDiscountCodeApplyButton",
+    "discountCodeClearButton": "NativeFlightDiscountCodeClearButton",
+    "discountCodeCancelButton": "NativeFlightDiscountCodeCancelButton",
+    "rewardSearchControl": "NativeFlightSearchRewardControl",
+    "passengerSelectorContainer": "NativeFlightPassengerSelectorContainer",
+    "passengerDetailsScrollView": "NativeFlightPassengerDetailsScrollView",
+    "passengerDetailsHub": "PassengerDetailsHub",
+    "redesignedPassengerDetailsSubmissionError": "PassengerDetailsSubmissionError",
+    "redesignedPassengerEditorHeader": "PassengerDetailsModalHeader",
+    "memberSelector": "PassengerDetailsMemberSelector",
+    "memberSelfOption": "PassengerDetailsMemberSelfOption",
+    "memberNotTravellingOption": "PassengerDetailsMemberNotTravellingOption",
+    "redesignedPassengerEditorScrollView": "PassengerDetailsEditorScrollView",
+    "redesignedPassengerSaveAndContinue": "PassengerDetailsSaveAndContinue",
+    "redesignedPassengerSaveValidation": "PassengerDetailsSaveValidationButton",
+    "redesignedPassengerDetailsContinueButton": "PassengerDetailsContinue",
+    "redesignedBookingTermsToggle": "PassengerDetailsTermsAcknowledgement",
+    "redesignedDateOfBirthPicker": "PassengerDetailsDateOfBirthPicker",
+    "redesignedContactEmailText": "PassengerDetailsContactEmailText",
+    "redesignedContactCountryCode": "PassengerDetailsContactCountryCode",
+    "redesignedContactTelephoneText": "PassengerDetailsContactTelephoneText",
+    "resultsSort": "NativeFlightSearchResultsSort",
+    "resultsFilter": "NativeFlightSearchResultsFilter",
+    "resultsAirportRoute": "NativeFlightSearchResultsAirportRoute",
+    "resultsReady": "NativeFlightResultsReady",
+    "flexibleDateCarousel": "NativeFlightFlexibleDateCarousel",
+    "flexibleDatePrefix": "NativeFlightFlexibleDate_",
+    "priceSortOption": "NativeFlightResultsSortOption-PRICE",
+    "recommendedSortOption": "NativeFlightResultsSortOption-RECOMMENDED",
+    "departureTimeSortOption": "NativeFlightResultsSortOption-DEPARTURE_TIME",
+    "durationSortOption": "NativeFlightResultsSortOption-DURATION",
+    "applySort": "NativeFlightResultsApplySort",
+    "filterOptionPrefix": "NativeFlightResultsFilterOption-",
+    "applyFilters": "NativeFlightResultsApplyFilters",
+    "clearFilters": "NativeFlightResultsClearFilters",
+    "activeFilterSummary": "NativeFlightSearchResultsActiveFilterSummary",
+    "fareSelectorCabinPrefix": "NativeFlightFareSelectorCabin",
+    "fareSelectorDismiss": "NativeFlightFareSelectorDismiss",
+    "redesignedFirstPassengerNameError": "PassengerDetailsPassenger1FirstNameError",
+    "fareSelectorFarePrefix": "NativeFlightFareSelectorFare",
+    "summaryBaggage": "NativeFlightSummaryBaggage",
+    "summaryItineraryPrefix": "NativeFlightSummaryItinerary",
+    "summaryFlightDetails0": "NativeFlightSummaryItinerary0FlightDetails",
+    "flightLegPrefix": "NativeFlightDetailsSegment",
+    "flightConnectionPrefix": "NativeFlightDetailsConnection",
+    "resultFlightDetails0": "NativeFlightResult0FlightDetails",
+    "summaryFareTitle0": "NativeFlightSummaryItinerary0FareTitle",
+    "summaryChange0": "NativeFlightSummaryItinerary0ChangeButton",
+    "summaryUpgradeButton0": "NativeFlightSummaryUpgrade0Button",
+    "summaryUpgradeTitle0": "NativeFlightSummaryUpgrade0Title",
+    "summaryUpgradeDifference0": "NativeFlightSummaryUpgrade0PriceDifference",
+    "summaryUpgradeTotal0": "NativeFlightSummaryUpgrade0TotalPrice",
+    "summaryError": "NativeFlightSummaryError",
+    "fareTitle0": "NativeFlightFareSelectorFare0Title",
+    "fareAppliedPromotion0": "NativeFlightFareSelectorFare0AppliedPromotion",
+    "summaryBaggageAllowancePrefix": "NativeFlightSummaryBaggageAllowance",
+    "fareSelectorUpgradeCard": "NativeFlightFareSelectorUpgradeCard",
+    "fareSelectorUpgradeViewFares": "NativeFlightFareSelectorUpgradeViewFares",
+    "payWithPointsCard": "NativeFlightPayWithPointsCard",
+    "payWithPointsOptionSelector": "NativeFlightPayWithPointsOptionSelector",
+    "payWithPointsOptionPrefix": "NativeFlightPayWithPointsOption",
+    "payWithPointsApplyButton": "NativeFlightPayWithPointsApplyButton",
+    "payWithPointsApplied": "NativeFlightPayWithPointsApplied",
+    "payWithPointsAmountToPay": "NativeFlightPayWithPointsAmountToPay",
+    "payWithPointsRemoveButton": "NativeFlightPayWithPointsRemoveButton",
+    "payWithPointsLoading": "NativeFlightPayWithPointsLoading",
+    "payWithPointsInsufficientBalance": "NativeFlightPayWithPointsInsufficientBalance",
+    "payWithPointsOptionsUnavailable": "NativeFlightPayWithPointsOptionsUnavailable",
+    "accountSettingsButton": "settingsBarButton",
+    "accountSettingsScreen": "yourAccountLabel",
+    "accountPersonalDetailsRow": "personalDetailsRow",
+    "accountMemberNameHeader": "title",
+    "accountEditDetails": "guestDiscoverFCButton",
+    "accountDelete": "deleteAccountButton"
+  },
+  "androidReadiness": {
+    "status": "proposed-contract-awaiting-android-delivery",
+    "locatorStrategy": "resource-id",
+    "execution": "configured-platform-readiness-not-qualified",
+    "selectors": {
+      "bookTab": "nav_book_tab",
+      "panel": "native_search_screen",
+      "origin": "native_search_origin_field",
+      "destination": "native_search_destination_field",
+      "dates": "native_search_travel_dates_field",
+      "passengers": "native_search_passengers_field",
+      "search": "native_search_button",
+      "roundTrip": "native_search_journey_round_trip",
+      "oneWay": "native_search_journey_one_way",
+      "airportSheet": "native_search_airport_selection_sheet",
+      "airportInput": "native_search_airport_search_field",
+      "airportResultPattern": "native_search_airport_result_{IATA}",
+      "airportRecentPattern": "native_search_airport_recent_{IATA}",
+      "airportClose": "native_search_airport_close_button",
+      "airportBack": "native_search_airport_back_button",
+      "airportList": "native_search_airport_list",
+      "dateSheet": "native_search_date_selection_sheet",
+      "calendar": "native_search_date_selection_calendar",
+      "datePattern": "native_search_date_{yyyy-MM-dd}",
+      "dateFooter": "native_search_date_selection_footer",
+      "departureValue": "native_search_date_selection_departure_value",
+      "returnValue": "native_search_date_selection_return_value",
+      "confirmDates": "native_search_date_selection_confirm_button",
+      "closeDates": "native_search_date_selection_close_button",
+      "passengerSheet": "native-search-passenger-sheet",
+      "passengerCountPattern": "native-search-passenger-count-{TYPE}",
+      "passengerIncrementPattern": "native_search_passenger_increment_{TYPE}",
+      "passengerDecrementPattern": "native_search_passenger_decrement_{TYPE}",
+      "confirmPassengers": "native_search_passenger_confirm_button",
+      "closePassengers": "native_search_passenger_close_button",
+      "promoEntry": "native_search_discount_code_action",
+      "promoSheet": "native-search-discount-code-sheet",
+      "promoInput": "native_search_discount_code_input",
+      "promoApply": "native_search_discount_code_apply_button",
+      "promoClear": "native_search_discount_code_clear_button",
+      "promoClose": "native_search_discount_code_close_button"
+    }
+  },
+  "releasePacks": {
+    "area": "SearchAndBook",
+    "platform": "iOS",
+    "sanity": [
+      "TC05",
+      "TC15",
+      "TC19",
+      "TC23",
+      "TC26",
+      "TC27",
+      "TC28",
+      "TC29",
+      "TC35",
+      "TC43",
+      "TC47",
+      "TC48",
+      "LOYALTY-TC01",
+      "LOYALTY-TC02"
+    ],
+    "regression": [
+      "TC01",
+      "TC02",
+      "TC03",
+      "TC04",
+      "TC05",
+      "TC07",
+      "TC08",
+      "TC09",
+      "TC10",
+      "TC11",
+      "TC12",
+      "TC13",
+      "TC14",
+      "TC15",
+      "TC16",
+      "TC17",
+      "TC18",
+      "TC19",
+      "TC20",
+      "TC21",
+      "TC22",
+      "TC23",
+      "TC24",
+      "TC25",
+      "TC26",
+      "TC27",
+      "TC28",
+      "TC29",
+      "TC31",
+      "TC32",
+      "TC33",
+      "TC34",
+      "TC35",
+      "TC38",
+      "TC39",
+      "TC40",
+      "TC41",
+      "TC42",
+      "TC43",
+      "TC44",
+      "TC45",
+      "TC46",
+      "TC47",
+      "TC48",
+      "TC49",
+      "TC50",
+      "TC51",
+      "TC52",
+      "TC53",
+      "TC54",
+      "TC55",
+      "LOYALTY-TC01",
+      "LOYALTY-TC02",
+      "LOYALTY-TC04"
+    ],
+    "backendRegression": [
+      "TC41",
+      "TC42"
+    ],
+    "excluded": {
+      "TC06": "Legacy combined smoke; targeted refinement scenarios cover its behaviour.",
+      "TC30": "Controlled failure hook not available; draft skipped test.",
+      "TC36": "Shared calendar edit contract requires qualification.",
+      "TC37": "Shared passenger edit contract requires qualification.",
+      "TC56": "Review back/re-entry scenario awaiting local qualification; no payment.",
+      "TC57": "Explicit local SIT PayPal login readiness; privacy opt-in required, live qualification and confirmation unavailable.",
+      "LOYALTY-TC03": "Pay with Points paused pending app redesign."
+    }
+  },
+  "scenarios": [
+    {
+      "id": "PANEL-TC01",
+      "testMethod": "SearchPanel_TC01_SearchPanel_ValidCriteriaEnableSearch",
+      "category": "MobileApp-SearchPanel-Readiness",
+      "outcome": "Shared iOS/Android Search panel: populate round-trip route and dates, assert one traveller and Search enabled; do not submit. Android requires modal resource-ID exposure.",
+      "platforms": [
+        "iOS",
+        "Android"
+      ]
+    },
+    {
+      "id": "PANEL-TC02",
+      "testMethod": "SearchPanel_TC02_JourneyType_SwitchingToReturnRequiresReturnDate",
+      "category": "MobileApp-SearchPanel-Pending",
+      "outcome": "Pending and explicitly skipped on both platforms: switching one-way to return requires a return date; switching back removes the return date and preserves departure. Android date-state fix passed targeted local qualification on 24 September 2026; iOS requalification remains required before readiness enrollment.",
+      "platforms": [
+        "iOS",
+        "Android"
+      ]
+    },
+    {
+      "id": "TC36",
+      "suite": "Readiness",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBook_TC36_TravelDates_EditUpdatesSummaryAndCancelPreservesCommittedDates",
+      "category": "MobileApp-SearchPanel-Readiness",
+      "outcome": "Select a range three months ahead, edit it to the preceding month and verify the panel summary; closing an unconfirmed draft retains the committed dates. Exercises forward/backward virtualised calendar navigation without submitting a search.",
+      "platforms": [
+        "iOS",
+        "Android"
+      ]
+    },
+    {
+      "id": "TC37",
+      "suite": "Readiness",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBook_TC37_PassengerCounts_ConfirmPersistsAndCancelDiscardsDraft",
+      "category": "MobileApp-SearchPanel-Readiness",
+      "outcome": "All traveller types persist after confirmation; cancellation discards draft counts. Minimum-count rules belong to the dedicated passenger validation scenario.",
+      "platforms": [
+        "iOS",
+        "Android"
+      ]
+    },
+    {
+      "id": "ANDROID-TC05",
+      "platform": "Android",
+      "testMethod": "AndroidSearchBook_TC05_DiscountCode_ValidatesAppliesAndClearsPanelEntry",
+      "category": "MobileApp-SearchBook-AndroidReadiness",
+      "outcome": "Promo length validation, apply, reopen, cancel draft and clear operate on panel state only; no discount entitlement asserted."
+    },
+    {
+      "id": "ANDROID-TC06",
+      "platform": "Android",
+      "testMethod": "AndroidSearchBook_TC06_SelectionSheets_DismissalPreservesRoute",
+      "category": "MobileApp-SearchBook-AndroidReadiness",
+      "outcome": "Airport back/close and calendar/traveller/promo close return to the panel without changing the route."
+    },
+    {
+      "id": "TC01",
+      "testMethod": "SearchBook_TC01_MixedPassengerOneWay_SelectsVirginFlight",
+      "category": "MobileApp-SearchBook-SmokeE2E",
+      "outcome": "Mixed-passenger one-way Virgin booking completes through payment, confirmation and Trips."
+    },
+    {
+      "id": "TC02",
+      "testMethod": "SearchBook_TC02_MixedPassengerOneWay_SelectsNonVirginFlight",
+      "category": "MobileApp-SearchBook-SmokeE2E",
+      "outcome": "Mixed-passenger one-way partner selection is retained through Flight Summary; checkout is owned by representative core E2Es."
+    },
+    {
+      "id": "TC03",
+      "testMethod": "SearchBook_TC03_TwoAdultsAndChildReturn_SelectsVirginOutboundAndInbound",
+      "category": "MobileApp-SearchBook-SmokeE2E",
+      "outcome": "Return Virgin outbound and inbound booking completes for two adults and one child."
+    },
+    {
+      "id": "TC04",
+      "testMethod": "SearchBook_TC04_TwoAdultsAndChildReturn_SelectsVirginOutboundAndPartnerInbound",
+      "category": "MobileApp-SearchBook-SmokeE2E",
+      "outcome": "Return Virgin outbound and partner inbound selections are retained through combined Flight Summary."
+    },
+    {
+      "id": "TC05",
+      "testMethod": "SearchBook_TC05_SearchEntry_EnforcesCalendarAndPassengerRules",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Search entry enforces required criteria, an inclusive today-plus-330-days calendar boundary (day 331 disabled), return-range confirmation and passenger constraints."
+    },
+    {
+      "id": "TC06",
+      "testMethod": "SearchBook_TC06_ResultsSortAndFilter_PersistUntilFiltersAreCleared",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Smoke",
+      "area": "SearchAndBook",
+      "outcome": "A short refinement smoke proves sorting and filtering persist until filters are cleared."
+    },
+    {
+      "id": "TC07",
+      "testMethod": "SearchBook_TC07_PriceSort_OrdersDisplayedResultsAscending",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Price sorting orders every displayed result by ascending minimum cabin price."
+    },
+    {
+      "id": "TC08",
+      "testMethod": "SearchBook_TC08_DepartureTimeSort_OrdersResultsAndRecommendedRestoresBaseline",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Departure-time sorting orders results and Recommended restores the baseline."
+    },
+    {
+      "id": "TC09",
+      "testMethod": "SearchBook_TC09_DurationSort_OrdersResultsAndRecommendedRestoresBaseline",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Duration sorting orders results and Recommended restores the baseline."
+    },
+    {
+      "id": "TC10",
+      "testMethod": "SearchBook_TC10_SortSwitching_PreservesSelectionAndRecommendedRestoresBaseline",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Switching Price, Departure and Duration preserves each selected state before Recommended restores the baseline; ordering is owned by TC07-TC09."
+    },
+    {
+      "id": "TC11",
+      "testMethod": "SearchBook_TC11_AvailableAirlineFilters_EveryResultContainsSelectedOperatedLeg",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Each airline filter offered for the current search returns only itineraries containing a leg operated by that airline."
+    },
+    {
+      "id": "TC12",
+      "testMethod": "SearchBook_TC12_ConnectionsFilters_EveryResultMatchesSelectedCount",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Every result matches each selected connection-count filter."
+    },
+    {
+      "id": "TC13",
+      "testMethod": "SearchBook_TC13_DepartureTimeFilters_EveryResultFallsInsideSelectedWindow",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Every result falls inside each selected departure-time window."
+    },
+    {
+      "id": "TC14",
+      "testMethod": "SearchBook_TC14_FilterSwitching_ReplacesDiscoveredAirlineAndValidatesResults",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Switching directly between two offered airline filters replaces the selection and validates results."
+    },
+    {
+      "id": "TC15",
+      "testMethod": "SearchBook_TC15_PriceSortWithDiscoveredAirlineFilter_PreservesOrderingAndMatchesCarrier",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Price ordering persists while every itinerary matches the discovered airline filter."
+    },
+    {
+      "id": "TC16",
+      "testMethod": "SearchBook_TC16_ClearFilters_RemovesDiscoveredAirlineAndPreservesPriceSort",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Clear removes the discovered airline filter, restores unfiltered results and preserves Price sorting."
+    },
+    {
+      "id": "TC17",
+      "testMethod": "SearchBook_TC17_RecentAirportSearches_RetainFiveMostRecentPerDirection",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Recent airport searches retain the latest five origins and destinations in newest-first order.",
+      "platforms": [
+        "iOS",
+        "Android"
+      ]
+    },
+    {
+      "id": "TC18",
+      "testMethod": "SearchBook_TC18_HemanPromoCode_DiscountsManchesterNewYorkReturnEconomyClassicByFivePounds",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "HEMAN reduces the matching May MAN-JFK return Economy Classic fare by exactly five pounds and exposes applied-promotion evidence."
+    },
+    {
+      "id": "TC19",
+      "testMethod": "SearchBook_TC19_FilterSelection_RecalculatesAvailabilityAcrossOtherGroups",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Selecting an available filter immediately recalculates enabled options in the other filter groups and the applied results match the selection."
+    },
+    {
+      "id": "TC20",
+      "testMethod": "SearchBook_TC20_VirginOperatingCarrierFlightCards_UseBroadCabinGroupNames",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Virgin flight cards use the broad Economy, Delight, Premium and Upper Class cabin group names."
+    },
+    {
+      "id": "TC21",
+      "testMethod": "SearchBook_TC21_OtherOperatingCarrierFlightCards_UseBackendBrandCabinNames",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Partner flight cards retain their backend fare or Brand cabin names rather than being collapsed into Virgin cabin groups."
+    },
+    {
+      "id": "TC22",
+      "testMethod": "SearchBook_TC22_VirginFlightCabin_UpgradeViewFaresOpensNextAvailableCabin",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "A Virgin cabin upgrade card is available and View fares moves the selector to the next offered cabin."
+    },
+    {
+      "id": "TC23",
+      "testMethod": "SearchBook_TC23_OneAdultGuestFromJfkToLhr_CompletesUsdBookingAndAppearsInTrips",
+      "category": "MobileApp-SearchBook-SmokeE2E",
+      "outcome": "One signed-out guest adult searches JFK-LHR, verifies USD results, selects Virgin Economy Classic, checks summary route/fare/USD, completes payment and verifies USD confirmation and exact booking reference in Trips. Enrolled in Sanity/Regression; expanded checkout not yet live-qualified."
+    },
+    {
+      "id": "TC24",
+      "testMethod": "SearchBook_TC24_VirginOperatingCarrier_FlightSummaryMatchesSelectedFlight",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "A Virgin-operated selection retains its route, carrier, fare, schedule, total price and enabled Continue state on Flight Summary."
+    },
+    {
+      "id": "TC25",
+      "testMethod": "SearchBook_TC25_OtherOperatingCarrier_FlightSummaryMatchesSelectedFlight",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "A partner-operated selection retains its route, carrier, backend fare, schedule, total price and enabled Continue state on Flight Summary."
+    },
+    {
+      "id": "TC26",
+      "testMethod": "SearchBook_TC26_MultiCarrierConnectingFlight_FlightSummaryRetainsStopsAndAdditionalCarrier",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "A dynamically selected non-direct +1 result retains stops and additional-carrier marker, ordered leg airports, ISO dates, clocks, operating carriers and any supplied descriptors in Summary Flight details. Adjacent leg airports and connection airports agree; first departure date and endpoints match the search. Extended scenario passed locally on 30 September 2026 against the rebuilt iOS branch in 2m17s, superseding the installed-build blocker. No UTC duration, independent backend truth, all-carrier, Android or BrowserStack qualification is inferred."
+    },
+    {
+      "id": "TC27",
+      "testMethod": "SearchBook_TC27_FlexibleDateSelection_RefreshesResultsAndPreservesRoute",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Selecting another available flexible date completes with visible results and preserves the submitted route."
+    },
+    {
+      "id": "TC28",
+      "testMethod": "SearchBook_TC28_EditSubmittedSearch_UpdatesCriteriaAndResultsRoute",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Editing from inbound results changes the submitted route and displays results for the amended return search."
+    },
+    {
+      "id": "TC29",
+      "readiness": "Ready",
+      "testMethod": "SearchBook_TC29_SelectedFareBenefitsAndBaggage_PropagateToFlightSummary",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Selected fare title is retained on Summary; Flight details baggage matches advertised inclusion and any displayed count/weight/three-axis dimensions. Explicitly excluded categories may be absent but never included. Outputs actual comparison counts, distinguishing Summary-only dimension display from verified retention. Passed locally 30 September 2026 in 58s: inclusion=2, quantity=0, weight=1, dimensions=0. Dimension comparison remains offline-qualified only: the selected Economy Light fare supplied no expected dimensions, although Summary displayed them. Full fare rules, linear dimensions and all-carrier coverage remain gaps."
+    },
+    {
+      "id": "TC30",
+      "suite": "Deferred",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBook_TC30_TransientSearchFailure_RetryRecoversToResults",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "Draft controlled recovery coverage, pending a deterministic fail-once Search and Book test hook."
+    },
+    {
+      "id": "TC31",
+      "testMethod": "SearchBook_TC31_DiscountCode_RejectsInvalidDraftsAndTrimsAppliedCode",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "readiness": "Ready",
+      "outcome": "Empty, two-character, punctuation and internal-space drafts disable Apply; three alphanumeric characters enable it. Applying a padded code persists the trimmed value on reopening. Panel only; no search or discount entitlement is requested."
+    },
+    {
+      "id": "TC32",
+      "testMethod": "SearchBook_TC32_DiscountCode_CancelPreservesAppliedCodeAndClearRemovesIt",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "readiness": "Ready",
+      "outcome": "Apply persists a synthetic code, cancelling a changed draft preserves the original, applying a replacement updates it, and Clear restores the empty panel and disables Apply on reopening. No search or discount entitlement is requested."
+    },
+    {
+      "id": "TC33",
+      "testMethod": "SearchBook_TC33_FareSheetCancellation_PreservesResultAndOriginalCabinOnReopen",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "readiness": "Ready",
+      "outcome": "Switch to a different displayed cabin without selecting a fare, dismiss, verify the original result evidence is unchanged, and reopen the original cabin. Requires two displayed selectable cabins; stops before Summary."
+    },
+    {
+      "id": "TC34",
+      "testMethod": "SearchBook_TC34_MissingPassengerFirstName_ShowsErrorAndPreventsSave",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "readiness": "Ready",
+      "outcome": "Guest one-adult search reaches the redesigned passenger editor; clearing first name exposes its nonempty validation error and the validation action does not save or dismiss the editor. Stops before passenger submission/payment."
+    },
+    {
+      "id": "TC35",
+      "testMethod": "SearchBook_TC35_ValidGuestPassenger_TermsAcceptanceControlsContinue",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "readiness": "Ready",
+      "outcome": "Complete and save a synthetic single guest traveller/contact using the existing flow; unaccepted Terms disable Continue, acceptance enables it, and deselection disables it again. Never click Continue or enter HPP."
+    },
+    {
+      "id": "TC38",
+      "testMethod": "SearchBook_TC38_OneWaySummaryChange_RetainsReplacementFlightFareAndPrice",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "One adult changes a Virgin one-way selection from Summary to an offered flight with a different displayed schedule. Summary retains replacement route, schedule, carrier, exact fare title and currency price. Stops before checkout. Requires two distinct schedules. Passed locally on iPhone 17 Pro / iOS 26.5 on 29 September 2026 in 2m04s. Return-leg invalidation/reselection and BrowserStack qualification are not covered."
+    },
+    {
+      "id": "TC39",
+      "testMethod": "SearchBook_TC39_OneWaySummaryUpgrade_UpdatesFareAndTotalPreservingFlight",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "One adult selects Virgin Economy, discovers an offered Summary upgrade and verifies its target fare and recalculated currency total while retaining route, carrier and schedule. Distinguishes additional charge from total fallback. Requires a positive-priced upgrade; zero/negative/reward and return-trip upgrades are outside scope. Stops before checkout. Passed locally on iPhone 17 Pro / iOS 26.5 on 29 September 2026 in 2m19s; both alternative price branches are offline-tested, not both live-qualified."
+    },
+    {
+      "id": "TC40",
+      "testMethod": "SearchBook_TC40_ReturnSummaryChange_RequiresInboundReselectionAndUpdatesItinerariesAndTotal",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "outcome": "One adult changes a return outbound from Summary to a distinct offered schedule, must reselect inbound, and chooses a distinct inbound schedule. Both scoped Summary itineraries retain the selected routes, dates, schedules, carriers and exact fare titles; total matches outbound base plus signed inbound adjustment or the displayed inbound full total. Requires at least two selectable Virgin schedules in each direction. Stops before checkout. Passed locally on iPhone 17 Pro / iOS 26.5 on 30 September 2026 in 2m54s. Inbound date is verified in Summary because its results have no flexible-date carousel. Android and BrowserStack not qualified."
+    },
+    {
+      "id": "TC41",
+      "suite": "BackendRegression",
+      "area": "SearchAndBook",
+      "readiness": "Ready",
+      "testMethod": "SearchBook_TC41_OneWaySummaryBaggage_MatchesBackendSelectedFlightAndFare",
+      "category": "MobileApp-SearchBook-BackendValidation",
+      "outcome": "Backend-first one-adult LHR-JFK revenue/GBP comparison. Prepare an independent direct Virgin Economy offer and summary, then run the normal UI search with identical criteria, match schedule, route, carrier, flight number and exact fare title, and compare baggage count/weight/dimensions. No app basket metadata or app test-only code. Two bounded runner-side API calls; no checkout. Two local passes on 30 September 2026; BrowserStack qualification pending."
+    },
+    {
+      "id": "TC42",
+      "suite": "BackendRegression",
+      "area": "SearchAndBook",
+      "readiness": "Ready",
+      "testMethod": "SearchBook_TC42_ConnectingPartnerSummaryBaggage_MatchesBackendSelectedLegsAndFare",
+      "category": "MobileApp-SearchBook-BackendValidation",
+      "outcome": "Backend-first one-adult LHR-JFK Economy/GBP comparison with two ordered legs and at least one partner operator. Match every leg's airports, dates, clocks, carrier and flight number plus connection airport before selecting the exact fare. Compare the matching itinerary-level baggage reference, not a duplicated allowance per leg. No checkout or app-only hooks. Local pass on 30 September 2026: two allowance rows and two dimension comparisons. BrowserStack qualification pending."
+    },
+    {
+      "id": "TC43",
+      "testMethod": "SearchBook_TC43_OneAdultGuestSeatSelection_CompletesBookingAndAppearsInTrips",
+      "category": "MobileApp-SearchBook-SmokeE2E",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One guest adult selects a dynamically available seat, verifies passenger assignment before submission, completes test payment and finds the confirmed booking in Trips. Enrolled in Sanity/Regression; historical payment issue #177 remains a qualification risk, not a skip. No post-payment seat-fulfilment or multi-sector claim."
+    },
+    {
+      "id": "TC44",
+      "testMethod": "SearchBook_TC44_OneAdultSeatSelection_ReplacementAndRemovalUpdateAssignment",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One guest adult selects an offered seat, replaces it with a different offered seat, verifies exact passenger assignment and removes it to restore the initial unassigned state. Stops before seat submission/payment; price and multi-sector assertions remain gaps."
+    },
+    {
+      "id": "TC45",
+      "testMethod": "SearchBook_TC45_SeatDetailsAndKey_DismissalPreservesPassengerAssignment",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "Close seat details and the seat key with an unassigned traveller and after selecting a seat; assignment remains unchanged. Stops before seat submission/payment; sheet content and price assertions need additional observation IDs."
+    },
+    {
+      "id": "TC46",
+      "testMethod": "SearchBook_TC46_TwoAdultSeatSelection_RetainsIndependentAssignments",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "Two guest adults select distinct offered seats. Verify automatic advance to the unassigned passenger, disabled seats already assigned to the other traveller, switching retention and removing the first assignment without changing the second. Stops before seat submission/payment. Passed the user-authorised local rerun on 7 October 2026 in 2m37s without further code changes. First run exposed seatSelection.error before passenger cards; its cause remains unknown. BrowserStack and repeated-run stability remain unqualified."
+    },
+    {
+      "id": "TC47",
+      "testMethod": "SearchBook_TC47_PaidSeatReplacementAndRemoval_RecalculateChargeAndTripTotal",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One guest adult compares offered paid-seat prices with detail, charge and trip total; differently priced replacement replaces rather than adds the original charge; removal restores zero charge and original total. Passed locally on 7 October in 6m02s: 46D GBP 40, one safe-area drag, 50A GBP 35, removal GBP 0; totals GBP 964.20, GBP 959.20 and baseline GBP 924.20. Requires PR1273 IDs and distinct paid inventory. No seat submission/payment. Enrolled in Regression; repeated-run stability and BrowserStack pending."
+    },
+    {
+      "id": "TC48",
+      "testMethod": "SearchBook_TC48_OneAdultGuestWithoutSeats_CompletesBookingAndAppearsInTrips",
+      "category": "MobileApp-SearchBook-SmokeE2E",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One guest adult searches LHR-JFK three months ahead, selects Virgin Economy Classic and completes payment, confirmation and Trips without selecting a seat. Enables the skip-seat launch flag. Comparison with TC43 holds party, route and fare criteria constant, not live offer inventory. Passed locally on main on 12 October 2026 through payment, confirmation and Trips (4m11s). BrowserStack qualification pending."
+    },
+    {
+      "id": "TC49",
+      "testMethod": "SearchBook_TC49_AdultWithLapInfant_OnlyAdultHasIndependentSeatAssignment",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One adult plus one lap infant exposes exactly one independently assignable passenger through the complete carousel count, and the adult passenger card identifies the linked infant with '+ infant'. Adult selection, replacement and removal retain active passenger zero. The new text assertion requires an iOS build containing #1311 and is not yet live-qualified. Stops before seat submission/payment; infant seat restrictions and BrowserStack remain unqualified."
+    },
+    {
+      "id": "TC50",
+      "testMethod": "SearchBook_TC50_UnsupportedOperatingCarriers_BypassSeatsWhileVirginRemainsEligible",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One adult selects an Economy Standard itinerary with every leg explicitly operated by AF/KL and requires direct payment entry without seat actions. Same-session Virgin Classic positive control must open seats to rule out a persisted global skip flag. No payment. Inventory dependent; passed locally on 9 October 2026 (4m51s); remote qualification pending."
+    },
+    {
+      "id": "TC51",
+      "testMethod": "SearchBook_TC51_AdultAndChildVirginOneWay_DisplaysSeatProximityGuidance",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One adult and one child select an eligible Virgin Economy Classic sector and must see seatSelection.childGuidanceSheet before the seat map. Stops at the guidance without dismissal, seat submission or payment. Exact copy and live qualification remain pending."
+    },
+    {
+      "id": "TC52",
+      "testMethod": "SearchBook_TC52_UnsupportedOutboundEligibleInbound_DisplaysGuidanceForFirstEligibleSector",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One adult and one child search YYZ-LHR return, three months ahead. Verify every outbound leg is explicitly unsupported for seats (AF/KLM), then select a Virgin Economy Classic inbound containing a verified seat-supported leg. No fixed connection airport, stop count or connecting carrier combination. Virgin Economy Light is excluded because it bypasses seats; no unqualified Delta fare fallback. Log both selected cabins and fare names. Child proximity guidance must display on entry to the first eligible inbound seat sector despite the unsupported outbound. Stops before dismissal, seat submission or payment; not an assertion of the separate distant-seat warning."
+    },
+    {
+      "id": "TC53",
+      "testMethod": "SearchBook_TC53_AdultAndChildUnsupportedOneWay_BypassesGuidanceAndSeats",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One adult and one child search MAN-MIA one-way three months ahead and select an Air France-led Economy Standard itinerary whose every operating leg is explicitly unsupported for native seats. Connections remain dynamic; reject any VS/DL or unknown operating leg. Log selected cabin and fare. Passenger submission must reach payment directly without child guidance or seat actions. No payment; inventory dependent."
+    },
+    {
+      "id": "TC54",
+      "testMethod": "SearchBook_TC54_AdultAndChildDirectDeltaOneWay_DisplaysSeatProximityGuidance",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One adult and one child select an offered fare from the seat-eligible Delta Main cabin on a direct DL-operated sector without assuming Virgin fare names. Because iOS Develop treats DL as seat eligible, child guidance must display before seats. Stops before dismissal, seat-map availability resolution or payment; matching Delta inventory and live qualification pending."
+    },
+    {
+      "id": "TC55",
+      "testMethod": "SearchBook_TC55_ShortNoticeLosCardPresentation_AgreementCompletesBookingAndTrips",
+      "category": "MobileApp-SearchBook-SmokeE2E",
+      "suite": "Regression",
+      "area": "SearchAndBook",
+      "outcome": "One guest adult, LHR-LOS one-way today plus three days, Virgin Economy Classic. Real test HPP then mandatory card-presentation guidance and enabled actions. Accept once, require confirmation and Trips. No proxy or payment retry; backend 2001 eligibility is a test-environment dependency. Cancel and exact backend request counts are not covered."
+    },
+    {
+      "id": "TC56",
+      "testMethod": "SearchBook_TC56_GuestReviewBackNavigation_ReentryRetainsTotalAndPaymentReadiness",
+      "category": "MobileApp-SearchBook-FunctionalValidation",
+      "suite": "Readiness",
+      "area": "SearchAndBook",
+      "outcome": "Guest one adult LHR-JFK Economy Classic with seats skipped: validate Review, go back to passenger details, continue without refilling, then compare Flights, Taxes/fees, Total and optional seat figures individually, including currency/points and seat-row presence. Both visits reconcile against Summary and require enabled payment action. Stop before HPP. No assertion of backend tax truth or payment-session identity. Original scenario passed locally on 20 October; per-row retention extension requires live qualification."
+    },
+    {
+      "id": "TC57",
+      "testMethod": "SearchBook_TC57_GuestPayPalSandbox_CompletesBookingAndAppearsInTrips",
+      "category": "MobileApp-SearchBook-PayPalReadiness",
+      "suite": "Readiness",
+      "area": "SearchAndBook",
+      "outcome": "Explicit local SIT guest LHR-JFK Economy Classic without seats: reconcile Review figures, retrieve Core Vault sandbox credentials, sign in on HTTPS sandbox.paypal.com and approve once. Require app confirmation, expected travellers, booking reference and Trips. Known confirmation blocker remains a failure, never a passing login-only result. Requires separate sandbox-payment and privacy opt-ins. External provider DOM selectors; remote qualification unavailable."
+    },
+    {
+      "id": "LOYALTY-TC01",
+      "testMethod": "LoyaltySearchBook_TC01_HighBalanceEconomyRedemption_CompletesThroughHppConfirmationAndTrips",
+      "category": "MobileApp-Account-SmokeE2E",
+      "outcome": "A stored SIT Red member with at least 100000 table points logs in, selects a one-adult Virgin Economy reward fare, verifies a positive cost within the live member balance and the same points on Summary, then completes cash payment through HPP, confirmation and Trips. Backend points-ledger reconciliation is not covered."
+    },
+    {
+      "id": "LOYALTY-TC02",
+      "testMethod": "LoyaltySearchBook_TC02_LowBalanceReturnUpperClass_BlocksContinuationForInsufficientPoints",
+      "category": "MobileApp-Account-FunctionalValidation",
+      "outcome": "A stored low-balance SIT Red member selects return Upper Class reward fares whose displayed points exceed the account balance, sees the insufficient-points warning and cannot continue from Flight Summary."
+    },
+    {
+      "id": "LOYALTY-TC03",
+      "suite": "Deferred",
+      "area": "SearchAndBook",
+      "testMethod": "LoyaltySearchBook_TC03_CurrencyBooking_SelectsDisplayedPayWithPointsOption",
+      "category": "MobileApp-Account-FunctionalValidation",
+      "outcome": "A stored SIT member disables reward-seat search, completes a one-way currency search, verifies their prepopulated passenger details, opens Pay with Points and selects a displayed contribution without applying it."
+    },
+    {
+      "id": "LOYALTY-TC04",
+      "testMethod": "LoyaltySearchBook_TC04_MemberNotTravelling_ClearsProfileAndRetainsReplacementTraveller",
+      "category": "MobileApp-Account-FunctionalValidation",
+      "outcome": "A leased SIT Red member makes a one-adult currency search, verifies prepopulated identity, opts out of travelling and verifies names, DOB, gender, membership, profile email and telephone clear. Saves synthetic replacement details, reopens and verifies retention and opt-out state. Stops before passenger submission/payment. Country-code reset and loyalty-programme selection are not asserted. Live qualification pending."
+    },
+    {
+      "id": "FAULT-TC01",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC01_ControlledSearchError_ShowsErrorAndAllowsSearch",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Opt-in sequential iOS POC. Inject exactly one HTTP-200 GraphQL search error before upstream forwarding, prove consumption, assert the owned error ID and enabled search action. Passed locally on 14 October 2026 on a disposable iPhone 17 Pro/iOS 26.5 using exact-process capture (1m17s), and on BrowserStack alongside TC02–TC05. TC06 passed locally but its remote UI/transport failure remains unconfirmed. Remote path requires a caller-owned isolated BrowserStack Local tunnel and explicit traffic-routing approval. No payment or retry/recovery assertion in TC01; repeated-run qualification remains pending."
+    },
+    {
+      "id": "FAULT-TC02",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC02_SearchUnavailable_ShowsErrorAndAllowsSearch",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Inject EAPI 3002 through the Search Error envelope. Prove injection and exact generic iOS message with enabled Search. Draft; live qualification pending."
+    },
+    {
+      "id": "FAULT-TC03",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC03_NoAvailabilityError_StopsSearchAndAllowsCorrection",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Inject EAPI 101682 no availability error; assert current generic search error and enabled Search. Does not claim a dedicated empty-results state. Draft; live qualification pending."
+    },
+    {
+      "id": "FAULT-TC04",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC04_SupplierSessionMissing_ShowsErrorAndAllowsSearch",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Inject EAPI 100600 unknown supplier session. Prove injection and safe search error. This is not B2C authentication expiry. Draft; live qualification pending."
+    },
+    {
+      "id": "FAULT-TC05",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC05_BasketUnavailable_StaysOnSummaryWithoutOpeningPassengers",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Inject EAPI 2004 on retrieveBasket. Assert exact summary error, re-enabled Continue and no passenger navigation. No retry, booking or payment. Does not prove elapsed-time cache expiry or restart-search UX. Draft; live qualification pending."
+    },
+    {
+      "id": "FAULT-TC06",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC06_SearchRequestTimeout_StopsLoadingAndAllowsSearch",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Withhold matching search responses for 150 seconds; assert exact error and enabled Search within 180 seconds. Repeated matching requests are withheld within the bounded lifetime. Local pass on provisioned simulator 14 October (3m14s run), completed about 122 seconds after interception before hold-completed. BrowserStack failed with missing error control and Appium transport errors; cause unconfirmed. No EAPI error code claimed. Draft."
+    },
+    {
+      "id": "FAULT-TC07",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC07_PostHppPaymentStatusFailure_ShowsErrorWithoutConfirmation",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Opt-in test payment followed by intercepted bookUpdatePaymentStatus HTTP-200 GraphQL error. Exact owned page/title/contact message and enabled Return to flight search; no Retry or confirmation. Never click Return or retry; guard unexpected orders. Local pass on 19 October against iOS PR1331 0dd5d294 (2m49s). Draft; BrowserStack and fresh-search reset unqualified."
+    },
+    {
+      "id": "FAULT-TC08",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC08_PostHppBookingFailure_ShowsErrorWithoutConfirmation",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Opt-in test payment and normal status update, then intercept bookCreateOrder with basket-unavailable HTTP-200 GraphQL error. Exact owned error and no confirmation; no retry. This is not a successful order followed by failed confirmation retrieval. Draft, not live qualified."
+    },
+    {
+      "id": "FAULT-TC09",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC09_PostHppBookingTimeout_StopsLoadingWithoutConfirmation",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Opt-in test payment then withhold bookCreateOrder for 150 seconds; assert exact error and recovery within 180 seconds without successful confirmation. Requests/retries never forwarded by active completion guard. No claim of measured client timeout until qualified. Draft, not live qualified."
+    },
+    {
+      "id": "FAULT-TC10",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC10_OutboundSeatMapFailure_ShowsReassuranceAndOpensInboundMap",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Intercept the outbound retrieveSeatMap with its EAPI generic HTTP-200 GraphQL error/code 500. Require all three approved reassurance messages within the owned error group, no Retry and loading absent. Continue and prove the eligible inbound seat map opens normally. Passed locally with confirmed injection on 16 October 2026; BrowserStack remains unqualified."
+    },
+    {
+      "id": "FAULT-TC11",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC11_SeatSaveFailure_ShowsErrorWithoutOpeningPayment",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Select a dynamically offered seat, verify assignment, then intercept selectSeat with its EAPI generic HTTP-200 GraphQL error/code 500. Require exact submission error, enabled Continue, retained draft assignment and no payment/confirmation. Active guard intercepts retries; no user retry or Skip. Draft, not live qualified; no successful save or partial multi-passenger reconciliation claim."
+    },
+    {
+      "id": "FAULT-TC12",
+      "suite": "FaultInjection",
+      "area": "SearchAndBook",
+      "testMethod": "SearchBookFault_TC12_InboundSeatMapFailure_ShowsReassuranceAndContinuesToPayment",
+      "category": "MobileApp-SearchBook-FaultInjection",
+      "outcome": "Use an unsupported outbound and eligible Virgin inbound, then intercept the inbound retrieveSeatMap. Require all three approved reassurance messages within the owned error group, no Retry and loading absent. Continue to payment without performing a payment action. Passed locally with confirmed injection on 16 October 2026; BrowserStack remains unqualified."
+    },
+    {
+      "id": "ACCOUNT-TC01",
+      "testMethod": "LoyaltyAccount_TC01_StoredMemberFirstName_MatchesPersonalDetailsAndExposesAccountActions",
+      "category": "MobileApp-Account-FunctionalValidation",
+      "outcome": "A leased SIT loyalty account logs in, opens My Account Personal Details, matches the stored first name, and exposes Edit details and Delete account actions. Surname display remains blocked by the app accessibility contract."
+    }
+  ],
+  "sharedSearchPanel": {
+    "pageContract": "IFlightSearchPanelPage",
+    "factory": "FlightSearchPanelPageFactory",
+    "platformSelection": "actual driver platformName from configured session",
+    "sharedScenarioIds": [
+      "PANEL-TC01",
+      "PANEL-TC02",
+      "TC36",
+      "TC37",
+      "TC17"
+    ],
+    "androidOnlyScenarioIds": [
+      "ANDROID-TC05",
+      "ANDROID-TC06"
+    ],
+    "retiredScenarioIds": {
+      "ANDROID-TC01": "PANEL-TC01",
+      "ANDROID-TC02": "PANEL-TC02",
+      "ANDROID-TC03": "TC36",
+      "PANEL-TC03": "TC36",
+      "PANEL-TC04": "TC37",
+      "ANDROID-TC04": "TC37",
+      "ANDROID-TC07": "TC17"
+    },
+    "iosAdditionalSelectors": {
+      "roundTripOption": "NativeFlightSearchRoundTripOption",
+      "oneWayOption": "NativeFlightSearchOneWayOption",
+      "passengerCancel": "NativeFlightPassengerSelectorCancelButton"
+    }
+  }
+}

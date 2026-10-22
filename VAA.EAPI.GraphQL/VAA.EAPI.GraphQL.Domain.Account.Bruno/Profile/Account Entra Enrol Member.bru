@@ -1,0 +1,145 @@
+meta {
+  name: Account Entra Enrol Member
+  type: graphql
+  seq: 8
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation AccountEntraEnrolMember {
+    accountEntraEnrolMember(
+      request: {
+        channelId: "{{account_channel_id}}"
+        channelUserId: "{{account_channel_user_id}}"
+        enrolmentToken: "{{account_enrolment_token}}"
+        customerDetails: {
+          firstName: "{{account_first_name}}"
+          lastName: "{{account_last_name}}"
+          middleName: "{{account_middle_name}}"
+          preferredFirstName: "{{account_preferred_first_name}}"
+          preferredLastName: "{{account_preferred_last_name}}"
+          preferredGender: "{{account_preferred_gender}}"
+          preferredName: "{{account_preferred_name}}"
+          preferredSalutation: "{{account_preferred_salutation}}"
+          preferredPronouns: "{{account_preferred_pronouns}}"
+          gender: "{{account_gender}}"
+          title: "{{account_title}}"
+          salutation: "{{account_salutation}}"
+          nationality: "{{account_nationality}}"
+          dateOfBirth: "{{account_date_of_birth}}"
+          password: "{{account_password}}"
+          customerType: Loyalty
+          addressDetails: [
+            {
+              addressType: Home
+              addressLine1: "{{account_address_line1}}"
+              addressLine2: "{{account_address_line2}}"
+              addressVerified: true
+              companyName: "{{account_company_name}}"
+              city: "{{account_city}}"
+              postalCode: "{{account_postal_code}}"
+              country: "{{account_country_code}}"
+              preferredFlag: "Y"
+            }
+          ]
+          contactDetails: {
+            emailDetails: [
+              {
+                usage: Business
+                emailId: "{{account_email}}"
+                preferredFlag: "Y"
+                description: "Personal Email"
+              }
+            ]
+            phoneDetails: [
+              {
+                phoneType: Mobile
+                usage: Personal
+                countryCode: "{{account_phone_country_code}}"
+                phoneNumber: "{{account_phone_number}}"
+                preferredFlag: "Y"
+                description: "Personal Phone"
+              }
+              {
+                phoneType: Mobile
+                usage: Business
+                countryCode: "{{account_secondary_phone_country_code}}"
+                phoneNumber: "{{account_secondary_phone_number}}"
+                preferredFlag: ""
+                description: "Personal Phone"
+              }
+            ]
+          }
+          loyaltyMember: {
+            memberType: "Individual"
+            mediaCode: "{{account_media_code}}"
+            enrollmentChannel: "{{account_enrolment_channel}}"
+            termsAndConditionsAccepted: true
+            guardianDetails: {
+              guardianTermsAndConditionsAccepted: true
+            }
+          }
+          travelProfile: {
+            reasonForTravel: Business
+          }
+          preferences: [
+            {
+              preferenceType: VaaMarketingPermissions
+              preferenceValue: "Y"
+            }
+            {
+              preferenceType: VaPartnersMarketingPermissions
+              preferenceValue: "Y"
+            }
+            {
+              preferenceType: VaGroupMarketingPermissions
+              preferenceValue: "Y"
+            }
+            {
+              preferenceType: PreferredPartnerFFP
+              preferenceValue: ""
+            }
+          ]
+          customerAttribute: [
+            {
+              type: IphoneApp
+              value: "{{account_iphone_app_identifier}}"
+            }
+            {
+              type: TwitterHandle
+              value: "{{account_twitter_handle}}"
+            }
+          ]
+        }
+      }
+    ) {
+      tokenType
+      scope
+      expiresIn
+      accessToken
+      refreshToken
+      idToken
+      continuationToken
+    }
+  }
+}
+
+script:post-response {
+  const body = typeof res.getBody === "function" ? res.getBody() : res.body;
+  const token = body?.data?.accountEntraEnrolMember;
+  
+  if (token?.accessToken) bru.setVar("access_token", token.accessToken);
+  if (token?.refreshToken) bru.setVar("refresh_token", token.refreshToken);
+  if (token?.idToken) bru.setVar("id_token", token.idToken);
+  if (token?.continuationToken) bru.setVar("continuation_token", token.continuationToken);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

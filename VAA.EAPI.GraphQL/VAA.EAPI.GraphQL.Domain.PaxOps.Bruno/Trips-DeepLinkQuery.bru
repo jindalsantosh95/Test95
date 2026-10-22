@@ -1,0 +1,32 @@
+meta {
+  name: Trips-DeepLinkQuery
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query {
+    Deeplink(
+    request: {
+      tripReservationId: "{{tripsBookingId}}",
+      deeplinkOption: IROP_ViewDetails,
+      additionalData: null
+    }
+    )
+      {
+          deeplinkUrl
+          deeplinkOption
+      }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,27 @@
+﻿<soapenv:Envelope xmlns:pnr="http://schemas.delta.com/common/pnrrequestparams" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://schemas.delta.com/common/stamping/v2" xmlns:v21="http://schemas.delta.com/common/userauthdata/v2" xmlns:v22="http://schemas.delta.com/common/ptrauthdata/v2" xmlns:v23="http://schemas.delta.com/common/passengerinfo/v2" xmlns:v3="http://schemas.delta.com/common/pnrcommontypes/v3" xmlns:v4="http://schemas.delta.com/common/requestinfo/v4" xmlns:v41="http://schemas.delta.com/common/segmentinfo/v4">
+	<soapenv:Header>
+		<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+		</wsse:Security>
+	</soapenv:Header>
+	<soapenv:Body wsu:Id="id-2EE8150552771434BF1523355634757102" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+		<!--Optional:-->
+		<v3:SetupContextRequest>
+			<!--Optional:-->
+			<v4:RequestInfo ApplicationId="ND" DebugOptions="Y" TestLab="TVTH">
+				<v4:HostContextParams PoolType="STAMPING/VAA/NEW/DIST/CAPABILITY"/>/>
+			</v4:RequestInfo>
+			<!--Optional:-->
+			<v3:RetrieveInfo isSessionNeeded="">
+				<!--Optional:-->
+				<v23:PassengerInfo RecordLocator="{0}"/>
+				<!--Optional:-->
+			</v3:RetrieveInfo>
+			<v2:StampingInfo>
+				<!--Optional:-->
+				<v21:UserAuthorizationData AgentCityCode="LON" RoleIndicator="RESNDCSALES" SecurityId="D027954"/>
+				<v22:PrinterAuthorizationData ATBPrinterAddress="14450A" AdminPrinterAddress="14450A" BagPrinterAddress="14450A" BoardingCardPrinterAddress="14450A"/>
+				<!--Optional:-->
+			</v2:StampingInfo>
+		</v3:SetupContextRequest>
+	</soapenv:Body>
+</soapenv:Envelope>

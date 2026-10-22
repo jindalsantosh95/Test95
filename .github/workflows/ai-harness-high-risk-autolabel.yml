@@ -1,0 +1,75 @@
+name: ai-harness-high-risk-autolabel
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+
+concurrency:
+  group: high-risk-autolabel-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  label:
+    name: high-risk-autolabel
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Detect high-risk file changes
+        id: detect
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pull_number = context.payload.pull_request.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number,
+              per_page: 100
+            });
+
+            const highRiskPatterns = [
+              /^\.github\/workflows\//i,
+              /^scripts\/verify\.ps1$/i,
+              /^scripts\/check-.*\.ps1$/i,
+              /^docs\/harness-/i,
+              /^docs\/agent-memory\.md$/i,
+              /^docs\/context-routing-operating-guidance\.md$/i,
+              /^VAA\.EAPI\.Automation\/docs\/HARNESS_ENGINEERING\.md$/i,
+              /^VAA\.EAPI\.Automation\/AGENTS\.md$/i,
+              /^VAA\.EAPI\.Automation\/docs\/FRAMEWORK_ARCHITECTURE\.md$/i,
+              /^VAA\.EAPI\.Automation\/[^/]+\.UI\/(Tests|Features|Flows|Pages)\//i
+            ];
+
+            const changed = files.map(f => f.filename);
+            const isHighRisk = changed.some(path => highRiskPatterns.some(pattern => pattern.test(path)));
+            core.setOutput("isHighRisk", isHighRisk ? "true" : "false");
+            core.setOutput("changed", changed.join(", "));
+
+      - name: Add high-risk label
+        if: ${{ steps.detect.outputs.isHighRisk == 'true' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue_number = context.payload.pull_request.number;
+            try {
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number,
+                labels: ["high-risk"]
+              });
+              core.info("Applied high-risk label based on changed files.");
+            } catch (error) {
+              throw error;
+            }
+
+      - name: No-op when not high-risk
+        if: ${{ steps.detect.outputs.isHighRisk != 'true' }}
+        run: echo "No high-risk file paths detected."

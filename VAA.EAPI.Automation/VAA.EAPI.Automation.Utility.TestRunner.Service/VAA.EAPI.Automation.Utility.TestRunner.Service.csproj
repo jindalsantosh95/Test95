@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-VAA.EAPI.Automation.Utility.TestRunner.Service-1cfe0c5b-9dcc-4d10-b837-bf8ddcd6e133</UserSecretsId>
+        <OutputType>exe</OutputType>
+        <PublishSingleFile>false</PublishSingleFile>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <PlatformTarget>x64</PlatformTarget>
+        <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <Optimize>False</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <Optimize>True</Optimize>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+        <None Update="local.settings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.ApplicationInsights" />
+        <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" />
+        <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" />
+        <PackageReference Include="NCrontab.Advanced" />
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.utility" />
+        <PackageReference Include="xunit.runner.visualstudio">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Reference Include="xunit.runner.utility.netcoreapp10">
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\VAA.EAPI.Automation.Core\VAA.EAPI.Automation.Core.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.Automation.CRM\VAA.EAPI.Automation.CRM.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.Automation.MarketingLoyalty\VAA.EAPI.Automation.MarketingLoyalty.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.Automation.MyAccount.UI\VAA.EAPI.Automation.MyAccount.UI.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.Automation.MyAccount\VAA.EAPI.Automation.MyAccount.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.Automation.NDC\VAA.EAPI.Automation.NDC.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.Automation.Book\VAA.EAPI.Automation.Book.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.Automation.Search\VAA.EAPI.Automation.Search.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.Automation.StressTests\VAA.EAPI.Automation.StressTests.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.Heimdall\VAA.EAPI.Automation.Heimdall.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.Automation.Heimdall.UI\VAA.EAPI.Automation.Heimdall.UI.csproj" />
+    </ItemGroup>
+    
+</Project>

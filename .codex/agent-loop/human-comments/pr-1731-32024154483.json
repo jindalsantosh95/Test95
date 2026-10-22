@@ -1,0 +1,81 @@
+{
+  "prNumber": 1731,
+  "branch": "codex/vaa-eapi-under18-enrolment-diagram-retry-15",
+  "base": "main",
+  "headSha": "c93d65d26c85748701d2cb87748082503620692b",
+  "runId": "32024154483",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/32024154483",
+  "collectedAtUtc": "2026-08-17T11:17:34.867Z",
+  "policy": {
+    "resolveHumanThreads": false,
+    "expectedDecisions": [
+      "agree",
+      "disagree",
+      "not-applicable"
+    ]
+  },
+  "comments": [
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6ZxKFt",
+      "replyToCommentDatabaseId": 3795685845,
+      "author": "vaa-auth-app-for-wiz",
+      "body": "<a><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.wiz.io/wiz-code/long_severity_tags/info_dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.wiz.io/wiz-code/long_severity_tags/info_light.svg\"><img align=\"top\" valign=\"top\" alt=\"Info\" title=\"Info\" src=\"https://assets.wiz.io/wiz-code/long_severity_tags/info_light.svg\"></picture></a>&ensp;Sensitive Data Finding\n\n**PII**\n\n<details>\n<summary>More Details</summary>\n<br>\n\n| Attribute | Value |\n| ----------- | -------- |\n| **Data Classifier** | PII/Name |\n| **Data Classifier ID** | BUILTIN-125 |\n#### Sampled Examples\n| Key | Value | \n| --- | ----- | \n| **Customer** | L**a**y \n| **Customer** | L**a**y \n| **Customer** | L**a**y \n\n> Rule ID: BUILTIN-125\n<br>\n\nTo ignore this finding as an exception, reply to this conversation with `#wiz_ignore reason`\n\n\nIf you'd like to ignore this finding in all future scans, add an exception in the .wiz file ([learn more](https://docs.wiz.io/wiz-docs/docs/exception-management-with-wiz-code#repository-configuration-file-wiz)) or create an Ignore Rule ([learn more](https://docs.wiz.io/wiz-docs/docs/exception-management-with-wiz-code#ignore-rules)).\n</details>\n<br>\n\nTo get more details on how to remediate this issue using AI, reply to this conversation with `#wiz remediate`\n\n<!-- WizScan-428d2cac-754e-424d-b7c9-adebbbeec2a5-Annotation -->\n\n<!-- WizRule-Data-BUILTIN-125 -->",
+      "path": ".codex/agent-loop/runs/32002894360.json",
+      "line": 1,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1731#discussion_r3795685845",
+      "decision": "disagree",
+      "responseComment": "This is a false positive. The generated run evidence contains the phrase `Customer plus Loyalty Enrolment`; `Loyalty` is a service/domain name, not a person's name or customer PII. No sensitive value is present in the referenced file.",
+      "actionSummary": "No file change was made because the sampled text is repository terminology in generated verification evidence, not PII."
+    },
+    {
+      "kind": "issue-comment",
+      "issueCommentId": 5313011437,
+      "author": "vaa-codex-pr-review-github-app",
+      "body": "<!-- sequence-goal-open-points human-comment -->\n## Input needed before this goal can be completed\n\n- **docs/sequence-diagrams/vaa-eapi-myaccount-under18-enrolment.md**: External Azure DevOps ticket IDs are not required for this implementation; the code-level contract in this diagram is the delivery baseline.\n- **docs/sequence-diagrams/vaa-eapi-myaccount-under18-enrolment.md**: `MyAccount:DeDupFCGenUrl` is treated as synchronous for this mutation. Household linking is attempted only when its response contains both a customer ID and member number.\n- **docs/sequence-diagrams/vaa-eapi-myaccount-under18-enrolment.md**: This delivery does not add retry or compensation orchestration. A link failure returns a controlled error after enrolment; retry safety remains with the existing DeDup and Member Management eligibility/link idempotency contracts. An event-driven reconciliation flow requires a separately owned follow-up design.\n\nThe implementation has passed verification and remains `InProgress` until these points are answered.",
+      "url": "https://github.com/VAAD1ST/eapi/pull/1731#issuecomment-5313011437",
+      "decision": "not-applicable",
+      "responseComment": "This is an AI-generated sequence-goal status comment rather than non-AI review feedback. It records implementation assumptions and does not request a code change, so it is outside this human-comment handling pass.",
+      "actionSummary": "No file change was made because this AI-authored status message is not actionable non-AI PR feedback."
+    },
+    {
+      "kind": "issue-comment",
+      "issueCommentId": 5313016475,
+      "author": "vaa-auth-app-for-wiz",
+      "body": "### Wiz Scan Summary\n\n| Scanner | Findings |\n|:--------|---------:|\n| <a><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.wiz.io/wiz-code/finding_type_icons/vulnerability_dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.wiz.io/wiz-code/finding_type_icons/vulnerability_light.svg\"><img align=\"top\" valign=\"top\" alt=\"Vulnerability Finding\" title=\"Vulnerability Finding\" src=\"https://assets.wiz.io/wiz-code/finding_type_icons/vulnerability_light.svg\"></picture></a>&ensp;Vulnerabilities | - |\n| <a><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.wiz.io/wiz-code/finding_type_icons/data_dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.wiz.io/wiz-code/finding_type_icons/data_light.svg\"><img align=\"top\" valign=\"top\" alt=\"Data Finding\" title=\"Data Finding\" src=\"https://assets.wiz.io/wiz-code/finding_type_icons/data_light.svg\"></picture></a>&ensp;Sensitive Data | 1 <a><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.wiz.io/wiz-code/short_severity_tags/info_dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.wiz.io/wiz-code/short_severity_tags/info_light.svg\"><img align=\"top\" valign=\"top\" alt=\"Info\" title=\"Info\" src=\"https://assets.wiz.io/wiz-code/short_severity_tags/info_light.svg\"></picture></a> |\n| <a><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.wiz.io/wiz-code/finding_type_icons/secret_dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.wiz.io/wiz-code/finding_type_icons/secret_light.svg\"><img align=\"top\" valign=\"top\" alt=\"Secret Finding\" title=\"Secret Finding\" src=\"https://assets.wiz.io/wiz-code/finding_type_icons/secret_light.svg\"></picture></a>&ensp;Secrets | - |\n| <a><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.wiz.io/wiz-code/finding_type_icons/configuration_dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.wiz.io/wiz-code/finding_type_icons/configuration_light.svg\"><img align=\"top\" valign=\"top\" alt=\"IaC Misconfiguration\" title=\"IaC Misconfiguration\" src=\"https://assets.wiz.io/wiz-code/finding_type_icons/configuration_light.svg\"></picture></a>&ensp;IaC Misconfigurations | - |\n| <a><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.wiz.io/wiz-code/finding_type_icons/supplyChain_dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.wiz.io/wiz-code/finding_type_icons/supplyChain_light.svg\"><img align=\"top\" valign=\"top\" alt=\"Software Management Finding\" title=\"Software Management Finding\" src=\"https://assets.wiz.io/wiz-code/finding_type_icons/supplyChain_light.svg\"></picture></a>&ensp;Software Management Findings | - |\n| | |\n| **Total** | 1 <a><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.wiz.io/wiz-code/short_severity_tags/info_dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.wiz.io/wiz-code/short_severity_tags/info_light.svg\"><img align=\"top\" valign=\"top\" alt=\"Info\" title=\"Info\" src=\"https://assets.wiz.io/wiz-code/short_severity_tags/info_light.svg\"></picture></a> |\n\n*<a href=\"https://app.wiz.io/findings/code-cicd-scans#~(event~(~%27006a82ec-160b-87d3-9c04-ab550f4fdf93*2cCI_CD_SCAN*2c2026-08-17T11*3a10*3a14.90529248Z))\" target=\"_blank\">View scan details in Wiz</a>*\n\nTo detect these findings earlier in the dev lifecycle, try the Wiz Code extension for *<a href=\"https://marketplace.visualstudio.com/items?itemName=WizCloud.wiz-vscode\" target=\"_blank\">VS Code</a>*, *<a href=\"https://plugins.jetbrains.com/plugin/28886-wiz\" target=\"_blank\">JetBrains</a>*, or *<a href=\"https://marketplace.visualstudio.com/items?itemName=WizCloud.WizVisualStudio\" target=\"_blank\">Visual Studio</a>*.\n\n\n<!-- WizScan-428d2cac-754e-424d-b7c9-adebbbeec2a5-ScanResult -->",
+      "url": "https://github.com/VAAD1ST/eapi/pull/1731#issuecomment-5313016475",
+      "decision": "not-applicable",
+      "responseComment": "This scan-summary comment only reports the separate informational Wiz finding and contains no additional remediation request. The underlying finding has been reviewed independently as a false positive.",
+      "actionSummary": "No file change was made because this is a duplicate scanner summary with no distinct actionable feedback."
+    },
+    {
+      "kind": "issue-comment",
+      "issueCommentId": 5313078295,
+      "author": "vaa-dimitris-dimitriou",
+      "body": "I don't see any unit tests for the microservice work",
+      "url": "https://github.com/VAAD1ST/eapi/pull/1731#issuecomment-5313078295",
+      "decision": "disagree",
+      "responseComment": "Unit tests for the microservice work are present on this branch. `SendEmailToCcpRequestMapperTests` covers the new under-18 email merge fields, while `HouseHoldAccountEmailTriggeringEventMapperTest` and `HouseHoldAccountLinkingCommandHandlerTest` cover the confirmation template, child details, and published email event. The relevant projects pass locally: Infrastructure Email 11/11 and Member Management 250 passed with 15 skipped.",
+      "actionSummary": "No file change was needed because the requested microservice unit coverage already exists and passes. Microsoft Testing Platform ignored the requested VSTest TRX/coverage switches, so no TRX analyser or coverage table was produced."
+    }
+  ],
+  "resourceUsage": {
+    "workflow": "sequence-goal-human-comment-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 3439608,
+      "inputTokens": 3434029,
+      "cachedInputTokens": 3361356,
+      "outputTokens": 5579,
+      "reasoningOutputTokens": 1315,
+      "estimatedUsd": 4.339141
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "3,439,608 tokens (3,434,029 input, 3,361,356 cached + 5,579 output, 1,315 reasoning); $4.339141 USD"
+  }
+}

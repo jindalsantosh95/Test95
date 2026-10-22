@@ -1,0 +1,154 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "UAT"
+    },
+    "AppServicePlanName": {
+      "value": "vatueunaspndc01"
+    },
+    "functionappName": {
+      "value": "va-tu-eun-ndcorderdoc-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-tu-eun-ndc-rtl-kv-01"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "Retail.Sabre.Order.Doc",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "UAT",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vatueunndcorderdocsa01"
+    },
+    "AppInsightsName": {
+      "value": "va-tu-eun-ndcorderdoc-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    // OpenApi
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Ndc Sabre Order Document Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to issue tickets"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "OrderDataServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndc-rtl-kv-01.vault.azure.net/secrets/va-tu-eun-ndcorderms-fn-01-Config-OrderDataServiceBusConnectionString/)"
+    },
+    "OrderMgtServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndc-rtl-kv-01.vault.azure.net/secrets/va-tu-eun-ndcordermgmt-fn-01-Config-ServiceBusConnectionString/)"
+    },
+    "OrderDataServiceBusTopicName": {
+      "value": "ndcorderrequesteventmessage"
+    },
+    "SabreUsername": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndc-rtl-kv-01.vault.azure.net/secrets/SabreUsername/)"
+    },
+    "SabrePassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-tu-eun-ndc-rtl-kv-01.vault.azure.net/secrets/SabrePassword/)"
+    },
+    "FromPartyId": {
+      "value": "Agency"
+    },
+    "ToPartyId": {
+      "value": "Sabre_API"
+    },
+    "PCC": {
+      "value": "09UI"
+    },
+    "Domain": {
+      "value": "DEFAULT"
+    },
+    "ConversationId": {
+      "value": "2021.01.DevStudio"
+    },
+    "SabreEndpoint": {
+      "value": "https://webservices.cert.platform.sabre.com"
+    },
+    "DirectTicketingPCC": {
+      "value": "6UOL,E8MM,6UUL,57EL,G4ZM,G5DM,G5CM,H1ZM,G5EM,G5FM,G5GM,G5HM,G5IM,G5JM,G5KM,G5LM"
+    },
+    "KeyVaultUri": {
+      "value": "https://va-tu-eun-ndc-rtl-kv-01.vault.azure.net/"
+    }
+  }
+}

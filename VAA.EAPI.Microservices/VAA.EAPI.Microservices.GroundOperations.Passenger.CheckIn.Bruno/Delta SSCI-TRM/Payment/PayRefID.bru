@@ -1,0 +1,133 @@
+meta {
+  name: PayRefID
+  type: http
+  seq: 4
+}
+
+post {
+  url: https://stage-snsapigateway2.vs01.vs.air4.com/paymentManagement/v1/paymentReferenceId
+  body: json
+  auth: inherit
+}
+
+headers {
+  channelId: DFMOBILE
+  appID: D2
+  Content-Type: application/json
+  purchasePath: DFMOBILEOCI
+  ~Content-Type: application/x-www-form-urlencoded
+}
+
+body:json {
+  {
+      "conversationId": null,
+      "reservationAgentId": null,
+      "recordLocatorId": null,
+      "paymentAmt": {
+          "currencyEquivalentPrice": {
+              "countryCode": null,
+              "currencyAmt": {{allPaxAmountDue}},
+              "currencyAmtStr": null,
+              "currencyCode": "{{baggageCurrencyCode}}",
+              "decimalPrecisionCnt": 0,
+              "iataDecimalPrecisionCnt": null,
+              "currencySymbol": null
+          },
+          "milesEquivalentPrice": null
+      },
+      "flightFare": {
+          "countryCode": null,
+          "currencyAmt": "0",
+          "currencyCode": "{{baggageCurrencyCode}}",
+          "currencyNbr": "840" // TODO 840 = USD, 826 = GBP
+      },
+      "currencyCode": "{{baggageCurrencyCode}}",
+      "urlGeneratedTimeStampText": null,
+      "paymentPortalLifeSpanText": null,
+      "statusText": null,
+      "offer": null,
+     
+      "ecommAdditionalData": {
+          "isMoto": null,
+          "emailAddress": "bimal.pun@fly.virgin.com",
+          "ipAddress": "205.174.22.25",
+          "phoneNum": "11111111",
+          "deviceData": null
+      },
+      "airlineData": {
+          "ticketIssueDate": null,
+          "shopType": "Revenue",
+          "tripType": "RETURN",
+          "profile": {
+              "customer": {
+                  "title": null,
+                  "firstName": "{{pax1_firstname}}",
+                  "lastName": "{{pax1_lastname}}",
+                  "middleName": null,
+                  "loyaltyTier": null,
+                  "loyaltyId": null
+              }
+          },
+          "passengers": [
+              {
+                  "passengerSequence": 1,
+                  "title": null,
+                  "firstName": "{{pax1_firstname}}",
+                  "lastName": "{{pax1_lastname}}",
+                  "middleName": null,
+                  "dateOfBirth": "2000-01-01"
+              }
+          ],
+          "product": {
+              "recordLocator": "{{pnr}}",
+              "ticketNumber": null,
+              "productCategory": "ANCILLARY",
+              "productType": null
+          },
+          "bags": [
+              {
+                  "passengerSequence": "1",
+                  "tripTag": "1",
+                  "tripSeq": "1",
+                  "productDescription": "service.CBAG",
+                  "productCurrencyCode": "{{baggageCurrencyCode}}",
+                  "productCurrencyAmt": "{{pax1_price}}",
+                  "productDecimalPrecisionCount": "0",
+                  "productCode": "CBAG",
+                  "productCategory": "SERVICE",
+                  "productItem": "2ND CHECKED BAG OR MORE 23KG"
+              }
+          ]
+      },
+      "additionalConfigParams": {
+          "successRedirectUrl": "",
+          "failureRedirectUrl": "",
+          "sessionID": null,
+          "multiProductFlag": true,
+          "insuranceFlag": false
+      }
+  }
+}
+
+script:post-response {
+  var json = res.getBody();
+  if (json.paymentReferenceId)
+  {
+    console.log("https://enterprisepaymentshpp-si.vs01.vs.air4.com:443/hpp?paymentReferenceId=" + json.paymentReferenceId + "&channelId=DFMOBILE&appId=D2&purchasePath=DFMOBILEOCI");
+    console.log("Suggested cards: 5101081046006034 (GBP) or 5333308664112277 (USD)");
+  }
+  else {
+    console.log('failed to generate paymentReferenceId')
+  }
+  
+  bru.setVar("paymentReferenceId", json.paymentReferenceId)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  QA
+}

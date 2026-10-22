@@ -1,0 +1,58 @@
+parameters: 
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  testRepoPath: 'Enterprise Microservices'
+  rootPath: ''
+  sanityrootpath: 'VAA.EAPI.Automation'
+  RestoreBuildProjects: '**/*.csproj'
+  variableGroupName: ''
+  environment: ''
+
+jobs: 
+  - job: 'SanityTesting'
+    displayName: 'Reference MS Sanity Testing'
+    pool:
+      name: ${{parameters.agentPool}}
+      vmImage: ${{parameters.agentSpecification}}
+    variables:
+      - group: ${{parameters.variableGroupName}}
+
+    steps:
+      # Task to checkout the repository
+      - checkout: 'self'
+        displayName: 'Checkout Testing Repository'
+
+      # Task to install DotNet Core SDK
+      - task: UseDotNet@2
+        displayName: 'Install DotNet Core SDK' 
+        inputs:
+          packageType: 'sdk'
+          version: '10.0.x'
+    
+      # Task to build the project
+      - task: DotNetCoreCLI@2
+        displayName: 'Build Project'
+        inputs:
+          command: build
+          projects: |
+            ${{parameters.sanityrootpath}}/VAA.EAPI.Automation.Search/VAA.EAPI.Automation.Search.csproj
+         # arguments: '--configuration $(BuildConfiguration) --no-restore'
+
+
+      # task to perform the sanity test 
+      - task: VSTest@2
+        displayName: 'NBF - ReferenceMS Sanity Testing' 
+        inputs:
+          testAssemblyVer2: |
+            **\VAA.EAPI.Automation.Search.dll
+            **\*Tests.dll
+            !**\obj\**
+          testFiltercriteria: 'Category=NBFReferenceMS_CICD'
+          testRunTitle: 'Reference MS Sanity Test'
+          rerunFailedTests: true
+          rerunType: basedOnTestFailureCount
+          rerunMaxAttempts: 0
+        continueOnError: true
+
+          

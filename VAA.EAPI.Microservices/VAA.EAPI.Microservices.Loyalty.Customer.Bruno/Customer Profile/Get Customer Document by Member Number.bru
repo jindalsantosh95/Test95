@@ -1,0 +1,16 @@
+meta {
+  name: Get Customer Document by Member Number
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{customer_base_url}}/customerdocument/account/{{customer_member_number}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="bin\**" />
+        <EmbeddedResource Remove="bin\**" />
+        <None Remove="bin\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="HotChocolate" Version="12.22.6" />
+        <PackageReference Include="HotChocolate.AspNetCore" Version="12.22.6" />
+        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.22.6" />
+        <PackageReference Include="HotChocolate.Data" Version="12.22.6" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.12.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\VAA.EAPI.GraphQL.Common\VAA.EAPI.GraphQL.Common.csproj" />
+        <ProjectReference Include="..\VAA.EAPI.GraphQL.Infrastructure\VAA.EAPI.GraphQL.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <GraphQlBinDir>$(MSBuildProjectDirectory)\..\VAA.EAPI.GraphQL\bin\$(Configuration)\$(TargetFramework)</GraphQlBinDir>
+        <GraphQlRestBinDir>$(MSBuildProjectDirectory)\..\VAA.EAPI.GraphQL.Rest\bin\$(Configuration)\$(TargetFramework)</GraphQlRestBinDir>
+    </PropertyGroup>
+
+    <Target Name="PostBuild" AfterTargets="Build">
+        <ItemGroup>
+            <PostBuildFiles Include="$(TargetDir)**\*" />
+        </ItemGroup>
+
+        <MakeDir Directories="$(GraphQlBinDir);$(GraphQlRestBinDir)" />
+
+        <Copy
+            SourceFiles="@(PostBuildFiles)"
+            DestinationFiles="@(PostBuildFiles->'$(GraphQlBinDir)\%(RecursiveDir)%(Filename)%(Extension)')"
+            SkipUnchangedFiles="true"
+            Retries="5"
+            RetryDelayMilliseconds="200" />
+
+        <Copy
+            SourceFiles="@(PostBuildFiles)"
+            DestinationFiles="@(PostBuildFiles->'$(GraphQlRestBinDir)\%(RecursiveDir)%(Filename)%(Extension)')"
+            SkipUnchangedFiles="true"
+            Retries="5"
+            RetryDelayMilliseconds="200" />
+    </Target>
+
+</Project>

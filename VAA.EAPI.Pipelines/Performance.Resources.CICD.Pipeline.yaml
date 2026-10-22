@@ -1,0 +1,81 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Performance.Deployment*
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Performance.Deployment*
+
+variables: 
+  - group: Common_Variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines' 
+  - name: agentPool1
+    value: 'LoyaltySystems'   
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: subRootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: applicationName
+    value: 'Performance'         
+  - name: functionAppName_DEV
+    value: 'avadeunafndigitalperf' 
+  - name: functionAppName_SIT
+    value: 'avateunafndigitalperf'
+  - name: functionAppName_UAT
+    value: 'avaseunafndigitalperf'                
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_DigitalPerf.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)  
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupNameDigitalPerf_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameDigitalPerf_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameDigitalPerf_UAT)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd) 
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_digitalperf.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      buildConfiguration: $(buildConfiguration)  
+      location: $(location)                     
+      applicationName: $(applicationName)  
+      resourceGroupName_DEV: $(resourceGroupNameDigitalPerf_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameDigitalPerf_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameDigitalPerf_UAT)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)        
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)

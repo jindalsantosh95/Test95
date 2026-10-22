@@ -1,0 +1,97 @@
+{
+  "prNumber": 1742,
+  "branch": "codex/holidays-document-token-diagram-clean",
+  "base": "main",
+  "headSha": "1c81456a317390ee082fcd93cbdf166188440954",
+  "runId": "32122146971",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/32122146971",
+  "collectedAtUtc": "2026-08-18T09:33:44.911Z",
+  "policy": {
+    "resolveHumanThreads": false,
+    "expectedDecisions": [
+      "agree",
+      "disagree",
+      "not-applicable"
+    ]
+  },
+  "comments": [
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6aDiIA",
+      "replyToCommentDatabaseId": 3802815706,
+      "author": "vaa-dimitris-dimitriou",
+      "body": "these test should follow the documented tdd approach using the service provider to register dependenciies",
+      "path": "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Holidays.Tests/RetrieveDocumentDownloadContractTests.cs",
+      "line": 7,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3802815706",
+      "decision": "agree",
+      "responseComment": "Agreed. The address-policy tests now build and resolve the real RetrieveDocumentService through IServiceProvider with the repository HTTP connector and OAuth test dependencies, and the shallow DTO-only assertion was removed.",
+      "actionSummary": "Refactored RetrieveDocumentDownloadContractTests to use the DI-based test harness and resolve IRetrieveDocumentService from ServiceCollection."
+    },
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6aDixf",
+      "replyToCommentDatabaseId": 3802819706,
+      "author": "vaa-dimitris-dimitriou",
+      "body": "i dont see any positive tests",
+      "path": "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Holidays.Tests/BookingControllerTests.cs",
+      "line": 60,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3802819706",
+      "decision": "agree",
+      "responseComment": "Agreed. Added a positive RetrieveDocument controller test that resolves BookingController and its dependencies from IServiceProvider, verifies HTTP 200, and confirms the validated document request reaches the registered service.",
+      "actionSummary": "Added RetrieveDocument_Returns_Ok_When_Document_Is_Retrieved with a DI-registered focused service stub."
+    },
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6aDi9B",
+      "replyToCommentDatabaseId": 3802820745,
+      "author": "vaa-dimitris-dimitriou",
+      "body": "these test should follow the documented tdd approach using the service provider to register dependenciies",
+      "path": "VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Trips.Tests/HolidayDocumentContractTests.cs",
+      "line": 5,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3802820745",
+      "decision": "agree",
+      "responseComment": "Agreed. Replaced the reflection/DTO-only assertions with a DI-resolved HolidayProvider behavior test using the real connector and a checked-in .mock response for POST /retrieveDocument.",
+      "actionSummary": "Refactored HolidayDocumentContractTests into a service-provider-based provider test and corrected the retrieveDocument mock contract."
+    },
+    {
+      "kind": "issue-comment",
+      "issueCommentId": 5325910854,
+      "author": "vaa-codex-pr-review-github-app",
+      "body": "<!-- sequence-goal-open-points human-comment -->\n## Input needed before this goal can be completed\n\n- **docs/sequence-diagrams/vaa-eapi-graphql-holidays-document-token-download.md**: Public query: `retrieveHolidayBookingDocument(documentId, documentToken)` returning `documentId` and `document`; internal route: `POST /retrieveDocument`.\n- **docs/sequence-diagrams/vaa-eapi-graphql-holidays-document-token-download.md**: Service authentication: existing `Ocp-Apim-Subscription-Key` supplied by `HolidayProvider` from `TripSettings:HolidayProvider:HolidaysMs:OcpSubID`.\n- **docs/sequence-diagrams/vaa-eapi-graphql-holidays-document-token-download.md**: JWT: existing `BookingIdHelper`/`BaseIdHelper` HS256 pattern using `TRIPMS:BookingIdJwtKey`, five-minute lifetime, 30-second clock skew, no issuer/audience validation, replay allowed during the lifetime, and existing shared-key rotation process.\n- **docs/sequence-diagrams/vaa-eapi-graphql-holidays-document-token-download.md**: DMAZE: HTTPS exact-host allowlist, no redirects, no user-info or loopback/private targets, 30-second timeout, bounded cancellation-aware 5 MB read, `application/pdf` plus `%PDF-` signature, and sanitized filename with `{documentId}.pdf` fallback.\n\nThe implementation has passed verification and remains `InProgress` until these points are answered.",
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#issuecomment-5325910854",
+      "decision": "not-applicable",
+      "responseComment": "Not applicable to this non-AI comment pass. This is an automated sequence-goal status comment rather than human review feedback.",
+      "actionSummary": "No action taken; retained the automated comment for the sequence-goal workflow."
+    },
+    {
+      "kind": "issue-comment",
+      "issueCommentId": 5326324713,
+      "author": "vaa-dimitris-dimitriou",
+      "body": "there are failing checks",
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#issuecomment-5326324713",
+      "decision": "agree",
+      "responseComment": "Agreed. The failing GraphQL checks were caused by stale HolidayQueryTests assertions referencing the removed DocumentDownloadLink property. Updated them to validate DocumentToken claims and reran the affected GraphQL tests successfully.",
+      "actionSummary": "Replaced four stale DocumentDownloadLink assertions with DocumentToken validation; affected GraphQL tests now build and pass."
+    }
+  ],
+  "resourceUsage": {
+    "workflow": "sequence-goal-human-comment-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 4284975,
+      "inputTokens": 4275175,
+      "cachedInputTokens": 4169361,
+      "outputTokens": 9800,
+      "reasoningOutputTokens": 1419,
+      "estimatedUsd": 5.668501
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "4,284,975 tokens (4,275,175 input, 4,169,361 cached + 9,800 output, 1,419 reasoning); $5.668501 USD"
+  }
+}

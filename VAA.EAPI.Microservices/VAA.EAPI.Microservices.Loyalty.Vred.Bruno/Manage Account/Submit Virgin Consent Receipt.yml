@@ -1,0 +1,45 @@
+info:
+  name: Submit Virgin Consent Receipt
+  type: http
+  seq: 1
+  tags:
+    - Manage Account
+
+http:
+  method: POST
+  url: "{{baseUrl}}/VirginConsentReceipt"
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+    - name: x-correlation-id
+      value: "VRED-Bruno-{{$randomUUID}}"
+    - name: api-channel
+      value: Bruno
+    - name: Authorization
+      value: "Bearer {{accessToken}}"
+      disabled: true
+    - name: Ocp-Apim-Subscription-Key
+      value: "{{ocpApimSubscriptionKey}}"
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "loyaltyMemberNumber": "{{memberNumber}}",
+        "customerId": "{{customerId}}",
+        "firstName": "{{firstName}}",
+        "lastName": "{{lastName}}",
+        "dateOfBirth": "{{dateOfBirth}}",
+        "countryCode": "{{countryCode}}",
+        "emailid": "{{emailId}}",
+        "marketingPreference": "{{marketingPreference}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

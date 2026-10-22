@@ -1,0 +1,150 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  functionAppName_Secure: ''
+  functionAppName_Public: ''  
+  AppInsightsName: ''
+  storageAccountName_Secure: ''
+  storageAccountName_Public: ''
+  environment: ''
+  location: ''
+  resourceGroupName: ''
+  serviceConnection: ''
+  subscriptionId: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''
+
+jobs: 
+- deployment: '${{parameters.environment}}'      
+  
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}  
+  
+  environment: ${{parameters.environment}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - ${{ if eq(parameters.environment, 'dev') }}:
+          - checkout: self
+        - download: current
+          artifact: drop      
+
+        - ${{ if eq(parameters.environment, 'dev') }}:
+          - template: graphql_native_websockets_dev.yaml
+            parameters:
+              phase: Prepare
+              serviceConnection: ${{parameters.serviceConnection}}
+              subscriptionId: ${{parameters.subscriptionId}}
+              resourceGroupName: ${{parameters.resourceGroupName}}
+              appName: ${{parameters.functionAppName_Secure}}
+
+        # Task to create the GraphQL (Secure) Function App     
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create ${{parameters.functionAppName_Secure}} Function App'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.serviceConnection}}
+            subscriptionid: ${{parameters.subscriptionId}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}
+            location:  ${{parameters.location}}
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy.json
+            ${{ if eq(parameters.environment, 'dev') }}:
+              csmParametersFile: $(Agent.TempDirectory)/${{parameters.functionAppName_Secure}}-native-dev.parameters.json
+            ${{ else }}:
+              csmParametersFile: $(Pipeline.workspace)/drop/Parameters/${{parameters.environment}}-azuredeploy.parameters.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -FunctionAppName ${{parameters.functionAppName_Secure}} -storageAccountName ${{parameters.storageAccountName_Secure}} -WEBSITE_DNS_ALT_SERVER ${{parameters.WEBSITE_DNS_ALT_SERVER}} -WEBSITE_DNS_SERVER ${{parameters.WEBSITE_DNS_SERVER}}
+
+        # Task to stop the GraphQL (Secure) Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop ${{parameters.functionAppName_Secure}} Function App'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName_Secure}}
+
+        # Task to deploy to the GraphQL (Secure) Function App
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy to ${{parameters.functionAppName_Secure}} Function App' 
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            appType: 'functionApp'
+            appName: ${{parameters.functionAppName_Secure}}
+            deployToSlotOrASE: true
+            resourceGroupName: ${{parameters.resourceGroupName}}
+            package: '$(Pipeline.workspace)/drop/*.zip'
+            deploymentMethod: 'runFromPackage'     
+
+        # Task to start the GraphQL (Secure) Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start ${{parameters.functionAppName_Secure}} Function App'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionAppName_Secure}}
+
+        - ${{ if eq(parameters.environment, 'dev') }}:
+          - template: graphql_native_websockets_dev.yaml
+            parameters:
+              phase: Activate
+              serviceConnection: ${{parameters.serviceConnection}}
+              subscriptionId: ${{parameters.subscriptionId}}
+              resourceGroupName: ${{parameters.resourceGroupName}}
+              appName: ${{parameters.functionAppName_Secure}}
+
+
+        - ${{ if eq(parameters.environment, 'dev') }}:
+          - template: graphql_native_websockets_dev.yaml
+            parameters:
+              phase: Prepare
+              serviceConnection: ${{parameters.serviceConnection}}
+              subscriptionId: ${{parameters.subscriptionId}}
+              resourceGroupName: ${{parameters.resourceGroupName}}
+              appName: ${{parameters.functionAppName_Public}}
+
+        # Task to create the GraphQL (Public) Function App      
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create ${{parameters.functionAppName_Public}} Function App'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.serviceConnection}}
+            subscriptionid: ${{parameters.subscriptionId}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}
+            location:  ${{parameters.location}}
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy.json
+            ${{ if eq(parameters.environment, 'dev') }}:
+              csmParametersFile: $(Agent.TempDirectory)/${{parameters.functionAppName_Public}}-native-dev.parameters.json
+            ${{ else }}:
+              csmParametersFile: $(Pipeline.workspace)/drop/Parameters/${{parameters.environment}}-azuredeploy.parameters.json
+            deploymentMode: 'Incremental'
+            ${{ if eq(parameters.environment, 'dev') }}:
+              overrideParameters: -FunctionAppName ${{parameters.functionAppName_Public}} -storageAccountName ${{parameters.storageAccountName_Public}} -WEBSITE_DNS_ALT_SERVER ${{parameters.WEBSITE_DNS_ALT_SERVER}} -WEBSITE_DNS_SERVER ${{parameters.WEBSITE_DNS_SERVER}}
+            ${{ else }}:
+              overrideParameters: -FunctionAppName ${{parameters.functionAppName_Public}} -storageAccountName ${{parameters.storageAccountName_Public}} -WEBSITE_DNS_ALT_SERVER ${{parameters.WEBSITE_DNS_ALT_SERVER}} -WEBSITE_DNS_SERVER ${{parameters.WEBSITE_DNS_SERVER}} -NativeWebSocketsConfiguration {"startupHookPath":"","existingStartupHooks":"","workerProcessCount":"1","path":"/api/v1/GraphQL/ws"}
+        # Task to stop the GraphQL (Public) Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop ${{parameters.functionAppName_Public}} Function App'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName_Public}}
+
+        # Task to deploy to the GraphQL (Public) Function App
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy to ${{parameters.functionAppName_Public}} Function App'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            appType: 'functionApp'
+            appName: ${{parameters.functionAppName_Public}}
+            deployToSlotOrASE: true
+            resourceGroupName: ${{parameters.resourceGroupName}}
+            package: '$(Pipeline.workspace)/drop/*.zip'
+            deploymentMethod: 'runFromPackage'     
+
+        # Task to start the GraphQL (Public) Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start ${{parameters.functionAppName_Public}} Function App'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionAppName_Public}}

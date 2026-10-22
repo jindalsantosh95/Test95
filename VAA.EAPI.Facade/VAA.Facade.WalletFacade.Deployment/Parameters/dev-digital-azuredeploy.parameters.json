@@ -1,0 +1,118 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": {
+      "value": "DEV"
+    },
+    "AppServicePlanName": {
+      "value": "vadveunaspdigital01"
+    },
+    "functionappName": {
+      "value": "va-dv-eun-walletfacade-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-dv-eun-loyalty-kv-01"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "WalletFacade",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "DEV",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vadveunwalletfacadesa01"
+    },
+    "AppInsightsName": {
+      "value": "va-dv-eun-walletfacade-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "KeyVaultUri": {
+      "value": "https://va-dv-eun-loyalty-kv-01.vault.azure.net/"
+    },
+    //Walletfacade settings
+    "Appsetting:AAD:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-loyalty-kv-01.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:EapiMsClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-loyalty-kv-01.vault.azure.net/secrets/va-dv-eun-walletfacade-fn-01-Config-EapiMsClientId/)"
+    },
+    "Appsetting:EapiMSSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-loyalty-kv-01.vault.azure.net/secrets/va-dv-eun-walletfacade-fn-01-Config-EapiMsSecret/)"
+    },
+    "Appsetting:WalletAppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-loyalty-kv-01.vault.azure.net/secrets/va-dv-eun-walletfacade-fn-01-Config-WalletAppId/)"
+    },
+    "Appsetting:WalletOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-loyalty-kv-01.vault.azure.net/secrets/va-dv-eun-walletfacade-fn-01-Config-WalletOcpKey/)"
+    },
+    "Appsetting:WalletUrl": {
+      "value": "https://Testresources.virginatlantic.com/DEV/digital/Wallet/"
+    },
+
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/2b812f93-ac9a-4076-b085-9b6aff727505/User_impersonation"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-WalletFacade Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This endpoint will provide walletfacade details ."
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": false
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": true
+    }
+  }
+}

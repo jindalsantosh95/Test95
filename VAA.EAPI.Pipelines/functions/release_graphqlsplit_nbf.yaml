@@ -1,0 +1,151 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  applicationName: ''
+  buildConfiguration: ''
+  testRepoPath_SIT: ''
+  testRepoPath_UAT: ''  
+  functionAppName_Secure_DEV: ''
+  functionAppName_Secure_SIT: ''
+  functionAppName_Secure_UAT: ''
+  functionAppName_Secure_PRD: ''
+  functionAppName_Public_DEV: ''
+  functionAppName_Public_SIT: ''
+  functionAppName_Public_UAT: ''
+  functionAppName_Public_PRD: ''
+  AppInsightsName_DEV: ''
+  AppInsightsName_SIT: ''
+  AppInsightsName_UAT: ''
+  AppInsightsName_PROD: ''
+  storageAccountName_DEV: ''
+  storageAccountName_SIT: ''
+  storageAccountName_UAT: ''
+  storageAccountName_PROD: ''
+  VARIABLE_GROUP_NAME_NBF_SIT: ''
+  VARIABLE_GROUP_NAME_NBF_UAT: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''
+
+stages:
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'Hotfix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml  
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DEV}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DEV}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment_DEV}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}  
+          AppInsightsName: ${{parameters.AppInsightsName_DEV}}
+          storageAccountName: ${{parameters.storageAccountName_DEV}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'Hotfix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_SIT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_SIT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_SIT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_SIT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_SIT}}
+          storageAccountName: ${{parameters.storageAccountName_SIT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'Functional_Testing_NBF_SIT'
+    displayName: 'Functional Testing - NBF - SIT' 
+    dependsOn: SIT  
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_nbf.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_SIT}}  
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'Hotfix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_UAT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_UAT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_UAT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_UAT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}
+          AppInsightsName: ${{parameters.AppInsightsName_UAT}}
+          storageAccountName: ${{parameters.storageAccountName_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'Functional_Testing_NBF_UAT'
+    displayName: 'Functional Testing - NBF - UAT' 
+    dependsOn: UAT   
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_nbf.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_UAT}}
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_UAT}}   
+
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'Hotfix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_PRD}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_PRD}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_PROD}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_PROD}}        
+          serviceConnection: ${{variables.serviceConnection_PROD}}
+          subscriptionId: ${{variables.subscriptionId_PROD}}    
+          AppInsightsName: ${{parameters.AppInsightsName_PROD}}
+          storageAccountName: ${{parameters.storageAccountName_PROD}}  
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}} 
+                   
+                           
+
+  

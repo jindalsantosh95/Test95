@@ -1,0 +1,16 @@
+meta {
+  name: Get Customer Profile by Customer ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{customer_base_url}}/customer/{{customer_id}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

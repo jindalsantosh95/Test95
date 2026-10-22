@@ -1,0 +1,25 @@
+parameters:
+  phase: ''
+  serviceConnection: ''
+  subscriptionId: ''
+  resourceGroupName: ''
+  appName: ''
+
+steps:
+- task: AzureCLI@2
+  displayName: '${{parameters.phase}} DEV native WebSockets: ${{parameters.appName}}'
+  inputs:
+    azureSubscription: ${{parameters.serviceConnection}}
+    scriptType: pscore
+    scriptLocation: scriptPath
+    scriptPath: '$(Build.SourcesDirectory)/scripts/deploy-graphql-native-websockets.ps1'
+    arguments: >-
+      -Phase '${{parameters.phase}}'
+      -Environment dev
+      -SubscriptionId '${{parameters.subscriptionId}}'
+      -ResourceGroupName '${{parameters.resourceGroupName}}'
+      -AppName '${{parameters.appName}}'
+      -ParameterFile '$(Pipeline.Workspace)/drop/Parameters/dev-azuredeploy.parameters.json'
+      -PreparedParameterFile '$(Agent.TempDirectory)/${{parameters.appName}}-native-dev.parameters.json'
+      -PackagePattern '$(Pipeline.Workspace)/drop/*.zip'
+    visibleAzLogin: false

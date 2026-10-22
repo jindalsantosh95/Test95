@@ -1,0 +1,260 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "AppInsightsName": {
+      "value": "AVAPEUNAIRULEENGINE"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPI-LOYALTY"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=fe28c16e-1f69-4c25-a986-bc7d21321e42;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    },
+    "Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "Appsetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-StorageAccount/)"
+    },
+    "Appsettings:AppInsightsKey": {
+      "value": "fe28c16e-1f69-4c25-a986-bc7d21321e42"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-ServiceBusConnectionString/)"
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVAPEUNAFNRULEENGINE"
+    },
+    "Appsettings:WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-StorageAccount/)"
+    },
+    "Appsettings:WEBSITE_CONTENTSHARE": {
+      "value": "avapeunafnruleengine-ds"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    //Azure AD
+    "Appsettings:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-AzureAdClientId/)"
+    },
+    "Appsettings:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "Appsettings:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsettings:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    //Service Bus
+    "Appsettings:ServiceBusTopicName": {
+      "value": "ruleengineeventmessages"
+    },
+    "Appsettings:CustomerTransactionEventTopicName": {
+      "value": "customertransactioneventmessages"
+    },
+
+    //Microservice DB key
+    "Appsettings:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-MicroserviceDBKey/)"
+    },
+    "Appsettings:MicroServiceEventStoreTableName": {
+      "value": "RuleEngineEventStore"
+    },
+    "Appsettings:MicroServiceResponseTableName": {
+      "value": "RuleEngineResponse"
+    },
+
+    // Birthday Bonus
+
+    "Appsettings:CombinedRuleApplicationName": {
+      "value": "CombinedMemberUpdateAccrualCampaignVoucherRules"
+    },
+    "Appsettings:CombinedRuleRequestEntityName": {
+      "value": "memberUpdateCampaignPayloadInbound"
+    },
+
+    //Environmental Settings and Expiration
+
+    "Appsettings:DatabaseID": {
+      "value": "https://database.windows.net/.default"
+    },
+    "Appsettings:SCV:CommonRefDBConnString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-CommonRefDBConnString/)"
+    },
+    "Appsettings:CommonCachingSlidingExpiration": {
+      "value": "1.00:00:00"
+    },
+
+    "Appsettings:CommonCachingAbsoluteExpiration": {
+      "value": "1.00:00:00"
+    },
+    "Appsettings:EconomyClasses": {
+      "value": "Y"
+    },
+    "Appsettings:PremEconomyClasses": {
+      "value": "W"
+    },
+    "Appsettings:UpperClasses": {
+      "value": "J"
+    },
+
+    // IN Rule
+    "Appsettings:TierRuleSetApplicationName": {
+      "value": "TierManagementRules"
+    },
+    "Appsettings:TierRuleSetEntityName": {
+      "value": "tierAwardPayloadInbound"
+    },
+    "Appsettings:RuleAppPassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-RuleAppPassword/)"
+    },
+    "Appsettings:RuleAppUserName": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-RuleAppUserName/)"
+    },
+    "Appsettings:RuleAppRepositoryServiceUri": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-RuleAppRepositoryServiceUri/)"
+    },
+    "Appsettings:InRuleAPIURL": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-InRuleAPIURL/)"
+    },
+    "Appsettings:InRuleAPIHeader": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-InRuleAPIHeader/)"
+    },
+
+    "Appsettings:InRuleDisruptionAPIURL": {
+      "value": "https://vaandc-prod-decision.inrule.com/api/DisruptionRules/decision/Disruptions"
+    },
+    "Appsettings:InRuleDisruptionAPIKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-InRuleDisruptionAPIKey/)"
+    },
+    //Slot Settings
+    "storageAccountName": {
+      "value": "avapeunstruleengine"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNRULEENGINE-Config-AzureAdClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    //swagger
+
+    "Appsettings:OpenApi__DocTitle": {
+      "value": "Inrule  Microservice"
+    },
+    "Appsettings:OpenApi__Description": {
+      "value": "This API is for Inrule "
+    },
+    "Appsettings:OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/dev/inrule/,https://testresources.virginatlantic.com/sit/inrule/,https://testresources.virginatlantic.com/inrule/,https://resources.virginatlantic.com/inrule/"
+    },
+    "Appsettings:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsettings:OpenApi__Version": {
+      "value": "v4"
+    },
+    "Appsettings:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsettings:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/f1df1886-f232-49bd-a74d-cd3d5043b488/.default"
+    },
+    "Appsettings:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsettings:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+
+
+
+
+
+    "tags": {
+      "value": {
+        "InitialProjectCode": "457",
+        "InitialProjectName": "Rule Engine",
+        "InitialBudgetCode": "9094",
+        "ActiveStatus": "PROD",
+        "Purpose": "Support functions for the Customer API AFN",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

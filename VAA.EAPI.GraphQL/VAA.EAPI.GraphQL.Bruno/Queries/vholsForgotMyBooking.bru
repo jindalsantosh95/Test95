@@ -1,0 +1,35 @@
+meta {
+  name: vholsForgotMyBooking
+  type: graphql
+  seq: 64
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query vholsForgotMyBooking($surname: String!, $dateOfBirth: DateTime!, $departureDate: DateTime!, $where: FMBResponseFilterInput, $order: [FMBResponseSortInput!]) {
+    vholsForgotMyBooking(surname: $surname, dateOfBirth: $dateOfBirth, departureDate: $departureDate, where: $where, order: $order) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "surname": "",
+    "dateOfBirth": "",
+    "departureDate": "",
+    "where": {},
+    "order": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

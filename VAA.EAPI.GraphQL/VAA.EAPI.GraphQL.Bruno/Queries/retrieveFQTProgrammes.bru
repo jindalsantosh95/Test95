@@ -1,0 +1,32 @@
+meta {
+  name: retrieveFQTProgrammes
+  type: graphql
+  seq: 39
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query retrieveFQTProgrammes($order: [FQTProgrammeRefDataSortInput!], $where: FQTProgrammeRefDataFilterInput) {
+    retrieveFQTProgrammes(order: $order, where: $where) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "order": null,
+    "where": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

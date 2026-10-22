@@ -1,0 +1,76 @@
+name: ai-harness-agent-resource-and-cost-trend-review
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 7 * * 1'
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download retained agent-resource evidence
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Join-Path $env:RUNNER_TEMP 'agent-resource-history'
+          New-Item -ItemType Directory -Path $root -Force | Out-Null
+          $cutoff = [DateTimeOffset]::UtcNow.AddDays(-7)
+          $artifacts = @()
+          $page = 1
+          do {
+            $response = gh api "repos/${{ github.repository }}/actions/artifacts?per_page=100&page=$page" | ConvertFrom-Json
+            $pageArtifacts = @($response.artifacts)
+            $artifacts += @($pageArtifacts | Where-Object {
+              -not $_.expired -and $_.name -like 'agent-resource-*' -and [DateTimeOffset]::Parse($_.created_at) -ge $cutoff
+            })
+            $page++
+          } while ($pageArtifacts.Count -eq 100 -and @($pageArtifacts | Where-Object { [DateTimeOffset]::Parse($_.created_at) -ge $cutoff }).Count -gt 0)
+          $headers = @{ Authorization = "Bearer $env:GH_TOKEN"; Accept = 'application/vnd.github+json' }
+          foreach ($artifact in $artifacts) {
+            $zip = Join-Path $root "$($artifact.id).zip"
+            $destination = Join-Path $root ([string]$artifact.id)
+            Invoke-WebRequest -Uri $artifact.archive_download_url -Headers $headers -OutFile $zip
+            Expand-Archive -LiteralPath $zip -DestinationPath $destination -Force
+            Remove-Item -LiteralPath $zip -Force
+          }
+          Write-Host "Downloaded $($artifacts.Count) retained agent-resource artifact(s)."
+
+      - name: Enforce 7-day workflow ceilings
+        id: trend
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          ./scripts/check-agent-resource-trend.ps1 `
+            -EvidenceDirectory (Join-Path $env:RUNNER_TEMP 'agent-resource-history') `
+            -WindowDays 7 `
+            -SummaryPath agent-resource-trend.json
+
+      - name: Upload weekly trend evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-resource-trend-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          path: agent-resource-trend.json
+
+      - name: Escalate exhausted weekly budget
+        if: steps.trend.outcome == 'failure'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $body = Get-Content -LiteralPath agent-resource-trend.json -Raw
+          gh issue create --title "Agent resource budget exhausted (${{ github.run_id }})" --body "``````json`n$body`n``````" --label documentation
+          throw 'One or more enrolled workflows exceeded its 7-day estimated-cost ceiling.'

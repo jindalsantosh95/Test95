@@ -1,0 +1,29 @@
+meta {
+  name: GetContentFragment
+  type: graphql
+  seq: 22
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query GetContentFragment($contentFragmentId: String) {
+    GetContentFragment(contentFragmentId: $contentFragmentId)
+  }
+}
+
+body:graphql:vars {
+  {
+    "contentFragmentId": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

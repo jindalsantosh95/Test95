@@ -1,0 +1,73 @@
+meta {
+  name: Save Government Forms
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SaveGovernmentFormTravelRequirements {
+    SaveGovernmentFormTravelRequirements(
+      travelRequirementsId: "{{travelRequirementsId}}"
+      passengerId: "{{pax1_Id}}"
+      sliceId: "{{slice1_Id}}"
+      governmentFormId: "{{governmentFormId}}"
+      linkId: "{{governmentFormLinkId}}"
+      text: "{{governmentFormText}}"
+      href: "{{governmentFormHref}}"
+    ) {
+      travelRequirementsId
+      reference {
+        pnrLocator
+        createdDate
+      }
+      passengers {
+        passengerId
+        givenNames
+        surname
+        sliceRequirements {
+          sliceId
+          governmentForms {
+            status
+            id
+            linkId
+            title
+            url
+            availableFromUtc
+            availableFromDescription
+            isAvailable
+          }
+        }
+      }
+      slices {
+        sliceId
+        origin {
+          code
+          countryCode
+        }
+        destination {
+          code
+          countryCode
+        }
+      }
+    }
+  }
+}
+
+script:post-response {
+  var travelRequirements = res.body.data.SaveGovernmentFormTravelRequirements;
+  
+  if (travelRequirements?.travelRequirementsId) {
+    bru.setVar("travelRequirementsId", travelRequirements.travelRequirementsId);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

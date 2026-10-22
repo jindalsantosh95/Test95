@@ -1,0 +1,29 @@
+meta {
+  name: Account Login
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query AccountLogin {
+    accountLogin(
+      memberLoginRequest: {
+        memberNumber: "{{account_member_number}}"
+        emailAddress: "{{account_email}}"
+        password: "{{account_password}}"
+        channelId: "{{account_channel_id}}"
+      }
+    )
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

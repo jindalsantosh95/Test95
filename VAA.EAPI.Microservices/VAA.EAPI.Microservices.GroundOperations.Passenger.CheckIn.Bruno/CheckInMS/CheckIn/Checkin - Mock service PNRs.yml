@@ -1,0 +1,57 @@
+info:
+  name: Checkin - Mock service PNRs
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{checkinms}}/CheckIn"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: "{\r
+
+      \    // Our Mock\r
+
+      \    // \"pnrLocator\": \"DEF456\"\r
+
+      \   // \"pnrLocator\": \"HYCS7F\"\r
+
+      \  //  \"pnrLocator\": \"G3JARJ\"\r
+
+      \    // \"pnrLocator\": \"HAND01\" // 6 pax, edited by hand\r
+
+      \    \r
+
+      \    // Delta SSCI Examples saved to mock service\r
+
+      \    // \"pnrLocator\": \"F6PM4A\" // Two passengers including one do not board\r
+
+      \  //   \"pnrLocator\": \"H7F7VI\" // Unable to checkin - speak to KLM\r
+
+      \    // \"pnrLocator\": \"HYCS7F\" // \r
+
+      \    // \"pnrLocator\": \"F77LF3\" // Early checkin? // 500\r
+
+      \    // \"pnrLocator\": \"F747BD\" // Checked in\r
+
+      \    // \"pnrLocator\": \"F75ERN\" // Do not board\r
+
+      \    // \"pnrLocator\": \"F74V92\" // No seats\r
+
+      \    // \"pnrLocator\": \"F77JOI\" // Unaccomanied minor\r
+
+      \r
+
+      \     \"pnrLocator\": \"GW7YQ7\", \"originCode\": \"LHR\" // Real call to Delta\r
+
+      }"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

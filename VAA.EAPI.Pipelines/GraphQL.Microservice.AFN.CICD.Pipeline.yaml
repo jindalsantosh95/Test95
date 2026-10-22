@@ -1,0 +1,86 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.GraphQL*
+      - scripts/deploy-graphql-native-websockets.ps1
+      - scripts/test-graphql-native-deployment.ps1
+      - VAA.EAPI.Pipelines/functions/graphql_native_websockets_dev.yaml
+      - VAA.EAPI.Pipelines/functions/deployment_graphql.yaml
+      - VAA.EAPI.Pipelines/functions/build_graphql.yaml
+
+variables: 
+  - group: APIM  
+  - group: APIM_IP
+  - group: AzureWebJobsStorage
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'
+  - name: testRepoPath_SIT
+    value: ''   
+  - name: testRepoPath_UAT
+    value: ''      
+  - name: rootPath
+    value: 'VAA.EAPI.GraphQL'
+  - name: subRootPath
+    value: 'VAA.EAPI'    
+  - name: applicationName
+    value: 'GraphQL'
+  - name: functionAppName_Secure_DEV
+    value: 'AVADEUNAFNGRAPHQL'
+  - name: functionAppName_Secure_SIT
+    value: 'AVATEUNAFNGRAPHQL'
+  - name: functionAppName_Secure_UAT
+    value: 'AVASEUNAFNGRAPHQL'
+  - name: functionAppName_Secure_PRD
+    value: 'AVAPEUNAFNGRAPHQL'    
+  - name: functionAppName_Public_DEV
+    value: 'AVADEUNAFNGRAPHQLP'
+  - name: functionAppName_Public_SIT
+    value: 'AVATEUNAFNGRAPHQLP'
+  - name: functionAppName_Public_UAT
+    value: 'AVASEUNAFNGRAPHQLP'
+  - name: functionAppName_Public_PRD
+    value: 'AVAPEUNAFNGRAPHQLP'      
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_graphql.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      applicationName: $(applicationName)
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_graphql.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)        
+      functionAppName_Secure_DEV: $(functionAppName_Secure_DEV)
+      functionAppName_Secure_SIT: $(functionAppName_Secure_SIT)
+      functionAppName_Secure_UAT: $(functionAppName_Secure_UAT)
+      functionAppName_Secure_PRD: $(functionAppName_Secure_PRD)
+      functionAppName_Public_DEV: $(functionAppName_Public_DEV)
+      functionAppName_Public_SIT: $(functionAppName_Public_SIT)
+      functionAppName_Public_UAT: $(functionAppName_Public_UAT)
+      functionAppName_Public_PRD: $(functionAppName_Public_PRD)
+      AzureWebJobsStorage_DEV: $(AzureWebJobsStorage_GraphQL_DEV)
+      AzureWebJobsStorage_SIT: $(AzureWebJobsStorage_GraphQL_SIT)
+      AzureWebJobsStorage_UAT: $(AzureWebJobsStorage_GraphQL_UAT)   
+      AzureWebJobsStorage_PROD: $(AzureWebJobsStorage_GraphQL_PROD)    
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)           

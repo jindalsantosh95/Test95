@@ -1,0 +1,148 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  functionAppName_Secure: ''
+  functionAppName_Public: ''  
+  environment: ''
+  location: ''
+  resourceGroupName: ''
+  serviceConnection: ''
+  subscriptionId: ''
+  AzureWebJobsStorage: ''  
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''  
+
+jobs: 
+- deployment: '${{parameters.environment}}'      
+  
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}  
+  
+  environment: ${{parameters.environment}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop      
+
+        # Task to create the GraphQL (Secure) Function App     
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create ${{parameters.functionAppName_Secure}} Function App'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.serviceConnection}}
+            subscriptionid: ${{parameters.subscriptionId}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}
+            location:  ${{parameters.location}}
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy_slot.json
+            csmParametersFile: $(Pipeline.workspace)/drop/Parameters/${{parameters.environment}}-azuredeploy.parameters.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -AppSetting:OperationsVisibilityMode Secure -FunctionAppName ${{parameters.functionAppName_Secure}} -AppSetting:AzureWebJobsStorage ${{parameters.AzureWebJobsStorage}} -WEBSITE_DNS_ALT_SERVER ${{parameters.WEBSITE_DNS_ALT_SERVER}} -WEBSITE_DNS_SERVER ${{parameters.WEBSITE_DNS_SERVER}}
+
+        
+        # Task to deploy to the GraphQL (Secure) Function App Slot
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy to Function App (Slot)' 
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            appType: 'functionApp'
+            appName: ${{parameters.functionAppName_Secure}}
+            deployToSlotOrASE: true
+            resourceGroupName: ${{parameters.resourceGroupName}}
+            package: '$(Pipeline.workspace)/drop/*.zip'
+            deploymentMethod: 'runFromPackage'
+            slotName: DS
+
+         # Task to Start the Slot Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start Azure App Service (Slot): ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionAppName_Secure}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}            
+            SpecifySlotOrASE: true
+            Slot: DS
+
+         # Task to Swap the Slot Function App with Prod Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Swap Slot for Slot to Env'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Swap Slots'
+            WebAppName: ${{parameters.functionAppName_Secure}}
+            resourceGroupName:  ${{parameters.resourceGroupName}} 
+            SourceSlot: DS
+            PreserveVnet: true
+
+         # Task to Stop the Slot Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop Azure App Service (Slot): ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName_Secure}}
+            resourceGroupName:  ${{parameters.resourceGroupName}} 
+            SpecifySlotOrASE: true
+            Slot: DS
+
+
+        # Task to create the GraphQL (Public) Function App      
+        - task: azureresourcemanagertemplatedeployment@3
+          displayName: 'Create ${{parameters.functionAppName_Public}} Function App'
+          inputs:
+            azureresourcemanagerconnection: ${{parameters.serviceconnection}}
+            subscriptionid: ${{parameters.subscriptionid}}
+            resourcegroupname:  ${{parameters.resourcegroupname}}
+            location:  ${{parameters.location}}
+            csmfile: $(pipeline.workspace)/drop/template/azuredeploy_slot.json
+            csmparametersfile: $(pipeline.workspace)/drop/parameters/${{parameters.environment}}-azuredeploy.parameters.json
+            deploymentmode: 'incremental'
+            overrideparameters: -AppSetting:OperationsVisibilityMode Public -FunctionAppName ${{parameters.functionAppName_Public}} -AppSetting:AzureWebJobsStorage ${{parameters.azurewebjobsstorage}} -WEBSITE_DNS_ALT_SERVER ${{parameters.WEBSITE_DNS_ALT_SERVER}} -WEBSITE_DNS_SERVER ${{parameters.WEBSITE_DNS_SERVER}}
+           
+       # Task to deploy to the GraphQL (Secure) Function App Slot
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy to Function App (Slot)' 
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            appType: 'functionApp'
+            appName: ${{parameters.functionappname_Public}}
+            deployToSlotOrASE: true
+            resourceGroupName: ${{parameters.resourceGroupName}}
+            package: '$(Pipeline.workspace)/drop/*.zip'
+            deploymentMethod: 'runFromPackage'
+            slotName: DS
+         # Task to Start the Slot Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start Azure App Service (Slot): ${{parameters.functionappname_Public}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionappname_Public}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}            
+            SpecifySlotOrASE: true
+            Slot: DS
+          
+
+          # Task to Swap the Slot Function App with Prod Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Swap Slot for Slot to Env'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Swap Slots'
+            WebAppName: ${{parameters.functionAppName_Public}}
+            resourceGroupName:  ${{parameters.resourceGroupName}} 
+            SourceSlot: DS
+            PreserveVnet: true
+        
+        # Task to Stop the Slot Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop Azure App Service (Slot): ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName_Public}}
+            resourceGroupName:  ${{parameters.resourceGroupName}} 
+            SpecifySlotOrASE: true
+            Slot: DS      

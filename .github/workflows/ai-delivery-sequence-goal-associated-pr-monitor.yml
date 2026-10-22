@@ -1,0 +1,496 @@
+name: ai-delivery-sequence-goal-associated-pr-monitor
+
+on:
+  workflow_run:
+    workflows: [ai-delivery-sequence-goal-loop, ai-delivery-sequence-goal-qa]
+    types: [completed]
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+  pull-requests: read
+  issues: read
+
+jobs:
+  monitor-associated-prs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: sequence-goal-associated-pr-monitor
+      cancel-in-progress: false
+    steps:
+      - name: Create cross-repository GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          private-key: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+          owner: VAAD1ST
+          permission-actions: write
+          permission-checks: read
+          permission-contents: read
+          permission-issues: write
+          permission-pull-requests: write
+          permission-statuses: read
+
+      - name: Resume goals whose associated PRs are merged
+        uses: actions/github-script@v7
+        env:
+          SEQUENCE_GOAL_APP_SLUG: ${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}
+          SEQUENCE_GOAL_COORDINATOR_REPOSITORY: ${{ github.repository }}
+          SEQUENCE_GOAL_IOS_BASE_BRANCH: ${{ vars.SEQUENCE_GOAL_IOS_BASE_BRANCH || 'develop' }}
+          SEQUENCE_GOAL_ANDROID_BASE_BRANCH: ${{ vars.SEQUENCE_GOAL_ANDROID_BASE_BRANCH || 'develop' }}
+          SEQUENCE_GOAL_WEBUI_REPOSITORY: ${{ vars.SEQUENCE_GOAL_WEBUI_REPOSITORY }}
+          SEQUENCE_GOAL_WEBUI_BASE_BRANCH: ${{ vars.SEQUENCE_GOAL_WEBUI_BASE_BRANCH || 'main' }}
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            const appSlug = process.env.SEQUENCE_GOAL_APP_SLUG;
+            const aiWorkflow = "ai-delivery-sequence-goal-associated-pr-feedback.yml";
+            const surfaceConfig = {
+              Backend: { repository: process.env.SEQUENCE_GOAL_COORDINATOR_REPOSITORY, base: "main" },
+              MobileIos: { repository: "VAAD1ST/vaa-mobile-ios", base: process.env.SEQUENCE_GOAL_IOS_BASE_BRANCH },
+              MobileAndroid: { repository: "VAAD1ST/vaa-mobile-android", base: process.env.SEQUENCE_GOAL_ANDROID_BASE_BRANCH },
+              WebUi: { repository: process.env.SEQUENCE_GOAL_WEBUI_REPOSITORY, base: process.env.SEQUENCE_GOAL_WEBUI_BASE_BRANCH }
+            };
+            const trustedCoordinatorAuthors = new Set(["github-actions", "github-actions[bot]", ...(appSlug ? [appSlug, `${appSlug}[bot]`, `app/${appSlug}`] : [])]);
+            const coordinatorBranches = new Map();
+            for await (const response of github.paginate.iterator(github.rest.repos.listBranches, {
+              owner: context.repo.owner, repo: context.repo.repo, per_page: 100
+            })) {
+              for (const branch of response.data || []) {
+                if (!branch.name || branch.name === "main") continue;
+                try {
+                  const prs = await github.paginate(github.rest.pulls.list, {
+                    owner: context.repo.owner, repo: context.repo.repo, state: "open", base: "main",
+                    head: `${context.repo.owner}:${branch.name}`, per_page: 100
+                  });
+                  const registered = prs.filter(pr => pr.head?.repo?.full_name === `${context.repo.owner}/${context.repo.repo}` &&
+                    pr.head?.ref === branch.name && trustedCoordinatorAuthors.has(pr.user?.login || "") &&
+                    /Automated PR raised by the sequence goal loop (?:for active goal delivery|after implementation verification)\./.test(pr.body || ""));
+                  if (registered.length !== 1) continue;
+                  const files = await github.paginate(github.rest.pulls.listFiles, { owner: context.repo.owner, repo: context.repo.repo, pull_number: registered[0].number, per_page: 100 });
+                  const diagramPaths = files.filter(file => file.status !== "removed" && /^docs\/sequence-diagrams\/(?!_)[^/]+\.md$/.test(file.filename)).map(file => file.filename);
+                  if (diagramPaths.length !== 1) continue;
+                  coordinatorBranches.set(branch.name, { branch: branch.name, headSha: branch.commit.sha, diagramPaths });
+                } catch (error) {
+                  core.warning(`Cannot inspect coordinator ${branch.name}: ${error.message}`);
+                }
+              }
+            }
+            const candidates = [];
+            for (const coordinatorBranch of coordinatorBranches.values()) {
+              const associated = [];
+              let goalText = "";
+              const registeredCoordinatorNumbers = new Set();
+              const openQuestions = [];
+              let hasUnresolvedOpenPoints = false;
+              let hasDeliveryGoal = false;
+              let recoverComplete = false;
+              for (const diagramPath of coordinatorBranch.diagramPaths) {
+                let response;
+                try {
+                  response = await github.rest.repos.getContent({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    path: diagramPath,
+                    ref: coordinatorBranch.headSha
+                  });
+                } catch (error) {
+                  core.warning(`Skipping unavailable diagram ${diagramPath} from coordinator branch ${coordinatorBranch.branch}: ${error.message}`);
+                  continue;
+                }
+                if (Array.isArray(response.data) || !response.data.content) continue;
+                const text = Buffer.from(response.data.content, "base64").toString("utf8");
+                goalText = text;
+                if (/^\|\s*Final state\s*\|\s*`Abandoned`\s*\|\s*$/im.test(text)) continue;
+                const isInProgress = /^\|\s*Status\s*\|\s*`InProgress`\s*\|\s*$/im.test(text);
+                const isComplete = /^\|\s*Status\s*\|\s*`Complete`\s*\|\s*$/im.test(text);
+                if (!isInProgress && !isComplete) continue;
+                hasDeliveryGoal = true;
+                recoverComplete = isComplete;
+                const openPoints = text.match(/## Open points to finalize\s*(?<body>[\s\S]*?)(?=\n## |$)/i)?.groups?.body || "";
+                const declaresNoOpenPoints = /^\s*(?:-\s*)?None\b/i.test(openPoints);
+                if (!declaresNoOpenPoints) {
+                  for (const question of openPoints.matchAll(/^\s*-\s+(?<question>(?!None\b).+?)\s*$/gim)) {
+                    hasUnresolvedOpenPoints = true;
+                    openQuestions.push({ diagram: diagramPath, question: question.groups.question.trim() });
+                  }
+                }
+                for (const coordinator of text.matchAll(/^\|\s*`Coordinator`\s*\|[^\n]*\|\s*\[#(?<number>\d+)\]\([^)]+\)\s*\|/gim)) {
+                  registeredCoordinatorNumbers.add(Number(coordinator.groups.number));
+                }
+                const rows = [...text.matchAll(/^\|\s*``?(?<surface>Backend|MobileIos|MobileAndroid|WebUi|QA-(?:Backend|MobileIos|MobileAndroid|WebUi))``?\s*\|\s*``?(?<repository>[^`]+)``?\s*\|\s*``?(?<base>[^`]+)``?\s*\|\s*``?(?<head>[^`]+)``?\s*\|\s*\[#(?<number>\d+)\]\([^)]+\)\s*\|/gim)];
+                for (const row of rows) {
+                  associated.push({
+                    diagram: diagramPath,
+                    surface: row.groups.surface,
+                    repository: row.groups.repository,
+                    base: row.groups.base,
+                    head: row.groups.head,
+                    number: Number(row.groups.number)
+                  });
+                }
+              }
+              if (hasDeliveryGoal) candidates.push({ branch: coordinatorBranch.branch, goalHeadSha: coordinatorBranch.headSha, recoverComplete, goalText, associated, registeredCoordinatorNumbers: [...registeredCoordinatorNumbers], hasUnresolvedOpenPoints, openQuestions });
+            }
+
+            const goalDigest = text => {
+              text = text.replace(/^### Delivery: .*?\r?\n```json\r?\n.*?\r?\n```\s*/gms, "");
+              text = text.replace(/^\|\s*(?:Harness Sensor|Acceptance evidence)\s*\|[^\r\n]*\r?\n?/gm, "");
+              text = text.replace(/^## (?:Associated delivery pull requests|Historical associated delivery pull requests|Delivery progress|Agent Loop Closure Evidence)\b.*?(?=^## |(?![\s\S]))/gms, "");
+              text = text.replace(/^## Agent Loop Goal\s*\n(.*?)(?=^## |(?![\s\S]))/gms, (_, table) =>
+                table.split(/\r?\n/).filter(line => /^\|\s*(Goal|Delivery surface|Done when|Promotion verification)\s*\|/.test(line)).join("\n"));
+              return require("crypto").createHash("sha256").update(text.replace(/\r\n/g, "\n").trim(), "utf8").digest("hex");
+            };
+            const readTask = (text, task) => {
+              const sections = [...text.matchAll(/^### Delivery: ([^\r\n]+)\r?\n```json\r?\n([\s\S]*?)\r?\n```/gm)].filter(match => match[1] === task);
+              if (sections.length > 1) throw new Error("Duplicate delivery task in goal document");
+              return sections.length ? JSON.parse(sections[0][2]) : null;
+            };
+            const deliveryIsCurrent = async (candidate, item, pr) => {
+              const surface = item.surface.replace(/^QA-/, "");
+              const phase = item.surface.startsWith("QA-") ? "QA" : "Production";
+              const state = readTask(candidate.goalText, `${surface} ${phase}`);
+              if (!state || state.status !== "Complete" || !/^[a-f0-9]{40}$/.test(pr.head.sha || "")) return false;
+              const digest = goalDigest(candidate.goalText);
+              if (phase === "Production") return state.verifiedCommit === pr.head.sha && String(state.identity || "").split("\n").at(-1) === digest;
+              const productionRows = candidate.associated.filter(row => row.surface === surface);
+              if (productionRows.length !== 1) return false;
+              const productionRow = productionRows[0];
+              const [owner, repo] = productionRow.repository.split("/", 2);
+              const { data: productionPr } = await github.rest.pulls.get({ owner, repo, pull_number: productionRow.number });
+              const productionState = readTask(candidate.goalText, `${surface} Production`);
+              return productionState?.status === "Complete" && productionState.verifiedCommit === productionPr.head.sha &&
+                String(productionState.identity || "").split("\n").at(-1) === digest && state.goalDigest === digest &&
+                state.productionCommit === productionPr.head.sha && state.verifiedCommit === productionPr.head.sha &&
+                state.verifiedQaCommit === pr.head.sha && state.pullRequest === pr.html_url;
+            };
+
+            for (const candidate of candidates) {
+              const associated = candidate.associated;
+
+              const declared = candidate.goalText.match(/^\|\s*Delivery surface\s*\|([^|]*)\|/im)?.[1] || "Backend";
+              const requiredSurfaces = [...new Set(declared.replace(/`/g, "").split(/[,;]/).map(value => value.trim()).filter(Boolean))];
+              if (!requiredSurfaces.length || requiredSurfaces.some(surface => !surfaceConfig[surface])) {
+                core.warning(`Invalid delivery surfaces in ${candidate.branch}; recovery requires correction.`);
+                continue;
+              }
+              const missingChildren = requiredSurfaces.some(surface => !associated.some(row => row.surface === surface) || !associated.some(row => row.surface === `QA-${surface}`));
+              const blockedTasks = requiredSurfaces.flatMap(surface => [`${surface} Production`, `${surface} QA`]).filter(task => readTask(candidate.goalText, task)?.status === "Blocked");
+              let allActiveMerged = true;
+              let hasClosedUnmerged = false;
+              let hasActiveOrUntrusted = false;
+              let hasDeliveryPending = false;
+              let hasInspectionFailure = false;
+              let hasDraftQa = false;
+              for (const item of associated) {
+                const [owner, repo] = item.repository.split("/", 2);
+                let pr;
+                try {
+                  ({ data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: item.number }));
+                } catch (error) {
+                  hasInspectionFailure = true;
+                  allActiveMerged = false;
+                  hasActiveOrUntrusted = true;
+                  core.warning(`Cannot inspect associated PR ${item.repository}#${item.number}: ${error.message}`);
+                  continue;
+                }
+                const marker = /Associated sequence-goal delivery for `{1,2}VAAD1ST\/eapi@/;
+                const trustedAuthors = new Set(["github-actions", "github-actions[bot]", ...(appSlug ? [appSlug, `${appSlug}[bot]`, `app/${appSlug}`] : [])]);
+                const expectedPhase = item.surface.startsWith("QA-") ? "QA" : "Production";
+                const expectedSurface = item.surface.replace(/^QA-/, "");
+                const configured = surfaceConfig[expectedSurface];
+                const expectedRepository = expectedPhase === "QA" ? `${context.repo.owner}/${context.repo.repo}` : configured?.repository;
+                const expectedBase = expectedPhase === "QA" ? "main" : configured?.base;
+                const body = pr.body || "";
+                const escapeRegex = value => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                const coordinatorPattern = `Associated sequence-goal delivery for \`{1,2}VAAD1ST/eapi@${escapeRegex(candidate.branch)}\`{1,2}\\.`;
+                const currentMetadata = new RegExp(`^${coordinatorPattern}$`, "m").test(body) &&
+                  new RegExp(`^- Phase: \`{1,2}${expectedPhase}\`{1,2}\\s*$`, "m").test(body) &&
+                  new RegExp(`^- Surface: \`{1,2}${expectedSurface}\`{1,2}\\s*$`, "m").test(body);
+                const trusted = configured && item.repository === expectedRepository && item.base === expectedBase &&
+                  pr.head.repo?.full_name === item.repository &&
+                  pr.head.ref === item.head &&
+                  pr.base.ref === item.base &&
+                  marker.test(body) &&
+                  currentMetadata &&
+                  trustedAuthors.has(pr.user?.login || "");
+                if (!trusted) {
+                  hasInspectionFailure = true;
+                  allActiveMerged = false;
+                  hasActiveOrUntrusted = true;
+                  core.warning(`Ignoring untrusted associated PR ${item.repository}#${item.number}.`);
+                  continue;
+                }
+                let deliveryPending = true;
+                try { deliveryPending = !(await deliveryIsCurrent(candidate, item, pr)); }
+                catch (error) { hasInspectionFailure = true; core.warning(`Cannot validate delivery bindings: ${error.message}`); }
+                if (deliveryPending) {
+                  hasDeliveryPending = true;
+                  core.info(`${item.surface} has missing or stale verification; completion recovery is blocked.`);
+                }
+                if (!pr.merged_at) {
+                  if (expectedPhase === "QA" && pr.state === "open" && pr.draft) hasDraftQa = true;
+                  allActiveMerged = false;
+                  core.info(`${item.surface} ${item.repository}#${item.number} remains ${pr.state}.`);
+                  if (pr.state !== "open") {
+                    hasClosedUnmerged = true;
+                  } else {
+                    hasActiveOrUntrusted = true;
+                    if (deliveryPending) {
+                      hasDeliveryPending = true;
+                      core.info(expectedPhase === "Production"
+                        ? `Delivery remains pending for ${item.repository}#${item.number}; shared writer locking keeps feedback handling serialized with delivery recovery.`
+                        : `QA delivery remains pending for ${item.repository}#${item.number}; QA recovery retains exclusive write ownership until publication completes.`);
+                    }
+                    const issueComments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number: item.number, per_page: 100 });
+                    const reviewComments = await github.paginate(github.rest.pulls.listReviewComments, { owner, repo, pull_number: item.number, per_page: 100 });
+                    const reviews = await github.paginate(github.rest.pulls.listReviews, { owner, repo, pull_number: item.number, per_page: 100 });
+                    const rawCheckRuns = await github.paginate(github.rest.checks.listForRef, {
+                      owner, repo, ref: pr.head.sha, filter: "latest", per_page: 100
+                    });
+                    const checkRunsByIdentity = new Map();
+                    for (const run of rawCheckRuns.flatMap(value => value?.check_runs || value || []).filter(Boolean)
+                      .sort((left, right) => new Date(right.completed_at || right.started_at || 0) - new Date(left.completed_at || left.started_at || 0))) {
+                      const identity = `${run.app?.slug || "unknown"}:${run.name || run.id}`;
+                      if (!checkRunsByIdentity.has(identity)) checkRunsByIdentity.set(identity, run);
+                    }
+                    const checkRuns = [...checkRunsByIdentity.values()];
+                    const combinedStatus = await github.rest.repos.getCombinedStatusForRef({ owner, repo, ref: pr.head.sha });
+                    const latestStatusesByContext = new Map();
+                    for (const status of [...(combinedStatus.data.statuses || [])]
+                      .sort((left, right) => new Date(right.updated_at) - new Date(left.updated_at))) {
+                      if (!latestStatusesByContext.has(status.context)) latestStatusesByContext.set(status.context, status);
+                    }
+                    const latestStatuses = [...latestStatusesByContext.values()];
+                    const appSlug = process.env.SEQUENCE_GOAL_APP_SLUG;
+                    const appAuthors = new Set(["github-actions", "github-actions[bot]", ...(appSlug ? [appSlug, `${appSlug}[bot]`] : [])]);
+                    const responseBodies = [...issueComments, ...reviewComments]
+                      .filter(comment => appAuthors.has(comment.user?.login || ""))
+                      .map(comment => comment.body || "");
+                    const hasDedicatedLine = (body, marker) => String(body || "").split(/\r?\n/).some(line => line.trim() === marker);
+                    const hasMarker = (kind, id) => responseBodies.some(body =>
+                      hasDedicatedLine(body, `<!-- sequence-goal-associated-feedback:${kind}:${id} -->`));
+                    const isPending = (kind, value) => Boolean(value.body) &&
+                      !appAuthors.has(value.user?.login || "") &&
+                      !hasMarker(kind, value.id);
+                    const failingConclusions = new Set(["failure", "timed_out", "startup_failure"]);
+                    const hasPendingCheckFailure = checkRuns.some(run =>
+                      failingConclusions.has(run.conclusion) && !hasMarker("check-run", run.id)) ||
+                      latestStatuses.some(status =>
+                        ["failure", "error"].includes(status.state) && !hasMarker("commit-status", status.id));
+                    const hasPendingMergeConflict = (pr.mergeable === false || pr.mergeable_state === "dirty") &&
+                      !hasMarker("merge-conflict", pr.head.sha);
+                    const requiredInferentialPasses = ["Security and privacy", "Accessibility", "Maintainability and architecture", "Observability, analytics and diagnosability", "Testing quality and coverage gaps", "Behavioural regression and traveller flow correctness"];
+                    const inferentialSection = (pr.body || "").match(/(?:^|\n)## Inferential review[^\n]*\n[\s\S]*?(?=\n## |\s*$)/i)?.[0] || "";
+                    const checkedInferentialPasses = [...inferentialSection.matchAll(/^- \[x\] (?<pass>[^\r\n]+)\r?$/gim)].map(match => match.groups.pass);
+                    const inferentialOutcomes = [...inferentialSection.matchAll(/^Review outcome:\s*(?:no-findings|findings-addressed|not-applicable):\s*\S.*$/gim)];
+                    const hasCompleteInferentialContract = checkedInferentialPasses.length === requiredInferentialPasses.length &&
+                      checkedInferentialPasses.every((pass, index) => pass === requiredInferentialPasses[index]) && inferentialOutcomes.length === 1;
+                    const bodyRevision = require("crypto").createHash("sha256").update(pr.body || "").digest("hex").slice(0, 16);
+                    const inferentialId = `${pr.head.sha}:${bodyRevision}`;
+                    const inferentialKind = !hasCompleteInferentialContract ? "inferential-review" : "inferential-ready";
+                    const hasPendingInferentialReview = expectedPhase === "Production" && expectedSurface === "MobileIos" &&
+                      (!hasCompleteInferentialContract || pr.draft) && !hasMarker(inferentialKind, inferentialId);
+                    const hasPendingAuthoredFeedback = issueComments.some(value => isPending("issue", value)) ||
+                      reviewComments.some(value => isPending("review-comment", value)) ||
+                      reviews.some(value => isPending("review", value));
+                    const pendingFeedbackIds = [
+                      ...issueComments.filter(value => isPending("issue", value)).map(value => `issue:${value.id}`),
+                      ...reviewComments.filter(value => isPending("review-comment", value)).map(value => `review-comment:${value.id}`),
+                      ...reviews.filter(value => isPending("review", value)).map(value => `review:${value.id}`),
+                      ...checkRuns.filter(run => failingConclusions.has(run.conclusion) && !hasMarker("check-run", run.id)).map(run => `check-run:${run.id}`),
+                      ...latestStatuses.filter(status => ["failure", "error"].includes(status.state) && !hasMarker("commit-status", status.id)).map(status => `commit-status:${status.id}`),
+                      ...(hasPendingMergeConflict ? [`merge-conflict:${pr.head.sha}`] : []),
+                      ...(!deliveryPending && hasPendingInferentialReview ? [`${inferentialKind}:${inferentialId}`] : [])
+                    ].sort();
+                    const feedbackKey = `feedback-${require("crypto").createHash("sha256").update(pendingFeedbackIds.join("\n")).digest("hex").slice(0, 16)}`;
+                    const hasPendingFeedback = hasPendingAuthoredFeedback ||
+                      hasPendingCheckFailure ||
+                      hasPendingMergeConflict ||
+                      (!deliveryPending && hasPendingInferentialReview);
+                    if (hasPendingFeedback && (!deliveryPending || expectedPhase === "Production")) {
+                      const attemptPrefix = `<!-- sequence-goal-associated-feedback:attempt:${pr.head.sha}:${feedbackKey}:`;
+                      const attemptComments = [...issueComments, ...reviewComments]
+                        .filter(comment => appAuthors.has(comment.user?.login || "") &&
+                          (comment.body || "").includes(attemptPrefix));
+                      const attemptCount = attemptComments.length;
+                      let activeFeedbackRuns = { data: { workflow_runs: [] } };
+                      let feedbackActivityKnown = true;
+                      try {
+                        activeFeedbackRuns = await github.rest.actions.listWorkflowRuns({ owner: context.repo.owner, repo: context.repo.repo, workflow_id: aiWorkflow, event: "workflow_dispatch", per_page: 100 });
+                      } catch (error) {
+                        feedbackActivityKnown = false;
+                        core.warning(`Active feedback-run lookup failed for ${item.repository}#${item.number}; worker concurrency will serialize dispatch, but exhaustion is deferred: ${error.message}`);
+                      }
+                      const feedbackRunName = `associated-feedback-${item.repository}-${item.number}`;
+                      if (activeFeedbackRuns.data.workflow_runs.some(run => run.display_title === feedbackRunName &&
+                        ["queued", "in_progress", "waiting", "requested", "pending"].includes(run.status))) {
+                        core.info(`Associated feedback is already active for ${item.repository}#${item.number}; skipping exhaustion or duplicate dispatch.`);
+                        continue;
+                      }
+                      if (attemptCount >= 3) {
+                        if (!feedbackActivityKnown) {
+                          core.warning(`Cannot safely publish exhaustion for ${item.repository}#${item.number} until worker activity can be determined.`);
+                          continue;
+                        }
+                        core.warning(`Associated feedback attempt budget is exhausted for ${item.repository}#${item.number} at ${pr.head.sha}.`);
+                        const exhaustionMarker = `<!-- sequence-goal-associated-feedback:exhausted:${pr.head.sha}:${feedbackKey} -->`;
+                        if (!responseBodies.some(body => body.includes(exhaustionMarker))) {
+                          const failedRunCandidates = [
+                            ...checkRuns.filter(run => failingConclusions.has(run.conclusion) && !hasMarker("check-run", run.id))
+                              .map(run => ({
+                                timestamp: Date.parse(run.completed_at || run.started_at || 0),
+                                url: run.details_url
+                              })),
+                            ...latestStatuses.filter(status => ["failure", "error"].includes(status.state) && !hasMarker("commit-status", status.id))
+                              .map(status => ({
+                                timestamp: Date.parse(status.updated_at || status.created_at || 0),
+                                url: status.target_url
+                              }))
+                          ].filter(candidate => candidate.url)
+                            .sort((left, right) => right.timestamp - left.timestamp);
+                          const latestFailedRunUrl = failedRunCandidates[0]?.url || `${pr.html_url}/checks`;
+                          await github.rest.issues.createComment({
+                            owner,
+                            repo,
+                            issue_number: item.number,
+                            body: `${exhaustionMarker}\n[from-codex] Automatic remediation stopped after three unsuccessful attempts for feedback set \`${feedbackKey}\` at head \`${pr.head.sha}\`. The same feedback, failing check, or merge conflict is still present, so no further automatic retries will run for this feedback set. [Open the latest failed run or check](${latestFailedRunUrl}), apply the required fix manually, provide new feedback, or push a new commit after addressing the blocker. A different pending-feedback set or a new head SHA starts a fresh bounded remediation series; retries use a fixed five-minute delay.`
+                          });
+                        }
+                        continue;
+                      }
+                      const pendingTimestamps = [
+                        ...issueComments.filter(value => isPending("issue", value)).map(value => value.updated_at || value.created_at),
+                        ...reviewComments.filter(value => isPending("review-comment", value)).map(value => value.updated_at || value.created_at),
+                        ...reviews.filter(value => isPending("review", value)).map(value => value.submitted_at),
+                        ...checkRuns.filter(run => failingConclusions.has(run.conclusion) && !hasMarker("check-run", run.id))
+                          .map(run => run.completed_at || run.started_at),
+                        ...latestStatuses.filter(status => ["failure", "error"].includes(status.state) && !hasMarker("commit-status", status.id))
+                          .map(status => status.updated_at || status.created_at),
+                        ...(hasPendingMergeConflict ? [pr.updated_at] : []),
+                        ...(hasPendingInferentialReview ? [pr.updated_at] : [])
+                      ].filter(Boolean).map(value => Date.parse(value)).filter(Number.isFinite);
+                      const attemptTimestamps = attemptComments
+                        .map(comment => Date.parse(comment.created_at || comment.updated_at))
+                        .filter(Number.isFinite);
+                      const delayMinutes = hasPendingAuthoredFeedback && attemptCount === 0 ? 0 : 5;
+                      const delayStartedAt = Math.max(0, ...pendingTimestamps, ...attemptTimestamps);
+                      const eligibleAt = delayStartedAt + delayMinutes * 60 * 1000;
+                      if (Date.now() < eligibleAt) {
+                        core.info(`Associated feedback attempt ${attemptCount + 1} for ${item.repository}#${item.number} is delayed until ${new Date(eligibleAt).toISOString()} (${delayMinutes} minute delay).`);
+                        continue;
+                      }
+                      try {
+                        await github.rest.actions.createWorkflowDispatch({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          workflow_id: aiWorkflow,
+                          ref: "main",
+                          inputs: { repository: item.repository, pr_number: String(item.number), surface: item.surface, coordinator_branch: candidate.branch, coordinator_diagram: item.diagram, feedback_key: feedbackKey }
+                        });
+                        core.info(`Dispatched associated feedback handling for ${item.surface} ${item.repository}#${item.number}.`);
+                      } catch (error) {
+                        core.warning(`Associated feedback dispatch failed for ${item.repository}#${item.number}; continuing with the remaining goals: ${error.message}`);
+                      }
+                    }
+                  }
+                }
+              }
+              if (hasInspectionFailure) continue;
+              const needsRecovery = missingChildren || hasDeliveryPending || hasDraftQa || hasClosedUnmerged;
+              if (blockedTasks.length) {
+                core.warning(`Delivery blocked for ${candidate.branch}: ${blockedTasks.join(", ")}. Resolve the recorded blocker and explicitly restart.`);
+                continue;
+              }
+              if (!needsRecovery && associated.length > 0 && !allActiveMerged && !(hasClosedUnmerged && !hasActiveOrUntrusted)) continue;
+              const coordinatorState = readTask(candidate.goalText, "Coordinator");
+              const recoveryStage = needsRecovery ? "Delivery" : "Completion";
+              if (!candidate.recoverComplete && (coordinatorState?.continuationStage || "Delivery") === recoveryStage && Number(coordinatorState?.automaticContinuations || 0) >= 3) {
+                core.warning(`Automatic continuation limit reached for ${candidate.branch}; review the remaining work in the goal document and explicitly restart.`);
+                continue;
+              }
+
+              if (candidate.recoverComplete && hasClosedUnmerged) {
+                core.warning(`Retained Complete goal ${candidate.branch} has a closed-unmerged child PR; refusing to create an invalid coordinator PR.`);
+                continue;
+              }
+              const openCoordinatorPrs = await github.paginate(github.rest.pulls.list, {
+                owner: context.repo.owner, repo: context.repo.repo, state: "open", base: "main",
+                head: `${context.repo.owner}:${candidate.branch}`, per_page: 100
+              });
+              const trustedCoordinatorAuthors = new Set(["github-actions", "github-actions[bot]", ...(appSlug ? [appSlug, `${appSlug}[bot]`, `app/${appSlug}`] : [])]);
+              const trustedOpenCoordinator = openCoordinatorPrs.find(pr =>
+                pr.head?.repo?.full_name === `${context.repo.owner}/${context.repo.repo}` &&
+                pr.head?.ref === candidate.branch &&
+                trustedCoordinatorAuthors.has(pr.user?.login || "") &&
+                (pr.body || "").includes("Automated PR raised by the sequence goal loop after implementation verification."));
+              if (!trustedOpenCoordinator) { core.info("Coordinator closed during monitoring; no restart dispatched."); continue; }
+              if (trustedOpenCoordinator.head.sha !== candidate.goalHeadSha) { core.info("Goal changed during monitoring; inspect the new document on the next pass."); continue; }
+              if (candidate.recoverComplete) {
+                if (needsRecovery || !allActiveMerged || candidate.hasUnresolvedOpenPoints || trustedOpenCoordinator.head.sha !== candidate.goalHeadSha) {
+                  core.info(`Deferring Complete recovery for ${candidate.branch}; delivery or coordinator state changed.`);
+                  continue;
+                }
+                if (trustedOpenCoordinator.draft) {
+                  const ready = await github.graphql(`mutation($pullRequestId: ID!) { markPullRequestReadyForReview(input: { pullRequestId: $pullRequestId }) { pullRequest { isDraft } } }`, { pullRequestId: trustedOpenCoordinator.node_id });
+                  if (ready.markPullRequestReadyForReview.pullRequest.isDraft) throw new Error(`Complete coordinator PR #${trustedOpenCoordinator.number} remained draft.`);
+                  core.info(`Marked recovered Complete coordinator PR #${trustedOpenCoordinator.number} ready for review.`);
+                }
+                continue;
+              }
+              let questionPayloadAcknowledged = false;
+              if (trustedOpenCoordinator?.draft && candidate.hasUnresolvedOpenPoints && candidate.registeredCoordinatorNumbers.includes(trustedOpenCoordinator.number)) {
+                const comments = await github.paginate(github.rest.issues.listComments, {
+                  owner: context.repo.owner, repo: context.repo.repo, issue_number: trustedOpenCoordinator.number, per_page: 100
+                });
+                const expectedQuestionLines = candidate.openQuestions.map(item => `- **${item.diagram}**: ${item.question}`);
+                questionPayloadAcknowledged = comments.some(comment => {
+                  if (!trustedCoordinatorAuthors.has(comment.user?.login || "") || !(comment.body || "").includes("<!-- sequence-goal-open-points human-comment -->")) return false;
+                  const actualQuestionLines = String(comment.body || "").split(/\r?\n/).filter(line => line.startsWith("- **"));
+                  return actualQuestionLines.length === expectedQuestionLines.length && actualQuestionLines.every((line, index) => line === expectedQuestionLines[index]);
+                });
+              }
+              if (questionPayloadAcknowledged && !needsRecovery) {
+                core.info(`Coordinator PR #${trustedOpenCoordinator.number} is already open for ${candidate.branch}; waiting for its question or review workflow instead of redispatching.`);
+                continue;
+              }
+
+              let busy = false;
+              try {
+                for (const workflow_id of ["ai-delivery-sequence-goal-loop.yml", "ai-delivery-sequence-goal-qa.yml"]) {
+                  for (const status of ["queued", "in_progress", "waiting", "requested", "pending"]) {
+                    const runs = await github.rest.actions.listWorkflowRuns({ owner: context.repo.owner, repo: context.repo.repo, workflow_id, branch: candidate.branch, status, per_page: 1 });
+                    if (runs.data.workflow_runs.length) { busy = true; break; }
+                  }
+                  if (busy) break;
+                }
+              } catch (error) { core.warning(`Active delivery-run lookup failed; deferring recovery: ${error.message}`); continue; }
+              if (busy) {
+                core.info(`A delivery run is already active for ${candidate.branch}; skipping duplicate dispatch.`);
+                continue;
+              }
+              try {
+                await github.rest.actions.createWorkflowDispatch({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  workflow_id: "ai-delivery-sequence-goal-loop.yml",
+                  ref: candidate.branch,
+                  inputs: { smoke_test: "false", automatic_resume: "true" }
+                });
+              } catch (error) {
+                core.warning(`Coordinator dispatch failed for ${candidate.branch}; continuing with the remaining goals: ${error.message}`);
+                continue;
+              }
+              core.info(associated.length === 0
+                ? `InProgress coordinator ${candidate.branch} has no recorded child PR; resumed bounded delivery recovery.`
+                : hasClosedUnmerged
+                ? `A child PR for ${candidate.branch} was closed without merge; resumed delivery to create a replacement.`
+                : needsRecovery
+                ? `Resumed incomplete delivery or missing QA for ${candidate.branch} from the goal document.`
+                : `All associated PRs for coordinator branch ${candidate.branch} are merged; resumed it for completion.`);
+            }

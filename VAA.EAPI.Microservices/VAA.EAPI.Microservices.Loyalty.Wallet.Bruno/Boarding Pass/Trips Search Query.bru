@@ -1,0 +1,565 @@
+meta {
+  name: Trips Search Query
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query Booking {
+    Booking(
+      tripDetailsRequest: {
+        using: PNR
+        confirmationNum: "{{pnrLocator}}"
+        encryptedConfirmationNum: null
+        ticketNum: null
+        creditCardNum: null
+        loyaltyNum: null
+        givenNames: "{{givenNames}}"
+        surname: "{{surname}}"
+        departureAirportCode: "{{originAirportCode}}"
+        bookingReference: null
+        dateOfBirth: null
+      }
+    ) {
+      status
+      id
+      pos {
+        countryCode
+        cityCode
+        currencyCode
+      }
+      tripSearchRequest {
+        givenNames
+        surname
+        pnrLocator
+        createdDate
+        flyingClubNumber
+        bookingReference
+        dateOfBirth
+      }
+      product {
+        sortByDate
+        supportedFlight
+        bookingType
+        reference {
+          airlineDesignator
+          pnrLocator
+          createdDate
+          confirmationNumber
+          chainCode
+          bookingDate
+        }
+        slices {
+          id
+          distanceMiles
+          ordinal
+          scheduledDepartureLocalDateTime
+          scheduledDepartureUtcDateTime
+          scheduledArrivalLocalDateTime
+          scheduledArrivalUtcDateTime
+          scheduledArrivalBasedOnDepartureLocalDateTime
+          estimatedDepartureLocalDateTime
+          estimatedDepartureUtcDateTime
+          estimatedArrivalLocalDateTime
+          estimatedArrivalUtcDateTime
+          actualDepartureLocalDateTime
+          actualDepartureUtcDateTime
+          actualArrivalLocalDateTime
+          actualArrivalUtcDateTime
+          origin {
+            terminalName
+            code
+            airportName
+            cityName
+            countryName
+            countryCode
+          }
+          destination {
+            terminalName
+            code
+            airportName
+            cityName
+            countryName
+            countryCode
+          }
+          segments {
+            id
+            operationalStatus {
+              type
+              subType
+              rebookEligible
+            }
+            ordinal
+            operatingCarrier {
+              flightNumber
+              carrierCode
+              carrierName
+              operationalSuffix
+            }
+            marketingCarrier {
+              flightNumber
+              carrierCode
+              carrierName
+              operationalSuffix
+            }
+            scheduledDepartureLocalDateTime
+            scheduledDepartureUtcDateTime
+            scheduledArrivalLocalDateTime
+            scheduledArrivalUtcDateTime
+            scheduledArrivalBasedOnDepartureLocalDateTime
+            estimatedDepartureLocalDateTime
+            estimatedDepartureUtcDateTime
+            estimatedArrivalLocalDateTime
+            estimatedArrivalUtcDateTime
+            actualDepartureLocalDateTime
+            actualDepartureUtcDateTime
+            actualArrivalLocalDateTime
+            actualArrivalUtcDateTime
+            scheduledDepartureUtc
+            scheduledArrivalUtc
+            estimatedDepartureUtc
+            estimatedArrivalUtc
+            actualDepartureUtc
+            actualArrivalUtc
+            scheduledDepartureLocal
+            scheduledArrivalLocal
+            scheduledArrivalBasedOnDepartureLocal
+            estimatedDepartureLocal
+            estimatedArrivalLocal
+            actualDepartureLocal
+            actualArrivalLocal
+            layoverDuration
+            origin {
+              terminalName
+              code
+              airportName
+              cityName
+              countryName
+              countryCode
+            }
+            destination {
+              terminalName
+              code
+              airportName
+              cityName
+              countryName
+              countryCode
+            }
+            actionCode
+            legs {
+              id
+              operating {
+                flightNumber
+                carrierCode
+                carrierName
+                operationalSuffix
+              }
+              marketing {
+                flightNumber
+                carrierCode
+                carrierName
+                operationalSuffix
+              }
+              scheduledDepartureLocalDateTime
+              scheduledDepartureUtcDateTime
+              scheduledArrivalLocalDateTime
+              scheduledArrivalUtcDateTime
+              scheduledArrivalBasedOnDepartureLocalDateTime
+              estimatedDepartureLocalDateTime
+              estimatedDepartureUtcDateTime
+              estimatedArrivalLocalDateTime
+              estimatedArrivalUtcDateTime
+              actualDepartureLocalDateTime
+              actualDepartureUtcDateTime
+              actualArrivalLocalDateTime
+              actualArrivalUtcDateTime
+              scheduledDepartureUtc
+              scheduledArrivalUtc
+              estimatedDepartureUtc
+              estimatedArrivalUtc
+              actualDepartureUtc
+              actualArrivalUtc
+              scheduledDepartureLocal
+              scheduledArrivalLocal
+              scheduledArrivalBasedOnDepartureLocal
+              estimatedDepartureLocal
+              estimatedArrivalLocal
+              actualDepartureLocal
+              actualArrivalLocal
+              origin {
+                terminalName
+                code
+                airportName
+                cityName
+                countryName
+                countryCode
+              }
+              destination {
+                terminalName
+                code
+                airportName
+                cityName
+                countryName
+                countryCode
+              }
+              onAirDuration
+              status
+              cabinClass {
+                code
+                productCode
+                seatAssignmentType
+                seatStatus
+                name
+              }
+              aircraft {
+                code
+                name
+                subfleetCode
+                planeName
+                tailNumber
+              }
+              seatAssignments {
+                seat {
+                  row
+                  column
+                  name
+                  type
+                  actualCabinClass {
+                    code
+                    productCode
+                    seatAssignmentType
+                    seatStatus
+                    name
+                  }
+                }
+              }
+              onGroundDuration
+            }
+            flightSegmentId
+            checkinStatus
+            duration
+            fareBasisCode
+            seatEligible
+            checkedIn
+            isLayoverDurationValid
+          }
+          checkinStatus
+          duration
+          checkInEligible
+          checkInOpens
+          scheduledDepartureLocal
+          scheduledArrivalLocal
+          scheduledArrivalBasedOnDepartureLocal
+          estimatedDepartureLocal
+          estimatedArrivalLocal
+          actualDepartureLocal
+          actualArrivalLocal
+          checkInOpensLocal
+          scheduledDepartureUtc
+          scheduledArrivalUtc
+          estimatedDepartureUtc
+          estimatedArrivalUtc
+          actualDepartureUtc
+          actualArrivalUtc
+        }
+        passengers {
+        customerId
+        nameNumber
+        passengerId
+        associatedInfantId
+        id
+        loyaltyMembership {
+          programmeCode
+          number
+          tierName
+        }
+        passengerType {
+          code
+          name
+          category
+        }
+        title
+        givenNames
+        lastName
+        firstNameNumber
+        lastNameNumber
+        gender
+        dateOfBirth
+        birthDate
+        email
+        phone {
+          countryCode
+          number
+        }
+        documents {
+          documentType
+          givenNames
+          surname
+          dateOfBirth
+          gender {
+            code
+            name
+          }
+          documentNumber
+          expirationDate
+          birthDate
+          issuingCountry {
+            code
+            name
+          }
+          nationality {
+            code
+            name
+          }
+          countryOfResidence {
+            code
+          }
+        }
+        firstName
+        slices {
+          id
+          distanceMiles
+          ordinal
+          scheduledDepartureLocalDateTime
+          scheduledDepartureUtcDateTime
+          scheduledArrivalLocalDateTime
+          scheduledArrivalUtcDateTime
+          scheduledArrivalBasedOnDepartureLocalDateTime
+          estimatedDepartureLocalDateTime
+          estimatedDepartureUtcDateTime
+          estimatedArrivalLocalDateTime
+          estimatedArrivalUtcDateTime
+          actualDepartureLocalDateTime
+          actualDepartureUtcDateTime
+          actualArrivalLocalDateTime
+          actualArrivalUtcDateTime
+          origin {
+            terminalName
+            code
+            airportName
+            cityName
+            countryName
+            countryCode
+          }
+          segments {
+            id
+            ordinal
+            operatingCarrier {
+              flightNumber
+              carrierCode
+              carrierName
+              operationalSuffix
+            }
+            marketingCarrier {
+              flightNumber
+              carrierCode
+              carrierName
+              operationalSuffix
+            }
+            scheduledDepartureLocalDateTime
+            scheduledDepartureUtcDateTime
+            scheduledArrivalLocalDateTime
+            scheduledArrivalUtcDateTime
+            scheduledArrivalBasedOnDepartureLocalDateTime
+            estimatedDepartureLocalDateTime
+            estimatedDepartureUtcDateTime
+            estimatedArrivalLocalDateTime
+            estimatedArrivalUtcDateTime
+            actualDepartureLocalDateTime
+            actualDepartureUtcDateTime
+            actualArrivalLocalDateTime
+            actualArrivalUtcDateTime
+            scheduledDepartureUtc
+            scheduledArrivalUtc
+            estimatedDepartureUtc
+            estimatedArrivalUtc
+            actualDepartureUtc
+            actualArrivalUtc
+            scheduledDepartureLocal
+            scheduledArrivalLocal
+            scheduledArrivalBasedOnDepartureLocal
+            estimatedDepartureLocal
+            estimatedArrivalLocal
+            actualDepartureLocal
+            actualArrivalLocal
+            layoverDuration
+            origin {
+              terminalName
+              code
+              airportName
+              cityName
+              countryName
+              countryCode
+            }
+            destination {
+              terminalName
+              code
+              airportName
+              cityName
+              countryName
+              countryCode
+            }
+            actionCode
+            flightSegmentId
+            operating {
+              flightNumber
+              carrierCode
+              carriername
+            }
+            marketing {
+              flightNumber
+              carrierCode
+              carriername
+            }
+            checkinStatus
+            duration
+            fareBasisCode
+            seatEligible
+            operationalStatus {
+              type
+              subType
+              rebookEligible
+            }
+            checkedIn
+            isLayoverDurationValid
+          }
+          checkinStatus
+          duration
+          checkInEligible
+          checkInOpens
+          scheduledDepartureLocal
+          scheduledArrivalLocal
+          scheduledArrivalBasedOnDepartureLocal
+          estimatedDepartureLocal
+          estimatedArrivalLocal
+          actualDepartureLocal
+          actualArrivalLocal
+          checkInOpensLocal
+          scheduledDepartureUtc
+          scheduledArrivalUtc
+          estimatedDepartureUtc
+          estimatedArrivalUtc
+          actualDepartureUtc
+          actualArrivalUtc
+        }
+        leadPassenger
+      }
+        totalPrice {
+          amount
+          currency
+        }
+        status
+        checkInEligible
+        accessibleTravelEligible
+        propertyId
+        propertyName
+        checkIn
+        checkOut
+        roomType
+        ratePlan
+        tbxProductType
+        tbxProductId
+        tbxProductOrder
+      }
+      passengers {
+        customerId
+        nameNumber
+        passengerId
+        associatedInfantId
+        id
+        title
+        givenNames
+        firstNameNumber
+        lastNameNumber
+        lastName
+        firstName
+        email
+      }
+      isAccountLinkedPNR
+      payment {
+        deposit
+        balanceDue
+        totalPriceToBePaid
+        currencyCode
+      }
+      destination {
+        cityCode
+        cityName
+        countryCode
+        countryName
+      }
+      travelDates {
+        departureDate
+        returnDate
+      }
+    }
+  }
+}
+
+tests {
+  const body = res.getBody();
+  
+  // runtime var
+  const originAirportCode = bru.getVar("originAirportCode");
+  
+  const destinationAirportCode = bru.getVar("destinationAirportCode");
+  
+  // response slices
+  const slices = body.data.Booking.product?.[0]?.slices || [];
+  
+  // find matching slice
+  const matchedSlice = slices.find(slice =>
+    slice.origin?.code === originAirportCode && slice.destination?.code === destinationAirportCode
+  );
+  
+   if (!matchedSlice || !matchedSlice.segments?.length) {
+       throw new Error(`No segments found for slice ${originAirportCode}->${destinationAirportCode}.`);
+     }
+  
+  bru.setVar("scheduledDepartureLocalDateTime", matchedSlice.segments[0].scheduledDepartureLocalDateTime.replace(".000Z", ""));
+  bru.setVar( "scheduledArrivalLocalDateTime", matchedSlice.segments[0].scheduledArrivalLocalDateTime.replace(".000Z", ""));
+  
+  bru.setVar("ordinal", matchedSlice.segments[0].ordinal);
+  
+  bru.setVar("opCarrierCode", matchedSlice.segments[0].operatingCarrier.carrierCode);
+  bru.setVar("opCarrierFlightNum", matchedSlice.segments[0].operatingCarrier.flightNumber);
+  bru.setVar("opCarrierName", matchedSlice.segments[0].operatingCarrier.carrierName);
+  
+  bru.setVar("mkCarrierCode", matchedSlice.segments[0].marketingCarrier.carrierCode);
+  bru.setVar("mkCarrierFlightNum", matchedSlice.segments[0].marketingCarrier.flightNumber);
+  bru.setVar("mkCarrierName", matchedSlice.segments[0].marketingCarrier.carrierName);
+  
+  bru.setVar("segOriginCode", matchedSlice.segments[0].origin.code);
+  bru.setVar("segOriginAirportName", matchedSlice.segments[0].origin.airportName);
+  bru.setVar("segOriginCountryCode", matchedSlice.segments[0].origin.countryCode);
+  bru.setVar("segOriginTerminalName", matchedSlice.segments[0].origin.terminalName);
+  
+  bru.setVar("segDestCode", matchedSlice.segments[0].destination.code);
+  bru.setVar("segDestAirportName", matchedSlice.segments[0].destination.airportName);
+  bru.setVar("segDestCountryCode", matchedSlice.segments[0].destination.countryCode);
+  bru.setVar("segDestTerminalName", matchedSlice.segments[0].destination.terminalName);
+  
+  
+  const passenger = body.data.Booking.passengers?.[0];
+  
+  if (!passenger) {
+       throw new Error("No passenger found in Booking response.");
+     }
+  
+  bru.setVar("firstName", passenger.firstName);
+  bru.setVar("lastName", passenger.lastName);
+  bru.setVar("firstNameNumber", passenger.firstNameNumber);
+  bru.setVar("lastNameNumber", passenger.lastNameNumber);
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

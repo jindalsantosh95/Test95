@@ -1,0 +1,13 @@
+###Request
+POST https://address-v3.example.test/address/v3/address-suggestions HTTP/1.1
+Authorization: Bearer server-app-token
+Ocp-Apim-Subscription-Key: existing-enrolment-key
+Content-Type: application/json
+
+$[?(@.query == '4 RH10 6DF' && @.countryCode == 'GB')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"flowId":"test-flow","candidates":[],"address":{"city":"London"}}

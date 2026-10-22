@@ -1,0 +1,58 @@
+meta {
+  name: Upgrade Virgin Account to Flying Club
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{customer_base_url}}/UpgradeToFlyingClub
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "customerDetails": {
+      "id": "{{customer_id}}",
+      "customerId": "{{customer_id}}",
+      "fcNumber": "{{customer_member_number}}",
+      "firstName": "{{customer_first_name}}",
+      "lastName": "{{customer_last_name}}",
+      "gender": "F",
+      "title": "Ms",
+      "customerType": "VirginAccount",
+      "dateOfBirth": "{{customer_date_of_birth}}",
+      "contactDetails": {
+        "emailDetails": [
+          {
+            "emailId": "{{customer_email}}",
+            "usage": "Personal",
+            "preferredFlag": "Y"
+          }
+        ],
+        "phoneDetails": [
+          {
+            "phoneType": "Mobile",
+            "usage": "Personal",
+            "countryCode": "{{customer_phone_country_code}}",
+            "phoneNumber": "{{customer_phone_number}}",
+            "preferredFlag": "Y"
+          }
+        ]
+      },
+      "enrollmentChannel": "{{customer_enrolment_channel}}",
+      "mediaCode": "VAC",
+      "memberType": "Individual",
+      "testMember": true
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

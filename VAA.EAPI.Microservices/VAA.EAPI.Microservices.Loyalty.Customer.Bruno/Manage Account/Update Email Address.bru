@@ -1,0 +1,27 @@
+meta {
+  name: Update Email Address
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{customer_base_url}}/{{customer_member_number}}/UpdateEmailAddress
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "memberNumber": "{{customer_member_number}}",
+    "newEmailAddress": "{{customer_email}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

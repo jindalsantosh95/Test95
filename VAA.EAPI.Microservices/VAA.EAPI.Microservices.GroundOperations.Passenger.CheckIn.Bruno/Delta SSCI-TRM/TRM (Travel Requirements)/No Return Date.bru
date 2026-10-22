@@ -1,0 +1,32 @@
+meta {
+  name: No Return Date
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{aws_api_url}}/{{stage_name}}/requirements/{{requirement_resource_id}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+  transactionId: VS-DigitalFirst-123-{{$guid}}
+  clientId: {{ping_client_id}}
+}
+
+body:json {
+  {
+      "passengerResourceId": "{{passenger_resource_id1}}",
+      "using": "RETURNDATE",
+      "consent": true,
+      "returnDateDeclined": true
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

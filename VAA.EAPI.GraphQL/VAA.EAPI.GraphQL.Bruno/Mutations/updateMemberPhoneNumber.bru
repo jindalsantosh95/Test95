@@ -1,0 +1,29 @@
+meta {
+  name: updateMemberPhoneNumber
+  type: graphql
+  seq: 43
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation updateMemberPhoneNumber($updatePhoneNumber: UpdatePhoneNumberInput) {
+    updateMemberPhoneNumber(updatePhoneNumber: $updatePhoneNumber)
+  }
+}
+
+body:graphql:vars {
+  {
+    "updatePhoneNumber": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

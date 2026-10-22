@@ -1,0 +1,117 @@
+meta {
+  name: Generate Wallet Links
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{wallet_base_url}}/BoardingPass
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Ocp-Apim-Subscription-Key: {{apim_subscription_key}}
+}
+
+body:json {
+  {
+    "Airports": [
+      {
+        "AirportCode": "{{originAirportCode}}",
+        "AirportName": "{{originAirportName}}",
+        "CityCode": "{{originCityCode}}",
+        "CityName": "{{originCityName}}",
+        "CountryCode": "{{originCountryCode}}",
+        "CountryName": "{{originCountryName}}",
+        "TimeZone": "{{originTimeZone}}"
+      },
+      {
+        "AirportCode": "{{destinationAirportCode}}",
+        "AirportName": "{{destinationAirportName}}",
+        "CityCode": "{{destinationCityCode}}",
+        "CityName": "{{destinationCityName}}",
+        "CountryCode": "{{destinationCountryCode}}",
+        "CountryName": "{{destinationCountryName}}",
+        "TimeZone": "{{destinationTimeZone}}"
+      }
+    ],
+    "Segments": [
+      {
+        "OperatingCarrier": {
+          "FlightNum": "{{opCarrierFlightNum}}",
+          "CarrierCode": "{{opCarrierCode}}",
+          "CarrierName": "{{opCarrierName}}"
+        },
+        "MarketingCarrier": {
+          "FlightNum": "{{mkCarrierFlightNum}}",
+          "CarrierCode": "{{mkCarrierCode}}",
+          "CarrierName": "{{mkCarrierName}}"
+        },
+        "ScheduledDepartureLocalDateTime": "{{scheduledDepartureLocalDateTime}}",
+        "ScheduledArrivalLocalDateTime": "{{scheduledArrivalLocalDateTime}}",
+        "Origin": {
+          "TerminalName": "{{segOriginTerminalName}}",
+          "Code": "{{segOriginCode}}",
+          "AirportName": "{{segOriginAirportName}}",
+          "CountryCode": "{{segOriginCountryCode}}"
+        },
+        "Destination": {
+          "TerminalName": "{{segDestTerminalName}}",
+          "Code": "{{segDestCode}}",
+          "AirportName": "{{segDestAirportName}}",
+          "CountryCode": "{{segDestCountryCode}}"
+        },
+        "Ordinal": {{ordinal}}
+      }
+    ],
+    "BoardingPasses": [
+      {
+        "PnrLocator": "{{pnrLocator}}",
+        "GivenNames": "{{givenNames}}",
+        "Surname": "{{surname}}",
+        "PassengerNIN": "{{passengerNIN}}",
+        "PassengerCustomerId": "",
+        "PassengerId": "",
+        "SeatNumber": "{{seatNumber}}",
+        "Zone": "{{zone}}",
+        "Terminal": "{{terminal}}",
+        "OperatingAirlineName": "{{operatingAirlineName}}",
+        "MarketingAirlineName": "{{marketingAirlineName}}",
+        "OperatingFlightNumber": "{{opCarrierFlightNum}}",
+        "MarketingFlightNumber": "{{marketingFlightNumber}}",
+        "DestinationAirportCode": "{{destinationAirportCode}}",
+        "OriginAirportCode": "{{originAirportCode}}",
+        "DepartureDateTime": "{{departureDateTime}}",
+        "DepartureLocal": "{{departureLocal}}",
+        "QrCodeData": "{{qrCodeData}}",
+        "VerificationStatusMessage": "{{verificationStatusMessage}}",
+        "TemplateCode": "{{templateCode}}",
+        "CabinName": "{{cabinName}}",
+        "Gate": "{{gate}}",
+        "BoardingTimeLocalTime": "{{boardingTimeLocalTime}}",
+        "ShowSkyPriority": {{showSkyPriority}},
+        "ShowTsaPre": {{showTsaPre}},
+        "FlightStatusCode": "{{flightStatusCode}}",
+        "InfantName": "",
+        "CheckedIn": {{checkedIn}},
+        "TierCode": "{{tierCode}}"
+      }
+    ],
+    "Passengers": [
+      {
+        "GivenNames": "{{firstName}}",
+        "Surname": "{{lastName}}",
+        "PassengerFirstNIN": "{{firstNameNumber}}",
+        "PassengerLastNIN": "{{lastNameNumber}}",
+        "CheckedIn": true
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

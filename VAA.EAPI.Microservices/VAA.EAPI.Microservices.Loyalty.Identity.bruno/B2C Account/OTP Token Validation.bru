@@ -1,0 +1,26 @@
+meta {
+  name: OTP Token Validation
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{identity_base_url}}/OtpTokenValidation
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "token": "{{otp_token}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

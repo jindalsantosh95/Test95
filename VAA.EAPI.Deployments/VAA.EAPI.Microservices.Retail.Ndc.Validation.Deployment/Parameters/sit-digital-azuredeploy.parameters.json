@@ -1,0 +1,215 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sit",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "SIT"
+    },
+    "AppServicePlanName": {
+      "value": "vatseunaspndc01"
+    },
+    "functionappName": {
+      "value": "va-ts-eun-ndcvalidation-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-ts-eun-ndc-rtl-kv-01"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "SIT",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vatseunndcvalidationsa01"
+    },
+    "AppInsightsName": {
+      "value": "va-ts-eun-ndcvalidation-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    // OpenApi
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Ndc Validation Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to Validate Agency Details"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "redisName": {
+      "value": "va-dv-eun-ndcvalidation-redis-01"
+    },
+    "AppSetting:RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/secrets/va-ts-eun-ndcvalidation-fn-01-Redis-Connectionstring/)"
+    },
+    "AppSetting:AgencySlidingExpirationInDay": {
+      "value": "00:00:30:00"
+    },
+    "AppSetting:AgencyAbsoluteExpirationInDay": {
+      "value": "00:00:30:00"
+    },
+    "AppSetting:SubscriptionCachingSlidingExpirationInDay": {
+      "value": "01:00:00:00"
+    },
+    "AppSetting:SubscriptionCachingAbsoluteExpirationInDay": {
+      "value": "01:00:00:00"
+    },
+    "AppSetting:SecuritySvcOCPKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/secrets/va-ts-eun-ndcvalidation-fn-01-Config-SecuritySvcOCPKey/)"
+    },
+    "AppSetting:SecuritySvcEndPoint": {
+      "value": "https://testresources.virginatlantic.com/sit/digital/security/apim/subscription/ndc/"
+    },
+    "AppSetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/secrets/va-ts-eun-ndcvalidation-fn-01-AzureAdClientId/)"
+    },
+    "AppSetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AppSetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    //Azure B2C settings
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/secrets/va-ts-eun-ndcvalidation-fn-01-AzureAdClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AppSetting:NDCConnectStoredProc": {
+      "value": "EXEC [dbo].[spIDX_APIKEY_VALIDATION_v3-3] @requestAgencyId,@requestAgencyType, @environment, @keyType, @corporateId"
+    },
+    "AppSetting:NDCConnectAgencyOCNStoredProc": {
+      "value": "EXEC [dbo].[spIDX_OCN_ENDPOINT_v1-0] @requestAgencyId, @environment, @AggregatorId"
+    },
+    "AppSetting:NDCConnectDBConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/secrets/va-ts-eun-ndcvalidation-fn-01-NDCConnectDBConnectionString/)"
+    },
+    "tablename": {
+      "value": "CurrencyPOS"
+    },
+    //IFG AgentFOP Lookup
+    "IFGAgentFopLookupUsername": {
+      "value": "va932tl@snb.ifg.iata.org"
+    },
+    "IFGAgentFopLookupPassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/secrets/va-ts-eun-ndcvalidation-fn-01-IFGAgentFopLookupPassword/)"
+    },
+    "IFGAgentFopLookupUrl": {
+      "value": "https://snb.ifg.iata.org/main/v4/agentFopLookup"
+    },
+    // Ticket authority check
+    "AppSetting:AgentTktAuthorityEndpointGet": {
+      "value": "https://stg-ndc.virginatlantic.com/api/IATA/Get?AgentId={agentid}&AgentType={reqAgentType}&Environment={env}"
+    },
+    "AppSetting:AgentTktAuthorityEndpointUpdate": {
+      "value": "https://stg-ndc.virginatlantic.com/api/IATA/Update?AgentId={agentid}&AgentType={reqAgentType}&Environment={env}"
+    },
+    "AppSetting:AgentTktAuthorityEnv": {
+      "value": "NONPROD"
+    },
+    "AppSetting:AgentTktAuthorityClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/secrets/va-ts-eun-ndcvalidation-fn-01-AgentTktAuthorityClientId/)"
+    },
+    "AppSetting:AgentTktAuthoritySecretKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/secrets/va-ts-eun-ndcvalidation-fn-01-AgentTktAuthoritySecretKey/)"
+    },
+    "AppSetting:AgentTktAuthorityCacheExpiryDuration": {
+      "value": "00:23:59:00"
+    },
+    "SecurityMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/sit/digital/security/heartbeat"
+    },
+    "KeyVaultUri": {
+      "value": "https://va-ts-eun-ndc-rtl-kv-01.vault.azure.net/"
+    }
+  }
+}

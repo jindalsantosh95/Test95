@@ -1,0 +1,33 @@
+meta {
+  name: retrieveSeat
+  type: graphql
+  seq: 41
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query retrieveSeat($request: FlightSeatMapRequestInput, $order: [SeatMapResponseSortInput!], $where: SeatMapResponseFilterInput) {
+    retrieveSeat(request: $request, order: $order, where: $where) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {},
+    "order": null,
+    "where": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

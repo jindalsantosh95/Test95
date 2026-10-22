@@ -1,0 +1,77 @@
+parameters: 
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  testRepoPath: 'Enterprise Microservices'
+  rootPath: ''
+  sanityrootpath: 'VAA.EAPI.Automation'
+  RestoreBuildProjects: '**/*.csproj'
+  variableGroupName: ''
+  environment: ''
+
+jobs: 
+  - job: 'FunctionalTesting'
+    displayName: 'Functional Testing'
+    pool:
+      name: ${{parameters.agentPool}}
+      vmImage: ${{parameters.agentSpecification}}
+    variables:
+      - group: ${{parameters.variableGroupName}}
+    steps:
+      # Task to checkout the repository
+      - checkout: self
+        displayName: 'Checkout Testing Repository' 
+    
+    
+      # Task to install DotNet Core SDK
+      - task: UseDotNet@2
+        displayName: 'Install DotNet Core SDK' 
+        inputs:
+          packageType: 'sdk'
+          version: '10.0.x'
+          
+      # Task to build the project
+      - task: DotNetCoreCLI@2
+        displayName: 'Build Project'
+        inputs:
+          command: 'build'
+          projects: |
+            ${{parameters.sanityrootpath}}/VAA.EAPI.Automation.Book/VAA.EAPI.Automation.Book.csproj
+            ${{parameters.sanityrootpath}}/VAA.EAPI.Automation.Search/VAA.EAPI.Automation.Search.csproj
+          #arguments: '--configuration ${{parameters.buildConfiguration}}'
+
+ 
+      - task: PowerShell@2
+        displayName: Add the username as an environment variable so the tests can find it.
+        inputs:
+          targetType: 'inline'
+          script: |       
+            Write-Host "Pipeline Variables Selected Environment is $(env)"   
+
+      - task: VSTest@2
+        displayName: 'VsTest - NBFGraphQL-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.Search\bin\Debug\net10.0\VAA.EAPI.Automation.Search.dll
+           **\VAA.EAPI.Automation.book\bin\Debug\net10.0\VAA.EAPI.Automation.book.dll
+         testFiltercriteria: 'Category=NBFGraphQL_CICD'
+         testRunTitle: 'NBFGraphQL-TestSuite'
+        continueOnError: true
+  
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results **/Log_For_*.txt'
+        inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**/Log_For_*.txt'    
+
+      - task: epsteam.EmailReportExtension.EmailReport.EmailReport@1
+        displayName: 'Send Email Report Always'
+        inputs:
+         subject: '[{environmentStatus}] {passPercentage} NBF Tests passed in $(env) stage for $(Build.BuildNumber) '
+         includeInToSectionStr: 2
+         toAddress: 'DF_TestingTeam@fly.virgin.com'
+         defaultDomain: VirginAtlantic365.onmicrosoft.com
+         includeCommits: false
+         includeOthersInTotal: true
+         enableTLS: true
+         smtpConnectionEndpoint: EmailServices

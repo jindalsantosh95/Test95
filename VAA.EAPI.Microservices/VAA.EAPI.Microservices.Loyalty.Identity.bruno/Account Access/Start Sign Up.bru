@@ -1,0 +1,35 @@
+meta {
+  name: Start Sign Up
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{identity_base_url}}/StartSignUp
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "{{identity_email}}"
+  }
+}
+
+script:post-response {
+  var body = res.getBody();
+  var token = body && body.value ? body.value : body;
+  
+  if (typeof token === "string" && token.length > 0) {
+    bru.setVar("continuation_token", token);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

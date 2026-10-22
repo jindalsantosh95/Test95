@@ -1,0 +1,27 @@
+###Request
+GET https://management.azure.com/subscriptions/test-subscription-id/resourceGroups/test-servicebus-resource-group/resources?api-version=2025-04-01 HTTP/1.1
+Authorization: Bearer GOOD_TOKEN
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json;
+
+{
+  "value": [
+    {
+      "name": "test-app-service",
+      "type": "Microsoft.Web/sites",
+      "kind": "functionapp"
+    },
+    {
+      "name": "test-servicebus-namespace",
+      "type": "Microsoft.ServiceBus/namespaces"
+    },
+    {
+      "name": "test-storage-account",
+      "type": "Microsoft.Storage/storageAccounts",
+      "kind": "StorageV2"
+    }
+  ],
+  "nextLink": null
+}

@@ -1,0 +1,242 @@
+parameters:
+  agentPool: ''
+  agentPool_SANDBOX: ''
+  agentSpecification: ''
+  applicationName: ''
+  microserviceName: ''
+  apimurlname: ''
+  buildConfiguration: ''  
+  functionAppName_DEV: ''
+  functionAppName_SIT: ''
+  functionAppName_UAT: ''
+  functionAppName_SB: ''
+  functionAppName_PRD: '' 
+  APIM_IP_DEV_SIT_UAT: '' 
+  APIM_IP_PRD: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''
+  WEBSITE_DNS_SERVER_SANDBOX: ''
+  WEBSITE_DNS_ALT_SERVER_SANDBOX: ''
+  AzureWebJobsStorage_DEV: ''
+  AzureWebJobsStorage_SIT: ''
+  AzureWebJobsStorage_UAT: ''
+  AzureWebJobsStorage_PROD: '' 
+  slotName: ''
+  testRepoPath_SIT: ''
+  testRepoPath_UAT: ''
+
+stages:
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/DEV.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_DEV}}
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_DEV}}       
+          slotName: ${{parameters.slotName}}
+
+  - stage: 'APIM_DEV'     
+    displayName: 'APIM - DEV' 
+    dependsOn: DEV   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim.yaml   
+        parameters:
+          apimEnv: 'DEV/'
+          apiEnv: '_DEV' 
+          apisEnv: 'dev'
+          stage: 'DEV'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}          
+          microserviceName: ${{parameters.microserviceName}}
+          apimurlname: ${{parameters.apimurlname}}
+          #productId: ${{parameters.productId}}    
+          functionAppName: ${{parameters.functionAppName_DEV}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_DEV}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}  
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/SIT.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_SIT}}
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}  
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_SIT}}        
+          slotName: ${{parameters.slotName}}
+
+  - stage: 'APIM_SIT'     
+    displayName: 'APIM - SIT' 
+    dependsOn: SIT   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim.yaml   
+        parameters:
+          stage: 'SIT'  
+          apimEnv: 'SIT/'
+          apiEnv: '_SIT'   
+          apisEnv: 'sit'                               
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          microserviceName: ${{parameters.microserviceName}}  
+          apimurlname: ${{parameters.apimurlname}}
+          #productId: ${{parameters.productId}}                      
+          functionAppName: ${{parameters.functionAppName_SIT}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_SIT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}          
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}  
+
+  - stage: 'SanityTestingSIT'
+    displayName: 'Sanity Testing - SIT' 
+    dependsOn: APIM_SIT 
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/sanitytesting.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_SIT}}                                            
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/UAT.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_UAT}}
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}} 
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_UAT}}          
+          slotName: ${{parameters.slotName}}
+
+  - stage: 'APIM_UAT'
+    displayName: 'APIM - UAT' 
+    dependsOn: UAT   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim.yaml   
+        parameters:
+          stage: 'UAT'   
+          apimEnv: 'UAT/'
+          apiEnv: '_UAT'      
+          apisEnv: 'uat'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}} 
+          microserviceName: ${{parameters.microserviceName}} 
+          apimurlname: ${{parameters.apimurlname}} 
+          #productId: ${{parameters.productId}}                     
+          functionAppName: ${{parameters.functionAppName_UAT}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_UAT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}           
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}} 
+
+  - stage: 'SanityTestingUAT'
+    displayName: 'Sanity Testing - UAT' 
+    dependsOn: APIM_UAT   
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/sanitytesting.yaml   
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_UAT}}
+
+  - stage: 'SANDBOX'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/SANDBOX.yaml
+    displayName: 'Deployment - SANDBOX' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_sandbox.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_SB}}
+          agentPool: ${{parameters.agentPool_SANDBOX}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          #APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}  
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER_SANDBOX}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER_SANDBOX}}  
+          
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/PRD.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_PRD}}
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}   
+          APIM_IP: ${{parameters.APIM_IP_PRD}}  
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_PROD}}           
+          slotName: ${{parameters.slotName}}          

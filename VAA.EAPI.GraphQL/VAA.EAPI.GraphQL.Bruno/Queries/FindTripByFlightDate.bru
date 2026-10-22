@@ -1,0 +1,46 @@
+meta {
+  name: FindTripByFlightDate
+  type: graphql
+  seq: 60
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query FindTripByFlightDate($pnr: String!, $flightDate: String!, $givenName: String!, $surname: String!) {
+    FindTripByFlightDate(pnr: $pnr, flightDate: $flightDate, givenName: $givenName, surname: $surname) {
+      id
+      passengers { firstName lastName }
+      product {
+        reference { pnrLocator bookingDate }
+        checkInEligible
+        slices {
+          segments {
+            marketingCarrier { carrierCode flightNumber }
+            origin { code }
+            destination { code }
+            scheduledArrivalUtcDateTime
+          }
+        }
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "pnr": "ABC123",
+    "flightDate": "31AUG25",
+    "givenName": "Jane",
+    "surname": "Doe"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

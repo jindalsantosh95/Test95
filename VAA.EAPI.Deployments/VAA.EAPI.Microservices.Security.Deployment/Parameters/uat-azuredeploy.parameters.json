@@ -1,0 +1,216 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "AppInsightsName": {
+      "value": "AVASEUNAISECURITYMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPCUSTOMERM"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=d332ee07-9fc4-4cb4-9b8d-ffefd51c9949;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    },
+    "Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "Appsetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "Appsettings:AppInsightsKey": {
+      "value": "d332ee07-9fc4-4cb4-9b8d-ffefd51c9949"
+    },
+    "EnvironmentName": {
+      "value": "UAT"
+    },
+    "storageAccountName": {
+      "value": "avaseunstsecurityms"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVASEUNAFNEAPISECURITY"
+    },
+    "Appsettings:WEBSITE_CONTENTSHARE": {
+      "value": "avaseunafneapisecurity"
+    },
+    "vaultName": {
+      "value": "avaseunkvems"
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+
+    //slot settings
+
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    //Storage Account - Microservice Events & Response
+    "Appsettings:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNEAPISECURITY-Config-StorageAccount/)"
+    },
+    "Appsettings:ShopsAwayAESSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNEAPISECURITY-Config-MSShopsAwayAESSecret/)"
+    },
+    "Appsettings:MicroServiceEventStoreTableName": {
+      "value": "SubscriptionEventStore"
+    },
+    "Appsettings:MicroServiceResponseTableName": {
+      "value": "SubscriptionResponse"
+    },
+
+    //Service Bus
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNEAPISECURITY-Config-ServiceBusConnectionString/)"
+    },
+
+    //Azure Active Directory
+    "AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNEAPISECURITY-Config-AzureAd-ClientId/)"
+    },
+    "AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    //Azure B2C settings
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNEAPISECURITY-Config-AzureAD-ClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    // MS APIM Subscription REST API Client ID
+    "Appsetting:ApimSubscriptionApiClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNEAPISECURITY-Config-MSAPIMSubscriptionAPIClientId/)"
+    },
+    "Appsetting:ApimSubscriptionApiClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNEAPISECURITY-Config-MSAPIMSubscriptionApiClientSecret/)"
+    },
+    "Appsetting:ApimSubscriptionApiResource": {
+      "value": "https://management.azure.com/"
+    },
+
+    // Enviromental settings
+    "Appsetting:APIMSubscriptionCreateResponseUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/securitymicroservice/apim/subscriptioncreate/response/{correlationid}"
+    },
+    "Appsetting:APIMSubscriptionUpdateResponseUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/securitymicroservice/apim/subscriptionupdate/response/{correlationid}"
+    },
+    "Appsetting:APIMSubscriptionDeleteResponseUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/securitymicroservice/apim/subscriptiondelete/response/{correlationid}"
+    },
+
+    //Command Status
+    "Appsetting:ResponseDelayTimeInMS": {
+      "value": "1000"
+    },
+    "Appsetting:ResponsePollingCount": {
+      "value": "50"
+    },
+
+    "IPRestriction": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    //swagger settings
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-Security Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This API provides information for Security microservice"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": true
+    },
+    "OpenApi__ForceHttp": {
+      "value": true
+    },
+
+    "tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "Enterprise API",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the APIM Subscription API AFN",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNAPIMSubscription\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

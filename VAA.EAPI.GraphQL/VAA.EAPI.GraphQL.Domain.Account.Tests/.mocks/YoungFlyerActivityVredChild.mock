@@ -1,0 +1,41 @@
+###Request
+GET https://testresources.virginatlantic.com/youngflyer/vred/VredStmts/CHILD HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "statements": [
+    {
+      "id": "child-activity-id",
+      "activityDate": "2026-10-12T00:00:00Z",
+      "transactionDate": "2026-10-12T13:50:02Z",
+      "description": "Virgin Flying Club Manual Adjustment",
+      "type": "CREDIT",
+      "pointsInt": "55000",
+      "vredDetail": {
+        "transactionId": "child-activity-transaction",
+        "partnerName": "Virgin Atlantic Airways",
+        "partnerCode": "VS",
+        "partnerSubtype": "Partner Airline",
+        "isFlight": true
+      }
+    },
+    {
+      "id": "child-activity-id-2",
+      "activityDate": "2026-09-12T00:00:00Z",
+      "transactionDate": "2026-09-12T13:50:02Z",
+      "description": "Virgin Flying Club Second Adjustment",
+      "type": "CREDIT",
+      "pointsInt": "100",
+      "vredDetail": {
+        "transactionId": "child-activity-transaction-2",
+        "partnerName": "Virgin Atlantic Airways",
+        "partnerCode": "VS",
+        "partnerSubtype": "Partner Airline",
+        "isFlight": true
+      }
+    }
+  ]
+}

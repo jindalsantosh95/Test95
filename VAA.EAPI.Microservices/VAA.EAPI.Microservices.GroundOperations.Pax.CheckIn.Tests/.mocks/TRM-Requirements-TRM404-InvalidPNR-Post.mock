@@ -1,0 +1,19 @@
+###Request
+POST https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements HTTP/1.1
+
+$[?(@.confirmationNum == 'TRM404A')]
+
+###Response
+HTTP/1.1 503 Service Unavailable
+Content-Type: application/json; charset=utf-8
+
+{
+  "exceptions": [
+    {
+      "code": "travelrequirement_011_001",
+      "message": "The information you provided does not match our records.",
+      "developerMessage": "Trips Journey is null"
+    }
+  ],
+  "moreInfo": []
+}

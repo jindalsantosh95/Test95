@@ -1,0 +1,28 @@
+info:
+  name: Authorisation Tokens
+  type: http
+  seq: 1
+  tags:
+    - Claims
+
+http:
+  method: POST
+  url: "{{baseUrl}}/authorisationTokens"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "data": {
+          "@odata.type": "microsoft.graph.onTokenIssuanceStartCalloutData"
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

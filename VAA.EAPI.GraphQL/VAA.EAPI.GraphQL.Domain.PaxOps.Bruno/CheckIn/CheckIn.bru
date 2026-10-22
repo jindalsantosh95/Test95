@@ -1,0 +1,337 @@
+meta {
+  name: CheckIn
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query CheckIn {
+    CheckIn(
+      pnrLocator: "",
+      originCode: "",
+      givenNames: "",
+      surname: ""
+    ) {
+      passengers {
+        passengerId
+        givenNames
+        surname
+        dateOfBirth
+        email
+        emergencyContact {
+          passengerId
+          firstName
+          lastName
+          phoneCountryCode
+          phoneNumber
+          passengerRefused
+        }
+        requirements {
+          passportProvided
+          passportVerified
+          baggageDeclared
+          contactTracing
+          contactTracingAvailableFromUtc
+          contactTracingAvailableFromDescription
+          checkedIn
+          overall
+          returnDateStatus
+          isReturnDateDeclined
+          returnDate
+          checkinEligible
+          passportErrors {
+            code
+            message
+            category
+            displayCode
+          }
+        }
+        slices {
+          sliceId
+          scheduledDepartureLocalDateTime
+          scheduledDepartureUtcDateTime
+          scheduledArrivalLocalDateTime
+          scheduledArrivalUtcDateTime
+          segments {
+            segmentId
+            ordinal
+            scheduledDepartureLocalDateTime
+            scheduledDepartureUtcDateTime
+            scheduledArrivalLocalDateTime
+            scheduledArrivalUtcDateTime
+            legs {
+              legId
+              scheduledDepartureLocalDateTime
+              scheduledDepartureUtcDateTime
+              scheduledArrivalLocalDateTime
+              scheduledArrivalUtcDateTime
+              aircraftTypeName
+              status
+              destination {
+                terminalName
+                code
+                airportName
+                cityName
+                countryName
+                countryCode
+              }
+              origin {
+                terminalName
+                code
+                airportName
+                cityName
+                countryName
+                countryCode
+              }
+            }
+            destination {
+              terminalName
+              code
+              airportName
+              cityName
+              countryName
+              countryCode
+            }
+            origin {
+              terminalName
+              code
+              airportName
+              cityName
+              countryName
+              countryCode
+            }
+            marketingCarrier {
+              flightNum
+              carrierCode
+              carrierName
+            }
+            operatingCarrier {
+              flightNum
+              carrierCode
+              carrierName
+            }
+          }
+          destination {
+            terminalName
+            code
+            airportName
+            cityName
+            countryName
+            countryCode
+          }
+          origin {
+            terminalName
+            code
+            airportName
+            cityName
+            countryName
+            countryCode
+          }
+        }
+        documents {
+          documentType
+          givenNames
+          surname
+          dateOfBirth
+          documentNumber
+          expirationDate
+          gender {
+            code
+          }
+          countryOfResidence {
+            name
+            code
+          }
+          nationality {
+            name
+            code
+          }
+          issuingCountry {
+            code
+          }
+        }
+        loyaltyMembership {
+          programmeCode
+          number
+        }
+        phone {
+          countryCode
+          number
+        }
+        passengerType {
+          code
+          name
+          category
+        }
+        contactTracing {
+          passengerId
+          streetAddress
+          city
+          state
+          zip
+          email
+          inTransit
+          noEmail
+          noSecondaryPhoneNumber
+          primaryPhoneNumber
+          primaryPhoneNumberCountryCode
+          secondaryPhoneNumber
+          secondaryPhoneNumberCountryCode
+        }
+      }
+      reference {
+        pnrLocator
+        createdDate
+      }
+      currentSlice {
+        sliceId
+        scheduledDepartureLocalDateTime
+        scheduledDepartureUtcDateTime
+        scheduledArrivalLocalDateTime
+        scheduledArrivalUtcDateTime
+        origin {
+          terminalName
+          code
+          airportName
+          cityName
+          countryName
+          countryCode
+        }
+        destination {
+          terminalName
+          code
+          airportName
+          cityName
+          countryName
+          countryCode
+        }
+        segments {
+          segmentId
+          ordinal
+          scheduledDepartureLocalDateTime
+          scheduledDepartureUtcDateTime
+          scheduledArrivalLocalDateTime
+          scheduledArrivalUtcDateTime
+          marketingCarrier {
+            flightNum
+            carrierCode
+            carrierName
+          }
+          operatingCarrier {
+            flightNum
+            carrierCode
+            carrierName
+          }
+          origin {
+            terminalName
+            code
+            airportName
+            cityName
+            countryName
+            countryCode
+          }
+          destination {
+            terminalName
+            code
+            airportName
+            cityName
+            countryName
+            countryCode
+          }
+          legs {
+            legId
+            scheduledDepartureLocalDateTime
+            scheduledDepartureUtcDateTime
+            scheduledArrivalLocalDateTime
+            scheduledArrivalUtcDateTime
+            aircraftTypeName
+            status
+            destination {
+              terminalName
+              code
+              airportName
+              cityName
+              countryName
+              countryCode
+            }
+            origin {
+              terminalName
+              code
+              airportName
+              cityName
+              countryName
+              countryCode
+            }
+            distanceMiles
+            flightDuration
+          }
+        }
+      }
+      checkInId
+      onlineCheckInStatus {
+        available
+        title
+        message
+        code
+      }
+      applyEmergencyContactToAllPax
+      applyContactTracingToAllPax
+    }
+  }
+  
+}
+
+vars:post-response {
+  checkInId: res("data.CheckIn.checkInId")
+  numPax: res("data.CheckIn.passengers.length")
+  pax1_dob: res("data.CheckIn.passengers[0].dateOfBirth")
+  pax1_id: res("data.CheckIn.passengers[0].passengerId")
+  pax1_givennames: res("data.CheckIn.passengers[0].givenNames")
+  pax1_surname: res("data.CheckIn.passengers[0].surname")
+  pax2_dob: res("data.CheckIn.passengers[1].dateOfBirth")
+  pax2_id: res("data.CheckIn.passengers[1].passengerId")
+  pax2_givennames: res("data.CheckIn.passengers[1].givenNames")
+  pax2_surname: res("data.CheckIn.passengers[1].surname")
+}
+
+script:post-response {
+  var checkIn = res.body.data.CheckIn.checkInId;
+  
+  //bru.setVar('checkInId', checkIn.checkInId);
+  //console.log("Num pax: " + checkIn.passengers.length);
+  
+  //bru.setVar("pax1_id", checkIn.passengers[0].passengerId);
+  //bru.setVar("pax1_givennames", checkIn.passengers[0].givenNames);
+  //bru.setVar("pax1_surname", checkIn.passengers[0].surname);
+  //bru.setVar("pax1_dob", checkIn.passengers[0].dateOfBirth);
+  /*if (checkIn.passengers.length > 1)
+  {
+      bru.setVar("pax2_id", checkIn.passengers[1].passengerId);
+      bru.setVar("pax2_givennames", checkIn.passengers[1].givenNames);
+      bru.setVar("pax2_surname", checkIn.passengers[1].surname);
+      bru.setVar("pax2_dob", checkIn.passengers[1].dateOfBirth);
+  }
+  if (checkIn.passengers.length > 2)
+  {
+      bru.setVar("pax3_id", checkIn.passengers[2].passengerId);
+      bru.setVar("pax3_givennames", checkIn.passengers[2].givenNames);
+      bru.setVar("pax3_surname", checkIn.passengers[2].surname);
+  }
+  if (checkIn.passengers.length > 3)
+  {
+      bru.setVar("pax4_id", checkIn.passengers[3].passengerId);
+      bru.setVar("pax4_givennames", checkIn.passengers[3].givenNames);
+      bru.setVar("pax4_surname", checkIn.passengers[3].surname);
+  }*/
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

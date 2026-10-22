@@ -1,0 +1,18 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/CheckIn HTTP/1.1
+
+$[?(@.pnrLocator == 'TSINIT')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "travelPartyId": "TSINIT-travel-party",
+  "onlineCheckInStatus": {
+    "available": false,
+    "code": "initiate-checkin-advisory",
+    "message": "Check-in cannot continue.",
+    "advisoryText1": "We're sorry. We can't validate your ticket."
+  }
+}

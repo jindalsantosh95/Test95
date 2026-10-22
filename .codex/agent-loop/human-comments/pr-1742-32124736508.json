@@ -1,0 +1,64 @@
+{
+  "prNumber": 1742,
+  "branch": "codex/holidays-document-token-diagram-clean",
+  "base": "main",
+  "headSha": "f83bd50fdaf2b9d2464471d2bb39db418a731164",
+  "runId": "32124736508",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/32124736508",
+  "collectedAtUtc": "2026-08-18T10:03:36.206Z",
+  "policy": {
+    "resolveHumanThreads": false,
+    "expectedDecisions": [
+      "agree",
+      "disagree",
+      "not-applicable"
+    ]
+  },
+  "comments": [
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6aEDYS",
+      "replyToCommentDatabaseId": 3803015467,
+      "author": "vaa-dimitris-dimitriou",
+      "body": "we can remove property as it is no longer requried",
+      "path": "VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Trips/Queries/HolidayQuery.cs",
+      "line": 445,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3803015467",
+      "decision": "agree",
+      "responseComment": "Agreed. The explicit DocumentUrl null assignment is no longer required because DocumentUrl is an internal token-building value and is excluded from the GraphQL contract with GraphQLIgnore.",
+      "actionSummary": "Removed the redundant document.DocumentUrl = null assignment from HolidayQuery while retaining the ignored internal property used to create the document token."
+    },
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6aEF6O",
+      "replyToCommentDatabaseId": 3803030717,
+      "author": "vaa-dimitris-dimitriou",
+      "body": "we should not be creating doubles, use actual implemented classes and mocks using .mock files",
+      "path": "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Holidays.Tests/BookingControllerTests.cs",
+      "line": 424,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3803030717",
+      "decision": "agree",
+      "responseComment": "Agreed. These controller tests should exercise the registered RetrieveDocumentService and shared HTTP mock pipeline rather than hand-written IRetrieveDocumentService doubles.",
+      "actionSummary": "Removed the two IRetrieveDocumentService test doubles, reused the real DI-registered RetrieveDocumentService for success and controlled failure cases, and added a checked-in PDF .mock response copied to test output."
+    }
+  ],
+  "resourceUsage": {
+    "workflow": "sequence-goal-human-comment-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 2219684,
+      "inputTokens": 2213982,
+      "cachedInputTokens": 2162745,
+      "outputTokens": 5702,
+      "reasoningOutputTokens": 773,
+      "estimatedUsd": 2.931705
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "2,219,684 tokens (2,213,982 input, 2,162,745 cached + 5,702 output, 773 reasoning); $2.931705 USD"
+  }
+}

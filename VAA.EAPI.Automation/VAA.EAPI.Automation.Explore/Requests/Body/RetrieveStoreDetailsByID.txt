@@ -1,0 +1,56 @@
+query RetrieveStoreDetailsByID($storeId: String, $origin: String) {
+  RetrieveStoreDetailsByID(storeId: $storeId, origin: $origin) {
+    storeId
+    name
+    locationLabel
+    latitude
+    longitude
+    featuredImage {
+      src
+      alt
+    }
+    cardImages {
+      src
+      alt
+    }
+    drivingTime
+    distance
+    isNew
+    isClosest
+    fullDetails {
+      details {
+        phone
+        emailAddress
+        address {
+          addressLine1
+          addressLine2
+          city
+          county
+          countryCode
+          postalCode
+        }
+      }
+      openingHours {
+        isOpenNow
+        weeklyHours {
+          day
+          hours
+        }
+        specialHours {
+          label
+          date
+          openingTime
+          closingTime
+          isClosed
+        }
+      }
+      services {
+        inStoreFacilities
+        accessibilityFeatures {
+          name
+          value
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+parameters:
+- name: JobName
+- name: FunctionName
+- name: SolutionName
+- name: ServiceConnection
+- name: Environment
+- name: RG_FunctionApp
+- name: Subscriptionid
+
+
+  
+
+
+
+
+jobs: 
+- deployment: ${{parameters.JobName}}
+       
+  
+  pool:
+   vmImage: 'windows-latest'
+  variables:
+   - group: ${{parameters.Environment}}
+  
+  
+  environment: ${{parameters.Environment}}
+  strategy:
+   runOnce:
+    deploy:
+      steps:
+      - download: current
+        artifact: drop
+
+      
+      
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Create Function App
+        inputs:
+          azureResourceManagerConnection: ${{parameters.ServiceConnection}}
+          subscriptionid: ${{parameters.Subscriptionid}}
+          resourceGroupName:  ${{parameters.RG_FunctionApp}}
+          location:  $(ResourceGroupLocation)
+          csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy.json
+          csmParametersFile: $(Pipeline.workspace)/drop/Parameters/${{parameters.Environment}}-azuredeploy.parameters.json
+          eploymentMode: 'Incremental' 
+
+      
+
+      - task: AzureAppServiceManage@0
+        displayName: 'Stop Azure App Service: ${{parameters.FunctionName}}'
+        inputs:
+          azureSubscription: ${{parameters.ServiceConnection}}
+          Action: 'Stop Azure App Service'
+          WebAppName: ${{parameters.FunctionName}}
+
+
+      - task: AzureFunctionApp@1
+        displayName: 'Deploy to Function APP' 
+        inputs:
+         azureSubscription: ${{parameters.ServiceConnection}}
+         appType: 'functionApp'
+         appName: ${{parameters.FunctionName}}
+         deployToSlotOrASE: true
+         resourceGroupName: ${{parameters.RG_FunctionApp}}
+         package: '$(Pipeline.workspace)/drop/*.zip'
+         deploymentMethod: 'runFromPackage'     
+
+
+      - task: AzureAppServiceManage@0
+        displayName: 'Start Azure App Service: ${{parameters.FunctionName}}'
+        inputs:
+          azureSubscription: ${{parameters.ServiceConnection}}
+          Action: 'Start Azure App Service'
+          WebAppName: ${{parameters.FunctionName}}
+     

@@ -1,0 +1,166 @@
+parameters:   
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: '' 
+  location: ''   
+  rootPath: ''
+  subRootPath: ''
+  applicationName: ''
+  resourceGroupName_DEV: ''
+  resourceGroupName_SIT: ''
+  resourceGroupName_UAT: ''
+  resourceGroupName_PROD: ''
+  serviceConnection_NonProd: ''
+  subscriptionId_NonProd: ''
+  serviceConnection_Prod: ''
+  subscriptionId_Prod: ''  
+  SPECTRAL_DSN: ''
+  SPECTRAL_KEY: ''
+  deploymentroot: 'VAA.EAPI.Deployments'
+
+stages: 
+  - stage: 'Build'
+    jobs: 
+      - job: 'Build'
+        displayName: 'Build'  
+        pool:
+          name: ${{parameters.agentPool}} 
+          vmImage: ${{parameters.agentSpecification}}         
+
+        steps:
+          # Task to install DotNet Core SDK
+          - task: UseDotNet@2
+            displayName: 'Install DotNet Core SDK' 
+            inputs:
+              packageType: 'sdk'
+              version: '10.0.x'
+          
+          # Task to build the project
+          - task: DotNetCoreCLI@2
+            displayName: 'Build Project'
+            inputs:
+              command: 'build'
+              projects: '**/${{parameters.subRootPath}}.csproj'
+              arguments: '--configuration ${{parameters.buildConfiguration}}'
+
+          # Task to unit test the project
+          - task: DotNetCoreCLI@2
+            displayName: 'Test Project'
+            inputs:
+              command: 'test'
+              projects: '**/${{parameters.subRootPath}}.Tests.csproj'
+              arguments: '--configuration ${{parameters.buildConfiguration}} --collect "XPlat Code coverage"'
+
+          # Task to publish the project
+          - task: DotNetCoreCLI@2
+            displayName: 'Publish Project'
+            inputs:
+              command: 'publish'
+              publishWebProjects: false
+              projects: '**/${{parameters.subRootPath}}.csproj'
+              arguments: '--configuration ${{parameters.buildConfiguration}} --output $(build.ArtifactStagingDirectory)'
+              zipAfterPublish: true
+
+          # Task to copy the ARM files to artifactstagingdirectory
+          - task: CopyFiles@2
+            displayName: 'Copy ARM Files'
+            inputs:
+              SourceFolder: '${{parameters.rootPath}}/${{parameters.subRootPath}}.Deployment'
+              TargetFolder: '$(build.ArtifactStagingDirectory)'
+
+          # task to publish build artifacts to Azure Pipelines 
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifacts' 
+            inputs:
+              PathtoPublish: '$(build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop' 
+              publishLocation: 'Container'
+
+          # task to validate the DEV ARM template 
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: 'ARM Validation - DEV'
+            inputs:
+              ConnectedServiceName: ${{parameters.serviceConnection_NonProd}}
+              subscriptionId: ${{parameters.subscriptionId_NonProd}}
+              resourceGroupName: ${{parameters.resourceGroupName_DEV}}
+              location: ${{parameters.location}}
+              csmFile: ${{parameters.rootPath}}/${{parameters.subRootPath}}.Deployment/Template/azuredeploy_digital.json
+              csmParametersFile: ${{parameters.rootPath}}/${{parameters.subRootPath}}.Deployment/Parameters/dev-digital-azuredeploy.parameters.json
+              deploymentMode: Validation
+
+          # task to validate the SIT ARM template 
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: 'ARM Validation - SIT'
+            inputs:
+              ConnectedServiceName: ${{parameters.serviceConnection_NonProd}}
+              subscriptionId: ${{parameters.subscriptionId_Digital_NonProd}}
+              resourceGroupName: ${{parameters.resourceGroupName_SIT}}
+              location: ${{parameters.location}}
+              csmFile: ${{parameters.rootPath}}/${{parameters.subRootPath}}.Deployment/Template/azuredeploy_digital.json
+              csmParametersFile: ${{parameters.rootPath}}/${{parameters.subRootPath}}.Deployment/Parameters/sit-digital-azuredeploy.parameters.json
+              deploymentMode: Validation
+
+          # task to validate the UAT ARM template 
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: 'ARM Validation - UAT'
+            inputs:
+              ConnectedServiceName: ${{parameters.serviceConnection_NonProd}}
+              subscriptionId: ${{parameters.subscriptionId_Digital_NonProd}}
+              resourceGroupName: ${{parameters.resourceGroupName_UAT}}
+              location: ${{parameters.location}}
+              csmFile: ${{parameters.rootPath}}/${{parameters.subRootPath}}.Deployment/Template/azuredeploy_digital.json
+              csmParametersFile: ${{parameters.rootPath}}/${{parameters.subRootPath}}.Deployment/Parameters/uat-digital-azuredeploy.parameters.json
+              deploymentMode: Validation
+
+         
+          # task to validate the PROD ARM template 
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: 'ARM Validation - PROD'
+            inputs:
+              ConnectedServiceName: ${{parameters.serviceConnection_Prod}}
+              subscriptionId: ${{parameters.subscriptionId_Prod}}
+              resourceGroupName: ${{parameters.resourceGroupName_PROD}}
+              location: ${{parameters.location}}
+              csmFile: ${{parameters.rootPath}}/${{parameters.subRootPath}}.Deployment/Template/azuredeploy_digital.json
+              csmParametersFile: ${{parameters.rootPath}}/${{parameters.subRootPath}}.Deployment/Parameters/prod-digital-azuredeploy.parameters.json
+              deploymentMode: Validation   
+              
+
+      # Job for Test Automation Artifacts build
+      - job: 'Build_TestAutomation'
+        displayName: 'Build_TripsAutomationProject'  
+        condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+        pool:
+          name: ${{parameters.agentPool}} 
+          vmImage: ${{parameters.agentSpecification}} 
+      
+        steps:
+          # Task to install DotNet Core SDK
+          - task: UseDotNet@2
+            displayName: 'Install DotNet Core SDK' 
+            inputs:
+              packageType: 'sdk'
+              version: '10.0.x'
+          
+          # Task to build the test project
+          - task: DotNetCoreCLI@2
+            displayName: 'Build Project'
+            inputs:
+              command: 'build'
+              projects: 'VAA.EAPI.Automation/VAA.EAPI.Automation.NDC/**/*.csproj'
+              arguments: '--configuration ${{parameters.buildConfiguration}}'
+
+        # Task to copy the Test project dll files to artifactstagingdirectory
+          - task: CopyFiles@2
+            displayName: 'Copy Files'
+            inputs:
+              SourceFolder: 'VAA.EAPI.Automation'
+              TargetFolder: '$(build.ArtifactStagingDirectory)'
+
+        # task to publish build artifacts to Azure Pipelines 
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Test Automation Artifacts' 
+            inputs:
+              PathtoPublish: '$(build.ArtifactStagingDirectory)'
+              ArtifactName: 'testAutomation' 
+              publishLocation: 'Container'

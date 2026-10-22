@@ -1,0 +1,237 @@
+meta {
+  name: Save Passport (pax 2)
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SavePassport {
+      SavePassport(savePassportRequest: {
+              checkInId: "{{checkInId}}"
+              document: {
+                  documentType: PASSPORT
+                  givenNames: "{{pax2_givennames}}"
+                  birthDate: "{{pax2_dob}}"
+                  surname: "{{pax2_surname}}"
+                  gender: { code: "M" }
+                  documentNumber: "159745179"
+                  expiryDate: "2029-05-14"
+                  issuingCountry: { code: "GBR" }
+                  nationality: { code: "GBR" }
+                  countryOfResidence: { code: "GBR" }
+              }
+              isScanned: false
+              passengerId: "{{pax2_id}}"
+          }) {
+          passengers {
+              passengerId
+              givenNames
+              surname
+              dateOfBirth
+              email
+              passengerType {
+                  code
+                  name
+                  category
+              }
+              documents {
+                  documentType
+                  givenNames
+                  surname
+                  dateOfBirth
+                  documentNumber
+                  expirationDate
+              }
+              requirements {
+                  passportProvided
+                  passportVerified
+                  baggageDeclared
+                  contactTracing
+                  contactTracingAvailableFromUtc
+                  contactTracingAvailableFromDescription
+                  checkedIn
+                  overall
+                  returnDate
+                  returnDateStatus
+                  isReturnDateDeclined
+                  checkinEligible
+                  secondaryDocumentStatus
+                  secondaryDocuments {
+                      documentType
+                      countryCode
+                      countryName
+                      name
+                      displayName
+                      status
+                      secondaryDocumentApplicationOptions {
+                        secondaryDocumentId
+                        applicationType
+                        title
+                        message
+                        url
+                      }
+                  }
+                  passportErrors {
+                      code
+                      message
+                      category
+                      displayCode
+                      title
+                  }
+              }
+              slices {
+                  sliceId
+                  scheduledDepartureLocalDateTime
+                  scheduledDepartureUtcDateTime
+                  scheduledArrivalLocalDateTime
+                  scheduledArrivalUtcDateTime
+              }
+              associatedAdultFullName
+              associatedAdultPassengerId
+              isInfantPassenger
+              phone {
+                  countryCode
+                  number
+              }
+              loyaltyMembership {
+                  programmeCode
+                  number
+              }
+              emergencyContact {
+                  passengerId
+                  firstName
+                  lastName
+                  phoneCountryCode
+                  phoneNumber
+                  passengerRefused
+              }
+              contactTracing {
+                  passengerId
+                  streetAddress
+                  city
+                  state
+                  zip
+                  email
+                  inTransit
+                  noEmail
+                  noSecondaryPhoneNumber
+                  primaryPhoneNumber
+                  primaryPhoneNumberCountryCode
+                  secondaryPhoneNumber
+                  secondaryPhoneNumberCountryCode
+              }
+          }
+          reference {
+              pnrLocator
+              createdDate
+          }
+          currentSlice {
+              sliceId
+              scheduledDepartureLocalDateTime
+              scheduledDepartureUtcDateTime
+              scheduledArrivalLocalDateTime
+              scheduledArrivalUtcDateTime
+              origin {
+                  terminalName
+                  code
+                  airportName
+                  cityName
+                  countryName
+                  countryCode
+              }
+              destination {
+                  terminalName
+                  code
+                  airportName
+                  cityName
+                  countryName
+                  countryCode
+              }
+              segments {
+                  segmentId
+                  ordinal
+                  scheduledDepartureLocalDateTime
+                  scheduledDepartureUtcDateTime
+                  scheduledArrivalLocalDateTime
+                  scheduledArrivalUtcDateTime
+                  operatingCarrier {
+                      flightNum
+                      carrierCode
+                      carrierName
+                  }
+                  marketingCarrier {
+                      flightNum
+                      carrierCode
+                      carrierName
+                  }
+                  origin {
+                      terminalName
+                      code
+                      airportName
+                      cityName
+                      countryName
+                      countryCode
+                  }
+                  destination {
+                      terminalName
+                      code
+                      airportName
+                      cityName
+                      countryName
+                      countryCode
+                  }
+                  legs {
+                      legId
+                      scheduledDepartureLocalDateTime
+                      scheduledDepartureUtcDateTime
+                      scheduledArrivalLocalDateTime
+                      scheduledArrivalUtcDateTime
+                      status
+                      destination {
+                          terminalName
+                          code
+                          airportName
+                          cityName
+                          countryName
+                          countryCode
+                      }
+                      origin {
+                          terminalName
+                          code
+                          airportName
+                          cityName
+                          countryName
+                          countryCode
+                      }
+                  }
+              }
+          }
+          checkInId
+          onlineCheckInStatus {
+              available
+              title
+              message
+              code
+          }
+          applyEmergencyContactToAllPax
+          applyContactTracingToAllPax
+          showBaggageAllowance
+      }
+  }
+  
+}
+
+vars:post-response {
+  checkInId: res("data.SavePassport.checkInId")
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

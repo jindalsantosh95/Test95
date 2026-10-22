@@ -1,0 +1,26 @@
+mutation ClaimPartnerFlightPoints($request: SkyFlightsPointsClaimRequestInput) {
+  claimPartnerFlightPoints(request: $request) {
+    totalVirginPoints
+    totalTierPoints
+    totalBonusPoints
+    segmentDetails {
+      operatingAirlineName
+      operatingAirlineCode
+      dateOfFlight
+      flightNumber
+      originAirportCode
+      destinationAirportCode
+      virginPoints
+      tierPoints
+      bonusPoints
+      isPartialTransaction
+    }
+    errorResponse {
+      message
+      extentions {
+        code
+        exception
+      }
+    }
+  }
+}

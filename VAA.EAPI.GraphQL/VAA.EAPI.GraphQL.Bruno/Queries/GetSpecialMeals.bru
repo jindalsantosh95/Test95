@@ -1,0 +1,31 @@
+meta {
+  name: GetSpecialMeals
+  type: graphql
+  seq: 28
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query GetSpecialMeals($tripReservationID: String) {
+    GetSpecialMeals(tripReservationID: $tripReservationID) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "tripReservationID": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

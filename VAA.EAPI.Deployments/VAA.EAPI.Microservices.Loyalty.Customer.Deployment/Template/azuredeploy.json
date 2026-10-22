@@ -1,0 +1,1073 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "type": "secureObject",
+      "defaultValue": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "",
+        "Site": "datadoghq.com",
+        "Environment": "",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "ServerFarmIdRg": {
+      "type": "string"
+    },
+    "FunctionAppName": {
+      "type": "string"
+    },
+    "plantype": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "AppsettingAppInsightsKey": {
+      "type": "string"
+    },
+    "AzureWebJobsStorage": {
+      "type": "string"
+    },
+    "appsettingsWEBSITE_CONTENTSHARE": {
+      "type": "string"
+    },
+    "appsettingsWEBSITE_CONTENTAZUREFILECONNECTIONSTRING": {
+      "type": "string"
+    },
+    "AppsettingInflightProfile:RetrieveMemberDetailsEndpoint": {
+      "type": "string"
+    },
+    "AppsettingLoyaltyProfile:RetrieveLoyaltyMemberDetailsEndpoint": {
+      "type": "string"
+    },
+    "AppsettingInflightProfile:RetrieveMemberAPIClientID": {
+      "type": "string"
+    },
+    "AppsettingInflightProfile:RetrieveMemberAPIClientSecret": {
+      "type": "string"
+    },
+    "AppsettingInflightProfile:RetrieveMemberAPIAuthority": {
+      "type": "string"
+    },
+    "AppsettingInflightProfile:RetrieveMemberAPIResource": {
+      "type": "string"
+    },
+    "AppsettingInflightProfile:RetrieveMemberOCPKey": {
+      "type": "string"
+    },
+    "AppsettingInflightProfile:AzureAdB2C:Instance": {
+      "type": "string"
+    },
+    "AppsettingInflightProfile:AzureAdB2C:ClientId": {
+      "type": "string"
+    },
+    "AppsettingInflightProfile:AzureAdB2C:SignUpSignInPolicyId": {
+      "type": "string"
+    },
+    "AppsettingInflightProfile:AzureAdB2C:TenantId": {
+      "type": "string"
+    },
+    "AppsettingSCV:CommonRefDBConnString": {
+      "type": "string"
+    },
+    "AppsettingaccountCode": {
+      "type": "string"
+    },
+    "Appsettingapi": {
+      "type": "string"
+    },
+    "AppsettingClientId": {
+      "type": "string"
+    },
+    "AppsettingClientSecret": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustTxnDB:EndPoint": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustTxnDB:AuthKey": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustTxnDB": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustTxnDB:CustPrflCntnr": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustTxnDB:MmbrPrfleContnr": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustTxnDB:MmbrshpChgContnr": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustTxnDB:PartnerMemContnr": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustDB:AuthKey": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustDB": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustDB:CustColCntnr": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustDB:CustHstryColCntnr": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustDB:CustSearchColCntnr": {
+      "type": "string"
+    },
+    "AppsettingCosmosSqlDBConnectionMode": {
+      "type": "string"
+    },
+    "AppsettingSCV:CustDB:EndPoint": {
+      "type": "string"
+    },
+    "AppsettingEventTopicUrl": {
+      "type": "string"
+    },
+    "AppsettingEventTopicKey": {
+      "type": "string"
+    },
+    "AppsettingEventTopicTypeCustomerSync": {
+      "type": "string"
+    },
+    "AppsettingEventTopicTypeAddressLookup": {
+      "type": "string"
+    },
+    "AppsettingSiebelEventGridUrl": {
+      "type": "string"
+    },
+    "AppsettingSiebelEventSourceUrl": {
+      "type": "string"
+    },
+    "AppsettingSiebelEventGridTopicKey": {
+      "type": "string"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "type": "string"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "type": "string"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "type": "string"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "type": "string"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "type": "string"
+    },
+    "Appsetting:TransactionDB": {
+      "type": "string"
+    },
+    "Appsetting:CustomerDetailsCollection": {
+      "type": "string"
+    },
+    "Appsetting:ProductIdTopMember": {
+      "type": "string"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "type": "string"
+    },
+    //Vnet Settings
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "type": "string"
+    },
+    "Appsetting:CommonCachingSlidingExpirationInDay": {
+      "type": "string"
+    },
+    "IPRestriction": {
+      "type": "string"
+    },
+    "skuName": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "vaultName": {
+      "type": "string"
+    },
+    "ResourceGroupSubscriptionId": {
+      "type": "string"
+    },
+    "SlotName": {
+      "type": "string"
+    },
+    "actionGroupsServiceNow": {
+      "type": "string"
+    },
+    "actionGroupsEAPISupport": {
+      "type": "string"
+    },
+    "emailAddressServiceNow": {
+      "type": "string"
+    },
+    "emailAddressEAPISupport": {
+      "type": "string"
+    },
+    "Tags": {
+      "type": "Object"
+    },
+    "Appsetting:DefaultVAAMarketingPreferenceValue": {
+      "type": "string"
+    },
+    "Appsetting:DefaultVAPartnersMarketingPreferenceValue": {
+      "type": "string"
+    },
+    "Appsetting:BLobStorageConnectionString": {
+      "type": "string"
+    },
+    "Appsetting:BlobStorageContainerName": {
+      "type": "string"
+    },
+    "Appsetting:ParentAgeLimit": {
+      "type": "string"
+    },
+    "Appsetting:CustomerAgeLimit": {
+      "type": "string"
+    },
+    "Appsetting:DatabaseID": {
+      "type": "string"
+    },
+    "Appsetting:FCNumberGenAPIURL": {
+      "type": "string"
+    },
+    "Appsetting:FCNumberGenAPIURLOCPKeyValue": {
+      "type": "string"
+    },
+    "Appsetting:FCNumberGenAPIClientID": {
+      "type": "string"
+    },
+    "Appsetting:FCNumberGenAPIClientSecretValue": {
+      "type": "string"
+    },
+    "Appsetting:FCNumberGenAPIResource": {
+      "type": "string"
+    },
+    "Appsetting:AzureADEndpoint": {
+      "type": "string"
+    },
+    "Appsetting:EventTopicType": {
+      "type": "string"
+    },
+    "Appsetting:EnrolmentEventType": {
+      "type": "string"
+    },
+    "Appsetting:VredCustomerAgeLimit": {
+      "type": "string"
+    },
+    "AppSetting:VredEnableSignDate": {
+      "type": "bool"
+    },
+    "Appsetting:PowerAppChannelID": {
+      "type": "string"
+    },
+    "Appsetting:DeltaChannelID": {
+      "type": "string"
+    },
+    "Appsetting:WebMyaChannelID": {
+      "type": "string"
+    },
+    "Appsetting:AppMyaChannelId": {
+      "type": "string"
+    },
+    "Appsetting:WebSiteChannelID": {
+      "type": "string"
+    },
+    "Appsetting:EnrolmentAgeLimit": {
+      "type": "string"
+    },
+    "Appsetting:PostCodeMandatoryCountryList": {
+      "type": "string"
+    },
+    "Appsetting:BlacklistedEmailsFileName": {
+      "type": "string"
+    },
+    "Appsetting:AddressUpdateTemplate": {
+      "type": "string"
+    },
+    "Appsetting:CustMSUpdateResponseURL": {
+      "type": "string"
+    },
+    "Appsetting:CustMSVaEnrolResponseURL": {
+      "type": "string"
+    },
+    "Appsetting:ResponsePollingCount": {
+      "type": "string"
+    },
+    "Appsetting:ResponseDelayTimeInMS": {
+      "type": "string"
+    },
+    "Appsetting:VredChannelID": {
+      "type": "string"
+    },
+    "Appsetting:RetryCount": {
+      "type": "string"
+    },
+    "Appsetting:CustDB:CustSearchColCntnrForTest": {
+      "type": "string"
+    },
+    "Appsetting:CustDB:IsCustSearchForTest": {
+      "type": "bool"
+    },
+    "Appsetting:HttpClientTimeOut": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "type": "string"
+    },
+    "Appsetting:CustomerSearchCollection": {
+      "type": "string"
+    },
+    //Azure B2C settings
+    "AzureAdB2C:TokenV1Issuer": {
+      "type": "string"
+    },
+    //Audit Settings
+    "Appsetting:AuditServiceBusTopicName": {
+      "type": "string"
+    },
+    //swagger settings
+
+    "OpenApi__Description": {
+      "type": "string"
+    },
+    "OpenApi__DocTitle": {
+      "type": "string"
+    },
+    "OpenApi__DocVersion": {
+      "type": "string"
+    },
+    "OpenApi__ForceHttp": {
+      "type": "bool"
+    },
+    "OpenApi__ForceHttps": {
+      "type": "bool"
+    },
+    "OpenApi__Scope": {
+      "type": "string"
+    },
+    "OpenApi__TokenUrl": {
+      "type": "string"
+    },
+    "OpenApi__Version": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "ResourceLocation": "[resourceGroup().location]",
+    "SiteResourceID": "[resourceId('Microsoft.Web/Sites', parameters('FunctionAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "North Europe",
+      "tags": "[parameters('Tags')]",
+      "sku": {
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "allowBlobPublicAccess": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('FunctionAppName')]",
+      "location": "[variables('ResourceLocation')]",
+      "kind": "functionapp",
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('FunctionAppName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('FunctionAppName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId(parameters('ServerFarmIdRg'), 'Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "LoggingProvider",
+              "value": "[parameters('DataDog').LoggingProvider]"
+            },
+            {
+              "name": "DatadogLogsEndpoint",
+              "value": "[parameters('DataDog').LogsEndpoint]"
+            },
+            {
+              "name": "DatadogApiKey",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_API_KEY",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_SITE",
+              "value": "[parameters('DataDog').Site]"
+            },
+            {
+              "name": "DD_SERVICE",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "DD_ENV",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DD_VERSION",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DD_TRACE_ENABLED",
+              "value": "[string(parameters('DataDog').TraceEnabled)]"
+            },
+            {
+              "name": "DD_RUNTIME_METRICS_ENABLED",
+              "value": "[string(parameters('DataDog').RuntimeMetricsEnabled)]"
+            },
+            {
+              "name": "DatadogService",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "environment",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DatadogSource",
+              "value": "[parameters('DataDog').Source]"
+            },
+            {
+              "name": "DatadogVersion",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DatadogTags",
+              "value": "[concat(parameters('DataDog').Tags, if(empty(parameters('DataDog').Tags), '', ','), 'cloud_provider:azure,subscription_id:', subscription().subscriptionId, ',resource_group:', resourceGroup().name, ',name:', parameters('FunctionAppName'), ',type:microsoft.web/sites,resource_id:', resourceId('Microsoft.Web/sites', parameters('FunctionAppName')))]"
+            },
+            {
+              "name": "DatadogBaggageAllowList",
+              "value": "[parameters('DataDog').BaggageAllowList]"
+            },
+            {
+              "name": "DatadogMinimumLogLevel",
+              "value": "[parameters('DataDog').MinimumLogLevel]"
+            },
+            {
+              "name": "DatadogQueueCapacity",
+              "value": "[string(parameters('DataDog').QueueCapacity)]"
+            },
+            {
+              "name": "DatadogBatchSize",
+              "value": "[string(parameters('DataDog').BatchSize)]"
+            },
+            {
+              "name": "DatadogFlushIntervalMilliseconds",
+              "value": "[string(parameters('DataDog').FlushIntervalMilliseconds)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet-isolated"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[parameters('AppsettingAppInsightsKey')]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            //Vnet Settings
+            {
+              "name": "WEBSITE_VNET_ROUTE_ALL",
+              "value": "[parameters('Appsetting:WEBSITE_VNET_ROUTE_ALL')]"
+            },
+
+            {
+              "name": "WEBSITE_DNS_ALT_SERVER",
+              "value": "[parameters('Appsetting:WEBSITE_DNS_ALT_SERVER')]"
+            },
+            {
+              "name": "WEBSITE_DNS_SERVER",
+              "value": "[parameters('Appsetting:WEBSITE_DNS_SERVER')]"
+            },
+
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[parameters('appsettingsWEBSITE_CONTENTSHARE')]"
+            },
+            {
+              "name": "InflightProfile:RetrieveMemberDetailsEndpoint",
+              "value": "[parameters('AppsettingInflightProfile:RetrieveMemberDetailsEndpoint')]"
+            },
+            {
+              "name": "LoyaltyProfile:RetrieveLoyaltyMemberDetailsEndpoint",
+              "value": "[parameters('AppsettingLoyaltyProfile:RetrieveLoyaltyMemberDetailsEndpoint')]"
+            },
+            {
+              "name": "InflightProfile:RetrieveMemberAPIClientID",
+              "value": "[parameters('AppsettingInflightProfile:RetrieveMemberAPIClientID')]"
+            },
+            {
+              "name": "InflightProfile:RetrieveMemberAPIClientSecret",
+              "value": "[parameters('AppsettingInflightProfile:RetrieveMemberAPIClientSecret')]"
+            },
+            {
+              "name": "InflightProfile:RetrieveMemberAPIAuthority",
+              "value": "[parameters('AppsettingInflightProfile:RetrieveMemberAPIAuthority')]"
+            },
+            {
+              "name": "InflightProfile:RetrieveMemberAPIResource",
+              "value": "[parameters('AppsettingInflightProfile:RetrieveMemberAPIResource')]"
+            },
+            {
+              "name": "InflightProfile:RetrieveMemberOCPKey",
+              "value": "[parameters('AppsettingInflightProfile:RetrieveMemberOCPKey')]"
+            },
+            {
+              "name": "AzureAdB2C:Instance",
+              "value": "[parameters('AppsettingInflightProfile:AzureAdB2C:Instance')]"
+            },
+            {
+              "name": "AzureAdB2C:ClientId",
+              "value": "[parameters('AppsettingInflightProfile:AzureAdB2C:ClientId')]"
+            },
+            {
+              "name": "AzureAdB2C:SignUpSignInPolicyId",
+              "value": "[parameters('AppsettingInflightProfile:AzureAdB2C:SignUpSignInPolicyId')]"
+            },
+            {
+              "name": "AzureAdB2C:TenantId",
+              "value": "[parameters('AppsettingInflightProfile:AzureAdB2C:TenantId')]"
+            },
+            {
+              "name": "SCV:CommonRefDBConnString",
+              "value": "[parameters('AppsettingSCV:CommonRefDBConnString')]"
+            },
+            {
+              "Name": "accountCode",
+              "value": "[parameters('AppsettingaccountCode')]"
+            },
+            {
+              "Name": "api",
+              "value": "[parameters('Appsettingapi')]"
+            },
+            {
+              "Name": "ClientId",
+              "value": "[parameters('AppsettingClientId')]"
+            },
+            {
+              "Name": "ClientSecret",
+              "value": "[parameters('AppsettingClientSecret')]"
+            },
+            {
+              "Name": "SCV:CustTxnDB:EndPoint",
+              "value": "[parameters('AppsettingSCV:CustTxnDB:EndPoint')]"
+            },
+            {
+              "Name": "SCV:CustTxnDB:AuthKey",
+              "value": "[parameters('AppsettingSCV:CustTxnDB:AuthKey')]"
+            },
+            {
+              "Name": "SCV:CustTxnDB",
+              "value": "[parameters('AppsettingSCV:CustTxnDB')]"
+            },
+            {
+              "Name": "SCV:CustTxnDB:CustPrflCntnr",
+              "value": "[parameters('AppsettingSCV:CustTxnDB:CustPrflCntnr')]"
+            },
+            {
+              "Name": "SCV:CustTxnDB:MmbrPrfleContnr",
+              "value": "[parameters('AppsettingSCV:CustTxnDB:MmbrPrfleContnr')]"
+            },
+            {
+              "Name": "SCV:CustTxnDB:MmbrshpChgContnr",
+              "value": "[parameters('AppsettingSCV:CustTxnDB:MmbrshpChgContnr')]"
+            },
+            {
+              "Name": "SCV:CustTxnDB:PartnerMemContnr",
+              "value": "[parameters('AppsettingSCV:CustTxnDB:PartnerMemContnr')]"
+            },
+            {
+              "Name": "SCV:CustDB:AuthKey",
+              "value": "[parameters('AppsettingSCV:CustDB:AuthKey')]"
+            },
+            {
+              "Name": "SCV:CustDB",
+              "value": "[parameters('AppsettingSCV:CustDB')]"
+            },
+            {
+              "Name": "SCV:CustDB:CustColCntnr",
+              "value": "[parameters('AppsettingSCV:CustDB:CustColCntnr')]"
+            },
+            {
+              "Name": "SCV:CustDB:CustHstryColCntnr",
+              "value": "[parameters('AppsettingSCV:CustDB:CustHstryColCntnr')]"
+            },
+            {
+              "Name": "SCV:CustDB:CustSearchColCntnr",
+              "value": "[parameters('AppsettingSCV:CustDB:CustSearchColCntnr')]"
+            },
+            {
+              "Name": "CosmosSqlDBConnectionMode",
+              "value": "[parameters('AppsettingCosmosSqlDBConnectionMode')]"
+            },
+            {
+              "Name": "SCV:CustDB:EndPoint",
+              "value": "[parameters('AppsettingSCV:CustDB:EndPoint')]"
+            },
+            {
+              "Name": "EventTopicUrl",
+              "value": "[parameters('AppsettingEventTopicUrl')]"
+            },
+            {
+              "Name": "EventTopicKey",
+              "value": "[parameters('AppsettingEventTopicKey')]"
+            },
+            {
+              "Name": "EventTopicTypeCustomerSync",
+              "value": "[parameters('AppsettingEventTopicTypeCustomerSync')]"
+            },
+            {
+              "Name": "EventTopicTypeAddressLookup",
+              "value": "[parameters('AppsettingEventTopicTypeAddressLookup')]"
+            },
+            {
+              "Name": "SiebelEventGridUrl",
+              "value": "[parameters('AppsettingSiebelEventGridUrl')]"
+            },
+            {
+              "Name": "SiebelEventSourceUrl",
+              "value": "[parameters('AppsettingSiebelEventSourceUrl')]"
+            },
+            {
+              "Name": "SiebelEventGridTopicKey",
+              "value": "[parameters('AppsettingSiebelEventGridTopicKey')]"
+            },
+            {
+              "name": "ServiceBusConnectionString",
+              "value": "[parameters('Appsetting:ServiceBusConnectionString')]"
+            },
+            {
+              "name": "AzureAd:Instance",
+              "value": "[parameters('Appsetting:AzureAd:Instance')]"
+            },
+            {
+              "name": "AzureAd:TenantId",
+              "value": "[parameters('Appsetting:AzureAd:TenantId')]"
+            },
+            {
+              "name": "AzureAd:ClientId",
+              "value": "[parameters('Appsetting:AzureAd:ClientId')]"
+            },
+            {
+              "name": "AzureAd:TokenV1Issuer",
+              "value": "[parameters('Appsetting:AzureAd:TokenV1Issuer')]"
+            },
+            {
+              "name": "MicroServiceDBKey",
+              "value": "[parameters('Appsetting:MicroServiceDBKey')]"
+            },
+            {
+              "name": "MicroServiceEventStoreTableName",
+              "value": "[parameters('Appsetting:MicroServiceEventStoreTableName')]"
+            },
+            {
+              "name": "TransactionDB",
+              "value": "[parameters('Appsetting:TransactionDB')]"
+            },
+            {
+              "name": "CustomerDetailsCollection",
+              "value": "[parameters('Appsetting:CustomerDetailsCollection')]"
+            },
+            {
+              "name": "ProductIdTopMember",
+              "value": "[parameters('Appsetting:ProductIdTopMember')]"
+            },
+            {
+              "name": "ServiceBusTopicName",
+              "value": "[parameters('Appsetting:ServiceBusTopicName')]"
+            },
+            {
+              "name": "DefaultVAAMarketingPreferenceValue",
+              "value": "[parameters('Appsetting:DefaultVAAMarketingPreferenceValue')]"
+            },
+            {
+              "name": "DefaultVAPartnersMarketingPreferenceValue",
+              "value": "[parameters('Appsetting:ServiceBusTopicName')]"
+            },
+            {
+              "name": "BLobStorageConnectionString",
+              "value": "[parameters('Appsetting:BLobStorageConnectionString')]"
+            },
+            {
+              "name": "BlobStorageContainerName",
+              "value": "[parameters('Appsetting:BlobStorageContainerName')]"
+            },
+            {
+              "name": "ParentAgeLimit",
+              "value": "[parameters('Appsetting:ParentAgeLimit')]"
+            },
+            {
+              "name": "CustomerAgeLimit",
+              "value": "[parameters('Appsetting:CustomerAgeLimit')]"
+            },
+            {
+              "name": "DatabaseID",
+              "value": "[parameters('Appsetting:DatabaseID')]"
+            },
+            {
+              "name": "FCNumberGenAPIURL",
+              "value": "[parameters('Appsetting:FCNumberGenAPIURL')]"
+            },
+            {
+              "name": "FCNumberGenAPIURLOCPKeyValue",
+              "value": "[parameters('Appsetting:FCNumberGenAPIURLOCPKeyValue')]"
+            },
+            {
+              "name": "FCNumberGenAPIClientID",
+              "value": "[parameters('Appsetting:FCNumberGenAPIClientID')]"
+            },
+            {
+              "name": "FCNumberGenAPIClientSecretValue",
+              "value": "[parameters('Appsetting:FCNumberGenAPIClientSecretValue')]"
+            },
+            {
+              "name": "FCNumberGenAPIResource",
+              "value": "[parameters('Appsetting:FCNumberGenAPIResource')]"
+            },
+            {
+              "name": "AzureADEndpoint",
+              "value": "[parameters('Appsetting:AzureADEndpoint')]"
+            },
+            {
+              "name": "EventTopicType",
+              "value": "[parameters('Appsetting:EventTopicType')]"
+            },
+            {
+              "name": "EnrolmentEventType",
+              "value": "[parameters('Appsetting:EnrolmentEventType')]"
+            },
+            {
+              "name": "VredCustomerAgeLimit",
+              "value": "[parameters('Appsetting:VredCustomerAgeLimit')]"
+            },
+            {
+              "name": "VredEnableSignDate",
+              "value": "[parameters('Appsetting:VredEnableSignDate')]"
+            },
+            {
+              "name": "PowerAppChannelID",
+              "value": "[parameters('Appsetting:PowerAppChannelID')]"
+            },
+            {
+              "name": "DeltaChannelID",
+              "value": "[parameters('Appsetting:DeltaChannelID')]"
+            },
+            {
+              "name": "WebMyaChannelID",
+              "value": "[parameters('Appsetting:WebMyaChannelID')]"
+            },
+            {
+              "name": "AppMyaChannelID",
+              "value": "[parameters('Appsetting:AppMyaChannelID')]"
+            },
+            {
+              "name": "WebSiteChannelID",
+              "value": "[parameters('Appsetting:WebSiteChannelID')]"
+            },
+            {
+              "name": "EnrolmentAgeLimit",
+              "value": "[parameters('Appsetting:EnrolmentAgeLimit')]"
+            },
+            {
+              "name": "PostCodeMandatoryCountryList",
+              "value": "[parameters('Appsetting:PostCodeMandatoryCountryList')]"
+            },
+            {
+              "name": "BlacklistedEmailsFileName",
+              "value": "[parameters('Appsetting:BlacklistedEmailsFileName')]"
+            },
+            {
+              "name": "AddressUpdateTemplate",
+              "value": "[parameters('Appsetting:AddressUpdateTemplate')]"
+            },
+            {
+              "name": "CustMSUpdateResponseURL",
+              "value": "[parameters('Appsetting:CustMSUpdateResponseURL')]"
+            },
+            {
+              "name": "CustMSVaEnrolResponseURL",
+              "value": "[parameters('Appsetting:CustMSVaEnrolResponseURL')]"
+            },
+            {
+              "name": "ResponsePollingCount",
+              "value": "[parameters('Appsetting:ResponsePollingCount')]"
+            },
+            {
+              "name": "ResponseDelayTimeInMS",
+              "value": "[parameters('Appsetting:ResponseDelayTimeInMS')]"
+            },
+            {
+              "name": "VredChannelID",
+              "value": "[parameters('Appsetting:VredChannelID')]"
+            },
+            {
+              "name": "RetryCount",
+              "value": "[parameters('Appsetting:RetryCount')]"
+            },
+            {
+              "name": "CustDB:CustSearchColCntnrForTest",
+              "value": "[parameters('Appsetting:CustDB:CustSearchColCntnrForTest')]"
+            },
+            {
+              "name": "CustDB:IsCustSearchForTest",
+              "value": "[parameters('Appsetting:CustDB:IsCustSearchForTest')]"
+            },
+            {
+              "name": "HttpClientTimeOut",
+              "value": "[parameters('Appsetting:HttpClientTimeOut')]"
+            },
+            {
+              "name": "CommonCachingSlidingExpirationInDay",
+              "value": "[parameters('Appsetting:CommonCachingSlidingExpirationInDay')]"
+            },
+            {
+              "name": "MicroServiceResponseTableName",
+              "value": "[parameters('Appsetting:MicroServiceResponseTableName')]"
+            },
+            {
+              "name": "CustomerSearchCollection",
+              "value": "[parameters('Appsetting:CustomerSearchCollection')]"
+            },
+
+            //Azure B2C settings
+            {
+              "name": "AzureAdB2C:TokenV1Issuer",
+              "value": "[parameters('AzureAdB2C:TokenV1Issuer')]"
+            },
+
+            //Audit settings
+            {
+              "name": "AuditServiceBusTopicName",
+              "value": "[parameters('Appsetting:AuditServiceBusTopicName')]"
+            },
+
+            //swagger settings
+
+            {
+              "name": "OpenApi__Scope",
+              "value": "[parameters('OpenApi__Scope')]"
+            },
+            {
+              "name": "OpenApi__TokenUrl",
+              "value": "[parameters('OpenApi__TokenUrl')]"
+            },
+            {
+              "name": "OpenApi__DocTitle",
+              "value": "[parameters('OpenApi__DocTitle')]"
+            },
+            {
+              "name": "OpenApi__Description",
+              "value": "[parameters('OpenApi__Description')]"
+            },
+            {
+              "name": "OpenApi__DocVersion",
+              "value": "[parameters('OpenApi__DocVersion')]"
+            },
+            {
+              "name": "OpenApi__Version",
+              "value": "[parameters('OpenApi__Version')]"
+            },
+            {
+              "name": "OpenApi__ForceHttps",
+              "value": "[parameters('OpenApi__ForceHttps')]"
+            },
+            {
+              "name": "OpenApi__ForceHttp",
+              "value": "[parameters('OpenApi__ForceHttp')]"
+            }
+          ]
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/web')]",
+      "location": "North Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$[parameters('FunctionAppName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": false,
+        "webSocketsEnabled": false,
+        "alwaysOn": "[if(equals(parameters('plantype'),'Consumption'),'false','true')]",
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": false
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "[parameters('IPRestriction')]",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow_APIM",
+            "description": "Allow APIM access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "reservedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/', parameters('FunctionAppName'), '.azurewebsites.net')]",
+      "location": "North Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+      ],
+      "properties": {
+        "siteName": "[parameters('FunctionAppName')]",
+        "hostNameType": "Verified"
+      }
+    },
+    {
+      "type": "microsoft.insights/components",
+      "kind": "web",
+      "name": "[parameters('AppInsightsName')]",
+      "apiVersion": "2015-05-01",
+      "location": "[Variables('ResourceLocation')]",
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "applicationId": "[variables('SiteResourceID')]",
+        "Application_Type": "web"
+      },
+      "dependsOn": [ "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]" ]
+    }
+  ]
+}

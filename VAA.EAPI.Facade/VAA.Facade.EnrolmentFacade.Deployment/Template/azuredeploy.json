@@ -1,0 +1,413 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "EnvironmentName": {
+      "type": "string"
+    },
+    "ServerFarmIdRg": {
+      "type": "string"
+    },
+    "FunctionAppName": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "AppsettingAppInsightsKey": {
+      "type": "string"
+    },
+    "AppsettingAzureWebJobsStorage": {
+      "type": "string"
+    },
+    "AppsettingRetrieveEnrolmentAPIClientId": {
+      "type": "string"
+    },
+    "AppsettingRetrieveEnrolmentAPIClientSecret": {
+      "type": "string"
+    },
+    "AppsettingRetrieveEnrolmentAPIAuthority": {
+      "type": "string"
+    },
+    "AppsettingRetrieveCustomerApiResource": {
+      "type": "string"
+    },
+    "AppsettingRetrieveEnrolmentOcpKey": {
+      "type": "string"
+    },
+    "AppsettingRetrieveCustomerEndpoint": {
+      "type": "string"
+    },
+    "AppsettingRetryAttempts": {
+      "type": "string"
+    },
+    "AppsettingAuthenticationUrl": {
+      "type": "string"
+    },
+    "AppsettingAzureAd:Instance": {
+      "type": "string"
+    },
+    "AppsettingAzureAd:ClientId": {
+      "type": "string"
+    },
+    "AppsettingAzureAd:TokenV1Issuer": {
+      "type": "string"
+    },
+    "AppsettingAuthorizationTokenType": {
+      "type": "string"
+    },
+    "AppsettingAzureADEndpoint": {
+      "type": "string"
+    },
+    "AppsettingFUNCTIONS_EXTENSION_VERSION": {
+      "type": "string"
+    },
+    "AppsettingFUNCTIONS_WORKER_RUNTIME": {
+      "type": "string"
+    },
+    "AppsettingAzureAd:TenantId": {
+      "type": "string"
+    },
+    "AppsettingEnrolmentSubject": {
+      "type": "string"
+    },
+    "AppsettingEventType": {
+      "type": "string"
+    },
+    "AppsettingAzureAdB2C:ClientId": {
+      "type": "string"
+    },
+    "AppsettingAzureAdB2C:Instance": {
+      "type": "string"
+    },
+    "AppsettingAzureAdB2C:TenantId": {
+      "type": "string"
+    },
+    "AppsettingAuthUrl": {
+      "type": "string"
+    },
+    "AppsettingAzureAdB2C:SignUpSignInPolicyId": {
+      "type": "string"
+    },
+    "AppsettingGraphQL:PnrLinkMutationEndpoint": {
+      "type": "string"
+    },
+    "AppsettingAuthAudience": {
+      "type": "string"
+    },
+    "AppsettingAuthClientID": {
+      "type": "string"
+    },
+    "AppsettingAuthClientSecret": {
+      "type": "string"
+    },
+    "AppsettingAzureAd:Domain": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "type": "string"
+    },
+    "IPRestriction": {
+      "type": "string"
+    },
+    //Slot settings
+    "SlotName": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "vaultName": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "Object"
+    }
+  },
+  "variables": {
+    "ResourceLocation": "[resourceGroup().location]",
+    "SiteResourceID": "[resourceId('Microsoft.Web/Sites', parameters('FunctionAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('FunctionAppName')]",
+      "location": "[variables('ResourceLocation')]",
+      "kind": "functionapp",
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('FunctionAppName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('FunctionAppName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId(parameters('ServerFarmIdRg'), 'Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet-isolated"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[parameters('AppsettingAppInsightsKey')]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[parameters('AppsettingAzureWebJobsStorage')]"
+            },
+            {
+              "name": "RetrieveCustomerEndpoint",
+              "value": "[parameters('AppsettingRetrieveCustomerEndpoint')]"
+            },
+            {
+              "name": "RetryAttempts",
+              "value": "[parameters('AppsettingRetryAttempts')]"
+            },
+            {
+              "name": "RetrieveEnrolmentAPIClientId",
+              "value": "[parameters('AppsettingRetrieveEnrolmentAPIClientId')]"
+            },
+            {
+              "name": "RetrieveEnrolmentAPIClientSecret",
+              "value": "[parameters('AppsettingRetrieveEnrolmentAPIClientSecret')]"
+            },
+            {
+              "name": "RetrieveEnrolmentAPIAuthority",
+              "value": "[parameters('AppsettingRetrieveEnrolmentAPIAuthority')]"
+            },
+            {
+              "name": "RetrieveCustomerApiResource",
+              "value": "[parameters('AppsettingRetrieveCustomerApiResource')]"
+            },
+            {
+              "name": "RetrieveEnrolmentOcpKey",
+              "value": "[parameters('AppsettingRetrieveEnrolmentOcpKey')]"
+            },
+            {
+              "name": "AzureAd:Instance",
+              "value": "[parameters('AppsettingAzureAd:Instance')]"
+            },
+            {
+              "name": "AzureAd:ClientId",
+              "value": "[parameters('AppsettingAzureAd:ClientId')]"
+            },
+            {
+              "name": "AzureAd:TokenV1Issuer",
+              "value": "[parameters('AppsettingAzureAd:TokenV1Issuer')]"
+            },
+            {
+              "name": "AzureAd:TenantId",
+              "value": "[parameters('AppsettingAzureAd:TenantId')]"
+            },
+            {
+              "name": "AuthenticationUrl",
+              "value": "[parameters('AppsettingAuthenticationUrl')]"
+            },
+            {
+              "name": "AuthorizationTokenType",
+              "value": "[parameters('AppsettingAuthorizationTokenType')]"
+            },
+            {
+              "name": "AzureADEndpoint",
+              "value": "[parameters('AppsettingAzureADEndpoint')]"
+            },
+            {
+              "name": "EnrolmentSubject",
+              "value": "[parameters('AppsettingEnrolmentSubject')]"
+            },
+            {
+              "name": "EventType",
+              "value": "[parameters('AppsettingEventType')]"
+            },
+            {
+              "name": "AzureAdB2C:ClientId",
+              "value": "[parameters('AppsettingAzureAdB2C:ClientId')]"
+            },
+            {
+              "name": "AzureAdB2C:Instance",
+              "value": "[parameters('AppsettingAzureAdB2C:Instance')]"
+            },
+            {
+              "name": "AzureAdB2C:TenantId",
+              "value": "[parameters('AppsettingAzureAdB2C:TenantId')]"
+            },
+            {
+              "name": "AuthUrl",
+              "value": "[parameters('AppsettingAuthUrl')]"
+            },
+            {
+              "name": "AzureAdB2C:SignUpSignInPolicyId",
+              "value": "[parameters('AppsettingAzureAdB2C:SignUpSignInPolicyId')]"
+            },
+            {
+              "name": "GraphQL:PnrLinkMutationEndpoint",
+              "value": "[parameters('AppsettingGraphQL:PnrLinkMutationEndpoint')]"
+            },
+            {
+              "name": "AuthAudience",
+              "value": "[parameters('AppsettingAuthAudience')]"
+            },
+            {
+              "name": "AuthClientID",
+              "value": "[parameters('AppsettingAuthClientID')]"
+            },
+            {
+              "name": "AuthClientSecret",
+              "value": "[parameters('AppsettingAuthClientSecret')]"
+            },
+            {
+              "name": "AzureAd:Domain",
+              "value": "[parameters('AppsettingAzureAd:Domain')]"
+            }
+          ]
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/web')]",
+      "location": "North Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$[parameters('FunctionAppName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": false,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": true
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "[parameters('IPRestriction')]",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow_APIM",
+            "description": "Allow APIM access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "reservedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/', parameters('FunctionAppName'), '.azurewebsites.net')]",
+      "location": "North Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+      ],
+      "properties": {
+        "siteName": "[parameters('FunctionAppName')]",
+        "hostNameType": "Verified"
+      }
+    },
+    {
+      "type": "microsoft.insights/components",
+      "kind": "web",
+      "name": "[parameters('AppInsightsName')]",
+      "apiVersion": "2015-05-01",
+      "location": "[Variables('ResourceLocation')]",
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "applicationId": "[variables('SiteResourceID')]",
+        "Application_Type": "web"
+      },
+      "dependsOn": [ "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]" ]
+    }
+  ]
+}

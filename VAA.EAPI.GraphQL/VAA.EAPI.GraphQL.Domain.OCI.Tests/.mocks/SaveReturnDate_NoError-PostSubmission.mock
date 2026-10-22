@@ -1,0 +1,152 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/CheckIn/SaveReturnDate HTTP/1.1
+
+$[?(@.passengerId == '01.01|77456950-f219-4053-8008-5ee8bff65a32|9999225479295|14ed3a2a-a726-4754-af01-872b02134712')]
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "travelPartyId": "TEST02-Id-SSCI",
+    "requirementsId": "TEST02-Id-TRM","reference": {
+        "pnrLocator": "TEST02",
+        "createdDate": "2025-09-29"
+    },
+    "passengers": [
+        {
+            "passengerId": "01.01|77456950-f219-4053-8008-5ee8bff65a32|9999225479295|14ed3a2a-a726-4754-af01-872b02134899",
+            "givenNames": "TORI",
+            "surname": "PAIK",
+            "dateOfBirth": "1946-09-29",
+            "email": "4JGHL2@EXAMPLE.COM",
+            "phone": {
+                "countryCode": "",
+                "number": "447466489905"
+            },
+            "documents": [
+			{
+                    "documentType": "PASSPORT",
+                    "givenNames": "TORI",
+                    "surname": "PAIK",
+                    "dateOfBirth": "1946-09-29",
+                    "gender": {
+                        "code": "M"
+                    },
+                    "documentNumber": "356106385",
+                    "expirationDate": "2032-11-03",
+                    "issuingCountry": {
+                        "code": "GBR"
+                    },
+                    "nationality": {
+                        "code": "GBR"
+                    },
+                    "countryOfResidence": {
+                        "code": "GBR"
+                    }
+                }
+			],
+            "requirements": {
+                "passportProvided": true,
+                "passportVerified": false,
+                "contactTracing": "TO_COMPLETE",
+                "returnDateStatus": "PROVIDED",
+				"returnDate": "1946-09-29",
+                "checkinEligible": true,
+                "secondaryDocumentStatus": "NOT_REQUIRED",
+                "overall": "PART_COMPLETE",
+                "passportErrors": [],
+                "overall": "TO_COMPLETE"
+            },
+            "contactTracing": {
+                "inTransit": false,
+                "email": "4JGHL2@EXAMPLE.COM",
+                "noEmail": false,
+                "primaryPhoneNumber": "447466489905",
+                "primaryPhoneNumberCountryCode": ""
+            }
+        }
+    ],
+    "currentSlice": {
+        "sliceId": "9b13f187-5029-4136-b58b-6a6b72380568",
+        "scheduledDepartureLocalDateTime": "2025-10-01T11:20:00",
+        "scheduledDepartureUtcDateTime": "2025-10-01T10:20:00",
+        "scheduledArrivalLocalDateTime": "2025-10-01T15:35:00",
+        "scheduledArrivalUtcDateTime": "2025-10-01T19:35:00",
+        "origin": {
+            "terminalName": "Terminal 3",
+            "code": "LHR",
+            "airportName": "Heathrow Airport",
+            "countryCode": "GBR"
+        },
+        "destination": {
+            "code": "ATL",
+            "airportName": "Hartsfield-Jackson Atlanta Intl",
+            "countryCode": "USA"
+        },
+        "segments": [
+            {
+                "segmentId": "066c47c1-8902-48e0-be50-f3ccc528989c",
+                "ordinal": 1,
+                "operatingCarrier": {
+                    "flightNum": "0103",
+                    "carrierCode": "VS",
+                    "carrierName": "Virgin Atlantic"
+                },
+                "marketingCarrier": {
+                    "flightNum": "0103",
+                    "carrierCode": "VS",
+                    "carrierName": "Virgin Atlantic"
+                },
+                "scheduledDepartureLocalDateTime": "2025-10-01T11:20:00",
+                "scheduledDepartureUtcDateTime": "2025-10-01T10:20:00",
+                "scheduledArrivalLocalDateTime": "2025-10-01T15:35:00",
+                "scheduledArrivalUtcDateTime": "2025-10-01T19:35:00",
+                "origin": {
+                    "terminalName": "Terminal 3",
+                    "code": "LHR",
+                    "airportName": "Heathrow Airport",
+                    "countryCode": "GBR"
+                },
+                "destination": {
+                    "code": "ATL",
+                    "airportName": "Hartsfield-Jackson Atlanta Intl",
+                    "countryCode": "USA"
+                },
+                "legs": [
+                    {
+                        "legId": "dd68a5e1-5e6f-4863-b4f1-f0ad1847360b",
+                        "ordinal": 1,
+                        "scheduledDepartureLocalDateTime": "2025-10-01T11:20:00",
+                        "scheduledDepartureUtcDateTime": "2025-10-01T10:20:00",
+                        "scheduledArrivalLocalDateTime": "2025-10-01T15:35:00",
+                        "scheduledArrivalUtcDateTime": "2025-10-01T19:35:00",
+                        "origin": {
+                            "code": "LHR",
+                            "airportName": "Heathrow Airport",
+                            "countryCode": "GBR"
+                        },
+                        "destination": {
+                            "code": "ATL",
+                            "airportName": "Hartsfield-Jackson Atlanta Intl",
+                            "countryCode": "USA"
+                        },
+                        "distanceMiles": 4220,
+                        "flightDuration": "9H 15M",
+                        "aircraftTypeName": "Airbus A350-1000",
+                        "status": "On time"
+                    }
+                ]
+            }
+        ]
+    },
+    "onlineCheckInStatus": {
+        "available": true
+    },
+    "applyEmergencyContactToAllPax": true,
+    "applyContactTracingToAllPax": false
+}

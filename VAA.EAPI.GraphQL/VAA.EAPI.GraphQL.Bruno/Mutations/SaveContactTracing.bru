@@ -1,0 +1,33 @@
+meta {
+  name: SaveContactTracing
+  type: graphql
+  seq: 29
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation SaveContactTracing($checkInId: String, $applyToAll: Boolean!, $contactTracings: [ContactTracingInput]) {
+    SaveContactTracing(checkInId: $checkInId, applyToAll: $applyToAll, contactTracings: $contactTracings) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "checkInId": "",
+    "applyToAll": false,
+    "contactTracings": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,42 @@
+meta {
+  name: Search Order
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{order_search_base_url}}/order/Search
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  ChannelId: NDC
+}
+
+body:json {
+  {
+    "searchFilterCriteria": {
+      "bookingReferenceCriteria": {
+        "bookingReference": {
+          "airlineDesignator": "VS",
+          "rLOC": "{{pnr}}"
+        },
+        "customerName": {
+          "givenName": "{{given_name}}",
+          "surName": "{{surname}}"
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Set pnr to a six-character test booking containing an SSR, for example AVML (Asian Vegetarian). The mapped response exposes PNR SSRs in orderInstructions.
+}

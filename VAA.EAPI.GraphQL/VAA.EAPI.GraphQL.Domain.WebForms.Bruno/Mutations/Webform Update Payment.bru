@@ -1,0 +1,40 @@
+meta {
+  name: Webform Update Payment
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_secure}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation WebformUpdatePayment($formName: String, $payment: PaymentInput) {
+    webformUpdatePayment(formName: $formName, payment: $payment) {
+      status
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "formName": "UpdatePayment",
+    "payment": {
+    "paymentNumber": "sample",
+    "accountHolderName": "sample",
+    "bankName": "sample",
+    "country": "sample",
+    "bankCountryName": "sample",
+    "town": "sample",
+    "sortCode": "sample",
+    "accountNumber": "sample"
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,93 @@
+meta {
+  name: Save Return Date
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation TravelRequirementsSaveReturnDate {
+    TravelRequirementsSaveReturnDate(
+      request: {
+        travelRequirementsId: "{{travelRequirementsId}}"
+        passengerId: "{{pax1_Id}}"
+        returnOn: "2027-10-01"
+        noReturnDate: false
+      }
+    ) {
+      travelRequirementsId
+      applyEmergencyContactToAllPax
+      reference {
+        pnrLocator
+        createdDate
+      }
+      passengers {
+        passengerId
+        givenNames
+        surname
+        dateOfBirth
+        sliceRequirements {
+          sliceId
+          passportProvided
+          passportVerified
+          baggageDeclared
+          contactTracing
+          contactTracingAvailableFromUtc
+          contactTracingAvailableFromDescription
+          checkedIn
+          overall
+          unhappyPassport
+          returnDateStatus
+          isReturnDateDeclined
+          returnDate
+          checkinEligible
+          secondaryDocumentStatus
+          secondaryDocuments {
+            documentType
+            countryCode
+            countryName
+            name
+            displayName
+            status
+            secondaryDocumentApplicationOptions {
+              secondaryDocumentId
+              applicationType
+              title
+              message
+              url
+            }
+          }
+          passportErrors {
+            code
+            message
+            category
+            displayCode
+          }
+        }
+      }
+      slices {
+        sliceId
+        scheduledDepartureLocalDateTime
+        scheduledArrivalLocalDateTime
+        origin {
+          code
+          countryCode
+        }
+        destination {
+          code
+          countryCode
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

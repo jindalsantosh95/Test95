@@ -1,0 +1,11 @@
+{
+  "query": "mutation SelectMealMutation($applyToAll: Boolean!, $tripReservationId: String, $segmentId: String, $passengerId: String, $ssrCode: String) { selectMealMutation(applyToAll: $applyToAll, tripReservationId: $tripReservationId, segmentId: $segmentId, passengerId: $passengerId, ssrCode: $ssrCode) { passengers { passengerResourceId firstName lastName passengerSegments { flightSegment { segmentId ordinal operatingAirlines { code name } flightNumber marketingFlight { operatingSuffix flightNumber marketingAirlines { code name } } departureAirport { code name } arrivalAirport { code name } checkinStatus flightLegs { legId ordinal flightNumber } } mealSelection { isSelected selectedChoice availableChoices { code description } isEligible isChangeAllowed } } } }}",
+  "variables": {
+    "tripReservationId": "",
+    "segmentId": "",
+    "passengerId": "",
+    "ssrCode": "",
+    "applyToAll": false
+  },
+  "operationName": "SelectMealMutation"
+}

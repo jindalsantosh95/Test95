@@ -1,0 +1,49 @@
+parameters:
+  serviceConnection: ''
+  subscriptionId: ''
+  resourceGroupName: ''
+  location: ''
+  functionAppName: ''
+  keyVaultName: ''
+  environment: ''
+
+steps:
+  - task: AzureCLI@2
+    displayName: 'Wait for REST host: ${{parameters.functionAppName}}'
+    timeoutInMinutes: 5
+    inputs:
+      azureSubscription: ${{parameters.serviceConnection}}
+      scriptType: ps
+      scriptLocation: inlineScript
+      inlineScript: |
+        $ErrorActionPreference = 'Stop'
+        $hostname = az functionapp show --subscription '${{parameters.subscriptionId}}' --resource-group '${{parameters.resourceGroupName}}' --name '${{parameters.functionAppName}}' --query defaultHostName -o tsv
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($hostname)) {
+          throw 'Cannot resolve the deployed REST hostname.'
+        }
+        $ready = $false
+        for ($attempt = 1; $attempt -le 12; $attempt++) {
+          try {
+            $response = Invoke-WebRequest -Uri "https://$hostname/api/heartbeat" -UseBasicParsing -TimeoutSec 10
+            if ([int]$response.StatusCode -eq 200) {
+              $ready = $true
+              break
+            }
+          } catch {
+            # Do not log response bodies or credentials; publication stays blocked.
+          }
+          if ($attempt -lt 12) { Start-Sleep -Seconds 5 }
+        }
+        if (-not $ready) { throw 'REST host heartbeat did not become ready within 12 attempts.' }
+        Write-Host 'REST host heartbeat is ready for key publication.'
+  # listKeys calls the live host; publish only after package deployment/start or slot swap.
+  - task: AzureResourceManagerTemplateDeployment@3
+    displayName: 'Publish deployed REST function key: ${{parameters.functionAppName}}'
+    inputs:
+      azureResourceManagerConnection: ${{parameters.serviceConnection}}
+      subscriptionId: ${{parameters.subscriptionId}}
+      resourceGroupName: ${{parameters.resourceGroupName}}
+      location: ${{parameters.location}}
+      csmFile: $(Pipeline.workspace)/drop/Template/publish_function_key.json
+      deploymentMode: 'Incremental'
+      overrideParameters: -functionappName ${{parameters.functionAppName}} -keyVaultName ${{parameters.keyVaultName}} -environment ${{parameters.environment}}

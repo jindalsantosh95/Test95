@@ -1,0 +1,191 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": { "value": { "LoggingProvider": "AppInsights", "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs", "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)", "Site": "datadoghq.com", "Environment": "prod", "Source": "csharp", "Version": "", "TraceEnabled": true, "RuntimeMetricsEnabled": true,"Tags": "", "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel", "MinimumLogLevel": "Information", "QueueCapacity": 5000, "BatchSize": 100, "FlushIntervalMilliseconds": 2000 } },
+    "environment": {
+      "value": "PROD"
+    },
+    "AppServicePlanName": {
+      "value": "vapreunaspdigital02"
+    },
+    "functionappName": {
+      "value": "VA-PR-EUN-NOTIFORCH-FN-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-pr-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avapeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-pr-eun-crm-kv-01"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "Tags": {
+      "value": {
+        "APPLICATION_NAME": "Orchestration Notification",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "PROD",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vapreunnotiforchsa01"
+    },
+    "AppInsightsName": {
+      "value": "va-pr-eun-notiforch-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-pr-eun-law-020"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avapeunlaw020"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+
+    // settings
+    "AircraftSwap": {
+      "value": {
+        "FlightMs": {
+          "OperationalScheduleUri": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/AircraftSwap-FlightMs-OperationalScheduleUri/)"
+        }
+      }
+    },
+    "Notifications": {
+      "value": {
+        "RedisConnectionString": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-RedisConnectionString/)",
+        "CheckInOpeningTimerSchedule": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-CheckInOpeningTimerSchedule/)",
+        "SeatSelectionReminderTimerSchedule": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-SeatSelectionReminderTimerSchedule/)",
+        "FlightMs": {
+          "ScheduleUri": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-FlightMs-ScheduleUri/)",
+          "CheckAircraftCategoryUri": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-FlightMs-CheckAircraftCategoryUri/)"
+        },
+        "ReferenceMs": {
+          "Uri": "https://resources.virginatlantic.com/ReferenceMicroservice/"
+        },
+        "CheckInOpeningService": {
+          "MessageDelay": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-CheckInOpeningService-MessageDelay/)",
+          "FromOffset": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-CheckInOpeningService-FromOffset/)",
+          "ToOffset": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-CheckInOpeningService-ToOffset/)"
+        },
+        "StarlinkNotification": {
+          "BeforeDeparture": "03:00:00",
+          "CategoryIndex": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-StarlinkNotification-CategoryIndex/)"
+        }
+      }
+    },
+    "MicroServiceEventStoreTableName": {
+      "value": "OrchesNotifStore"
+    },
+    "MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-MicroServiceDBKey/)"
+    },
+
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Orchestration Retail Therapy "
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This endpoint will provide information for Orchestration Retail Therapy"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    //Notification settings
+    "NotificationTopicName": {
+      "value": "servicenotifications"
+    },
+    "AircraftSwapEnabled": {
+      "value": "false"
+    },
+    "AircraftChangeNotifDelay": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/AircraftChangeNotifDelay/)"
+    },
+    "NotificationServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-ServiceBusConnectionString/)"
+    },
+    "AIMSServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/AIMS-ServiceBusConnectionString/)"
+    },
+    "Analytics:ServiceBus:ConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Analytics-ServiceBus-ConnectionString/)"
+    },
+    "FlightOpsKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-crm-kv-01.vault.azure.net/secrets/Notifications-FlightOpsKey/)"
+    },
+    "FlightCancelledAlertMessage": {
+      "value": "Your flight has been cancelled. Please contact customer service for rebooking options." //TBD
+    },
+    "FlightCancelledContent": {
+      "value": "https://virginatlantic.com/trips/flight_details" //TBD
+    },
+    "CheckInOpenedAlertMessage": {
+      "value": "You’re now ready to check in for your flight to {arrival}."
+    },
+    "CheckInOpenedContent": {
+      "value": "https://virginatlantic.com/trips" //TBD
+    },
+    "SeatSelectionReminderAlertMessage": {
+      "value": "Hi, we're looking forward to welcoming you onboard. We noticed you haven't selected your preferred seat onboard, now is the perfect time - tap here to find out more"
+    },
+    "SeatSelectionReminderContent": {
+      "value": "https://virginatlantic.com/trips"
+    },
+    "StarlinkEnabledAlertMessage": {
+      "value": "Free, high-speed Starlink WiFi is onboard your flight. Tap to find out more."
+    },
+    "StarlinkEnabledContent": {
+      "value": "https://virginatlantic.com/trips"
+    },
+    "StarlinkCustomEventName": {
+      "value": "emit_starlink"
+    },
+    "FlightTimeChangedAlertMessage": {
+      "value": "Your flight time has been changed. Please check your updated itinerary for new departure details. Please check your booking for details." //TBD
+    },
+    "FlightTimeChangedContent": {
+      "value": "https://virginatlantic.com/trips/flight_details" //TBD
+    }
+
+  }
+}

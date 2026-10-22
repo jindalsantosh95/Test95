@@ -1,0 +1,72 @@
+{
+  "prNumber": 1731,
+  "branch": "codex/vaa-eapi-under18-enrolment-diagram-retry-15",
+  "base": "main",
+  "headSha": "a2179fce233d1c60370a9461b5b8afdca05bf495",
+  "runId": "32484311945",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/32484311945",
+  "collectedAtUtc": "2026-08-21T12:57:29.679Z",
+  "policy": {
+    "resolveHumanThreads": false,
+    "expectedDecisions": [
+      "agree",
+      "disagree",
+      "not-applicable"
+    ]
+  },
+  "comments": [
+    {
+      "kind": "review-thread",
+      "threadId": "PRRT_kwDORKRjBc6a4PWI",
+      "replyToCommentDatabaseId": 3823334543,
+      "author": "vaa-auth-app-for-wiz",
+      "body": "<a><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.wiz.io/wiz-code/long_severity_tags/info_dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.wiz.io/wiz-code/long_severity_tags/info_light.svg\"><img align=\"top\" valign=\"top\" alt=\"Info\" title=\"Info\" src=\"https://assets.wiz.io/wiz-code/long_severity_tags/info_light.svg\"></picture></a>&ensp;Sensitive Data Finding\n\n**PII**\n\n<details>\n<summary>More Details</summary>\n<br>\n\n| Attribute | Value |\n| ----------- | -------- |\n| **Data Classifier** | PII/Name |\n| **Data Classifier ID** | BUILTIN-125 |\n#### Sampled Examples\n| Key | Value | \n| --- | ----- | \n| **Customer** | L**a**y \n| **Customer** | L**a**y \n| **Customer** | L**a**y \n| **Customer** | L**a**y \n\n> Rule ID: BUILTIN-125\n<br>\n\nTo ignore this finding as an exception, reply to this conversation with `#wiz_ignore reason`\n\n\nIf you'd like to ignore this finding in all future scans, add an exception in the .wiz file ([learn more](https://docs.wiz.io/wiz-docs/docs/exception-management-with-wiz-code#repository-configuration-file-wiz)) or create an Ignore Rule ([learn more](https://docs.wiz.io/wiz-docs/docs/exception-management-with-wiz-code#ignore-rules)).\n</details>\n<br>\n\nTo get more details on how to remediate this issue using AI, reply to this conversation with `#wiz remediate`\n\n<!-- WizScan-428d2cac-754e-424d-b7c9-adebbbeec2a5-Annotation -->\n\n<!-- WizRule-Data-BUILTIN-125 -->",
+      "path": ".codex/agent-loop/runs/32002894360.json",
+      "line": 1,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1731#discussion_r3823334543",
+      "decision": "disagree",
+      "responseComment": "This is a false positive. The referenced generated run evidence contains repository terms such as `Customer plus Loyalty Enrolment` and project paths containing `Loyalty.Customer`; `Loyalty` is a service/domain name, not a person's name or customer PII. No sensitive value is present in the file.",
+      "actionSummary": "No file change was made because the sampled text is repository terminology in generated verification evidence, not PII."
+    },
+    {
+      "kind": "issue-comment",
+      "issueCommentId": 5369377580,
+      "author": "mikesmith-vaa",
+      "body": "> Wait for 1779\r\n\r\ndone",
+      "url": "https://github.com/VAAD1ST/eapi/pull/1731#issuecomment-5369377580",
+      "decision": "not-applicable",
+      "responseComment": "Acknowledged. PR 1779 is now merged and its merge commit is present in this branch, so this status update does not request any further change.",
+      "actionSummary": "No file change was needed because this is an acknowledgement that the previously requested dependency wait has completed."
+    },
+    {
+      "kind": "review-summary",
+      "reviewId": 4992414866,
+      "author": "mikesmith-vaa",
+      "body": "Wait for 1779",
+      "url": "https://github.com/VAAD1ST/eapi/pull/1731#pullrequestreview-4992414866",
+      "state": "COMMENTED",
+      "decision": "agree",
+      "responseComment": "Agreed. The branch was held for PR 1779, and PR 1779 is now merged; its merge commit is included in this branch's history, so the dependency is satisfied.",
+      "actionSummary": "No additional file change was needed because merge commit `9f37081b5b` for PR 1779 is already an ancestor of the current branch head."
+    }
+  ],
+  "resourceUsage": {
+    "workflow": "sequence-goal-human-comment-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 157807,
+      "inputTokens": 156244,
+      "cachedInputTokens": 127539,
+      "outputTokens": 1563,
+      "reasoningOutputTokens": 267,
+      "estimatedUsd": 0.254184
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "157,807 tokens (156,244 input, 127,539 cached + 1,563 output, 267 reasoning); $0.254184 USD"
+  }
+}

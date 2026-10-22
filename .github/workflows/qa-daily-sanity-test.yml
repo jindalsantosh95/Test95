@@ -1,0 +1,27 @@
+name: 'Automation - Daily Sanity Test'
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: Target environment
+        required: true
+        default: sit
+        type: choice
+        options: [dev, sit, uat]
+  schedule:
+    - cron: "0 6 * * 1-5"
+
+jobs:
+  run-suite:
+    uses: ./.github/workflows/qa-run-automation-suite.yml
+    with:
+      manifest_path: config/automation-suites/daily-sanity-test.json
+      target_environment: ${{ github.event.inputs.target_environment || 'sit' }}
+      enable_slack_for_branch_runs: ${{ github.event_name == 'workflow_dispatch' }}
+    secrets:
+      key_vault_url: ${{ secrets.KEY_VAULT_URL }}
+      key_vault_tenant_id: ${{ secrets.KEY_VAULT_TENANT_ID }}
+      key_vault_client_id: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+      key_vault_client_secret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

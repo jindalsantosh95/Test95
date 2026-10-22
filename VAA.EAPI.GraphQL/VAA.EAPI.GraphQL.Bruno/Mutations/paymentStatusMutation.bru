@@ -1,0 +1,33 @@
+meta {
+  name: paymentStatusMutation
+  type: graphql
+  seq: 27
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation paymentStatusMutation($request: tripsPaymentStatusRequestInput) {
+    paymentStatusMutation(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {
+      "paymentStatus": "SUCCESS"
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

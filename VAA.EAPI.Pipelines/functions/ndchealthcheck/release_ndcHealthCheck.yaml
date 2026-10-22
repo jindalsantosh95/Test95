@@ -1,0 +1,197 @@
+parameters:
+  agentPool: ''
+  agentPool_SANDBOX: ''
+  agentSpecification: ''
+  applicationName: ''
+  buildConfiguration: ''
+  testRepoPath_SIT: ''
+  testRepoPath_UAT: ''  
+  functionAppName_DEV: ''
+  functionAppName_SIT: ''
+  functionAppName_UAT: ''
+  functionAppName_SANDBOX: ''
+  functionAppName_PRD: ''
+  AppInsightsName_DEV: ''
+  AppInsightsName_SIT: ''
+  AppInsightsName_UAT: ''
+  AppInsightsName_SB: ''
+  AppInsightsName_PROD: ''
+  storageAccountName_DEV: ''
+  storageAccountName_SIT: ''
+  storageAccountName_UAT: ''
+  storageAccountName_SB: ''
+  storageAccountName_PROD: ''
+  location: ''
+  AppInsightsName_DT5: ''
+  appserviceplan_DT5: ''
+  resourceGroupName_DT5: ''
+  functionAppName_DT5: ''
+  KeyvaultName_DT5: ''
+  storageAccountName_DT5: ''
+  functionAppName_Secure_DT5: ''
+  VARIABLE_GROUP_NAME_SCHEMA: ''
+  VARIABLE_GROUP_NAME_DEV: ''
+  VARIABLE_GROUP_NAME_SIT: ''
+  VARIABLE_GROUP_NAME_UAT: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: '' 
+  SLACK_API_TOKEN: ''
+  SLACK_TITLE: ''
+
+stages:
+
+  - stage: 'PR_Test5'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - Test5' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlndc_Test5.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_DT5}}  
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: Test5
+          pr_name: PR_Test5
+          location: ${{parameters.location}}    
+          appserviceplan: ${{parameters.appserviceplan_DT5}}
+          keyvaultName: ${{parameters.KeyvaultName_DT5}}      
+          resourceGroupName: ${{parameters.resourceGroupName_DT5}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_DT5}}
+          storageAccountName: ${{parameters.storageAccountName_DT5}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlndc.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_DEV}}         
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment_DEV}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}  
+          AppInsightsName: ${{parameters.AppInsightsName_DEV}}
+          storageAccountName: ${{parameters.storageAccountName_DEV}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+    
+  - stage: 'NDCHealthCheck_SchemaValidation_DEV'
+    displayName: 'NDCHealthCheck_SchemaValidation_DEV' 
+    dependsOn: DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_SchemaValidation.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SCHEMA}}
+          SLACK_API_TOKEN: ${{parameters.SLACK_API_TOKEN}}
+          SLACK_TITLE: ${{parameters.SLACK_TITLE}}
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlndc.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_SIT}}         
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_SIT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_SIT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_SIT}}
+          storageAccountName: ${{parameters.storageAccountName_SIT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlndc.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_UAT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_UAT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_UAT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}
+          AppInsightsName: ${{parameters.AppInsightsName_UAT}}
+          storageAccountName: ${{parameters.storageAccountName_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+  
+  - stage: 'SANDBOX'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/SANDBOX_GQL.yaml
+    displayName: 'Deployment - SANDBOX' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphql_sandbox.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_SANDBOX}}
+          agentPool: ${{parameters.agentPool_SANDBOX}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          AppInsightsName: ${{parameters.AppInsightsName_SB}}
+          storageAccountName: ${{parameters.storageAccountName_SB}}
+          #APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}  
+          #WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER_SANDBOX}}
+          #WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER_SANDBOX}}
+
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlndc.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_PRD}}         
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_PROD}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_PROD}}        
+          serviceConnection: ${{variables.serviceConnection_PROD}}
+          subscriptionId: ${{variables.subscriptionId_PROD}}    
+          AppInsightsName: ${{parameters.AppInsightsName_PROD}}
+          storageAccountName: ${{parameters.storageAccountName_PROD}}   
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}

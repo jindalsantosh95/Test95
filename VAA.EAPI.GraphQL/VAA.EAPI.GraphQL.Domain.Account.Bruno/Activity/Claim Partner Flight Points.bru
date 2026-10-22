@@ -1,0 +1,58 @@
+meta {
+  name: Claim Partner Flight Points
+  type: graphql
+  seq: 7
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation ClaimPartnerFlightPoints {
+    claimPartnerFlightPoints(
+      request: {
+        fcNumber: "{{account_member_number}}"
+        airline: "{{account_airline}}"
+        ticketNumber: "{{account_ticket_number}}"
+        flightNumber: "{{account_flight_number}}"
+        cabinClass: "{{account_cabin_class}}"
+        departureDate: "{{account_departure_date}}"
+        departureFrom: "{{account_departure_from}}"
+        arrivingAt: "{{account_arriving_at}}"
+        seatNumber: "{{account_seat_number}}"
+        pnrNumber: "{{account_pnr}}"
+      }
+    ) {
+      totalVirginPoints
+      totalTierPoints
+      totalBonusPoints
+      segmentDetails {
+        operatingAirlineName
+        operatingAirlineCode
+        dateOfFlight
+        flightNumber
+        originAirportCode
+        destinationAirportCode
+        virginPoints
+        tierPoints
+        bonusPoints
+        isPartialTransaction
+      }
+      errorResponse {
+        message
+        extentions {
+          code
+          exception
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="HotChocolate.AspNetCore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VAA.EAPI.GraphQL.Common\VAA.EAPI.GraphQL.Common.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.GraphQL.Infrastructure\VAA.EAPI.GraphQL.Infrastructure.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <GraphQlBinDir>$(MSBuildProjectDirectory)\..\VAA.EAPI.GraphQL\bin\$(Configuration)\$(TargetFramework)</GraphQlBinDir>
+  </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="Build">
+    <ItemGroup>
+      <PostBuildFiles Include="$(TargetDir)**\*" />
+    </ItemGroup>
+    <MakeDir Directories="$(GraphQlBinDir)" />
+    <Copy SourceFiles="@(PostBuildFiles)"
+          DestinationFiles="@(PostBuildFiles->'$(GraphQlBinDir)\%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" Retries="5" RetryDelayMilliseconds="200" />
+  </Target>
+</Project>

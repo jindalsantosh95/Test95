@@ -1,0 +1,31 @@
+meta {
+  name: searchOffersNextBFF
+  type: graphql
+  seq: 53
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query searchOffersNextBFF($request: FlightOfferNextRequestInput!) {
+    searchOffersNextBFF(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

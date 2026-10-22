@@ -1,0 +1,89 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "DEV"
+    },
+    "FunctionAppName": {
+      "value": "avadeunafndigitalperf"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-D-EUN-DigitalPerf"
+    },
+    "AppServicePlanName": {
+      "value": "avadeunaspdigitalperf"
+    },
+    "AppInsightsName": {
+      "value": "AVADEUNAIDIGITALPERF"
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "KeyVaultUri": {
+      "value": "https://avadeunkvdigiperf.vault.azure.net/"
+    },
+    "vaultName": {
+      "value": "avadeunkvdigiperf"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkvdigiperf.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avadeunstdigitalperf"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "",
+        "InitialProjectName": "",
+        "InitialBudgetCode": "",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for new performance env",
+        "ApplicationUsageIdList": ""
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Assign Loyalty Award
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{customer_base_url}}/customer/loyalty/{{customer_member_number}}/assignaward
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "memberId": "{{customer_member_number}}",
+    "productName": "Top Member"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

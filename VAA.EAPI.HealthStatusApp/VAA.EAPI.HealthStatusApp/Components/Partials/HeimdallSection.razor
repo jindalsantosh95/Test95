@@ -1,0 +1,47 @@
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+
+
+<div class="card-body d-flex flex-column justify-content-center">
+    <div class="d-flex flex-column">
+        <div class="pb-2">
+            <span class="d-block">Latest Test Result: <strong>@Model.LatestHeimdallResult.Message</strong>&nbsp;&nbsp;  At Time: <strong>@Model.LatestHeimdallResult.TimeStamp</strong></span>
+            <span class="d-block">Total Successful Tests: <strong>@Model.TotalSuccessful</strong></span>
+            <span class="d-block">Total Failed Tests: <strong>@Model.TotalFailed</strong></span>
+        </div>
+
+        <div style="width:100%; overflow-x: auto;">
+            <table class="table table-striped uat-table" style="width:100%; table-layout: fixed; margin-bottom:5px;">
+            <thead>
+                <tr>
+                    <th class="col-9 col-sm-10">Exception Message</th>
+                    <th class="col-3 col-sm-2">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Exceptions != null && Model.Exceptions.Any())
+                {
+                    @foreach (var metric in Model.Exceptions)
+                    {
+                        <tr>
+                            <td class="col-9 col-sm-10">@metric.Message</td>
+                            <td class="col-3 col-sm-2">@metric.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="2" class="text-center">No exceptions logged in the last 24 hours</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public AppInsightsMetricsModel Model { get; set; }
+    [Parameter] public string TabName { get; set; }
+}

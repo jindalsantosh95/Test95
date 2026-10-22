@@ -1,0 +1,16 @@
+﻿using Newtonsoft.Json;
+
+namespace VAA.EAPI.LoungeManagement.Clues.Infrastructure.Domain.Entities.LoungeEligibility
+{
+    public class PassengerReservationDetails
+    {
+        [JsonProperty("eticket")]
+        public string Eticket { get; set; }
+
+        [JsonProperty("bookingReference")]
+        public string BookingReference { get; set; }
+
+        [JsonProperty("segments")]
+        public Segment[] Segments { get; set; }
+    }
+}

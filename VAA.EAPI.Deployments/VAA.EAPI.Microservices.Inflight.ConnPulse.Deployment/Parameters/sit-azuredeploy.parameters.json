@@ -1,0 +1,137 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sit",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "SIT"
+    },
+    "AppServicePlanName": {
+      "value": "vatseunaspdigital01"
+    },
+    "functionappName": {
+      "value": "va-ts-eun-ifconnpulse-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-ts-eun-fltops-kv-01"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "Inflight connectivity Pulse Ms",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "SIT",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vatseunifconpulsesa01"
+    },
+    "AppInsightsName": {
+      "value": "va-ts-eun-ifconnpulse-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-Inflight Connectivity Pulse Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This endpoint will provide Inflight Connectivity Pulse information "
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "StarlinkSandboxUrl": {
+      "value": "https://starlink.com/api/public/v2/routers/sandbox/"
+    },
+    "StarlinkAuthenticationUrl": {
+      "value": "https://starlink.com/api/auth/connect/token"
+    },
+    "StarlinkAPIClientId": {
+      "value": "8083b26f-625a-4695-9895-61e0d4c7c861"
+    },
+    "StarlinkClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/StarlinkAPIClientSecret/)"
+    },
+    "CaptivePortalAsyncCheckUrl": {
+      "value": "https://onboard.virginatlantic.com/?debug=TndMnIl8RzDpTBJ"
+    },
+    "CaptivePortalExpectedBackendHeaderValue": {
+      "value": "starlink-portal"
+    },
+    "InflightConnUrl": {
+      "value": "https://Testresources.virginatlantic.com/SIT/digital/InFlightConnectivity/heartbeat"
+    },
+    "InflightConnectivityHealth": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/InflightConnectivityHealth/)"
+    },
+    "GraphQLUrl": {
+      "value": "https://testresources.virginatlantic.com/sit/GraphQL/myaccount/public/heartbeat"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "owner": "Platform Engineering",
+  "scopes": [
+    "VAA.EAPI.Automation/VAA.EAPI.Automation.sln",
+    "VAA.EAPI.Deployments/VAA.EAPI.Deployments.sln",
+    "VAA.EAPI.Facade/VAA.Facade.sln",
+    "VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.sln",
+    "VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Stitch.sln",
+    "VAA.EAPI.Microservices/VAA.EAPI.Microservices.sln",
+    "VAA.EAPI.Microservices/VAA.EAPI.Microservices.CRM.sln",
+    "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Data.sln",
+    "VAA.EAPI.Microservices/VAA.EAPI.Microservices.FlightOperations.sln",
+    "VAA.EAPI.Microservices/VAA.EAPI.Microservices.GroundOperations.sln",
+    "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Loyalty.sln",
+    "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.sln",
+    "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Holidays.sln",
+    "VAA.EAPI.Microservices/VAA.EAPI.Microservices.Utilities.sln",
+    "VAA.EAPI.NDC.Transformation/VAA.EAPI.NDC.Transformation.sln",
+    "VAA.EAPI.Orchastration/VAA.EAPI.Orchestration.sln",
+    "VAA.EAPI.Web/VAA.EAPI.Web.sln"
+  ],
+  "rules": [
+    "solution-projects-resolve",
+    "project-references-resolve",
+    "project-graph-acyclic",
+    "production-does-not-reference-tests",
+    "production-does-not-reference-automation",
+    "runtime-does-not-reference-deployment"
+  ],
+  "referenceExceptions": [
+    {
+      "rule": "production-does-not-reference-tests",
+      "source": "VAA.EAPI.Automation/VAA.EAPI.Automation.Utility.TestRunner.Service/VAA.EAPI.Automation.Utility.TestRunner.Service.csproj",
+      "target": "VAA.EAPI.Automation/VAA.EAPI.Automation.StressTests/VAA.EAPI.Automation.StressTests.csproj",
+      "owner": "Automation Engineering",
+      "rationale": "The TestRunner service deliberately hosts and dispatches the StressTests suite; it is runner infrastructure rather than a production application dependency."
+    }
+  ]
+}

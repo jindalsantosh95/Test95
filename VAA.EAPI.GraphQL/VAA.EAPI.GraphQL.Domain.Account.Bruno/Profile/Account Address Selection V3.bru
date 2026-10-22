@@ -1,0 +1,55 @@
+meta {
+  name: Account Address Selection V3
+  type: graphql
+  seq: 19
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation AccountAddressSelectionV3 {
+    accountAddressSelectionV3(
+      request: {
+        reference: "{{address_lookup_v3_reference}}"
+      }
+    ) {
+      flowId
+      address {
+        addressLine1
+        addressLine2
+        addressLine3
+        city
+        postalCode
+        region
+        countryCode
+        countryName
+        addressVerified
+        valid
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  No additional v3 subscription key is required from this client. GraphQL uses
+  its existing server-side EnrolmentMSOcpKey and OAuth application token for
+  AddressLookupAPIAppId, matching v2. No end-user token, session header,
+  custom context token or extra Functions key is needed.
+
+  The existing GraphQL REST host also discovers this operation as POST
+  /api/v1/accountAddressSelectionV3. Send the normal REST request wrapper:
+  {"request":{"reference":"<fresh Address reference>"}}
+
+  Use your configured REST host URL, not the GraphQL endpoint URL above.
+  Do not automatically retry: cancellation or a lost response does not prove
+  the provider did not process and charge for the selected-address Retrieve.
+}

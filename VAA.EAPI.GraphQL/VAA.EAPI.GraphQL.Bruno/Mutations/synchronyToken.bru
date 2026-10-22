@@ -1,0 +1,31 @@
+meta {
+  name: synchronyToken
+  type: graphql
+  seq: 40
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation synchronyToken($basketId: String) {
+    synchronyToken(basketId: $basketId) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "basketId": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

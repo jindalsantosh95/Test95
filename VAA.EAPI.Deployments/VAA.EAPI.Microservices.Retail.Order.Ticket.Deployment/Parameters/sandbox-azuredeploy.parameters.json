@@ -1,0 +1,172 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sandbox",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "SANDBOX"
+    },
+    "AppServicePlanName": {
+      "value": "avaieunasplorderapis"
+    },
+    "appName": {
+      "value": "Avaieunafnorderticketmicroserv"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-i-eun-ase-001"
+    },
+    "aseName": {
+      "value": "avaieunase001"
+    },
+    "keyVaultName": {
+      "value": "avaieunkv001"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "EAPINDC Order Ticket",
+        "DOMAIN": "NDC DEVELOPER",
+        "ENVIRONMENT": "DEV",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "appinsightname": {
+      "value": "avaieunaiorder"
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server)"
+    },
+    "storageaccountName": {
+      "value": "avaieunstorderticket"
+    },
+    "appinsightkey": {
+      "value": "f0679053-89c4-4c05-9563-9f2f96b6443a"
+    },
+    "appinsight_string": {
+      "value": "InstrumentationKey=f0679053-89c4-4c05-9563-9f2f96b6443a;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Commong-Config-AzureWebJobsSecretStorageType/)"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "KeyVaultUri":{
+      "value":"https://avaieunkv001.vault.azure.net/"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "OrderTicketEventStore"
+    },
+    "Appsetting:OrderTicketVoidEventHandlerTopicName": {
+      "value": "Ticket"
+    },
+    "Appsetting:OrderPaymentServiceBusTopicName": {
+      "value": "Payment"
+    },
+    "Appsetting:OrderTicketVoidEventSubscriptionName": {
+      "value": "VoidTicketSubscriber"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/avaieunordersb001-ServiceBus-ConnectionString/)"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "value": "Ticket"
+    },
+    "Appsetting:RefundWindowInHours": {
+      "value": "24"
+    },
+    "Appsetting:VoidOrderDetailSubscriptionName": {
+      "value": "VoidOrderDetailSubscriber"
+    },
+
+    "DeltaCertificateName": {
+      "value": "NdcDLSoaCertificate"
+    },
+    "ApplicationId": {
+      "value": "ND"
+    },
+    "RoleIndicator": {
+      "value": "RESNDCSALES"
+    },
+    "SecurityId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNORDERTICKETMICROSERV-Config-SecurityId/)"
+    },
+    "TestLab": {
+      "value": "TVTH"
+    },
+    "PoolType": {
+      "value": "STAMPING/VAA/NEW/DIST/CAPABILITY"
+    },
+    "PrinterData": {
+      "value": "14450A"
+    },
+    "AgentCityCode": {
+      "value": "LON"
+    },
+    "DebugOptions": {
+      "value": "Y"
+    },
+    "PnrCommonV6EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:31063/pnrcommon/v6"
+    },
+    "TicketingProcessV3EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:37531/ticketingprocess/v3"
+    },
+    "CreditCardV2EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:33013/creditcard/v2"
+    },
+    "RemarksV3EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:31054/remark/v3"
+    },
+
+    "ResourceGroupSubscriptionId": {
+      "value": "https://avaieunkv001.vault.azure.net/secrets/Common-config-RGSubscription-Id/"
+    },
+    "AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Avaieunafnorderticketmicroserv-Config-Client-ID/)"
+    },
+    "AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "TicketCosmosDBConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/TicketCosmosDBConnectionString/)"
+    }
+  }
+}

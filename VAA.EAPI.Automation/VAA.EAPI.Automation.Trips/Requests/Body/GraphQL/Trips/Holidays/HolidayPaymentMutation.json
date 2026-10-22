@@ -1,0 +1,14 @@
+{
+  "query": "mutation HolidayPaymentMutation($request: HolidayPaymentRequestInput) { holidayPaymentMutation(request: $request) { amountToPay status paymentLink removeLink } }",
+  "variables": {
+    "request": {
+      "tripResourceId": "",
+      "amountToPay": 1,
+      "returnUrl": "https://example.com/payment/success",
+      "expiryUrl": "https://example.com/payment/expired",
+      "payPalClientUrl": "https://www.paypal.com/checkoutnow",
+      "contextPath": "/holiday/payment"
+    }
+  },
+  "operationName": "HolidayPaymentMutation"
+}

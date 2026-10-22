@@ -1,0 +1,41 @@
+meta {
+  name: Save Passport Details (pax 1)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{delta_ssci}}/{{travelparty_id}}/passportdetails
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "firstNIN": "{{pax1_firstnin}}",
+      "lastNIN": "{{pax1_lastnin}}",
+      "passengerNINs": "{{pax1_lastnin}}.{{pax1_firstnin}}",
+      "documentType": "P",
+      "primaryDocumentProvidedFlag": true,
+      "verifiedByDelta": true,
+      "documentFirstName": "{{pax1_firstname}}",
+      "documentLastName": "{{pax1_lastname}}",
+   // "onwardDeptDateMonth": "10", "onwardDeptDateDay": "10", "onwardDeptDateYear": "2030",
+      "documentNationality": "{{passport_country}}",
+      "documentCountryOfResidence": "{{passport_country}}",
+      "documentIssuingCountry": "{{passport_country}}",
+      "documentGender": "M",
+      "documentBirthMonth": "{{passenger_monthdob1}}",
+      "documentBirthDay": "{{passenger_daydob1}}",
+      "documentBirthYear": "{{passenger_yeardob1}}",
+      "documentNumber": "{{passport_number}}",
+      "documentExpirationMonth": "05",
+      "documentExpirationDay": "01",
+      "documentExpirationYear": "2030"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

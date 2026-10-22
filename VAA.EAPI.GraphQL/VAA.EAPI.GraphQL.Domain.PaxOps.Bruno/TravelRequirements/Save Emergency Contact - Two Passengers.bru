@@ -1,0 +1,67 @@
+meta {
+  name: Save Emergency Contact - Two Passengers
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SaveEmergencyContactTravelRequirementsForTwoPassengers {
+    SaveEmergencyContactTravelRequirements(
+      travelRequirementsId: "{{travelRequirementsId}}"
+      applyToAllPassengers: false
+      emergencyContacts: [
+        {
+          passengerId: "{{pax1_Id}}"
+          firstName: "Morgan"
+          lastName: "Primary"
+          phoneCountryCode: "GB"
+          phoneNumber: "7700900001"
+          passengerRefused: false
+        }
+        {
+          passengerId: "{{pax2_Id}}"
+          firstName: "Alex"
+          lastName: "Backup"
+          phoneCountryCode: "US"
+          phoneNumber: "4045550100"
+          passengerRefused: false
+        }
+      ]
+    ) {
+      travelRequirementsId
+      applyEmergencyContactToAllPax
+      passengers {
+        passengerId
+        givenNames
+        surname
+        emergencyContact {
+          passengerId
+          firstName
+          lastName
+          phoneCountryCode
+          phoneNumber
+          passengerRefused
+        }
+      }
+    }
+  }
+}
+
+script:post-response {
+  var travelRequirements = res.body.data.SaveEmergencyContactTravelRequirements;
+  
+  if (travelRequirements?.travelRequirementsId) {
+    bru.setVar("travelRequirementsId", travelRequirements.travelRequirementsId);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

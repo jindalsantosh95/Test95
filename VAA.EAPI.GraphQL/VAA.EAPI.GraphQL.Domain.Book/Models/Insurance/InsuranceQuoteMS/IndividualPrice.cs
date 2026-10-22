@@ -1,0 +1,10 @@
+namespace VAA.EAPI.GraphQL.Domain.Book.Models.Insurance.InsuranceQuoteMS
+{
+    public class IndividualPrice
+    {
+        public double AdminFee { get; set; }
+        public double Price { get; set; }
+        public int Sequence { get; set; }
+    }
+
+}

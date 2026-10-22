@@ -1,0 +1,200 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPCUSTOMERM"
+    },
+    "EnvironmentName": {
+      "value": "UAT"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVASEUNAFNADDRESSLOOKUPMICROSERV"
+    },
+    "AppInsightsName": {
+      "value": "AVASEUNAICUSTOMERMS"
+    },
+    "AppsettingsAppInsightsKey": {
+      "value": "73853322-7317-4092-a5ac-746f8d185ef6"
+    },
+    "AppSettingAzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNADDRESSLOOKUPMICROSERV-Config-StorageAccount/e0aae20612ff46a1870abeb1f45d5461)"
+    },
+    "AppsettingAzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=73853322-7317-4092-a5ac-746f8d185ef6;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/d56a9c5fb73f4df88c282a512ee92d66)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/e946de24aebe4ca1acbb9f17ae253c0c)"
+    },
+    "AppsettingsWEBSITE_CONTENTAZUREFILECONNECTIONSTRING": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNADDRESSLOOKUPMICROSERV-Config-StorageAccount/e0aae20612ff46a1870abeb1f45d5461)"
+    },
+    "AppsettingsWEBSITE_CONTENTSHARE": {
+      "value": "avaseunafnaddresslookup-ds"
+    },
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-Address LookUp Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This API provides ability to Search for Request Information in the Address Lookup"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": true
+    },
+    "OpenApi__ForceHttp": {
+      "value": true
+    },
+    "AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNADDRESSLOOKUPMICROSERV-Config-AzureAd-ClientId/)"
+    },
+    "AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:EventTopicKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNADDRESSLOOKUPMICROSERV-Config-EventTopicKey/7705a1cf43a44c5d8dee7a625fa98ec7)"
+    },
+    "Appsetting:EventTopicType": {
+      "value": "AddressLookupCompletedEvent"
+    },
+    "Appsetting:EventTopicUrl": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNADDRESSLOOKUPMICROSERV-Config-EventTopicUrl/7ce3753123b543e382bc30942821a3a9)"
+    },
+    "Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "Appsetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNADDRESSLOOKUPMICROSERV-Config-MicroserviceDBKey/)"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "AddressLookupEventStore"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNADDRESSLOOKUPMICROSERV-Config-ServiceBusConnectionString/d0336636728b498d8da95ee1978703cb)"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "value": "enrolcustomer"
+    },
+    "Appsetting:WesalEndpoint": {
+      "value": "https://iis8-svcs-acc.ukgtm.vaa.vtg.local/Wesal.asmx"
+    },
+    "Appsetting:GbgFindEndpoint": {
+      "value": "https://api.addressy.com/Capture/Interactive/Find/v1.20/json6.ws?Key={keyValue}&Text={textValue}"
+    },
+    "Appsetting:GbgRetrieveEndpoint": {
+      "value": "https://api.addressy.com/Capture/Interactive/Retrieve/v1.30/json6.ws?Key={keyValue}&Id={IdValue}"
+    },
+    "Appsetting:GbgServiceKeyMap": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNADDRESSLOOKUPMICROSERV-Config-GbgServiceKeyMap/)"
+    },
+    "Appsetting:GbgSearchRecordLimit": {
+      "value": "20"
+    },
+    "AddressLookupV3": {
+      "value": {
+        "MinQueryLength": "3",
+        "ReferenceEncryptionKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNADDRESSLOOKUPMICROSERV-AddressLookupV3-ReferenceEncryptionKey/)",
+        "ReferenceLifetimeSeconds": "300",
+        "SuggestionLimit": "6",
+        "GbgFindEndpoint": "https://api.addressy.com/Capture/Interactive/Find/v1.20/json6.ws",
+        "GbgRetrieveEndpoint": "https://api.addressy.com/Capture/Interactive/Retrieve/v1.30/json6.ws"
+      }
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "Appsetting:WesalAzureEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/wesal"
+    },
+    "Appsetting:WesalOCPSubKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/EAPI-AVASEUNAFNADDRESSLOOKUPMS-config-Ocp-SubscriptionKey/24fc601c418a4e5396e89b849fe52e39)"
+    },
+
+    "vaultName": {
+      "value": "AVASEUNKVEMS"
+    },
+    "storageAccountName": {
+      "value": "avaseunstaddressms"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNADDRESSLOOKUPMICROSERV-Config-AzureAd-ClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNCAMPAIGNMANAGEMENT-Config-AzureAdTenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    "tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Customer API AFN",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+  }

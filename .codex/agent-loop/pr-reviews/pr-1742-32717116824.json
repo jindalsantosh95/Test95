@@ -1,0 +1,126 @@
+{
+  "prNumber": 1742,
+  "branch": "codex/holidays-document-token-diagram-clean",
+  "base": "main",
+  "headSha": "e0adedd2e1b4f280a6f140777268a8afb0aa09e1",
+  "runId": "32717116824",
+  "runUrl": "https://github.com/VAAD1ST/eapi/actions/runs/32717116824",
+  "collectedAtUtc": "2026-08-24T10:33:12.979Z",
+  "approved": false,
+  "reviewDecision": null,
+  "approvals": [],
+  "unresolvedAiThreads": [
+    {
+      "threadId": "PRRT_kwDORKRjBc6bp_8z",
+      "replyToCommentDatabaseId": 3842599822,
+      "path": "VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Trips/Services/HolidayProvider.cs",
+      "line": null,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3842599822",
+      "author": "copilot-pull-request-reviewer",
+      "body": "This method returns null on HTTP 404, but its declared return type is non-nullable (Task<RetrieveDocumentDownloadResponse>). That will either produce nullable warnings (if enabled) or misrepresent the contract to callers (null is a valid outcome for NotFound).",
+      "decision": "valid",
+      "resolutionComment": "Updated HolidayProvider.RetrieveDocument to return Task<RetrieveDocumentDownloadResponse?> within a scoped nullable-annotations region, matching the deliberate null result for downstream 404 responses while preserving the project's existing nullable configuration."
+    },
+    {
+      "threadId": "PRRT_kwDORKRjBc6bp_9O",
+      "replyToCommentDatabaseId": 3842599863,
+      "path": "VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Trips/Interface/IHolidayProvider.cs",
+      "line": null,
+      "url": "https://github.com/VAAD1ST/eapi/pull/1742#discussion_r3842599863",
+      "author": "copilot-pull-request-reviewer",
+      "body": "The interface declares RetrieveDocument as non-nullable, but HolidayProvider.RetrieveDocument returns null when the downstream service responds 404. The interface should reflect the nullable contract so callers can handle the NotFound case explicitly.",
+      "decision": "valid",
+      "resolutionComment": "Updated IHolidayProvider.RetrieveDocument to return Task<RetrieveDocumentDownloadResponse?> within a scoped nullable-annotations region so callers can see and explicitly handle the downstream NotFound contract."
+    }
+  ],
+  "checks": {
+    "combinedStatus": "pending",
+    "checkRuns": [
+      {
+        "name": "dispatch-comment-loops",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32717353776/job/97401324346"
+      },
+      {
+        "name": "verify-docs-agent-loop",
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32717345167/job/97401321905"
+      },
+      {
+        "name": "review",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32717345197/job/97401299941"
+      },
+      {
+        "name": "closed-loop-gate",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32717345175/job/97401298758"
+      },
+      {
+        "name": "high-risk-autolabel",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32717345213/job/97401298586"
+      },
+      {
+        "name": "harness-coverage",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32717345244/job/97401298483"
+      },
+      {
+        "name": "review-team-labels",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/actions/runs/32717342788/job/97401291672"
+      },
+      {
+        "name": "Wiz IaC Scanner",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/97401288447"
+      },
+      {
+        "name": "Wiz Vulnerability Scanner",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/97401288395"
+      },
+      {
+        "name": "Wiz Secret Scanner",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/97401288379"
+      },
+      {
+        "name": "Wiz Data Scanner",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/VAAD1ST/eapi/runs/97401288171"
+      }
+    ]
+  },
+  "resourceUsage": {
+    "workflow": "sequence-goal-pr-review-loop",
+    "model": "gpt-5.6-sol",
+    "maximum": {
+      "inputTokens": 25000000,
+      "outputTokens": 40000,
+      "estimatedUsd": 30.0
+    },
+    "actual": {
+      "totalTokens": 2501902,
+      "inputTokens": 2497556,
+      "cachedInputTokens": 2447231,
+      "outputTokens": 4346,
+      "reasoningOutputTokens": 557,
+      "estimatedUsd": 3.146051
+    },
+    "maximumLabel": "25,000,000 input tokens; 40,000 output tokens; $30.00 USD",
+    "actualLabel": "2,501,902 tokens (2,497,556 input, 2,447,231 cached + 4,346 output, 557 reasoning); $3.146051 USD"
+  }
+}

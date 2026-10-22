@@ -1,0 +1,227 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "FunctionAppName": {
+      "value": "AVADEUNAFNVALIDATIONMICROSERV"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-D-EUN-ENTERPRISEAPI"
+    },
+    "AppServicePlanName": {
+      "value": "AVADEUNASPORDER"
+    },
+    "AppInsightsName": {
+      "value": "AVADEUNAIORDERMGMT"
+    },
+    "APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "0a999bf1-2751-406e-ad91-3447b777a54d"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNVALIDATIONMICROSERV-Config-StorageAccount/)"
+    },
+
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avadeunafnvalidationmicroserv"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+
+    "IPRestriction": {
+      "value": ""
+    },
+    "storageAccountName": {
+      "value": "avadeunstvalidationms"
+    },
+    "redisName": {
+      "value": "avadeunrcvalidation"
+    },
+    "AppSetting:RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNVALIDATIONMICROSERV-Redis-Connectionstring/)"
+    },
+    "AppSetting:SecuritySvcOCPKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNVALIDATIONMICROSERV-Config-SecuritySvcOCPKey/)"
+    },
+    "AppSetting:SecuritySvcEndPoint": {
+      "value": "https://testresources.virginatlantic.com/dev/securitymicroservice/apim/subscription/ndc/"
+    },
+    "AppSetting:OpenApi__Description": {
+      "value": "This API provides ability to Validate Agency Details"
+    },
+    "AppSetting:OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/Agency/Validate"
+    },
+    "AppSetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "AppSetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "AppSetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "AppSetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "AppSetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "AppSetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "AppSetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNVALIDATIONMICROSERV-AzureAdClientId/)"
+    },
+    "AppSetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AppSetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    //Azure B2C settings
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNVALIDATIONMICROSERV-AzureAdClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    "AppSetting:NDCConnectStoredProc": {
+      "value": "EXEC [dbo].[spIDX_APIKEY_VALIDATION_v3-3] @requestAgencyId,@requestAgencyType, @environment, @keyType, @corporateId"
+    },
+    "AppSetting:NDCConnectAgencyOCNStoredProc": {
+      "value": "EXEC [dbo].[spIDX_OCN_ENDPOINT_v1-0] @requestAgencyId, @environment, @AggregatorId"
+    },
+    "AppSetting:NDCConnectDBConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNVALIDATIONMICROSERV-NDCConnectDBConnectionString/)"
+    },
+    "vaultName": {
+      "value": "AVADEUNKVEAPIS"
+    },
+    "storageaccountName2": {
+      "value": "avadeunstpricingrefdata"
+    },
+    "tablename": {
+      "value": "CurrencyPOS"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    //IFG AgentFOP Lookup
+    "IFGAgentFopLookupUsername": {
+      "value": "va932tl@snb.ifg.iata.org"
+    },
+    "IFGAgentFopLookupPassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNVALIDATIONMICROSERV-IFGAgentFopLookupPassword/)"
+    },
+    "IFGAgentFopLookupUrl": {
+      "value": "https://snb.ifg.iata.org/main/v4/agentFopLookup"
+    },
+
+    //Redis cache
+    "AppSetting:AgencySlidingExpirationInDay": {
+      "value": "00:00:30:00"
+    },
+    "AppSetting:AgencyAbsoluteExpirationInDay": {
+      "value": "00:00:30:00"
+    },
+    "AppSetting:SubscriptionCachingSlidingExpirationInDay": {
+      "value": "01:00:00:00"
+    },
+    "AppSetting:SubscriptionCachingAbsoluteExpirationInDay": {
+      "value": "01:00:00:00"
+    },
+    // Ticket authority check
+    "AppSetting:AgentTktAuthorityEndpointGet": {
+      "value": "https://stg-ndc.virginatlantic.com/api/IATA/Get?AgentId={agentid}&AgentType={reqAgentType}&Environment={env}"
+    },
+    "AppSetting:AgentTktAuthorityEndpointUpdate": {
+      "value": "https://stg-ndc.virginatlantic.com/api/IATA/Update?AgentId={agentid}&AgentType={reqAgentType}&Environment={env}"
+    },
+    "AppSetting:AgentTktAuthorityEnv": {
+      "value": "NONPROD"
+    },
+    "AppSetting:AgentTktAuthorityClientId": {
+      "value": "A23EBF74F9DFA41F4B1CFD5D9718C77A5F583B28AB422A01EA8"
+    },
+    "AppSetting:AgentTktAuthoritySecretKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNVALIDATIONMICROSERV-AgentTktAuthoritySecretKey/)"
+    },
+    "AppSetting:AgentTktAuthorityCacheExpiryDuration": {
+      "value": "00:23:59:00"
+    },
+    "SecurityMSHeartBeatUrl": {
+      "value": "https://testresources.virginatlantic.com/dev/securitymicroservice/heartbeat"
+    },
+
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "Order API",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Order API AFN",
+        "ApplicationUsageIdList": "AVADEUNAFNVALIDATIONMICROSERV"
+      }
+    }
+
+  }
+}

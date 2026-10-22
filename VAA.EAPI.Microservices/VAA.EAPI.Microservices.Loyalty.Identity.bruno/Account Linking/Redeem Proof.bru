@@ -1,0 +1,31 @@
+meta {
+  name: Redeem Proof
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{identity_base_url}}/account-linking-proof/redeem
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "proof": "{{account_linking_proof}}",
+    "transactionId": "{{account_linking_transaction_id}}",
+    "clientId": "{{account_linking_client_id}}",
+    "resource": "{{account_linking_resource}}"
+  }
+}
+
+docs {
+  Internal EAPI diagnostic only. Authenticate with Loyalty.Identity.AccountLinkingProof.Redeem.
+  External callers use the GraphQL operation, not this microservice URL.
+  The first valid redemption returns flyingClubAccountNumber and consentSubject.
+  A repeated redemption fails, including an identical retry. Restart linking after a lost response.
+}

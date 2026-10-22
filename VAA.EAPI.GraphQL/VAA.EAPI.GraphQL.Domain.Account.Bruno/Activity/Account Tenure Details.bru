@@ -1,0 +1,32 @@
+meta {
+  name: Account Tenure Details
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query AccountTenureDetails {
+    accountTenureDetails {
+      memberCustomAttributesDocuments {
+        activeYearCounterForTenureBenefits
+        totalActiveYear
+        isAnActiveYear
+        memberLastFiveVSActivityYear {
+          activityYear
+          benefitGiven
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

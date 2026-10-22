@@ -1,0 +1,41 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  environment: ''  
+  APIMServiceConnection: ''  
+  APIMSubscriptionId: ''  
+  APIMResourceGroupName: ''  
+  APIMName: '' 
+  GroupName: ''  
+
+stages:
+
+  - stage: 'APIM_Add_Group_User'
+    displayName: 'APIM Add Group User' 
+    dependsOn: publishArtifacts     
+
+    jobs: 
+    - deployment: '${{parameters.environment}}'     
+      pool:
+        name: ${{parameters.agentPool}} 
+        vmImage: ${{parameters.agentSpecification}}  
+
+      environment: ${{parameters.environment}}  
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - download: current
+              artifact: drop           
+            
+            # Task to create the Function App      
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'APIM Add Group User'
+              inputs:
+                azureResourceManagerConnection: ${{parameters.APIMServiceConnection}}
+                subscriptionid: ${{parameters.APIMSubscriptionId}}
+                resourceGroupName:  ${{parameters.APIMResourceGroupName}}
+                location:  'North Europe'
+                csmFile: $(Pipeline.workspace)/drop/templates/apim_create_group.json
+                deploymentMode: 'Incremental'
+                overrideParameters: -APIMName ${{parameters.APIMName}} -GroupName ${{parameters.GroupName}} -UserName ${{parameters.UserName}}

@@ -1,0 +1,24 @@
+info:
+  name: RetrieveSSR
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: "{{delta_ssr}}{{reservationResourceId}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: transactionid
+      value: "{{$randomUUID}}"
+    - name: channelId
+      value: MyTrips
+    - name: x-air4_mytrips_test
+      value: "{{appname_test}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

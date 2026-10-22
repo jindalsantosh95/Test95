@@ -1,0 +1,56 @@
+###Request
+GET https://Testresources.virginatlantic.com/dev/orderdata/orders/VS932TYLCEJ26-ARC/ARC HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+
+{
+	"bookingReference": {
+		"rloc": "TYLCEJ",
+		"rlocCreateDate": "28Apr26",
+		"rlocCreateDateTime": "06:18:00",
+		"externalRecordLocator": "CIOXZ5",
+		"externalSystem": "1S"
+	},
+	"arcTransactionHistory": [
+		{
+			"passengerTicketDetails": [
+				{
+					"amount": {
+						"monetaryAmount": "1051.60"
+					},
+					"accountableDocumentRefs": [
+						{
+							"documentNumber": "9322520240373",
+							"customerRefId": "ADULT_1"
+						}
+					],
+					"version": 1,
+					"type": "OrderCreate"
+				},
+				{
+					"amount": {
+						"monetaryAmount": "71.00"
+					},
+					"accountableDocumentRefs": [
+						{
+							"documentNumber": "9322520240374",
+							"customerRefId": "ADULT_1"
+						}
+					],
+					"version": 2,
+					"type": "AddCollect"
+				}
+			],
+			"customerId": "ADULT_1"
+		}
+	],
+	"id": "VS932TYLCEJ26-ARC",
+	"partitionKey": "VS932TYLCEJ26-ARC"
+}

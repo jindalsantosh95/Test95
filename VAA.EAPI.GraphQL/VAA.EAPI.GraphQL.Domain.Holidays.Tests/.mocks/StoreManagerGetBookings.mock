@@ -1,0 +1,21 @@
+###Request
+GET https://Testresources.virginatlantic.com/dev/storelocator/stores/store-1/bookings?date=2026-07-01&status=BOOKED&q=ABC123 HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+[
+  {
+    "id": "booking-1",
+    "storeId": "store-1",
+    "storeSlotId": "slot-1",
+    "customerRef": "ABC123",
+    "status": "BOOKED",
+    "windowStartAt": "2026-07-01T09:00:00Z",
+    "windowEndAt": "2026-07-01T09:30:00Z",
+    "windowCapacity": 2,
+    "createdAt": "2026-06-01T10:00:00Z",
+    "updatedAt": "2026-06-01T10:00:00Z"
+  }
+]

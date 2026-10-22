@@ -1,0 +1,270 @@
+query retrieveBasket($basketId: String) {
+  retrieveBasket(basketId: $basketId) {
+    basketId
+    people {
+      id
+      firstName
+      lastName
+      dateOfBirth
+      gender
+      profilePassenger
+      validation
+      type
+      membershipDetails {
+        fqtProgramme
+        fqtNumber
+        fqtValidityStatus
+        validation
+      }
+    }
+    offerIds
+    flightsearchRequest {
+      searchOriginDestinations {
+        origin
+        destination
+        departureDate
+      }
+    }
+    contactDetails {
+      emailAddress
+      peopleId
+      phoneNumber
+      alternativePhoneNumber
+      acceptPost
+      acceptTelephone
+      acceptEmail
+      acceptTextMessage
+      validation
+      countryCode
+      fcAutoMatchStamping
+    }
+    termsAndConditions {
+      accepted
+      validation
+    }
+    customerProfile {
+      firstName
+      lastName
+      membershipDetails {
+        fqtProgramme
+        fqtNumber
+        fqtTierCode
+        fqtPoints
+      }
+    }
+    earnPoints {
+      earnTierPoints
+      earnVirginPoints
+      earnGroupVirginPoints
+    }
+    isInsuranceAdded
+    pointOfSale {
+      countryCode
+      cityCode
+    }
+    fcAutoMatched
+    isCoBrandEligible
+    coBrandStatus
+    validation
+    summary {     
+      summaryLink
+      departureDate
+      isAwardSearch
+      flightPrice
+      insurancePrice
+      membershipPoints
+      hasSufficientPoints
+      voucherPoints
+      pointsToPay
+      voucherApplied
+      voucherRedemptionSelection {
+        maxVouchersToUse
+        selectedVoucherIds
+        selectedOptionId
+      }
+      voucherDetails {
+        redemptionOptions {
+          optionId
+          optionName
+          redemptionType
+          appliedVouchers { voucherId pointsUsed }
+          coveredPassengers
+          pointsToPay
+          totalPointsUsed
+          cashToPay
+        }
+        bestOption { optionId optionName redemptionType selectionReason }
+        availableVouchers { voucherId name type balancePoints expiryDate }
+      }
+      selectedPayWithPointsOption {
+        amount
+        currencyCode
+        loyaltyPoints
+      }
+      inboundFlights {
+        airlineName
+        flightNumber
+        airline
+        departing {
+          iata
+          name
+        }
+        arriving {
+          iata
+          name
+        }
+        departingAt
+        arrivingAt
+        cabinClass
+        sectors {
+          sectorId
+          airlineName
+          flightNumber
+          airline
+          operatingAirline
+          operatingAirlineName
+          leg {
+            airline
+            airlineName
+            operatingAirline
+            operatingAirlineName
+          }
+          departing {
+            iata
+            name
+          }
+          arriving {
+            iata
+            name
+          }
+          departingAt
+          arrivingAt
+          cabinClass
+        }
+      }
+      outboundFlights {
+        airlineName
+        flightNumber
+        airline
+        departing {
+          iata
+          name
+        }
+        arriving {
+          iata
+          name
+        }
+        departingAt
+        arrivingAt
+        cabinClass
+        sectors {
+          sectorId
+          airlineName
+          flightNumber
+          airline
+          operatingAirline
+          operatingAirlineName
+          leg {
+            airline
+            airlineName
+            operatingAirline
+            operatingAirlineName
+          }
+          departing {
+            iata
+            name
+          }
+          arriving {
+            iata
+            name
+          }
+          departingAt
+          arrivingAt
+          cabinClass
+        }
+      }
+        slices {
+        airlineName
+        flightNumber
+        airline
+        departing {
+          iata
+          name
+        }
+        arriving {
+          iata
+          name
+        }
+        departingAt
+        arrivingAt
+        cabinClass
+        sectors {
+          sectorId
+          airlineName
+          flightNumber
+          airline
+          operatingAirline
+          operatingAirlineName
+          leg {
+            airline
+            airlineName
+            operatingAirline
+            operatingAirlineName
+          }
+          departing {
+            iata
+            name
+          }
+          arriving {
+            iata
+            name
+          }
+          departingAt
+          arrivingAt
+          cabinClass
+        }
+      }
+      departureDate
+      returnDate
+      bookingType
+      minDeposit
+      totalPriceWithoutDiscount
+      totalPrice
+      totalSeatPrice
+      priceCurrency
+      pricePerPerson
+      paymentAmount
+      termsAndConditions
+      includes {
+        hotel
+        villa
+        flight
+        car
+        transfer
+        extras
+        disneyExtras
+        vRoom
+        additional
+      }
+      partyComposition {
+        adults
+        children
+        teens
+        infants
+        total
+      }
+    }
+    flightPassengerSeatMap {
+      sectorId
+      seatOfferId
+      passengerId
+      seatNumber
+      pos
+      price {
+        amount
+        currency
+      }
+      linkedInfantId
+    }
+  }
+}

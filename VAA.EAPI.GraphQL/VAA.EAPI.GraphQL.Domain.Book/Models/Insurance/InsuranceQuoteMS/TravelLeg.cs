@@ -1,0 +1,12 @@
+﻿namespace VAA.EAPI.GraphQL.Domain.Book.Models.Insurance.InsuranceQuoteMS
+{
+    public class TravelLeg
+    {
+        public string ClassOfService { get; set; }
+        public Destination Destination { get; set; }
+        public string FareClass { get; set; }
+        public Origin Origin { get; set; }
+        public string RouteNumber { get; set; }
+        public int Sequence { get; set; }
+    }
+}

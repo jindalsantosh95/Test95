@@ -1,0 +1,83 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "FunctionAppName": {
+      "value": "AVADEUNAFNHTTPMOCKER"
+    },
+    "EnvironmentName": {
+      "value": "DEV"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-D-EUN-ENTERPRISEAPI"
+    },
+    "AppServicePlanName": {
+      "value": "AVADEUNASPEAPI"
+    },
+    "workspacename": {
+      "value": "avadeunlawsms"
+    },
+    "AppInsightsName": {
+      "value": "AVADEUNAIHTTPMOCKER"
+    },
+    "storageAccountName": {
+      "value": "avadeunsthttpmockerms"
+    },
+    "vaultName": {
+      "value": "AVADEUNKVEAPIS"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "resourceurl": {
+      "value": "Cache:get:https://Testresources.virginatlantic.com/DEV"
+    },
+    "resourceurlPost": {
+      "value": "Cache:post:https://Testresources.virginatlantic.com/DEV"
+    },
+
+    // Azure Function Settings
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSetting:AzureWebJobsStorage": {
+      "value": ""
+    },
+
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+
+
+    // Http HttpMocker settings
+    "HttpMocker.MockStorageService.Source": {
+      "value": "AzureStorage"
+    },
+
+    "HttpMocker.AzureBlobContainerService.Uri": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/HttpMocker-AzureBlobContainerService-Uri/)"
+    },
+
+    "HttpMocker.AzureBlobContainerService.Container": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/HttpMocker-AzureBlobContainerService-Container/)"
+    },
+
+    "HttpMocker.AzureBlobContainerService.Sas": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/HttpMocker-AzureBlobContainerService-Sas/)"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Http mocking service For Enterprise Microservices",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

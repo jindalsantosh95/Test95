@@ -1,0 +1,113 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements/SaveEmergencyContact HTTP/1.1
+
+$[?(@.emergencyContacts[1].passengerId == '02.01|other-resource-id' && @.emergencyContacts[1].firstName == 'Alex')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+  "requirementsId": "requirements-id",
+  "reference": {
+    "pnrLocator": "CNMLQN",
+    "createdDate": "2026-05-31"
+  },
+  "slices": [
+    {
+      "sliceId": "slice-1",
+      "scheduledDepartureLocalDateTime": "2026-06-10T08:20:00",
+      "scheduledDepartureUtcDateTime": "2026-06-10T07:20:00",
+      "scheduledArrivalLocalDateTime": "2026-06-10T11:30:00",
+      "scheduledArrivalUtcDateTime": "2026-06-10T15:30:00",
+      "segments": []
+    },
+    {
+      "sliceId": "slice-2",
+      "scheduledDepartureLocalDateTime": "2026-06-15T08:15:00",
+      "scheduledDepartureUtcDateTime": "2026-06-15T12:15:00",
+      "scheduledArrivalLocalDateTime": "2026-06-15T20:10:00",
+      "scheduledArrivalUtcDateTime": "2026-06-15T19:10:00",
+      "segments": []
+    }
+  ],
+  "passengers": [
+    {
+      "passengerId": "01.01|resource-id",
+      "givenNames": "TRAVEL",
+      "surname": "TEST",
+      "documents": [],
+      "emergencyContact": {
+        "passengerId": "01.01|resource-id",
+        "firstName": "Morgan",
+        "lastName": "Primary",
+        "phoneCountryCode": "GB",
+        "phoneNumber": "7700900001",
+        "passengerRefused": false
+      },
+      "sliceRequirements": [
+        {
+          "sliceId": "slice-1",
+          "passportProvided": true,
+          "passportVerified": true,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "REQUIRED",
+          "passportErrors": [],
+          "secondaryDocumentStatus": "REQUIRED",
+          "overall": "TO_COMPLETE",
+          "checkinEligible": false
+        },
+        {
+          "sliceId": "slice-2",
+          "passportProvided": true,
+          "passportVerified": true,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "REQUIRED",
+          "passportErrors": [],
+          "secondaryDocumentStatus": "REQUIRED",
+          "overall": "TO_COMPLETE",
+          "checkinEligible": false
+        }
+      ]
+    },
+    {
+      "passengerId": "02.01|other-resource-id",
+      "givenNames": "OTHER",
+      "surname": "TEST",
+      "documents": [],
+      "emergencyContact": {
+        "passengerId": "02.01|other-resource-id",
+        "firstName": "Alex",
+        "lastName": "Backup",
+        "phoneCountryCode": "US",
+        "phoneNumber": "4045550100",
+        "passengerRefused": false
+      },
+      "sliceRequirements": [
+        {
+          "sliceId": "slice-1",
+          "passportProvided": true,
+          "passportVerified": true,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "REQUIRED",
+          "passportErrors": [],
+          "secondaryDocumentStatus": "REQUIRED",
+          "overall": "TO_COMPLETE",
+          "checkinEligible": false
+        },
+        {
+          "sliceId": "slice-2",
+          "passportProvided": true,
+          "passportVerified": true,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "REQUIRED",
+          "passportErrors": [],
+          "secondaryDocumentStatus": "REQUIRED",
+          "overall": "TO_COMPLETE",
+          "checkinEligible": false
+        }
+      ]
+    }
+  ]
+}

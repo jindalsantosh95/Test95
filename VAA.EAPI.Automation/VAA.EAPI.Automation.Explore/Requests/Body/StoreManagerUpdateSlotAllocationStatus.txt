@@ -1,0 +1,24 @@
+mutation StoreManagerUpdateSlotAllocationStatus($storeId: String!, $slotId: String!, $allocationId: String!, $request: StoreManagerSlotAllocationStatusUpdateRequestInput!) {
+  storeManagerUpdateSlotAllocationStatus(storeId: $storeId, slotId: $slotId, allocationId: $allocationId, request: $request) {
+    id
+    windowId
+    slotId
+    storeId
+    startAt
+    endAt
+    capacity
+    bookedCount
+    remainingCapacity
+    allocations {
+      id
+      windowId
+      slotId
+      storeId
+      allocationIndex
+      status
+      reason
+      bookingId
+      customerRef
+    }
+  }
+}

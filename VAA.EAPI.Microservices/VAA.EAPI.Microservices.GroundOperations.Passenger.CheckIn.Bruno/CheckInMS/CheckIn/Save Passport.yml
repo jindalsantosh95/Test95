@@ -1,0 +1,72 @@
+info:
+  name: Save Passport
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{checkinms}}/CheckIn/SavePassport"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: "{\r
+
+      \    \"travelPartyId\": \"{{travelPartyId}}\",\r
+
+      \    \"requirementsId\": \"{{requirementsId}}\",\r
+
+      \    \"document\": {\r
+
+      \        \"documentType\": \"PASSPORT\",\r
+
+      \        \"givenNames\": \"{{pax1_givennames}}\",\r
+
+      \        \"surname\": \"{{pax1_surname}}\",\r
+
+      \        \"dateOfBirth\": \"1984-04-25\",\r
+
+      \        \"gender\": {\"code\": \"X\"},\r
+
+      \        \"documentNumber\": \"159745178\",\r
+
+      \        \"expirationDate\": \"2029-05-01\",\r
+
+      \        \"issuingCountry\": {\"code\": \"GBR\"},\r
+
+      \        \"nationality\": {\"code\": \"GBR\"},\r
+
+      \        \"countryOfResidence\": {\"code\": \"GBR\"}\r
+
+      \    },\r
+
+      \    \"passengerId\": \"{{pax1_id}}\",\r
+
+      \    \"isScanned\": false\r
+
+      }"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: "var json = res.getBody();\r
+
+        \r
+
+        bru.setVar('checkInid', json.checkInid);\r
+
+        console.log(\"Num pax: \" + json.passengers.length);\r
+
+        bru.setVar(\"pax1_id\", json.passengers[0].passengerId);\r
+
+        bru.setVar(\"pax1_givennames\", json.passengers[0].givenNames);\r
+
+        bru.setVar(\"pax1_surname\", json.passengers[0].surname);"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

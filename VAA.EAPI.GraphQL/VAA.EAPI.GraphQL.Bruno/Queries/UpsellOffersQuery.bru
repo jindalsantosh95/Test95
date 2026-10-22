@@ -1,0 +1,31 @@
+meta {
+  name: UpsellOffersQuery
+  type: graphql
+  seq: 63
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query UpsellOffersQuery($tripReservationID: String) {
+    UpsellOffersQuery(tripReservationID: $tripReservationID) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "tripReservationID": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

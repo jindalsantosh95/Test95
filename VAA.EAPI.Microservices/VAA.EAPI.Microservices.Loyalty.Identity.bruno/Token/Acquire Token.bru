@@ -1,0 +1,33 @@
+meta {
+  name: Acquire Token
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{identity_base_url}}/token
+  body: none
+  auth: inherit
+}
+
+headers {
+  Pnr: {{pnr}}
+  FirstName: {{identity_first_name}}
+  LastName: {{identity_last_name}}
+  TicketRef: {{ticket_ref}}
+  Type: {{token_type}}
+}
+
+script:post-response {
+  var body = res.getBody();
+  var token = body && body.value ? body.value : body;
+  
+  if (typeof token === "string" && token.length > 0) {
+    bru.setVar("auth_token", token);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,559 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "type": "secureObject",
+      "defaultValue": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "",
+        "Site": "datadoghq.com",
+        "Environment": "",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "type": "string"
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "functionappName": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "aseRg": {
+      "type": "string"
+    },
+    "aseName": {
+      "type": "string"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "object"
+    },
+    "WEBSITE_DNS_SERVER": {
+      "type": "string"
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "type": "string"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "type": "string"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "type": "string"
+    },
+    "OpenApi__Scope": {
+      "type": "string"
+    },
+    "OpenApi__TokenUrl": {
+      "type": "string"
+    },
+    "OpenApi__DocTitle": {
+      "type": "string"
+    },
+    "OpenApi__Description": {
+      "type": "string"
+    },
+    "OpenApi__DocVersion": {
+      "type": "string"
+    },
+    "OpenApi__Version": {
+      "type": "string"
+    },
+    "OpenApi__ForceHttps": {
+      "type": "bool"
+    },
+    "OpenApi__ForceHttp": {
+      "type": "bool"
+    },
+    "storageaccountName": {
+      "type": "string"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "type": "string"
+    },
+    "WORKSPACE_NAME": {
+      "type": "string"
+    },
+    "workspaceResourceId": {
+      "type": "string"
+    },
+    "KeyVaultUri": {
+      "type": "string"
+    },
+    "SlotName": {
+      "type": "string"
+    },
+    //Wallet ms appsettings
+    "Appsetting:AAD:TenantId": {
+      "type": "string"
+    },
+    "Appsetting:AAD:Authority": {
+      "type": "string"
+    },
+    "Appsetting:EapiMsClientID": {
+      "type": "string"
+    },
+    "Appsetting:EapiMSSecret": {
+      "type": "string"
+    },
+    "Appsetting:PassTypeIdentifier": {
+      "type": "string"
+    },
+    "Appsetting:TeamIdentifier": {
+      "type": "string"
+    },
+    "Appsetting:PassbookCertificate": {
+      "type": "string"
+    },
+    "AppSetting:APNSPushCertificate": {
+      "type": "string"
+    },
+    "Appsetting:AppleWalletCertificate": {
+      "type": "string"
+    },
+    "Appsetting:WalletBlobUrl": {
+      "type": "string"
+    },
+    "Appsetting:Red_Background_RGB": {
+      "type": "string"
+    },
+    "Appsetting:Gold_Background_RGB": {
+      "type": "string"
+    },
+    "Appsetting:Silver_Background_RGB": {
+      "type": "string"
+    },
+    "Appsetting:WalletDBConnectionString": {
+      "type": "string"
+    },
+    "Appsetting:RegisterPassTable": {
+      "type": "string"
+    },
+    "Appsetting:PushPassTable": {
+      "type": "string"
+    },
+    "Appsetting:WalletNotificationResponseUrl": {
+      "type": "string"
+    },
+    "Appsetting:RecordCount": {
+      "type": "string"
+    },
+    "Appsetting:ResponsePollingCount": {
+      "type": "string"
+    },
+    "Appsetting:ResponseDelayTimeInMS": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "type": "string"
+    },
+    "Appsetting:WalletGeneratePassUrl": {
+      "type": "string"
+    },
+    "AppSetting:WalletFacadeAppId": {
+      "type": "string"
+    },
+    "AppSetting:CustomerMsUrl": {
+      "type": "string"
+    },
+    "AppSetting:CustomerAppId": {
+      "type": "string"
+    },
+    "AppSetting:CustomerTransUrl": {
+      "type": "string"
+    },
+    "AppSetting:CustomerTransAppId": {
+      "type": "string"
+    },
+    "AppSetting:EapiOcpSubId": {
+      "type": "string"
+    },
+    "AppSetting:PushNotificationKeyId": {
+      "type": "string"
+    },
+    "AppSetting:IsDevelopmentServer": {
+      "type": "bool"
+    },
+    "AppSetting:AppleApiDevEndpoint": {
+      "type": "string"
+    },
+    "AppSetting:AppleApiProdEndpoint": {
+      "type": "string"
+    },
+    "AppSetting:AppleApiDevPort": {
+      "type": "string"
+    },
+    "AppSetting:AppleApiProdPort": {
+      "type": "string"
+    },
+    "AppSetting:ServiceBusConnectionString": {
+      "type": "string"
+    },
+    "AppSetting:AirshipFlightEndpoint": {
+      "type": "string"
+    },
+    "AppSetting:AirshipWalletLinkEndpoint": {
+      "type": "string"
+    },
+    "AppSetting:AirShipWalletAdaptivePassUrlPrefix": {
+      "type": "string"
+    },
+    "AppSetting:AirshipTokenValue": {
+      "type": "string"
+    },
+    "AppSetting:RedisConnectionString": {
+      "type": "string"
+    },
+    "AppSetting:BoardingPassSlidingExpiryHours": {
+      "type": "string"
+    },
+    "AppSetting:SecureProgramImageUrl": {
+      "type": "string"
+    },
+    "AppSetting:SkyPriorityImgUrl": {
+      "type": "string"
+    },
+    "AppSetting:TSAPreImgUrl": {
+      "type": "string"
+    },
+    "AppSetting:AirshipIosPremiumTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipIosUpperTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipIosDLTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipIosOATemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipAndroidPremiumTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipAndroidUpperTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipAndroidDLTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipAndroidOATemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipIosEconomyTemplate": {
+      "type": "string"
+    },
+    "AppSetting:AirshipAndroidEconomyTemplate": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-09-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('Tags')]",
+      "sku": {
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "allowBlobPublicAccess": false
+      }
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2020-02-02",
+      "name": "[parameters('AppInsightsName')]",
+      "location": "[parameters('location')]",
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web",
+        "WorkspaceResourceId": "[parameters('workspaceResourceId')]"
+      },
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('functionappName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "kind": "functionapp",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "serverFarmId": "[resourceId(parameters('aseRg'), 'Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "hostingEnvironmentProfile": "[resourceId(parameters('aseRg'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/slots",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/',parameters('SlotName'))]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+      ],
+      "tags": "[parameters('tags')]",
+      "kind": "functionapp",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "serverFarmId": "[resourceId(parameters('aseRg'), 'Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/slots/config",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/',parameters('SlotName'),'/web')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$[parameters('FunctionAppName')]__[parameters('SlotName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": false,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": false
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "FtpsOnly",
+        "reservedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/slots/config",
+      "apiVersion": "2021-03-01",
+      "name": "[concat(parameters('FunctionAppName'), '/', parameters('slotName'), '/appsettings')]",
+      "kind": "functionapp,workflowapp",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName'))]"
+      ],
+      "properties": {
+        "FUNCTIONS_EXTENSION_VERSION": "~4",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+        "WEBSITE_CONTENTOVERVNET": "1",
+        "WEBSITE_VNET_ROUTE_ALL": "1",
+        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', parameters('AppInsightsName')), '2014-04-01').InstrumentationKey]",
+        "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(resourceId('Microsoft.Insights/components', parameters('AppInsightsName')), '2020-02-02').ConnectionString]",
+        "LoggingProvider": "[parameters('DataDog').LoggingProvider]",
+        "DatadogLogsEndpoint": "[parameters('DataDog').LogsEndpoint]",
+        "DatadogApiKey": "[parameters('DataDog').ApiKey]",
+        "DD_API_KEY": "[parameters('DataDog').ApiKey]",
+        "DD_SITE": "[parameters('DataDog').Site]",
+        "DD_SERVICE": "[parameters('FunctionAppName')]",
+        "DD_ENV": "[parameters('DataDog').Environment]",
+        "DD_VERSION": "[parameters('DataDog').Version]",
+        "DD_TRACE_ENABLED": "[string(parameters('DataDog').TraceEnabled)]",
+        "DD_RUNTIME_METRICS_ENABLED": "[string(parameters('DataDog').RuntimeMetricsEnabled)]",
+        "DatadogService": "[parameters('FunctionAppName')]",
+        "environment": "[parameters('DataDog').Environment]",
+        "DatadogSource": "[parameters('DataDog').Source]",
+        "DatadogVersion": "[parameters('DataDog').Version]",
+        "DatadogTags": "[concat(parameters('DataDog').Tags, if(empty(parameters('DataDog').Tags), '', ','), 'cloud_provider:azure,subscription_id:', subscription().subscriptionId, ',resource_group:', resourceGroup().name, ',name:', parameters('FunctionAppName'), ',type:microsoft.web/sites,resource_id:', resourceId('Microsoft.Web/sites', parameters('FunctionAppName')))]",
+        "DatadogBaggageAllowList": "[parameters('DataDog').BaggageAllowList]",
+        "DatadogMinimumLogLevel": "[parameters('DataDog').MinimumLogLevel]",
+        "DatadogQueueCapacity": "[string(parameters('DataDog').QueueCapacity)]",
+        "DatadogBatchSize": "[string(parameters('DataDog').BatchSize)]",
+        "DatadogFlushIntervalMilliseconds": "[string(parameters('DataDog').FlushIntervalMilliseconds)]",
+        "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]",
+        "WEBSITE_DNS_SERVER": "[parameters('WEBSITE_DNS_SERVER')]",
+        "WEBSITE_DNS_ALT_SERVER": "[parameters('WEBSITE_DNS_ALT_SERVER')]",
+        "WEBSITE_RUN_FROM_PACKAGE": "[parameters('WEBSITE_RUN_FROM_PACKAGE')]",
+        "WEBSITE_LOAD_USER_PROFILE": "[parameters('WEBSITE_LOAD_USER_PROFILE')]",
+        "AzureWebJobsSecretStorageType": "Files",
+        "OpenApi__Scope": "[parameters('OpenApi__Scope')]",
+        "OpenApi__TokenUrl": "[parameters('OpenApi__TokenUrl')]",
+        "OpenApi__DocTitle": "[parameters('OpenApi__DocTitle')]",
+        "OpenApi__Description": "[parameters('OpenApi__Description')]",
+        "OpenApi__DocVersion": "[parameters('OpenApi__DocVersion')]",
+        "OpenApi__Version": "[parameters('OpenApi__Version')]",
+        "OpenApi__ForceHttps": "[parameters('OpenApi__ForceHttps')]",
+        "OpenApi__ForceHttp": "[parameters('OpenApi__ForceHttp')]",
+        "KeyVaultUri": "[parameters('KeyVaultUri')]",
+        //Wallet Ms appsettings
+        "AAD:TenantId": "[parameters('Appsetting:AAD:TenantId')]",
+        "AAD:Authority": "[parameters('Appsetting:AAD:Authority')]",
+        "EapiMsClientID": "[parameters('Appsetting:EapiMsClientID')]",
+        "EapiMSSecret": "[parameters('Appsetting:EapiMSSecret')]",
+        "PassTypeIdentifier": "[parameters('Appsetting:PassTypeIdentifier')]",
+        "TeamIdentifier": "[parameters('Appsetting:TeamIdentifier')]",
+        "PassbookCertificate": "[parameters('Appsetting:PassbookCertificate')]",
+        "APNSPushCertificate": "[parameters('AppSetting:APNSPushCertificate')]",
+        "AppleWalletCertificate": "[parameters('Appsetting:AppleWalletCertificate')]",
+        "WalletBlobUrl": "[parameters('Appsetting:WalletBlobUrl')]",
+        "Red_Background_RGB": "[parameters('Appsetting:Red_Background_RGB')]",
+        "Gold_Background_RGB": "[parameters('Appsetting:Gold_Background_RGB')]",
+        "Silver_Background_RGB": "[parameters('Appsetting:Silver_Background_RGB')]",
+        "WalletDBConnectionString": "[parameters('Appsetting:WalletDBConnectionString')]",
+        "RegisterPassTable": "[parameters('Appsetting:RegisterPassTable')]",
+        "PushPassTable": "[parameters('Appsetting:PushPassTable')]",
+        "WalletNotificationResponseUrl": "[parameters('Appsetting:WalletNotificationResponseUrl')]",
+        "RecordCount": "[parameters('Appsetting:RecordCount')]",
+        "ResponsePollingCount": "[parameters('Appsetting:ResponsePollingCount')]",
+        "ResponseDelayTimeInMS": "[parameters('Appsetting:ResponseDelayTimeInMS')]",
+        "MicroServiceDBKey": "[parameters('Appsetting:MicroServiceDBKey')]",
+        "MicroServiceEventStoreTableName": "[parameters('Appsetting:MicroServiceEventStoreTableName')]",
+        "MicroServiceResponseTableName": "[parameters('Appsetting:MicroServiceResponseTableName')]",
+        "WalletGeneratePassUrl": "[parameters('Appsetting:WalletGeneratePassUrl')]",
+        "WalletFacadeAppId": "[parameters('Appsetting:WalletFacadeAppId')]",
+        "CustomerMsUrl": "[parameters('Appsetting:CustomerMsUrl')]",
+        "CustomerAppId": "[parameters('Appsetting:CustomerAppId')]",
+        "CustomerTransUrl": "[parameters('Appsetting:CustomerTransUrl')]",
+        "CustomerTransAppId": "[parameters('Appsetting:CustomerTransAppId')]",
+        "EapiOcpSubId": "[parameters('Appsetting:EapiOcpSubId')]",
+        "PushNotificationKeyId": "[parameters('Appsetting:PushNotificationKeyId')]",
+        "IsDevelopmentServer": "[parameters('Appsetting:IsDevelopmentServer')]",
+        "AppleApiDevEndpoint": "[parameters('Appsetting:AppleApiDevEndpoint')]",
+        "AppleApiProdEndpoint": "[parameters('Appsetting:AppleApiProdEndpoint')]",
+        "AppleApiDevPort": "[parameters('Appsetting:AppleApiDevPort')]",
+        "AppleApiProdPort": "[parameters('Appsetting:AppleApiProdPort')]",
+        "ServiceBusConnectionString": "[parameters('Appsetting:ServiceBusConnectionString')]",
+        "AirshipFlightEndpoint": "[parameters('Appsetting:AirshipFlightEndpoint')]",
+        "AirshipWalletLinkEndpoint": "[parameters('Appsetting:AirshipWalletLinkEndpoint')]",
+        "AirShipWalletAdaptivePassUrlPrefix": "[parameters('AppSetting:AirShipWalletAdaptivePassUrlPrefix')]",
+        "AirshipTokenValue": "[parameters('Appsetting:AirshipTokenValue')]",
+        "RedisConnectionString": "[parameters('Appsetting:RedisConnectionString')]",
+        "BoardingPassSlidingExpiryHours": "[parameters('Appsetting:BoardingPassSlidingExpiryHours')]",
+        "SecureProgramImageUrl": "[parameters('Appsetting:SecureProgramImageUrl')]",
+        "SkyPriorityImgUrl": "[parameters('Appsetting:SkyPriorityImgUrl')]",
+        "TSAPreImgUrl": "[parameters('Appsetting:TSAPreImgUrl')]",
+        "AirshipIosPremiumTemplate": "[parameters('Appsetting:AirshipIosPremiumTemplate')]",
+        "AirshipIosUpperTemplate": "[parameters('Appsetting:AirshipIosUpperTemplate')]",
+        "AirshipIosDLTemplate": "[parameters('Appsetting:AirshipIosDLTemplate')]",
+        "AirshipIosOATemplate": "[parameters('Appsetting:AirshipIosOATemplate')]",
+        "AirshipAndroidPremiumTemplate": "[parameters('Appsetting:AirshipAndroidPremiumTemplate')]",
+        "AirshipAndroidUpperTemplate": "[parameters('Appsetting:AirshipAndroidUpperTemplate')]",
+        "AirshipAndroidDLTemplate": "[parameters('Appsetting:AirshipAndroidDLTemplate')]",
+        "AirshipAndroidOATemplate": "[parameters('Appsetting:AirshipAndroidOATemplate')]",
+        "AirshipIosEconomyTemplate": "[parameters('Appsetting:AirshipIosEconomyTemplate')]",
+        "AirshipAndroidEconomyTemplate": "[parameters('Appsetting:AirshipAndroidEconomyTemplate')]"
+
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "apiVersion": "2015-06-01",
+      "name": "[concat(parameters('keyvaultName'),'/add')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('functionappName'))]"
+      ],
+      "properties": {
+        "accessPolicies": [
+          {
+            "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionappName')), '2019-08-01', 'full').identity.principalId]",
+            "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionappName')), '2019-08-01', 'full').identity.tenantId]",
+            "permissions": {
+              "secrets": [ "Get", "List" ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

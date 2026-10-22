@@ -1,0 +1,272 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPCUSTOMERM"
+    },
+    "EnvironmentName": {
+      "value": "UAT"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVASEUNAFNLOYALTYSYNCMICROSERV"
+    },
+    "vaultName": {
+      "value": "AVASEUNKVEMS"
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "skuName": {
+      "value": "Standard_RAGRS"
+    },
+    "storageAccountName": {
+      "value": "avaseunstloyaltyms"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "Appsetting:APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "73853322-7317-4092-a5ac-746f8d185ef6"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=73853322-7317-4092-a5ac-746f8d185ef6;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/"
+    },
+    "AppInsightsName": {
+      "value": "AVASEUNAICUSTOMERMS"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avaseunafnloyaltysyncms-ds"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    //"AppSettingAzureWebJobsStorage": {
+    //  "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNLOYALTYSYNCMICROSERV-Config-StorageAccount/)"
+    //},
+    "appsettingsEventGridUrl": {
+      "value": "https://avapeunegcustconns.northeurope-1.eventgrid.azure.net/api/events?api-version=2018-01-01"
+    },
+    "appsettingsEventGridTopicKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNLOYALTYSYNCMICROSERV-Config-EventGridTopicKey/)"
+    },
+    "appsettingsEventSourceUrl": {
+      "value": "https://virginatlantic.com/cloudevents/spec/CustomerLoyaltyEvents"
+    },
+    "appsettingsKeyVaultUri": {
+      "value": "https://avadeunkveapis.vault.azure.net/"
+    },
+    "appsettingsApplicationId": {
+      "value": "FC"
+    },
+    "appsettingsAppChannelName": {
+      "value": "SIEBELLOYALTY"
+    },
+    "appsettingsTestLab": {
+      "value": "TVTH"
+    },
+    "appsettingsDeltaCertificateName": {
+      "value": "DeltaProfileSyncServiceCertificate"
+    },
+    "appsettingsDeltaLoyaltyProfileSyncEndPoint": {
+      "value": "http://webservices.vs01.vs.air4.com:32031/loyaltyprofilesync"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNLOYALTYSYNCMICROSERV-Config-ServiceBusConnectionString/)"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "value": "enrolcustomer"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNLOYALTYSYNCMICROSERV-Config-AzureAD-ClientId/)"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNLOYALTYSYNCMICROSERV-Config-MicroServiceDBKey/)"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "LoyaltySyncEventStore"
+    },
+    "Appsetting:EnrolCustomerPSDSSyncSubscriber": {
+      "value": "EnrolCustomerPSDSSyncSubscriber"
+    },
+    "Appsetting:Air4PassengerV4EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:31057/passenger/v4"
+    },
+    "Appsetting:EnablePSDSSync": {
+      "value": true
+    },
+    "Appsetting:ApplicationName": {
+      "value": "Customer"
+    },
+    "Appsetting:ApplicationVersion": {
+      "value": "DC"
+    },
+    "Appsetting:CreateUserID": {
+      "value": "DC"
+    },
+    "Appsetting:AuthorizationToSave": {
+      "value": "Y"
+    },
+    "Appsetting:EnrolmentChannelList": {
+      "value": "WEB-MYA|APP-MYA|POWERAPP"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "vNetName": {
+      "value": "acnpeunVnetcns001"
+    },
+    "vNetResourceGroupName": {
+      "value": "RG-CN-P-EUN-CommonNetworking-001"
+    },
+    "vNetSubnetName": {
+      "value": "AVASEUNASPCUSTOMERM-subnet"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNLOYALTYSYNCMICROSERV-Config-AzureAD-ClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:DFAppChannelName": {
+      "value": "DFWEB"
+    },
+    "Appsetting:DlCurrencyConvertServiceEndpoint": {
+      "value": "https://webservices.vs01.vs.air4.com:32048/loyalty-miles-currencyconvert"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Loyalty Sync Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to convert currency to points"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/dev/loyaltysyncmicroservice/,https://testresources.virginatlantic.com/sit/loyaltysyncmicroservice/,https://testresources.virginatlantic.com/loyaltysyncmicroservice/,https://resources.virginatlantic.com/loyaltysyncmicroservice/"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/4fdc51ad-c193-49df-8ce5-52145112fc3a/.default"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": false
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": true
+    },
+    "Appsetting:EventTopicTypeCustomerSync": {
+      "value": "CustomerSyncEvent"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "value": "LoyaltySyncEventResponse"
+    },
+    "Appsetting:CommandStatusLocation": {
+      "value": "https://Testresources.virginatlantic.com/uat/LoyaltysyncMicroservice/SyncSFPD/status/{1}"
+    },
+    "Appsetting:CommandStatusPollingDelayMS": {
+      "value": "100"
+    },
+    "Appsetting:CommandStatusPollingRetryCount": {
+      "value": "10"
+    },
+    "EventTopicTypPSDSSync": {
+      "value": "PSDSSyncEvent"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "[if(equals(parameters('EnvironmentName'),'PROD'),'PROD','NONPROD')]",
+        "Purpose": "Support functions for the Customer API AFN",
+        "ApplicationUsageIdList": "AFNLOYALTYSYNCMS"
+      }
+    }
+  }
+}

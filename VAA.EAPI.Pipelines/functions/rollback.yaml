@@ -1,0 +1,53 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  functionAppName: ''
+  environment: ''
+  resourceGroupName: ''
+  serviceConnection: ''
+
+jobs:  
+- deployment: 'rollback'   
+
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}  
+
+  environment: 'rollback'    
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+
+        # Task to Start the Slot Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start Azure App Service (Slot): ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionAppName}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}            
+            SpecifySlotOrASE: true
+            Slot: DS        
+
+        # Task to Swap the Slot Function App with Prod Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Swap the Slot Function App with Prod Function App'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Swap Slots'
+            WebAppName: ${{parameters.functionAppName}}
+            resourceGroupName:  ${{parameters.resourceGroupName}} 
+            SourceSlot: DS
+            PreserveVnet: true
+
+        # Task to Stop the Slot Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop Azure App Service (Slot): ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName}}
+            resourceGroupName:  ${{parameters.resourceGroupName}} 
+            SpecifySlotOrASE: true
+            Slot: DS

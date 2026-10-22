@@ -1,0 +1,19 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/CheckIn HTTP/1.1
+
+$[?(@.pnrLocator == 'UMNRPR')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "travelPartyId": "UMNRPR-travel-party",
+  "onlineCheckInStatus": {
+    "available": false,
+    "code": "UMNR",
+    "title": "Airport check in required",
+    "message": "Young travellers can’t check in online.",
+    "advisoryText1": "We can't check you in online if you wish to enroll in the Delta Unaccompanied Minor program. This requires you to check in at the airport with an agent."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "local-docs-harness",
+      "environment": "local",
+      "component": "repository-docs-harness",
+      "status": "active",
+      "owner": "Harness Maintainer",
+      "collectorInterface": "scripts/invoke-observed-docs-harness.ps1",
+      "queryInterface": "scripts/query-agent-observability.ps1",
+      "evidenceRoot": "TestResults/docs-harness-observability",
+      "signals": ["logs", "metrics", "traces"],
+      "correlationField": "runId",
+      "retentionDays": 30,
+      "maxQueryWindowMinutes": 60,
+      "redaction": "Repository-relative paths and harness outcomes only; commands, environment variables, secrets, payloads and customer data are excluded.",
+      "access": "Local filesystem, repository user only"
+    }
+  ]
+}

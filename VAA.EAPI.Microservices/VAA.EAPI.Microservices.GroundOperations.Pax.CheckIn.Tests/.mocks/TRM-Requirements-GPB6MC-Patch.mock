@@ -1,0 +1,292 @@
+###Request
+PATCH https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements/1f37c8b8-4f5a-4956-8fb0-67ee1c357ecd HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "requirementsResourceId": "14b8a1d8-ed01-4923-8172-24ca0802ce14",
+    "checkin": false,
+    "travelRequirements": {
+        "id": "e51d1670-cbba-4de9-99a9-abc8fa18c266",
+        "bookingReference": {
+            "id": "GPB6MC",
+            "creationDate": "2025-07-07T00:00:00Z"
+        },
+        "trips": [
+            {
+                "id": "fa33c12b-311a-4659-9173-785e86ca4982",
+                "ordinal": 0,
+                "departureStation": {
+                    "code": "ATL",
+                    "name": "Hartsfield Jackson Atlanta International Airport",
+                    "country": {
+                        "code": "US",
+                        "name": "United States of America",
+                        "isoAlpha3Code": "USA"
+                    },
+                    "city": {
+                        "name": "Atlanta"
+                    }
+                },
+                "arrivalStation": {
+                    "code": "CDG",
+                    "name": "Charles de Gaulle International Airport",
+                    "country": {
+                        "code": "FR",
+                        "name": "France",
+                        "isoAlpha3Code": "FRA"
+                    },
+                    "city": {
+                        "name": "Paris"
+                    }
+                },
+                "firstDepartureLocalDate": "2025-07-30T15:35:00-04:00",
+                "lastArrivalLocalDate": "2025-07-31T06:15:00+02:00",
+                "segments": [
+                    {
+                        "id": "6df39403-6d1f-4cd9-bc23-43ef35659d7f",
+                        "ordinal": 1,
+                        "operatingCarrier": {
+                            "code": "DL",
+                            "name": "Delta Air Lines"
+                        },
+                        "flightNum": "0082",
+                        "marketingSegment": {
+                            "flightNum": "0082",
+                            "marketingCarrier": [
+                                {
+                                    "code": "DL",
+                                    "name": "Delta Air Lines"
+                                }
+                            ]
+                        },
+                        "legs": [
+                            {
+                                "id": "ccf334e1-2d11-4de5-aa73-8e3da6332a1d",
+                                "ordinal": 1,
+                                "departure": {
+                                    "station": {
+                                        "code": "ATL",
+                                        "name": "Hartsfield Jackson Atlanta International Airport",
+                                        "country": {
+                                            "code": "US",
+                                            "name": "United States of America",
+                                            "isoAlpha3Code": "USA"
+                                        },
+                                        "city": {
+                                            "name": "Atlanta"
+                                        }
+                                    },
+                                    "estimatedDepartureLocalDateTime": "2025-07-30T15:35:00-04:00",
+                                    "scheduledDepartureLocalDateTime": "2025-07-30T15:35:00-04:00",
+                                    "estimatedDepartureUTCDateTime": "2025-07-30T19:35:00Z",
+                                    "scheduledDepartureUTCDateTime": "2025-07-30T19:35:00Z"
+                                },
+                                "arrival": {
+                                    "station": {
+                                        "code": "CDG",
+                                        "name": "Charles de Gaulle International Airport",
+                                        "country": {
+                                            "code": "FR",
+                                            "name": "France",
+                                            "isoAlpha3Code": "FRA"
+                                        },
+                                        "city": {
+                                            "name": "Paris"
+                                        }
+                                    },
+                                    "estimatedArrivalLocalDateTime": "2025-07-31T06:15:00+02:00",
+                                    "scheduledArrivalLocalDateTime": "2025-07-31T06:15:00+02:00",
+                                    "estimatedArrivalUTCDateTime": "2025-07-31T04:15:00Z",
+                                    "scheduledArrivalUTCDateTime": "2025-07-31T04:15:00Z"
+                                },
+                                "international": true
+                            }
+                        ],
+                        "international": true,
+                        "transportType": "AIR"
+                    }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": false
+            }
+        ],
+        "passengers": [
+            {
+                "passengerResourceId": "e1100952-f7f1-420f-b1fe-6cd667103e85",
+                "givenNames": "ONE",
+                "surname": "TEST",
+                "nameNum": "01.01",
+                "customerId": "9962145512865",
+                "birthDate": "1982-07-29T00:00:00Z",
+                "status": {
+                    "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "ccf334e1-2d11-4de5-aa73-8e3da6332a1d",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": true,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "fa33c12b-311a-4659-9173-785e86ca4982",
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": true,
+                                                "verified": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "SELF_DECLARATION_FORM",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "acceptanceWindow": {
+                                                    "from": "",
+                                                    "to": ""
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "country": {
+                                                    "code": "FR",
+                                                    "isoAlpha3Code": "FRA"
+                                                },
+                                                "links": [
+                                                    {
+                                                        "linkId": "INTLFRA_VisaReq",
+                                                        "text": "France Visa Requirement Check (Optional Third Party)",
+                                                        "href": "https://apply.joinsherpa.com/products?passport=USA&destinations=FRA&affiliateId=delta&language=en-US"
+                                                    }
+                                                ],
+                                                "ruleId": "dynamically_generated_LEG_INTL_FR",
+                                                "digitalVerificationEligible": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "exceptions": [],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": false,
+                                "checkinEligible": true
+                            }
+                        ],
+                        "travelDocuments": [
+                            {
+                                "type": "PASSPORT",
+                                "subType": "P",
+                                "givenNames": "ONE",
+                                "surname": "TEST",
+                                "birthDate": "1982-07-29",
+                                "gender": {
+                                    "code": "M",
+                                    "name": "Male"
+                                },
+                                "number": "A15489785",
+                                "expirationDate": "2026-04-01",
+                                "issuingCountry": {
+                                    "code": "USA",
+                                    "name": "United States of America",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "nationality": {
+                                    "code": "USA",
+                                    "name": "United States of America",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "countryOfResidence": {
+                                    "code": "USA",
+                                    "name": "United States of America",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "methodOfDataEntry": "P",
+                                "documentFeature": "NONE",
+                                "sourceFromType": "PNR"
+                            }
+                        ],
+                        "contactInformation": [
+                            {
+                                "requirements": [
+                                    {
+                                        "type": "US_ADDRESS",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "PRIMARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "SECONDARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "EMAIL",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    }
+                                ],
+                                "address": {},
+                                "phone": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

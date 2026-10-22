@@ -1,0 +1,54 @@
+﻿<div class="card">
+    <div class="card-header">
+        Service Bus
+    </div>
+    <div class="card-body">
+        <div class="containerServiceBus">
+            @foreach (var item in Items)
+            {
+                <div class="itemServiceBus">
+                    <h5>
+                        @item.Value
+                        <i class="@GetIconClass(item.Key)" style="align-self:baseline; margin-top:-2%"></i>
+                    </h5>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Dictionary<string, bool> Services { get; set; }
+
+    private Dictionary<string, string> Items = new Dictionary<string, string>
+    {
+        { "Customer", "Customer" },
+        { "Order", "Order" },
+        { "Seat", "Seat" },
+        { "SOR", "Single" },
+        { "Security", "Security" }
+    };
+
+    private string GetIconClass(string itemkey)
+    {
+        if (Services != null)
+        {
+            foreach (var service in Services)
+            {
+                if (service.Key.Contains(itemkey, StringComparison.OrdinalIgnoreCase)) 
+                {
+                    if (service.Value)
+                    {
+                        return "bi bi-send-check"; 
+                    }
+                    else
+                    {
+                        return "bi bi-send-x";
+                    }
+                }
+            }
+            return "bi bi-send-check";
+        }
+        return "bi bi-send-dash";
+    }
+}

@@ -1,0 +1,159 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "Dev"
+    },
+    "AppServicePlanName": {
+      "value": "vadveunaspdigital03"
+    },
+    "functionappName": {
+      "value": "va-dv-eun-paxops-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-dv-eun-service-kv-01"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "Paxops Ms",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "DEV",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vadveunpaxopssa01"
+    },
+    "AppInsightsName": {
+      "value": "va-dv-eun-paxops-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    //swagger settings
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-Paxops Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This endpoint will provide Online check in informations"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "MockDelegatingHandler:Enabled": {
+      "value": "true"
+    },
+    "MockDelegatingHandler:MockServiceUri": {
+      "value": "https://Testresources.virginatlantic.com/dev/mock"
+    },
+    "DeltaSsciEndpoint": {
+      "value": "https://stg.virginatlantic.com/PCCOciWeb/apiv2/auth"
+    },
+    "DeltaTrmEndpoint": {
+      "value": "https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int"
+    },
+    "DeltaAir4TokenEndpoint": {
+      "value": "https://ssaasi.vs01.vs.air4.com/as/token.oauth2"
+    },
+    "DeltaTrmClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-service-kv-01.vault.azure.net/secrets/paxopsmicroservice-DeltaTrmClientSecret/)"
+    },
+    "TrmConfigOptionsValue": {
+      "value": "[{'nativeTravelDocs':'true'}]"
+    },
+    "SherpaAffiliateId": {
+      "value": "virginatlantic"
+    },
+    "SecondaryDocumentContentOverrides": {
+      "value": "[{\"countryCode\":\"USA\",\"requirementOption\":\"ETA\",\"displayName\":\"ESTA\",\"governmentTitle\":\"ESTA\",\"governmentUrl\":\"https://esta.cbp.dhs.gov/\"},{\"countryCode\":\"USA\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://www.state.gov/visas/\"},{\"countryCode\":\"GBR\",\"requirementOption\":\"ETA\",\"governmentUrl\":\"https://www.gov.uk/eta\"},{\"countryCode\":\"GBR\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://www.gov.uk/check-uk-visa/\"},{\"countryCode\":\"IND\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://indianvisaonline.gov.in/\"},{\"countryCode\":\"CAN\",\"requirementOption\":\"ETA\",\"governmentUrl\":\"https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta.html\"},{\"countryCode\":\"CAN\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/visitor-visa.html\"},{\"countryCode\":\"JAM\",\"requirementOption\":\"ETA\",\"governmentUrl\":\"https://www.enterjamaica.gov.jm/\"},{\"countryCode\":\"KOR\",\"requirementOption\":\"ETA\",\"governmentUrl\":\"https://www.k-eta.go.kr/\"},{\"countryCode\":\"NGA\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://portal.immigration.gov.ng/\"},{\"countryCode\":\"ZWE\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://www.evisa.gov.zw/index.html\"},{\"countryCode\":\"ISR\",\"requirementOption\":\"ETA\",\"governmentUrl\":\"https://israel-entry.piba.gov.il/\"},{\"countryCode\":\"IRL\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://www.visas.inis.gov.ie/\"}]"
+    },
+    "DeltaChannelValue": {
+      "value": "DFMOBILE"
+    },
+    "DeltaApiIdValue": {
+      "value": "D2"
+    },
+    "DeltaClientIdValue": {
+      "value": "VAMobileAppAIR4_CC_SI"
+    },
+    "DeltaTestTrmValue": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-service-kv-01.vault.azure.net/secrets/paxopsmicroservice-DeltaTestTrmValue/)"
+    },
+    "KeyVaultUri": {
+      "value": "https://va-dv-eun-service-kv-01.vault.azure.net/"
+    },
+    "Redisconnectionstring": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-service-kv-01.vault.azure.net/secrets/paxopsmicroservice-Redisconnectionstring/)"
+    },
+    "BoardingPassSlidingExpiryHours": {
+      "value": "48"
+    }
+  }
+}

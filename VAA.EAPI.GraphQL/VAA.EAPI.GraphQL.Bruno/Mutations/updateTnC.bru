@@ -1,0 +1,31 @@
+meta {
+  name: updateTnC
+  type: graphql
+  seq: 45
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation updateTnC($updateTnCRequest: TnCUpdateRequestInput) {
+    updateTnC(updateTnCRequest: $updateTnCRequest) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "updateTnCRequest": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

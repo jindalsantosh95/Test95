@@ -1,0 +1,119 @@
+name: ai-harness-docs-semantic-gardening
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 1 * *'
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: docs-semantic-gardening
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CODEX_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      DOC_GARDENING_MODEL: gpt-5.4-mini
+      DOC_GARDENING_MAX_ATTEMPTS: '1'
+      CODEX_CLI_VERSION: '0.146.0'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Require configured agent credentials
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:CODEX_API_KEY)) {
+            throw 'OPENAI_API_KEY is required for semantic documentation gardening.'
+          }
+
+      - name: Install Codex CLI
+        shell: bash
+        run: npm install --global "@openai/codex@${CODEX_CLI_VERSION}"
+
+      - name: Run bounded read-only semantic comparison
+        id: garden
+        shell: pwsh
+        run: |
+          $prompt = @'
+          Perform a read-only semantic documentation gardening review of this repository.
+          Read AGENTS.md, docs/doc-gardening.md, docs/readme.md, and the harness maps first.
+          Compare a bounded sample of high-risk or recently changed documentation claims with repository-local code, tests, configuration, and workflows.
+          Do not modify files. Do not infer external runtime state. Do not expose secrets or sensitive payloads.
+          Return exactly NO_FINDINGS when no actionable contradiction is supported by repository evidence.
+          Otherwise return Markdown containing: claim/file, authoritative evidence, classification, confidence, smallest correction, owner, and verification method.
+          Limit the result to the five highest-confidence findings.
+          '@
+          New-Item -ItemType Directory -Path TestResults/agent-resource -Force | Out-Null
+          & codex --sandbox read-only exec --json --model $env:DOC_GARDENING_MODEL --output-last-message docs-gardening-result.md $prompt |
+            Tee-Object -FilePath TestResults/agent-resource/docs-semantic-gardening.jsonl
+          $codexExit = $LASTEXITCODE
+          ./scripts/check-agent-resource-budget.ps1 `
+            -WorkflowId docs-semantic-gardening `
+            -Model $env:DOC_GARDENING_MODEL `
+            -UsagePath TestResults/agent-resource/docs-semantic-gardening.jsonl `
+            -EvidencePath TestResults/agent-resource/docs-semantic-gardening.budget.json
+          $budgetExit = $LASTEXITCODE
+          if ($codexExit -ne 0) { throw "Codex semantic gardening failed with exit code $codexExit; resource evidence was still evaluated." }
+          if ($budgetExit -ne 0) { throw 'Semantic gardening exhausted its token or cost budget.' }
+          if (-not (Test-Path -LiteralPath docs-gardening-result.md)) { throw 'Semantic gardening produced no result file.' }
+          $result = (Get-Content -LiteralPath docs-gardening-result.md -Raw).Trim()
+          if ([string]::IsNullOrWhiteSpace($result)) { throw 'Semantic gardening produced an empty result.' }
+          "has_findings=$($result -ne 'NO_FINDINGS')" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Write run evidence
+        shell: pwsh
+        env:
+          HAS_FINDINGS: ${{ steps.garden.outputs.has_findings }}
+        run: |
+          $evidence = [ordered]@{
+            schemaVersion = 1
+            runId = '${{ github.run_id }}-${{ github.run_attempt }}'
+            workflow = 'docs-semantic-gardening'
+            state = 'Succeeded'
+            baseCommit = '${{ github.sha }}'
+            model = $env:DOC_GARDENING_MODEL
+            maxAttempts = [int]$env:DOC_GARDENING_MAX_ATTEMPTS
+            timeoutMinutes = 20
+            hasFindings = [System.Convert]::ToBoolean($env:HAS_FINDINGS)
+            completedAtUtc = [datetime]::UtcNow.ToString('o')
+          }
+          $evidence | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath docs-gardening-run.json -Encoding utf8
+
+      - name: Upload gardening evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-semantic-gardening-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            docs-gardening-result.md
+            docs-gardening-run.json
+
+      - name: Upload resource and cost evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-resource-docs-semantic-gardening-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: error
+          retention-days: 7
+          path: TestResults/agent-resource/
+
+      - name: Open focused remediation issue
+        if: steps.garden.outputs.has_findings == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "Docs semantic gardening findings (${{ github.run_id }})" \
+            --body-file docs-gardening-result.md \
+            --label documentation

@@ -1,0 +1,50 @@
+parameters: 
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  variableGroupName: ''
+  environment: ''
+  SourceFolder: '$(Agent.BuildDirectory)/testAutomation/'
+
+jobs: 
+  - job: 'SanityTesting'
+    displayName: 'NDC Sanity Testing'
+    pool:
+      name: ${{parameters.agentPool}}
+      vmImage: ${{parameters.agentSpecification}}
+    variables:
+      - group: ${{parameters.variableGroupName}}
+
+    steps:
+     - download: current
+       artifact: testAutomation 
+
+      # Task to copy the ARM files to artifactstagingdirectory
+     - task: CopyFiles@2
+       displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+       inputs:
+          SourceFolder: ${{parameters.SourceFolder}}
+          Contents: |
+           **/*
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+      # task to perform the sanity test 
+     - task: VSTest@2
+       displayName: 'NDC Sanity Testing' 
+       inputs:
+          testAssemblyVer2: |
+            ${{parameters.SourceFolder}}\VAA.EAPI.Automation.NDC\bin\Release\net10.0\VAA.EAPI.Automation.NDC.dll
+            **\*Tests.dll
+          testFiltercriteria: 'Category=NDC - SanityV2'
+          testRunTitle: 'NDC Offer Sanity Test'
+          rerunFailedTests: true
+          rerunType: basedOnTestFailureCount
+          rerunMaxAttempts: 2
+       continueOnError: true
+
+
+     - task: PublishTestResults@2
+       displayName: 'Publish Test Results **/Log_For_*.txt'
+       inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**/Log_For_*.txt'          

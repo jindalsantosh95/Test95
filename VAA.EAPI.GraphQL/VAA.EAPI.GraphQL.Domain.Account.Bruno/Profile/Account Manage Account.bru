@@ -1,0 +1,46 @@
+meta {
+  name: Account Manage Account
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query AccountManageAccount {
+    accountManageAccount {
+      memberType
+      firstName
+      lastName
+      preferredName
+      dateofBirth
+      gender
+      email
+      contactNumber
+      countryCode
+      isVAAMarketingPreferred
+      headOfGroupMemberNumber
+      address {
+        addressType
+        addressLine1
+        addressLine2
+        addressLine3
+        city
+        postalCode
+        region
+        countryCode
+        countryName
+        preferredFlag
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

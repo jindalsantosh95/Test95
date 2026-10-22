@@ -1,0 +1,26 @@
+###Request
+GET https://teste-ecs.tbox-test.vholsinternal.co.uk/cart-service/v2/cart/6999399?expand=all&userId=17760&cliId=-1 HTTP/1.1
+
+###Response
+HTTP/1.1 400 Bad Request
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+  "status": {
+    "code": -1,
+    "message": "ERROR"
+  },
+  "error": {
+    "code": 50020000000000000,
+    "message": "Unauthorized to access this endpoint.",
+    "errors": [
+      "API Error Code : 2000 - Full authentication is required to access this resource"
+    ]
+  },
+  "data": [],
+  "version": "v2.0"
+}

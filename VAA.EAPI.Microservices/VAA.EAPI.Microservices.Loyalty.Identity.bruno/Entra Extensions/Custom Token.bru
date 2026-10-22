@@ -1,0 +1,36 @@
+meta {
+  name: Custom Token
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{identity_base_url}}/CustomToken
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "data": {
+      "dataType": "microsoft.graph.onTokenIssuanceStartRequestData",
+      "authenticationContext": {
+        "correlationId": "{{entra_correlation_id}}",
+        "user": {
+          "userPrincipalName": "{{identity_email}}",
+          "mail": "{{identity_email}}",
+          "id": "{{entra_user_id}}"
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

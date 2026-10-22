@@ -1,0 +1,33 @@
+meta {
+  name: insuranceDecision
+  type: graphql
+  seq: 22
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation insuranceDecision($request: UpdateInsuranceDecisionRequestInput) {
+    insuranceDecision(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {
+      "insuranceSelected": false
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

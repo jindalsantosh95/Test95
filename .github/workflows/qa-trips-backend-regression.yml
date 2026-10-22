@@ -1,0 +1,38 @@
+name: Automation - Trips Backend Regression Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: "Target environment for the test config"
+        required: true
+        default: "sit"
+        type: choice
+        options:
+          - dev
+          - sit
+          - uat
+  schedule:
+    # SIT runs Monday to Friday at 06:00 UTC.
+    - cron: "0 6 * * 1-5"
+    # UAT runs Monday to Friday at 07:00 UTC, one hour after SIT.
+    - cron: "0 7 * * 1-5"
+
+jobs:
+  trips-mobile-regression:
+    uses: ./.github/workflows/qa-run-automation-suite.yml
+    with:
+      manifest_path: config/automation-suites/trips-backend-regression.json
+      target_environment: >-
+        ${{ github.event_name == 'schedule'
+            && (github.event.schedule == '0 6 * * 1-5' && 'sit' || 'uat')
+            || inputs.target_environment }}
+      enable_slack_for_branch_runs: ${{ github.event_name == 'workflow_dispatch' }}
+    secrets:
+      key_vault_url: ${{ secrets.KEY_VAULT_URL }}
+      key_vault_tenant_id: ${{ secrets.KEY_VAULT_TENANT_ID }}
+      key_vault_client_id: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+      key_vault_client_secret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+      hpp_vaa_digital_first_token: ${{ secrets.HPP_VAA_DIGITAL_FIRST_TOKEN }}
+      hpp_delta_enterprise_payments_token: ${{ secrets.HPP_DELTA_ENTERPRISE_PAYMENTS_TOKEN }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL_TRIPS }}

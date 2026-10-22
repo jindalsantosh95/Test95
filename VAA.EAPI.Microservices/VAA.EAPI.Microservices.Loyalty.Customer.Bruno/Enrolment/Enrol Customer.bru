@@ -1,0 +1,79 @@
+meta {
+  name: Enrol Customer
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{customer_base_url}}/Enrolment
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  channelId: {{customer_enrolment_channel}}
+  channeluserid: {{customer_channel_user_id}}
+}
+
+body:json {
+  {
+    "id": "{{$guid}}",
+    "data": {
+      "channelUserId": "{{customer_channel_user_id}}",
+      "customerDetails": {
+        "firstName": "{{customer_first_name}}",
+        "lastName": "{{customer_last_name}}",
+        "gender": "F",
+        "title": "Ms",
+        "nationality": "British",
+        "customerType": "Loyalty",
+        "dateOfBirth": "{{customer_date_of_birth}}",
+        "password": "{{customer_password}}",
+        "addressDetails": [
+          {
+            "addressType": "Home",
+            "addressLine1": "{{customer_address_line_1}}",
+            "addressLine2": "{{customer_address_line_2}}",
+            "city": "{{customer_city}}",
+            "postalCode": "{{customer_postal_code}}",
+            "country": "{{customer_country_code}}",
+            "preferredFlag": "Y",
+            "addressVerified": true
+          }
+        ],
+        "contactDetails": {
+          "emailDetails": [
+            {
+              "emailId": "{{customer_email}}",
+              "usage": "Personal",
+              "preferredFlag": "Y"
+            }
+          ],
+          "phoneDetails": [
+            {
+              "phoneType": "Mobile",
+              "usage": "Personal",
+              "countryCode": "{{customer_phone_country_code}}",
+              "phoneNumber": "{{customer_phone_number}}",
+              "preferredFlag": "Y"
+            }
+          ]
+        },
+        "loyaltyMember": {
+          "memberType": "Individual",
+          "programName": "Virgin Atlantic Flying Club",
+          "status": "Active",
+          "testMember": true,
+          "mediaCode": "A50",
+          "termsAndConditionsAccepted": true
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

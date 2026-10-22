@@ -1,0 +1,108 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBooking HTTP/1.1
+
+$[?( @.bookingReference == '9999998' )]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "booking": {
+    "id": "9999998",
+    "bookingSummary": {
+      "brandName": "Virgin Holidays",
+      "brandCode": "WW",
+      "company": "VHOLS",
+      "companyName": "Virgin Holidays Ltd"
+    },
+    "summary": {
+      "travelDates": {
+        "startDate": "{DateTime(yyyy-MM-ddT00:00:00, 7, day)}",
+        "endDate": "{DateTime(yyyy-MM-ddT00:00:00, 14, day)}"
+      }
+    },
+    "payment": {
+      "balanceDue": 0,
+      "currencyCode": "GBP"
+    },
+    "status": "Confirmed [ TK ]",
+    "travellers": [
+      {
+        "firstName": "Test",
+        "lastName": "User",
+        "leadTraveller": true,
+        "dateOfBirth": "1970-01-01T00:00:00"
+      }
+    ],
+    "holidayPackageDetails": {
+      "destination": {
+        "countryName": "United Arab Emirates"
+      }
+    },
+    "holidayProducts": [
+      {
+        "summary": {
+          "productStatus": "CONFIRMED",
+          "travelDates": {
+            "startDate": "{DateTime(yyyy-MM-ddT00:00:00, 7, day)}",
+            "endDate": "{DateTime(yyyy-MM-ddT00:00:00, 14, day)}"
+          }
+        },
+        "travellersComposition": {
+          "adultCount": 1,
+          "travellers": [
+            {
+              "firstName": "Test",
+              "lastName": "User",
+              "leadTraveller": true,
+              "dateOfBirth": "1970-01-01T00:00:00"
+            }
+          ]
+        },
+        "flightDetails": {
+          "isBookingSourceAir4": false,
+          "airlineLocator": {
+            "pnrLocator": "EKTEST",
+            "airlineDesignator": "EK"
+          },
+          "sectors": [
+            {
+              "id": "1",
+              "ordinal": 1,
+              "scheduledDepartureLocal": "{DateTime(yyyy-MM-ddT00:00:00, 7, day)}",
+              "scheduledArrivalLocal": "{DateTime(yyyy-MM-ddT00:00:00, 7, day)}",
+              "origin": { "code": "MAN" },
+              "destination": { "code": "DXB" },
+              "segments": [
+                {
+                  "id": "1",
+                  "pnrLocator": "EKTEST",
+                  "ordinal": 1,
+                  "scheduledDepartureLocal": "{DateTime(yyyy-MM-ddT00:00:00, 7, day)}",
+                  "scheduledArrivalLocal": "{DateTime(yyyy-MM-ddT00:00:00, 7, day)}",
+                  "origin": { "code": "MAN" },
+                  "destination": { "code": "DXB" },
+                  "operatingCarrier": { "carrierCode": "EK", "flightNumber": "20" },
+                  "marketingCarrier": { "carrierCode": "EK", "flightNumber": "20" },
+                  "legs": [
+                    {
+                      "id": "1",
+                      "status": "ON_TIME",
+                      "origin": { "code": "MAN" },
+                      "destination": { "code": "DXB" },
+                      "operating": { "carrierCode": "EK", "flightNumber": "20" },
+                      "marketing": { "carrierCode": "EK", "flightNumber": "20" }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "errors": []
+}
+

@@ -1,0 +1,20 @@
+meta {
+  name: Retrieve PNR
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{order_search_base_url}}/order/{{pnr}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Retrieves the underlying PNR response for a test booking containing an SSR.
+}

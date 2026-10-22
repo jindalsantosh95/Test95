@@ -1,0 +1,19 @@
+###Request
+PATCH https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements/handcrafted-example-02-trm HTTP/1.1
+
+$[?(@.requests[0].passengerResourceId == '96y1456c-967b-43df-aa9b-9eb6bde711e9')]
+
+###Response
+HTTP/1.1 400 Bad Request
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "code": "THP4009",
+    "message": "Bad Request",
+    "developerMessage": "CTC phone info has phone number but missing country code",
+    "moreInfo": []
+}

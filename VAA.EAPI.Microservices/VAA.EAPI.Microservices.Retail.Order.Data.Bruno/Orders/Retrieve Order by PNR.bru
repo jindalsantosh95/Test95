@@ -1,0 +1,20 @@
+meta {
+  name: Retrieve Order by PNR
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{order_data_base_url}}/orders/{{pnr}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  The service first attempts an order ID lookup and then falls back to a booking-reference lookup.
+}

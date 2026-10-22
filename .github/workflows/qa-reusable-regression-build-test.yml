@@ -1,0 +1,1577 @@
+name: Automation - Reusable Regression Runner
+
+on:
+  workflow_call:
+    inputs:
+      suite_name:
+        description: "Display name for suite and notifications"
+        required: true
+        type: string
+      workflow_slug:
+        description: "Slug used for concurrency, trx naming, and artifacts"
+        required: true
+        type: string
+      target_environment:
+        description: "Target environment for the test config"
+        required: false
+        default: "sit"
+        type: string
+      test_project_path:
+        description: "Path to the test project"
+        required: true
+        type: string
+      test_filter:
+        description: "Multiline Category=... list"
+        required: true
+        type: string
+      base_url:
+        description: "Base URL for shared test resources"
+        required: false
+        type: string
+      base_url_digital:
+        description: "Base URL for digital endpoints"
+        required: false
+        type: string
+      graphql_mobile_path:
+        description: "GraphQL mobile public path"
+        required: false
+        type: string
+      graphql_myaccount_public_path:
+        description: "GraphQL MyAccount public path"
+        required: false
+        type: string
+      graphql_trips_secure:
+        description: "GraphQL trips secure path"
+        required: false
+        type: string
+      graphql_book_path:
+        description: "GraphQL book path for testresources endpoints"
+        required: false
+        type: string
+      graphql_search_path:
+        description: "GraphQL search path for testresources endpoints"
+        required: false
+        type: string
+      summary_config_path:
+        description: "JSON config path for suite-specific summary grouping/impact rules"
+        required: false
+        default: "config/regression-summary/default/default-summary.json"
+        type: string
+      slack_config_path:
+        description: "Optional JSON config path for suite-specific Slack message formatting"
+        required: false
+        type: string
+      slack_secret_name:
+        description: "Optional environment-bound secret name used for Slack notifications"
+        required: false
+        default: ""
+        type: string
+      enable_slack_for_branch_runs:
+        description: "Allow Slack notification outside main branch"
+        required: false
+        default: false
+        type: boolean
+      use_playwright_for_hpp:
+        description: "Use Playwright for hosted payment pages"
+        required: false
+        default: false
+        type: boolean
+      hpp_page_allowed_origins:
+        description: "Exact HTTPS HPP page origins allowed to receive access headers"
+        required: false
+        default: "https://enterprisepaymentshpp-si.vs01.vs.air4.com"
+        type: string
+      hpp_header_allowed_origins:
+        description: "Additional exact HTTPS HPP API origins allowed to receive access headers"
+        required: false
+        default: "https://enterprisepaymentshppapi-si.vs01.vs.air4.com,https://stg.virginatlantic.com"
+        type: string
+      timeout_minutes:
+        description: "Job timeout in minutes"
+        required: false
+        default: 60
+        type: number
+      runner_labels_json:
+        description: "JSON array of runner labels for runs-on"
+        required: false
+        default: '["self-hosted","Windows","eapi-automation"]'
+        type: string
+      test_environment_json:
+        description: "Optional non-secret environment variables for the suite test process"
+        required: false
+        default: "{}"
+        type: string
+      required_variables_json:
+        description: "Manifest-declared required test environment variable names"
+        required: false
+        default: "[]"
+        type: string
+      allowed_variables_json:
+        description: "Manifest-declared allowlist of non-secret test environment variable names"
+        required: false
+        default: "[]"
+        type: string
+      required_secrets_json:
+        description: "Manifest-declared required secret names"
+        required: false
+        default: "[]"
+        type: string
+    secrets:
+      key_vault_url:
+        required: false
+      key_vault_tenant_id:
+        required: false
+      key_vault_client_id:
+        required: false
+      key_vault_client_secret:
+        required: false
+      hpp_vaa_digital_first_token:
+        required: false
+      hpp_delta_enterprise_payments_token:
+        required: false
+      browserstack_username:
+        required: false
+      browserstack_access_key:
+        required: false
+      slack_webhook_url:
+        required: false
+
+concurrency:
+  group: ${{ inputs.workflow_slug }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  regression-build-test:
+    name: "${{ inputs.suite_name }} (${{ inputs.target_environment }})"
+    environment: ${{ inputs.target_environment }}
+    runs-on: ${{ fromJson(inputs.runner_labels_json) }}
+    timeout-minutes: ${{ inputs.timeout_minutes }}
+    defaults:
+      run:
+        shell: powershell
+    env:
+      env: ${{ inputs.target_environment }}
+      SUITE_NAME: ${{ inputs.suite_name }}
+      WORKFLOW_SLUG: ${{ inputs.workflow_slug }}
+      TEST_PROJECT_PATH: ${{ inputs.test_project_path }}
+      TEST_FILTER: ${{ inputs.test_filter }}
+      BaseUrl: ${{ inputs.base_url }}
+      BaseUrlDigital: ${{ inputs.base_url_digital }}
+      graphQL: ${{ inputs.graphql_mobile_path }}
+      graphQlMyAccountPublic: ${{ inputs.graphql_myaccount_public_path }}
+      tripsSecureEndpoint: ${{ inputs.graphql_trips_secure }}
+      graphQlBook: ${{ inputs.graphql_book_path }}
+      graphQlSearch: ${{ inputs.graphql_search_path }}
+      SUMMARY_CONFIG_PATH: ${{ inputs.summary_config_path }}
+      SLACK_CONFIG_PATH: ${{ inputs.slack_config_path }}
+      TEST_ENVIRONMENT_JSON: ${{ inputs.test_environment_json }}
+      REQUIRED_VARIABLES_JSON: ${{ inputs.required_variables_json }}
+      ALLOWED_VARIABLES_JSON: ${{ inputs.allowed_variables_json }}
+      REQUIRED_SECRETS_JSON: ${{ inputs.required_secrets_json }}
+      IN_FLIGHT_APPLICATIONS_UI_BASE_URL: ${{ vars.IN_FLIGHT_APPLICATIONS_UI_BASE_URL }}
+      # A manifest-provided secret name is strict. It must never fall back to
+      # another suite's generic webhook when the environment secret is absent.
+      SLACK_WEBHOOK_URL: ${{ inputs.slack_secret_name != '' && secrets[inputs.slack_secret_name] || (inputs.slack_secret_name == '' && secrets.slack_webhook_url || '') }}
+      HAS_SLACK_WEBHOOK: ${{ (inputs.slack_secret_name != '' && secrets[inputs.slack_secret_name] != '') || (inputs.slack_secret_name == '' && secrets.slack_webhook_url != '') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - name: Validate environment-bound Slack secret
+        if: inputs.slack_secret_name != ''
+        shell: powershell
+        env:
+          SLACK_SECRET_NAME: ${{ inputs.slack_secret_name }}
+          SLACK_WEBHOOK_URL: ${{ secrets[inputs.slack_secret_name] }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:SLACK_WEBHOOK_URL)) {
+            throw "Required environment secret '$($env:SLACK_SECRET_NAME)' is not configured."
+          }
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Display .NET SDK
+        run: dotnet --info
+
+      - name: Restore
+        run: dotnet restore $env:TEST_PROJECT_PATH
+
+      - name: Build
+        run: dotnet build $env:TEST_PROJECT_PATH -c Release --no-restore
+
+      - name: Validate suite configuration
+        shell: powershell
+        env:
+          KeyVaultUrl: ${{ secrets.key_vault_url }}
+          KeyVaultTenantId: ${{ secrets.key_vault_tenant_id }}
+          KeyVaultClientId: ${{ secrets.key_vault_client_id }}
+          KeyVaultClientSecret: ${{ secrets.key_vault_client_secret }}
+          HppVaaDigitalFirstToken: ${{ secrets.hpp_vaa_digital_first_token }}
+          HppDeltaEnterprisePaymentsToken: ${{ secrets.hpp_delta_enterprise_payments_token }}
+          BROWSERSTACK_USERNAME: ${{ secrets.browserstack_username }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.browserstack_access_key }}
+          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
+        run: |
+          try {
+            $testEnvironment = $env:TEST_ENVIRONMENT_JSON | ConvertFrom-Json -ErrorAction Stop
+          }
+          catch {
+            throw "Unable to parse test_environment_json: $($_.Exception.Message)"
+          }
+
+          function Convert-JsonStringArray {
+            param(
+              [string]$Json,
+              [string]$Name
+            )
+
+            if ([string]::IsNullOrWhiteSpace($Json)) {
+              return @()
+            }
+
+            try {
+              $parsed = ConvertFrom-Json -InputObject $Json -ErrorAction Stop
+            }
+            catch {
+              throw "Unable to parse $($Name): $($_.Exception.Message)"
+            }
+
+            if ($null -eq $parsed) {
+              return @()
+            }
+
+            # Windows PowerShell unwraps a one-item JSON array to a scalar.
+            return @($parsed | ForEach-Object { [string]$_ })
+          }
+
+          $allowedVariables = @(Convert-JsonStringArray -Json $env:ALLOWED_VARIABLES_JSON -Name 'ALLOWED_VARIABLES_JSON')
+          $allowedVariableSet = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+          foreach ($name in $allowedVariables) {
+            [void]$allowedVariableSet.Add([string]$name)
+          }
+          $protectedVariableSet = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+          @(
+            'TEST_PROJECT_PATH', 'TEST_FILTER', 'SUITE_NAME', 'WORKFLOW_SLUG', 'ENV',
+            'TARGET_ENVIRONMENT', 'BASE_URL', 'BASE_URL_DIGITAL', 'GRAPHQL_MOBILE_PATH',
+            'GRAPHQL_MYACCOUNT_PUBLIC_PATH', 'GRAPHQL_TRIPS_SECURE', 'GRAPHQL_BOOK_PATH',
+            'GRAPHQL_SEARCH_PATH', 'SUMMARY_CONFIG_PATH', 'SLACK_CONFIG_PATH',
+            'TEST_ENVIRONMENT_JSON', 'REQUIRED_VARIABLES_JSON', 'ALLOWED_VARIABLES_JSON',
+            'REQUIRED_SECRETS_JSON', 'IN_FLIGHT_APPLICATIONS_UI_BASE_URL',
+            'SLACK_WEBHOOK_URL', 'HAS_SLACK_WEBHOOK', 'KEY_VAULT_URL',
+            'KEY_VAULT_TENANT_ID', 'KEY_VAULT_CLIENT_ID', 'KEY_VAULT_CLIENT_SECRET',
+            'HPP_VAA_DIGITAL_FIRST_TOKEN', 'HPP_DELTA_ENTERPRISE_PAYMENTS_TOKEN',
+            'BROWSERSTACK_USERNAME', 'BROWSERSTACK_ACCESS_KEY', 'HPP_PAGE_ALLOWED_ORIGINS',
+            'HPP_HEADER_ALLOWED_ORIGINS', 'USE_PLAYWRIGHT_FOR_HPP', 'HPP_PLAYWRIGHT_HEADLESS'
+          ) | ForEach-Object { [void]$protectedVariableSet.Add($_) }
+
+          foreach ($property in $testEnvironment.PSObject.Properties) {
+            if ($property.Name -notmatch '^[A-Z][A-Z0-9_]*$') {
+              throw "Invalid test environment variable name '$($property.Name)'."
+            }
+
+            if (-not $allowedVariableSet.Contains($property.Name)) {
+              throw "Test environment variable '$($property.Name)' is not declared in the manifest allowedVariables list."
+            }
+
+            if ($protectedVariableSet.Contains($property.Name) -or
+                $property.Name -match '^(GITHUB|RUNNER|ACTIONS)_' -or
+                $property.Name -in @('CI', 'PATH', 'HOME', 'TEMP', 'TMP')) {
+              throw "Test environment variable '$($property.Name)' is reserved and cannot be overridden."
+            }
+
+            if ($property.Value -is [System.Array] -or $property.Value -is [pscustomobject]) {
+              throw "Test environment variable '$($property.Name)' must have a scalar value."
+            }
+
+            $value = [string]$property.Value
+            if ($value -match '[\r\n]') {
+              throw "Test environment variable '$($property.Name)' cannot contain a newline."
+            }
+
+            [Environment]::SetEnvironmentVariable($property.Name, $value, 'Process')
+            if (-not [string]::IsNullOrWhiteSpace($env:GITHUB_ENV)) {
+              Add-Content -LiteralPath $env:GITHUB_ENV -Value "$($property.Name)=$value"
+            }
+          }
+
+          $variableAliases = @{
+            BASE_URL = 'BaseUrl'
+            BASE_URL_DIGITAL = 'BaseUrlDigital'
+            GRAPHQL_MOBILE_PATH = 'graphQL'
+            GRAPHQL_MYACCOUNT_PUBLIC_PATH = 'graphQlMyAccountPublic'
+            GRAPHQL_TRIPS_SECURE = 'tripsSecureEndpoint'
+            GRAPHQL_BOOK_PATH = 'graphQlBook'
+            GRAPHQL_SEARCH_PATH = 'graphQlSearch'
+          }
+
+          $requiredVariables = @(Convert-JsonStringArray -Json $env:REQUIRED_VARIABLES_JSON -Name 'REQUIRED_VARIABLES_JSON')
+          $requiredSecrets = @(Convert-JsonStringArray -Json $env:REQUIRED_SECRETS_JSON -Name 'REQUIRED_SECRETS_JSON')
+          $missingVariables = New-Object 'System.Collections.Generic.List[string]'
+          foreach ($name in $requiredVariables) {
+            $lookupName = if ($variableAliases.ContainsKey([string]$name)) { $variableAliases[[string]$name] } else { [string]$name }
+            $value = [Environment]::GetEnvironmentVariable($lookupName)
+            if ([string]::IsNullOrWhiteSpace($value)) {
+              [void]$missingVariables.Add([string]$name)
+            }
+          }
+
+          $secretValues = @{
+            KEY_VAULT_URL = $env:KeyVaultUrl
+            KEY_VAULT_TENANT_ID = $env:KeyVaultTenantId
+            KEY_VAULT_CLIENT_ID = $env:KeyVaultClientId
+            KEY_VAULT_CLIENT_SECRET = $env:KeyVaultClientSecret
+            HPP_VAA_DIGITAL_FIRST_TOKEN = $env:HppVaaDigitalFirstToken
+            HPP_DELTA_ENTERPRISE_PAYMENTS_TOKEN = $env:HppDeltaEnterprisePaymentsToken
+            BROWSERSTACK_USERNAME = $env:BROWSERSTACK_USERNAME
+            BROWSERSTACK_ACCESS_KEY = $env:BROWSERSTACK_ACCESS_KEY
+            SLACK_WEBHOOK_URL = $env:SLACK_WEBHOOK_URL
+          }
+          $missingSecrets = New-Object 'System.Collections.Generic.List[string]'
+          foreach ($name in $requiredSecrets) {
+            $secretName = [string]$name
+            $lookupName = if ($secretName -like 'SLACK_WEBHOOK_URL*') { 'SLACK_WEBHOOK_URL' } else { $secretName }
+            if (-not $secretValues.ContainsKey($lookupName)) {
+              throw "Manifest secret '$secretName' is not supported by the reusable runner."
+            }
+
+            if ([string]::IsNullOrWhiteSpace([string]$secretValues[$lookupName])) {
+              [void]$missingSecrets.Add($secretName)
+            }
+          }
+
+          if ($missingVariables.Count -gt 0 -or $missingSecrets.Count -gt 0) {
+            $missing = @($missingVariables.ToArray() + $missingSecrets.ToArray())
+            throw "Required suite configuration is missing: $($missing -join ', ')."
+          }
+
+      - name: Run regression tests
+        shell: powershell
+        env:
+          KeyVaultUrl: ${{ secrets.key_vault_url }}
+          KeyVaultTenantId: ${{ secrets.key_vault_tenant_id }}
+          KeyVaultClientId: ${{ secrets.key_vault_client_id }}
+          KeyVaultClientSecret: ${{ secrets.key_vault_client_secret }}
+          HppVaaDigitalFirstToken: ${{ secrets.hpp_vaa_digital_first_token }}
+          HppDeltaEnterprisePaymentsToken: ${{ secrets.hpp_delta_enterprise_payments_token }}
+          BROWSERSTACK_USERNAME: ${{ secrets.browserstack_username }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.browserstack_access_key }}
+          HPP_PAGE_ALLOWED_ORIGINS: ${{ inputs.hpp_page_allowed_origins }}
+          HPP_HEADER_ALLOWED_ORIGINS: ${{ inputs.hpp_header_allowed_origins }}
+          UsePlaywrightForHpp: ${{ inputs.use_playwright_for_hpp }}
+          HppPlaywrightHeadless: 'true'
+        run: |
+          $categories = @(
+            $env:TEST_FILTER -split "[\r\n\|]+" |
+              ForEach-Object { $_.Trim() } |
+              Where-Object { $_ -like "Category=*" } |
+              ForEach-Object { $_.Substring("Category=".Length) }
+          )
+          if ($categories.Count -eq 0) {
+            throw "No categories found in TEST_FILTER."
+          }
+
+          $failedCategories = @()
+          New-Item -ItemType Directory -Path "TestResults" -Force | Out-Null
+          foreach ($category in $categories) {
+            $safeCategory = $category -replace "[^A-Za-z0-9_-]", "_"
+            $trxPath = Join-Path (Join-Path $env:GITHUB_WORKSPACE "TestResults") "$($env:WORKFLOW_SLUG)-$safeCategory-$($env:env).trx"
+            if (Test-Path -LiteralPath $trxPath) {
+              Remove-Item -LiteralPath $trxPath -Force
+            }
+
+            Write-Host "Running category: $category"
+
+            & dotnet test "$env:TEST_PROJECT_PATH" `
+              -c Release `
+              --no-build `
+              --filter "Category=$category" `
+              --results-directory "TestResults" `
+              --logger "trx;LogFileName=$($env:WORKFLOW_SLUG)-$safeCategory-$($env:env).trx"
+
+            $testExitCode = $LASTEXITCODE
+            if ($testExitCode -ne 0) {
+              Write-Host "::warning::Category run failed: $category (exit code $testExitCode)"
+              $failedCategories += "$category (exit code $testExitCode)"
+              continue
+            }
+
+            if (-not (Test-Path -LiteralPath $trxPath)) {
+              Write-Host "::warning::Category run did not produce a TRX file: $category"
+              $failedCategories += "$category (missing TRX)"
+              continue
+            }
+
+            try {
+              [xml]$trx = Get-Content -LiteralPath $trxPath -Raw -ErrorAction Stop
+              $totalTests = [int]$trx.TestRun.ResultSummary.Counters.total
+              $passedTests = [int]$trx.TestRun.ResultSummary.Counters.passed
+            }
+            catch {
+              Write-Host "::warning::Category run produced an unreadable TRX file: $category ($($_.Exception.Message))"
+              $failedCategories += "$category (invalid TRX)"
+              continue
+            }
+
+            if ($totalTests -le 0) {
+              Write-Host "::warning::Category run produced no tests: $category"
+              $failedCategories += "$category (no tests)"
+            }
+            elseif ($passedTests -le 0) {
+              Write-Host "::warning::Category run produced no passed tests: $category"
+              $failedCategories += "$category (no passed tests)"
+            }
+          }
+
+          if ($failedCategories.Count -gt 0) {
+            throw "One or more category runs failed: $($failedCategories -join ', ')"
+          }
+
+      - name: Publish test summary
+        id: publish_summary
+        if: always()
+        shell: powershell
+        run: |
+          $summaryPath = $env:GITHUB_STEP_SUMMARY
+
+          if (-not (Test-Path -Path $env:SUMMARY_CONFIG_PATH)) {
+            throw "Summary config file was not found at '$($env:SUMMARY_CONFIG_PATH)'."
+          }
+
+          $summaryConfig = $null
+          try {
+            $summaryConfig = Get-Content -Path $env:SUMMARY_CONFIG_PATH -Raw -ErrorAction Stop | ConvertFrom-Json
+          }
+          catch {
+            throw "Unable to load summary config at '$($env:SUMMARY_CONFIG_PATH)': $($_.Exception.Message)"
+          }
+
+          function Get-ConfigArray([object]$value) {
+            if ($null -eq $value) { return @() }
+            return @($value)
+          }
+
+          function Get-ConfigString([object]$value, [string]$fallback = "") {
+            $text = [string]$value
+            if ([string]::IsNullOrWhiteSpace($text)) {
+              return $fallback
+            }
+
+            return $text
+          }
+
+          function Get-ConfigMap([object]$value) {
+            $map = @{}
+            if ($null -eq $value) {
+              return $map
+            }
+
+            if ($value -is [System.Collections.IDictionary]) {
+              foreach ($entry in $value.GetEnumerator()) {
+                $key = Get-ConfigString $entry.Key
+                if ([string]::IsNullOrWhiteSpace($key)) {
+                  continue
+                }
+
+                $map[$key] = Get-ConfigString $entry.Value
+              }
+
+              return $map
+            }
+
+            foreach ($property in $value.PSObject.Properties) {
+              $key = Get-ConfigString $property.Name
+              if ([string]::IsNullOrWhiteSpace($key)) {
+                continue
+              }
+
+              $map[$key] = Get-ConfigString $property.Value
+            }
+
+            return $map
+          }
+
+          $defaultGroupName = Get-ConfigString $summaryConfig.defaultGroup
+          $defaultCustomerImpactText = Get-ConfigString $summaryConfig.defaultCustomerImpact
+          $configuredGroupRules = Get-ConfigArray $summaryConfig.groupRules
+          $configuredCustomerImpactRules = Get-ConfigArray $summaryConfig.customerImpactRules
+          $configuredGroupOrder = Get-ConfigArray $summaryConfig.groupOrder
+          $configuredHolidayGroups = Get-ConfigArray $summaryConfig.holidayGroups
+          $configuredHolidayLinePattern = Get-ConfigString $summaryConfig.holidayLinePattern "(?!)"
+          $configuredDataUnavailableReasonPattern = Get-ConfigString $summaryConfig.dataUnavailableReasonPattern
+          $configuredPriorityContextKeys = Get-ConfigArray $summaryConfig.priorityContextKeys
+          $configuredPriorityContextLabelsRaw = Get-ConfigMap $summaryConfig.priorityContextLabels
+          $configuredPriorityContextLabels = @{}
+          foreach ($entry in $configuredPriorityContextLabelsRaw.GetEnumerator()) {
+            $normalizedKey = Get-ConfigString $entry.Key
+            if ([string]::IsNullOrWhiteSpace($normalizedKey)) {
+              continue
+            }
+
+            $configuredPriorityContextLabels[$normalizedKey.Trim().ToLowerInvariant()] = Get-ConfigString $entry.Value
+          }
+
+          if ([string]::IsNullOrWhiteSpace($defaultGroupName)) { throw "summary config missing required 'defaultGroup'." }
+          if ([string]::IsNullOrWhiteSpace($defaultCustomerImpactText)) { throw "summary config missing required 'defaultCustomerImpact'." }
+          if ($configuredGroupRules.Count -eq 0) { throw "summary config missing required 'groupRules'." }
+          if ($configuredCustomerImpactRules.Count -eq 0) { throw "summary config missing required 'customerImpactRules'." }
+          if ($configuredGroupOrder.Count -eq 0) { throw "summary config missing required 'groupOrder'." }
+          if ([string]::IsNullOrWhiteSpace($configuredDataUnavailableReasonPattern)) { throw "summary config missing required 'dataUnavailableReasonPattern'." }
+          if ($configuredPriorityContextKeys.Count -eq 0) { throw "summary config missing required 'priorityContextKeys'." }
+
+          function Write-DefaultOutputs() {
+            "total=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "passed=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "failed=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "skipped=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "pass_rate=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "fail_rate=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "execution_pass_rate=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "execution_coverage=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "duration=n/a" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "execution_time=n/a" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "category_failure_buckets=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "failed_test_details=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "skipped_test_details=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "customer_impact=- No customer impact could be determined because no test results were available." | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "skipped_data_unavailable_summary=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "feature_summary_primary=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "feature_summary_holidays=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "customer_impact_primary=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "customer_impact_holidays=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "skipped_data_unavailable_primary=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "skipped_data_unavailable_holidays=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          }
+
+          function Write-MinimalSummary([string]$reason) {
+            Write-DefaultOutputs
+            "## $($env:SUITE_NAME) Summary ($env:env)`n`n$reason" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+          }
+
+          function Get-CounterValue($value) {
+            if ($null -eq $value -or [string]::IsNullOrWhiteSpace([string]$value)) { return 0 }
+            return [int]$value
+          }
+
+          function Get-ShortTestName([string]$fullName) {
+            if ([string]::IsNullOrWhiteSpace($fullName)) {
+              return "Unknown failed test"
+            }
+
+            $namePart = $fullName
+            $parenIndex = $fullName.IndexOf("(")
+            if ($parenIndex -gt 0) {
+              $namePart = $fullName.Substring(0, $parenIndex)
+            }
+
+            $lastDotIndex = $namePart.LastIndexOf(".")
+            if ($lastDotIndex -ge 0 -and $lastDotIndex -lt $namePart.Length - 1) {
+              return $fullName.Substring($lastDotIndex + 1)
+            }
+
+            return $fullName
+          }
+
+          function Get-ResultMessageLines($result) {
+            if ($null -eq $result -or $null -eq $result.Output -or $null -eq $result.Output.ErrorInfo) {
+              return @()
+            }
+
+            $message = [string]$result.Output.ErrorInfo.Message
+            if ([string]::IsNullOrWhiteSpace($message)) {
+              return @()
+            }
+
+            return @($message -split "`r?`n" | ForEach-Object { $_.Trim() } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+          }
+
+          function Get-ReadableResultReason($result, [int]$maxLength = 260) {
+            $lines = Get-ResultMessageLines $result
+            if ($lines.Count -eq 0) {
+              return "No error message"
+            }
+
+            $selectedLines = @()
+            foreach ($line in $lines) {
+              if ($line -match '^at\s+') {
+                break
+              }
+              $selectedLines += $line
+              if ($selectedLines.Count -ge 3) {
+                break
+              }
+            }
+
+            if ($selectedLines.Count -eq 0) {
+              $selectedLines = @($lines[0])
+            }
+
+            $reason = ($selectedLines -join " | ") -replace '\s+', ' '
+            $reason = $reason.Trim()
+            if ([string]::IsNullOrWhiteSpace($reason)) {
+              return "No error message"
+            }
+
+            if ($reason.Length -gt $maxLength) {
+              return $reason.Substring(0, $maxLength) + "..."
+            }
+
+            return $reason
+          }
+
+          function Add-ContextEntry($contextMap, [string]$key, [string]$value) {
+            if ([string]::IsNullOrWhiteSpace($key)) {
+              return
+            }
+
+            $normalizedKey = $key.Trim().ToLowerInvariant()
+            if ($contextMap.ContainsKey($normalizedKey)) {
+              return
+            }
+
+            $cleanValue = if ($null -eq $value) { "" } else { [string]$value }
+            $contextMap[$normalizedKey] = $cleanValue.Trim()
+          }
+
+          function Get-PriorityContextSummary($result, [int]$maxLength = 260) {
+            $lines = Get-ResultMessageLines $result
+            if ($lines.Count -eq 0) {
+              return ""
+            }
+
+            $text = ($lines -join " ")
+            if ([string]::IsNullOrWhiteSpace($text)) {
+              return ""
+            }
+
+            $contextMap = @{}
+
+            $contextKeyTokens = @(
+              $configuredPriorityContextKeys |
+                ForEach-Object { Get-ConfigString $_ } |
+                ForEach-Object { $_.Trim() } |
+                Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+                ForEach-Object { [regex]::Escape($_) }
+            )
+
+            if ($contextKeyTokens.Count -eq 0) {
+              return ""
+            }
+
+            $contextKeyPattern = $contextKeyTokens -join "|"
+            $keyValuePatternTemplate = '(?<key>{0})\s*(==|=|:)\s*(?<value>''[^'']*''|"[^"]*"|[^,;\]\)\s]+)'
+            $keyValuePattern = [string]::Format($keyValuePatternTemplate, $contextKeyPattern)
+
+            $keyValueMatches = [regex]::Matches(
+              $text,
+              $keyValuePattern,
+              [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+            )
+
+            foreach ($match in $keyValueMatches) {
+              $rawKey = $match.Groups["key"].Value
+              $rawValue = $match.Groups["value"].Value.Trim("'", '"')
+
+              if ([string]::IsNullOrWhiteSpace($rawValue) -or $rawValue -eq "<empty>" -or $rawValue -eq "<null>" -or $rawValue -eq "=") {
+                continue
+              }
+
+              Add-ContextEntry $contextMap $rawKey $rawValue
+            }
+
+            if ($contextMap.Count -eq 0) {
+              return ""
+            }
+
+            $priorityKeys = @()
+            foreach ($configuredKey in $configuredPriorityContextKeys) {
+              $normalizedPriorityKey = Get-ConfigString $configuredKey
+              if ([string]::IsNullOrWhiteSpace($normalizedPriorityKey)) {
+                continue
+              }
+
+              $normalizedPriorityKey = $normalizedPriorityKey.Trim().ToLowerInvariant()
+              if ($priorityKeys -notcontains $normalizedPriorityKey) {
+                $priorityKeys += $normalizedPriorityKey
+              }
+            }
+
+            $parts = @()
+            foreach ($priorityKey in $priorityKeys) {
+              if ($contextMap.ContainsKey($priorityKey)) {
+                $displayKey = if ($configuredPriorityContextLabels.ContainsKey($priorityKey)) { $configuredPriorityContextLabels[$priorityKey] } else { $priorityKey }
+                $parts += "$displayKey='$($contextMap[$priorityKey])'"
+              }
+            }
+
+            foreach ($extraKey in ($contextMap.Keys | Sort-Object)) {
+              if ($priorityKeys -contains $extraKey) {
+                continue
+              }
+
+              $parts += "$extraKey='$($contextMap[$extraKey])'"
+            }
+
+            $contextText = ($parts -join ", ")
+            if ($contextText.Length -gt $maxLength) {
+              $contextText = $contextText.Substring(0, $maxLength) + "..."
+            }
+
+            return $contextText
+          }
+
+          function Get-NormalizedResultReason($result) {
+            $line = Get-ReadableResultReason $result
+            if ([string]::IsNullOrWhiteSpace($line) -or $line -eq "No error message") {
+              return "No reason provided"
+            }
+
+            $normalized = $line
+            $normalized = $normalized -replace '^\$XunitDynamicSkip\$', ''
+            $normalized = $normalized -replace '^Xunit\.SkipException\s*:\s*', ''
+            $normalized = $normalized -replace '^Test skipped:\s*', ''
+            $normalized = $normalized.Trim()
+
+            if ([string]::IsNullOrWhiteSpace($normalized)) {
+              return "No reason provided"
+            }
+
+            return $normalized
+          }
+
+          function Get-TopReasonSummary($reasonMap, [int]$maxItems = 2) {
+            if ($null -eq $reasonMap -or $reasonMap.Count -eq 0) {
+              return "No reason provided"
+            }
+
+            $items = @(
+              $reasonMap.GetEnumerator() |
+                Sort-Object Value -Descending |
+                Select-Object -First $maxItems |
+                ForEach-Object {
+                  $reasonText = [string]$_.Key
+                  if ($reasonText.Length -gt 180) {
+                    $reasonText = $reasonText.Substring(0, 180) + "..."
+                  }
+                  "$reasonText (x$($_.Value))"
+                }
+            )
+
+            if ($items.Count -eq 0) {
+              return "No reason provided"
+            }
+
+            return ($items -join "; ")
+          }
+
+          function Is-DataUnavailableReason([string]$reason) {
+            if ([string]::IsNullOrWhiteSpace($reason)) {
+              return $false
+            }
+
+            return $reason -match $configuredDataUnavailableReasonPattern
+          }
+
+          function Get-CategoryDisplayName([string]$categoryName) {
+            if ([string]::IsNullOrWhiteSpace($categoryName)) {
+              return "Uncategorized"
+            }
+
+            $displayName = $categoryName -replace "-Regression$", ""
+            $displayName = $displayName -replace "Mobile", ""
+            return $displayName.Trim()
+          }
+
+          function Get-CategoryPassRate([int]$passed, [int]$failed) {
+            $executed = $passed + $failed
+            if ($executed -le 0) {
+              return 0
+            }
+
+            return [math]::Round(($passed / $executed) * 100, 2)
+          }
+
+          function Get-CategoryPassRateText([int]$passed, [int]$failed) {
+            $executed = $passed + $failed
+            if ($executed -le 0) {
+              return "n/a"
+            }
+
+            return "$(Get-CategoryPassRate $passed $failed)%"
+          }
+
+          function Get-CustomerImpact([string]$categoryName) {
+            if ([string]::IsNullOrWhiteSpace($categoryName)) {
+              return $defaultCustomerImpactText
+            }
+
+            foreach ($rule in $configuredCustomerImpactRules) {
+              if ($null -eq $rule) {
+                continue
+              }
+
+              $pattern = Get-ConfigString $rule.pattern
+              $impact = Get-ConfigString $rule.impact
+              if (-not [string]::IsNullOrWhiteSpace($pattern) -and -not [string]::IsNullOrWhiteSpace($impact) -and $categoryName -match $pattern) {
+                return $impact
+              }
+            }
+
+            return $defaultCustomerImpactText
+          }
+
+          function Get-CategoryGroupName([string]$categoryName) {
+            if ([string]::IsNullOrWhiteSpace($categoryName)) {
+              return $defaultGroupName
+            }
+
+            foreach ($rule in $configuredGroupRules) {
+              if ($null -eq $rule) {
+                continue
+              }
+
+              $pattern = Get-ConfigString $rule.pattern
+              $groupName = Get-ConfigString $rule.group
+              if (-not [string]::IsNullOrWhiteSpace($pattern) -and -not [string]::IsNullOrWhiteSpace($groupName) -and $categoryName -match $pattern) {
+                return $groupName
+              }
+            }
+
+            return $defaultGroupName
+          }
+
+          $trxFiles = Get-ChildItem -Path "TestResults" -Filter "*.trx" -File -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTimeUtc -Descending
+
+          if ($trxFiles.Count -eq 0) {
+            Write-MinimalSummary "No TRX file was found in TestResults."
+            exit 0
+          }
+
+          $total = 0
+          $passed = 0
+          $failed = 0
+          $skipped = 0
+          $totalDuration = [timespan]::Zero
+          $categoryStats = @{}
+          $categoryReasonStats = @{}
+          $failedTestDetails = @()
+          $skippedTestDetails = @()
+
+          foreach ($trxFile in $trxFiles) {
+            [xml]$trx = $null
+            try {
+              [xml]$trx = Get-Content -Path $trxFile.FullName -ErrorAction Stop
+            }
+            catch {
+              continue
+            }
+
+            if ($null -eq $trx.TestRun -or $null -eq $trx.TestRun.ResultSummary -or $null -eq $trx.TestRun.ResultSummary.Counters) {
+              continue
+            }
+
+            $categoryName = "Uncategorized"
+            if ($trxFile.BaseName -match "^$([regex]::Escape($env:WORKFLOW_SLUG))-(.+)-$([regex]::Escape($env:env))$") {
+              $categoryName = $matches[1]
+            }
+
+            if (-not $categoryStats.ContainsKey($categoryName)) {
+              $categoryStats[$categoryName] = [PSCustomObject]@{ Passed = 0; Failed = 0; Skipped = 0 }
+            }
+
+            if (-not $categoryReasonStats.ContainsKey($categoryName)) {
+              $categoryReasonStats[$categoryName] = [PSCustomObject]@{
+                FailedReasons = @{}
+                SkippedReasons = @{}
+              }
+            }
+
+            [datetime]$startTime = [datetime]::MinValue
+            [datetime]$finishTime = [datetime]::MinValue
+            if ($null -ne $trx.TestRun.Times -and [datetime]::TryParse($trx.TestRun.Times.start, [ref]$startTime) -and [datetime]::TryParse($trx.TestRun.Times.finish, [ref]$finishTime)) {
+              $totalDuration += ($finishTime - $startTime)
+            }
+
+            $failedResults = @()
+            if ($null -ne $trx.TestRun.Results -and $null -ne $trx.TestRun.Results.UnitTestResult) {
+              $failedResults = @($trx.TestRun.Results.UnitTestResult | Where-Object { $_.outcome -eq "Failed" })
+            }
+
+            foreach ($failedResult in $failedResults) {
+              $shortName = Get-ShortTestName([string]$failedResult.testName)
+              $errorLine = Get-ReadableResultReason $failedResult 350
+              $priorityContext = Get-PriorityContextSummary $failedResult 250
+              $normalizedError = Get-NormalizedResultReason $failedResult
+
+              if (-not $categoryReasonStats[$categoryName].FailedReasons.ContainsKey($normalizedError)) {
+                $categoryReasonStats[$categoryName].FailedReasons[$normalizedError] = 0
+              }
+              $categoryReasonStats[$categoryName].FailedReasons[$normalizedError]++
+
+              if ([string]::IsNullOrWhiteSpace($priorityContext)) {
+                $failedTestDetails += "- [$categoryName] $shortName => $errorLine"
+              }
+              else {
+                $failedTestDetails += "- [$categoryName] $shortName => Context: $priorityContext | $errorLine"
+              }
+            }
+
+            $skippedResults = @()
+            if ($null -ne $trx.TestRun.Results -and $null -ne $trx.TestRun.Results.UnitTestResult) {
+              $skippedResults = @($trx.TestRun.Results.UnitTestResult | Where-Object { $_.outcome -eq "NotExecuted" -or $_.outcome -eq "Skipped" })
+            }
+
+            $counters = $trx.TestRun.ResultSummary.Counters
+            $catPassed = Get-CounterValue $counters.passed
+            $catFailed = Get-CounterValue $counters.failed
+            $catSkippedFromCounters = Get-CounterValue $counters.notExecuted
+            $catSkippedFromResults = $skippedResults.Count
+            $catSkipped = [math]::Max($catSkippedFromCounters, $catSkippedFromResults)
+            $catTotalFromCounters = Get-CounterValue $counters.total
+            $catTotalFromOutcomes = $catPassed + $catFailed + $catSkipped
+            $catTotal = [math]::Max($catTotalFromCounters, $catTotalFromOutcomes)
+
+            $total += $catTotal
+            $passed += $catPassed
+            $failed += $catFailed
+            $skipped += $catSkipped
+
+            $categoryStats[$categoryName].Passed += $catPassed
+            $categoryStats[$categoryName].Failed += $catFailed
+            $categoryStats[$categoryName].Skipped += $catSkipped
+
+            foreach ($skippedResult in $skippedResults) {
+              $skipReason = Get-NormalizedResultReason $skippedResult
+              $shortName = Get-ShortTestName([string]$skippedResult.testName)
+              $skipDetail = Get-ReadableResultReason $skippedResult 350
+              $priorityContext = Get-PriorityContextSummary $skippedResult 250
+              if (-not $categoryReasonStats[$categoryName].SkippedReasons.ContainsKey($skipReason)) {
+                $categoryReasonStats[$categoryName].SkippedReasons[$skipReason] = 0
+              }
+              $categoryReasonStats[$categoryName].SkippedReasons[$skipReason]++
+              if ([string]::IsNullOrWhiteSpace($priorityContext)) {
+                $skippedTestDetails += "- [$categoryName] $shortName => $skipDetail"
+              }
+              else {
+                $skippedTestDetails += "- [$categoryName] $shortName => Context: $priorityContext | $skipDetail"
+              }
+            }
+          }
+
+          $passRate = if ($total -gt 0) { [math]::Round(($passed / $total) * 100, 2) } else { 0 }
+          $failRate = if ($total -gt 0) { [math]::Round(($failed / $total) * 100, 2) } else { 0 }
+          $executed = $passed + $failed
+          $executionPassRate = if ($executed -gt 0) { [math]::Round(($passed / $executed) * 100, 2) } else { 0 }
+          $executionCoverage = if ($total -gt 0) { [math]::Round(($executed / $total) * 100, 2) } else { 0 }
+          $durationText = if ($totalDuration.TotalSeconds -gt 0) { "$([int]$totalDuration.TotalMinutes)m $($totalDuration.Seconds)s" } else { "n/a" }
+          $executionTimeUk = "n/a"
+          try {
+            $executionTimeUk = [System.TimeZoneInfo]::ConvertTimeBySystemTimeZoneId(
+              [datetime]::UtcNow,
+              "GMT Standard Time"
+            ).ToString("dd MMM yyyy HH:mm:ss") + " UK"
+          }
+          catch {
+            $executionTimeUk = [datetime]::UtcNow.ToString("dd MMM yyyy HH:mm:ss") + " UTC"
+          }
+
+          $categoryFailureBucketText = "None"
+          $customerImpactItems = @()
+          $skippedDataUnavailableSummaryText = "None"
+          if ($categoryStats.Count -gt 0) {
+            $groupOrder = @($configuredGroupOrder)
+            $categoryLines = @()
+            $skippedDataByFeature = @{}
+
+            foreach ($groupName in $groupOrder) {
+              $groupCategories = @(
+                $categoryStats.GetEnumerator() |
+                  Where-Object { (Get-CategoryGroupName $_.Key) -eq $groupName } |
+                  Sort-Object { $_.Value.Failed } -Descending
+              )
+
+              if ($groupCategories.Count -gt 0) {
+                $categoryLines += "**\[$groupName\]**"
+                $categoryLines += ($groupCategories | ForEach-Object {
+                  $displayName = Get-CategoryDisplayName $_.Key
+                  $catPassRateText = Get-CategoryPassRateText $_.Value.Passed $_.Value.Failed
+                  $failedReasonSummary = Get-TopReasonSummary $categoryReasonStats[$_.Key].FailedReasons 1
+                  $skippedReasonSummary = Get-TopReasonSummary $categoryReasonStats[$_.Key].SkippedReasons 2
+
+                  $skippedDataCount = 0
+                  foreach ($skipReasonEntry in $categoryReasonStats[$_.Key].SkippedReasons.GetEnumerator()) {
+                    if (Is-DataUnavailableReason([string]$skipReasonEntry.Key)) {
+                      $skippedDataCount += [int]$skipReasonEntry.Value
+                    }
+                  }
+
+                  if ($skippedDataCount -gt 0) {
+                    if (-not $skippedDataByFeature.ContainsKey($displayName)) {
+                      $skippedDataByFeature[$displayName] = 0
+                    }
+                    $skippedDataByFeature[$displayName] += $skippedDataCount
+                  }
+
+                  if ($_.Value.Failed -gt 0) {
+                    $customerImpactItems += "- $(Get-CustomerImpact $_.Key)"
+                    if ($_.Value.Skipped -gt 0) {
+                      "{0}: Passed {1}, Failed {2}, Skipped {3}, Pass% {4} :x:`n  - Failure summary: {5}`n  - Skipped summary: {6}`n  - Customer impact: {7}" -f $displayName, $_.Value.Passed, $_.Value.Failed, $_.Value.Skipped, $catPassRateText, $failedReasonSummary, $skippedReasonSummary, (Get-CustomerImpact $_.Key)
+                    }
+                    else {
+                      "{0}: Passed {1}, Failed {2}, Skipped {3}, Pass% {4} :x:`n  - Failure summary: {5}`n  - Customer impact: {6}" -f $displayName, $_.Value.Passed, $_.Value.Failed, $_.Value.Skipped, $catPassRateText, $failedReasonSummary, (Get-CustomerImpact $_.Key)
+                    }
+                  }
+                  elseif ($_.Value.Skipped -gt 0) {
+                    "{0}: Passed {1}, Failed {2}, Skipped {3}, Pass% {4} :warning:`n  - Skipped summary: {5}" -f $displayName, $_.Value.Passed, $_.Value.Failed, $_.Value.Skipped, $catPassRateText, $skippedReasonSummary
+                  }
+                  elseif (($_.Value.Passed + $_.Value.Failed + $_.Value.Skipped) -eq 0) {
+                    "{0}: Passed {1}, Failed {2}, Skipped {3}, Pass% {4} :warning:`n  - No tests were executed for this category." -f $displayName, $_.Value.Passed, $_.Value.Failed, $_.Value.Skipped, $catPassRateText
+                  }
+                  else {
+                    "{0}: Passed {1}, Failed {2}, Skipped {3}, Pass% {4} :white_check_mark:" -f $displayName, $_.Value.Passed, $_.Value.Failed, $_.Value.Skipped, $catPassRateText
+                  }
+                })
+                $categoryLines += ""
+              }
+            }
+
+            if ($categoryLines.Count -gt 0 -and [string]::IsNullOrWhiteSpace($categoryLines[-1])) {
+              $categoryLines = $categoryLines[0..($categoryLines.Count - 2)]
+            }
+
+            if ($categoryLines.Count -gt 0) {
+              $categoryFailureBucketText = ($categoryLines -join "`n")
+            }
+
+            if ($skippedDataByFeature.Count -gt 0) {
+              $skippedDataUnavailableSummaryText = (
+                $skippedDataByFeature.GetEnumerator() |
+                  Sort-Object Value -Descending |
+                  ForEach-Object { "- $($_.Key): $($_.Value)" }
+              ) -join "`n"
+            }
+          }
+
+          $customerImpactText = if ($customerImpactItems.Count -gt 0) {
+            ($customerImpactItems | Select-Object -Unique) -join "`n"
+          }
+          else {
+            "- No customer impact detected."
+          }
+
+          $failedTestDetailsText = "None"
+          if ($failedTestDetails.Count -gt 0) {
+            $failedTestDetailsText = ($failedTestDetails | Select-Object -First 25) -join "`n"
+          }
+
+          $skippedTestDetailsText = "None"
+          if ($skippedTestDetails.Count -gt 0) {
+            $skippedTestDetailsText = ($skippedTestDetails | Select-Object -First 25) -join "`n"
+          }
+
+          $categoryFailureBucketTextForSlack = $categoryFailureBucketText -replace '\*\*\\\[([^\]]+)\\\]\*\*', '*[$1]*'
+          $categoryFailureBucketTextForSlack = $categoryFailureBucketTextForSlack -replace '\*\*([^\*]+)\*\*', '*$1*'
+
+          function Remove-EdgeBlankLines([string[]]$lines) {
+            if ($null -eq $lines -or $lines.Count -eq 0) {
+              return @()
+            }
+
+            $start = 0
+            $end = $lines.Count - 1
+
+            while ($start -le $end -and [string]::IsNullOrWhiteSpace($lines[$start])) {
+              $start++
+            }
+
+            while ($end -ge $start -and [string]::IsNullOrWhiteSpace($lines[$end])) {
+              $end--
+            }
+
+            if ($start -gt $end) {
+              return @()
+            }
+
+            return $lines[$start..$end]
+          }
+
+          function Split-FeatureSummaryByModule([string]$featureSummaryText) {
+            $result = @{ Primary = "None"; Holidays = "None" }
+            if ([string]::IsNullOrWhiteSpace($featureSummaryText) -or $featureSummaryText -eq "None") {
+              return $result
+            }
+
+            $holidayGroups = @($configuredHolidayGroups)
+            $primaryLines = @()
+            $holidayLines = @()
+            $currentTarget = "primary"
+
+            foreach ($line in ($featureSummaryText -split "`r?`n")) {
+              if ($line -match '^\*{1,2}\[([^\]]+)\]\*{1,2}$') {
+                $groupName = $matches[1]
+                $isHolidayGroup = $holidayGroups -contains $groupName
+                $currentTarget = if ($isHolidayGroup) { "holiday" } else { "primary" }
+              }
+
+              if ($currentTarget -eq "holiday") {
+                $holidayLines += $line
+              }
+              else {
+                $primaryLines += $line
+              }
+            }
+
+            $primaryLines = Remove-EdgeBlankLines $primaryLines
+            $holidayLines = Remove-EdgeBlankLines $holidayLines
+
+            if ($primaryLines.Count -gt 0) {
+              $result.Primary = $primaryLines -join "`n"
+            }
+
+            if ($holidayLines.Count -gt 0) {
+              $result.Holidays = $holidayLines -join "`n"
+            }
+
+            return $result
+          }
+
+          function Split-SimpleListByModule([string]$text) {
+            $result = @{ Primary = "None"; Holidays = "None" }
+            if ([string]::IsNullOrWhiteSpace($text) -or $text -eq "None") {
+              return $result
+            }
+
+            $primaryLines = @()
+            $holidayLines = @()
+            foreach ($line in ($text -split "`r?`n")) {
+              if ([string]::IsNullOrWhiteSpace($line)) {
+                continue
+              }
+
+              if ($line -match $configuredHolidayLinePattern) {
+                $holidayLines += $line
+              }
+              else {
+                $primaryLines += $line
+              }
+            }
+
+            if ($primaryLines.Count -gt 0) {
+              $result.Primary = $primaryLines -join "`n"
+            }
+
+            if ($holidayLines.Count -gt 0) {
+              $result.Holidays = $holidayLines -join "`n"
+            }
+
+            return $result
+          }
+
+          $featureSummarySplit = Split-FeatureSummaryByModule $categoryFailureBucketTextForSlack
+          $customerImpactSplit = Split-SimpleListByModule $customerImpactText
+          $skippedDataSplit = Split-SimpleListByModule $skippedDataUnavailableSummaryText
+
+          $codeFence = '```'
+          $summaryLines = @(
+            "## $($env:SUITE_NAME) Summary ($env:env)",
+            "",
+            "| Metric | Value |",
+            "| --- | ---: |",
+            "| Total | **$total** |",
+            "| Passed | **$passed** |",
+            "| Failed | **$failed** |",
+            "| Skipped | **$skipped** |",
+            "| Execution Pass Rate | **$executionPassRate%** |",
+            "| Execution Coverage | **$executionCoverage%** |",
+            "| Duration | **$durationText** |",
+            "",
+            "### Feature Summary",
+            $categoryFailureBucketText,
+            "",
+            "### Skipped due to test data unavailable",
+            $skippedDataUnavailableSummaryText,
+            "",
+            "### Skipped Test Details (sample)",
+            $skippedTestDetailsText,
+            "",
+            "### Customer Impact",
+            $customerImpactText
+          )
+
+          "total=$total" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "passed=$passed" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "failed=$failed" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "skipped=$skipped" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "pass_rate=$passRate" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "fail_rate=$failRate" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "execution_pass_rate=$executionPassRate" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "execution_coverage=$executionCoverage" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "duration=$durationText" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "execution_time=$executionTimeUk" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "category_failure_buckets<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $categoryFailureBucketTextForSlack | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "customer_impact<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $customerImpactText | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "skipped_data_unavailable_summary<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $skippedDataUnavailableSummaryText | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "feature_summary_primary<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $featureSummarySplit.Primary | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "feature_summary_holidays<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $featureSummarySplit.Holidays | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "customer_impact_primary<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $customerImpactSplit.Primary | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "customer_impact_holidays<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $customerImpactSplit.Holidays | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "skipped_data_unavailable_primary<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $skippedDataSplit.Primary | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "skipped_data_unavailable_holidays<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $skippedDataSplit.Holidays | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "failed_test_details<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $failedTestDetailsText | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "skipped_test_details<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $skippedTestDetailsText | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+          $summaryLines -join "`n" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+
+          try {
+            $analysis = & "scripts/analyse-test-run-results.ps1" `
+              -ResultsDirectory "TestResults" `
+              -SuiteName $env:SUITE_NAME `
+              -EnvironmentName $env:env
+            if (-not [string]::IsNullOrWhiteSpace($analysis)) {
+              "`n$analysis" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+            }
+          }
+          catch {
+            "### Post-Test Failure Analysis`n`nUnable to generate failure analysis: $($_.Exception.Message)" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+          }
+
+      - name: Notify Slack summary
+        if: always()
+        shell: powershell
+        env:
+          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
+          HAS_SLACK_WEBHOOK_VALUE: ${{ env.HAS_SLACK_WEBHOOK }}
+          SLACK_ALLOWED_BY_REF: ${{ github.ref == 'refs/heads/main' || inputs.enable_slack_for_branch_runs }}
+          CURRENT_REF: ${{ github.ref }}
+          JOB_STATUS: ${{ job.status }}
+          TOTAL: ${{ steps.publish_summary.outputs.total }}
+          PASSED: ${{ steps.publish_summary.outputs.passed }}
+          FAILED: ${{ steps.publish_summary.outputs.failed }}
+          SKIPPED: ${{ steps.publish_summary.outputs.skipped }}
+          EXECUTION_PASS_RATE: ${{ steps.publish_summary.outputs.execution_pass_rate }}
+          EXECUTION_COVERAGE: ${{ steps.publish_summary.outputs.execution_coverage }}
+          DURATION: ${{ steps.publish_summary.outputs.duration }}
+          EXECUTION_TIME: ${{ steps.publish_summary.outputs.execution_time }}
+          CATEGORY_FAILURE_BUCKETS: ${{ steps.publish_summary.outputs.category_failure_buckets }}
+          CUSTOMER_IMPACT: ${{ steps.publish_summary.outputs.customer_impact }}
+          SKIPPED_DATA_UNAVAILABLE_SUMMARY: ${{ steps.publish_summary.outputs.skipped_data_unavailable_summary }}
+          FEATURE_SUMMARY_PRIMARY: ${{ steps.publish_summary.outputs.feature_summary_primary }}
+          FEATURE_SUMMARY_HOLIDAYS: ${{ steps.publish_summary.outputs.feature_summary_holidays }}
+          CUSTOMER_IMPACT_PRIMARY: ${{ steps.publish_summary.outputs.customer_impact_primary }}
+          CUSTOMER_IMPACT_HOLIDAYS: ${{ steps.publish_summary.outputs.customer_impact_holidays }}
+          SKIPPED_DATA_UNAVAILABLE_PRIMARY: ${{ steps.publish_summary.outputs.skipped_data_unavailable_primary }}
+          SKIPPED_DATA_UNAVAILABLE_HOLIDAYS: ${{ steps.publish_summary.outputs.skipped_data_unavailable_holidays }}
+          FAILED_TEST_DETAILS: ${{ steps.publish_summary.outputs.failed_test_details }}
+          SKIPPED_TEST_DETAILS: ${{ steps.publish_summary.outputs.skipped_test_details }}
+          TARGET_ENV: ${{ inputs.target_environment }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if ($env:HAS_SLACK_WEBHOOK_VALUE -ne 'true') {
+            Write-Host "::warning::Slack notification skipped: SLACK_WEBHOOK_URL is not configured for this run."
+            return
+          }
+
+          if ($env:SLACK_ALLOWED_BY_REF -ne 'true') {
+            Write-Host "::warning::Slack notification skipped: ref '$($env:CURRENT_REF)' is not allowed and branch override is disabled."
+            return
+          }
+
+          switch ($env:JOB_STATUS) {
+            "success" { $statusEmoji = ":white_check_mark:"; $statusText = "Passed" }
+            "failure" { $statusEmoji = ":x:"; $statusText = "Failed" }
+            "cancelled" { $statusEmoji = ":warning:"; $statusText = "Cancelled" }
+            default { $statusEmoji = ":warning:"; $statusText = "Unknown" }
+          }
+
+          $slackConfig = $null
+          if (-not [string]::IsNullOrWhiteSpace($env:SLACK_CONFIG_PATH)) {
+            if (-not (Test-Path -Path $env:SLACK_CONFIG_PATH)) {
+              throw "Slack config file was not found at '$($env:SLACK_CONFIG_PATH)'."
+            }
+
+            try {
+              $slackConfig = Get-Content -Path $env:SLACK_CONFIG_PATH -Raw -ErrorAction Stop | ConvertFrom-Json
+            }
+            catch {
+              throw "Unable to load Slack config at '$($env:SLACK_CONFIG_PATH)': $($_.Exception.Message)"
+            }
+          }
+
+          function Get-SlackConfigString([object]$value, [string]$fallback) {
+            $text = [string]$value
+            if ([string]::IsNullOrWhiteSpace($text)) {
+              return $fallback
+            }
+
+            return $text
+          }
+
+          function Get-SlackConfigInt([object]$value, [int]$fallback) {
+            if ($null -eq $value) {
+              return $fallback
+            }
+
+            $parsed = 0
+            if ([int]::TryParse([string]$value, [ref]$parsed) -and $parsed -gt 0) {
+              return $parsed
+            }
+
+            return $fallback
+          }
+
+          function Get-SlackConfigBool([object]$value, [bool]$fallback) {
+            if ($null -eq $value) {
+              return $fallback
+            }
+
+            $text = ([string]$value).Trim().ToLowerInvariant()
+            if ($text -in @("true", "1", "yes", "y")) { return $true }
+            if ($text -in @("false", "0", "no", "n")) { return $false }
+
+            return $fallback
+          }
+
+          $splitMessages = Get-SlackConfigBool $slackConfig.splitMessages $true
+          $holidaysMessageLabel = Get-SlackConfigString $slackConfig.holidaysMessageLabel "Holidays Module"
+          $includeSuiteNameInHolidaysHeader = Get-SlackConfigBool $slackConfig.includeSuiteNameInHolidaysHeader $true
+          $featureSummaryPrimaryTitle = Get-SlackConfigString $slackConfig.featureSummaryPrimaryTitle "Feature Summary (Trips + Seats):"
+          $featureSummaryHolidaysTitle = Get-SlackConfigString $slackConfig.featureSummaryHolidaysTitle "Feature Summary (Holidays):"
+          $skippedUnavailablePrimaryTitle = Get-SlackConfigString $slackConfig.skippedUnavailablePrimaryTitle "Skipped due to test data unavailable (Trips + Seats):"
+          $skippedUnavailableHolidaysTitle = Get-SlackConfigString $slackConfig.skippedUnavailableHolidaysTitle "Skipped due to test data unavailable (Holidays):"
+          $customerImpactPrimaryTitle = Get-SlackConfigString $slackConfig.customerImpactPrimaryTitle "Customer Impact (Trips + Seats):"
+          $customerImpactHolidaysTitle = Get-SlackConfigString $slackConfig.customerImpactHolidaysTitle "Customer Impact (Holidays):"
+          $failedDetailsTitle = Get-SlackConfigString $slackConfig.failedDetailsTitle "Failed test details (sample):"
+          $skippedDetailsTitle = Get-SlackConfigString $slackConfig.skippedDetailsTitle "Skipped test details (sample):"
+          $buttonText = Get-SlackConfigString $slackConfig.buttonText "View Workflow Run"
+          $passedLabel = Get-SlackConfigString $slackConfig.passedLabel "Passed"
+          $includeFailedDetails = Get-SlackConfigBool $slackConfig.includeFailedDetails $true
+          $includeSkippedDetails = Get-SlackConfigBool $slackConfig.includeSkippedDetails $true
+
+          $truncateFeatureSummary = Get-SlackConfigInt $slackConfig.truncate.featureSummary 2900
+          $truncateSkippedUnavailable = Get-SlackConfigInt $slackConfig.truncate.skippedUnavailable 1200
+          $truncateCustomerImpact = Get-SlackConfigInt $slackConfig.truncate.customerImpact 1200
+          $truncateFailedDetails = Get-SlackConfigInt $slackConfig.truncate.failedTestDetails 2500
+          $truncateSkippedDetails = Get-SlackConfigInt $slackConfig.truncate.skippedTestDetails 2500
+
+          function Truncate-Text([string]$text, [int]$maxLength) {
+            if ([string]::IsNullOrWhiteSpace($text)) { return "None" }
+            $clean = $text.Replace("`r", "")
+            if ($clean.Length -le $maxLength) { return $clean }
+            return $clean.Substring(0, $maxLength) + "... (truncated)"
+          }
+
+          $primaryFeatureSource = if ($splitMessages) { $env:FEATURE_SUMMARY_PRIMARY } else { $env:CATEGORY_FAILURE_BUCKETS }
+          $primarySkippedSource = if ($splitMessages) { $env:SKIPPED_DATA_UNAVAILABLE_PRIMARY } else { $env:SKIPPED_DATA_UNAVAILABLE_SUMMARY }
+          $primaryImpactSource = if ($splitMessages) { $env:CUSTOMER_IMPACT_PRIMARY } else { $env:CUSTOMER_IMPACT }
+
+          $primaryFeatureSummaryText = Truncate-Text $primaryFeatureSource $truncateFeatureSummary
+          $holidayFeatureSummaryText = Truncate-Text $env:FEATURE_SUMMARY_HOLIDAYS $truncateFeatureSummary
+          $skippedDataUnavailablePrimaryText = Truncate-Text $primarySkippedSource $truncateSkippedUnavailable
+          $skippedDataUnavailableHolidayText = Truncate-Text $env:SKIPPED_DATA_UNAVAILABLE_HOLIDAYS $truncateSkippedUnavailable
+          $customerImpactPrimaryText = Truncate-Text $primaryImpactSource $truncateCustomerImpact
+          $customerImpactHolidayText = Truncate-Text $env:CUSTOMER_IMPACT_HOLIDAYS $truncateCustomerImpact
+          $failedTestDetailsText = Truncate-Text $env:FAILED_TEST_DETAILS $truncateFailedDetails
+          $skippedTestDetailsText = Truncate-Text $env:SKIPPED_TEST_DETAILS $truncateSkippedDetails
+          $holidaysHeaderTitle = if ($includeSuiteNameInHolidaysHeader) { "$($env:SUITE_NAME) - $holidaysMessageLabel" } else { "$holidaysMessageLabel" }
+
+          $primaryBlocks = @(
+            @{
+              type = "section"
+              text = @{ type = "mrkdwn"; text = "$statusEmoji *$($env:SUITE_NAME)* (Env: $($env:TARGET_ENV))" }
+            },
+            @{
+              type = "section"
+              fields = @(
+                @{ type = "mrkdwn"; text = "*Total:*`n$($env:TOTAL)" },
+                @{ type = "mrkdwn"; text = "*${passedLabel}:*`n$($env:PASSED)" },
+                @{ type = "mrkdwn"; text = "*Failed:*`n$($env:FAILED)" },
+                @{ type = "mrkdwn"; text = "*Skipped:*`n$($env:SKIPPED)" },
+                @{ type = "mrkdwn"; text = "*Execution Pass Rate:*`n$($env:EXECUTION_PASS_RATE)%" },
+                @{ type = "mrkdwn"; text = "*Execution Coverage:*`n$($env:EXECUTION_COVERAGE)%" },
+                @{ type = "mrkdwn"; text = "*Duration:*`n$($env:DURATION)" },
+                @{ type = "mrkdwn"; text = "*Completed (UK):*`n$($env:EXECUTION_TIME)" }
+              )
+            },
+            @{
+              type = "divider"
+            },
+            @{
+              type = "section"
+              text = @{ type = "mrkdwn"; text = "*$featureSummaryPrimaryTitle*" }
+            },
+            @{
+              type = "section"
+              text = @{ type = "mrkdwn"; text = "$primaryFeatureSummaryText" }
+            },
+            @{
+              type = "section"
+              text = @{ type = "mrkdwn"; text = "*$skippedUnavailablePrimaryTitle*`n$skippedDataUnavailablePrimaryText" }
+            },
+            @{
+              type = "section"
+              text = @{ type = "mrkdwn"; text = "*$customerImpactPrimaryTitle*`n$customerImpactPrimaryText" }
+            }
+          )
+
+          if (-not $splitMessages) {
+            if ($includeFailedDetails) {
+              $primaryBlocks += @(
+                @{
+                  type = "section"
+                  text = @{ type = "mrkdwn"; text = "*$failedDetailsTitle*`n$failedTestDetailsText" }
+                }
+              )
+            }
+
+            if ($includeSkippedDetails) {
+              $primaryBlocks += @(
+                @{
+                  type = "section"
+                  text = @{ type = "mrkdwn"; text = "*$skippedDetailsTitle*`n$skippedTestDetailsText" }
+                }
+              )
+            }
+          }
+
+          $primaryBlocks += @(
+            @{
+              type = "actions"
+              elements = @(
+                @{ type = "button"; text = @{ type = "plain_text"; text = "$buttonText" }; url = "$($env:RUN_URL)" }
+              )
+            }
+          )
+
+          $primaryPayload = @{
+            text = "$statusEmoji $($env:SUITE_NAME) ($statusText)"
+            blocks = $primaryBlocks
+          } | ConvertTo-Json -Depth 8
+
+          $holidaysBlocks = @(
+            @{
+              type = "section"
+              text = @{ type = "mrkdwn"; text = "$statusEmoji *$holidaysHeaderTitle* (Env: $($env:TARGET_ENV))" }
+            },
+            @{
+              type = "section"
+              text = @{ type = "mrkdwn"; text = "*$featureSummaryHolidaysTitle*`n$holidayFeatureSummaryText" }
+            },
+            @{
+              type = "section"
+              text = @{ type = "mrkdwn"; text = "*$skippedUnavailableHolidaysTitle*`n$skippedDataUnavailableHolidayText" }
+            },
+            @{
+              type = "section"
+              text = @{ type = "mrkdwn"; text = "*$customerImpactHolidaysTitle*`n$customerImpactHolidayText" }
+            }
+          )
+
+          if ($splitMessages) {
+            if ($includeFailedDetails) {
+              $holidaysBlocks += @(
+                @{
+                  type = "section"
+                  text = @{ type = "mrkdwn"; text = "*$failedDetailsTitle*`n$failedTestDetailsText" }
+                }
+              )
+            }
+
+            if ($includeSkippedDetails) {
+              $holidaysBlocks += @(
+                @{
+                  type = "section"
+                  text = @{ type = "mrkdwn"; text = "*$skippedDetailsTitle*`n$skippedTestDetailsText" }
+                }
+              )
+            }
+          }
+
+          $holidaysBlocks += @(
+            @{
+              type = "actions"
+              elements = @(
+                @{ type = "button"; text = @{ type = "plain_text"; text = "$buttonText" }; url = "$($env:RUN_URL)" }
+              )
+            }
+          )
+
+          $holidaysPayload = @{
+            text = "$statusEmoji $holidaysHeaderTitle ($statusText)"
+            blocks = $holidaysBlocks
+          } | ConvertTo-Json -Depth 8
+
+          try {
+            Invoke-RestMethod -Method Post -Uri $env:SLACK_WEBHOOK_URL -ContentType "application/json" -Body $primaryPayload
+            if ($splitMessages) {
+              Invoke-RestMethod -Method Post -Uri $env:SLACK_WEBHOOK_URL -ContentType "application/json" -Body $holidaysPayload
+            }
+          }
+          catch {
+            Write-Host "::warning::Slack notification failed: $($_.Exception.Message)"
+          }
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.workflow_slug }}-results-${{ inputs.target_environment }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            TestResults/*.trx
+            VAA.EAPI.Automation/TestResults/playwright/**/network-diagnostics.json
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Clean generated runner files
+        if: always()
+        continue-on-error: true
+        shell: powershell
+        run: |
+          $generatedPaths = @(
+            (Join-Path $env:GITHUB_WORKSPACE "TestResults"),
+            (Join-Path $env:GITHUB_WORKSPACE "TestInput")
+          )
+
+          foreach ($path in $generatedPaths) {
+            if (Test-Path -LiteralPath $path) {
+              Remove-Item -LiteralPath $path -Recurse -Force -ErrorAction SilentlyContinue
+            }
+          }
+
+          $automationRoot = Join-Path $env:GITHUB_WORKSPACE "VAA.EAPI.Automation"
+          if (Test-Path -LiteralPath $automationRoot) {
+            Get-ChildItem -LiteralPath $automationRoot -Directory -Recurse -Force -ErrorAction SilentlyContinue |
+              Where-Object { $_.Name -in @("bin", "obj", "TestResults") } |
+              Sort-Object { $_.FullName.Length } -Descending |
+              ForEach-Object {
+                Remove-Item -LiteralPath $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
+              }
+          }

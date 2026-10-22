@@ -1,0 +1,308 @@
+parameters:
+  agentPool: ''
+  agentPool_deployment: ''
+  agentSpecification: ''
+  resourceGroupName_DEV: ''
+  resourceGroupName_SIT: ''
+  resourceGroupName_UAT: ''
+  resourceGroupName_PROD: ''
+  applicationName: ''
+  microserviceName: ''
+  apimurlname: ''
+  buildConfiguration: ''
+  functionAppName_DEV: ''
+  functionAppName_SIT: ''
+  functionAppName_UAT: ''
+  functionAppName_PROD: ''
+  functionAppName_DEV_Secure: ''
+  functionAppName_SIT_Secure: ''
+  functionAppName_UAT_Secure: ''
+  functionAppName_PROD_Secure: ''
+  APIM_IP_DEV_SIT_UAT: '' 
+  APIM_IP_PRD: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''
+  workspaceResourceId: ''
+  workspaceResourceId_prod: ''
+  APIM_NonProd: ''
+  APIMResourceGroupName_NonProd: ''  
+  APIMServiceConnection_NonProd: ''
+  APIMSubscriptionId_NonProd: ''
+  AppInsightsName_DEV: ''
+  AppInsightsName_SIT: ''
+  AppInsightsName_UAT: ''
+  AppInsightsName_PROD: ''
+  AppInsightsName_Secure_DEV: ''
+  AppInsightsName_Secure_SIT: ''
+  AppInsightsName_Secure_UAT: ''
+  AppInsightsName_Secure_PROD: ''
+  storageAccountName_DEV: ''
+  storageAccountName_SIT: ''
+  storageAccountName_UAT: ''
+  storageAccountName_PROD: ''
+  storageAccountName_Secure_DEV: ''
+  storageAccountName_Secure_SIT: ''
+  storageAccountName_Secure_UAT: ''
+  storageAccountName_Secure_PROD: ''
+  VARIABLE_GROUP_NAME_SCHEMA: ''
+  VARIABLE_GROUP_NAME_DEV: ''
+  VARIABLE_GROUP_NAME_SIT: ''
+  VARIABLE_GROUP_NAME_UAT: ''
+  SLACK_API_TOKEN: ''
+  SLACK_TITLE: ''
+  stitchfunctionAppName_DEV: ''
+  stitchfunctionAppName_SIT: ''
+  stitchfunctionAppName_UAT: ''
+  stitchfunctionAppName_PROD: ''
+  stitchrgname_DEV: ''
+  stitchrgname_SIT: ''
+  stitchrgname_UAT: ''
+  stitchrgname_PROD: ''
+  Redis_DEV: ''
+  Redis_SIT: ''
+  Redis_UAT: ''
+  Redis_PROD: ''
+  #Performance Variables
+  functionAppName_PRFM: ''
+  functionAppName_sec_PRFM: ''
+  appInsightsName_PRFM: ''
+  appInsightsName_sec_PRFM: ''
+  storageAccName_PRFM: ''
+  storageAccName_sec_PRFM: ''
+  keyvault_PRFM: ''
+  resourceGroupName_PRFM: ''
+  ASPName: ''
+  TripsMs_URL: ''
+  PaxopsMs_URL: ''
+  TripsMs_OcpSubID: ''
+  BookingIdJwtKey: ''
+  PaxopsMs_OcpSubID: ''
+  CheckInIdJwtKey: ''
+
+
+
+stages:
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/DEV.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_GqlTrips_Mobile_Restart_slot.yaml 
+        parameters:
+          functionAppName: ${{parameters.functionAppName_DEV}}
+          functionAppName_secure: ${{parameters.functionAppName_DEV_Secure}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}
+          ApplicationInsightName: ${{parameters.AppInsightsName_DEV}}
+          storageAccountName: ${{parameters.storageAccountName_DEV}}
+          ApplicationInsigtName_Secure: ${{parameters.AppInsightsName_Secure_DEV}}
+          storageAccountName_Secure: ${{parameters.storageAccountName_Secure_DEV}}
+          stitchfunctionAppName: ${{parameters.stitchfunctionAppName_DEV}}
+          stitchrgname: ${{parameters.stitchrgname_DEV}}
+          Redis_ConnectionString: ${{parameters.Redis_DEV}}
+
+
+
+  - stage: 'Trips_Tests_DEV'
+    displayName: 'Trips_Tests_DEV' 
+    dependsOn: DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/MyTrips/tripsFunctionaltests.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_DEV}}
+
+
+  - stage: 'SchemaValidation_DEV'
+    displayName: 'SchemaValidation_DEV' 
+    dependsOn: DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_SchemaValidation.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SCHEMA}}
+          SLACK_API_TOKEN: ${{parameters.SLACK_API_TOKEN}}
+          SLACK_TITLE: ${{parameters.SLACK_TITLE}}
+          
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/SIT.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_GqlTrips_Mobile_Restart_slot.yaml
+        parameters:
+          functionAppName: ${{parameters.functionAppName_SIT}}
+          functionAppName_secure: ${{parameters.functionAppName_SIT_Secure}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_SIT}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}
+          ApplicationInsightName: ${{parameters.AppInsightsName_SIT}}
+          storageAccountName: ${{parameters.storageAccountName_SIT}}
+          ApplicationInsigtName_Secure: ${{parameters.AppInsightsName_Secure_SIT}}
+          storageAccountName_Secure: ${{parameters.storageAccountName_Secure_SIT}}
+          stitchfunctionAppName: ${{parameters.stitchfunctionAppName_SIT}}
+          stitchrgname: ${{parameters.stitchrgname_SIT}}
+          Redis_ConnectionString: ${{parameters.Redis_SIT}}
+
+
+  - stage: 'Trips_Tests_SIT'
+    displayName: 'Trips_Tests_SIT' 
+    dependsOn: SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/MyTrips/tripsFunctionaltests.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+          
+  
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/UAT.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_GqlTrips_Mobile_Restart_slot.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_UAT}}
+          functionAppName_secure: ${{parameters.functionAppName_UAT_Secure}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_UAT}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}
+          ApplicationInsightName: ${{parameters.AppInsightsName_UAT}}
+          storageAccountName: ${{parameters.storageAccountName_UAT}}
+          ApplicationInsigtName_Secure: ${{parameters.AppInsightsName_Secure_UAT}}
+          storageAccountName_Secure: ${{parameters.storageAccountName_Secure_UAT}}
+          stitchfunctionAppName: ${{parameters.stitchfunctionAppName_UAT}}
+          stitchrgname: ${{parameters.stitchrgname_UAT}}
+          Redis_ConnectionString: ${{parameters.Redis_UAT}}
+
+
+  - stage: 'Trips_Tests_UAT'
+    displayName: 'Trips_Tests_UAT' 
+    dependsOn: UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/MyTrips/tripsFunctionaltests.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+
+  - stage: 'PRFM'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/UAT.yaml
+    displayName: 'Deployment - Performance' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_GqlTrips_Mobile_Restart_prfm.yaml  
+        parameters:
+          functionAppName: ${{parameters.functionAppName_PRFM}}
+          functionAppName_secure: ${{parameters.functionAppName_sec_PRFM}}
+          storageAccName: ${{parameters.storageAccName_PRFM}}
+          storageAccName_secure: ${{parameters.storageAccName_sec_PRFM}}
+          appInsightsName: ${{parameters.appInsightsName_PRFM}}
+          appInsightsName_secure: ${{parameters.appInsightsName_sec_PRFM}}
+          keyvaultName: ${{parameters.keyvault_PRFM}}
+          ASPName: ${{parameters.ASPName}}
+          TripsMs_URL: ${{parameters.TripsMs_URL}}
+          PaxopsMs_URL: ${{parameters.PaxopsMs_URL}}
+          TripsMs_OcpSubID: ${{parameters.TripsMs_OcpSubID}}
+          BookingIdJwtKey: ${{parameters.BookingIdJwtKey}}
+          PaxopsMs_OcpSubID: ${{parameters.PaxopsMs_OcpSubID}}
+          CheckInIdJwtKey: ${{parameters.CheckInIdJwtKey}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: PRFM
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_PRFM}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}   
+        
+
+          
+
+ 
+          
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/PRD.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_GqlTrips_Mobile_Restart_slot.yaml
+        parameters:
+           functionAppName: ${{parameters.functionAppName_PROD}}
+           functionAppName_secure: ${{parameters.functionAppName_PROD_Secure}}
+           agentPool: ${{parameters.agentPool}}
+           agentPool_deployment: ${{parameters.agentPool_deployment}}
+           agentSpecification: ${{parameters.agentSpecification}}
+           applicationName: ${{parameters.applicationName}}        
+           environment: ${{variables.environment}}
+           location: ${{variables.location}}          
+           resourceGroupName: ${{parameters.resourceGroupName_PROD}}        
+           serviceConnection: ${{variables.serviceConnection}}
+           subscriptionId: ${{variables.subscriptionId}}   
+           APIM_IP: ${{parameters.APIM_IP_PRD}}  
+           WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+           WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}  
+           workspaceResourceId: ${{parameters.workspaceResourceId_prod}}  
+           ApplicationInsightName: ${{parameters.AppInsightsName_PROD}}
+           storageAccountName: ${{parameters.storageAccountName_PROD}}    
+           ApplicationInsigtName_Secure: ${{parameters.AppInsightsName_Secure_PROD}}
+           storageAccountName_Secure: ${{parameters.storageAccountName_Secure_PROD}} 
+           stitchfunctionAppName: ${{parameters.stitchfunctionAppName_PROD}}
+           stitchrgname: ${{parameters.stitchrgname_PROD}}
+           Redis_ConnectionString: ${{parameters.Redis_PROD}}
+
+            

@@ -1,0 +1,29 @@
+meta {
+  name: accountOTPGenerate
+  type: graphql
+  seq: 9
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation accountOTPGenerate($emailId: String) {
+    accountOTPGenerate(emailId: $emailId)
+  }
+}
+
+body:graphql:vars {
+  {
+    "emailId": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

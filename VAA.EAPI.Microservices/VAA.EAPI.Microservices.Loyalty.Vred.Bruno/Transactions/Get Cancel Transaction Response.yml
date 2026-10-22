@@ -1,0 +1,30 @@
+info:
+  name: Get Cancel Transaction Response
+  type: http
+  seq: 4
+  tags:
+    - Transactions
+
+http:
+  method: GET
+  url: "{{baseUrl}}/cancelTransaction/response/{{cancelCorrelationId}}"
+  headers:
+    - name: Accept
+      value: application/json
+    - name: x-correlation-id
+      value: "VRED-Bruno-{{$randomUUID}}"
+    - name: api-channel
+      value: Bruno
+    - name: Authorization
+      value: "Bearer {{accessToken}}"
+      disabled: true
+    - name: Ocp-Apim-Subscription-Key
+      value: "{{ocpApimSubscriptionKey}}"
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

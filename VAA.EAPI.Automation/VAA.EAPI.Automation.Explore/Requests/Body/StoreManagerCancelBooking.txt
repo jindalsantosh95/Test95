@@ -1,0 +1,14 @@
+mutation StoreManagerCancelBooking($storeId: String!, $bookingId: String!, $request: BookingCancellationRequestInput!) {
+  storeManagerCancelBooking(storeId: $storeId, bookingId: $bookingId, request: $request) {
+    id
+    storeId
+    storeSlotId
+    customerRef
+    status
+    windowStartAt
+    windowEndAt
+    windowCapacity
+    createdAt
+    updatedAt
+  }
+}

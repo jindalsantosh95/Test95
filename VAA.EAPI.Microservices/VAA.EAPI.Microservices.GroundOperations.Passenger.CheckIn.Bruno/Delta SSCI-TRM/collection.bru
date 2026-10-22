@@ -1,0 +1,91 @@
+meta {
+  name: GroundOps - Delta SSCI/TRM (Self Service Check In / Travel Requirements)
+}
+
+auth {
+  mode: oauth2
+}
+
+auth:oauth2 {
+  grant_type: client_credentials
+  access_token_url: {{delta_token}}
+  refresh_token_url: 
+  client_id: {{ping_client_id}}
+  client_secret: {{delta_ssci_client_secret}}
+  scope: read
+  credentials_placement: body
+  credentials_id: credentials
+  token_source: access_token
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+vars:pre-request {
+  travelparty_id: 
+  pax1_firstname: kirk
+  pax1_lastname: BEERE
+  pax1_firstnin: 
+  pax1_lastnin: 
+  pax1_customerid: 
+  pax1_passengerid: 
+  pax2_firstname: 
+  pax2_lastname: 
+  pax2_firstnin: 
+  pax2_lastnin: 
+  pax2_customerid: 
+  pax2_passengerid: 
+  pax3_firstname: 
+  pax3_lastname: 
+  pax3_firstnin: 
+  pax3_lastnin: 
+  pax3_customerid: 
+  pax3_passengerid: 
+  pax4_firstname: 
+  pax4_lastname: 
+  pax4_firstnin: 
+  pax4_lastnin: 
+  pax4_customerid: 
+  pax4_passengerid: 
+  stage_name: 
+  aws_api_url: 
+  ping_auth_token: 
+  requirement_resource_id: 
+  travel_requirements_response: 
+  pnr: DMLXXO
+  trip_resource_id1: 
+  passenger_resource_id1: 
+  passenger_givenNames1: 
+  passenger_surname1: 
+  passenger_resource_id2: 
+  passenger_givenNames2: 
+  passenger_surname2: 
+  passenger_resource_id3: 
+  passenger_givenNames3: 
+  passenger_surname3: 
+  passenger_resource_id4: 
+  passenger_givenNames4: 
+  passenger_surname4: 
+  AppChannelName: 
+  AppID: 
+  ping_client_id: 
+  X-TRRM_VSDigital_Test: 
+  trip_resource_id2: 
+  passenger_resource_id5: 
+  passenger_givenNames5: 
+  passenger_surname5: 
+  passenger_resource_id6: 
+  passenger_givenNames6: 
+  passenger_surname6: 
+  passenger_resource_id7: 
+  passenger_givenNames7: 
+  passenger_surname7: 
+  passenger_resource_id8: 
+  passenger_givenNames8: 
+  passenger_surname8: 
+  passenger_resource_id9: 
+  passenger_givenNames9: 
+  passenger_surname9: 
+  origin: LHR
+}

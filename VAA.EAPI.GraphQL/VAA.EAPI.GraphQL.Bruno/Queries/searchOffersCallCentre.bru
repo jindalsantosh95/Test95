@@ -1,0 +1,31 @@
+meta {
+  name: searchOffersCallCentre
+  type: graphql
+  seq: 51
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query searchOffersCallCentre($request: FlightOfferRequestInput!) {
+    searchOffersCallCentre(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

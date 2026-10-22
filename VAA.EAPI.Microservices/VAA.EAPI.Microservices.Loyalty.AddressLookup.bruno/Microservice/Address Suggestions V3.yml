@@ -1,0 +1,30 @@
+# Expands nested containers using Find only: five concurrent calls, at most 20 expansion calls.
+# Returns unique Address candidates; select one for Retrieve. SearchTooBroad means narrow the query.
+# The configured per-Find limit still applies; the merged response can exceed that limit.
+info:
+  name: Address Suggestions V3
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{baseUrl}}/v3/address-suggestions"
+  body:
+    type: json
+    data: |-
+      {
+        "query": "10 Downing Street",
+        "countryCode": "GB"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: const address = res.body.candidates.find(candidate => candidate.type === "Address"); if (address) bru.setVar("addressLookupV3Reference", address.reference);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

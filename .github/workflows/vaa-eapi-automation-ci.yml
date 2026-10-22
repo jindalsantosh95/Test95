@@ -1,0 +1,67 @@
+name: Automation - CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'VAA.EAPI.Automation/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'VAA.EAPI.Automation/**'
+
+concurrency:
+  group: vaa-eapi-automation-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      BUILD_CONFIGURATION: Release
+      ROOT_PATH: VAA.EAPI.Automation
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Reclaim runner disk space
+        shell: bash
+        run: |
+          df -h /
+          sudo rm -rf /usr/local/lib/android /usr/share/swift /opt/ghc
+          docker system prune --all --force || true
+          df -h /
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('VAA.EAPI.Automation/**/*.csproj', 'VAA.EAPI.Automation/Directory.Packages.props') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore
+        shell: pwsh
+        working-directory: ${{ env.ROOT_PATH }}
+        run: dotnet restore VAA.EAPI.Automation.sln
+
+      - name: Build
+        shell: pwsh
+        working-directory: ${{ env.ROOT_PATH }}
+        run: dotnet build VAA.EAPI.Automation.sln --configuration $env:BUILD_CONFIGURATION --no-restore
+
+      - name: Upload artifacts (drop)
+        uses: actions/upload-artifact@v4
+        with:
+          name: drop
+          if-no-files-found: error
+          path: |
+            VAA.EAPI.Automation/**/bin/${{ env.BUILD_CONFIGURATION }}/**

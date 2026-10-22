@@ -1,0 +1,41 @@
+###Request
+GET https://management.azure.com/subscriptions/test-subscription-id/resourceGroups/test-resource-group/providers/Microsoft.Web/sites/test-app-name/config/configreferences/appsettings?api-version=2025-05-01 HTTP/1.1
+Authorization: Bearer GOOD_TOKEN
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json;
+
+{
+  "value": [
+    {
+      "id": "/subscriptions/test-subscription-id/resourceGroups/test-resource-group/providers/Microsoft.Web/sites/test-app-name/config/configreferences/appsettings/resolved-setting",
+      "name": "resolved-setting",
+      "type": "Microsoft.Web/sites/config/configreferences",
+      "properties": {
+        "activeVersion": "0123456789abcdef",
+        "identityType": "SystemAssigned",
+        "reference": "@Microsoft.KeyVault(VaultName=test-key-vault;SecretName=resolved-secret)",
+        "secretName": "resolved-secret",
+        "secretVersion": "",
+        "source": "KeyVault",
+        "status": "Resolved",
+        "vaultName": "test-key-vault"
+      }
+    },
+    {
+      "id": "/subscriptions/test-subscription-id/resourceGroups/test-resource-group/providers/Microsoft.Web/sites/test-app-name/config/configreferences/appsettings/denied-setting",
+      "name": "denied-setting",
+      "type": "Microsoft.Web/sites/config/configreferences",
+      "properties": {
+        "details": "Access denied.",
+        "identityType": "SystemAssigned",
+        "reference": "@Microsoft.KeyVault(VaultName=test-key-vault;SecretName=denied-secret)",
+        "secretName": "denied-secret",
+        "source": "KeyVault",
+        "status": "AccessToKeyVaultDenied",
+        "vaultName": "test-key-vault"
+      }
+    }
+  ]
+}

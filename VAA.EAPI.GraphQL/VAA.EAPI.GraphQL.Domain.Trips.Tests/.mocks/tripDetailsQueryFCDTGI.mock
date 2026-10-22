@@ -1,0 +1,36 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/tripmicroservice/tripsList/search HTTP/1.1
+
+$[?(@.confirmationNum == 'FCDTGI')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "tripListResponse": [
+        {
+            "tripSearchRequest": {
+                "using": "PNR",
+                "confirmationNum": "FCDTGI",
+                "givenNames": "D",
+                "surname": "Walker"
+            },
+            "tripDetails": {
+                "errors": [
+                    {
+                        "code": "ROR4152",
+                        "message": "Unable to retrieve reservation with provided input.",
+                        "developerMessage": "RetrieverFlightOrderService.invokeFlightOrderRetriever -transactionId:9163e627-1e4b-4206-ae53-860da6743f31,FE5139:Unable to retrieve reservation with provided input.:PNRCOMMON : NO MATCH FOUND | ErrorID: 9163e627-1e4b-4206-ae53-860da6743f31 | TimeStamp: 4/16/2026 1:23:41 PM",
+                        "errorSource": "Delta"
+                    }
+                ],
+                "status": 400
+            }
+        }
+    ]
+}

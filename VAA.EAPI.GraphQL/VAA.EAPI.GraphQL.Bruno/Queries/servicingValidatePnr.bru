@@ -1,0 +1,29 @@
+meta {
+  name: servicingValidatePnr
+  type: graphql
+  seq: 59
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query servicingValidatePnr($request: IdentityAcquireTokenRequestInput!) {
+    servicingValidatePnr(request: $request)
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

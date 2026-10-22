@@ -1,0 +1,27 @@
+meta {
+  name: Validate Flying Club Broker Token
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{identity_base_url}}/application-token/validate
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{access_token}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "accessToken": "{{flying_club_broker_token}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

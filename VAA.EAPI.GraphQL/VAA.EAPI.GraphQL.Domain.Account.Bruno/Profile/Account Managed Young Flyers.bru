@@ -1,0 +1,37 @@
+meta {
+  name: Account Managed Young Flyers
+  type: graphql
+  seq: 17
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query AccountManagedYoungFlyerAccounts {
+    accountManagedYoungFlyerAccounts(activitiesCount: 50) {
+      parentCustomerId
+      parentFcNumber
+      youngFlyers {
+        customerId
+        fcNumber
+        firstName
+        lastName
+        dateOfBirth
+        hoHManaged
+        fcJoinDate
+        tierPoints
+        tierCode
+        status
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

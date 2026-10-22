@@ -1,0 +1,14 @@
+{
+  "query": "query Query($request: NDCSubscriptionRetrieveQueryRequestInput!) {\r\n  securityGetAPIMSubscriptionNDC(request: $request) {\r\n    subscriptionState\r\n    subscriptionKeys {\r\n      key\r\n      validFrom\r\n      validTo\r\n    }\r\n    channel\r\n    environment\r\n    status\r\n  }\r\n}",
+  "variables": {
+    "request": {
+      "party": {
+        "agency": { "agencyId": "" },
+        "aggregator": { "aggregatorId": "" }
+      },
+      "channel": "",
+      "environment": ""
+    }
+  },
+  "operationName": "Query"
+}

@@ -1,0 +1,66 @@
+﻿###Request
+GET https://teste-rest.tbox-test.vholsinternal.co.uk/document-service/v2/pending-documents/6842564?expand=all&userId=17760&cliId=-1 HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "status": {
+        "code": 1,
+        "message": "Successfully fetched pending documents"
+    },
+    "keyControls": {
+        "cliId": 0,
+        "userId": 0
+    },
+    "data": [
+        {
+            "format": "pdf",
+            "docType": "TRVDOC",
+            "dispatchMethods": "CCM",
+            "template": "traveldoc-template",
+            "attributes": [
+                {
+                    "name": "DOC_STATUS",
+                    "value": "N"
+                },
+                {
+                    "name": "DOC_WAIT",
+                    "value": "true"
+                },
+                {
+                    "name": "GEN_STATUS",
+                    "value": "PENDING"
+                }
+            ],
+            "dispatchDateTime": "2026-07-22T01:11:00",
+            "description": "BOOKING_ID = 6842564\nDOCUMENT_DESC = Request:Reservation Manager[DocumentGeneratorFactory:TravelDocumentRuleHandler]\nOn:Wed Jan 28 13:20:10 GMT 2026\nIP:10.240.34.182\nDispatch:CCM\nRuleId:36986\nDoc Status:N\nTD=addEntryAt:Wed Jan 28 13:20:10 GMT 2026;\n\nDOC_CATEGORY = N\nDOWNTOWN_VOU_AIRLINE_AND_FLTNO = null\nEMAIL-DOC-TYPE = TRVDOCEML\nFROM-EMAIL = Virgin Holidays Customer Services <DoNotReply@VirginHolidays.com>\nGENERAL = TBX\nITINERARY-TEMPLATE = td_itinerary_template\nPRINT-DOC-SEND-NDAYS = 40\nPRINTDOC = TBX\nSUB_DOC_TYPE = DOC_TYPE=ACCOMVOUCHER;BOOKING_ID=6842564;ITEM_NO=1;PRODUCT_CODE=HTL;DOC_CATEGORY=N;DEPARTURE_DATE=20260805;\nSUB_DOC_TYPE = DOC_TYPE=FLIGHTTICKETDOCUMENT;BOOKING_ID=6842564;ITEM_NO=1;PRODUCT_CODE=FLT;DOC_CATEGORY=N;DEPARTURE_DATE=20260805;DOCWAIT=1;DWREF=DWR-ETKT;DWR=ETicket is not ready;\nSUB_DOC_TYPE = DOC_TYPE=GENERICVOUCHER;BOOKING_ID=6842564;ITEM_NO=1;PRODUCT_CODE=GEN;DOC_CATEGORY=N;DEPARTURE_DATE=20260805;\nSUB_DOC_TYPE = DOC_TYPE=GENERICVOUCHER;BOOKING_ID=6842564;ITEM_NO=5;PRODUCT_CODE=GEN;DOC_CATEGORY=N;DEPARTURE_DATE=20260805;\nSUB_DOC_TYPE = DOC_TYPE=ITINERARYDOCUMENT;BOOKING_ID=6842564;DOC_CATEGORY=N;\nTIME_TO_SEND = 2026-07-22 01:11\nTRACKING_NO = GENERAL\nVALID-PRODUCT-CODES = HTL,FLT,CAR,TRS,INS,EXC,GEN"
+        },
+        {
+            "docType": "TRVDOCEML",
+            "dispatchMethods": "DNT",
+            "attributes": [
+                {
+                    "name": "DOC_STATUS",
+                    "value": "N"
+                },
+                {
+                    "name": "DOC_WAIT",
+                    "value": "true"
+                },
+                {
+                    "name": "GEN_STATUS",
+                    "value": "PENDING"
+                }
+            ],
+            "dispatchDateTime": "2026-01-28T13:20:10",
+            "description": "BOOKING_ID = 6842564\nDOCUMENT_DESC = Request:Reservation Manager[DocumentGeneratorFactory:TravelDocumentRuleHandler]\nOn:Wed Jan 28 13:20:10 GMT 2026\nIP:10.240.34.182\nPrint Doc Request:\n\nPRINT-DOC-SEND-NDAYS = 14\nPRINTDOC = WAIT\nSUB_DOC_TYPE = DOC_TYPE=TRVDOCEML;BOOKING_ID=6842564;DOC_CATEGORY=N;DOCWAIT=1;DWREF=DWR-ND-BFD;DWR=Wait until (days to departure < 14 days);\nTRACKING_NO = PRINTDOC"
+        }
+    ],
+    "version": "v2.0"
+}

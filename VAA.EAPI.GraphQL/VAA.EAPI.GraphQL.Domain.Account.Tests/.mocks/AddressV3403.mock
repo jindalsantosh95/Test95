@@ -1,0 +1,13 @@
+###Request
+POST https://address-v3.example.test/403/v3/address-selections HTTP/1.1
+Authorization: Bearer server-app-token
+Ocp-Apim-Subscription-Key: existing-enrolment-key
+Content-Type: application/json
+
+$[?(@.reference == 'opaque-reference')]
+
+###Response
+HTTP/1.1 403 Synthetic failure
+Content-Type: application/json
+
+{"Code":"Unavailable"}

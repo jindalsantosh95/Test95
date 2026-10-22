@@ -1,0 +1,84 @@
+meta {
+  name: 1-1 TravelParties
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{delta_ssci}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: Bruno/1
+  Accept: */*
+  Accept-Encoding: gzip, deflate, br
+  Connection: keep-alive
+  ~appid: OCI
+  ~X-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+  ~AppChannelName: {{AppChannelName}}
+  ~AppID: {{AppID}}
+}
+
+body:json {
+  {
+      "recordLocator": "DLSM9W",
+      "originCode": "{{origin}}"
+  }
+}
+
+vars:pre-request {
+  pnr: C6S29O
+  origin: LHR
+}
+
+script:post-response {
+  var json = res.getBody();
+  
+  bru.setVar('travelparty_id', json.id);
+  bru.setVar('pnr', json.recordLocator);
+  console.log("Num pax: " + json.passengers.length);
+  bru.setVar("pax1_firstname", json.passengers[0].firstName);
+  bru.setVar("pax1_lastname", json.passengers[0].lastName);
+  bru.setVar("pax1_firstnin", json.passengers[0].firstNIN);
+  bru.setVar("pax1_lastnin", json.passengers[0].lastNIN);
+  bru.setVar("pax1_customerid", json.passengers[0].customerId);
+  bru.setVar("pax1_passengerid", json.passengers[0].id);
+  
+  if (json.passengers.length > 1)
+  {
+      bru.setVar("pax2_firstname", json.passengers[1].firstName);
+      bru.setVar("pax2_lastname", json.passengers[1].lastName);
+      bru.setVar("pax2_firstnin", json.passengers[1].firstNIN);
+      bru.setVar("pax2_lastnin", json.passengers[1].lastNIN);
+      bru.setVar("pax2_customerid", json.passengers[1].customerId);
+      bru.setVar("pax2_passengerid", json.passengers[1].id);
+  }
+  
+  if (json.passengers.length > 2)
+  {
+      bru.setVar("pax3_firstname", json.passengers[2].firstName);
+      bru.setVar("pax3_lastname", json.passengers[2].lastName);
+      bru.setVar("pax3_firstnin", json.passengers[2].firstNIN);
+      bru.setVar("pax3_lastnin", json.passengers[2].lastNIN);
+      bru.setVar("pax3_customerid", json.passengers[2].customerId);
+      bru.setVar("pax3_passengerid", json.passengers[2].id);
+  }
+  
+  if (json.passengers.length > 3)
+  {
+      bru.setVar("pax4_firstname", json.passengers[3].firstName);
+      bru.setVar("pax4_lastname", json.passengers[3].lastName);
+      bru.setVar("pax4_firstnin", json.passengers[3].firstNIN);
+      bru.setVar("pax4_lastnin", json.passengers[3].lastNIN);
+      bru.setVar("pax4_customerid", json.passengers[3].customerId);
+      bru.setVar("pax4_passengerid", json.passengers[3].id);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

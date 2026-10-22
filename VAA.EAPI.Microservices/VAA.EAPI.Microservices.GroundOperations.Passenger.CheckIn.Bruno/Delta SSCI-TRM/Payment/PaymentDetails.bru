@@ -1,0 +1,63 @@
+meta {
+  name: PaymentDetails
+  type: http
+  seq: 7
+}
+
+get {
+  url: https://stage-snsapigateway2.vs01.vs.air4.com/paymentManagement/v1/paymentDetails/{{paymentReferenceId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  objectName: FormOfPayment
+  channelId: DFMOBILE
+  appID: D2
+  Content-Type: application/json
+  purchasePath: DFMOBILEOCI
+  ~Content-Type: application/x-www-form-urlencoded
+}
+
+script:post-response {
+  var json = res.getBody();
+  
+  var objectContent = JSON.parse(json.objectContentText);
+  
+  console.log(JSON.parse(json.objectContentText));
+    
+  bru.setVar("payment_creditCardType", objectContent.paymentMethod.paymentCard.paymentCardTypeCode);
+  bru.setVar("payment_creditCardNumber", objectContent.paymentMethod.paymentCard.paymentCardNum);
+  bru.setVar("payment_creditFirstName", objectContent.paymentMethod.paymentCard.cardHolderName.firstName);
+  bru.setVar("payment_creditLastName", objectContent.paymentMethod.paymentCard.cardHolderName.lastName);
+  bru.setVar("payment_expirationMonth", objectContent.paymentMethod.paymentCard.expirationMonthNum);
+  bru.setVar("payment_expirationYear", objectContent.paymentMethod.paymentCard.expirationYearNum);
+  bru.setVar("payment_securityCode", objectContent.paymentMethod.paymentCard.cardVerificationValueNum);
+  bru.setVar("payment_address1", objectContent.paymentMethod.paymentCard.billingAdr.addressLine1Text);
+  bru.setVar("payment_address2", objectContent.paymentMethod.paymentCard.billingAdr.addressLine2Text);
+  bru.setVar("payment_city", objectContent.paymentMethod.paymentCard.billingAdr.cityLocalityName);
+  bru.setVar("payment_country", objectContent.paymentMethod.paymentCard.billingAdr.countryCode);   
+  bru.setVar("payment_zipCode", objectContent.paymentMethod.paymentCard.billingAdr.postalCode);
+  bru.setVar("payment_paymentReferenceId", objectContent.paymentReferenceId);
+  //bru.setVar("payment_psd2ErrorKey": "",
+  console.log(objectContent.price);
+  bru.setVar("payment_paymentAmount", objectContent.price.currencyEquivalentPrice.currencyAmt);
+  //bru.setVar("payment_paymentAmountDecimal": "00",
+  bru.setVar("payment_currencyCode", objectContent.price.currencyEquivalentPrice.currencyCode);
+  //bru.setVar("payment_payWithMilesToggle": false,
+  //bru.setVar("payment_selectedPaxNIN": "01.01"
+       
+  
+  
+  
+  //bru.setVar("paymentReferenceId", json.paymentReferenceId)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  QA
+}

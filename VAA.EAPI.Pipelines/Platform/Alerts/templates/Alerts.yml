@@ -1,0 +1,41 @@
+parameters:
+- name: JobName
+- name: ServiceConnection
+- name: Environment
+- name: RG_Alerts
+- name: Subscriptionid
+- name: ResourceLocation
+- name: MicroserviceName
+
+jobs: 
+- deployment: ${{parameters.JobName}}
+       
+  
+  pool:
+   vmImage: 'windows-latest'
+  variables:
+   - group: ${{parameters.Environment}}
+  
+  
+  environment: ${{parameters.Environment}}
+  strategy:
+   runOnce:
+    deploy:
+      steps:
+      - download: current
+        artifact: drop
+
+      
+      
+      
+      
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Create Alerts
+        inputs:
+          azureResourceManagerConnection: ${{parameters.ServiceConnection}}
+          subscriptionId: ${{parameters.Subscriptionid}}
+          resourceGroupName: ${{parameters.RG_Alerts}}
+          location: ${{parameters.ResourceLocation}}
+          csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy.json
+          csmParametersFile: $(Pipeline.workspace)/drop/Parameters/${{parameters.Environment}}-azuredeploy.parameters.json
+          deploymentMode: 'Incremental'

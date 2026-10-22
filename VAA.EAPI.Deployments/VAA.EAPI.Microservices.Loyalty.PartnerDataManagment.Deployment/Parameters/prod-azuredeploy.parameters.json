@@ -1,0 +1,264 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "FunctionAppName": {
+      "value": "avapeunafnpdm"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPI-COMMON"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantic@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "AppInsightsName": {
+      "value": "avapeunaipdm"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "Appsetting:AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avapeunstpdm"
+    },
+    "Appsetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSetting:WEBSITE_CONTENTSHARE": {
+      "value": "avapeunafnpdm"
+    },
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Loyalty PDM Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "VAA Loyalty Partner data Managment Microservice ."
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    // PDM settings
+    "Appsetting:AutoRetroResetDuration": {
+      "value": "7"
+    },
+    "Appsetting:AutoRetroTimerChrone": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-AutoRetroTimerChrone/)"
+    },
+    "Appsetting:ClientIDFlightAPI": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-ClientIDFlightAPI/)"
+    },
+    "Appsetting:ClientSecrectFlightAPI": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-ClientSecrectFlightAPI/)"
+    },
+    "Appsetting:CodeShareFlightApiUrl": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-CodeShareFlightApiUrl/)"
+    },
+    "Appsetting:ResourceIDMemberApi": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-ResourceIDMemberApi/)"
+    },
+    "Appsetting:subscriptionKeyMemberApi": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-subscriptionKeyMemberApi/)"
+    },
+    "Appsetting:authUrlApi": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-authUrlApi/)"
+    },
+    "Appsetting:tenantNameApi": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-tenantNameApi/)"
+    },
+    "Appsetting:FlownSQLDBConnString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-FlownSQLDBConnString/)"
+    },
+    "Appsetting:ExcludeEnvironmentCredential": {
+      "value": "false"
+    },
+    "Appsetting:ExcludeManagedIdentityCredential": {
+      "value": "true"
+    },
+    "Appsetting:ExcludeVisualStudioCredential": {
+      "value": "true"
+    },
+    "Appsetting:RetroDurationinDays": {
+      "value": "365"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-AzureAdClientId/)"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    // Azure B2C Settings
+    "Appsetting:AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-AzureAdClientId/)"
+    },
+    "Appsetting:AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "Appsetting:AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:NonAccrualVSClasses": {
+      "value": "A,P,G"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-ServiceBusConnectionString/)"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-StorageAccount)"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "PartnerDataMgmtEventStore"
+    },
+    "Appsetting:OrderMSServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/OrderMS-ServiceBusConnectionString/)"
+    },
+    "Appsetting:ReferenceMicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/ReferenceMicroServiceDBKey/)"
+    },
+    "Appsetting:AutoAccrualFallbackSchedule": {
+      "value": "0 0 16 * * *"
+    },
+    "Appsetting:AutoAccrualFallbackDepartureThresholdDays": {
+      "value": "2"
+    },
+    "Appsetting:SkyTeamPartnerCacheExpiryHours": {
+      "value": "8"
+    },
+    "Appsetting:SkyTeamKafkaBootstrapServers": {
+      "value": "KAFKA_BOOTSTRAP_ENDPOINT_PENDING"
+    },
+    "Appsetting:AccrualOutboundKafkaTopic": {
+      "value": "skyteam-auto-accrual"
+    },
+    "Appsetting:AccrualInboundKafkaTopic": {
+      "value": "Inbound-auto-accrual"
+    },
+    "Appsetting:AutoAccrualFeedbackOutboundKafkaTopic": {
+      "value": "KAFKA_AUTO_ACCRUAL_FEEDBACK_TOPIC"
+    },
+    "Appsetting:SkyTeamPgpPublicKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-SkyTeamPgpPublicKey/)"
+    },
+    "Appsetting:VsPgpPrivateKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-VsPgpPrivateKey/)"
+    },
+    "Appsetting:SkyTeamKafkaConsumerGroup": {
+      "value": "skyteam-auto-accrual-consumer"
+    },
+    "Appsetting:AutoAccrualFeedbackOutboundKafkaConsumerGroup": {
+      "value": "KAFKA_AUTO_ACCRUAL_FEEDBACK_CONSUMER_GROUP"
+    },
+    "Appsetting:AccrualPgpEncryptionKeyId": {
+      "value": "YOUR_PGP_EncryptionKey_Id"
+    },
+    "Appsetting:SkyTeamInboundDataTableName": {
+      "value": "SkyTeamInboundAccrualData"
+    },
+    "Appsetting:VSClaimInputValidationBlobStorageUri": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-VSClaimInputValidationBlobStorageUri/)"
+    },
+    "Appsetting:VSClaimInputValidationBlobSasKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/PDM-VSClaimInputValidationBlobSasKey/)"
+    },
+    "Appsetting:VSClaimInputValidationBlobContainerName": {
+      "value": "vsretrovalidationdata"
+    },
+    "Appsetting:SkyTeamInboundAccrualMessageLookupTableName": {
+      "value": "SkyTeamInboundAccrualMessageLookup"
+    },
+    "Appsetting:LoyaltyMemberManagementTopicName": {
+      "value": "loyaltymembermanagementeventmessages"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "PDM ms",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "PROD",
+        "Purpose": "PDM ms",
+        "ApplicationUsageIdList": "avapeunafnpdm"
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+trigger:
+  - Status-Web-App
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+- checkout: self
+  clean: true
+  persistCredentials: true
+
+- script: |
+    git fetch --all
+    git switch azure-pipelines-Static-Web-App
+
+- powershell: |
+    Write-Host "Installing Spectral..."
+    $installPath = "$System.DefaultWorkingDirectory"
+    New-Item -ItemType Directory -Path $installPath -Force
+    $spectralPath = iwr https://spectral-eu.checkpoint.com/latest/ps1?key=$SPECTRAL_KEY -useb | iex
+    if (-Not (Get-Command spectral -ErrorAction SilentlyContinue)) {
+        Write-Error "Spectral installation failed or is not in PATH."
+        exit 1
+    }
+    Write-Host "Spectral installed successfully at $installPath"
+  displayName: 'Install Spectral'
+
+- powershell: |
+    $spectralExePath = "$System.DefaultWorkingDirectory" 
+       if (Test-Path $spectralExePath) {
+        Set-Location -Path (Split-Path $spectralExePath)
+        Write-Host "Navigated to $(Get-Location)"
+        .\spectral.exe scan --dsn https://$SPECTRAL_KEY@spectral-eu.checkpoint.com --engines secrets,iac,oss --include-tags base,audit,iac
+    } else {
+        Write-Error "spectral.exe not found at $spectralExePath"
+        exit 1
+    }
+  displayName: 'Run Spectral Scan'

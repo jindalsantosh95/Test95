@@ -1,0 +1,117 @@
+info:
+  name: Generate PRI
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{paymentms}}/paymentReferenceId"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{paymentms_ocp}}"
+    - name: channel
+      value: DFMOBILE
+    - name: formOfPayment
+      value: Card
+    - name: api-channel
+      value: DFMOBILE
+  body:
+    type: json
+    data: |-
+      {
+        "pos": {
+          "ipAddress": "{{ipAddress}}",
+          "currencyNumber": "{{currencyNumber}}",
+          "currencyCode": "{{currencyCode}}"
+        },
+        "paymentAmt": {
+          "currencyEquivalentPrice": {
+            "amount": {
+              "monetaryAmount": "{{totalPrice}}",
+              "decimalPrecisionCount": {{decimalPrecisionCount}},
+              "currency": "{{currencyCode}}"
+            }
+          }
+        },
+        "loyaltyMemberDetails": {
+          "memberNumber": "{{memberNumber}}",
+          "memberTierCode": "{{memberTierCode}}"
+        },
+        "customerDetails": [
+          {
+            "firstName": "{{pax1_givennames}}",
+            "lastName": "{{pax1_surname}}",
+            "dateOfBirth": "{{pax1_dateOfBirth}}",
+            "contacts": {
+              "countrycode": "{{phoneCountryCode}}",
+              "email": "{{email}}",
+              "phone": "{{phone}}"
+            }
+          }
+        ],
+        "additionalConfigParams": {
+          "successRedirectUrl": "{{successRedirectUrl}}",
+          "failureRedirectUrl": "{{failureRedirectUrl}}"
+        },
+        "bagsDetails": [
+          {
+            "passengerSequence": "1",
+            "productDescription": "service.CBAG",
+            "productCurrencyCode": "{{currencyCode}}",
+            "productCurrencyAmt": "{{totalPrice}}",
+            "productDecimalPrecisionCount": "{{decimalPrecisionCount}}",
+            "productCode": "CBAG",
+            "productCategory": "SERVICE",
+            "productItem": "Excess Baggage"
+          }
+        ],
+        "flightSegments": [
+          {
+            "classOfService": "{{classOfService}}",
+            "marketingFlightNumber": "{{marketingFlightNumber}}",
+            "marketingCarrier": "{{marketingCarrier}}",
+            "operatingCarrier": "{{operatingCarrier}}",
+            "legs": [
+              {
+                "originAirportCode": "{{originAirportCode}}",
+                "destinationAirportCode": "{{destinationAirportCode}}",
+                "scheduledDepartureTime": {
+                  "localDateTime": "{{scheduledDepartureLocalDateTime}}"
+                },
+                "scheduledArrivalTime": {
+                  "localDateTime": "{{scheduledArrivalLocalDateTime}}"
+                }
+              }
+            ]
+          }
+        ],
+        "tripType": "{{tripType}}",
+        "isBagsPayment": true,
+        "recordLocator": "{{pnrLocator}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        var body = res.getBody();
+        var hppLink = body.hPPLink || body.HPPLink;
+        var paymentUrl = body.paymentURL || body.PaymentURL;
+
+        bru.setVar("hppLink", hppLink);
+        bru.setVar("paymentUrl", paymentUrl);
+
+        var match = hppLink && /[?&]paymentReferenceId=([^&]+)/.exec(hppLink);
+
+        if (match) {
+          var paymentReferenceId = decodeURIComponent(match[1]);
+          bru.setVar("paymentReferenceId", paymentReferenceId);
+          bru.setEnvVar("paymentReferenceId", paymentReferenceId);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,121 @@
+﻿<IATA_OrderCreateRQ xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersMessage" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<DistributionChain>
+		<DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<ContactInfo>
+				<ContactInfoID>TRAVELREPUBLIC.CO.UK</ContactInfoID>
+				<EmailAddress>
+					<EmailAddressText>TRAVEL.REPUBLIC.CO.UK@gmail.com</EmailAddressText>
+				</EmailAddress>
+			</ContactInfo>
+			<Ordinal>1</Ordinal>
+			<OrgRole>Seller</OrgRole>
+			<ParticipatingOrg>
+				<Name>TRAVEL REPUBLIC.CO.UK</Name>
+				<OrgID>91281035</OrgID>
+				<SalesAgent>
+					<SalesAgentID>1234567</SalesAgentID>
+				</SalesAgent>
+			</ParticipatingOrg>
+		</DistributionChainLink>
+		<DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">	
+			<Ordinal>2</Ordinal>
+			<OrgRole>Carrier</OrgRole>
+			<ParticipatingOrg>
+				<Name>TRAVEL REPUBLIC.CO.UK</Name>
+				<OrgID>VS</OrgID>
+			</ParticipatingOrg>
+		</DistributionChainLink>
+	</DistributionChain>
+	<Request>
+		<CreateOrder xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<AcceptSelectedQuotedOfferList>
+				<SelectedPricedOffer>
+					<OfferRefID>1175c744-2f9c-4b82-b175-6ec6a5d95562|SvepLZHawM6OBT8tdsPCFB008</OfferRefID>
+					<OwnerCode>VS</OwnerCode>
+					<SelectedOfferItem>
+						<OfferItemRefID>1175c744-2f9c-4b82-b175-6ec6a5d95562|SvepLZHawM6OBT8tdsPCFB008-1</OfferItemRefID>
+						<PaxRefID>ADULT_1</PaxRefID>
+					</SelectedOfferItem>
+					<TotalOfferPriceAmount CurCode="GBP">1138.79</TotalOfferPriceAmount>
+				</SelectedPricedOffer>
+			</AcceptSelectedQuotedOfferList>
+		</CreateOrder>
+		<DataLists xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<ContactInfoList>
+				<ContactInfo>
+					<ContactInfoID>CID_1</ContactInfoID>
+					<Phone>
+						<ContactTypeText>HOME</ContactTypeText>
+						<CountryDialingCode>+44</CountryDialingCode>
+						<PhoneNumber>123456</PhoneNumber>
+					</Phone>
+					<EmailAddress>
+						<EmailAddressText>test@virgin.com</EmailAddressText>
+					</EmailAddress>
+				</ContactInfo>
+			</ContactInfoList>
+			<PaxList xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+				<Pax>
+					<ContactInfoRefID>CID_1</ContactInfoRefID>
+					<PaxID>ADULT_1</PaxID>
+					<PTC>ADT</PTC>
+					<Individual>
+						<Birthdate>1995-05-18</Birthdate>
+						<GenderCode>M</GenderCode>
+						<GivenName>David</GivenName>
+						<Surname>Smith</Surname>
+						<TitleName>Mr</TitleName>
+					</Individual>
+				</Pax>
+			</PaxList>
+		</DataLists>
+		<PaymentFunctions xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<PaymentMethodCriteria>
+				<PaymentTypeCode>CC</PaymentTypeCode>
+			</PaymentMethodCriteria>
+			<PaymentProcessingDetails>
+				<Amount CurCode="GBP">1138.79</Amount>
+				<PaymentMethod>
+					<PaymentCard>
+						<CardholderAddress>
+							<CityName>Crawley</CityName>
+							<CountryCode>GB</CountryCode>
+							<PostalCode>RH108HA</PostalCode>
+							<StreetText>8</StreetText>
+							<StreetText>Cobbles Crescent</StreetText>
+						</CardholderAddress>
+						<CardHolderName>CL BRWA</CardHolderName>
+						<CardNumber>4222000006285344</CardNumber>
+						<CardSecurityCode>123</CardSecurityCode>
+						<CardTypeText>VI</CardTypeText>
+						<ExpirationDate>0126</ExpirationDate>
+						<SecurePaymentVersion2>
+							<AuthenticationValue>ODQzNjgwNjU0ZjM3N2JmYTg0NTM</AuthenticationValue>
+							<DirectoryServerTrxID>c272b04f-6e7b-43a2-bb78-90f4fb94aa25</DirectoryServerTrxID>
+							<ElectronicCommerceInd>05</ElectronicCommerceInd>
+							<TrxStatusText>Y</TrxStatusText>
+							<PaymentTrxChannelCode>MO</PaymentTrxChannelCode>
+						</SecurePaymentVersion2>
+						<SecureProgram>
+							<EnrollmentStatusText>CardEnrolled3DS2.1.0</EnrollmentStatusText>
+						</SecureProgram>
+					</PaymentCard>
+				</PaymentMethod>
+				<Payer>
+					<PayerName>
+						<IndividualName>
+							<GivenName>David</GivenName>
+							<Surname>Smith</Surname>
+						</IndividualName>
+					</PayerName>
+					<PayerPhoneNumber>
+						<PhoneNumber>123456789</PhoneNumber>
+					</PayerPhoneNumber>
+					<PayerEmailAddress>
+						<EmailAddressText>abc@test.com</EmailAddressText>
+					</PayerEmailAddress>
+				</Payer>
+			</PaymentProcessingDetails>
+		</PaymentFunctions>
+	</Request>
+</IATA_OrderCreateRQ>

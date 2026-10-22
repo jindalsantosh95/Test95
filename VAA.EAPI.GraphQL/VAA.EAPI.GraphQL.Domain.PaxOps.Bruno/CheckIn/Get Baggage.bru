@@ -1,0 +1,117 @@
+meta {
+  name: Get Baggage
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+headers {
+  ~Authorization: {{loginToken}}
+}
+
+body:graphql {
+  query BaggageAllowance {
+      BaggageAllowance(checkInId: "{{checkInId}}", hidePaidBaggage: false) {
+          checkInId
+      	  emailAddress
+          passengers {
+              givenNames
+              surname
+              passengerNiN
+              baggageOffers {
+                  baggageCount
+                  baggageOfferId
+                  price {
+                      currency
+                      amount
+                      additionalBagPrice
+                      decimalPrecisionCount
+                  }
+              }
+            baggageAdvisory {
+              title
+              message
+            }
+              isInfantPassenger
+              canChangeBags
+              numSelectedBags
+          }
+          allAboutBags {
+              baggageUrl
+              byCabin {
+                  title
+                  description
+                  iconType
+              }
+              everyoneGets {
+                  title
+                  description
+                  iconType
+              }
+          }
+          baggageLearnMoreUrl
+          showBaggageAllowance
+      }
+  }
+  
+}
+
+script:post-response {
+  const body = res.body;
+  
+  // checkInId
+  const newCheckInId = body.data.BaggageAllowance.checkInId;
+  bru.setVar("checkInId", newCheckInId);
+  
+  // passenger 1
+  const passenger1 = body.data.BaggageAllowance.passengers[0];
+  bru.setVar("passengerNiN", passenger1.passengerNiN);
+  
+  // first free baggage offer
+  const firstFreeBags = passenger1.baggageOffers.find(
+      baggage => baggage.price.amount === 0
+  );
+  
+  if (firstFreeBags) {
+      bru.setVar("1stFreeBaggageOfferId", firstFreeBags.baggageOfferId);
+      bru.setVar("1stFreeBaggageCount", Number(firstFreeBags.baggageCount));
+      bru.setVar("1stFreeBaggagePrice", parseFloat(firstFreeBags.price.amount));
+      bru.setVar("1stFreeBaggageCurrency", firstFreeBags.price.currency);
+      bru.setVar(
+          "1stFreeBaggageDecimalPrecisionCount",
+          Number(firstFreeBags.price.decimalPrecisionCount)
+      );
+  }
+  
+  // first paid baggage offer
+  const firstPaidBags = passenger1.baggageOffers.find(
+      baggage => baggage.price.amount > 0
+  );
+  
+  if (firstPaidBags) {
+      bru.setVar("1stPaidBaggageOfferId", firstPaidBags.baggageOfferId);
+      bru.setVar("1stPaidBaggageCount", Number(firstPaidBags.baggageCount));
+      bru.setVar("1stPaidBaggagePrice", parseFloat(firstPaidBags.price.amount));
+      bru.setVar("1stPaidBaggageCurrency", firstPaidBags.price.currency);
+      bru.setVar(
+          "1stPaidBaggageDecimalPrecisionCount",
+          Number(firstPaidBags.price.decimalPrecisionCount)
+      );
+  }
+  
+  var emailAddress = body.data &&
+                     body.data.BaggageAllowance &&
+                     body.data.BaggageAllowance.emailAddress;
+  
+  bru.setVar("emailAddress", emailAddress || "Test@example.com");
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,179 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPIMS"
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVAPEUNAFNPASSENGERMICROSERV"
+    },
+    "AppInsightsName": {
+      "value": "AVAPEUNAICUSTOMERMS"
+    },
+    "Appsetting:APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "fe8fd990-715e-40c0-a692-9524e40b3b2c"
+    },
+    "AppsettingAzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNPASSENGERMICROSERV-Config-AzureAd-ClientID/)"
+    },
+    "AppsettingAzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AppsettingAzureAd:TenantID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AppsettingAzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=fe8fd990-715e-40c0-a692-9524e40b3b2c;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/"
+    },
+    "AppsettingAzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppsettingsWEBSITE_CONTENTSHARE": {
+      "value": "avapeunafnpassengermicroserv"
+    },
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNPASSENGERMICROSERV-Config-StorageAccount/)"
+    },
+    "AppSettingDeltaCertificateName": {
+      "value": "DeltaProfileSyncServiceCertificateAzure"
+    },
+    "AppSettingDeltaPassengerV4EndPoint": {
+      "value": "https://webservices.vs.air4.com:31057/passenger/v4"
+    },
+    "AppSettingDlAppChannelName": {
+      "value": "VIRGINHOLIDAYS"
+    },
+    "AppSettingDlApplicationId": {
+      "value": "VH"
+    },
+    "AppSettingKeyVaultUri": {
+      "value": "https://avapeunkvems.vault.azure.net/"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "AppsettingsMicroServiceDBTableName": {
+      "value": "ChannelConfig"
+    },
+    "AppsettingsOpenApi__Description":{
+      "value": "This API provides ability to Register and Update Passenger"
+    },
+    "AppsettingsOpenApi__DocTitle": {
+      "value": "Passenger Microservice"
+    },
+
+    "AppsettingsOpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "AppsettingsOpenApi__Version": {
+      "value": "v4"
+    },
+    "AppsettingsOpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "AppsettingsOpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "AppsettingsOpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "AppsettingsOpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/c7118379-bf21-44de-b6e5-1a0227d75045/.default"
+    },
+    "AppsettingsDlTestLab": {
+      "value": "AIR"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "skuName": {
+      "value": "Standard_RAGRS"
+    },
+    "storageAccountName": {
+      "value": "avapeunstpassengerms"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNPASSENGERMICROSERV-Config-AzureAd-ClientID/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "PROD",
+        "Purpose": "Passenger",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNLOYALTYSYNCMS\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

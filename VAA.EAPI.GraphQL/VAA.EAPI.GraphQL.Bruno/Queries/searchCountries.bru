@@ -1,0 +1,32 @@
+meta {
+  name: searchCountries
+  type: graphql
+  seq: 46
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query searchCountries($order: [CountryRefDataSortInput!], $where: CountryRefDataFilterInput) {
+    searchCountries(order: $order, where: $where) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "order": null,
+    "where": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,1270 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "NativeWebSocketsConfiguration": {
+      "type": "object",
+      "defaultValue": {
+        "redisPrefix": "",
+        "startupHookPath": "",
+        "existingStartupHooks": "",
+        "workerProcessCount": "1",
+        "path": "/api/v1/GraphQL/ws"
+      },
+      "metadata": {
+        "description": "Native WebSocket settings grouped to keep the shared ARM template below the 256-parameter limit. Enable only after validating prerequisites."
+      }
+    },
+    "NativeWebSocketsBridgeSecret": {
+      "metadata": {
+        "description": "Required when enabled: Key Vault app-setting reference resolving to a random bridge secret of at least 32 characters."
+      },
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "DataDog": {
+      "type": "secureObject",
+      "defaultValue": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "",
+        "Site": "datadoghq.com",
+        "Environment": "",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "FunctionAppName": {
+      "type": "String"
+    },
+    "environment": {
+      "type": "string"
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "FunctionAppName": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "aseRg": {
+      "type": "string"
+    },
+    "aseName": {
+      "type": "string"
+    },
+    "KeyVaultUri": {
+      "type": "string"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "object"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "type": "string"
+    },
+
+    "Tags": {
+      "type": "Object"
+    },
+
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "type": "string"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "WEBSITE_DNS_SERVER_SANDBOX": {
+      "type": "string"
+    },
+    "WEBSITE_DNS_ALT_SERVER_SANDBOX": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Description": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Version": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "type": "string"
+    },
+    // micro-service settings
+    "resourceurl": {
+      "type": "string"
+    },
+    "resourceurlPost": {
+      "type": "string"
+    },
+    // Azure B2C Active Directory
+    "AzureAB2C": {
+      "type": "object"
+    },
+    //Azure Active Directory Entra
+    "AAD": {
+      "type": "object"
+    },
+
+    // Graph QL Microservice
+    "EAPIGraph": {
+      "type": "object"
+    },
+    "EnrolmentTokenFlag": {
+      "type": "bool"
+    },
+    "YoungFlyerAgeLimit": {
+      "type": "int"
+    },
+    "EnableUnder18StandardEnrolmentBlock": {
+      "type": "bool"
+    },
+    "AllowIntrospection": {
+      "type": "string"
+    },
+    "CommonEAPIOcpAPIMKey": {
+      "type": "string"
+    },
+    "PersistedQueryStore": {
+      "type": "string"
+    },
+    "GraphqlTimeOutInSeconds": {
+      "type": "int"
+    },
+    // Customer Transactions Microservice
+    "CustTrans": {
+      "type": "object"
+    },
+    //VRed Microservice
+    "VRed": {
+      "type": "object"
+    },
+    //Wallet Microservice
+    "Myaccount": {
+      "type": "object"
+    },
+    "AddressLookupV3": {
+      "type": "secureObject"
+    },
+    "Wallet:AppId": {
+      "type": "string"
+    },
+    "Security:AppId": {
+      "type": "string"
+    },
+    // Customer Microservice
+    "Customer": {
+      "type": "object"
+    },
+    "CustomerMSURLForValidateMemberStatus": {
+      "type": "string"
+    },
+    "ManageAccount:UpdatePhoneNumber": {
+      "type": "string"
+    },
+    // Ref Data API (Siebel Exit)
+    "RefDataAPI": {
+      "type": "object"
+    },
+    "Reference:MsUrl": {
+      "type": "string"
+    },
+    "LoyaltySync": {
+      "type": "object"
+    },
+    // Holiday Search Microservice
+    "HolidaySearch:Url": {
+      "type": "string"
+    },
+
+    // VHols Query API
+    "VHolsQueryAPI": {
+      "type": "object"
+    },
+    //Order Data Microservice
+    "OrderData": {
+      "type": "object"
+    },
+    "OrderDataMs:FutureBookingUrl": {
+      "type": "string"
+    },
+    "EnableOrderSearchFlightService": {
+      "type": "bool"
+    },
+    // Order Search Microservice
+    "OrderSearch": {
+      "type": "object"
+    },
+    // CRM Microservice
+    "CRMMS": {
+      "type": "object"
+    },
+    //Offer Microservice
+    "Offer": {
+      "type": "object"
+    },
+    // Reprice Microservice
+    "Reprice": {
+      "type": "object"
+    },
+    "Identity": {
+      "type": "object"
+    },
+    // CampaignManagement
+    "CampaignManagement": {
+      "type": "object"
+    },
+    // Loyalty Transaction Management
+    "ListOfStatusForAccrual": {
+      "type": "string"
+    },
+    "Loyalty:RetroFlightActivityNoOfDays": {
+      "type": "string"
+    },
+    "CommonCachingAbsoluteExpiration": {
+      "type": "string"
+    },
+    "CommonCachingSlidingExpiration": {
+      "type": "string"
+    },
+    // Operations | Passenger Manifest
+    "Operations": {
+      "type": "object"
+    },
+    "OperationsVisibilityMode": {
+      "type": "string"
+    },
+    //MemberManagement
+    "MemberManagement": {
+      "type": "object"
+    },
+    // GetBooking
+    "GetBooking:Url": {
+      "type": "string"
+    },
+    // CreateCustomer
+    "Enrolment": {
+      "type": "object"
+    },
+    //Email Ms
+    "Email:AppId": {
+      "type": "string"
+    },
+    "VredMarketingFeatureFlag": {
+      "type": "string"
+    },
+    // Delay used by microservice connecter when making get call after post
+    "TimeToWaitBeforeNextRecall": {
+      "type": "string"
+    },
+    // Redis cache
+    "RedisCacheConnectionString": {
+      "type": "string"
+    },
+    "AppSetting:McpCallerContextApplicationId": { "type": "string" },
+    //Myaccount loyalty enrollment
+    "EnableCustomerMs": {
+      "type": "bool"
+    },
+    "EnableMockResponseForVACLoginOverview": {
+      "type": "bool"
+    },
+    "EnableAzureEndpointAddressDetails": {
+      "type": "bool"
+    },
+    //EAPI Security Microservice - APIM Subscription
+    "APIMSubscriptionMS": {
+      "type": "object"
+    },
+    // Identity MS - Validate Password
+    "IdentityMS": {
+      "type": "object"
+    },
+    // TravelPlus [Search / Book]
+    "Search": {
+      "type": "object"
+    },
+    //Website Book [Order]
+    "BookOrder": {
+      "type": "object"
+    },
+    //Website Book [Offer]
+    "Book": {
+      "type": "object"
+    },
+    //Website Book [Basket]
+    "BasketMSRetrieveUrl": {
+      "type": "string"
+    },
+    "BasketMSUpdatePassengerUrl": {
+      "type": "string"
+    },
+    "BasketMSUpdateContactUrl": {
+      "type": "string"
+    },
+    "BasketMSUpdateTermsUrl": {
+      "type": "string"
+    },
+    "BasketMSOcpKey": {
+      "type": "string"
+    },
+    "BasketMSUpdateOfferIDUrl": {
+      "type": "string"
+    },
+    "BasketMSUpdateSelectedOfferUrl": {
+      "type": "string"
+    },
+    "BasketMSCreateUrl": {
+      "type": "string"
+    },
+    "BasketMSUpdatePaymentUrl": {
+      "type": "string"
+    },
+    "BasketMSDeleteUrl": {
+      "type": "string"
+    },
+    "BasketMSOrderStatusUpdateUrl": {
+      "type": "string"
+    },
+    "BasketMSUpdateSeatOfferUrl": {
+      "type": "string"
+    },
+    "BasketMSSetFlightSummaryUrl": {
+      "type": "string"
+    },
+    "DelayTimeInMS": {
+      "type": "int"
+    },
+    "PollingCount": {
+      "type": "int"
+    },
+    "BasketMSUpdateMembershipUrl": {
+      "type": "string"
+    },
+    "BasketMS:Url": {
+      "type": "string"
+    },
+    //Website Book [ReferenceMS]
+    "ReferenceMSAirportDetailsUrl": {
+      "type": "string"
+    },
+    "ReferenceMSAirlineDetailsUrl": {
+      "type": "string"
+    },
+    "ReferenceMSCabinDetailsUrl": {
+      "type": "string"
+    },
+    "ReferenceMSAircraftDetailsUrl": {
+      "type": "string"
+    },
+    "ReferenceMSCountriesUrl": {
+      "type": "string"
+    },
+    "ReferenceMSFQTUrl": {
+      "type": "string"
+    },
+    "ReferenceMSMobileFeaturesUrl": {
+      "type": "string"
+    },
+    "ReferenceMSOcpKey": {
+      "type": "string"
+    },
+    "ReferenceMSAir4CurrencyNumberUrl": {
+      "type": "string"
+    },
+    //Website Book [Payment]
+    "PaymentMS:Url": {
+      "type": "string"
+    },
+    // Reference Micro Service
+    "RefDataMS": {
+      "type": "object"
+    },
+    //Seat Microservice
+    "Seat:MSUrl": {
+      "type": "string"
+    },
+    // Book : Seat Microservice
+    "BookSeatMSOcpKey": {
+      "type": "string"
+    },
+    "BookSeatMSUrl": {
+      "type": "string"
+    },
+    "BookRetrieveSeatOfferUrl": {
+      "type": "string"
+    },
+    "BookUpdateSeatOfferMSUrl": {
+      "type": "string"
+    },
+    // Book : LOPA Microservice
+    "LOPAMSOcpKey": {
+      "type": "string"
+    },
+    "LOPAMSUrl": {
+      "type": "string"
+    },
+    "EnableVACEnrolment": {
+      "type": "string"
+    },
+    "EnableEarnPointCalculator": {
+      "type": "string"
+    },
+    "EnableVoucherRedemption": {
+      "type": "string",
+      "defaultValue": "false"
+    },
+    //Insurance MS 
+    "InsuranceMSOcpKey": {
+      "type": "string"
+    },
+    "InsuranceMSUrl": {
+      "type": "string"
+    },
+    // RuleEngine(InRule) MS
+    "InRule": {
+      "type": "object"
+    },
+    // SkyTeam MS
+    "SkyMs": {
+      "type": "object"
+    },
+    //Customer Contact
+    "EnableCabinFilters": {
+      "type": "bool"
+    },
+    "EnableConnectionsFilters": {
+      "type": "bool"
+    },
+    "EnableDepartureTimesFilters": {
+      "type": "bool"
+    },
+    "EnableAirlineFilters": {
+      "type": "bool"
+    },
+    // SkyTeam MS
+    "Audit": {
+      "type": "object"
+    },
+    //PDM MS
+    "PdmMSUrl": {
+      "type": "string"
+    },
+    "PdmMSAppId": {
+      "type": "string"
+    },
+
+    //InRule MS 
+    "InRuleMSUrl": {
+      "type": "string"
+    },
+    "InRuleMSAppID": {
+      "type": "string"
+    },
+
+    // Analytics MS
+    "AnalyticsMS:URL": {
+      "type": "string"
+    },
+
+    //NDC Threshold settings
+    "NDCHealth": {
+      "type": "object"
+    },
+
+    //FEAPI Settings
+    "FEAPI": {
+      "type": "object"
+    },
+    //TRIP MS
+    "TRIPMS": {
+      "type": "object"
+    },
+    //Trip Related Settings
+    "TripSettings": {
+      "type": "object"
+    },
+    //FlightService MS
+    "FlightServiceMS": {
+      "type": "object"
+    },
+
+    //Check-In Microservice
+    "CheckIn": {
+      "type": "object"
+    },
+    // Content Service
+    "ContentService": {
+      "type": "object"
+    },
+    //AirportInfo Query
+    "AirportInfoQuery:RoutesApi": {
+      "type": "string"
+    },
+    "Analytics": {
+      "type": "object"
+    },
+    //Order Mmgt
+    "OrderManagement": {
+      "type": "object"
+    },
+
+    //Retailing
+    "Retailing": {
+      "type": "object"
+    },
+
+    // MockDelegatingHandler
+    "MockDelegatingHandler": {
+      "type": "object"
+    },
+    //validate txn 
+    "ValidateTxnDelayInMS": {
+      "type": "string"
+    },
+    "ValidateTxnRetryLimit": {
+      "type": "string"
+    },
+
+    //NDCHealthCheck
+    "NDCOfferHeartBeatUrl": {
+      "type": "string"
+    },
+    "NDCOrderHeartBeatUrl": {
+      "type": "string"
+    },
+    
+    "workspacename": {
+      "type": "string"
+    },
+    //Store appointment
+    "StoreLocator": {
+      "type": "object"
+    },
+    // CRM Refund Microservice
+    "CRMRefund": {
+      "type": "object"
+    }
+  },
+  "variables": {
+    "ResourceLocation": "[resourceGroup().location]",
+    "SiteResourceID": "[resourceId('Microsoft.Web/Sites', parameters('FunctionAppName'))]",
+    "azurewebjobstorage": "[concat('@Microsoft.KeyVault(SecretUri=https://',parameters('keyVaultName'),'.vault.azure.net/secrets/',parameters('storageAccountName'),'-connectionstring)')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2021-06-01",
+      "name": "[parameters('workspacename')]",
+      "location": "[variables('ResourceLocation')]",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "kind": "web",
+      "apiVersion": "2020-02-02",
+      "name": "[parameters('AppInsightsName')]",
+      "location": "[Variables('ResourceLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspacename'))]"
+      ],
+      "properties": {
+        "Application_Type": "web",
+        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('FunctionAppName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "kind": "functionapp",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "serverFarmId": "[resourceId(parameters('aseRg'), 'Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "hostingEnvironmentProfile": "[resourceId(parameters('aseRg'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "LoggingProvider",
+              "value": "[parameters('DataDog').LoggingProvider]"
+            },
+            {
+              "name": "DatadogLogsEndpoint",
+              "value": "[parameters('DataDog').LogsEndpoint]"
+            },
+            {
+              "name": "DatadogApiKey",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_API_KEY",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_SITE",
+              "value": "[parameters('DataDog').Site]"
+            },
+            {
+              "name": "DD_SERVICE",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "DD_ENV",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DD_VERSION",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DD_TRACE_ENABLED",
+              "value": "[string(parameters('DataDog').TraceEnabled)]"
+            },
+            {
+              "name": "DD_RUNTIME_METRICS_ENABLED",
+              "value": "[string(parameters('DataDog').RuntimeMetricsEnabled)]"
+            },
+            {
+              "name": "DatadogService",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "environment",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DatadogSource",
+              "value": "[parameters('DataDog').Source]"
+            },
+            {
+              "name": "DatadogVersion",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DatadogTags",
+              "value": "[concat(parameters('DataDog').Tags, if(empty(parameters('DataDog').Tags), '', ','), 'cloud_provider:azure,subscription_id:', subscription().subscriptionId, ',resource_group:', resourceGroup().name, ',name:', parameters('FunctionAppName'), ',type:microsoft.web/sites,resource_id:', resourceId('Microsoft.Web/sites', parameters('FunctionAppName')))]"
+            },
+            {
+              "name": "DatadogBaggageAllowList",
+              "value": "[parameters('DataDog').BaggageAllowList]"
+            },
+            {
+              "name": "DatadogMinimumLogLevel",
+              "value": "[parameters('DataDog').MinimumLogLevel]"
+            },
+            {
+              "name": "DatadogQueueCapacity",
+              "value": "[string(parameters('DataDog').QueueCapacity)]"
+            },
+            {
+              "name": "DatadogBatchSize",
+              "value": "[string(parameters('DataDog').BatchSize)]"
+            },
+            {
+              "name": "DatadogFlushIntervalMilliseconds",
+              "value": "[string(parameters('DataDog').FlushIntervalMilliseconds)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value)]"
+            }
+          ]
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/web')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$[parameters('FunctionAppName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": true,
+        "webSocketsEnabled": true,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": false
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "FtpsOnly",
+        "reservedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2021-03-01",
+      "name": "[concat(parameters('FunctionAppName'),'/','appsettings')]",
+      "kind": "functionapp,workflowapp",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]",
+        "[resourceId('Microsoft.KeyVault/vaults/accessPolicies', parameters('keyVaultName'),'add')]"
+      ],
+      "properties": {
+        "NativeWebSocketsRedisPrefix": "[if(empty(if(contains(parameters('NativeWebSocketsConfiguration'), 'redisPrefix'), parameters('NativeWebSocketsConfiguration').redisPrefix, '')), parameters('FunctionAppName'), parameters('NativeWebSocketsConfiguration').redisPrefix)]",
+        "NativeWebSocketsPath": "[parameters('NativeWebSocketsConfiguration').path]",
+        "FUNCTIONS_WORKER_PROCESS_COUNT": "[parameters('NativeWebSocketsConfiguration').workerProcessCount]",
+        "DOTNET_STARTUP_HOOKS": "[if(not(empty(parameters('NativeWebSocketsConfiguration').startupHookPath)), concat(parameters('NativeWebSocketsConfiguration').existingStartupHooks, if(empty(parameters('NativeWebSocketsConfiguration').existingStartupHooks), '', ';'), parameters('NativeWebSocketsConfiguration').startupHookPath), parameters('NativeWebSocketsConfiguration').existingStartupHooks)]",
+        "NativeWebSocketsBridgeSecret": "[parameters('NativeWebSocketsBridgeSecret')]",
+        /*App Settings */
+        "FUNCTIONS_EXTENSION_VERSION": "~4",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+        "WEBSITE_CONTENTOVERVNET": "1",
+        "WEBSITE_VNET_ROUTE_ALL": "1",
+        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', parameters('AppInsightsName')), '2014-04-01').InstrumentationKey]",
+        "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(resourceId('Microsoft.Insights/components', parameters('AppInsightsName')), '2020-02-02').ConnectionString]",
+        "AzureWebJobsStorage": "[variables('azurewebjobstorage')]",
+        "WEBSITE_RUN_FROM_PACKAGE": "[parameters('WEBSITE_RUN_FROM_PACKAGE')]",
+        "WEBSITE_LOAD_USER_PROFILE": "[parameters('WEBSITE_LOAD_USER_PROFILE')]",
+        "AzureWebJobsSecretStorageType": "[parameters('AzureWebJobsSecretStorageType')]",
+        "OpenApi__Scope": "[parameters('Appsetting:OpenApi__Scope')]",
+        "OpenApi__TokenUrl": "[parameters('Appsetting:OpenApi__TokenUrl')]",
+        "OpenApi__DocTitle": "[parameters('Appsetting:OpenApi__DocTitle')]",
+        "OpenApi__Description": "[parameters('Appsetting:OpenApi__Description')]",
+        "OpenApi__DocVersion": "[parameters('Appsetting:OpenApi__DocVersion')]",
+        "OpenApi__Version": "[parameters('Appsetting:OpenApi__Version')]",
+        "OpenApi__ForceHttps": "[parameters('Appsetting:OpenApi__ForceHttps')]",
+        "OpenApi__ForceHttp": "[parameters('Appsetting:OpenApi__ForceHttp')]",
+        "OpenApi__HostNames": "[parameters('Appsetting:OpenApi__HostNames')]",
+        //Settings
+        "AB2C:Authority": "[parameters('AzureAB2C').Authority]",
+        "AB2C:TenantId": "[parameters('AzureAB2C').TenantId]",
+        "AB2C:AB2CAudience": "[parameters('AzureAB2C').AB2CAudience]",
+        "AB2C:AB2COpenIdConnection": "[parameters('AzureAB2C').AB2COpenIdConnection]",
+        // Azure Active Directory
+        "AAD:EntraTenantId": "[parameters('AAD').EntraTenantId]",
+        "AAD:Authority": "[parameters('AAD').Authority]",
+        "AAD:TenantId": "[parameters('AAD').TenantId]",
+        "AAD:TokenV1Issuer": "[parameters('AAD').TokenV1Issuer]",
+        // Graph QL Microservice
+        "EAPIGraph:AppID": "[parameters('EAPIGraph').AppID]",
+        "EAPIGraph:ClientSecret": "[parameters('EAPIGraph').ClientSecret]",
+        "EnrolmentTokenFlag": "[parameters('EnrolmentTokenFlag')]",
+        "YoungFlyerAgeLimit": "[parameters('YoungFlyerAgeLimit')]",
+        "EnableUnder18StandardEnrolmentBlock": "[parameters('EnableUnder18StandardEnrolmentBlock')]",
+        "AllowIntrospection": "[parameters('AllowIntrospection')]",
+        "CommonEAPIOcpAPIMKey": "[parameters('CommonEAPIOcpAPIMKey')]",
+        "PersistedQueryStore": "[parameters('PersistedQueryStore')]",
+        "GraphqlTimeOutInSeconds": "[parameters('GraphqlTimeOutInSeconds')]",
+        // Customer Transactions Microservice
+        "CustTrans:AppId": "[parameters('CustTrans').AppId]",
+        "CustTrans:OcpSubID": "[parameters('CustTrans').OcpSubID]",
+        "CustTrans:MsUrl": "[parameters('CustTrans').MsUrl]",
+        //VRed Microservice
+        "VRed:OcpSubID": "[parameters('VRed').OcpSubID]",
+        "VRed:AppId": "[parameters('VRed').AppId]",
+        "VRed:MsUrl": "[parameters('VRed').MsUrl]",
+        //Wallet, security , myaccount and email Microservice   
+        "Myaccount:WalletGeneratePassURL": "[parameters('Myaccount').WalletGeneratePassURL]",
+        "MyAccount:SecurityMSURLForGetTokenForShopsAway": "[parameters('MyAccount').SecurityMSURLForGetTokenForShopsAway]",
+        "MyAccount:FutureBookingUrl": "[parameters('Myaccount').FutureBookingUrl]",
+        "MyAccount:EmailMSURLForPasswordResetConfirmation": "[parameters('Myaccount').EmailMSURLForPasswordResetConfirmation]",
+        "MyAccount:PasswordResetConfirmationTemplate": "[parameters('Myaccount').PasswordResetConfirmationTemplate]",
+        "MyAccount:EnableMockResponseForLoyaltySignUp": "[parameters('Myaccount').EnableMockResponseForLoyaltySignUp]",
+        "MyAccount:EnrolmentSignUp:URL": "[parameters('MyAccount').EnrolmentSignUp.URL]",
+        "MyAccount:AllowMemberToEnrolToAzureB2C": "[parameters('Myaccount').AllowMemberToEnrolToAzureB2C]",
+        "MyAccount:EnableMockResponseForPointDotCom": "[parameters('Myaccount').EnableMockResponseForPointDotCom]",
+        "MyAccount:IdentityMSURLForVerifyMemberInAzureB2C": "[parameters('Myaccount').IdentityMSURLForVerifyMemberInAzureB2C]",
+        "MyAccount:IdentityMSURLForVerifyEmailtoAzureB2C": "[parameters('Myaccount').IdentityMSURLForVerifyEmailtoAzureB2C]",
+        "MyAccount:AddressLookUpURLForAddressDetails": "[parameters('Myaccount').AddressLookUpURLForAddressDetails]",
+        "MyAccount:AddressLookup:AppId": "[parameters('MyAccount').AddressLookup.AppId]",
+        "AddressLookupV3:ApimUrl": "[parameters('AddressLookupV3').ApimUrl]",
+        "MyAccount:EnableMockResponseForEnrolment": "[parameters('Myaccount').EnableMockResponseForEnrolment]",
+        "MyAccount:DeDupFCGenUrl": "[parameters('Myaccount').DeDupFCGenUrl]",
+        "MyAccount:MobileEnrolment:MinimumIosVersion": "[parameters('Myaccount').MobileEnrolment.MinimumIosVersion]",
+        "MyAccount:MobileEnrolment:MinimumAndroidVersion": "[parameters('Myaccount').MobileEnrolment.MinimumAndroidVersion]",
+        "MyAccount:AddressLookUpURLForAddressDetailsV2": "[parameters('Myaccount').AddressLookUpURLForAddressDetailsV2]",
+        "MyAccount:CustomerMSURLForMemberDetails": "[parameters('Myaccount').CustomerMSURLForMemberDetails]",
+        "MyAccount:CustomerMSURLForEmailUpdate": "[parameters('Myaccount').CustomerMSURLForEmailUpdate]",
+        "MyAccount:InflightConnectivityMSURL": "[parameters('Myaccount').InflightConnectivityMSURL]",
+        "MyAccount:InflightConnectivityExpiry": "[parameters('Myaccount').InflightConnectivityExpiry]",
+        "MyAccount:InflightConnectivityLimitedExpiry": "[parameters('Myaccount').InflightConnectivityLimitedExpiry]",
+        "MyAccount:InflightConnectivityOcpKey": "[parameters('Myaccount').InflightConnectivityOcpKey]",
+        "MyAccount:CustomerMSUrlForUpdateMemberAddress": "[parameters('Myaccount').CustomerMSUrlForUpdateMemberAddress]",
+        "MyAccount:PostCodeMandatoryCountryList": "[parameters('Myaccount').PostCodeMandatoryCountryList]",
+        "MyAccount:EnableMockResponseForPartnersFlightsPointsClaim": "[parameters('Myaccount').EnableMockResponseForPartnersFlightsPointsClaim]",
+        //wallet
+        "Wallet:AppId": "[parameters('Wallet:AppId')]",
+        "Security:AppId": "[parameters('Security:AppId')]",
+        // Customer Microservice
+        "Customer:BasicEnrolmentUrl": "[parameters('Customer').BasicEnrolmentUrl]",
+        "Customer:MsUrl": "[parameters('Customer').MsUrl]",
+        "Customer:AppId": "[parameters('Customer').AppId]",
+        "Customer:OcpSubID": "[parameters('Customer').OcpSubID]",
+        "Customer:UrlGetbyCustID": "[parameters('Customer').UrlGetbyCustID]",
+        "Customer:UrlGetByMemNum": "[parameters('Customer').UrlGetByMemNum]",
+        "CustomerMSURLForValidateMemberStatus": "[parameters('CustomerMSURLForValidateMemberStatus')]",
+        "ManageAccount:UpdatePhoneNumber": "[parameters('ManageAccount:UpdatePhoneNumber')]",
+        "Customer:AddressHistoryRetrievalUrl": "[parameters('Customer').AddressHistoryRetrievalUrl]",
+        "Customer:ContactHistoryRetrievalUrl": "[parameters('Customer').ContactHistoryRetrievalUrl]",
+        "Customer:CustomerDocByCustIdUrl": "[parameters('Customer').CustomerDocByCustIdUrl]",
+
+        // Ref Data API (Siebel Exit)
+        "RefDataAPI:AppId": "[parameters('RefDataAPI').AppId]",
+        "RefDataAPI:OcpSubID": "[parameters('RefDataAPI').OcpSubID]",
+        "RefDataAPI:GenericUrl": "[parameters('RefDataAPI').GenericUrl]",
+        "RefDataAPI:CacheTimeSpan": "[parameters('RefDataAPI').CacheTimeSpan]",
+        "Reference:MsUrl": "[parameters('Reference:MsUrl')]",
+        //Loyalty Sync MS
+        "LoyaltySync:MsUrl": "[parameters('LoyaltySync').MsUrl]",
+        "LoyaltySync:OcpSubId": "[parameters('LoyaltySync').OcpSubId]",
+        "LoyaltySync:AppId": "[parameters('LoyaltySync').AppId]",
+        // Holiday Search API
+        "HolidaySearch:Url": "[parameters('HolidaySearch:Url')]",
+        // VHols Query API
+        "VHolsQueryAPI:Login": "[parameters('VHolsQueryAPI').Login]",
+        "VHolsQueryAPI:Forgot": "[parameters('VHolsQueryAPI').Forgot]",
+        "VHolsQueryAPI:Refresh": "[parameters('VHolsQueryAPI').Refresh]",
+        "VHolsQueryAPI:Retrieve": "[parameters('VHolsQueryAPI').Retrieve]",
+        "VHolsQueryAPI:Content": "[parameters('VHolsQueryAPI').Content]",
+        //Order Data Microservice
+        "OrderData:AppId": "[parameters('OrderData').AppId]",
+        "OrderData:MSUrl": "[parameters('OrderData').MSUrl]",
+        "OrderData:OcpSubID": "[parameters('OrderData').OcpSubID]",
+        "OrderDataMs:FutureBookingUrl": "[parameters('OrderDataMs:FutureBookingUrl')]",
+        "EnableOrderSearchFlightService": "[parameters('EnableOrderSearchFlightService')]",
+        //Order Search Microservice
+        "OrderSearch:Url": "[parameters('OrderSearch').Url]",
+        "OrderSearch:AppId": "[parameters('OrderSearch').AppId]",
+        "OrderSearch:OcpSubID": "[parameters('OrderSearch').OcpSubID]",
+        "OrderSearch:MSUrl": "[parameters('OrderSearch').MSUrl]",
+        //CRM Microservice
+        "CRMMS:Url": "[parameters('CRMMS').Url]",
+        "CRMMS:AppId": "[parameters('CRMMS').AppId]",
+        "CRMMS:OcpSubID": "[parameters('CRMMS').OcpSubID]",
+        "CRMMS:EnableResponseUrl": "[parameters('CRMMS').EnableResponseUrl]",
+        //Offer Microservice
+        "Offer:Url": "[parameters('Offer').Url]",
+        "Offer:AppId": "[parameters('Offer').AppId]",
+        "Offer:OcpSubID": "[parameters('Offer').OcpSubID]",
+        //Reprice Microservice
+        "Reprice:Url": "[parameters('Reprice').Url]",
+        "Reprice:AppId": "[parameters('Reprice').AppId]",
+        "Reprice:OcpSubID": "[parameters('Reprice').OcpSubID]",
+        "Identity:Issuer": "[parameters('Identity').Issuer]",
+        "Identity:SignKey": "[parameters('Identity').SignKey]",
+        "Identity:OcpSubId": "[parameters('Identity').OcpSubID]",
+        "Identity:IdentityActivationTokenIssuer": "[parameters('Identity').IdentityActivationTokenIssuer]",
+        "Identity:MsUrl": "[parameters('Identity').MsUrl]",
+        // CampaignManagement
+        "CampaignManagement:AppId": "[parameters('CampaignManagement').AppId]",
+        "CampaignManagement:OcpSubID": "[parameters('CampaignManagement').OcpSubID]",
+        "CampaignManagement:CampaignManagementMsUrl": "[parameters('CampaignManagement').CampaignManagementMsUrl]",
+        "CampaignManagement:AssignCampaignCode": "[parameters('CampaignManagement').AssignCampaignCode]",
+        "CampaignManagement:AssignCampaignId": "[parameters('CampaignManagement').AssignCampaignId]",
+        // Loyalty Transaction Management
+        "ListOfStatusForAccrual": "[parameters('ListOfStatusForAccrual')]",
+        "Loyalty:RetroFlightActivityNoOfDays": "[parameters('Loyalty:RetroFlightActivityNoOfDays')]",
+        "CommonCachingAbsoluteExpiration": "[parameters('CommonCachingAbsoluteExpiration')]",
+        "CommonCachingSlidingExpiration": "[parameters('CommonCachingSlidingExpiration')]",
+        // Operations | Passenger Manifest
+        "Operations:PassengerManifestUrl": "[parameters('Operations').PassengerManifestUrl]",
+        "Operations:PassengerManifestAppId": "[parameters('Operations').PassengerManifestAppId]",
+        "Operations:PassengerManifestOcpKey": "[parameters('Operations').PassengerManifestOcpKey]",
+        "Operations:PassengerManifestAcceptHeader": "[parameters('Operations').PassengerManifestAcceptHeader]",
+        "OperationsVisibilityMode": "[parameters('OperationsVisibilityMode')]",
+        //MemberManagement
+        "MemberManagement:AppId": "[parameters('MemberManagement').AppId]",
+        "MemberManagement:OcpSubID": "[parameters('MemberManagement').OcpSubID]",
+        "MemberManagement:MsUrl": "[parameters('MemberManagement').MsUrl]",
+        //GetBooking
+        "GetBooking:Url": "[parameters('GetBooking:Url')]",
+        // CreateCustomer
+        "Enrolment:Url": "[parameters('Enrolment').Url]",
+        "Enrolment:AppId": "[parameters('Enrolment').AppId]",
+        "Enrolment:OcpKey": "[parameters('Enrolment').OcpKey]",
+        //Email Ms
+        "Email:AppId": "[parameters('Email:AppId')]",
+        "VredMarketingFeatureFlag": "[parameters('VredMarketingFeatureFlag')]",
+        // Delay used by microservice connecter when making get call after post
+        "TimeToWaitBeforeNextRecall": "[parameters('TimeToWaitBeforeNextRecall')]",
+        // Redis cache
+        "RedisCacheConnectionString": "[parameters('RedisCacheConnectionString')]",
+        "Mcp:CallerContext:ApplicationId": "[parameters('AppSetting:McpCallerContextApplicationId')]",
+        //My account - Loyalty enrollment
+        "EnableCustomerMs": "[parameters('EnableCustomerMs')]",
+        "EnableMockResponseForVACLoginOverview": "[parameters('EnableMockResponseForVACLoginOverview')]",
+        "EnableAzureEndpointAddressDetails": "[parameters('EnableAzureEndpointAddressDetails')]",
+        //EAPI Security Microservice - APIM Subscription
+        "APIMSubscriptionMS:CreateUrl": "[parameters('APIMSubscriptionMS').CreateUrl]",
+        "APIMSubscriptionMS:GetUrl": "[parameters('APIMSubscriptionMS').GetUrl]",
+        "APIMSubscriptionMS:UpdateUrl": "[parameters('APIMSubscriptionMS').UpdateUrl]",
+        "APIMSubscriptionMS:DeleteUrl": "[parameters('APIMSubscriptionMS').DeleteUrl]",
+        "APIMSubscriptionMS:AppId": "[parameters('APIMSubscriptionMS').AppId]",
+        "APIMSubscriptionMS:OcpKey": "[parameters('APIMSubscriptionMS').OcpKey]",
+        // Identity MS - Validate Password
+        "IdentityMS:AppId": "[parameters('IdentityMS').AppId]",
+        "IdentityMS:OcpKey": "[parameters('IdentityMS').OcpKey]",
+        // TravelPlus [Search / Book] , Brand MS, Sustain Ms
+        "Search:TravelPlus:FlightSearch:Url": "[parameters('Search').TravelPlus.FlightSearch.Url]",
+        "Search:TravelPlus:CookieHeaders": "[parameters('Search').TravelPlus.CookieHeaders]",
+        "Search:TravelPlus:CookiePrefix": "[parameters('Search').TravelPlus.CookiePrefix]",
+        "Search:TravelPlus:Connection": "[parameters('Search').TravelPlus.Connection]",
+        "Search:TravelPlus:Accept": "[parameters('Search').TravelPlus.Accept]",
+        "Search:TravelPlus:ContentType": "[parameters('Search').TravelPlus.ContentType]",
+        "Search:PostBackUrl": "[parameters('Search').PostBackUrl]",
+        "Search:OfferMS:URL": "[parameters('Search').OfferMS.Url]",
+        "Search:OfferMS:OCPKey": "[parameters('Search').OfferMS.OCPKey]",
+        "Search:OfferMS:ChannelId": "[parameters('Search').OfferMS.ChannelId]",
+        "Search:BrandMS:URL": "[parameters('Search').BrandMS.URL]",
+        "Search:BrandMS:OCPKey": "[parameters('Search').BrandMS.OCPKey]",
+        "Search:SustainMS:URL": "[parameters('Search').SustainMS.URL]",
+        "Search:SustainMS:OCPKey": "[parameters('Search').SustainMS.OCPKey]",
+        "Search:EnableCarbonIndexIntegration": "[parameters('Search').EnableCarbonIndexIntegration]",
+
+        //Website Book [Order]
+        "BookOrder:CreateUrl": "[parameters('BookOrder').CreateUrl]",
+        "BookOrder:OcpSubID": "[parameters('BookOrder').OcpSubID]",
+        //Website Book [Offer] and Book [Payment]
+        "Book:Offer:Url": "[parameters('Book').Offer.Url]",
+        "Book:Offer:OcpSubID": "[parameters('Book').Offer.OcpSubID]",
+        "Book:OfferMS:ChannelId": "[parameters('Book').OfferMS.ChannelId]",
+        "Book:PaymentMS:Url": "[parameters('Book').PaymentMS.Url]",
+        "Book:OrderPaymentReferenceIdMS:Url": "[parameters('Book').OrderPaymentReferenceIdMS.Url]",
+        "Book:PaymentMS:OcpSubID": "[parameters('Book').PaymentMS.OcpSubID]",
+        "Book:PaymentCaptureMS:Url": "[parameters('Book').PaymentCaptureMS.Url]",
+        "Book:PaymentVoidMS:Url": "[parameters('Book').PaymentVoidMS.Url]",
+        "Book:PaymentCaptureMS:VendorId": "[parameters('Book').PaymentCaptureMS.VendorId]",
+        "Book:VRed:VirginPoints": "[parameters('Book').VRed.VirginPoints]",
+        "Book:VRed:AppId": "[parameters('Book').VRed.AppId]",
+        //Website Book [Basket]
+        "BasketMSRetrieveUrl": "[parameters('BasketMSRetrieveUrl')]",
+        "BasketMSUpdatePassengerUrl": "[parameters('BasketMSUpdatePassengerUrl')]",
+        "BasketMSUpdateContactUrl": "[parameters('BasketMSUpdateContactUrl')]",
+        "BasketMSUpdateTermsUrl": "[parameters('BasketMSUpdateTermsUrl')]",
+        "BasketMSOcpKey": "[parameters('BasketMSOcpKey')]",
+        "BasketMSUpdateOfferIDUrl": "[parameters('BasketMSUpdateOfferIDUrl')]",
+        "BasketMSUpdateSelectedOfferUrl": "[parameters('BasketMSUpdateSelectedOfferUrl')]",
+        "BasketMSCreateUrl": "[parameters('BasketMSCreateUrl')]",
+        "BasketMSUpdatePaymentUrl": "[parameters('BasketMSUpdatePaymentUrl')]",
+        "BasketMSDeleteUrl": "[parameters('BasketMSDeleteUrl')]",
+        "BasketMSOrderStatusUpdateUrl": "[parameters('BasketMSOrderStatusUpdateUrl')]",
+        "BasketMSUpdateSeatOfferUrl": "[parameters('BasketMSUpdateSeatOfferUrl')]",
+        "BasketMSSetFlightSummaryUrl": "[parameters('BasketMSSetFlightSummaryUrl')]",
+        "DelayTimeInMS": "[parameters('DelayTimeInMS')]",
+        "PollingCount": "[parameters('PollingCount')]",
+        "BasketMSUpdateMembershipUrl": "[parameters('BasketMSUpdateMembershipUrl')]",
+        "BasketMS:Url": "[parameters('BasketMS:Url')]",
+        //Website Book [ReferenceMS]
+        "ReferenceMSAirportDetailsUrl": "[parameters('ReferenceMSAirportDetailsUrl')]",
+        "ReferenceMSAirlineDetailsUrl": "[parameters('ReferenceMSAirlineDetailsUrl')]",
+        "ReferenceMSCabinDetailsUrl": "[parameters('ReferenceMSCabinDetailsUrl')]",
+        "ReferenceMSAircraftDetailsUrl": "[parameters('ReferenceMSAircraftDetailsUrl')]",
+        "ReferenceMSCountriesUrl": "[parameters('ReferenceMSCountriesUrl')]",
+        "ReferenceMSFQTUrl": "[parameters('ReferenceMSFQTUrl')]",
+        "ReferenceMSMobileFeaturesUrl": "[parameters('ReferenceMSMobileFeaturesUrl')]",
+        "ReferenceMSOcpKey": "[parameters('ReferenceMSOcpKey')]",
+        "ReferenceMSAir4CurrencyNumberUrl": "[parameters('ReferenceMSAir4CurrencyNumberUrl')]",
+        //Website Book [Payment]
+        "PaymentMS:Url": "[parameters('PaymentMS:Url')]",
+        // Reference Micro Service
+        "RefDataMS:AppId": "[parameters('RefDataMS').AppId]",
+        "RefDataMS:OcpSubID": "[parameters('RefDataMS').OcpSubID]",
+        "RefDataMS:GenericUrl": "[parameters('RefDataMS').GenericUrl]",
+        "RefDataMS:CacheTimeSpan": "[parameters('RefDataMS').CacheTimeSpan]",
+        //Seat Ms
+        "Seat:MSUrl": "[parameters('Seat:MSUrl')]",
+        // Book : Seat Microservice
+        "BookSeatMSOcpKey": "[parameters('BookSeatMSOcpKey')]",
+        "BookSeatMSUrl": "[parameters('BookSeatMSUrl')]",
+        "BookRetrieveSeatOfferUrl": "[parameters('BookRetrieveSeatOfferUrl')]",
+        "BookUpdateSeatOfferMSUrl": "[parameters('BookUpdateSeatOfferMSUrl')]",
+        // Book : LOPA Microservice
+        "LOPAMSOcpKey": "[parameters('LOPAMSOcpKey')]",
+        "LOPAMSUrl": "[parameters('LOPAMSUrl')]",
+        "EnableVACEnrolment": "[parameters('EnableVACEnrolment')]",
+        "EnableEarnPointCalculator": "[parameters('EnableEarnPointCalculator')]",
+        "EnableVoucherRedemption": "[parameters('EnableVoucherRedemption')]",
+        //Insurance MS
+        "InsuranceMSOcpKey": "[parameters('InsuranceMSOcpKey')]",
+        "InsuranceMSUrl": "[parameters('InsuranceMSUrl')]",
+        // RuleEngine(InRule) MS
+        "InRule:OcpSubID": "[parameters('InRule').OcpSubID]",
+        "InRule:Url": "[parameters('InRule').Url]",
+        "InRule:AppId": "[parameters('InRule').AppId]",
+        // SkyTeam MS
+        "SkyMs:OcpSubID": "[parameters('SkyMs').OcpSubID]",
+        "SkyMs:GenericUrl": "[parameters('SkyMs').GenericUrl]",
+        "SkyMs:AppId": "[parameters('SkyMs').AppId]",
+        //Customer Contact
+        "EnableCabinFilters": "[parameters('EnableCabinFilters')]",
+        "EnableConnectionsFilters": "[parameters('EnableConnectionsFilters')]",
+        "EnableDepartureTimesFilters": "[parameters('EnableDepartureTimesFilters')]",
+        "EnableAirlineFilters": "[parameters('EnableAirlineFilters')]",
+        // SkyTeam MS
+        "Audit:AppId": "[parameters('Audit').AppId]",
+        "Audit:OcpSubID": "[parameters('Audit').OcpSubID]",
+        "Audit:MsUrl": "[parameters('Audit').MsUrl]",
+        //PDM MS
+        "PdmMSUrl": "[parameters('PdmMSUrl')]",
+        "PdmMSAppId": "[parameters('PdmMSAppId')]",
+        "InRuleMSUrl": "[parameters('InRuleMSUrl')]",
+        "InRuleMSAppID": "[parameters('InRuleMSAppID')]",
+        "AnalyticsMS:URL": "[parameters('AnalyticsMS:URL')]",
+
+        //NDC Threshold Settings
+        "NDCHealth:NDCHealthReportUrl": "[parameters('NDCHealth').NDCHealthReportUrl]",
+        "NDCHealth:NDCHealthReportSubKey": "[parameters('NDCHealth').NDCHealthReportSubKey]",
+        "NDCHealth:LowThreshold": "[parameters('NDCHealth').LowThreshold]",
+        "NDCHealth:Threshold": "[parameters('NDCHealth').Threshold]",
+        "NDCHealth:HighThreshold": "[parameters('NDCHealth').HighThreshold]",
+        "NDCHealth:PaymentFacadeHeartBeatUrl": "[parameters('NDCHealth').PaymentFacadeHeartBeatUrl]",
+        "NDCHealth:PaymentFacadeSubKey": "[parameters('NDCHealth').PaymentFacadeSubKey]",
+        "NDCHealth:PaymentFacadeTokenClientId": "[parameters('NDCHealth').PaymentFacadeTokenClientId]",
+        "NDCHealth:PaymentFacadeTokenClientSecret": "[parameters('NDCHealth').PaymentFacadeTokenClientSecret]",
+        "NDCHealth:PaymentFacadeTokenResource": "[parameters('NDCHealth').PaymentFacadeTokenResource]",
+        "NDCHealth:PaymentFacadeTokenUrl": "[parameters('NDCHealth').PaymentFacadeTokenUrl]",
+
+        //FEAPI Settings
+        "FEAPI:AppId": "[parameters('FEAPI').AppId]",
+        "FEAPI:OcpKey": "[parameters('FEAPI').OcpKey]",
+        "FEAPI:CreateCreditManualAdjustment": "[parameters('FEAPI').CreateCreditManualAdjustment]",
+        "FEAPI:CreateManualRedempton": "[parameters('FEAPI').CreateManualRedempton]",
+        "FEAPI:CancelTransaction": "[parameters('FEAPI').CancelTransaction]",
+        //TRIP MS
+        "TRIPMS:MSUrl": "[parameters('TRIPMS').MSUrl]",
+        "TRIPMS:OcpSubID": "[parameters('TRIPMS').OcpSubID]",
+        "TRIPMS:BookingIdJwtKey": "[parameters('TRIPMS').BookingIdJwtKey]",
+        //Trip Settings
+        "TripSettings:EnableSeatDeletion": "[parameters('TripSettings').EnableSeatDeletion]",
+        "TripSettings:FlightOpsOcpSubID": "[parameters('TripSettings').FlightOpsOcpSubID]",
+        "FlightStatus:InternalApiUrl": "[parameters('TripSettings').FlightOpsUrl]",
+        "FlightStatus:SubscriptionKey": "[parameters('TripSettings').FlightOpsOcpSubID]",
+        "FlightStatus:MaxResponseBytes": "4194304",
+        "FlightStatus:GraphQLTimeoutSeconds": "75",
+        "FlightStatus:GraphQLAttemptTimeoutSeconds": "25",
+        "TripSettings:FlightOpsUrl": "[parameters('TripSettings').FlightOpsUrl]",
+        "TripSettings:FlightOpsMaxConcurrentScheduleRequests": "[parameters('TripSettings').FlightOpsMaxConcurrentScheduleRequests]",
+        "TripSettings:PopsOpenDaysBeforeDeparture": "[parameters('TripSettings').PopsOpenDaysBeforeDeparture]",
+        "TripSettings:PopsCloseDaysBeforeDeparture": "[parameters('TripSettings').PopsCloseDaysBeforeDeparture]",
+        "TripSettings:HolidayProvider:HolidaysMs:Url": "[parameters('TripSettings').HolidayProvider.HolidaysMs.Url]",
+        "TripSettings:HolidayProvider:HolidaysMs:OcpSubID": "[parameters('TripSettings').HolidayProvider.HolidaysMs.OcpSubID]",
+        "TripSettings:AllowedDocumentTypes": "[parameters('TripSettings').AllowedDocumentTypes]",
+        "TripSettings:HiddenElementGroups": "[parameters('TripSettings').HiddenElementGroups]",
+        "TripSettings:HertzManageBookingUrl": "[parameters('TripSettings').HertzManageBookingUrl]",
+        "TripSettings:KoreanAirlineOperatedHelpText": "[parameters('TripSettings').KoreanAirlineOperatedHelpText]",
+        "TripSettings:OtherAirlineOperatedHelpText": "[parameters('TripSettings').OtherAirlineOperatedHelpText]",
+        "TripSettings:PaymentProvider:HolidayPayment:Url": "[parameters('TripSettings').PaymentProvider.HolidayPayment.Url]",
+        "TripSettings:PaymentProvider:HolidayPayment:OcpKey": "[parameters('TripSettings').PaymentProvider.HolidayPayment.OcpKey]",
+        //Flight Service MS
+        "FlightServiceMS:MSUrl": "[parameters('FlightServiceMS').MSUrl]",
+        "FlightServiceMS:OcpSubID": "[parameters('FlightServiceMS').OcpSubID]",
+        //Check-In Microservice
+        "CheckIn:MSUrl": "[parameters('CheckIn').MsURL]",
+        "CheckIn:OcpSubID": "[parameters('CheckIn').OcpSubID]",
+        //Content Service
+        "ContentService:Url": "[parameters('ContentService').Url]",
+        "ContentService:Ocp": "[parameters('ContentService').Ocp]",
+        //AirportInfo Query
+        "AirportInfoQuery:RoutesApi": "[parameters('AirportInfoQuery:RoutesApi')]",
+        "Analytics:MsUrl": "[parameters('Analytics').MsUrl]",
+        "Aanalytics:OcpSubId": "[parameters('Analytics').OcpSubId]",
+        //Ordermgmt
+        "OrderManagement:MsUrl": "[parameters('OrderManagement').MsUrl]",
+        "OrderManagement:AppId": "[parameters('OrderManagement').AppId]",
+        "OrderManagement:OcpKey": "[parameters('OrderManagement').OcpKey]",
+        //
+        "Retailing:ChannelId": "[parameters('Retailing').ChannelId]",
+        "MealServiceProvider:FlightServiceMsUri": "[parameters('Retailing').MealServiceProvider.FlightServiceMsUri]",
+        "MealServiceProvider:OcpKey": "[parameters('Retailing').MealServiceProvider.OcpKey]",
+        "OrderDataProvider:MsUrl": "[parameters('Retailing').OrderDataProvider.OrderDataMsUri]",
+        "OrderDataProvider:OcpKey": "[parameters('Retailing').OrderDataProvider.OcpKey]",
+        "CateringProvider:CateringMsUri": "[parameters('Retailing').CateringProvider.CateringMsUri]",
+        "CateringProvider:OcpKey": "[parameters('Retailing').CateringProvider.OcpKey]",
+        "OrderSearchProvider:OrderSearchMsUri": "[parameters('Retailing').OrderSearchProvider.OrderSearchMsUri]",
+        "OrderSearchProvider:OcpKey": "[parameters('Retailing').OrderSearchProvider.OcpKey]",
+
+        // MockDelegatingHandler
+        "MockDelegatingHandler:Enabled": "[parameters('MockDelegatingHandler').Enabled]",
+        "MockDelegatingHandler:MockServiceUri": "[parameters('MockDelegatingHandler').MockServiceUri]",
+        //Validate Txn
+        "ValidateTxnDelayInMS": "[parameters('ValidateTxnDelayInMS')]",
+        "ValidateTxnRetryLimit": "[parameters('ValidateTxnRetryLimit')]",
+        //NDCHealthCheck
+        "NDCOfferHeartBeatUrl": "[parameters('NDCOfferHeartBeatUrl')]",
+        "NDCOrderHeartBeatUrl": "[parameters('NDCOrderHeartBeatUrl')]",
+
+        // micro-service response caching
+        "[concat(parameters('resourceurl'), '/ReferenceMicroservice/aircraftdetails')]": "expiry=00:01:00:00&url=.*&isSliding=false",
+        "[tolower(concat(parameters('resourceurl'), '/ReferenceMicroservice/airportdetail'))]": "expiry=00:01:00:00&url=.*&isSliding=false",
+        "[concat(parameters('resourceurl'), '/ReferenceMicroservice/airlinedetails')]": "expiry=00:01:00:00&url=.*&isSliding=false",
+        "[concat(parameters('resourceurl'), '/ReferenceMicroservice/cabindetails')]": "expiry=00:01:00:00&url=.*&isSliding=false",
+        "[concat(parameters('resourceurl'), '/ReferenceMicroservice/BaggageDetails')]": "expiry=00:01:00:00&url=.*&isSliding=false",
+        "[concat(parameters('resourceurl'), '/ReferenceMicroservice/taxcode')]": "expiry=00:01:00:00&url=.*&isSliding=false",
+        "[concat(parameters('resourceurl'), '/ReferenceMicroservice/upgradeofferdetails')]": "expiry=00:01:00:00&url=.*&isSliding=false",
+        "[concat(parameters('resourceurl'), '/ReferenceMicroservice/PartnerProfile')]": "expiry=00:01:00:00&url=.*&isSliding=false",
+        "[concat(parameters('resourceurl'), '/ReferenceMicroservice/Products')]": "expiry=00:01:00:00&url=.*&isSliding=false",
+        "[concat(parameters('resourceurlPost'), '/sustainmicroservice/Sustainability')]": "expiry=00:30:00:00&rq_content=$.flightDetails[0].originAirport,$.flightDetails[0].destinationAirport,$.flightDetails[0].flightNumber",
+        "[concat(parameters('resourceurlPost'), '/OfferMicroservice/Offers//CalendarSearch')]": "expiry=00:00:20:00&rq_content=$&rq_headers=api-session-id&when=%24%5B%3F(%40.method%20%3D%3D%20%27POST%27%20%26%26%20%40.content.flightSearchRequest.currentTripIndexId%20%3D%3D%20%270%27%20%26%26%20%40.headers%5B%3F(%40.key%20%3D%3D%20%27api-session-id%27)%5D.value%5B0%5D%20!%3D%20null)%5D",
+        "[concat(parameters('resourceurlPost'), '/OfferMicroservice/Offers//FlexiSearch')]": "expiry=00:00:20:00&rq_content=$&rq_headers=api-session-id&when=%24%5B%3F(%40.method%20%3D%3D%20%27POST%27%20%26%26%20%40.content.flightSearchRequest.currentTripIndexId%20%3D%3D%20%270%27%20%26%26%20%40.headers%5B%3F(%40.key%20%3D%3D%20%27api-session-id%27)%5D.value%5B0%5D%20!%3D%20null)%5D",
+        "[concat(parameters('resourceurlPost'), '/OfferMicroservice/Offers//search')]": "expiry=00:00:20:00&rq_content=$&rq_headers=api-session-id&when=%24%5B%3F(%40.method%20%3D%3D%20%27POST%27%20%26%26%20%40.content.flightSearchRequest.currentTripIndexId%20%3D%3D%20%270%27%20%26%26%20%40.headers%5B%3F(%40.key%20%3D%3D%20%27api-session-id%27)%5D.value%5B0%5D%20!%3D%20null)%5D",
+        "Cache:orderResponse": "expiry=01:00:00:00&variables=$.request.basketId",
+        "Cache:paymentDetailsResponse": "expiry=01:00:00:00&variables=$.request.basketId",
+        "KeyVaultUri": "[parameters('KeyVaultUri')]",
+        "WEBSITE_DNS_SERVER_SANDBOX": "[parameters('WEBSITE_DNS_SERVER_SANDBOX')]",
+        "WEBSITE_DNS_ALT_SERVER_SANDBOX": "[parameters('WEBSITE_DNS_ALT_SERVER_SANDBOX')]",
+        //Store appointment
+        "StoreLocator:MsUrl": "[parameters('StoreLocator').MsUrl]",
+        "StoreLocator:OcpSubID": "[parameters('StoreLocator').OcpSubID]",
+        //CRM Refund
+        "CRM:Refunds:Status:Url": "[parameters('CRMRefund').Status.Url]",
+        "CRM:Refunds:Submit:Url": "[parameters('CRMRefund').Submit.Url]",
+        "CRM:Refunds:OcpKey": "[parameters('CRMRefund').OcpKey]",
+        "CRM:Refunds:AppId": "[parameters('CRMRefund').AppId]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "apiVersion": "2015-06-01",
+      "name": "[concat(parameters('keyvaultName'),'/add')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]"
+
+      ],
+      "properties": {
+        "accessPolicies": [
+          {
+            "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('FunctionAppName')), '2019-08-01', 'full').identity.principalId]",
+            "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('FunctionAppName')), '2019-08-01', 'full').identity.tenantId]",
+            "permissions": {
+              "secrets": [ "Get", "List", "Set" ]
+            }
+          }
+        ]
+      }
+    },
+
+
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2022-09-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "northeurope",
+      "sku": {
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "allowBlobPublicAccess": false
+
+      }
+    }
+  ]
+}

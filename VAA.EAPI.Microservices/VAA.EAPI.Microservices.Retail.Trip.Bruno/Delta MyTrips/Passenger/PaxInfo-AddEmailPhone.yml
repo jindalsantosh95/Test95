@@ -1,0 +1,110 @@
+info:
+  name: PaxInfo-AddEmailPhone
+  type: http
+  seq: 10
+
+http:
+  method: PATCH
+  url: "{{delta_passenger}}{{reservationResourceId}}"
+  body:
+    type: json
+    data: "{\r
+
+      \    \"reservationResourceId\": {{reservationResourceId}},\r
+
+      \    \"passengers\": [\r
+
+      \        {\r
+
+      \            \"passengerResourceId\": \"64b1983f-f64a-4da9-80f7-1589a4f376cf\",\r
+
+      \            \"passengerType\": {\r
+
+      \                \"id\": \"A\",\r
+
+      \                \"code\": \"ADT\",\r
+
+      \                \"name\": \"ADULT\",\r
+
+      \                \"category\": \"ADULT\"\r
+
+      \            },\r
+
+      \            \"advancePassengerInformation\": {\r
+
+      \                \"passengerContact\": {\r
+
+      \                    \"phone\": {\r
+
+      \                        \"sequenceNum\": \"\",\r
+
+      \                        \"deviceType\": \"CELL\",\r
+
+      \                        \"countryDialingCode\": \"GB\",\r
+
+      \                        \"number\": \"0123456789\"\r
+
+      \                    },\r
+
+      \                    \"email\": {\r
+
+      \                        \"address\": \"test@va.com\"\r
+
+      \                    },\r
+
+      \                    \"refused\": false\r
+
+      \                },\r
+
+      \                \"emergencyContact\": {\r
+
+      \                    \"phone\": {\r
+
+      \                        \"number\": \"0123456789\",\r
+
+      \                        \"countryDialingCode\": \"GB\"\r
+
+      \                    },\r
+
+      \                    \"givenNames\": \"FREDRIC\",\r
+
+      \                    \"surname\": \"FOREST\",\r
+
+      \                    \"refused\": false\r
+
+      \                },\r
+
+      \                \"destinationAddress\": {\r
+
+      \                    \"cityName\": \"\",\r
+
+      \                    \"state\": {\r
+
+      \                        \"code\": \"\",\r
+
+      \                        \"name\": \"\"\r
+
+      \                    },\r
+
+      \                    \"postalCode\": \"\",\r
+
+      \                    \"street\": \"\"\r
+
+      \                },\r
+
+      \                \"actionType\": \"ADD\"\r
+
+      \            }\r
+
+      \        }\r
+
+      \    ]\r
+
+      }"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

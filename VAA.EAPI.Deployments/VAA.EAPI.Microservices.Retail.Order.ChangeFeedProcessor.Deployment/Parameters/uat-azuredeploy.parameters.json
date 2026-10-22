@@ -1,0 +1,154 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    //********** Function Settings ***************//
+    "EnvironmentName": {
+      "value": "UAT"
+    },
+    "FunctionAppName": {
+      "value": "avaseunfnorderchangefeed"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPEAPIORDER"
+    },
+
+    "AppInsightsName": {
+      "value": "AVASEUNAIORDERCHANGEFEED"
+    },
+    "vaultName": {
+      "value": "AVASEUNKVEMS"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avaseunstorderchangefeed"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "KeyVaultUri": {
+      "value": "https://avaseunkvems.vault.azure.net/"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/2b812f93-ac9a-4076-b085-9b6aff727505/User_impersonation"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Order Change Feed Processor"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This endpoint will provide the details of change feed."
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    //Order Change Feed
+    "CosmosConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/CosmosConnectionString/)"
+    },
+    "CosmosSqlDBConnectionMode": {
+      "value": "GATEWAY"
+    },
+    "LeaseContainerName": {
+      "value": "OrdersCollectionLeaseSCVGenesys"
+    },
+    "OrderDB:SCVOrderDBCollection": {
+      "value": "OrderCollectionDigital"
+    },
+    "OrderDB:SCVOrderDBEndpoint": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/OrderDB-SCVOrderDBEndpoint/)"
+    },
+    "OrderDB:SCVOrderDBName": {
+      "value": "OrderDB"
+    },
+    "SingleOrderViewDB:SingleOrderViewDBCollection": {
+      "value": "CustomerOrderAssociation"
+    },
+    "SingleOrderViewDB:SingleOrderViewDBEndPoint": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/SingleOrderViewDB-SingleOrderViewDBEndPoint/)"
+    },
+    "SingleOrderViewDB:SingleOrderViewDBName": {
+      "value": "SingleOrderViewDB"
+    },
+    "LeaseContainerPrefix": {
+      "value": "UAT"
+    },
+
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "ChangeFeedProcessor",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Change Feed Processor",
+        "ApplicationUsageIdList": "avaseunfnorderchangefeed"
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+#!/bin/sh
+# Harness engineering — pre-commit hook (Thread 2).
+# See VAA.EAPI.Automation/docs/HARNESS_ENGINEERING.md.
+#
+# Instant checks only — kept fast so it never tempts a bypass. The full build +
+# format verification lives in scripts/verify.ps1.
+#
+# Enable:      VAA.EAPI.Automation/scripts/verify.ps1 -InstallHooks
+# Bypass once: git commit --no-verify
+
+fail=0
+
+# Central Package Management: a .csproj under VAA.EAPI.Automation must not pin an
+# inline package version — versions live in Directory.Packages.props.
+for f in $(git diff --cached --name-only --diff-filter=d -- 'VAA.EAPI.Automation/' | grep '\.csproj$'); do
+    if git show ":$f" | grep -qE '<PackageReference[^>]*[[:space:]]Version='; then
+        echo "pre-commit: $f pins an inline package Version= — move it to Directory.Packages.props"
+        fail=1
+    fi
+done
+
+if [ "$fail" -ne 0 ]; then
+    echo ""
+    echo "pre-commit checks failed. Fix the above, or bypass once with: git commit --no-verify"
+    exit 1
+fi
+
+exit 0

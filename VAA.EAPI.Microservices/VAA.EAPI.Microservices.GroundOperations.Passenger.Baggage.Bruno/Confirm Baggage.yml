@@ -1,0 +1,49 @@
+info:
+  name: Confirm Baggage
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{baggagems}}/ConfirmBaggage"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{baggagems_ocp}}"
+  body:
+    type: json
+    data: |-
+      {
+        "travelPartyId": "{{travelPartyId}}",
+        "paymentReferenceId": "{{paymentReferenceId}}",
+        "cardHolderDetail": {
+          "cardHolderFirstName": "{{cardHolderFirstName}}",
+          "cardHolderLastName": "{{cardHolderLastName}}",
+          "cardType": "{{cardType}}",
+          "cardNumber": "{{cardNumber}}",
+          "expiryMonth": "{{expiryMonth}}",
+          "expiryYear": "{{expiryYear}}",
+          "cardVerificationValue": "{{cardVerificationValue}}"
+        },
+        "billingAddress": {
+          "addressLine1": "{{addressLine1}}",
+          "addressLine2": "{{addressLine2}}",
+          "city": "{{city}}",
+          "country": "{{country}}",
+          "postalCode": "{{postalCode}}"
+        },
+        "paymentDetails": {
+          "paymentAmount": "{{totalPrice}}",
+          "decimalPrecisionCount": "{{decimalPrecisionCount}}",
+          "currencyCode": "{{currencyCode}}",
+          "payWithMilesToggle": false
+        },
+        "email": "{{email}}",
+        "pnrLocator": "{{pnrLocator}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

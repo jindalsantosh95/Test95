@@ -1,0 +1,118 @@
+parameters:
+  agentPool: ''
+  agentPool_deployment: ''
+  agentSpecification: ''
+  applicationName: ''
+  functionAppName: ''
+  functionAppName_secure: ''
+  environment: ''
+  location: ''
+  resourceGroupName: ''
+  serviceConnection: ''
+  subscriptionId: ''
+  APIM_IP: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''   
+  workspaceResourceId: ''
+  ApplicationInsightName: ''
+  storageAccountName: ''
+  ApplicationInsightName_Secure: ''
+  storageAccountName_Secure: ''
+
+jobs: 
+- deployment: '${{parameters.environment}}'      
+  
+  pool:
+    name: ${{parameters.agentPool_deployment}} 
+    vmImage: ${{parameters.agentSpecification}}  
+  
+  environment: ${{parameters.environment}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop      
+
+        # Task to create the Function App      
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create Function App'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.serviceConnection}}
+            subscriptionid: ${{parameters.subscriptionId}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}
+            location:  ${{parameters.location}}
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy_digital.json
+            csmParametersFile: $(Pipeline.workspace)/drop/Parameters/${{parameters.environment}}-digital-azuredeploy.parameters.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -workspaceResourceId ${{parameters.workspaceResourceId}} -functionappName ${{parameters.functionAppName}} -AppInsightsName ${{parameters.ApplicationInsightName}} -storageaccountName ${{parameters.storageAccountName}} -WEBSITE_DNS_SERVER ${{parameters.WEBSITE_DNS_SERVER}} -WEBSITE_DNS_ALT_SERVER ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+
+        # Task to stop the Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop Azure App Service: ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName}}
+
+        # Task to deploy the Function App
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy to Function APP' 
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            appType: 'functionApp'
+            appName: ${{parameters.functionAppName}}
+            deployToSlotOrASE: true
+            resourceGroupName: ${{parameters.resourceGroupName}}
+            package: '$(Pipeline.workspace)/drop/*.zip'
+            deploymentMethod: 'runFromPackage'     
+
+        # Task to start the Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start Azure App Service: ${{parameters.functionAppName}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionAppName}}
+
+        # Task to create the Slot Function App      
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create Slot Function App'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.serviceConnection}}
+            subscriptionid: ${{parameters.subscriptionId}}
+            resourceGroupName:  ${{parameters.resourceGroupName}}
+            location:  ${{parameters.location}}
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy_digital.json
+            csmParametersFile: $(Pipeline.workspace)/drop/Parameters/${{parameters.environment}}-digital-azuredeploy.parameters.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -workspaceResourceId ${{parameters.workspaceResourceId}} -functionappName ${{parameters.functionAppName_secure}} -AppInsightsName ${{parameters.ApplicationInsightName_Secure}} -storageaccountName ${{parameters.storageAccountName_Secure}} -WEBSITE_DNS_SERVER ${{parameters.WEBSITE_DNS_SERVER}} -WEBSITE_DNS_ALT_SERVER ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+
+        # Task to stop the Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Stop Azure App Service: ${{parameters.functionAppName_secure}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Stop Azure App Service'
+            WebAppName: ${{parameters.functionAppName_secure}}
+
+        # Task to deploy the Function App
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy to Function APP' 
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            appType: 'functionApp'
+            appName: ${{parameters.functionAppName_secure}}
+            deployToSlotOrASE: true
+            resourceGroupName: ${{parameters.resourceGroupName}}
+            package: '$(Pipeline.workspace)/drop/*.zip'
+            deploymentMethod: 'runFromPackage'     
+
+        # Task to start the Function App
+        - task: AzureAppServiceManage@0
+          displayName: 'Start Azure App Service: ${{parameters.functionAppName_secure}}'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            Action: 'Start Azure App Service'
+            WebAppName: ${{parameters.functionAppName_secure}}
+    

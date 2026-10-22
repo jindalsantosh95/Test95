@@ -1,0 +1,246 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sit",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppServicePlanName": {
+      "value": "AVATEUNASPEAPI1"
+    },
+    "EnvironmentName": {
+      "value": "SIT"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-T-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVATEUNAFNVREDMICROSERV"
+    },
+    "AppInsightsName": {
+      "value": "AVATEUNAIVREDMS"
+    },
+    /*"AppsettingAppInsightsKey": {
+      "value": "0833ce80-b6d5-4bbb-b0a0-0760a1267c24"
+    },*/
+    "Appsetting:VredEnableSignDate": {
+      "value": true
+    },
+    "AppSettingAzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-StorageAccount/)"
+    },
+    "AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-AzureAd-ClientId/)"
+    },
+    "AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:MemberMetaDataSchema": {
+      "value": "https://json-schemas.red.virgin.com/member-metadata-vaa-2-0-0.schema.json"
+    },
+    "Appsetting:VRedEnrolmentAPI": {
+      "value": "https://Testresources.virginatlantic.com/vredenrollment-stage/enrollments/v1"
+    },
+    "Appsetting:VRedAuthUrl": {
+      "value": "https://idp.b2b.staging.red.virgin.com/oauth2/token"
+    },
+    "Appsetting:AuthAudience": {
+      "value": "https://api.staging.loyalty.virgin.com/"
+    },
+    "Appsetting:UpdateVRedAuthUrl": {
+      "value": "https://red-api-r1.staging.loyalty.virgin.com/members/members/v1"
+    },
+    "Appsetting:AuthClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-AuthClientID/)"
+    },
+    "Appsetting:AuthClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-AuthClientSecret/)"
+    },
+    "AppsettingsEventGridUrl": {
+      "value": "https://avapeunegcustconns.northeurope-1.eventgrid.azure.net/api/events?api-version=2018-01-01"
+    },
+    "AppsettingsEventGridTopicKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-EventGridTopicKey/)"
+    },
+    "Appsetting:VRed-Ocp-Apim-Subscription-Key": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-OcpApimSubscriptionKey/)"
+    },
+    "Appsetting:KeyVaultToken": {
+      "value": "EAPI-AAD-VREDTokenKeyName"
+    },
+    "Appsetting:KeyVaultTokenPeriod": {
+      "value": "EAPI-AAD-VREDTokenPeriodKeyName"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-ServiceBusConnectionString/)"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "value": "enrolcustomer"
+    },
+    "Appsetting:KeyVaultExpireTokenValue": {
+      "value": "EAPI-AAD-VREDExpireTokenValueKeyName"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-MicroServiceDBKey/)"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "VRedEventStore"
+    },
+    "Appsetting:VRedEndpointUrl": {
+      "value": "https://red-api-r1.staging.loyalty.virgin.com/balances/"
+    },
+
+    "Appsetting:VRedConsentEndpointUrl": {
+      "value": "https://privacyportaluatde.onetrust.com/request/v1/consentreceipts"
+    },
+    "Appsetting:VRedConsentRequestToken": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-VRedConsentRequestToken/)"
+    },
+    "Appsetting:VRedConsentRequestKey1": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-VRedConsentRequestKey1/)"
+    },
+    "Appsetting:VRedConsentRequestKey2": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-VRedConsentRequestKey2/)"
+    },
+
+
+    "Appsetting:UrlVersion": {
+      "value": "v1"
+    },
+    "Appsetting:VRedStatementEndpointUrl": {
+      "value": "https://red-api-r1.staging.loyalty.virgin.com/statements/v2"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "Appsetting:VGLCDBConnString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/VGLCDBConnString/)"
+    },
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNVREDMICROSERV-Config-AuthClientID/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    //Retail Therapy App Settings
+    "Appsetting:CreateTransactionResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/sit/vred/CreateTransaction/response/{correlationid}"
+    },
+    "Appsetting:CancelTransactionResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/sit/vred/cancelTransaction/response/{correlationid}"
+    },
+    "Appsetting:CreditMetaDataSchema": {
+      "value": "https://json-schemas.staging.red.virgin.com/points-transaction-metadata-vaa-credit-3-0-0.schema.json"
+    },
+    "Appsetting:DebitMetaDataSchema": {
+      "value": "https://json-schemas.staging.red.virgin.com/points-transaction-metadata-vaa-debit-3-0-0.schema.json"
+    },
+    "Appsetting:VredTransactionAPICallbackUrl": {
+      "value": "https://Testresources.virginatlantic.com/customermanagement/loyalty/Transaction/test/TransactionUpdateCallback"
+    },
+    "Appsetting:VredTransactionAPIV2": {
+      "value": "https://Testresources.virginatlantic.com/LoyaltyPointsTransaction/api/v2/pointsTransactions"
+    },
+    "Appsetting:ResponsePollingCount": {
+      "value": "50"
+    },
+    "Appsetting:ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "value": "VRedResponse"
+    },
+    "Appsetting:DatabaseID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-DatabaseID/)"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "vaultName": {
+      "value": "AVATEUNKVEMS"
+    },
+
+    //swagger settings
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Vred Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This API provides Vred information"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": true
+    },
+    "OpenApi__ForceHttp": {
+      "value": true
+    },
+
+    "tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "PROD",
+        "Purpose": "Support functions for the Customer API AFN",
+        "ApplicationUsageIdList": "\"\"\\\"{​​\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}​​\\\"\""
+      }
+    }
+  }
+}

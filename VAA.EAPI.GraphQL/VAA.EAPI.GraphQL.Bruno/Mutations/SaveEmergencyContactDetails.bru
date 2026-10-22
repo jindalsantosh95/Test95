@@ -1,0 +1,33 @@
+meta {
+  name: SaveEmergencyContactDetails
+  type: graphql
+  seq: 30
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation SaveEmergencyContactDetails($checkInId: String, $applyToAllPassengers: Boolean!, $emergencyContacts: [EmergencyContactInput]) {
+    SaveEmergencyContactDetails(checkInId: $checkInId, applyToAllPassengers: $applyToAllPassengers, emergencyContacts: $emergencyContacts) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "checkInId": "",
+    "applyToAllPassengers": false,
+    "emergencyContacts": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,19 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/orderdata/svc/orders/search HTTP/1.1
+
+$[?(@.pnr == 'UNPROCESSABLE')]
+$[?(@.firstName == 'Jane')]
+$[?(@.lastName == 'Doe')]
+
+###Response
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json; charset=utf-8
+
+{
+  "errors": [
+    {
+      "code": "ORDER_UNPROCESSABLE",
+      "message": "Order document lookup could not be processed."
+    }
+  ]
+}

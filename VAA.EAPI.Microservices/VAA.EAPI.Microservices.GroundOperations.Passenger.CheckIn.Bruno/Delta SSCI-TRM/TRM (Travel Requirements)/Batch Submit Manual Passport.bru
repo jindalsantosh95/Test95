@@ -1,0 +1,68 @@
+meta {
+  name: Batch Submit Manual Passport
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{delta_trm}}/requirements/{{requirement_resource_id}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+  transactionId: VS-DigitalFirst-123-{{$guid}}
+  clientId: {{ping_client_id}}
+  configOptions: [{'nativeTravelDocs':'true'}]
+  X-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+  AppChannelName: {{AppChannelName}}
+  AppId: {{AppID}}
+}
+
+body:json {
+  {
+    "requests": [
+      {
+        "passengerResourceId": "{{passenger_resource_id1}}",
+        "using": "PASSPORT",
+        "identityDocument": {
+          "type": "PASSPORT",
+          "givenNames": "{{passenger_givenNames1}}",
+          "middleName": "",
+          "surname": "{{passenger_surname1}}",
+          "birthDate": "1982-07-29",
+          "gender": {
+            "code": "M"
+          },
+          "number": "AB8210281",
+          "expirationDate": "2026-10-01",
+          "issuingCountry": {
+            "code": "GBR"
+          },
+          "nationality": {
+            "code": "GBR"
+          },
+          "countryOfResidence": {
+            "code": "GBR"
+          },
+          "dataSourceType": "MANUAL"
+        },
+        "consent": true,
+        "modified": true,
+        "saveToProfile": false
+      }
+    ]
+  }
+}
+
+script:post-response {
+  var body = res.getBody();
+  bru.setEnvVar("travel_requirements_response", JSON.stringify(body));
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

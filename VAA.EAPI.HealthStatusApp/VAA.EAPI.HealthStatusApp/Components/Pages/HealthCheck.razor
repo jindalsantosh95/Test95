@@ -1,0 +1,57 @@
+﻿@page "/api-check"
+@attribute [Authorize(Policy = "RequireSpecificGroup")]
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<ul class="nav nav-tabs justify-content-center" style="--bs-nav-tabs-border-color: #61126b;margin: 0 1.8rem;padding-top:25px;">
+    <li class="health nav-item" style="background-color:transparent;" @onclick="@(() => ShowTab(1, "FunctionApps"))">
+        <a class="nav-link status-tab @(currentTab == 1 ? "active tab-active" : "")">Function Apps</a>
+    </li>
+    <li class="health nav-item" style="background-color:transparent;" @onclick="@(() => ShowTab(2, "LinkedServices"))">
+        <a class="nav-link status-tab @(currentTab == 2 ? "active tab-active" : "")">Linked Services</a>
+    </li>
+</ul>
+@if (currentTab == 1)
+{
+    <StatusTable TabName="FunctionApps" SelectedService="@selectedService" />
+}
+else if (currentTab == 2)
+{
+    <StatusTableLinkedServices TabName="LinkedServices" />
+}
+
+@code {
+    private int currentTab = 1;
+    private string? selectedService;
+
+    protected override void OnInitialized()
+    {
+        UpdateHeader("Applications Health");
+        var uri = new Uri(Navigation.Uri);
+        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        selectedService = query["service"];
+
+        if (!string.IsNullOrEmpty(selectedService))
+        {
+            currentTab = 1;
+        }
+    }
+
+    private void ShowTab(int tab, string tabName)
+    {
+        currentTab = tab;
+        StateHasChanged();
+    }
+
+    private void UpdateHeader(string title)
+    {
+        JSRuntime.InvokeVoidAsync("updateHeader", title);
+    }
+}
+
+<script>
+    function updateHeader(title) {
+        document.querySelector(".header-title").textContent = title;
+    }
+</script>

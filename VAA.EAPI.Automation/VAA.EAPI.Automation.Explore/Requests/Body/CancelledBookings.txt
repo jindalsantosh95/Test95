@@ -1,0 +1,14 @@
+query CancelledBookings($storeId: String!, $date: String!, $status: StoreManagerBookingStatus!) {
+  storeManagerBookings(storeId: $storeId, date: $date, status: $status) {
+    id
+    storeId
+    storeSlotId
+    customerRef
+    status
+    windowStartAt
+    windowEndAt
+    windowCapacity
+    createdAt
+    updatedAt
+  }
+}

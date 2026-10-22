@@ -1,0 +1,291 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "DEV"
+    },
+    "FunctionAppName": {
+      "value": "avadeunafnreferencemicro"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-D-EUN-ENTERPRISEAPI"
+    },
+    "AppServicePlanName": {
+      "value": "AVADEUNASPORDER"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "AppInsightsName": {
+      "value": "AVADEUNAIOFFER"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=f385c8e8-b65c-4968-843d-fb4a96058164;IngestionEndpoint=https://northeurope-3.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    },
+    "KeyVaultUri": {
+      "value": "https://avadeunkveapis.vault.azure.net/"
+    },
+    "vaultName": {
+      "value": "AVADEUNKVEAPIS"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "f385c8e8-b65c-4968-843d-fb4a96058164"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avadeunstreferencems"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    /*"AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNCRMMICROSERV-Config-StorageAccount/)"
+    },*/
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "CountryBlob": {
+      "value": "Countries.json"
+    },
+    "AirlineBlob": {
+      "value": "CarrierDetails.json"
+    },
+    "CabinBlob": {
+      "value": "CabinData.json"
+    },
+    "UpgradeOffersDataBlob": {
+      "value": "UpgradeOffersData.json"
+    },
+    "AircraftBlob": {
+      "value": "Aircraft.json"
+    },
+    "DestinationURLBlob": {
+      "value": "SalesBanner_DestinationURLs.json"
+    },
+    "SSRDetailsDataBlob": {
+      "value": "SSRDetails.json"
+    },
+    "FQTProgramsBlob": {
+      "value": "FQTProgrammes.json"
+    },
+    "BlobStorageUri": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/ReferenceMSBlobStorageUrl/)"
+    },
+    "ContainerName": {
+      "value": "referencedata"
+    },
+    "LoyaltyBlobStorageUri": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/ReferenceMSLoyaltyBlobStorageUrl/)"
+    },
+    "BlackListEmailContainerName": {
+      "value": "emailblacklist-identityfacade"
+    },
+    "BlackListEmailBlobName": {
+      "value": "backlisted-emails.json"
+    },
+    "LoyaltyBlobStorageSaSKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/ReferenceMSBlobLotyaltySasKey/)"
+    },
+    "TaxCodebBlob": {
+      "value": "TAX_CODES.json"
+    },
+    "VsEconblob": {
+      "value": "VS_ECON.json"
+    },
+    "ProductIndetifierBlob": {
+      "value": "PRODUCT_IDENTIFIERS.json"
+    },
+    "AirportBlob": {
+      "value": "AirportDetails.json"
+    },
+    "GendersBlob": {
+      "value": "Genders.json"
+    },
+    "StatesOfUSABlob": {
+      "value": "StatesOfUsa.json"
+    },
+    "NationalitiesBlob": {
+      "value": "Nationalities.json"
+    },
+    "SSRMealBlob": {
+      "value": "SSRMealDetails.json"
+    },
+    "PassportCountriesBlob": {
+      "value": "PassportCountries.json"
+    },
+    "BaggageBlob": {
+      "value": "BaggageDetails.json"
+    },
+    "Air4CurrencyNumberBlob": {
+      "value": "Air4CurrencyNumberData.json"
+    },
+    "CabinClassBlob": {
+      "value": "CabinClassDetails.json"
+    },
+    "PaymentMethodDetailsBlob": {
+      "value": "PaymentMethodDetails.json"
+    },
+    "MobileFeaturesBlob": {
+      "value": "mobile-features.json"
+    },
+    "RedisConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/AVADEUNAFNVALIDATIONMICROSERV-Redis-Connectionstring/)"
+    },
+    "AemGraphEndpointUri": {
+      "value": "https://stg-vaabrowse.virginatlantic.com/graphql/execute.json/vaa-home/vaa-sales-banners"
+    },
+    "AemImagePrefix": {
+      "value": "https://stg-vaabrowse.virginatlantic.com/"
+    },
+    "SalesBannerRefreshSchedule": {
+      "value": "0 31 * * * *"
+    },
+    "SasKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/ReferenceMSBlobSasKey/)"
+    },
+    "CurrencyConversionSubKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/CurrencyConversionSubKey/)"
+    },
+    "CurrencyConversionServiceUrl": {
+      "value": "https://testresources.virginatlantic.com/Currencyacc"
+    },
+    "CurrencyConversionRefreshSchedule": {
+      "value": "0 9,21 * * *"
+    },
+    "Appsetting:DatabaseID": {
+      "value": "https://database.windows.net/.default"
+    },
+    "Appsetting:CommonCachingSlidingExpirationInDay": {
+      "value": "7"
+    },
+    "Appsetting:SCV:CommonRefDbConnString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/avadeunafnreferencemicro-Config-CommonRefDBConnString/)"
+    },
+    "AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/ReferenceMSAdClientId/)"
+    },
+    "AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AzureAd:TenantId": {
+      "value": "6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8"
+    },
+    "AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Reference Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to fetch reference data items"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/referencemicroservice/"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/avadeunafnreferencemicro-config-AzureB2C-ClientID/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "ReferenceAPI",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Reference API AFN",
+        "ApplicationUsageIdList": "avadeunafnreferencemicro"
+      }
+    }
+  }
+}

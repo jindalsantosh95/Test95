@@ -1,0 +1,97 @@
+meta {
+  name: GetBoardingPassByPNR
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+headers {
+  api-channel: mobile;platform=Bruno;build-id=NA
+}
+
+body:graphql {
+  query GetBoardingPass {
+      GetBoardingPass(
+          pnrLocator: ""
+          originCode: ""
+          givenNames: ""
+          surname: ""
+      ) {
+          checkInStatus
+          tripsBookingId
+          iosPnrMultiBoardingPassUrl
+          androidPnrMultiBoardingPassUrl
+          boardingPasses {
+              pnrLocator
+              givenNames
+              surname
+              passengerNIN
+              seatNumber
+              zone
+              terminal
+              operatingAirlineName
+              marketingAirlineName
+              operatingFlightNumber
+              marketingFlightNumber
+              destinationAirportCode
+              originAirportCode
+              departureDateTime
+              departureLocal
+              qrCodeData
+              desktopBoardingPassBase64
+              verificationStatusMessage
+              templateCode
+              cabinName
+              gate
+              boardingTime
+              boardingTimeLocalTime
+              showSkyPriority
+              showTsaPre
+              flightStatusCode
+              infantName
+              checkedIn
+              iosBoardingPassWalletLink
+              androidBoardingPassWalletLink
+              boardingPassAdaptiveLink
+              tierCode
+              tierName
+              operationalStatus {
+                  type
+                  subType
+                  rebookEligible
+                  isCleaned
+                  information {
+                      card {
+                          title
+                          lines
+                      }
+                      page {
+                          title
+                          nextActionText
+                          sections {
+                              heading
+                              paragraphs
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+}
+
+script:post-response {
+  var response = res.body.data.GetBoardingPass;
+
+  bru.setVar("tripsBookingId", response.tripsBookingId);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

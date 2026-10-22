@@ -1,0 +1,43 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  environment: ''  
+  APIMServiceConnection: ''  
+  APIMSubscriptionId: ''  
+  APIMResourceGroupName: ''  
+  APIMName: '' 
+  SubscriptionName: ''  
+  OwnerName: ''  
+  ProductName: ''  
+
+stages:
+
+  - stage: 'APIM_Create_Subscription'
+    displayName: 'APIM Create Subscription' 
+    dependsOn: publishArtifacts     
+
+    jobs: 
+    - deployment: '${{parameters.environment}}'     
+      pool:
+        name: ${{parameters.agentPool}} 
+        vmImage: ${{parameters.agentSpecification}}  
+
+      environment: ${{parameters.environment}}  
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - download: current
+              artifact: drop           
+            
+            # Task to create the Function App      
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'APIM Create Subscription'
+              inputs:
+                azureResourceManagerConnection: ${{parameters.APIMServiceConnection}}
+                subscriptionid: ${{parameters.APIMSubscriptionId}}
+                resourceGroupName:  ${{parameters.APIMResourceGroupName}}
+                location:  'North Europe'
+                csmFile: $(Pipeline.workspace)/drop/templates/apim_create_group.json
+                deploymentMode: 'Incremental'
+                overrideParameters: -APIMName ${{parameters.APIMName}} -SubscriptionName ${{parameters.SubscriptionName}} -OwnerName ${{parameters.OwnerName}} -ProductName ${{parameters.ProductName}}

@@ -1,0 +1,80 @@
+meta {
+  name: Save Secondary Document Attestation
+  type: graphql
+  seq: 7
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SaveSecondaryDocumentTravelRequirements {
+    SaveSecondaryDocumentTravelRequirements(
+      travelRequirementsId: "{{travelRequirementsId}}"
+      passengerId: "{{pax1_Id}}"
+      sliceId: "{{slice1_Id}}"
+      secondaryDocumentId: "{{secondaryDocumentId}}"
+      countryCode: "{{secondaryDocumentCountryCode}}"
+    ) {
+      travelRequirementsId
+      passengers {
+        passengerId
+        givenNames
+        surname
+        dateOfBirth
+        documents {
+          documentType
+          documentNumber
+          expirationDate
+          expiryDate
+          givenNames
+          surname
+          dateOfBirth
+          nationality {
+            code
+          }
+          issuingCountry {
+            code
+          }
+        }
+        sliceRequirements {
+          sliceId
+          passportProvided
+          passportVerified
+          secondaryDocumentStatus
+          secondaryDocuments {
+            documentType
+            countryCode
+            countryCode3Letter
+            countryName
+            name
+            displayName
+            status
+            secondaryDocumentApplicationOptions {
+              secondaryDocumentId
+              applicationType
+              url
+            }
+          }
+        }
+      }
+    }
+  }
+  
+}
+
+script:post-response {
+  var travelRequirements = res.body.data.SaveSecondaryDocumentTravelRequirements;
+  
+  if (travelRequirements?.travelRequirementsId) {
+    bru.setVar("travelRequirementsId", travelRequirements.travelRequirementsId);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

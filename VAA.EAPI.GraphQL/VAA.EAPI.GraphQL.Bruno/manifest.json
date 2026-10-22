@@ -1,0 +1,1877 @@
+{
+  "sourceEndpoint": "https://testresources.virginatlantic.com/dev/graphql/full/public",
+  "queryCount": 68,
+  "mutationCount": 47,
+  "subscriptionCount": 0,
+  "operations": [
+    {
+      "type": "query",
+      "name": "accountActivityDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "page",
+          "type": "Int!",
+          "defaultValue": null
+        },
+        {
+          "name": "pageSize",
+          "type": "Int!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[ActivityDetail]"
+    },
+    {
+      "type": "query",
+      "name": "accountAddressDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "AddressDetailRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[WesalAddressResponse]"
+    },
+    {
+      "type": "query",
+      "name": "accountBannerDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "BannerDetails"
+    },
+    {
+      "type": "query",
+      "name": "accountFlightDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "page",
+          "type": "Int!",
+          "defaultValue": null
+        },
+        {
+          "name": "pageSize",
+          "type": "Int!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "FlightDetailsResponse"
+    },
+    {
+      "type": "query",
+      "name": "accountGenerateWalletPass",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "[Byte!]"
+    },
+    {
+      "type": "query",
+      "name": "accountLogin",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "memberLoginRequest",
+          "type": "FlyingClubLoginRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "query",
+      "name": "accountManageAccount",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "ManageAccountResponseOfAddressCustMS"
+    },
+    {
+      "type": "query",
+      "name": "accountMemberDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "vouchersCount",
+          "type": "Int!",
+          "defaultValue": null
+        },
+        {
+          "name": "activitiesCount",
+          "type": "Int!",
+          "defaultValue": null
+        },
+        {
+          "name": "flightsCount",
+          "type": "Int!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "MemberDetailsResolverResponse"
+    },
+    {
+      "type": "query",
+      "name": "accountPointDotComDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "onBehalf",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "query",
+      "name": "accountValidatePassword",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "password",
+          "type": "PasswordValidatorRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[PasswordPolicy]"
+    },
+    {
+      "type": "query",
+      "name": "BaggageAllowance",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "checkInId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "BaggageResponse"
+    },
+    {
+      "type": "query",
+      "name": "Booking",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "tripDetailsRequest",
+          "type": "TripsDetailsRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "TripsBooking"
+    },
+    {
+      "type": "query",
+      "name": "BookingMessages",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "tripReservationID",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "MessageResponse"
+    },
+    {
+      "type": "query",
+      "name": "brand",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "BrandServiceRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "CabinAmenity!"
+    },
+    {
+      "type": "query",
+      "name": "brandBFF",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "BrandServiceRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "CabinAmenity!"
+    },
+    {
+      "type": "query",
+      "name": "CarbonIndex",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "CarbonIndexRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[CarbonIndexResponse!]!"
+    },
+    {
+      "type": "query",
+      "name": "CheckIn",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "pnrLocator",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "eTicketNumber",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "originCode",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "givenNames",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "surname",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "CheckInResponse"
+    },
+    {
+      "type": "query",
+      "name": "Deeplink",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "DeeplinkRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "DeeplinkResponse"
+    },
+    {
+      "type": "query",
+      "name": "fareConditions",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "FareServiceRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "FareInfoResponse!"
+    },
+    {
+      "type": "query",
+      "name": "firstSliceSearch",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "FlightOfferRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SearchResults!"
+    },
+    {
+      "type": "query",
+      "name": "GetBoardingPass",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "checkInId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "pnrLocator",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "originCode",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "BoardingPassResponse"
+    },
+    {
+      "type": "query",
+      "name": "GetContentFragment",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "contentFragmentId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[String]"
+    },
+    {
+      "type": "query",
+      "name": "getFlyReadyStatus",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "tripReservationID",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[FlyReadyStatus]"
+    },
+    {
+      "type": "query",
+      "name": "GetGenderDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "[PaxOps_Ref_Gender]"
+    },
+    {
+      "type": "query",
+      "name": "GetNationalityDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "[Nationality]"
+    },
+    {
+      "type": "query",
+      "name": "GetPassportCountries",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "[PassportCountry]"
+    },
+    {
+      "type": "query",
+      "name": "GetSpecialAssistance",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "tripReservationID",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "PassengerResponse"
+    },
+    {
+      "type": "query",
+      "name": "GetSpecialMeals",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "tripReservationID",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "PassengerResponse"
+    },
+    {
+      "type": "query",
+      "name": "GetStatesOfUSA",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "[StatesOfUSA]"
+    },
+    {
+      "type": "query",
+      "name": "gqlVersion",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "Version"
+    },
+    {
+      "type": "query",
+      "name": "InsuranceQuote",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "basketId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "quoteVersionId",
+          "type": "Int!",
+          "defaultValue": "0"
+        }
+      ],
+      "returnType": "[QuoteResponse]"
+    },
+    {
+      "type": "query",
+      "name": "LoyaltyProgramsDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "LoyaltyProgramDetails"
+    },
+    {
+      "type": "query",
+      "name": "nextSliceSearch",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "SearchOffersNextSliceRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SearchResults!"
+    },
+    {
+      "type": "query",
+      "name": "orderResponse",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "basketId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "OrderCreateGraphQLResponse"
+    },
+    {
+      "type": "query",
+      "name": "paymentDetailsResponse",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "basketId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "PaymentOrderResponse"
+    },
+    {
+      "type": "query",
+      "name": "PointsToCurrencyConverterQuery",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "basketId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[PointsEquivalentCurrency]"
+    },
+    {
+      "type": "query",
+      "name": "retrieveBasket",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "basketId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "Basket"
+    },
+    {
+      "type": "query",
+      "name": "retrieveCoBrandApplicationStatus",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "ApplicationStatusRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "ApplicationStatusResponse"
+    },
+    {
+      "type": "query",
+      "name": "retrieveFQTProgrammes",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "order",
+          "type": "[FQTProgrammeRefDataSortInput!]",
+          "defaultValue": null
+        },
+        {
+          "name": "where",
+          "type": "FQTProgrammeRefDataFilterInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[FQTProgrammeRefData]"
+    },
+    {
+      "type": "query",
+      "name": "retrieveHouseHoldAccount",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "retrieveHHAccountRequest",
+          "type": "RetrieveHHAccountRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "RetrieveHHAccountResponse"
+    },
+    {
+      "type": "query",
+      "name": "retrieveSeat",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "FlightSeatMapRequestInput",
+          "defaultValue": null
+        },
+        {
+          "name": "order",
+          "type": "[SeatMapResponseSortInput!]",
+          "defaultValue": null
+        },
+        {
+          "name": "where",
+          "type": "SeatMapResponseFilterInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SeatMapResponse"
+    },
+    {
+      "type": "query",
+      "name": "retrieveSeatMap",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "SeatMapRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SeatMapResponse"
+    },
+    {
+      "type": "query",
+      "name": "salesBanners",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "displayLocations",
+          "type": "[String!]!",
+          "defaultValue": null
+        },
+        {
+          "name": "request",
+          "type": "SalesBannerRequestInput!",
+          "defaultValue": null
+        },
+        {
+          "name": "returnAllMatches",
+          "type": "Boolean!",
+          "defaultValue": "false"
+        },
+        {
+          "name": "order",
+          "type": "[SalesBannerSortInput!]",
+          "defaultValue": null
+        },
+        {
+          "name": "where",
+          "type": "SalesBannerFilterInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[SalesBanner!]!"
+    },
+    {
+      "type": "query",
+      "name": "searchAirportInfo",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "searchTerm",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "limit",
+          "type": "Int!",
+          "defaultValue": "0"
+        },
+        {
+          "name": "order",
+          "type": "[AirportInfoResponseSortInput!]",
+          "defaultValue": null
+        },
+        {
+          "name": "where",
+          "type": "AirportInfoResponseFilterInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "AirportInfoResponse"
+    },
+    {
+      "type": "query",
+      "name": "searchCarHire",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "pickUpLocation",
+          "type": "String!",
+          "defaultValue": null
+        },
+        {
+          "name": "dropOffLocation",
+          "type": "String!",
+          "defaultValue": null
+        },
+        {
+          "name": "departureDate",
+          "type": "DateTime!",
+          "defaultValue": null
+        },
+        {
+          "name": "duration",
+          "type": "Int!",
+          "defaultValue": null
+        },
+        {
+          "name": "pickUpTime",
+          "type": "String!",
+          "defaultValue": null
+        },
+        {
+          "name": "dropOfftime",
+          "type": "String!",
+          "defaultValue": null
+        },
+        {
+          "name": "where",
+          "type": "CarHireSearchResponseFilterInput",
+          "defaultValue": null
+        },
+        {
+          "name": "order",
+          "type": "[CarHireSearchResponseSortInput!]",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "CarHireSearchResponse!"
+    },
+    {
+      "type": "query",
+      "name": "searchCountries",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "order",
+          "type": "[CountryRefDataSortInput!]",
+          "defaultValue": null
+        },
+        {
+          "name": "where",
+          "type": "CountryRefDataFilterInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[CountryRefData]"
+    },
+    {
+      "type": "query",
+      "name": "searchHolidays",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "location",
+          "type": "String!",
+          "defaultValue": null
+        },
+        {
+          "name": "depDate",
+          "type": "DateTime!",
+          "defaultValue": null
+        },
+        {
+          "name": "gateway",
+          "type": "String!",
+          "defaultValue": null
+        },
+        {
+          "name": "duration",
+          "type": "Int!",
+          "defaultValue": null
+        },
+        {
+          "name": "adults",
+          "type": "Int!",
+          "defaultValue": null
+        },
+        {
+          "name": "where",
+          "type": "HolidaySearchResponseFilterInput",
+          "defaultValue": null
+        },
+        {
+          "name": "order",
+          "type": "[HolidaySearchResponseSortInput!]",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "HolidaySearchResponse!"
+    },
+    {
+      "type": "query",
+      "name": "searchHotels",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "location",
+          "type": "String!",
+          "defaultValue": null
+        },
+        {
+          "name": "depDate",
+          "type": "DateTime!",
+          "defaultValue": null
+        },
+        {
+          "name": "duration",
+          "type": "Int!",
+          "defaultValue": null
+        },
+        {
+          "name": "adults",
+          "type": "Int!",
+          "defaultValue": null
+        },
+        {
+          "name": "where",
+          "type": "HolidaySearchResponseFilterInput",
+          "defaultValue": null
+        },
+        {
+          "name": "order",
+          "type": "[HolidaySearchResponseSortInput!]",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "HolidaySearchResponse!"
+    },
+    {
+      "type": "query",
+      "name": "searchOffers",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "FlightOfferRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SearchResults!"
+    },
+    {
+      "type": "query",
+      "name": "searchOffersBFF",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "FlightOfferRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SearchResults!"
+    },
+    {
+      "type": "query",
+      "name": "searchOffersCallCentre",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "FlightOfferRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SearchResults!"
+    },
+    {
+      "type": "query",
+      "name": "searchOffersNext",
+      "deprecated": true,
+      "deprecationReason": "Use searchOffersNextSlice",
+      "arguments": [
+        {
+          "name": "request",
+          "type": "FlightOfferNextRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SearchResults!"
+    },
+    {
+      "type": "query",
+      "name": "searchOffersNextBFF",
+      "deprecated": true,
+      "deprecationReason": "Use searchOffersNextSlice",
+      "arguments": [
+        {
+          "name": "request",
+          "type": "FlightOfferNextRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SearchResults!"
+    },
+    {
+      "type": "query",
+      "name": "searchOffersNextSlice",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "SearchOffersNextSliceRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SearchResults!"
+    },
+    {
+      "type": "query",
+      "name": "searchSummary",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "SearchSummaryRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "Summary!"
+    },
+    {
+      "type": "query",
+      "name": "searchSummaryDeepLink",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "SearchSummaryDeepLinkQueryRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "Summary!"
+    },
+    {
+      "type": "query",
+      "name": "seatMapQuery",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "tripReservationId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "segmentId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "TripsSeatMapResponse"
+    },
+    {
+      "type": "query",
+      "name": "servicingGetOrder",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "OrderSearchResponse!"
+    },
+    {
+      "type": "query",
+      "name": "servicingValidatePnr",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "IdentityAcquireTokenRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "query",
+      "name": "summaryResponse",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "basketId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "FlightSummary"
+    },
+    {
+      "type": "query",
+      "name": "token",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "appId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "microService",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "query",
+      "name": "TripDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "TripDetailsRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[TripsBooking]"
+    },
+    {
+      "type": "query",
+      "name": "UpsellOffersQuery",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "tripReservationID",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "Upsell_UpsellOfferResponse"
+    },
+    {
+      "type": "query",
+      "name": "vholsForgotMyBooking",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "surname",
+          "type": "String!",
+          "defaultValue": null
+        },
+        {
+          "name": "dateOfBirth",
+          "type": "DateTime!",
+          "defaultValue": null
+        },
+        {
+          "name": "departureDate",
+          "type": "DateTime!",
+          "defaultValue": null
+        },
+        {
+          "name": "where",
+          "type": "FMBResponseFilterInput",
+          "defaultValue": null
+        },
+        {
+          "name": "order",
+          "type": "[FMBResponseSortInput!]",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "FMBResponse!"
+    },
+    {
+      "type": "query",
+      "name": "vholsGetBookingDetail",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "refresh",
+          "type": "Boolean",
+          "defaultValue": null
+        },
+        {
+          "name": "where",
+          "type": "BookingDetailFilterInput",
+          "defaultValue": null
+        },
+        {
+          "name": "order",
+          "type": "[BookingDetailSortInput!]",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "BookingDetail!"
+    },
+    {
+      "type": "query",
+      "name": "vholsLogin",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "LoginRequestInput!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "AuthenticationResponse!"
+    },
+    {
+      "type": "query",
+      "name": "vholsRefresh",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "refreshToken",
+          "type": "String!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "AuthenticationResponse!"
+    },
+    {
+      "type": "query",
+      "name": "voucherDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "page",
+          "type": "Int!",
+          "defaultValue": null
+        },
+        {
+          "name": "pageSize",
+          "type": "Int!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "[Voucher]"
+    },
+    {
+      "type": "mutation",
+      "name": "accountEmailConfirmation",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [],
+      "returnType": "Boolean!"
+    },
+    {
+      "type": "mutation",
+      "name": "accountEmailVerification",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "activationToken",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "Boolean!"
+    },
+    {
+      "type": "mutation",
+      "name": "accountEnrolMember",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "CreateCustomerAccountRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "FlyingClubSignUpResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "accountEntraOtpValidation",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "EntraOtpValidationRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "EntraOtpValidationResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "accountEntraPasswordSubmission",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "NewPasswordSubmissionRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SignInResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "accountInviteMember",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "inviteeFcNumber",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "groupName",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "accountInviteMemberAction",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "HouseHoldInviteActionRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "accountMemberSignIn",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "SignInRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SignInResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "accountOTPGenerate",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "emailId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "accountOTPValidate",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "emailId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "otp",
+          "type": "Int!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "OtpValidationResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "accountPasswordResetStart",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "PasswordResetStartRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "InitiatePasswordResetResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "accountPnrLinkEnrolment",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "CustomerDTOInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "accountRefreshToken",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "RefreshTokenRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SignInResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "accountResendVerificationEmail",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "EnrolToAzureB2CCommandRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "accountUpdateAddressDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "updateAddressDetail",
+          "type": "UpdateMemberAddressRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "accountUpdateEmailAddress",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "newEmailAddress",
+          "type": "UpdateEmailRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "bookCreateOrder",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "OrderCreateGraphQLRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "OrderCreateGraphQLResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "bookUpdatePaymentStatus",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "UpdatePaymentStatusRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "UpdatePaymentStatusResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "claimPartnerFlightPoints",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "SkyFlightsPointsClaimRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "MissingPointsResponseOfClaimFlightSegmentDetails"
+    },
+    {
+      "type": "mutation",
+      "name": "claimVSPoints",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "ticketNumber",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "fcNumber",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "MissingPointsResponseOfClaimFlightSegmentDetails"
+    },
+    {
+      "type": "mutation",
+      "name": "GenerateBoardingPass",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "checkInId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "BoardingPassResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "insuranceDecision",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "UpdateInsuranceDecisionRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "Basket"
+    },
+    {
+      "type": "mutation",
+      "name": "loyaltyEnrolCustomer",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "CreateCustomerRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "ManageBannerDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "bannerCode",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "manageLoyaltyMemberMutation",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "loyaltyMemberDetailsRequest",
+          "type": "LoyaltyMemberDetailsRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "LoyaltyMemberDetailsResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "orderPaymentReferenceId",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "OrderPaymentRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "PaymentOrderResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "paymentStatusMutation",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "tripsPaymentStatusRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "tripsPaymentStatusResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "SaveBaggage",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "SaveBaggageRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "BaggageResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "SaveContactTracing",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "checkInId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "applyToAll",
+          "type": "Boolean!",
+          "defaultValue": null
+        },
+        {
+          "name": "contactTracings",
+          "type": "[ContactTracingInput]",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "CheckInResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "SaveEmergencyContactDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "checkInId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "applyToAllPassengers",
+          "type": "Boolean!",
+          "defaultValue": null
+        },
+        {
+          "name": "emergencyContacts",
+          "type": "[EmergencyContactInput]",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "CheckInResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "SavePassport",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "savePassportRequest",
+          "type": "SavePassportRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "CheckInResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "SaveReturnDate",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "saveReturnDateRequest",
+          "type": "SaveReturnDateRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "CheckInResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "seatConfirmationMutation",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "tripReservationId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "TripsSeatConfirmationResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "seatPaymentMutation",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "PaymentRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "tripsPaymentResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "selectMealMutation",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "tripReservationId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "segmentId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "passengerId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "ssrCode",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "applyToAll",
+          "type": "Boolean!",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "PassengerResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "SelectPassengers",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "checkInId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "passengerIds",
+          "type": "[String]",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "CheckInResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "selectSeat",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "SelectSeatRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SeatMapResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "selectSeatMutation",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "selectSeatRequest",
+          "type": "SeatSelectionRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "TripsSeatMapResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "selectSpecialAssistanceMutation",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "tripReservationId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "segmentIds",
+          "type": "[String]",
+          "defaultValue": null
+        },
+        {
+          "name": "passengerId",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "ssrCode",
+          "type": "String",
+          "defaultValue": null
+        },
+        {
+          "name": "ssrCategoryCode",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "PassengerResponse"
+    },
+    {
+      "type": "mutation",
+      "name": "synchronyToken",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "basketId",
+          "type": "String",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "SynchronyDataShareToken"
+    },
+    {
+      "type": "mutation",
+      "name": "updateContactDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "updateContactDetailsRequest",
+          "type": "ContactUpdateRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "Basket"
+    },
+    {
+      "type": "mutation",
+      "name": "updateMarketingPreference",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "updateMarketingPreferenceRequest",
+          "type": "UpdateMarketingPreferenceRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "Boolean!"
+    },
+    {
+      "type": "mutation",
+      "name": "updateMemberPhoneNumber",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "updatePhoneNumber",
+          "type": "UpdatePhoneNumberInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "updatePeople",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "updatePeopleRequest",
+          "type": "PassengerUpdateRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "Basket"
+    },
+    {
+      "type": "mutation",
+      "name": "updateTnC",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "updateTnCRequest",
+          "type": "TnCUpdateRequestInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "Basket"
+    },
+    {
+      "type": "mutation",
+      "name": "virginAccountUpdateCustomerDetails",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "request",
+          "type": "VirginAccountCustomerUpdateInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    },
+    {
+      "type": "mutation",
+      "name": "virginAccountUpgrade",
+      "deprecated": false,
+      "deprecationReason": null,
+      "arguments": [
+        {
+          "name": "virginAccountDetails",
+          "type": "VirginAccountDetailsInput",
+          "defaultValue": null
+        }
+      ],
+      "returnType": "String"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+meta {
+  name: Get Secure Flight Info
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query GetSecureFlightInfo {
+    GetSecureFlightInfo(
+      request: {
+        pnrLocator: "{{pnrLocator}}"
+        givenNames: "{{pax1_GivenNames}}"
+        surname: "{{pax1_Surname}}"
+        passengerFirstNin: "{{pax1_FirstNin}}"
+        passengerLastNin: "{{pax1_LastNin}}"
+      }
+    ) {
+      secureFlightReservationId
+      showRedressNumber
+      showCanadianTravelNumber
+      passengerDetails {
+        passengerId
+        passengerFirstNin
+        passengerLastNin
+        knownTravellerNumber
+        canadianTravelNumber
+        redressNumber
+      }
+    }
+  }
+}
+
+script:post-response {
+  const secureFlightInfo = res.body.data.GetSecureFlightInfo;
+
+  function generateNumber(length) {
+    return Array.from({ length }, () => Math.floor(Math.random() * 10)).join("");
+  }
+
+  if (secureFlightInfo) {
+    bru.setVar("secureFlightReservationId", secureFlightInfo.secureFlightReservationId);
+    bru.setVar("secureFlightPassengerId", secureFlightInfo.passengerDetails?.passengerId ?? "");
+    bru.setVar("secureFlightPassengerFirstNin", secureFlightInfo.passengerDetails?.passengerFirstNin ?? "");
+    bru.setVar("secureFlightPassengerLastNin", secureFlightInfo.passengerDetails?.passengerLastNin ?? "");
+    bru.setVar("knownTravellerNumber", secureFlightInfo.passengerDetails?.knownTravellerNumber ?? generateNumber(9));
+    bru.setVar("canadianTravelNumber", secureFlightInfo.passengerDetails?.canadianTravelNumber ?? `CAN${generateNumber(10)}`);
+    bru.setVar("redressNumber", secureFlightInfo.passengerDetails?.redressNumber ?? generateNumber(9));
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,202 @@
+parameters: 
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  testRepoPath: 'Enterprise Microservices'
+  rootPath: ''
+  sanityrootpath: 'VAA.EAPI.Automation'
+  RestoreBuildProjects: '**/*.csproj'
+  variableGroupName: ''
+  environment: ''
+
+jobs: 
+  - job: 'FunctionalTesting'
+    displayName: 'Functional Testing'
+    pool:
+      name: ${{parameters.agentPool}}
+      vmImage: ${{parameters.agentSpecification}}
+    variables:
+      - group: ${{parameters.variableGroupName}}
+    steps:
+      # Task to checkout the repository
+      - checkout: self
+        displayName: 'Checkout Testing Repository' 
+    
+    
+      # Task to install DotNet Core SDK
+      - task: UseDotNet@2
+        displayName: 'Install DotNet Core SDK' 
+        inputs:
+          packageType: 'sdk'
+          version: '10.0.x'
+          
+      # Task to build the project
+      - task: DotNetCoreCLI@2
+        displayName: 'Build Project'
+        inputs:
+          command: 'build'
+          projects: |
+            ${{parameters.sanityrootpath}}/VAA.EAPI.Automation.MarketingLoyalty/VAA.EAPI.Automation.MarketingLoyalty.csproj
+          #arguments: '--configuration ${{parameters.buildConfiguration}}'
+
+ 
+      - task: PowerShell@2
+        displayName: Add the username as an environment variable so the tests can find it.
+        inputs:
+          targetType: 'inline'
+          script: |       
+            Write-Host "Pipeline Variables Selected Environment is $(env)"
+            #Write-Host "Loyalty TestEnv is $(LoyaltyEnvironment)"
+            #Write-Host "MicrosoftURLOnline is $(MicrosoftURLOnline)"
+            #Write-Host "BaseUrl is $(BaseUrl)"
+            #Write-Host "KeyVaultUrl $(KeyVaultUrl)"
+            #Write-Host "KeyVaulttenantId is $(KeyVaulttenantId)"
+            #Write-Host "TestEnv is $(TestEnv)"
+            #Write-Host "KeyVaultclientId is $(KeyVaultclientId)"
+            #Write-Host "KeyVaultclientSecret is $(KeyVaultclientSecret)"
+       
+      
+
+      - task: VSTest@2
+        displayName: 'VsTest - CampaignManagement-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MarketingLoyalty.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=CampaignManagement-Regression'
+         testRunTitle: 'CampaignManagement-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+
+      - task: VSTest@2
+        displayName: 'VsTest - PromotionManagement-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MarketingLoyalty.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=PromotionManagement-Regression'
+         testRunTitle: 'PromotionManagement-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+
+      - task: VSTest@2
+        displayName: 'VsTest - MemberManagement-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MarketingLoyalty.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=LoyaltyMemberManagement-Regression'
+         testRunTitle: 'MemberManagement-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+        
+      - task: VSTest@2
+        displayName: 'VsTest - SupplementarySilver-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MarketingLoyalty.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=SupplementarySilver-Regression'
+         testRunTitle: 'SupplementarySilver-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+      
+      - task: VSTest@2
+        displayName: 'VsTest - ContactNotes-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MarketingLoyalty.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=LoyaltyContactNotes-Regression'
+         testRunTitle: 'LoyaltyContactNotes-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+
+      - task: VSTest@2
+        displayName: 'VsTest - AuditManagement-Regression'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MarketingLoyalty.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=AuditManagement-Regression'
+         testRunTitle: 'AuditManagement-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+
+      - task: VSTest@2
+        displayName: 'VsTest - Customer-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MarketingLoyalty.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=CustomerManagement-Regression'
+         testRunTitle: 'Customer-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+
+      - task: VSTest@2
+        displayName: 'VsTest - CustomerTransactionMS-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MarketingLoyalty.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=CustomerTransaction-Regression'
+         testRunTitle: 'CustomerTransactionMS-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+
+      - task: VSTest@2
+        displayName: 'VsTest - CustomerMS-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MarketingLoyalty.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=CustomerMS-Regression'
+         testRunTitle: 'CustomerMS-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+  
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results **/Log_For_*.txt'
+        inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**/Log_For_*.txt'    
+
+      - task: epsteam.EmailReportExtension.EmailReport.EmailReport@1
+        displayName: 'Send Email Report Always'
+        inputs:
+         subject: '[{environmentStatus}] {passPercentage} LOOPS Tests passed in $(env) stage for $(Build.BuildNumber) '
+         includeInToSectionStr: 2
+         toAddress: 'loops.paritysquad@fly.virgin.com'
+         defaultDomain: VirginAtlantic365.onmicrosoft.com
+         includeCommits: false
+         includeOthersInTotal: true
+         enableTLS: true
+         smtpConnectionEndpoint: EmailServices

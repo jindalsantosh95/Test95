@@ -1,0 +1,472 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPIMS"
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVAPEUNAFNIDENTITYMICROSERV"
+    },
+    "AppInsightsName": {
+      "value": "AVAPEUNAIIDENTITYMS"
+    },
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-StorageAccount/)"
+    },
+    "Appsetting:WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-StorageAccount/)"
+    },
+    "Appsetting:WEBSITE_CONTENTSHARE": {
+      "value": "avapeunafnidentityms-ds"
+    },
+    /*"Appsetting:APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "fe8fd990-715e-40c0-a692-9524e40b3b2c"
+    },*/
+    "Appsetting:AuthenticationUrl": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:AuthorizationTokenType": {
+      "value": "Bearer"
+    },
+    "AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-AzureAd-ClientId/)"
+    },
+    "AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-AzureAd-ClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-ClientID/723c037b2fed4761ae260c06eb3786ce)"
+    },
+    "Appsetting:ClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-ClientSecret/49fe44a4063c48479469a853dc494542)"
+    },
+    "Appsetting:ReferenceDataMicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-StorageAccount/)"
+    },
+    "Appsetting:OTPGenerateTableName": {
+      "value": "OTPRequest"
+    },
+    "Appsetting:RandomDigitMinValue": {
+      "value": "100000"
+    },
+    "Appsetting:RandomDigitMaxValue": {
+      "value": "1000000"
+    },
+    "Appsetting:ContinuationTokenRandomDigitMinValue": {
+      "value": "10000000"
+    },
+    "Appsetting:ContinuationTokenRandomDigitMaxValue": {
+      "value": "100000000"
+    },
+    "Appsetting:OTPExpiryTimeLimit": {
+      "value": "10"
+    },
+    "Appsetting:OTPGenerationLimit": {
+      "value": "5"
+    },
+    "Appsetting:OTPEmailTemplate": {
+      "value": "vaaMyAccRePlatOTP"
+    },
+    "Appsetting:OTPSignTemplate": {
+      "value": "vaaAppOTP"
+    },
+    "Appsetting:EmailUpdateTemplate": {
+      "value": "vaaLoyaltyFCGEN14a"
+    },
+    "Appsetting:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-AzureADB2C-TenantId/e8be89021129481d8978dcd36a1f1aec)"
+    },
+    "Appsetting:CustomMemberStatusAttribute": {
+      "value": "memberStatus"
+    },
+    "Appsetting:CustomMemberTypeAttribute": {
+      "value": "memberType"
+    },
+    "Appsetting:CustomSecurityAnswer1Attribute": {
+      "value": "securityAnswer1"
+    },
+    "Appsetting:CustomSecurityAnswer2Attribute": {
+      "value": "securityAnswer2"
+    },
+    "Appsetting:CustomSecurityQuestion1Attribute": {
+      "value": "securityQuestion1"
+    },
+    "Appsetting:CustomSecurityQuestion2Attribute": {
+      "value": "securityQuestion2"
+    },
+    "Appsetting:CustomCustomerIdAttribute": {
+      "value": "customerId"
+    },
+    "Appsetting:AccountEnabled": {
+      "value": "accountEnabled"
+    },
+    "Appsetting:OtherMails": {
+      "value": "otherMails"
+    },
+    "Appsetting:DisplayName": {
+      "value": "displayName"
+    },
+    "Appsetting:GivenName": {
+      "value": "givenName"
+    },
+    "Appsetting:Identities": {
+      "value": "identities"
+    },
+    "Appsetting:Surname": {
+      "value": "surname"
+    },
+    "Appsetting:PasswordProfile": {
+      "value": "passwordProfile"
+    },
+    "Appsetting:PasswordPolicies": {
+      "value": "passwordPolicies"
+    },
+    "Appsetting:SignInNames": {
+      "value": "signInNames"
+    },
+    "Appsetting:IdentityEventHandlerTopicName": {
+      "value": "enrolcustomer"
+    },
+
+    "Appsetting:VredMarketingFeatureFlag": {
+      "value": "Y"
+    },
+    "Appsetting:IdentityEventSubscriptionName": {
+      "value": "EnrolCustomerIdentitySubscriber"
+    },
+    "Appsetting:ExtensionPrefix": {
+      "value": "extension_1fa4e9a71e1f410ba568a6f290e8d058_"
+    },
+    "Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "Appsetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:GraphAPIUrl": {
+      "value": "https://graph.microsoft.com/"
+    },
+    "Appsetting:GraphApiUrlVersion": {
+      "value": "v1.0"
+    },
+    "Appsetting:GraphApiUrlProxyAddressVersion": {
+      "value": "beta"
+    },
+    "Appsetting:SignInEmailAddress": {
+      "value": "emailAddress"
+    },
+    "Appsetting:SignInUserName": {
+      "value": "username"
+    },
+    "Appsetting:version": {
+      "value": "100"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-ServiceBusConnectionString/)"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "value": "enrolcustomer"
+    },
+    "Appsetting:Air4PnrCommonEndPoint": {
+      "value": "https://webservices.vs.air4.com:31063/pnrcommon/v6"
+    },
+    "Appsetting:TicketingProcessV3EndPoint": {
+      "value": "https://webservices.vs.air4.com:37531/ticketingprocess/v3"
+    },
+    "Appsetting:KeyVaultUri": {
+      "value": "https://avapeunkvems.vault.azure.net/"
+    },
+    "Appsetting:DeltaCertificateName": {
+      "value": "AVAPEUNFNORDERMICROSERV-Config-NdcDLSoaCertificate"
+    },
+    "Appsetting:ApplicationId": {
+      "value": "ND"
+    },
+    "Appsetting:RoleIndicator": {
+      "value": "RESNDCSALES"
+    },
+    "Appsetting:SecurityId": {
+      "value": "D027954"
+    },
+    "Appsetting:TestLab": {
+      "value": "AIR"
+    },
+    "Appsetting:OptionNumberForDisplayRequest": {
+      "value": "1"
+    },
+    "Appsetting:ProvideResidualValue": {
+      "value": "N"
+    },
+    "Appsetting:TrustedSource": {
+      "value": "Y"
+    },
+    "Appsetting:PoolType": {
+      "value": "STAMPING/VAA/NEW/DIST/CAPABILITY"
+    },
+    "Appsetting:AgentCityCode": {
+      "value": "LON"
+    },
+    "Appsetting:IdentityAcquireToken:Secret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-Secret/)"
+    },
+    "Appsetting:IdentityAcquireToken:Issuer": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-Issuer/)"
+    },
+    "Appsetting:IdentityAcquireToken:Audience": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-Audience/)"
+    },
+    "Appsetting:IdentityAcquireToken:KeyId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-KeyId/)"
+    },
+    "Appsetting:IdentityAcquireToken:ExpiryMinutes": {
+      "value": "20"
+    },
+    "Appsetting:ActivationLink": {
+      "value": "https://stg.virginatlantic.com/ActivateUser?activationtoken="
+    },
+    "Appsetting:CustomerSyncTopicName": {
+      "value": "enrolcustomer"
+    },
+    "Appsetting:EmailTriggerTopicName": {
+      "value": "enrolcustomer"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-StorageAccount/)"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "IdentityEventStore"
+    },
+    "Appsetting:AllowTestEmail": {
+      "value": "N"
+    },
+    "Appsetting:TestEmailId": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "Appsetting:ActivationTokenExpirationLimit": {
+      "value": "120"
+    },
+    "Appsetting:RetryCounter": {
+      "value": "5"
+    },
+    "Appsetting:OTPDigitLength": {
+      "value": "6"
+    },
+    "Appsetting:OtpEntraDigitLength": {
+      "value": "8"
+    },
+    "Appsetting:MyAccountActivationTokenIssuer": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-Register-Issuer/)"
+    },
+    "Appsetting:WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "Appsetting:WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "Appsetting:MailNickName": {
+      "value": "mailNickname"
+    },
+    "Appsetting:Mail": {
+      "value": "mail"
+    },
+    "Appsetting:B2CDomain": {
+      "value": "avapeunloyaltyfcb2c.onmicrosoft.com"
+    },
+    "Appsetting:UserPrincipalName": {
+      "value": "userPrincipalName"
+    },
+    "Appsetting:OtpExpiryTimeSpan": {
+      "value": "0:1:0:0"
+    },
+    "Appsetting:OTPCreation": {
+      "value": "0:23:59:59"
+    },
+    "Appsetting:OtpLimit": {
+      "value": "5"
+    },
+    "Appsetting:WelcomeEmailTemplate": {
+      "value": "vaaMyAccRePlatWC"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "skuName": {
+      "value": "Standard_LRS"
+    },
+    "storageAccountName": {
+      "value": "avapeunstidentityms"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "Appsetting:VaAccEmailB2CLink": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-VacSetPasswordLink/)"
+    },
+    "Appsetting:VaAccEmailTemplate": {
+      "value": "vaAccountPassword"
+    },
+    "Appsetting:EntraTenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-EntraTenantId/)"
+    },
+    //swagger settings
+    "AppsettingsOpenApi__DocTitle": {
+      "value": "Identity Microservice"
+    },
+    "AppsettingsOpenApi__Description": {
+      "value": "This API provides ability to Register and Update Identity"
+    },
+    "AppsettingsOpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "AppsettingsOpenApi__Version": {
+      "value": "v3"
+    },
+    "AppsettingsOpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "AppsettingsOpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "AppsettingsOpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "AppsettingsOpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:EntraAPISubDomain": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-EntraSubDomain/)"
+    },
+    "Appsetting:EntraAPIurlDomain": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-EntraUrlDomain/)"
+    },
+    "Appsetting:EntraClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-EntraClientId/)"
+    },
+    "Appsetting:EntraApiScope": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-EntraApiScope/)"
+    },
+    "Appsetting:EntraLogging": {
+      "value": "false"
+    },
+    "Appsetting:FlyingClubTokenIssuer": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-FlyingClubTokenIssuer/)"
+    },
+    "Appsetting:FlyingClubTokenAuthorizedParty": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-FlyingClubTokenAuthorizedParty/)"
+    },
+    "Appsetting:FlyingClubTokenAudience": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-FlyingClubTokenAudience/)"
+    },
+    "Appsetting:FlyingClubTokenClaimType": {
+      "value": "flying_club_account_number"
+    },
+    "Appsetting:FlyingClubTokenLifetimeSeconds": {
+      "value": "300"
+    },
+    "Appsetting:FlyingClubTokenKeyVaultKeyId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-FlyingClubTokenKeyVaultKeyId/)"
+    },
+    "Appsetting:RedisConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNVALIDATIONMICROSERV-Redis-Connectionstring/)"
+    },
+    "Appsetting:AccountLinkingTransactionClientId": { "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-AccountLinkingTransactionClientId/)" },
+    "Appsetting:AccountLinkingTransactionResource": { "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-AccountLinkingTransactionResource/)" },
+    "Appsetting:AccountLinkingTrustedCallerApplicationId": { "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-AccountLinkingTrustedCallerApplicationId/)" },
+    "Appsetting:ValidationJwtKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNIDENTITYMICROSERV-Config-ValidationJwtKey/)"
+    },
+    "Appsetting:OtpTokenExpiryTime": {
+      "value": "20"
+    },
+    "UpdateAzureB2CProfileSubscriber": {
+      "value": "UpdateAzureB2CProfileSubscriber"
+    },
+    "UpdateAzureB2CProfileTopicName": {
+      "value": "manageaccount"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "PROD",
+        "Purpose": "Support functions for the Customer API AFN",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

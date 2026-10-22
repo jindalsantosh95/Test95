@@ -1,0 +1,44 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  variableGroupName: ''
+  environment: ''
+  sourceFolder: 'D:\a\1/testAutomation'
+
+jobs: 
+- job: 'BasicAccount_Testing'
+  displayName: 'BasicAccount'
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}
+  variables:
+    - group: ${{parameters.variableGroupName}}
+ 
+
+  steps:
+   - download: current
+     artifact: testAutomation       
+          
+
+    # Task to copy the ARM files to artifactstagingdirectory
+   - task: CopyFiles@2
+     displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+     inputs:
+       SourceFolder: ${{parameters.sourceFolder}}
+       Contents: |
+         **/*
+       TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      
+
+   - task: VSTest@2
+     displayName: 'BasicAccount-TestSuite'
+     inputs:
+       testAssemblyVer2: |
+         **\VAA.EAPI.Automation.MyAccount.dll
+         **\*Tests.dll
+         !**\obj\**
+       searchFolder: '$(Build.ArtifactStagingDirectory)'
+       testFiltercriteria: 'Category=BasicAccount-Regression'
+       testRunTitle: 'BasicAccount-Regression'
+     continueOnError: true

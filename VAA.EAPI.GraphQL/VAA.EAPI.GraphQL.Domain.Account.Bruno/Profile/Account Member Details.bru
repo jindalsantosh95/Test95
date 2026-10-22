@@ -1,0 +1,93 @@
+meta {
+  name: Account Member Details
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query AccountMemberDetails {
+    accountMemberDetails(vouchersCount: 3, activitiesCount: 5, flightsCount: 3) {
+      flyingClubMemberDetails {
+        memberType
+        firstName
+        lastName
+        preferredName
+        tierCode
+        fCMembershipNumber
+        totalVirginPoints
+        tierPoints
+        customerID
+        email
+        contactNumber
+        countryCode
+      }
+      voucherResponse {
+        voucherDetails {
+          type
+          source
+          description
+          issueDate
+          expiryDate
+          status
+          number
+          isGifted
+        }
+        errorResponse {
+          message
+          extentions {
+            code
+            exception
+          }
+        }
+      }
+      flightDetails {
+        flightSegmentDetails {
+          bookingReference
+          flightNumber
+          operatingAirlineCode
+          originAirportCode
+          destinationAirportCode
+          dateOfFlight
+          scheduledDepartureTime
+          showClaimsBanner
+        }
+        errorResponse {
+          message
+          extentions {
+            code
+            exception
+          }
+        }
+      }
+      activityResponse {
+        activityDetails {
+          activityDate
+          partnerName
+          statement
+          virginPoints
+          tierPoints
+          transactionId
+          transactionType
+        }
+        errorResponse {
+          message
+          extentions {
+            code
+            exception
+          }
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

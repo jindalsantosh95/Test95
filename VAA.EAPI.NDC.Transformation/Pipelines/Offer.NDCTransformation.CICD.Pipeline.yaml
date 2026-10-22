@@ -1,0 +1,108 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.NDC.Transformation/VAA.EAPI.NDC.Offer
+      - VAA.EAPI.NDC.Transformation/VAA.EAPI.NDC.Offer.Deployment
+      - VAA.EAPI.NDC.Transformation/Pipelines/Offer*
+
+variables: 
+  - group: Common_Variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: AzureWebJobsStorage
+  - name: agentPool
+    value: 'Azure Pipelines' 
+  - name: agentPool1
+    value: 'LoyaltySystems'   
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.NDC.Transformation'  
+  - name: subRootPath
+    value: 'VAA.EAPI.NDC.Offer' 
+  - name: microserviceName
+    value: 'NDCOffer' 
+  - name: productId
+    value: 'EAPI_NDCTransformation'  
+  - name: apimurlname
+    value: 'ndctranformationoffer'         
+  - name: functionAppName_DEV
+    value: 'avadeunafnndcoffer' 
+  - name: functionAppName_SIT
+    value: 'avateunafnndcoffer'
+  - name: functionAppName_UAT
+    value: 'avaseunafnndcoffer' 
+  - name: functionAppName_SANDBOX
+    value: 'avaieunafnndcoffer'
+  - name: functionAppName_PRD
+    value: 'avapeunafnndcoffer'    
+  - name: slotName
+    value: 'DS' 
+  - name: resourceGroupName_DEV
+    value: 'RG-VA-D-EUN-NDCTRANSFORMATION' 
+  - name: resourceGroupName_SIT
+    value: 'RG-VA-T-EUN-NDCTRANSFORMATION'
+  - name: resourceGroupName_UAT
+    value: 'RG-VA-S-EUN-NDCTRANSFORMATION' 
+  - name: resourceGroupName_SANDBOX
+    value: 'RG-VA-I-EUN-NDCTRANSFORMATION'
+  - name: resourceGroupName_PROD
+    value: 'RG-VA-P-EUN-NDCTRANSFORMATION'
+          
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: Functions/build.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_SANDBOX: $(resourceGroupName_SANDBOX)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+  # CD (Deployment) Pipeline
+  - template: Functions/release.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_SANDBOX: $(agentPool1)
+      agentSpecification: $(agentSpecification) 
+      buildConfiguration: $(buildConfiguration)  
+      location: $(location)                     
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_SANDBOX: $(functionAppName_SANDBOX)
+      functionAppName_PRD: $(functionAppName_PRD)  
+      AzureWebJobsStorage_DEV: $(AzureWebJobsStorage_NDCOffer_DEV)
+      AzureWebJobsStorage_SIT: $(AzureWebJobsStorage_NDCOffer_SIT)
+      AzureWebJobsStorage_UAT: $(AzureWebJobsStorage_NDCOffer_UAT)
+      AzureWebJobsStorage_SANDBOX: $(AzureWebJobsStorage_NDCOffer_SANDBOX)
+      AzureWebJobsStorage_PROD: $(AzureWebJobsStorage_NDCOffer_PROD)
+      slotName: $(slotName) 
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)           
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)        
+      WEBSITE_DNS_ALT_SERVER_SANDBOX: $(WEBSITE_DNS_ALT_SERVER_SANDBOX)
+      WEBSITE_DNS_SERVER_SANDBOX: $(WEBSITE_DNS_SERVER_SANDBOX)

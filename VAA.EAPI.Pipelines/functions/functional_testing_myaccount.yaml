@@ -1,0 +1,100 @@
+parameters: 
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  testRepoPath: 'Enterprise Microservices'
+  rootPath: ''
+  sanityrootpath: 'VAA.EAPI.Automation'
+  RestoreBuildProjects: '**/*.csproj'
+  variableGroupName: ''
+  environment: ''
+
+jobs: 
+  - job: 'FunctionalTesting'
+    displayName: 'Functional Testing-MyAccount'
+    pool:
+      name: ${{parameters.agentPool}}
+      vmImage: ${{parameters.agentSpecification}}
+    variables:
+      - group: ${{parameters.variableGroupName}}
+    steps:
+      # Task to checkout the repository
+      - checkout: self
+        displayName: 'Checkout Testing Repository' 
+    
+    
+      # Task to install DotNet Core SDK
+      - task: UseDotNet@2
+        displayName: 'Install DotNet Core SDK' 
+        inputs:
+          packageType: 'sdk'
+          version: '10.0.x'
+          
+      # Task to build the project
+      - task: DotNetCoreCLI@2
+        displayName: 'Build Project'
+        inputs:
+          command: 'build'
+          projects: |
+            ${{parameters.sanityrootpath}}/VAA.EAPI.Automation.MyAccount/VAA.EAPI.Automation.MyAccount.csproj
+          #arguments: '--configuration ${{parameters.buildConfiguration}}'
+ 
+      - task: PowerShell@2
+        displayName: Add the username as an environment variable so the tests can find it.
+        inputs:
+          targetType: 'inline'
+          script: |       
+            Write-Host "Pipeline Variables Selected Environment is $(env)"
+            #Write-Host "MicrosoftURLOnline is $(MicrosoftURLOnline)"
+            #Write-Host "BaseUrl is $(BaseUrl)"
+            #Write-Host "KeyVaultUrl $(KeyVaultUrl)"
+            #Write-Host "KeyVaulttenantId is $(KeyVaulttenantId)"
+            #Write-Host "TestEnv is $(TestEnv)"
+            #Write-Host "KeyVaultclientId is $(KeyVaultclientId)"
+            #Write-Host "KeyVaultclientSecret is $(KeyVaultclientSecret)"     
+
+      - task: VSTest@2
+        displayName: 'VsTest - EnrolmentGraphQL-Regression-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MyAccount.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=EnrolmentGraphQL-Regression'
+         testRunTitle: 'EnrolmentGraphQL-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+
+      - task: VSTest@2
+        displayName: 'VsTest - BasicAccount-Regression-TestSuite'
+        inputs:
+         testAssemblyVer2: |
+           **\VAA.EAPI.Automation.MyAccount.dll
+           **\*Tests.dll
+           !**\obj\**
+         testFiltercriteria: 'Category=BasicAccount-Regression'
+         testRunTitle: 'BasicAccount-Regression-TestSuite'
+         rerunFailedTests: true
+         rerunType: basedOnTestFailureCount
+         rerunMaxAttempts: 2
+        continueOnError: true
+
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results **/Log_For_*.txt'
+        inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**/Log_For_*.txt'    
+
+      - task: epsteam.EmailReportExtension.EmailReport.EmailReport@1
+        displayName: 'Send Email Report Always'
+        inputs:
+         subject: '[{environmentStatus}] {passPercentage} MY ACCOUNT tests passed in $(env) stage for $(Build.BuildNumber) '
+         includeInToSectionStr: 2
+         toAddress: 'DF_TestingTeam@fly.virgin.com'
+         defaultDomain: VirginAtlantic365.onmicrosoft.com
+         includeCommits: false
+         includeOthersInTotal: true
+         enableTLS: true
+         smtpConnectionEndpoint: EmailServices

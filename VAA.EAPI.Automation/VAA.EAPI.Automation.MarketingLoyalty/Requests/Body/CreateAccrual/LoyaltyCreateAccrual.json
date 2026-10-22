@@ -1,0 +1,34 @@
+{
+  "query": "mutation LoyaltyCreateAccrual($transactionRequest: CreateTransactionMutationRequestInput) {  loyaltyCreateAccrual(transactionRequest: $transactionRequest) {    transactionId    transactionStatus    errors {      code      message      developerMessage      errorSource      errorTag    }  }}",
+  "variables": {
+    "transactionRequest": {
+      "activityDate": null,
+      "comments": null,
+      "createdBy": null,
+      "customerId": null,
+      "flightDetails": {
+        "bookingClass": null,
+        "bookingReference": null,
+        "destinationAirport": null,
+        "originationAirport": null,
+        "ticketNumber": null
+      },
+      "memberNumber": null,
+      "memberStatus": null,
+      "noOfPassengers": null,
+      "noOfSegments": null,
+      "partnerCode": null,
+      "points": null,
+      "productName": null,
+      "tierPoints": null,
+      "transactionSource": null,
+      "voucherDetails": {
+        "voucherId": null,
+        "voucherName": null,
+        "voucherNumber": null,
+        "voucherUsage": null
+      }
+    }
+  },
+  "operationName": "LoyaltyCreateAccrual"
+}

@@ -1,0 +1,25 @@
+meta {
+  name: GetGenderDetails
+  type: graphql
+  seq: 24
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query GetGenderDetails {
+    GetGenderDetails {
+      __typename
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

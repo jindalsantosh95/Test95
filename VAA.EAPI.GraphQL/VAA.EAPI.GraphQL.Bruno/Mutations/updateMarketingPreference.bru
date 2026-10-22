@@ -1,0 +1,32 @@
+meta {
+  name: updateMarketingPreference
+  type: graphql
+  seq: 42
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation updateMarketingPreference($updateMarketingPreferenceRequest: UpdateMarketingPreferenceRequestInput) {
+    updateMarketingPreference(updateMarketingPreferenceRequest: $updateMarketingPreferenceRequest)
+  }
+}
+
+body:graphql:vars {
+  {
+    "updateMarketingPreferenceRequest": {
+      "preferenceValue": false,
+      "isVacMember": false
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

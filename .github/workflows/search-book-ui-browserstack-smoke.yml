@@ -1,0 +1,473 @@
+name: Automation - Search & Book UI BrowserStack Regression
+
+on:
+  schedule:
+    - cron: "17 5 * * *"
+      timezone: "Europe/London"
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: Frontend environment to test
+        required: true
+        default: test4
+        type: choice
+        options:
+          - test1
+          - test2
+          - test3
+          - test4
+          - test5
+          - stg
+      test_suite:
+        description: Test batch to run
+        required: true
+        default: regression
+        type: choice
+        options:
+          - regression
+          - vouchers
+          - custom
+      custom_filter:
+        description: VSTest filter used when test_suite is custom
+        required: false
+        type: string
+      browser_profile:
+        description: Browser profile for manual runs
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - all-each
+          - mac-safari
+          - windows-chrome
+          - windows-edge
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: search-book-ui-browserstack-stg
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate Playwright project
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('VAA.EAPI.Automation/**/*.csproj', 'VAA.EAPI.Automation/Directory.Packages.props') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+      - name: Restore
+        working-directory: VAA.EAPI.Automation
+        run: dotnet restore VAA.EAPI.Automation.SearchAndBook.UI/VAA.EAPI.Automation.SearchAndBook.UI.csproj
+      - name: Build
+        working-directory: VAA.EAPI.Automation
+        run: dotnet build VAA.EAPI.Automation.SearchAndBook.UI/VAA.EAPI.Automation.SearchAndBook.UI.csproj --configuration Release --no-restore
+      - name: Upload compiled scheduled test artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-book-ui-scheduled-build-${{ github.run_id }}
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 1
+          path: VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin/**
+
+  build-regression-browser-matrix:
+    name: Randomly assign regression tests to browsers
+    if: github.event_name == 'schedule'
+    needs: validate
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+      count: ${{ steps.matrix.outputs.count }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Download compiled scheduled test artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: search-book-ui-scheduled-build-${{ github.run_id }}
+          path: VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin
+      - name: Build seeded browser assignment
+        id: matrix
+        shell: pwsh
+        run: |
+          ./scripts/build-search-book-ui-regression-browser-matrix.ps1 `
+            -TestAssembly "VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin/Release/net10.0/VAA.EAPI.Automation.SearchAndBook.UI.dll" `
+            -Seed ${{ github.run_number }}
+
+  browserstack-smoke:
+    name: Regression - ${{ matrix.shard }} - ${{ matrix.test_name }}
+    needs: [validate, build-regression-browser-matrix]
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix: ${{ fromJson(needs.build-regression-browser-matrix.outputs.matrix) }}
+    env:
+      SAB_BASE_URL: https://stg.virginatlantic.com
+      SAB_RUN_MODE: BrowserStack
+      SAB_LOYALTY_ENVIRONMENT: UAT
+      LoyaltyAccount: ${{ secrets.LoyaltyAccount }}
+      SAB_ARTIFACT_DIR: TestResults/playwright-${{ matrix.shard }}
+      SAB_BS_OS: ${{ matrix.os }}
+      SAB_BS_OS_VERSION: ${{ matrix.os_version }}
+      SAB_BS_BROWSER: ${{ matrix.browser }}
+      SAB_BS_BROWSER_VERSION: ${{ matrix.browser_version }}
+      SAB_BS_DEVICE_NAME: ""
+      SAB_BS_SESSION_NAME: "[stg] cross-browser regression - ${{ matrix.shard }} - ${{ matrix.test_name }}"
+      SAB_TEST_FILTER: ${{ matrix.filter }}
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      BROWSERSTACK_PROJECT: Virgin Atlantic Web - Search and Book
+      BROWSERSTACK_BUILD: search-and-book-ui-stg-${{ github.run_number }}
+      BROWSERSTACK_LOCAL: "false"
+      BROWSERSTACK_PROFILE: Diagnostic
+      BROWSERSTACK_PREFLIGHT: "true"
+      BROWSERSTACK_CAPTURE_NETWORK_CONTENT: "false"
+      KeyVaultUrl: ${{ secrets.KEY_VAULT_URL }}
+      KeyVaultTenantId: ${{ secrets.KEY_VAULT_TENANT_ID }}
+      KeyVaultClientId: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+      KeyVaultClientSecret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Download compiled scheduled test artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: search-book-ui-scheduled-build-${{ github.run_id }}
+          path: VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin
+      - name: Validate Playwright driver artifact
+        shell: bash
+        run: |
+          driver="VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin/Release/net10.0/.playwright/node/linux-x64/node"
+          if [ -f "$driver" ]; then
+            chmod +x "$driver"
+          fi
+          if [ ! -x "$driver" ]; then
+            echo "::error title=Playwright driver artifact invalid::Expected executable driver at $driver"
+            find "VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin" -maxdepth 8 -print | sort
+            exit 1
+          fi
+      - name: Validate regression credentials
+        shell: bash
+        run: |
+          test -n "$BROWSERSTACK_USERNAME" || { echo "BROWSERSTACK_USERNAME secret is required"; exit 1; }
+          test -n "$BROWSERSTACK_ACCESS_KEY" || { echo "BROWSERSTACK_ACCESS_KEY secret is required"; exit 1; }
+          test -n "$LoyaltyAccount" || { echo "LoyaltyAccount secret is required for logged-in regression journeys"; exit 1; }
+          test -n "$KeyVaultUrl" || { echo "KEY_VAULT_URL secret is required for logged-in regression journeys"; exit 1; }
+          test -n "$KeyVaultTenantId" || { echo "KEY_VAULT_TENANT_ID secret is required for logged-in regression journeys"; exit 1; }
+          test -n "$KeyVaultClientId" || { echo "KEY_VAULT_CLIENT_ID secret is required for logged-in regression journeys"; exit 1; }
+          test -n "$KeyVaultClientSecret" || { echo "KEY_VAULT_CLIENT_SECRET secret is required for logged-in regression journeys"; exit 1; }
+      - name: Run BrowserStack STG regression
+        id: run_tests
+        working-directory: VAA.EAPI.Automation
+        shell: bash
+        run: |
+          dotnet test VAA.EAPI.Automation.SearchAndBook.UI/bin/Release/net10.0/VAA.EAPI.Automation.SearchAndBook.UI.dll \
+            --filter "$SAB_TEST_FILTER" \
+            --results-directory "TestResults/browserstack-${{ matrix.shard }}" \
+            --logger "trx;LogFileName=result.trx" -- xUnit.MaxParallelThreads=1
+      - name: Analyse final TRX
+        if: always()
+        shell: pwsh
+        run: |
+          $trx = "VAA.EAPI.Automation/TestResults/browserstack-${{ matrix.shard }}/result.trx"
+          if (Test-Path -LiteralPath $trx) {
+            $analysis = ./scripts/analyse-test-run-results.ps1 -TrxPath $trx -SuiteName "Search & Book UI cross-browser regression" -EnvironmentName "stg"
+            $analysis | Set-Content "VAA.EAPI.Automation/TestResults/browserstack-${{ matrix.shard }}/analysis.md"
+            $analysis | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          }
+      - name: Write profile result contract
+        if: always()
+        shell: pwsh
+        run: |
+          $trx = "VAA.EAPI.Automation/TestResults/browserstack-${{ matrix.shard }}/result.trx"
+          $network = "VAA.EAPI.Automation/TestResults/playwright-${{ matrix.shard }}/network-diagnostics.json"
+          ./scripts/new-search-book-ui-run-summary.ps1 -TrxPath $trx -Profile "${{ matrix.profile }}" -Scenario "Cross-browser regression" -OutputPath "VAA.EAPI.Automation/TestResults/browserstack-${{ matrix.shard }}/run-summary.json" -NetworkDiagnosticsPath $network -JobStatus "${{ steps.run_tests.outcome }}"
+      - name: Upload cross-browser artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-book-ui-stg-cross-browser-${{ matrix.shard }}
+          if-no-files-found: warn
+          path: |
+            VAA.EAPI.Automation/TestResults/browserstack-${{ matrix.shard }}/**
+            VAA.EAPI.Automation/TestResults/playwright-${{ matrix.shard }}/**
+
+  notify-slack:
+    name: Notify Slack summary
+    if: always() && github.event_name == 'schedule' && github.ref == 'refs/heads/main'
+    needs: [validate, browserstack-smoke]
+    runs-on: ubuntu-latest
+    env:
+      HAS_SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Download result contracts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: search-book-ui-stg-*
+          merge-multiple: false
+      - name: Publish Slack summary
+        if: env.HAS_SLACK_WEBHOOK == 'true'
+        shell: pwsh
+        run: |
+          ./scripts/publish-search-book-ui-slack.ps1 -ArtifactRoot "artifacts" -WebhookUrl $env:SLACK_WEBHOOK_URL -RunUrl $env:RUN_URL -WorkflowName "Search & Book UI BrowserStack regression" -TargetEnvironment "stg"
+      - name: Report missing optional Slack webhook
+        if: env.HAS_SLACK_WEBHOOK != 'true'
+        run: echo "SLACK_WEBHOOK_URL is not configured; workflow results remain available in GitHub and BrowserStack."
+
+  matrix-result:
+    name: BrowserStack matrix result
+    if: always() && github.event_name == 'schedule'
+    needs: [validate, browserstack-smoke, notify-slack]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assert scheduled suites passed
+        shell: bash
+        run: |
+          echo "Validation: ${{ needs.validate.result }}"
+          echo "Cross-browser regression: ${{ needs.browserstack-smoke.result }}"
+          test "${{ needs.validate.result }}" = "success"
+          test "${{ needs.browserstack-smoke.result }}" = "success"
+
+  manual-build:
+    name: Build manual test artifact
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('VAA.EAPI.Automation/**/*.csproj', 'VAA.EAPI.Automation/Directory.Packages.props') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+      - name: Restore and build once
+        working-directory: VAA.EAPI.Automation
+        run: |
+          dotnet restore VAA.EAPI.Automation.SearchAndBook.UI/VAA.EAPI.Automation.SearchAndBook.UI.csproj
+          dotnet build VAA.EAPI.Automation.SearchAndBook.UI/VAA.EAPI.Automation.SearchAndBook.UI.csproj --configuration Release --no-restore
+      - name: Resolve selected test filter
+        shell: bash
+        env:
+          TARGET_ENVIRONMENT: ${{ inputs.target_environment }}
+          TEST_SUITE: ${{ inputs.test_suite }}
+          CUSTOM_FILTER: ${{ inputs.custom_filter }}
+        run: |
+          case "$TEST_SUITE" in
+            regression) test_filter="Category=SearchAndBook-UI-Regression" ;;
+            vouchers)
+              test "$TARGET_ENVIRONMENT" = "test4" || { echo "::error::Voucher tests are currently available only on Test4."; exit 1; }
+              test_filter="tag=search-and-book-ui-voucher" ;;
+            custom)
+              test -n "$CUSTOM_FILTER" || { echo "::error::custom_filter is required for a custom run."; exit 1; }
+              test_filter="$CUSTOM_FILTER" ;;
+          esac
+          echo "MANUAL_TEST_FILTER=$test_filter" >> "$GITHUB_ENV"
+      - name: Randomly assign selected tests to browsers
+        id: matrix
+        shell: pwsh
+        run: |
+          ./scripts/build-search-book-ui-regression-browser-matrix.ps1 `
+            -TestAssembly "VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin/Release/net10.0/VAA.EAPI.Automation.SearchAndBook.UI.dll" `
+            -TestFilter $env:MANUAL_TEST_FILTER `
+            -Seed ${{ github.run_number }} `
+            -BrowserProfile "${{ inputs.browser_profile }}"
+      - name: Upload compiled test artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-book-ui-manual-build-${{ github.run_id }}
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 1
+          path: VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin/**
+
+  manual-run:
+    name: ${{ inputs.target_environment }} - ${{ inputs.test_suite }} - ${{ matrix.shard }} - ${{ matrix.test_name }}
+    if: github.event_name == 'workflow_dispatch'
+    needs: manual-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix: ${{ fromJson(needs.manual-build.outputs.matrix) }}
+    env:
+      SAB_RUN_MODE: BrowserStack
+      SAB_ARTIFACT_DIR: TestResults/playwright-manual-${{ matrix.shard }}
+      SAB_BS_OS: ${{ matrix.os }}
+      SAB_BS_OS_VERSION: ${{ matrix.os_version }}
+      SAB_BS_BROWSER: ${{ matrix.browser }}
+      SAB_BS_BROWSER_VERSION: ${{ matrix.browser_version }}
+      SAB_BS_SESSION_NAME: "[${{ inputs.target_environment }}] ${{ inputs.test_suite }} - ${{ matrix.shard }} - ${{ matrix.test_name }}"
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      BROWSERSTACK_PROJECT: Virgin Atlantic Web - Search and Book
+      BROWSERSTACK_BUILD: search-book-ui-${{ inputs.target_environment }}-${{ inputs.test_suite }}-${{ github.run_number }}
+      BROWSERSTACK_LOCAL: "false"
+      BROWSERSTACK_PROFILE: Diagnostic
+      BROWSERSTACK_PREFLIGHT: "true"
+      BROWSERSTACK_CAPTURE_NETWORK_CONTENT: "false"
+      LoyaltyAccount: ${{ secrets.LoyaltyAccount }}
+      KeyVaultUrl: ${{ secrets.KEY_VAULT_URL }}
+      KeyVaultTenantId: ${{ secrets.KEY_VAULT_TENANT_ID }}
+      KeyVaultClientId: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+      KeyVaultClientSecret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Download compiled test artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: search-book-ui-manual-build-${{ github.run_id }}
+          path: VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin
+      - name: Validate Playwright driver artifact
+        shell: bash
+        run: |
+          driver="VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin/Release/net10.0/.playwright/node/linux-x64/node"
+          if [ -f "$driver" ]; then
+            chmod +x "$driver"
+          fi
+          if [ ! -x "$driver" ]; then
+            echo "::error title=Playwright driver artifact invalid::Expected executable driver at $driver"
+            find "VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI/bin" -maxdepth 8 -print | sort
+            exit 1
+          fi
+      - name: Configure environment and selected test batch
+        shell: bash
+        env:
+          TARGET_ENVIRONMENT: ${{ inputs.target_environment }}
+          TEST_SUITE: ${{ inputs.test_suite }}
+          CUSTOM_FILTER: ${{ inputs.custom_filter }}
+        run: |
+          case "$TARGET_ENVIRONMENT" in
+            stg) base_url="https://stg.virginatlantic.com"; environment="uat"; loyalty_environment="UAT" ;;
+            test1|test2|test3|test4|test5) base_url="https://vaa-${TARGET_ENVIRONMENT}.virginatlantic.com"; environment="sit"; loyalty_environment="SIT" ;;
+            *) echo "::error::Unsupported environment: $TARGET_ENVIRONMENT"; exit 1 ;;
+          esac
+          case "$TEST_SUITE" in
+            regression) test_filter="Category=SearchAndBook-UI-Regression" ;;
+            vouchers)
+              test "$TARGET_ENVIRONMENT" = "test4" || { echo "::error::Voucher tests are currently available only on Test4."; exit 1; }
+              test_filter="tag=search-and-book-ui-voucher" ;;
+            custom)
+              test -n "$CUSTOM_FILTER" || { echo "::error::custom_filter is required for a custom run."; exit 1; }
+              test_filter="$CUSTOM_FILTER" ;;
+          esac
+          echo "SAB_BASE_URL=$base_url" >> "$GITHUB_ENV"
+          echo "Environment=$environment" >> "$GITHUB_ENV"
+          echo "SAB_LOYALTY_ENVIRONMENT=$loyalty_environment" >> "$GITHUB_ENV"
+          echo "SAB_TEST_FILTER=${{ matrix.filter }}" >> "$GITHUB_ENV"
+      - name: Validate existing framework credentials
+        shell: bash
+        run: |
+          test -n "$BROWSERSTACK_USERNAME" || { echo "BROWSERSTACK_USERNAME secret is required"; exit 1; }
+          test -n "$BROWSERSTACK_ACCESS_KEY" || { echo "BROWSERSTACK_ACCESS_KEY secret is required"; exit 1; }
+          test -n "$LoyaltyAccount" || { echo "LoyaltyAccount secret is required for logged-in regression journeys"; exit 1; }
+          test -n "$KeyVaultUrl" || { echo "KEY_VAULT_URL secret is required"; exit 1; }
+          test -n "$KeyVaultTenantId" || { echo "KEY_VAULT_TENANT_ID secret is required"; exit 1; }
+          test -n "$KeyVaultClientId" || { echo "KEY_VAULT_CLIENT_ID secret is required"; exit 1; }
+          test -n "$KeyVaultClientSecret" || { echo "KEY_VAULT_CLIENT_SECRET secret is required"; exit 1; }
+      - name: Run selected test batch
+        id: run_tests
+        working-directory: VAA.EAPI.Automation
+        run: |
+          dotnet test VAA.EAPI.Automation.SearchAndBook.UI/bin/Release/net10.0/VAA.EAPI.Automation.SearchAndBook.UI.dll \
+            --filter "$SAB_TEST_FILTER" \
+            --results-directory "TestResults/manual-${{ matrix.shard }}" \
+            --logger "trx;LogFileName=result.trx" -- xUnit.MaxParallelThreads=1
+      - name: Analyse TRX
+        if: always()
+        shell: pwsh
+        run: |
+          $trx = "VAA.EAPI.Automation/TestResults/manual-${{ matrix.shard }}/result.trx"
+          if (Test-Path -LiteralPath $trx) {
+            $analysis = ./scripts/analyse-test-run-results.ps1 -TrxPath $trx -SuiteName "Search & Book UI ${{ inputs.test_suite }}" -EnvironmentName "${{ inputs.target_environment }}"
+            $analysis | Set-Content "VAA.EAPI.Automation/TestResults/manual-${{ matrix.shard }}/analysis.md"
+            $analysis | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          }
+      - name: Write manual result contract
+        if: always()
+        shell: pwsh
+        run: |
+          $trx = "VAA.EAPI.Automation/TestResults/manual-${{ matrix.shard }}/result.trx"
+          $network = "VAA.EAPI.Automation/TestResults/playwright-manual-${{ matrix.shard }}/network-diagnostics.json"
+          ./scripts/new-search-book-ui-run-summary.ps1 -TrxPath $trx -Profile "${{ matrix.profile }}" -Scenario "${{ inputs.test_suite }}" -OutputPath "VAA.EAPI.Automation/TestResults/manual-${{ matrix.shard }}/run-summary.json" -NetworkDiagnosticsPath $network -JobStatus "${{ steps.run_tests.outcome }}"
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-book-ui-${{ inputs.target_environment }}-${{ inputs.test_suite }}-${{ matrix.shard }}
+          if-no-files-found: warn
+          path: |
+            VAA.EAPI.Automation/TestResults/manual-${{ matrix.shard }}/**
+            VAA.EAPI.Automation/TestResults/playwright-manual-${{ matrix.shard }}/**
+
+  notify-manual-slack:
+    name: Notify Slack manual summary
+    if: always() && github.event_name == 'workflow_dispatch'
+    needs: [manual-build, manual-run]
+    runs-on: ubuntu-latest
+    env:
+      HAS_SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Download manual result contracts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: search-book-ui-${{ inputs.target_environment }}-${{ inputs.test_suite }}-*
+          merge-multiple: false
+      - name: Publish Slack summary
+        if: env.HAS_SLACK_WEBHOOK == 'true'
+        shell: pwsh
+        run: |
+          ./scripts/publish-search-book-ui-slack.ps1 -ArtifactRoot "artifacts" -WebhookUrl $env:SLACK_WEBHOOK_URL -RunUrl $env:RUN_URL -WorkflowName "Search & Book UI BrowserStack ${{ inputs.test_suite }}" -TargetEnvironment "${{ inputs.target_environment }}"
+      - name: Report missing optional Slack webhook
+        if: env.HAS_SLACK_WEBHOOK != 'true'
+        run: echo "SLACK_WEBHOOK_URL is not configured; workflow results remain available in GitHub and BrowserStack."

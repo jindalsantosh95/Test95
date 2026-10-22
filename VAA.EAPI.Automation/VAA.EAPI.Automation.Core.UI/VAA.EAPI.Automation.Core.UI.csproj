@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Appium.WebDriver" />
+		<PackageReference Include="Deque.AxeCore.Commons" />
+		<PackageReference Include="Deque.AxeCore.Selenium" />
+		<PackageReference Include="ExtentReports" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+		<PackageReference Include="Selenium.Support" />
+		<PackageReference Include="Selenium.WebDriver" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="local.settings.local.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<ProjectReference Include="..\VAA.EAPI.Automation.Core\VAA.EAPI.Automation.Core.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.Automation.Core.Playwright\VAA.EAPI.Automation.Core.Playwright.csproj" />
+	</ItemGroup>
+
+</Project>

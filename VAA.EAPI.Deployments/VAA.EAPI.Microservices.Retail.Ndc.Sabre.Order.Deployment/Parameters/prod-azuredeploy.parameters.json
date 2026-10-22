@@ -1,0 +1,201 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "FunctionAppName": {
+      "value": "AVAPEUNAFNNDCORDERMS"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPIORDERMS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantic@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "AppInsightsName": {
+      "value": "AVAPEUNAINDCORDERMS"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avapeunafnndcorderms"
+    },
+
+    "IPRestriction": {
+      "value": ""
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avapeunstndcorderms"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "KeyVaultUri": {
+      "value": "https://avapeunkvems.vault.azure.net/"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Ndc Sabre Order  Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to fetch sabre  data items"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/referencemicroservice/"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "OrderCreateResponseUrl": {
+      "value": "https://resources.virginatlantic.com/NdcOrderMS/order/response/{correlationid}"
+    },
+    "ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNNDCORDERMS-Config-ServiceBusConnectionString/)"
+    },
+    "ServiceBusTopicName": {
+      "value": "orderrequesteventmessage"
+    },
+    "TtlExpiryTopicName": {
+      "value": "ndcorderttlexpirymessage"
+    },
+    "OrderDataServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNNDCORDERMS-Config-OrderDataServiceBusConnectionString/)"
+    },
+    "OrderDataServiceBusTopicName": {
+      "value": "ndcorderrequesteventmessage"
+    },
+    "ResponsePollingCount": {
+      "value": "50"
+    },
+    "ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNNDCORDERMS-Config-StorageAccount/)"
+    },
+    "MicroServiceEventStoreTableName": {
+      "value": "OrderEventStore"
+    },
+    "MicroServiceResponseTableName": {
+      "value": "OrderResponse"
+    },
+    "DeletionRetryCounterLimit": {
+      "value": "3"
+    },
+    "SabreUsername": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/SabreUsername/)"
+    },
+    "SabrePassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/SabrePassword/)"
+    },
+    "FromPartyId": {
+      "value": "Agency"
+    },
+    "ToPartyId": {
+      "value": "Sabre_API"
+    },
+    "PCC": {
+      "value": "09UI"
+    },
+    "Domain": {
+      "value": "DEFAULT"
+    },
+    "ConversationId": {
+      "value": "2021.01.DevStudio"
+    },
+    "SabreEndpoint": {
+      "value": "https://webservices.platform.sabre.com"
+    },
+    "SSRDelayInMS": {
+      "value": "4000"
+    },
+    "PollingIntervalMs": {
+      "value": "1000"
+    },
+    "MaxAttempts": {
+      "value": "8"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "LOPAAPI",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "PROD",
+        "Purpose": "Support functions for the Sabre API AFN",
+        "ApplicationUsageIdList": "AVATEUNAFNNDCORDERMS"
+      }
+    }
+  }
+}

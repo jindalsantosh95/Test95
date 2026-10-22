@@ -1,0 +1,194 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:     
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.PaxOps*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.PaxOps*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty.bruno
+
+variables: 
+  
+  - group: Graphql_Digital
+  - group: Digital_Variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: Graphql_Stitch
+  - name: agentPool
+    value: 'Azure Pipelines' 
+  - name: agentPool1
+    value: 'LoyaltySystems'  
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.GraphQL'  
+  - name: subRootPath
+    value: 'VAA.EAPI.GraphQL'  
+  - name: applicationName
+    value: 'GraphQL'
+  - name: microserviceName
+    value: 'Loyalty' 
+  - name: productId
+    value: 'Graphql-Loyalty' 
+  - name: apimurlname
+    value: 'Loyalty'            
+  - name: functionAppName_DEV
+    value: 'va-dv-eun-gqlloyalty-fn-01' 
+  - name: functionAppName_SIT
+    value: 'va-ts-eun-gqlloyalty-fn-01'
+  - name: functionAppName_UAT
+    value: 'va-tu-eun-gqlloyalty-fn-01'
+  - name: functionAppName_PROD
+    value: 'va-pr-eun-gqlloyalty-fn-01'
+  - name: functionAppName_DEV_Secure
+    value: 'va-dv-eun-gqlloyaltys-fn-01' 
+  - name: functionAppName_SIT_Secure
+    value: 'va-ts-eun-gqlloyaltys-fn-01'
+  - name: functionAppName_UAT_Secure
+    value: 'va-tu-eun-gqlloyaltys-fn-01'
+  - name: functionAppName_PROD_Secure
+    value: 'va-pr-eun-gqlloyaltys-fn-01'
+
+
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions_digital/build_graphqlloyalty.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupName_Loyalty_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_Loyalty_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_Loyalty_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_Loyalty_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)  
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_Prod: $(subscriptionId_Prod)
+
+
+  # CD (Deployment) Pipeline
+  - template: functions_digital/release_graphql_servicing.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_deployment: $(agentPool1)      
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      buildConfiguration: $(buildConfiguration)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)    
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_Prod: $(subscriptionId_Prod) 
+      resourceGroupName_DEV: $(resourceGroupName_Loyalty_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_Loyalty_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_Loyalty_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_Loyalty_PROD)
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_PROD: $(functionAppName_PROD)
+      functionAppName_DEV_Secure: $(functionAppName_DEV_Secure)
+      functionAppName_SIT_Secure: $(functionAppName_SIT_Secure)
+      functionAppName_UAT_Secure: $(functionAppName_UAT_Secure)
+      functionAppName_PROD_Secure: $(functionAppName_PROD_Secure)
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)
+      workspaceResourceId: $(workspaceResourceId)
+      workspaceResourceId_prod: $(workspaceResourceId_prod)
+      asename: $(asename)
+      asename_prod: $(asename_prod)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)
+      AppInsightsName_DEV: $(AppInsightsName_GqlLoyalty_DEV)
+      AppInsightsName_SIT: $(AppInsightsName_GqlLoyalty_SIT)
+      AppInsightsName_UAT: $(AppInsightsName_GqlLoyalty_UAT)
+      AppInsightsName_PROD: $(AppInsightsName_GqlLoyalty_PROD)
+      storageAccountName_DEV: $(storageAccountName_GqlLoyalty_DEV)
+      storageAccountName_SIT: $(storageAccountName_GqlLoyalty_SIT)
+      storageAccountName_UAT: $(storageAccountName_GqlLoyalty_UAT)
+      storageAccountName_PROD: $(storageAccountName_GqlLoyalty_PROD)
+      AppInsightsName_Secure_DEV: $(AppInsightsName_GqlLoyalty_Secure_DEV)
+      AppInsightsName_Secure_SIT: $(AppInsightsName_GqlLoyalty_Secure_SIT)
+      AppInsightsName_Secure_UAT: $(AppInsightsName_GqlLoyalty_Secure_UAT)
+      AppInsightsName_Secure_PROD: $(AppInsightsName_GqlLoyalty_Secure_PROD)
+      storageAccountName_Secure_DEV: $(storageAccountName_GqlLoyalty_Secure_DEV)
+      storageAccountName_Secure_SIT: $(storageAccountName_GqlLoyalty_Secure_SIT)
+      storageAccountName_Secure_UAT: $(storageAccountName_GqlLoyalty_Secure_UAT)
+      storageAccountName_Secure_PROD: $(storageAccountName_GqlLoyalty_Secure_PROD)
+      KeyvaultName_DEV: $(KeyvaultName_Myaccount_DEV)
+      KeyvaultName_SIT: $(KeyvaultName_Myaccount_SIT)
+      KeyvaultName_UAT: $(KeyvaultName_Myaccount_UAT)
+      KeyvaultName_PROD: $(KeyvaultName_Myaccount_PROD)
+      VARIABLE_GROUP_NAME_SCHEMA: "SchemaValidation_DEV"
+      Redis_DEV: $(Redis_DEV)
+      Redis_SIT: $(Redis_SIT)
+      Redis_UAT: $(Redis_UAT)
+      Redis_PROD: $(Redis_PROD)
+      ASPName_DEV: $(ASP2_DEV)
+      ASPName_SIT: $(ASP2_SIT)
+      ASPName_UAT: $(ASP2_UAT)
+      ASPName_PROD: $(ASP2_PROD)
+      SLACK_API_TOKEN: $(SLACK_API_TOKEN)
+      SLACK_TITLE: $(SLACK_TITLE_RETAILING)

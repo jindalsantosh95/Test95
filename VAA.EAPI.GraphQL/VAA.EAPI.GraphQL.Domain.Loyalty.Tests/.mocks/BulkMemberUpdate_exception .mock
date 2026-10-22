@@ -1,0 +1,23 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/dev/loyaltymembermanagement/BulkMemberUpdate HTTP/1.1
+
+[?( @.memberStatus == 'ACTIVE' && @.memberNotes == 'BulkMemberUpdate_UnhandledException' && @.initiatedBy == 'user@test.com')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "message": "An error has occurred",
+    "errors": [
+        {
+            "code": "1234",
+            "message": "an unhandled exception",
+            "source": "unit test",
+        }
+    ],
+}

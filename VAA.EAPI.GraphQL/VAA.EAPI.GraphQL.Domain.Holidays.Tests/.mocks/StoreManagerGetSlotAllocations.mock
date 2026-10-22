@@ -1,0 +1,53 @@
+###Request
+GET https://Testresources.virginatlantic.com/dev/storelocator/stores/store-1/slots/slot-1/allocations?startAt=2026-07-01T09%3A00%3A00%2B01%3A00 HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "id": "slot-1",
+  "windowId": "slot-1",
+  "slotId": "slot-1",
+  "storeId": "store-1",
+  "startAt": "2026-07-01T09:00:00+01:00",
+  "endAt": "2026-07-01T09:30:00+01:00",
+  "capacity": 3,
+  "bookedCount": 2,
+  "remainingCapacity": 0,
+  "allocations": [
+    {
+      "id": "allocation-20260701-1",
+      "windowId": "slot-1",
+      "slotId": "slot-1",
+      "storeId": "store-1",
+      "allocationIndex": 1,
+      "status": "BLOCKED",
+      "reason": "Staff unavailable",
+      "bookingId": null,
+      "customerRef": null
+    },
+    {
+      "id": "allocation-20260701-2",
+      "windowId": "slot-1",
+      "slotId": "slot-1",
+      "storeId": "store-1",
+      "allocationIndex": 2,
+      "status": "BOOKED",
+      "reason": null,
+      "bookingId": "BR-10-000171",
+      "customerRef": "BR56787"
+    },
+    {
+      "id": "allocation-20260701-3",
+      "windowId": "slot-1",
+      "slotId": "slot-1",
+      "storeId": "store-1",
+      "allocationIndex": 3,
+      "status": "BOOKED",
+      "reason": null,
+      "bookingId": "BR-10-000172",
+      "customerRef": "BR12345"
+    }
+  ]
+}

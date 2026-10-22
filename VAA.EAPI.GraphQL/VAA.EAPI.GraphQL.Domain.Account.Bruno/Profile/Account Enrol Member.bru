@@ -1,0 +1,86 @@
+meta {
+  name: Account Enrol Member
+  type: graphql
+  seq: 7
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation AccountEnrolMember {
+    accountEnrolMember(
+      request: {
+        channelId: "{{account_channel_id}}"
+        channelUserId: "{{account_channel_user_id}}"
+        enrolmentToken: "{{account_enrolment_token}}"
+        customerDetails: {
+          firstName: "{{account_first_name}}"
+          lastName: "{{account_last_name}}"
+          gender: "{{account_gender}}"
+          dateOfBirth: "{{account_date_of_birth}}"
+          password: "{{account_password}}"
+          customerType: Loyalty
+          enrolmentChannel: "{{account_enrolment_channel}}"
+          contactDetails: {
+            emailDetails: [
+              {
+                usage: Personal
+                emailId: "{{account_email}}"
+                preferredFlag: "Y"
+              }
+            ]
+            phoneDetails: [
+              {
+                phoneType: Mobile
+                usage: Personal
+                countryCode: "{{account_phone_country_code}}"
+                phoneNumber: "{{account_phone_number}}"
+                preferredFlag: "Y"
+              }
+            ]
+          }
+          addressDetails: [
+            {
+              addressType: Home
+              addressLine1: "{{account_address_line1}}"
+              addressLine2: "{{account_address_line2}}"
+              addressLine3: "{{account_address_line3}}"
+              city: "{{account_city}}"
+              postalCode: "{{account_postal_code}}"
+              region: "{{account_region}}"
+              country: "{{account_country}}"
+              preferredFlag: "Y"
+            }
+          ]
+          loyaltyMember: {
+            programName: VirginAtlanticFlyingClub
+            memberType: "Individual"
+            mediaCode: "{{account_media_code}}"
+            enrollmentChannel: "{{account_enrolment_channel}}"
+            termsAndConditionsAccepted: true
+          }
+        }
+      }
+    ) {
+      customerId
+      memberDetails {
+        memberNumber
+        status
+      }
+      errors {
+        code
+        message
+        errorSource
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

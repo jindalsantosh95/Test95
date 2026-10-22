@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+
+        <!--To enable the Microsoft Testing Platform 'dotnet test' experience, add property: -->
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+
+        <!--To enable the Microsoft Testing Platform native command line experience, add property: -->
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+
+        <!--For more information on Microsoft Testing Platform support in xUnit.net, please visit: -->
+        <!--https://xunit.net/docs/getting-started/v3/microsoft-testing-platform-->
+
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit" />
+    </ItemGroup>
+  <ItemGroup>
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\VAA.EAPI.Microservices.Framework.Tests\TestDataSamples\OfferMS\OfferQueryHandlerRequest.json" Link="TestDataSamples\OfferMS\OfferQueryHandlerRequest.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".mocks\ITAResponse-LHRATL-Return32mb.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\ITAResponse-LHRMCO-Return.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+    <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.2" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+      <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VAA.EAPI.Common\VAA.EAPI.Common.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Core.Xunit\VAA.EAPI.Core.Xunit.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Microservices.Framework.Tests\VAA.EAPI.Microservices.Framework.Tests.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Microservices.Retail.Offer\VAA.EAPI.Microservices.Retail.Offer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

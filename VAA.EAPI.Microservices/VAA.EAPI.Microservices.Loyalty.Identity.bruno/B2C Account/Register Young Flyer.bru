@@ -1,0 +1,50 @@
+meta {
+  name: Register Young Flyer
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{identity_base_url}}/RegisterYoungFlyer
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "customerDetails": {
+      "firstName": "{{identity_first_name}}",
+      "lastName": "{{identity_last_name}}",
+      "gender": "{{identity_gender}}",
+      "dateOfBirth": "{{identity_date_of_birth}}",
+      "fcNumber": "{{identity_member_number}}",
+      "customerId": "{{identity_customer_id}}",
+      "customerType": "Loyalty",
+      "status": "ACTIVE",
+      "contactDetails": {
+        "emailDetails": [
+          {
+            "emailId": "1234567890abcdef1234567890abcdef@U18.virgin.com",
+            "preferredFlag": "Y",
+            "valid": "N"
+          }
+        ]
+      },
+      "loyaltyMember": {
+        "memberType": "Individual",
+        "enrollmentChannel": "{{identity_enrolment_channel}}",
+        "termsAndConditionsAccepted": true,
+        "flyingClubCardNumber": "{{identity_member_number}}"
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

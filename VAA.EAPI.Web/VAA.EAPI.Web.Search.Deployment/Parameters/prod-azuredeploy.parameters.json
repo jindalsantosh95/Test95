@@ -1,0 +1,250 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    // Deployment Settings
+    "FunctionAppName": {
+      "value": "avapeunafnwebbffsearch"
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-WEBBFF"
+    },
+    "AppServicePlanName": {
+      "value": "avapeunaspwebbff"
+    },
+    "AppInsightsName": {
+      "value": "avapeunaiwebbff"
+    },
+    "storageAccountName": {
+      "value": "avapeunstwebbffsearch"
+    },
+    "vaultName": {
+      "value": "avapeunkvwebbff"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantic@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvwebbff.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "PROD",
+        "Purpose": "BFF for WebSearch",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+
+    //vnet settings
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+
+    // Azure Function Settings
+    "AppSetting:AzureWebJobsStorage": {
+      "value": ""
+    },
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    /*"AppSetting:WEBSITE_CONTENTSHARE": {
+      "value": "avapeunafnwebbffsearch"
+    },*/
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "AppSetting:OperationsVisibilityMode": {
+      "value": "Public|Secure"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+
+    // Azure Active Directory
+    "AppSetting:AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AppSetting:AAD:TenantId": {
+      "value": "6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8"
+    },
+    "AppSetting:AAD:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    // Graph QL Microservice
+    "AppSetting:GraphQL:AppID": {
+      "value": ""
+    },
+    "AppSetting:GraphQL:Url": {
+      "value": "https://resources.virginatlantic.com/search/public/v1/GraphQL"
+    },
+    "AppSetting:GraphQL:ShowMockResponse": {
+      "value": "false"
+    },
+    "AppSetting:GraphQL:BaggageSummaryMockResponse": {
+      "value": "false"
+    },
+    "AppSetting:GraphQL:SearchOffersPqId": {
+      "value": "searchOffersBFF"
+    },
+    "AppSetting:GraphQL:SearchOffersNextPqId": {
+      "value": "searchOffersNextBFF"
+    },
+    "AppSetting:HttpClientTimeOut": {
+      "value": "00:01:30"
+    },
+    "AppSetting:GraphQL:OfferSearch:PqId": {
+      "value": "searchOffersBFF"
+    },
+    "AppSetting:GraphQL:RetrieveBasketPqId": {
+      "value": "retrieveBasketDetailsPqId"
+    },
+    "AppSetting:GraphQL:Brand:PqId": {
+      "value": "brandBFF"
+    },
+    "AppSetting:GraphQL:CarbonIndex:PqId": {
+      "value": "carbonIndexBFF"
+    },
+    "AppSetting:GraphQL:FareConditionsPqId": {
+      "value": "fareConditions"
+    },
+    "AppSetting:BookingCheckOutURL": {
+      "value": "https://travelplus.virginatlantic.com/flight-only/passengers"
+    },
+    // Call Back Translation
+    "AppSetting:PostbackUrl": {
+      "value": "https://resources.virginatlantic.com/search"
+    },
+
+    // Delay used by microservice connecter when making get call after post
+    "AppSetting:TimeToWaitBeforeNextRecall": {
+      "value": ""
+    },
+
+    // Redis cache
+    "AppSetting:RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/avapeunafnwebbffsearch-Config-RedisCacheConnectionString/)"
+    },
+    "AppSetting:RedisCacheExpiry": {
+      "value": ""
+    },
+
+    // test basket settings
+    "KeyVaultUri": {
+      "value": "https://avapeunkvwebbff.vault.azure.net"
+    },
+    "MicroServiceClientId": {
+      "value": ""
+    },
+    "MicroServiceClientSecret": {
+      "value": ""
+    },
+    "BasketUri": {
+      "value": "https://resources.virginatlantic.com/basketmicroservice/basket"
+    },
+    "OfferSubscriptionAutomationKey": {
+      "value": ""
+    },
+    "BasketSubscriptionAutomationKey": {
+      "value": ""
+    },
+
+    //Basket Links
+    "BasketLink": {
+      "value": "https://resources.virginatlantic.com/Search/basket"
+    },
+    "ContactLink": {
+      "value": "https://resources.virginatlantic.com/Search/contact"
+    },
+    "TermsLink": {
+      "value": "https://resources.virginatlantic.com/Search/terms"
+    },
+    "PassengerLink": {
+      "value": "https://resources.virginatlantic.com/Search/passenger/"
+    },
+    "BookCreateOrderPqId": {
+      "value": "SearchOrderCreate"
+    },
+    "OrderConfirmationMockResponse": {
+      "value": "false"
+    },
+
+    //swagger settings
+    "Appsettings:OpenApi__DocTitle": {
+      "value": "Web Search"
+    },
+    "Appsettings:OpenApi__Description": {
+      "value": "This API provides ability to Register and Update Web Search"
+    },
+    "Appsettings:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsettings:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsettings:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsettings:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "Appsettings:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsettings:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/bb74c198-0a08-447b-8e7c-01a9c74dda93/.default"
+    },
+    "Appsettings:GraphQL:MyAccountUrl": {
+      "value": "https://resources.virginatlantic.com/GraphQL/myaccount/public"
+    },
+    "Appsettings:GraphQL:MemberDetailsPqId": {
+      "value": "accountMemberDetails"
+    }
+  }
+}

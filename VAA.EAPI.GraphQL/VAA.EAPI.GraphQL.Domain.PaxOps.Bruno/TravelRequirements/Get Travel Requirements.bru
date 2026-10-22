@@ -1,0 +1,319 @@
+meta {
+  name: Get Travel Requirements
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query GetTravelRequirements {
+    GetTravelRequirements(
+      request: {
+        pnrLocator: "CNMLQN"
+        givenNames: "T"
+        surname: "TEST"
+      }
+    ) {
+      travelRequirementsId
+      applyEmergencyContactToAllPax
+
+      reference {
+        pnrLocator
+        createdDate
+      }
+
+      passengers {
+        passengerId
+        passengerFirstNin
+        passengerLastNin
+        givenNames
+        surname
+        dateOfBirth
+        isInfantPassenger
+        email
+
+        phone {
+          countryCode
+          number
+        }
+
+        documents {
+          documentType
+          givenNames
+          surname
+          dateOfBirth
+          birthDate
+          documentNumber
+          expirationDate
+          expiryDate
+
+          gender {
+            code
+          }
+
+          countryOfResidence {
+            code
+          }
+  
+          nationality {
+            code
+          }
+  
+          issuingCountry {
+            code
+          }
+        }
+  
+        emergencyContact {
+          passengerId
+          firstName
+          lastName
+          phoneCountryCode
+          phoneNumber
+          passengerRefused
+        }
+  
+        sliceRequirements {
+          sliceId
+          passportRequired
+          passportProvided
+          passportVerified
+          baggageDeclared
+          contactTracing
+          contactTracingAvailableFromUtc
+          contactTracingAvailableFromDescription
+          checkedIn
+          overall
+          unhappyPassport
+          returnDateStatus
+          isReturnDateDeclined
+          returnDate
+          checkinEligible
+          secondaryDocumentStatus
+
+          secondaryDocuments {
+            documentType
+            countryCode
+            countryCode3Letter
+            countryName
+            name
+            displayName
+            status
+            secondaryDocumentApplicationOptions {
+              secondaryDocumentId
+              applicationType
+              title
+              message
+              url
+              urlText
+            }
+          }
+
+          governmentForms {
+            status
+            id
+            linkId
+            title
+            url
+            availableFromUtc
+            availableFromDescription
+            isAvailable
+          }
+  
+          passportErrors {
+            code
+            message
+            title
+            category
+            displayCode
+          }
+          travelRequirementErrors {
+            code
+            message
+            title
+            category
+            displayCode
+          }
+        }
+  
+        contactTracing {
+          passengerId
+          streetAddress
+          city
+          state
+          zip
+          email
+          inTransit
+          noEmail
+          noSecondaryPhoneNumber
+          primaryPhoneNumber
+          primaryPhoneNumberCountryCode
+          secondaryPhoneNumber
+          secondaryPhoneNumberCountryCode
+        }
+      }
+  
+      slices {
+        sliceId
+        scheduledDepartureLocalDateTime
+        scheduledDepartureUtcDateTime
+        scheduledArrivalLocalDateTime
+        scheduledArrivalUtcDateTime
+  
+        origin {
+          terminalName
+          code
+          airportName
+          countryCode
+          countryName
+        }
+  
+        destination {
+          terminalName
+          code
+          airportName
+          cityName
+          countryCode
+          countryName
+        }
+  
+        segments {
+          segmentId
+          ordinal
+          scheduledDepartureLocalDateTime
+          scheduledDepartureUtcDateTime
+          scheduledArrivalLocalDateTime
+          scheduledArrivalUtcDateTime
+  
+          marketingCarrier {
+            flightNum
+            carrierCode
+          }
+  
+          operatingCarrier {
+            flightNum
+            carrierCode
+          }
+  
+          origin {
+            terminalName
+            code
+            airportName
+            countryCode
+            countryName
+          }
+  
+          destination {
+            terminalName
+            code
+            airportName
+            cityName
+            countryCode
+            countryName
+          }
+  
+          legs {
+            legId
+          }
+        }
+      }
+    }
+  }
+  
+}
+
+script:post-response {
+  var travelRequirements = res.body.data.GetTravelRequirements;
+  
+  bru.setVar("travelRequirementsId", travelRequirements.travelRequirementsId);
+  
+  //considering happy path for first slice
+  bru.setVar("slice1_Id", travelRequirements.slices[0].sliceId);
+  var destination = travelRequirements.slices[0].destination.countryCode;
+  bru.setVar("countryCode", destination);
+  
+  function generateDocumentNumber() {
+      return "9" + Math.floor(10000000 + Math.random() * 90000000);
+  }
+  
+  function generateExpiryDate() {
+      const date = new Date();
+      const randomDays = Math.floor(Math.random() * (5 * 365));
+      date.setFullYear(date.getFullYear() + 5);
+      date.setDate(date.getDate() + randomDays);
+      return date.toISOString().split('T')[0];
+  }
+
+  const passengers = travelRequirements?.passengers ?? [];
+
+  bru.setVar("pnrLocator", travelRequirements?.reference?.pnrLocator ?? "");
+
+  //passenger 1
+  const pax_1 = passengers[0];
+
+  if (pax_1) {
+    bru.setVar("pax1_Id", pax_1.passengerId);
+    bru.setVar("pax1_GivenNames", pax_1.givenNames);
+    bru.setVar("pax1_Surname", pax_1.surname);
+    bru.setVar("pax1_DateOfBirth", pax_1.dateOfBirth);
+    bru.setVar("pax1_FirstNin", pax_1.passengerFirstNin ?? "");
+    bru.setVar("pax1_LastNin", pax_1.passengerLastNin ?? "");
+
+    const pax_1_Document = pax_1.documents?.[0];
+    bru.setVar("pax1_Gender", pax_1_Document?.gender?.code ?? "M");
+    bru.setVar("pax1_DocumentNumber", pax_1_Document?.documentNumber ?? generateDocumentNumber());
+    bru.setVar("pax1_DocumentExpiryDate", pax_1_Document?.expirationDate ?? generateExpiryDate());
+
+    const pax_1_SliceRequirements = pax_1.sliceRequirements?.find(
+      sliceRequirements => sliceRequirements.sliceId === travelRequirements.slices[0].sliceId
+    ) ?? pax_1.sliceRequirements?.[0];
+    const governmentForm = pax_1_SliceRequirements?.governmentForms?.[0];
+    const secondaryDocument = pax_1_SliceRequirements?.secondaryDocuments?.[0];
+
+    if (governmentForm) {
+      bru.setVar("governmentFormId", governmentForm.id);
+      bru.setVar("governmentFormLinkId", governmentForm.linkId);
+      bru.setVar("governmentFormText", governmentForm.title);
+      bru.setVar("governmentFormHref", governmentForm.url);
+    }
+
+    if (secondaryDocument) {
+      bru.setVar("secondaryDocumentType", secondaryDocument.documentType);
+      bru.setVar("secondaryDocumentCountryCode", secondaryDocument.countryCode ?? "");
+      bru.setVar("secondaryDocumentCountryName", secondaryDocument.countryName ?? "");
+      bru.setVar("secondaryDocumentStatus", secondaryDocument.status);
+      const applicationOptions = secondaryDocument.secondaryDocumentApplicationOptions ?? [];
+      const governmentApplication = applicationOptions.find(x => x.applicationType === "Government");
+      const vendorApplication = applicationOptions.find(x => x.applicationType === "Vendor");
+      const primaryApplication = governmentApplication ?? vendorApplication;
+      bru.setVar("secondaryDocumentId", primaryApplication?.secondaryDocumentId ?? "");
+    }
+  }
+  
+  //passenger 2
+  const pax_2 = passengers[1];
+  
+  if (pax_2) {
+    bru.setVar("pax2_Id", pax_2.passengerId);
+    bru.setVar("pax2_GivenNames", pax_2.givenNames);
+    bru.setVar("pax2_Surname", pax_2.surname);
+    bru.setVar("pax2_DateOfBirth", pax_2.dateOfBirth);
+    bru.setVar("pax2_FirstNin", pax_2.passengerFirstNin ?? "");
+    bru.setVar("pax2_LastNin", pax_2.passengerLastNin ?? "");
+  
+    const pax_2_Document = pax_2.documents?.[0];
+    bru.setVar("pax2_Gender", pax_2_Document?.gender?.code ?? "F");
+    bru.setVar("pax2_DocumentNumber", pax_2_Document?.documentNumber ?? generateDocumentNumber());
+    bru.setVar("pax2_DocumentExpiryDate", pax_2_Document?.expirationDate ?? generateExpiryDate());
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

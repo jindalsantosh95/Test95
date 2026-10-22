@@ -1,0 +1,16 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/CheckIn/SaveReturnDate HTTP/1.1
+
+$[?(@.passengerId == 'transaction-summary-return-date')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "onlineCheckInStatus": {
+    "available": false,
+    "code": "return-date-advisory",
+    "message": "Check-in cannot continue."
+  }
+}

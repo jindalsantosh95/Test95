@@ -1,0 +1,61 @@
+info:
+  name: Save Passport (2nd pax)
+  type: http
+  seq: 8
+
+http:
+  method: POST
+  url: "{{checkinms}}/CheckIn/SavePassport"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: "{\r
+
+      \    \"checkInId\": \"{{checkInId}}\",\r
+
+      \    \"document\": {\r
+
+      \        \"documentType\": \"PASSPORT\",\r
+
+      \        \"givenNames\": \"{{pax2_givennames}}\",\r
+
+      \        \"surname\": \"{{pax2_surname}}\",\r
+
+      \        \"dateOfBirth\": \"2024-04-25\",\r
+
+      \        \"gender\": {\"code\": \"M\"},\r
+
+      \        \"documentNumber\": \"159745178\",\r
+
+      \        \"expirationDate\": \"2030-05-01\",\r
+
+      \        \"issuingCountry\": {\"code\": \"USA\"},\r
+
+      \        \"nationality\": {\"code\": \"USA\"},\r
+
+      \        \"countryOfResidence\": {\"code\": \"USA\"}\r
+
+      \    },\r
+
+      \    \"passengerId\": \"{{pax2_id}}\",\r
+
+      \    \"isScanned\": false\r
+
+      }"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: "var json = res.getBody();\r
+
+        \r
+
+        bru.setVar('checkInid', json.checkInid);"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

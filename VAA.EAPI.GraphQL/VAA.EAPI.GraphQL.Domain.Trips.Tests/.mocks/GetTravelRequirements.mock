@@ -1,0 +1,63 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements HTTP/1.1
+
+$[?(@.pnrLocator != null)]
+$[?(@.givenNames != null)]
+$[?(@.surname != null)]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "reference": {
+    "pnrLocator": "EK49YD"
+  },
+  "slices": [
+    {
+      "sliceId": "checkin-slice-1",
+      "origin": {
+        "code": "LHR"
+      },
+      "destination": {
+        "code": "JFK"
+      }
+    }
+  ],
+  "passengers": [
+    {
+      "passengerFirstNin": "01",
+      "passengerLastNin": "01",
+      "sliceRequirements": [
+        {
+          "sliceId": "checkin-slice-1",
+          "secondaryDocumentStatus": "NOT_REQUIRED"
+        }
+      ]
+    },
+    {
+      "passengerFirstNin": "01",
+      "passengerLastNin": "02",
+      "sliceRequirements": [
+        {
+          "sliceId": "checkin-slice-1",
+          "secondaryDocumentStatus": "REQUIRED"
+        }
+      ]
+    },
+    {
+      "passengerFirstNin": "01",
+      "passengerLastNin": "01",
+      "sliceRequirements": [
+        {
+          "sliceId": "1",
+          "secondaryDocumentStatus": "COMPLETE"
+        },
+        {
+          "sliceId": "2",
+          "secondaryDocumentStatus": "UNKNOWN"
+        }
+      ]
+    }
+  ]
+}

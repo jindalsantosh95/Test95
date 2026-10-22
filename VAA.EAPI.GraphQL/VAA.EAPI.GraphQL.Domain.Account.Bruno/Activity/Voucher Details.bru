@@ -1,0 +1,31 @@
+meta {
+  name: Voucher Details
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query VoucherDetails {
+    voucherDetails(page: 1, pageSize: 10) {
+      type
+      source
+      description
+      issueDate
+      expiryDate
+      status
+      number
+      isGifted
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Get Customer Profile by Member Number
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{customer_base_url}}/customer/loyalty/{{customer_member_number}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  const body = res.getBody();
+  const customer = body.customer ?? body.Customer;
+  const address = customer?.addressDetails?.[0] ?? customer?.AddressDetails?.[0];
+
+  if (!address || !Object.prototype.hasOwnProperty.call(address, "addressVerified")) {
+    throw new Error("Customer profile address must include addressVerified.");
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

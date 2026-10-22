@@ -1,0 +1,315 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sit",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppServicePlanName": {
+      "value": "AVATEUNASPEAPI1"
+    },
+    "EnvironmentName": {
+      "value": "SIT"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-T-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVATEUNAFNCUSTTRANSMS"
+    },
+    "AppInsightsName": {
+      "value": "AVATEUNAICUSTTRNS"
+    },
+    /*"AppsettingAppInsightsKey": {
+      "value": "0833ce80-b6d5-4bbb-b0a0-0760a1267c24"
+    },*/
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNCUSTTRANSMS-Config-StorageAccount/)"
+    },
+    "AppsettingAzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNCUSTTRANSMS-Config-AzureAD-ClientId/)"
+    },
+    "AppsettingAzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "AppsettingAzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AppsettingAzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "AppSetting:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNCUSTTRANSMS-Config-StorageAccount/)"
+    },
+    "AppsettingCosmosSqlDBConnectionMode": {
+      "value": "Direct"
+    },
+    "AppsettingContactNoteDocType": {
+      "value": "ContactNote"
+    },
+    "AppsettingContactNoteEventSubject": {
+      "value": "ContactNotes"
+    },
+    "AppsettingTargetedMembershipDocType": {
+      "value": "TargetedMembership"
+    },
+    "AppsettingTargetedMembershipEventSubject": {
+      "value": "TargetedMembership"
+    },
+    "Appsetting:CampaignEnrolmentDocType": {
+      "value": "CampaignEnrollment"
+    },
+    "Appsetting:CampaignEnrolmentEventSubject": {
+      "value": "CampaignEnrollment"
+    },
+    "Appsetting:MembershipChangeDocType": {
+      "value": "MembershipChange"
+    },
+    "Appsetting:FlyingClubMemberDocType": {
+      "value": "FlyingClubMember"
+    },
+    "Appsetting:FlyingClubMemberEventSubject": {
+      "value": "FlyingClubMember"
+    },
+    "Appsetting:RuleEngineTopicName": {
+      "value": "ruleengineeventmessages"
+    },
+    "AppsettingAwardDocType": {
+      "value": "Award"
+    },
+    "AppsettingAwardEventSubject": {
+      "value": "Awards"
+    },
+    "Appsetting:ActivityDocType": {
+      "value": "Activity"
+    },
+    "AppsettingTopMemberProductID": {
+      "value": "1634561747"
+    },
+    "AppsettingTransactionDBEndPoint": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNCUSTTRANSMS-Config-TransactionDBEndPoint/)"
+    },
+    "AppsettingTransactionDB": {
+      "value": "CustomerTransactionsDB_Acc"
+    },
+    "AppsettingTransactionCollection": {
+      "value": "CustomerDetailsCollection"
+    },
+    "AppsettingServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNCUSTTRANSMS-Config-ServiceBusConnectionString/)"
+    },
+    "AppsettingServiceBusTopicName": {
+      "value": "customertransactioneventmessages"
+    },
+    "AppsettingCommandStatusLocation": {
+      "value": "https://Testresources.virginatlantic.com/sit/customertransactions/{0}s/status/{1}"
+    },
+    "AppsettingCommandStatusPollingDelayMS": {
+      "value": "100"
+    },
+    "AppsettingCommandStatusPollingRetryCount": {
+      "value": "50"
+    },
+    "AppsettingMicroServiceEventStoreTableName": {
+      "value": "CustomerTransactionEvents"
+    },
+    "AppsettingMicroServiceResponseTableName": {
+      "value": "CustomerTransactionEventResponses"
+    },
+    "AppsettingCustomerTransactionDB": {
+      "value": "CustomerTransactionsDB_Acc"
+    },
+    "AppsettingCustomerTransactionCollection": {
+      "value": "CustomerDetailsCollection"
+    },
+    "MemberCustomAttributesDocType": {
+      "value": "MemberCustomAttributes"
+    },
+    "MemberCustomAttributesEventSubject": {
+      "value": "MemberCustomAttributes"
+    },
+
+    // GroupDocType
+
+    "Appsetting:GroupDocType": {
+      "value": "Group"
+    },
+    "Appsetting:GroupDocTypeEventSubject": {
+      "value": "GroupDocTypeEventSubject"
+    },
+    //PartnerMembershipDocType
+
+    "Appsetting:PartnerMembershipDocType": {
+      "value": "PartnerMembership"
+    },
+    "Appsetting:PartnerMembershipEventSubject": {
+      "value": "PartnerMembershipEventSubject"
+    },
+    //Audit
+    "Appsetting:AuditServiceBusTopicName": {
+      "value": "auditeventmessages"
+    },
+    "Appsetting:CustomerSearchTopicName": {
+      "value": "customereventmessages"
+    },
+    // Transaction Document
+    "Appsetting:BannerResponseURL": {
+      "value": "https://Testresources.virginatlantic.com/sit/customertransactions/CreateBannerResponse/{CorrelationId}"
+    },
+    "Appsetting:ResponsePollingCount": {
+      "value": "50"
+    },
+    "Appsetting:ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "Appsetting:TransactionDocType": {
+      "value": "Transaction"
+    },
+    "Appsetting:TransactionEventSubject": {
+      "value": "Transaction"
+    },
+    "Appsetting:CustomerProfileDocType": {
+      "value": "CustomerProfile"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+
+    //Slot Settings
+    "storageAccountName": {
+      "value": "avateunstcustomertrsapi"
+    },
+    "vaultName": {
+      "value": "AVATEUNKVEMS"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNCUSTTRANSMS-Config-AzureAD-ClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    //swagger
+
+    "Appsettings:OpenApi__DocTitle": {
+      "value": "Customer Transaction Microservice"
+    },
+    "Appsettings:OpenApi__Description": {
+      "value": "This API is for customer transactions"
+    },
+    "Appsettings:OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/dev/customertransactions/,https://testresources.virginatlantic.com/sit/customertransactions/,https://testresources.virginatlantic.com/customertransactions/,https://resources.virginatlantic.com/customertransactions/"
+    },
+    "Appsettings:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsettings:OpenApi__Version": {
+      "value": "v4"
+    },
+    "Appsettings:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsettings:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/f1df1886-f232-49bd-a74d-cd3d5043b488/.default"
+    },
+    "Appsettings:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsettings:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    //redeemvoucher
+    "Appsettings:BlobConnStringForStatementTxt": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNCUSTTRANSMS-Config-BlobConnStringForStatementTxt/)"
+    },
+    "Appsettings:ContainerNameForStatementTxt": {
+      "value": "transactionstatementtexts"
+    },
+    "Appsettings:BlobNameForStatementTxt": {
+      "value": "StatementTextValues.json"
+    },
+    "Appsettings:LoyaltyMemberMgmtStorageSASKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNCUSTTRANSMS-Config-LoyaltyMemberMgmtStorageSASKey/)"
+    },
+    "Appsettings:VredServiceBusTopicName": {
+      "value": "vredeventmessages"
+    },
+    "Appsettings:VredCommandStatusLocation": {
+      "value": "https://digital-test.virginatlantic.com/SIT/digital/vred/{0}/response/{1}"
+    },
+    "Appsettings:CacheExpiryHours": {
+      "value": "8"
+    },
+    "Appsettings:TransactionRecentWindowHours": {
+      "value": "1"
+    },
+    "Appsettings:VoucherMonitoringDurationMinutes": {
+      "value": "15"
+    },
+    "tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Customer API AFN",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AVADEUNAFNCUSTTRANSSMS\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

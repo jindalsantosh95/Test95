@@ -1,0 +1,19 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/dev/earn/error HTTP/1.1
+Content-Type: application/json; charset=utf-8
+
+###Response
+HTTP/1.1 400 CLIENT_ERROR
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+  "status": 400,
+  "url": "/transactions/api/v2/pointsTransactions",
+  "code": "CLIENT_ERROR",
+  "message": "requestId must not be blank",
+  "description": "Unable to connect to VRed Transaction endpoint"
+}

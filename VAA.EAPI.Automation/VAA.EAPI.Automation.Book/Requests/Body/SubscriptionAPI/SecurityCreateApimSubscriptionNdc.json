@@ -1,0 +1,28 @@
+{
+  "query": "mutation Mutation($request: NDCSubscriptionCreateMutationRequestInput!) {\n  securityCreateAPIMSubscriptionNDC(request: $request) {\n    subscriptionState\n    subscriptionKeys {\n      key\n      validFrom\n      validTo\n    }\n    channel\n    environment\n    status\n  }\n}\n",
+  "variables": {
+    "request": {
+      "party": {
+        "agency": {
+          "agencyId": "",
+          "agencyName": ""
+        },
+        "aggregator": {
+          "aggregatorId": "",
+          "aggregatorName": ""
+        }
+      },
+      "userAccount": {
+        "firstName": "",
+        "lastName": "",
+        "emailAddress": ""
+      },
+      "channel": "",
+      "environment": ""
+    }
+  },
+  "operationName": "Mutation"
+}
+
+
+

@@ -1,0 +1,49 @@
+meta {
+  name: rewardSeatAvailability
+  type: graphql
+  seq: 45
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  query RewardSeatAvailability($request: RewardSeatAvailabilityRequestInput!) {
+    rewardSeatAvailability(request: $request) {
+      pointsDays {
+        date
+        minPrice
+        currency
+        minAwardPointsTotal
+        seats {
+          awardEconomy { cabinPointsValue price currency isSaverAward cabinClassSeatCount cabinClassSeatCountString }
+          awardPremium { cabinPointsValue price currency isSaverAward cabinClassSeatCount cabinClassSeatCountString }
+          awardUpperClass { cabinPointsValue price currency isSaverAward cabinClassSeatCount cabinClassSeatCountString }
+        }
+      }
+      month
+      year
+      totalAwardsSeatsForMonth
+      originPrettyName
+      destinationPrettyName
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {
+      "slice": { "origin": "LHR", "destination": "JFK", "departure": "2027-01-01" },
+      "years": [2027],
+      "months": ["JANUARY"]
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 30000
+}

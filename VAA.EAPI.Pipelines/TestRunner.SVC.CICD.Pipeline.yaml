@@ -1,0 +1,60 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Utility.TestRunner.Service*
+      - VAA.EAPI.Automation/VAA.EAPI.Heimdall*
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Heimdall.UI*
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI*
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Core*
+    exclude:       
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Utility.TestRunner.Service.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Utility.TestRunner.Service*
+      - VAA.EAPI.Automation/VAA.EAPI.Heimdall*
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Heimdall.UI*
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.SearchAndBook.UI*
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Core*
+    exclude:       
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.Utility.TestRunner.Service.bruno
+
+variables: 
+  - group: Common_Variables
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines'    
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release' 
+  - name: rootPath
+    value: 'VAA.EAPI.Automation' 
+  - name: subRootPath
+    value: 'VAA.EAPI.Automation'   
+  - name: applicationName
+    value: 'Utility.TestRunner.Service'        
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_testrunner.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      rootPath: $(rootPath)  
+      subRootPath: $(subRootPath)
+      applicationName: $(applicationName)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)

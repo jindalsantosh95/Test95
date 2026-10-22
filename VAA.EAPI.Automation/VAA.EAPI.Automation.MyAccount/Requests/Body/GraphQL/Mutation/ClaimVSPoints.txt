@@ -1,0 +1,30 @@
+mutation ClaimVSPoints($ticketNumber: String, $fcNumber: String) {
+  claimVSPoints(ticketNumber: $ticketNumber, fcNumber: $fcNumber) {
+    totalVirginPoints
+    totalTierPoints
+    totalBonusPoints
+    segmentDetails {
+      operatingAirlineName
+      operatingAirlineCode
+      dateOfFlight
+      flightNumber
+      originAirportCode
+      destinationAirportCode
+      originAirportName
+      destinationAirportName
+      originAirportCountry
+      destinationAirportCountry
+      virginPoints
+      tierPoints
+      bonusPoints
+      isPartialTransaction
+    }
+    errorResponse {
+      message
+      extentions {
+        exception
+        code
+      }
+    }
+  }
+}

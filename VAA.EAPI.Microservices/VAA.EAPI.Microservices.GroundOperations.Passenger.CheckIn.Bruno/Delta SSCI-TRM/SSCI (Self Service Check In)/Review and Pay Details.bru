@@ -1,0 +1,35 @@
+meta {
+  name: Review and Pay Details
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{delta_ssci}}/{{travelparty_id}}/reviewAndPayDetail
+  body: json
+  auth: inherit
+}
+
+headers {
+  AppChannelName: DFMOBILE
+  AppID: D2
+  ClientID: VAMobileAppAIR4_CC_SI
+  ~appid: OCI
+}
+
+script:post-response {
+  var json = res.getBody();
+  
+  console.log("BagPurchaseDetails: " + json.bagPurchaseDetails);
+  console.log("allPassengerAmountDueTotal: " + json.allPassengerAmountDueTotal);
+  
+  bru.setVar("allPaxAmountDue", json.allPassengerAmountDueTotal[0].price);
+  bru.setVar("baggageCurrencyCode", json.allPassengerAmountDueTotal[0].currency);
+  
+  bru.setVar("pax1_price", json.bagPurchaseDetails[0].totalCost)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

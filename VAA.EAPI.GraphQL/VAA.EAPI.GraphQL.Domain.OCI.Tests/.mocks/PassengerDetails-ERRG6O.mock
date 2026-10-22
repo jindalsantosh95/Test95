@@ -1,0 +1,50 @@
+###Request
+GET https://testresources.virginatlantic.com/DEV/digital/Trip/passengerDetails/Test-booking-Id HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "passengerInformation": {
+    "bookingId": "Test-booking-Id",
+    "passengers": [
+      {
+        "passengerResourceId": "8c4c998e-6c30-4f6a-b787-ff8d77eac21c",
+        "firstNameNum": "01",
+        "lastNameNum": "01",
+        "advancePassengerInformation": {
+          "trustedTravelerPrograms": [
+            { "number": "456789012", "program": "REDRESS_NUMBER" },
+            { "number": "123456789", "program": "KNOWN_TRAVELER_NUMBER" },
+            { "number": "", "program": "CANADA_TRAVELER_NUMBER" }
+          ]
+        }
+      },
+      {
+        "passengerResourceId": "5e9e1255-b51a-49a1-9cfa-ecd40b46a4b0",
+        "firstNameNum": "01",
+        "lastNameNum": "02",
+        "advancePassengerInformation": {
+          "trustedTravelerPrograms": [
+            { "number": "", "program": "REDRESS_NUMBER" },
+            { "number": "987654321", "program": "KNOWN_TRAVELER_NUMBER" },
+            { "number": "CAN1234567890", "program": "CANADA_TRAVELER_NUMBER" }
+          ]
+        }
+      },
+      {
+        "passengerResourceId": "750cbc7c-a6b9-4925-97d8-e40310e2d1f9",
+        "firstNameNum": "01",
+        "lastNameNum": "03",
+        "advancePassengerInformation": {
+          "trustedTravelerPrograms": [
+            { "number": "789456123", "program": "REDRESS_NUMBER" },
+            { "number": "", "program": "KNOWN_TRAVELER_NUMBER" },
+            { "number": "", "program": "CANADA_TRAVELER_NUMBER" }
+          ]
+        }
+      }
+    ]
+  }
+}

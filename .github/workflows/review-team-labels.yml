@@ -1,0 +1,170 @@
+name: Review Team Labels
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, review_requested, review_request_removed]
+    branches: [main]
+  pull_request_review:
+    types: [submitted, dismissed]
+  workflow_dispatch:
+    inputs:
+      pull_request_number:
+        description: Pull request number to reconcile
+        required: true
+        type: number
+
+concurrency:
+  group: review-team-labels-${{ github.event.pull_request.number || inputs.pull_request_number }}
+  cancel-in-progress: true
+
+jobs:
+  reconcile:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.base.ref == 'main' }}
+    name: review-team-labels
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Reconcile requested team labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pull_number = context.payload.pull_request?.number
+              ?? Number('${{ inputs.pull_request_number }}');
+            const configPath = '.github/review-team-labels.json';
+
+            if (!Number.isInteger(pull_number) || pull_number <= 0) {
+              core.setFailed('A valid pull request number is required.');
+              return;
+            }
+
+            // Read trusted configuration from the current base branch. A pull
+            // request's base SHA can predate this workflow on long-lived PRs.
+            let configRef = context.payload.pull_request?.base?.ref;
+            if (!configRef) {
+              const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number });
+              configRef = pr.base?.ref;
+            }
+            configRef = configRef ?? context.payload.repository?.default_branch;
+            if (!configRef) {
+              throw new Error('Could not determine the trusted base branch for review label configuration.');
+            }
+            const { data: configFile } = await github.rest.repos.getContent({
+              owner,
+              repo,
+              path: configPath,
+              ref: configRef
+            });
+            if (Array.isArray(configFile) || !('content' in configFile)) {
+              throw new Error(`${configPath} must be a JSON file.`);
+            }
+
+            const config = JSON.parse(
+              Buffer.from(configFile.content, configFile.encoding).toString('utf8')
+            );
+            const labelPrefix = config.managedLabelPrefix;
+            const labelColor = config.labelColor;
+            const teamLabels = config.teamLabels;
+
+            if (typeof labelPrefix !== 'string' || labelPrefix.length === 0) {
+              throw new Error(`${configPath}: managedLabelPrefix must be a non-empty string.`);
+            }
+            if (typeof labelColor !== 'string' || !/^[0-9a-f]{6}$/i.test(labelColor)) {
+              throw new Error(`${configPath}: labelColor must be a six-character hex colour without '#'.`);
+            }
+            if (!teamLabels || typeof teamLabels !== 'object' || Array.isArray(teamLabels)) {
+              throw new Error(`${configPath}: teamLabels must be an object mapping team slugs to label names.`);
+            }
+
+            for (const [teamSlug, labelName] of Object.entries(teamLabels)) {
+              if (!teamSlug || typeof labelName !== 'string' || !labelName.startsWith(labelPrefix)) {
+                throw new Error(`${configPath}: every team must map to a label beginning with '${labelPrefix}'.`);
+              }
+              if (labelName.length > 50) {
+                throw new Error(`${configPath}: label '${labelName}' exceeds GitHub's 50-character limit.`);
+              }
+            }
+
+            const { data: reviewRequests } = await github.rest.pulls.listRequestedReviewers({
+              owner,
+              repo,
+              pull_number
+            });
+
+            const desiredLabels = new Map();
+            for (const team of reviewRequests.teams) {
+              const labelName = teamLabels[team.slug];
+              if (!labelName) {
+                core.warning(`No review label mapping exists for @${owner}/${team.slug} in ${configPath}.`);
+                continue;
+              }
+
+              const mappedTeams = desiredLabels.get(labelName) ?? [];
+              mappedTeams.push(team.slug);
+              desiredLabels.set(labelName, mappedTeams);
+            }
+
+            const currentLabels = await github.paginate(github.rest.issues.listLabelsOnIssue, {
+              owner,
+              repo,
+              issue_number: pull_number,
+              per_page: 100
+            });
+            const managedLabels = currentLabels
+              .map(label => label.name)
+              .filter(name => name.startsWith(labelPrefix));
+
+            for (const [name, teamSlugs] of desiredLabels) {
+              const description = `Review requested from ${teamSlugs.map(slug => `@${owner}/${slug}`).join(', ')}`;
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name });
+              } catch (error) {
+                if (error.status !== 404) {
+                  throw error;
+                }
+
+                try {
+                  await github.rest.issues.createLabel({
+                    owner,
+                    repo,
+                    name,
+                    color: labelColor,
+                    description: description.slice(0, 100)
+                  });
+                  core.info(`Created label ${name}.`);
+                } catch (createError) {
+                  if (createError.status !== 422) {
+                    throw createError;
+                  }
+
+                  // Another PR may have created this repository-wide label
+                  // after getLabel returned 404. Confirm that race and carry on.
+                  try {
+                    await github.rest.issues.getLabel({ owner, repo, name });
+                    core.info(`Label ${name} was created by another workflow run.`);
+                  } catch (confirmError) {
+                    throw createError;
+                  }
+                }
+              }
+            }
+
+            const labelsToAdd = [...desiredLabels.keys()]
+              .filter(name => !managedLabels.includes(name));
+            if (labelsToAdd.length > 0) {
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: pull_number,
+                labels: labelsToAdd
+              });
+              core.info(`Added labels: ${labelsToAdd.join(', ')}.`);
+            }
+
+            if (labelsToAdd.length === 0) {
+              core.info(`Review team labels are already current for pull request ${pull_number}.`);
+            }

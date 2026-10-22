@@ -1,0 +1,217 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Trips*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.NDCHealthCheck*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*  
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Trips.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Trips*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+      
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.NDCHealthCheck*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*  
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Trips.bruno
+
+variables: 
+  - group: APIM  
+  - group: APIM_IP
+  - group: Common_Variables
+  - group: Graphql_Trips
+  - group: Graphql_Stitch
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'
+  - name: testRepoPath_SIT
+    value: ''   
+  - name: testRepoPath_UAT
+    value: ''      
+  - name: rootPath
+    value: 'VAA.EAPI.GraphQL'
+  - name: subRootPath
+    value: 'VAA.EAPI'    
+  - name: applicationName
+    value: 'GraphQL'
+  - name: functionAppName_Secure_DT1
+    value: 'AVADEUNAFNGRAPHQLTripsDT1'
+  - name: functionAppName_Secure_DT2
+    value: 'AVADEUNAFNGRAPHQLTripsDT2'
+  - name: functionAppName_Secure_DT3
+    value: 'AVADEUNAFNGRAPHQLTripsDT3'
+  - name: functionAppName_Secure_DT4
+    value: 'AVADEUNAFNGRAPHQLTripsDT4'
+  - name: functionAppName_Secure_DT5
+    value: 'AVADEUNAFNGRAPHQLTripsDT5'
+  - name: functionAppName_Secure_DEV
+    value: 'AVADEUNAFNGRAPHQLTrips'
+  - name: functionAppName_Secure_SIT
+    value: 'AVATEUNAFNGRAPHQLTrips'
+  - name: functionAppName_Secure_UAT
+    value: 'AVASEUNAFNGRAPHQLTrips'
+  - name: functionAppName_Secure_PRD
+    value: 'AVAPEUNAFNGRAPHQLTrips'
+  - name: functionAppName_Public_DT1
+    value: 'AVADEUNAFNGRAPHQLTripsPDT1'
+  - name: functionAppName_Public_DT2
+    value: 'AVADEUNAFNGRAPHQLTripsPDT2'
+  - name: functionAppName_Public_DT3
+    value: 'AVADEUNAFNGRAPHQLTripsPDT3'
+  - name: functionAppName_Public_DT4
+    value: 'AVADEUNAFNGRAPHQLTripsPDT4'
+  - name: functionAppName_Public_DT5
+    value: 'AVADEUNAFNGRAPHQLTripsPDT5'     
+  - name: functionAppName_Public_DEV
+    value: 'AVADEUNAFNGRAPHQLTripsP'
+  - name: functionAppName_Public_SIT
+    value: 'AVATEUNAFNGRAPHQLTripsP'
+  - name: functionAppName_Public_UAT
+    value: 'AVASEUNAFNGRAPHQLTripsP'
+  - name: functionAppName_Public_PRD
+    value: 'AVAPEUNAFNGRAPHQLTripsP'      
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/MyTrips/build_graphqlTrips.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      rootPath: $(rootPath)
+      location: $(location)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName)
+      resourceGroupName_DEV: $(resourceGroupNameGraphql_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameGraphql_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameGraphql_UAT)
+      resourceGroupName_PROD: $(resourceGroupNameGraphql_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+
+  # CD (Deployment) Pipeline
+  - template: functions/MyTrips/release_graphqlTrips_DT5.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      applicationName: $(applicationName)
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)  
+      functionAppName_Secure_DT1: $(functionAppName_Secure_DT1)
+      functionAppName_Secure_DT2: $(functionAppName_Secure_DT2)
+      functionAppName_Secure_DT3: $(functionAppName_Secure_DT3)
+      functionAppName_Secure_DT4: $(functionAppName_Secure_DT4)    
+      functionAppName_Secure_DT5: $(functionAppName_Secure_DT5)   
+      functionAppName_Secure_DEV: $(functionAppName_Secure_DEV)
+      functionAppName_Secure_SIT: $(functionAppName_Secure_SIT)
+      functionAppName_Secure_UAT: $(functionAppName_Secure_UAT)
+      functionAppName_Secure_PRD: $(functionAppName_Secure_PRD)
+      functionAppName_Public_DT1: $(functionAppName_Public_DT1)
+      functionAppName_Public_DT2: $(functionAppName_Public_DT2)
+      functionAppName_Public_DT3: $(functionAppName_Public_DT3)
+      functionAppName_Public_DT4: $(functionAppName_Public_DT4)
+      functionAppName_Public_DT5: $(functionAppName_Public_DT5)
+      functionAppName_Public_DEV: $(functionAppName_Public_DEV)
+      functionAppName_Public_SIT: $(functionAppName_Public_SIT)
+      functionAppName_Public_UAT: $(functionAppName_Public_UAT)
+      functionAppName_Public_PRD: $(functionAppName_Public_PRD)
+      AppInsightsName_DEV: $(AppInsightsName_DEV)
+      AppInsightsName_SIT: $(AppInsightsName_SIT)
+      AppInsightsName_UAT: $(AppInsightsName_UAT)
+      AppInsightsName_PROD: $(AppInsightsName_PROD)
+      storageAccountName_DEV: $(AzureWebJobsStorage_GQLTrips_Sec_DEV)
+      storageAccountName_SIT: $(AzureWebJobsStorage_GQLTrips_Sec_SIT)
+      storageAccountName_UAT: $(AzureWebJobsStorage_GQLTrips_Sec_UAT)   
+      storageAccountName_PROD: $(AzureWebJobsStorage_GQLTrips_Sec_PROD)
+      storageAccountName_DEV_P: $(AzureWebJobsStorage_GQLTrips_Public_DEV)
+      storageAccountName_SIT_P: $(AzureWebJobsStorage_GQLTrips_Public_SIT)
+      storageAccountName_UAT_P: $(AzureWebJobsStorage_GQLTrips_Public_UAT)   
+      storageAccountName_PROD_P: $(AzureWebJobsStorage_GQLTrips_Public_PROD)       
+      location: $(location)
+      resourceGroupName_DT1: $(resourceGroupName_DT1)
+      AppInsightsName_DT1: $(AppInsightsName_DT1)
+      appserviceplan_DT1: $(appserviceplan_DT1)
+      KeyvaultName_DT1: $(KeyvaultName_DT1)
+      storageAccountName_DT1: $(storageAccountName_DT1)
+      storageAccountName_P_DT1: $(storageAccountName_P_DT1)  
+      resourceGroupName_DT2: $(resourceGroupName_DT2)
+      AppInsightsName_DT2: $(AppInsightsName_DT2)
+      appserviceplan_DT2: $(appserviceplan_DT2)
+      KeyvaultName_DT2: $(KeyvaultName_DT2)
+      storageAccountName_DT2: $(storageAccountName_DT2)
+      storageAccountName_P_DT2: $(storageAccountName_P_DT2)  
+      resourceGroupName_DT3: $(resourceGroupName_DT3)
+      AppInsightsName_DT3: $(AppInsightsName_DT3)
+      appserviceplan_DT3: $(appserviceplan_DT3)
+      KeyvaultName_DT3: $(KeyvaultName_DT3)
+      storageAccountName_DT3: $(storageAccountName_DT3)
+      storageAccountName_P_DT3: $(storageAccountName_P_DT3)  
+      resourceGroupName_DT4: $(resourceGroupName_DT4)
+      AppInsightsName_DT4: $(AppInsightsName_DT4)
+      appserviceplan_DT4: $(appserviceplan_DT4)
+      KeyvaultName_DT4: $(KeyvaultName_DT4)
+      storageAccountName_DT4: $(storageAccountName_DT4)
+      storageAccountName_P_DT4: $(storageAccountName_P_DT4)  
+      resourceGroupName_DT5: $(resourceGroupName_DT5)
+      AppInsightsName_DT5: $(AppInsightsName_DT5)
+      appserviceplan_DT5: $(appserviceplan_DT5)
+      KeyvaultName_DT5: $(KeyvaultName_DT5)
+      storageAccountName_DT5: $(storageAccountName_DT5)
+      storageAccountName_P_DT5: $(storageAccountName_P_DT5)
+      VARIABLE_GROUP_NAME_SCHEMA: "SchemaValidation_DEV"
+      VARIABLE_GROUP_NAME_DEV: "TESTING_TRIPS_VARIABLES_DEV"
+      VARIABLE_GROUP_NAME_SIT: "TESTING_TRIPS_VARIABLES_SIT"
+      VARIABLE_GROUP_NAME_UAT: "TESTING_TRIPS_VARIABLES_UAT"
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)  
+      stitchfunctionAppName_DEV: $(stitchfunctionAppName_DEV)
+      stitchfunctionAppName_SIT: $(stitchfunctionAppName_SIT)
+      stitchfunctionAppName_UAT: $(stitchfunctionAppName_UAT)
+      stitchfunctionAppName_PROD: $(stitchfunctionAppName_PROD)
+      stitchrgname_DEV: $(stitchrgname_DEV)
+      stitchrgname_SIT: $(stitchrgname_SIT)
+      stitchrgname_UAT: $(stitchrgname_UAT)
+      stitchrgname_PROD: $(stitchrgname_PROD)
+      SLACK_API_TOKEN: $(SLACK_API_TOKEN)
+      SLACK_TITLE: $(SLACK_TITLE_TRIPS)

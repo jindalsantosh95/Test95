@@ -1,0 +1,28 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "APIMName": {
+            "type": "string",
+            "defaultValue": "avaxeunamcag001"            
+        },
+        "ProductName": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+          "type": "Microsoft.ApiManagement/service/products",
+          "apiVersion": "2021-12-01-preview",
+          "name": "[concat(parameters('APIMName'), '/', parameters('ProductName'))]",
+          "properties": {
+            "displayName": "[parameters('ProductName')]",
+            "description": "[concat(parameters('ProductName'), ' product.')]",
+            "subscriptionRequired": true,
+            "approvalRequired": false,
+            "state": "notPublished"
+          }
+        },         
+
+    ]
+}

@@ -1,0 +1,358 @@
+###Request
+POST https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements HTTP/1.1
+
+$[?(@.confirmationNum == 'EARYFL')]
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "requirementsResourceId": "5f11d6c8-bc3e-484a-a8f5-a802f49652b8",
+    "checkin": false,
+    "travelRequirements": {
+        "id": "9d8a097b-086d-42d4-9d34-59924f26ee03",
+        "bookingReference": {
+            "id": "EARYFL",
+            "creationDate": "2025-08-31T00:00:00Z"
+        },
+        "trips": [
+            {
+                "id": "b78e566e-64c4-47a2-ac9f-795ae4507182",
+                "ordinal": 0,
+                "departureStation": {
+                    "code": "LHR",
+                    "name": "Heathrow Airport",
+                    "country": {
+                        "code": "GB",
+                        "isoAlpha3Code": "GBR"
+                    }
+                },
+                "arrivalStation": {
+                    "code": "ATL",
+                    "name": "Hartsfield-Jackson Atlanta Intl",
+                    "country": {
+                        "code": "US",
+                        "isoAlpha3Code": "USA"
+                    }
+                },
+                "firstDepartureLocalDate": "2025-09-01T11:20:00+01:00",
+                "lastArrivalLocalDate": "2025-09-01T15:35:00-04:00",
+                "segments": [
+                    {
+                        "id": "b74f9930-e832-4be8-ac12-1e109101c538",
+                        "ordinal": 1,
+                        "operatingCarrier": {
+                            "code": "VS",
+                            "name": "Virgin Atlantic"
+                        },
+                        "flightNum": "0103",
+                        "marketingSegment": {
+                            "flightNum": "0103",
+                            "marketingCarrier": [
+                                {
+                                    "code": "VS",
+                                    "name": "Virgin Atlantic"
+                                }
+                            ]
+                        },
+                        "legs": [
+                            {
+                                "id": "bbea4fc1-dcaa-4300-879d-7ea3a5242a83",
+                                "ordinal": 1,
+                                "departure": {
+                                    "station": {
+                                        "code": "LHR",
+                                        "name": "Heathrow Airport",
+                                        "country": {
+                                            "code": "GB",
+                                            "isoAlpha3Code": "GBR"
+                                        }
+                                    },
+                                    "estimatedDepartureLocalDateTime": "2025-09-01T11:20:00+01:00",
+                                    "scheduledDepartureLocalDateTime": "2025-09-01T11:20:00+01:00",
+                                    "estimatedDepartureUTCDateTime": "2025-09-01T10:20:00Z",
+                                    "scheduledDepartureUTCDateTime": "2025-09-01T10:20:00Z"
+                                },
+                                "arrival": {
+                                    "station": {
+                                        "code": "ATL",
+                                        "name": "Hartsfield-Jackson Atlanta Intl",
+                                        "country": {
+                                            "code": "US",
+                                            "isoAlpha3Code": "USA"
+                                        }
+                                    },
+                                    "estimatedArrivalLocalDateTime": "2025-09-01T15:35:00-04:00",
+                                    "scheduledArrivalLocalDateTime": "2025-09-01T15:35:00-04:00",
+                                    "estimatedArrivalUTCDateTime": "2025-09-01T19:35:00Z",
+                                    "scheduledArrivalUTCDateTime": "2025-09-01T19:35:00Z"
+                                },
+                                "international": true
+                            }
+                        ],
+                        "international": true,
+                        "transportType": "AIR"
+                    }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": true
+            }
+        ],
+        "passengers": [
+            {
+                "passengerResourceId": "2fe89395-0ab8-41ea-a06c-fd7408a85e89",
+                "givenNames": "TEST",
+                "surname": "MEMBERRORO",
+                "nameNum": "01.01",
+                "customerId": "9999227466407",
+                "birthDate": "1950-08-27T00:00:00Z",
+                "status": {
+                    "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "bbea4fc1-dcaa-4300-879d-7ea3a5242a83",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "NOT_OK"
+                                                },
+                                                "exceptions": [
+                                                    {
+                                                        "code": "travelrequirement_030_001",
+                                                        "displayCode": "FirstNameAndLastNameMismatch",
+                                                        "message": "The surname and given name entered does not match the reservation.",
+                                                        "developerMessage": "The surname and given name entered does not match the reservation.",
+                                                        "category": "ERROR",
+                                                        "priority": 1
+                                                    }
+                                                ],
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "CONTACT_TRACING",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "acceptanceWindow": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "from": "PT72H",
+                                                    "to": ""
+                                                },
+                                                "effectivity": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "effectiveUTCDate": "2021-11-08 04:01:00Z",
+                                                    "expirationUTCDate": "2029-11-08 00:00:00Z",
+                                                    "effectiveLocalDate": "2021-11-08 00:00:00Z",
+                                                    "expirationLocalDate": "2029-11-08 00:00:00Z"
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "ruleId": "LEG_INTL_US-S1LHRATL",
+                                                "digitalVerificationEligible": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "b78e566e-64c4-47a2-ac9f-795ae4507182",
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "NOT_OK",
+                                                    "reason": "travelrequirement_030_006"
+                                                },
+                                                "exceptions": [
+                                                    {
+                                                        "code": "travelrequirement_030_006",
+                                                        "displayCode": "PassportExpiredBeforeDeparture",
+                                                        "message": "PassportExpiredBeforeDeparture",
+                                                        "developerMessage": "",
+                                                        "category": "ERROR",
+                                                        "priority": 2
+                                                    },
+                                                    {
+                                                        "code": "travelrequirement_030_001",
+                                                        "displayCode": "FirstNameAndLastNameMismatch",
+                                                        "message": "The surname and given name entered does not match the reservation.",
+                                                        "developerMessage": "The surname and given name entered does not match the reservation.",
+                                                        "category": "ERROR",
+                                                        "priority": 1
+                                                    }
+                                                ],
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "CONTACT_TRACING",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "acceptanceWindow": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "from": "PT72H",
+                                                    "to": ""
+                                                },
+                                                "effectivity": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "effectiveUTCDate": "2021-11-08 04:01:00Z",
+                                                    "expirationUTCDate": "2029-11-08 00:00:00Z",
+                                                    "effectiveLocalDate": "2021-11-08 00:00:00Z",
+                                                    "expirationLocalDate": "2029-11-08 00:00:00Z"
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "ruleId": "LEG_INTL_US-S1LHRATL",
+                                                "digitalVerificationEligible": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "exceptions": [
+								{
+                                        "code": "travelrequirement_030_013",
+                                        "displayCode": "DocNotSufficientForTravel",
+                                        "message": "Internal Server error occured",
+                                        "developerMessage": "TIMATIC, Internal Server error occured",
+                                        "category": "ERROR",
+                                        "priority": 8
+                                    }],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": false,
+                                "checkinEligible": false
+                            }
+                        ],
+                        "travelDocuments": [
+                            {
+                                "type": "PASSPORT",
+                                "subType": "P",
+                                "givenNames": "PPTEST",
+                                "surname": "PPPMEMBERRORO",
+                                "birthDate": "1950-08-27",
+                                "gender": {
+                                    "code": "M",
+                                    "name": "Male"
+                                },
+                                "number": "945975890",
+                                "expirationDate": "2024-10-10",
+                                "issuingCountry": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "nationality": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "countryOfResidence": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "methodOfDataEntry": "P",
+                                "documentFeature": "NONE",
+                                "sourceFromType": "PNR"
+                            }
+                        ],
+                        "contactInformation": [
+                            {
+                                "requirements": [
+                                    {
+                                        "type": "US_ADDRESS",
+                                        "required": true,
+                                        "allowEmpty": false
+                                    },
+                                    {
+                                        "type": "PRIMARY_PHONE",
+                                        "required": true,
+                                        "allowEmpty": false
+                                    },
+                                    {
+                                        "type": "SECONDARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "EMAIL",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    }
+                                ],
+                                "address": {},
+                                "email": [
+                                    {
+                                        "verified": false,
+                                        "value": "DQWEDQ09EWEQ9@GMAIL.CO.NP"
+                                    }
+                                ],
+                                "phone": [
+                                    {
+                                        "verified": false,
+                                        "preference": "PRIMARY",
+                                        "type": "MOBILE",
+                                        "countryCode": "",
+                                        "phoneNumber": "443423423423"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

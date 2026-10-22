@@ -1,0 +1,86 @@
+parameters:
+  microserviceName: ''
+  productId: ''
+  stage: ''
+  apimEnv: '' 
+  apiEnv: ''    
+  apisEnv: ''   
+  agentPool: ''
+  apimurlname: ''
+  agentSpecification: ''
+  functionAppName: ''  
+  resourceGroupName: ''
+  serviceConnection: ''
+  APIMName: '' 
+  APIMResourceGroupName: ''
+  APIMServiceConnection: ''
+  APIMSubscriptionId: ''  
+  APIM_IP: ''
+
+jobs: 
+  - job:  '${{parameters.stage}}'  
+  
+    pool:
+      name: ${{parameters.agentPool}} 
+      vmImage: ${{parameters.agentSpecification}}  
+  
+  
+    steps:
+        - download: current
+          artifact: drop           
+
+        # Task to Remove APIM access restrictions      
+        - task: AzurePowerShell@5
+          displayName: 'Disable APIM - Access Restrictions'        
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            azurePowerShellVersion: LatestVersion            
+            ScriptType: 'InlineScript'
+            Inline: |
+              Remove-AzWebAppAccessRestrictionRule -ResourceGroupName ${{parameters.resourceGroupName}} -WebAppName ${{parameters.functionAppName}} -Name Allow_APIM -IpAddress "${{parameters.APIM_IP}}"    
+        
+        # Task to set allow all for access      
+        - task: AzurePowerShell@5
+          displayName: 'Allow all - Access '        
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            azurePowerShellVersion: LatestVersion            
+            ScriptType: 'InlineScript'
+            Inline: |
+              $Resource = Get-AzResource -ResourceType Microsoft.Web/sites -ResourceGroupName ${{parameters.resourceGroupName}} -ResourceName ${{parameters.functionAppName}}
+              $Resource.Properties.siteConfig.ipSecurityRestrictionsDefaultAction = "Allow"
+              $Resource | Set-AzResource -Force 
+
+        # Task to publish API in APIM via Swagger     
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Publish API in APIM via Swagger'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.APIMServiceConnection}}
+            subscriptionid: ${{parameters.APIMSubscriptionId}}
+            resourceGroupName:  ${{parameters.APIMResourceGroupName}}
+            location:  'North Europe'
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy_apim.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -APIMName ${{parameters.APIMName}} -functionAppName ${{parameters.functionAppName}} -apisEnv ${{parameters.apisEnv}} -apimEnv ${{parameters.apimEnv}} -apiEnv ${{parameters.apiEnv}} -applicationName ${{parameters.microserviceName}} -apimurlname ${{parameters.apimurlname}} -productId ${{parameters.productId}} 
+
+        #  Task to enable APIM access restrictions      
+        - task: AzurePowerShell@5
+          displayName: 'Enable APIM - Access Restrictions'   
+          inputs:
+             azureSubscription: ${{parameters.serviceConnection}}
+             azurePowerShellVersion: LatestVersion            
+             ScriptType: 'InlineScript'
+             Inline: |
+              Add-AzWebAppAccessRestrictionRule -ResourceGroupName ${{parameters.resourceGroupName}} -WebAppName ${{parameters.functionAppName}} -Name Allow_APIM -Priority 1 -Action Allow -IpAddress "${{parameters.APIM_IP}}"  
+
+        # Task to Set Deny access other than APIM      
+        - task: AzurePowerShell@5
+          displayName: 'Deny - Access Restrictions other than APIM'   
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            azurePowerShellVersion: LatestVersion            
+            ScriptType: 'InlineScript'
+            Inline: |
+             $Resource = Get-AzResource -ResourceType Microsoft.Web/sites -ResourceGroupName ${{parameters.resourceGroupName}} -ResourceName ${{parameters.functionAppName}}
+             $Resource.Properties.siteConfig.ipSecurityRestrictionsDefaultAction = "Deny"
+             $Resource | Set-AzResource -Force         

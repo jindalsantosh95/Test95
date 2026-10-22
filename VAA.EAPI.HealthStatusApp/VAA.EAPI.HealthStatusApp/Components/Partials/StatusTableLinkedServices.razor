@@ -1,0 +1,173 @@
+﻿@inject IJSRuntime JS
+@inject HttpClient Http
+@inject ISignalRService SignalRService
+@using Microsoft.AspNetCore.SignalR.Client
+@using VAA.EAPI.HealthStatusApp.SignalRClasses
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+
+
+
+<div id="dataTableContainer" class="statustable-container">
+    <table id="linked" class="display table-striped" style="width:100%; padding:1.5rem;">
+        <thead>
+            <tr>
+                <th>Service</th>
+                <th>Status</th>
+                <th>Service Type</th>
+                <th>Parent Service Checked</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+
+@if (!isLinkedTableInitialized)
+{
+    <div class="lds-roller" style="    width: 100%;
+height:16rem;
+    display: flex;
+padding-top: 5rem;
+    justify-content: center;">
+        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+
+}
+
+
+@code {
+    [Parameter] public string TabName { get; set; }
+    private List<LinkedServiceStatusModel> Rows = new List<LinkedServiceStatusModel>();
+    private string ServiceName;
+    private HubConnection? hubConnection;
+    private bool isLinkedTableInitialized = false;
+    private bool isHandlerRegistered = false;
+    private bool _isSignalRInitialized = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_isSignalRInitialized)
+        {
+            hubConnection = SignalRService.GetConnection();
+
+            if (!isHandlerRegistered)
+            {
+
+                hubConnection.On<IEnumerable<LinkedServiceStatusModel>>("ReceiveLinkedServicesStatusTable", async (results) =>
+                {
+                    Rows = results.ToList();
+                    if (!isLinkedTableInitialized)
+                    {
+                        await JS.InvokeVoidAsync("initializelinkedDataTable", Rows);
+                        isLinkedTableInitialized = true;
+                    }
+                    else
+                    {
+                        await JS.InvokeVoidAsync("updatelinkedTable", Rows);
+                    }
+                    StateHasChanged();
+                });
+
+                isHandlerRegistered = true;
+            }
+
+            if (!SignalRService.IsConnected)
+                await SignalRService.StartConnectionAsync();
+
+            _isSignalRInitialized = true;
+
+            try
+            {
+                while (hubConnection.State != HubConnectionState.Connected)
+                {
+                    await Task.Delay(200);
+                }
+                await hubConnection.InvokeAsync("GetLinkedServicesStatusTable");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching initial health status: {ex.Message}");
+            }
+        }
+    }
+
+    private string GetStatus(int statusCode)
+    {
+        if(statusCode == 2)
+        {
+            return "bi bi-check-circle";
+        }
+        else if(statusCode == 1)
+        {
+            return "bi bi-exclamation-triangle-fill";
+        }
+        else
+        {
+            return "bi bi-x-octagon-fill bi-lg";
+        }
+    }
+}
+
+
+<script>
+    var linkeddataTable;
+
+    function getStatusIcon(statusCode) {
+        if (statusCode == 2) {
+            return '<i class="bi bi-check-circle text-success"></i>';
+        } else if (statusCode == 1) {
+            return '<i class="bi bi-exclamation-triangle-fill text-warning"></i>';
+        } else {
+            return '<i class="bi bi-x-octagon-fill text-danger"></i>';
+        }
+    }
+
+    function initializelinkedDataTable(data) {
+        if ($.fn.DataTable.isDataTable('#linked')) {
+            $('#linked').DataTable().destroy();
+        }
+        linkeddataTable = $('#linked').DataTable({
+            data: data,
+            columns: [
+                { data: "serviceName", title: "Service" },
+                { 
+                    data: "statusCode", 
+                    title: "Status",
+                    render: function(data, type, row) {
+                        if (type === 'display' || type === 'filter') {
+                            return getStatusIcon(data);
+                        }
+                        return data;
+                    },
+                    type: "html"
+                },
+                { data: "serviceType", title: "Service Type" },
+                { data: "parentServiceCheckName", title: "Parent Service Checked" },
+                { data: "description", title: "Description" },
+            ],
+            destroy: true,
+            responsive: true,
+            rowReorder: {
+                selector: 'td:nth-child(2)'
+            },
+            columnDefs: [
+                { targets: 3, orderable: false }
+            ]
+        });
+
+        var loaderElement = document.querySelector('.lds-roller');
+        if (loaderElement) {
+            loaderElement.style.display = 'none';
+        }
+    }
+
+    function updatelinkedTable(data) {
+        if (linkeddataTable) {
+            linkeddataTable.clear().rows.add(data).draw();
+        } else {
+            initializeDataTable(data);
+        }
+    }
+</script>

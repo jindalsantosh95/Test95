@@ -1,0 +1,73 @@
+meta {
+  name: accountManagedYoungFlyerAccounts
+  type: graphql
+  seq: 41
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query accountManagedYoungFlyerAccounts {
+    accountManagedYoungFlyerAccounts(activitiesCount: 50) {
+      parentCustomerId
+      parentFcNumber
+      youngFlyers {
+        customerId
+        fcNumber
+        firstName
+        lastName
+        dateOfBirth
+        status
+        emailAddress
+        hoHManaged
+        activityResponse {
+          activityDetails {
+            activityDate
+            partnerCode
+            partnerName
+            statement
+            tierPoints
+            transactionId
+            transactionProcessedDate
+            transactionType
+            virginPoints
+          }
+          errorResponse {
+            extentions {
+              exception
+              code
+            }
+            message
+          }
+        }
+        tenureResponse {
+          memberCustomAttributesDocuments {
+            activeYearCounterForTenureBenefits
+            totalActiveYear
+            isAnActiveYear
+            memberLastFiveVSActivityYear {
+              activityYear
+              benefitGiven
+            }
+          }
+          errorResponse {
+            extentions {
+              exception
+              code
+            }
+            message
+          }
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,170 @@
+parameters:
+  agentPool: ''
+  location: ''
+  agentSpecification: ''
+  applicationName: ''
+  buildConfiguration: ''
+  testRepoPath_SIT: ''
+  testRepoPath_UAT: ''  
+  AppInsightsName_DT5: ''
+  resourceGroupName_DT5: ''
+  functionAppName_DT5: ''
+  KeyvaultName_DT5: ''
+  storageAccountName_DT5: ''
+  storageAccountName_P_DT5: ''
+  functionAppName_Secure_DT5: ''
+  functionAppName_Secure_DEV: ''
+  functionAppName_Secure_SIT: ''
+  functionAppName_Secure_UAT: ''
+  functionAppName_Secure_PRD: ''
+  functionAppName_Public_DT5: ''
+  functionAppName_Public_DEV: ''
+  functionAppName_Public_SIT: ''
+  functionAppName_Public_UAT: ''
+  functionAppName_Public_PRD: ''
+  VARIABLE_GROUP_NAME_NBF_SIT: ''
+  VARIABLE_GROUP_NAME_NBF_UAT: ''
+  AzureWebJobsStorage_GqlStitch_Public_Dev: ''
+  AzureWebJobsStorage_GqlStitch_Public_SIT: ''
+  AzureWebJobsStorage_GqlStitch_Public_UAT: ''
+  AzureWebJobsStorage_GqlStitch_Public_PROD: ''   
+  AzureWebJobsStorage_GqlStitch_Secure_Dev: ''
+  AzureWebJobsStorage_GqlStitch_Secure_SIT: ''
+  AzureWebJobsStorage_GqlStitch_Secure_UAT: ''
+  AzureWebJobsStorage_GqlStitch_Secure_PROD: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: '' 
+ 
+
+stages:
+
+  - stage: 'PR_Test5'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - Test5' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlstitch_Test5.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DT5}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DT5}}    
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: Test5
+          pr_name: PR_Test5
+          location: ${{parameters.location}}    
+          appserviceplan: ${{parameters.appserviceplan_DT5}}
+          keyvaultName: ${{parameters.KeyvaultName_DT5}}      
+          resourceGroupName: ${{parameters.resourceGroupName_DT5}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_DT5}}
+          storageAccountName: ${{parameters.storageAccountName_DT5}}
+          storageAccountName_P: ${{parameters.storageAccountName_P_DT5}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+          
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'Hotfix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlstitch.yaml  
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DEV}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DEV}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment_DEV}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}  
+          storageAccountName_Secure : ${{parameters.AzureWebJobsStorage_GqlStitch_Secure_Dev}}
+          storageAccountName_Public : ${{parameters.AzureWebJobsStorage_GqlStitch_Public_Dev}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'Hotfix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlstitch.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_SIT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_SIT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_SIT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_SIT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          storageAccountName_Secure : ${{parameters.AzureWebJobsStorage_GqlStitch_Secure_SIT}}
+          storageAccountName_Public : ${{parameters.AzureWebJobsStorage_GqlStitch_Public_SIT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'Hotfix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlstitch.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_UAT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_UAT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_UAT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_UAT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}
+          storageAccountName_Secure : ${{parameters.AzureWebJobsStorage_GqlStitch_Secure_UAT}}
+          storageAccountName_Public : ${{parameters.AzureWebJobsStorage_GqlStitch_Public_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'Hotfix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlstitch.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_PRD}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_PRD}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_PROD}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_PROD}}        
+          serviceConnection: ${{variables.serviceConnection_PROD}}
+          subscriptionId: ${{variables.subscriptionId_PROD}}  
+          storageAccountName_Secure : ${{parameters.AzureWebJobsStorage_GqlStitch_Secure_PROD}}
+          storageAccountName_Public : ${{parameters.AzureWebJobsStorage_GqlStitch_Public_PROD}}  
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+                   
+                           
+
+  

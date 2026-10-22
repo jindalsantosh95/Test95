@@ -1,0 +1,36 @@
+﻿using CSharpFunctionalExtensions;
+using MediatR;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using VAA.EAPI.Common.Helpers;
+using VAA.EAPI.Infrastructure.Repository.CosmosSqlDBv2;
+
+namespace VAA.EAPI.Microservices.Retail.Order.Payment.Infrastructure.Repositories
+{
+    public class CosmosRepoCommandHandler : IRequestHandler<CosmosRepoCommand, Result<Unit>>
+    {
+        private readonly IMediator _mediator;
+
+        public CosmosRepoCommandHandler(IMediator mediator)
+        {
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        }
+
+        public async Task<Result<Unit>> Handle(CosmosRepoCommand request, CancellationToken cancellationToken)
+        {
+            CosmosModifyRepoCommand command = new()
+            {
+                DatabaseEndpoint = ConfigReader.Get(Constants.Environment.PaymentDBEndpoint),
+                DatabaseName = ConfigReader.Get(Constants.Environment.PaymentDatabaseName),
+                CollectionName = ConfigReader.Get(Constants.Environment.PaymentCollection),
+                Event = request.Event,
+            };
+
+            await _mediator.Send(command, cancellationToken);
+
+            return Unit.Value;
+        }
+    }
+}
+

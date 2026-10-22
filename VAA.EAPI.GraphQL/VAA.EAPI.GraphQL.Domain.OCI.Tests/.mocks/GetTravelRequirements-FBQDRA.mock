@@ -1,0 +1,598 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements HTTP/1.1
+
+$[?(@.pnrLocator == 'FBQDRA')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "requirementsId": "43e03049-f958-42d7-b830-a7df9543aaa7",
+    "applyEmergencyContactToAllPax": true,
+    "reference": {
+        "pnrLocator": "FBQDRA",
+        "createdDate": "2026-05-14"
+    },
+    "passengers": [
+        {
+            "passengerId": "01.01|f161fc72-6706-4589-9e16-2a509a6c14b6",
+            "passengerFirstNin": "01",
+            "passengerLastNin": "01",
+            "givenNames": "TRAVELONE",
+            "surname": "TEST",
+            "dateOfBirth": "1986-10-06",
+            "email": "JOSE@TEST.COM",
+            "phone": {
+                "countryCode": "409",
+                "number": "1234567143123218"
+            },
+            "documents": [
+                {
+                    "documentType": "PASSPORT",
+                    "givenNames": "TRAVELONE",
+                    "surname": "TEST",
+                    "dateOfBirth": "1986-10-06",
+                    "gender": {
+                        "code": "X"
+                    },
+                    "documentNumber": "96761345",
+                    "expirationDate": "2030-07-21",
+                    "issuingCountry": {
+                        "code": "GBR"
+                    },
+                    "nationality": {
+                        "code": "GBR"
+                    },
+                    "countryOfResidence": {
+                        "code": "GBR"
+                    }
+                }
+            ],
+            "sliceRequirements": [
+                {
+                    "sliceId": "f004db54-154a-4e10-bcd1-cd9d80f01d93",
+                    "passportProvided": true,
+                    "passportVerified": false,
+                    "contactTracing": "NOT_REQUIRED",
+                    "returnDateStatus": "NOT_REQUIRED",
+                    "checkinEligible": true,
+                    "passportErrors": [],
+                    "travelRequirementErrors": [
+                        {
+                            "code": "travelrequirement_030_011",
+                            "message": "Your destination needs a few more details about your travel plans. Please check in at the airport and show a ticket to leave your destination or other documents.",
+                            "title": "Something's not quite right"
+                        }
+                    ],
+                    "secondaryDocumentStatus": "NOT_REQUIRED",
+                    "overall": "PART_COMPLETE"
+                },
+                {
+                    "sliceId": "70698a67-e518-4b4d-a3ee-42999014e3cc",
+                    "passportProvided": true,
+                    "passportVerified": false,
+                    "contactTracing": "NOT_REQUIRED",
+                    "returnDateStatus": "NOT_REQUIRED",
+                    "checkinEligible": true,
+                    "passportErrors": [
+                        {
+                            "code": "SecondaryDocNonETARequirement",
+                            "message": "Travellers who aren't citizens need to show a valid visa or entry document. You'll just need to present this when you check in with our airport team.",
+                            "title": "We can't complete check in online"
+                        }
+                    ],
+                    "secondaryDocumentStatus": "REQUIRED",
+                    "secondaryDocuments": [
+                        {
+                            "documentType": "TRANSIT_VISA",
+                            "countryCode": "GBR",
+                            "countryName": null,
+                            "name": "Visa",
+                            "displayName": "{countryName} Visa",
+                            "status": "REQUIRED",
+                            "secondaryDocumentApplicationOptions": [
+                                {
+                                    "secondaryDocumentId": "EMBASSY_VISA_1",
+                                    "explanatoryHtml": "<p>A transit visa is required.</p>",
+                                    "applicationType": "Government",
+                                    "title": "Apply at the government embassy",
+                                    "message": "Complete your {countryName} Visa at your closest {countryName} embassy. Once it's approved, come back here and confirm you're ready to travel.",
+                                    "url": null,
+                                    "urlText": "Visit government website"
+                                }
+                            ]
+                        }
+                    ],
+                    "overall": "PART_COMPLETE"
+                },
+                {
+                    "sliceId": "e47af66f-53cc-4a1d-81c1-bcb6aa8e727f",
+                    "passportProvided": true,
+                    "passportVerified": false,
+                    "contactTracing": "COMPLETE",
+                    "returnDateStatus": "REQUIRED",
+                    "checkinEligible": true,
+                    "passportErrors": [],
+                    "secondaryDocumentStatus": "REQUIRED",
+                    "secondaryDocumentStatusForETA": true,
+                    "secondaryDocuments": [
+                        {
+                            "documentType": "VISA",
+                            "countryCode": "USA",
+                            "countryName": null,
+                            "name": "Visa",
+                            "displayName": "{countryName} Visa",
+                            "status": "REQUIRED",
+                            "secondaryDocumentApplicationOptions": [
+                                {
+                                    "secondaryDocumentId": "EMBASSY_VISA_2",
+                                    "explanatoryHtml": null,
+                                    "applicationType": "Government",
+                                    "title": "Apply at the government embassy",
+                                    "message": "Complete your {countryName} Visa at your closest {countryName} embassy. Once it's approved, come back here and confirm you're ready to travel.",
+                                    "url": null,
+                                    "urlText": "Visit government website"
+                                }
+                            ]
+                        }
+                    ],
+                    "overall": "PART_COMPLETE"
+                }
+            ],
+            "emergencyContact": {},
+            "contactTracing": {
+                "streetAddress": "3129 DELTA BLVD",
+                "city": "ATL",
+                "state": "MN",
+                "zip": "55068",
+                "inTransit": false,
+                "email": "JOSE@TEST.COM",
+                "noEmail": false,
+                "primaryPhoneNumber": "1234567143123218",
+                "primaryPhoneNumberCountryCode": "409",
+                "secondaryPhoneNumber": "7812123312",
+                "secondaryPhoneNumberCountryCode": "",
+                "noSecondaryPhoneNumber": false
+            }
+        },
+        {
+            "passengerId": "02.01|af69a8bb-9c5d-49d5-8c25-506b6fe3c619",
+            "passengerFirstNin": "01",
+            "passengerLastNin": "02",
+            "givenNames": "TRAVELTWO",
+            "surname": "TEST",
+            "dateOfBirth": "1986-01-07",
+            "phone": {
+                "countryCode": "",
+                "number": "7812123312"
+            },
+            "documents": [
+                {
+                    "documentType": "PASSPORT",
+                    "givenNames": "TRAVELTWO",
+                    "surname": "TEST",
+                    "dateOfBirth": "1986-01-07",
+                    "gender": {
+                        "code": "X"
+                    },
+                    "documentNumber": "998013451",
+                    "expirationDate": "2031-09-11",
+                    "issuingCountry": {
+                        "code": "USA"
+                    },
+                    "nationality": {
+                        "code": "USA"
+                    },
+                    "countryOfResidence": {
+                        "code": "USA"
+                    }
+                }
+            ],
+            "sliceRequirements": [
+                {
+                    "sliceId": "f004db54-154a-4e10-bcd1-cd9d80f01d93",
+                    "passportProvided": true,
+                    "passportVerified": false,
+                    "contactTracing": "NOT_REQUIRED",
+                    "returnDateStatus": "NOT_REQUIRED",
+                    "checkinEligible": true,
+                    "passportErrors": [],
+                    "secondaryDocumentStatus": "NOT_REQUIRED",
+                    "overall": "PART_COMPLETE"
+                },
+                {
+                    "sliceId": "70698a67-e518-4b4d-a3ee-42999014e3cc",
+                    "passportProvided": true,
+                    "passportVerified": false,
+                    "contactTracing": "NOT_REQUIRED",
+                    "returnDateStatus": "NOT_REQUIRED",
+                    "checkinEligible": true,
+                    "passportErrors": [
+                        {
+                            "code": "SecondaryDocNonETARequirement",
+                            "message": "Travellers who aren't citizens need to show a valid visa or entry document. You'll just need to present this when you check in with our airport team.",
+                            "title": "We can't complete check in online"
+                        }
+                    ],
+                    "secondaryDocumentStatus": "REQUIRED",
+                    "overall": "PART_COMPLETE"
+                },
+                {
+                    "sliceId": "e47af66f-53cc-4a1d-81c1-bcb6aa8e727f",
+                    "passportProvided": true,
+                    "passportVerified": false,
+                    "contactTracing": "NOT_REQUIRED",
+                    "returnDateStatus": "NOT_REQUIRED",
+                    "checkinEligible": true,
+                    "passportErrors": [],
+                    "secondaryDocumentStatus": "NOT_REQUIRED",
+                    "overall": "PART_COMPLETE"
+                }
+            ],
+            "contactTracing": {
+                "inTransit": false,
+                "noEmail": false,
+                "primaryPhoneNumber": "7812123312",
+                "primaryPhoneNumberCountryCode": "",
+                "noSecondaryPhoneNumber": false
+            }
+        },
+        {
+            "passengerId": "03.01|3db09fa9-abce-404a-9b05-23086f33fd47",
+            "passengerFirstNin": "01",
+            "passengerLastNin": "03",
+            "givenNames": "TRAVELTHREE",
+            "surname": "TEST",
+            "dateOfBirth": "1986-01-09",
+            "phone": {
+                "countryCode": "409",
+                "number": "1234567143123218"
+            },
+            "documents": [
+                {
+                    "documentType": "PASSPORT",
+                    "givenNames": "TRAVELTHREE",
+                    "surname": "TEST",
+                    "dateOfBirth": "1986-01-09",
+                    "gender": {
+                        "code": "X"
+                    },
+                    "documentNumber": "908021445",
+                    "expirationDate": "2032-10-12",
+                    "issuingCountry": {
+                        "code": "IND"
+                    },
+                    "nationality": {
+                        "code": "IND"
+                    },
+                    "countryOfResidence": {
+                        "code": "IND"
+                    }
+                }
+            ],
+            "sliceRequirements": [
+                {
+                    "sliceId": "f004db54-154a-4e10-bcd1-cd9d80f01d93",
+                    "passportProvided": true,
+                    "passportVerified": false,
+                    "contactTracing": "NOT_REQUIRED",
+                    "returnDateStatus": "NOT_REQUIRED",
+                    "checkinEligible": true,
+                    "passportErrors": [
+                        {
+                            "code": "SecondaryDocNonETARequirement",
+                            "message": "Travellers who aren't citizens need to show a valid visa or entry document. You'll just need to present this when you check in with our airport team.",
+                            "title": "We can't complete check in online"
+                        }
+                    ],
+                    "secondaryDocumentStatus": "REQUIRED",
+                    "overall": "PART_COMPLETE"
+                },
+                {
+                    "sliceId": "70698a67-e518-4b4d-a3ee-42999014e3cc",
+                    "passportProvided": true,
+                    "passportVerified": false,
+                    "contactTracing": "NOT_REQUIRED",
+                    "returnDateStatus": "NOT_REQUIRED",
+                    "checkinEligible": true,
+                    "passportErrors": [],
+                    "secondaryDocumentStatus": "NOT_REQUIRED",
+                    "overall": "PART_COMPLETE"
+                },
+                {
+                    "sliceId": "e47af66f-53cc-4a1d-81c1-bcb6aa8e727f",
+                    "passportProvided": true,
+                    "passportVerified": false,
+                    "contactTracing": "COMPLETE",
+                    "returnDateStatus": "PROVIDED",
+                    "returnDate": "2026-06-01",
+                    "checkinEligible": true,
+                    "passportErrors": [
+                        {
+                            "code": "SecondaryDocNonETARequirement",
+                            "message": "Travellers who aren't citizens need to show a valid visa or entry document. You'll just need to present this when you check in with our airport team.",
+                            "title": "We can't complete check in online"
+                        }
+                    ],
+                    "secondaryDocumentStatus": "REQUIRED",
+                    "overall": "PART_COMPLETE"
+                }
+            ],
+            "emergencyContact": {
+                "firstName": "TEST",
+                "lastName": "CONTACT",
+                "phoneCountryCode": "GB",
+                "phoneNumber": "7323239087"
+            },
+            "contactTracing": {
+                "streetAddress": "3129 DELTA BLVD",
+                "city": "ATL",
+                "state": "MN",
+                "zip": "55068",
+                "inTransit": false,
+                "noEmail": false,
+                "primaryPhoneNumber": "1234567143123218",
+                "primaryPhoneNumberCountryCode": "409",
+                "secondaryPhoneNumber": "7812123312",
+                "secondaryPhoneNumberCountryCode": "",
+                "noSecondaryPhoneNumber": false
+            }
+        }
+    ],
+    "slices": [
+        {
+            "sliceId": "f004db54-154a-4e10-bcd1-cd9d80f01d93",
+            "scheduledDepartureLocalDateTime": "2026-05-18T08:15:00",
+            "scheduledDepartureUtcDateTime": "2026-05-18T12:15:00",
+            "scheduledArrivalLocalDateTime": "2026-05-18T20:10:00",
+            "scheduledArrivalUtcDateTime": "2026-05-18T19:10:00",
+            "origin": {
+                "code": "JFK",
+                "airportName": "John F Kennedy International",
+                "countryCode": "USA"
+            },
+            "destination": {
+                "code": "LHR",
+                "airportName": "Heathrow Airport",
+                "countryCode": "GBR"
+            },
+            "segments": [
+                {
+                    "segmentId": "6aafc1c8-2529-4675-a4ce-c07f0fddb86e",
+                    "ordinal": 1,
+                    "operatingCarrier": {
+                        "flightNum": "0026",
+                        "carrierCode": "VS",
+                        "carrierName": "Virgin Atlantic"
+                    },
+                    "marketingCarrier": {
+                        "flightNum": "0026",
+                        "carrierCode": "VS",
+                        "carrierName": "Virgin Atlantic"
+                    },
+                    "scheduledDepartureLocalDateTime": "2026-05-18T08:15:00",
+                    "scheduledDepartureUtcDateTime": "2026-05-18T12:15:00",
+                    "scheduledArrivalLocalDateTime": "2026-05-18T20:10:00",
+                    "scheduledArrivalUtcDateTime": "2026-05-18T19:10:00",
+                    "origin": {
+                        "code": "JFK",
+                        "airportName": "John F Kennedy International",
+                        "countryCode": "USA"
+                    },
+                    "destination": {
+                        "code": "LHR",
+                        "airportName": "Heathrow Airport",
+                        "countryCode": "GBR"
+                    },
+                    "legs": [
+                        {
+                            "legId": "1ebb2c7b-5957-49dd-8c52-d15e1cbd230d",
+                            "ordinal": 1,
+                            "scheduledDepartureLocalDateTime": "2026-05-18T08:15:00",
+                            "scheduledDepartureUtcDateTime": "2026-05-18T12:15:00",
+                            "scheduledArrivalLocalDateTime": "2026-05-18T20:10:00",
+                            "scheduledArrivalUtcDateTime": "2026-05-18T19:10:00",
+                            "origin": {
+                                "code": "JFK",
+                                "airportName": "John F Kennedy International",
+                                "countryCode": "USA"
+                            },
+                            "destination": {
+                                "code": "LHR",
+                                "airportName": "Heathrow Airport",
+                                "countryCode": "GBR"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "sliceId": "70698a67-e518-4b4d-a3ee-42999014e3cc",
+            "scheduledDepartureLocalDateTime": "2026-05-19T10:40:00",
+            "scheduledDepartureUtcDateTime": "2026-05-19T09:40:00",
+            "scheduledArrivalLocalDateTime": "2026-05-20T00:05:00",
+            "scheduledArrivalUtcDateTime": "2026-05-19T18:35:00",
+            "origin": {
+                "code": "LHR",
+                "airportName": "Heathrow Airport",
+                "countryCode": "GBR"
+            },
+            "destination": {
+                "code": "DEL",
+                "airportName": "Indira Gandhi International Airport",
+                "countryCode": "IND"
+            },
+            "segments": [
+                {
+                    "segmentId": "4537a4c2-1ef6-444f-8442-826b459cecd1",
+                    "ordinal": 2,
+                    "operatingCarrier": {
+                        "flightNum": "0302",
+                        "carrierCode": "VS",
+                        "carrierName": "Virgin Atlantic"
+                    },
+                    "marketingCarrier": {
+                        "flightNum": "0302",
+                        "carrierCode": "VS",
+                        "carrierName": "Virgin Atlantic"
+                    },
+                    "scheduledDepartureLocalDateTime": "2026-05-19T10:40:00",
+                    "scheduledDepartureUtcDateTime": "2026-05-19T09:40:00",
+                    "scheduledArrivalLocalDateTime": "2026-05-20T00:05:00",
+                    "scheduledArrivalUtcDateTime": "2026-05-19T18:35:00",
+                    "origin": {
+                        "code": "LHR",
+                        "airportName": "Heathrow Airport",
+                        "countryCode": "GBR"
+                    },
+                    "destination": {
+                        "code": "DEL",
+                        "airportName": "Indira Gandhi International Airport",
+                        "countryCode": "IND"
+                    },
+                    "legs": [
+                        {
+                            "legId": "926b47b2-f20b-4da9-b3b6-414993831f29",
+                            "ordinal": 2,
+                            "scheduledDepartureLocalDateTime": "2026-05-19T10:40:00",
+                            "scheduledDepartureUtcDateTime": "2026-05-19T09:40:00",
+                            "scheduledArrivalLocalDateTime": "2026-05-20T00:05:00",
+                            "scheduledArrivalUtcDateTime": "2026-05-19T18:35:00",
+                            "origin": {
+                                "code": "LHR",
+                                "airportName": "Heathrow Airport",
+                                "countryCode": "GBR"
+                            },
+                            "destination": {
+                                "code": "DEL",
+                                "airportName": "Indira Gandhi International Airport",
+                                "countryCode": "IND"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "sliceId": "e47af66f-53cc-4a1d-81c1-bcb6aa8e727f",
+            "scheduledDepartureLocalDateTime": "2026-05-25T02:05:00",
+            "scheduledDepartureUtcDateTime": "2026-05-24T20:35:00",
+            "scheduledArrivalLocalDateTime": "2026-05-25T15:35:00",
+            "scheduledArrivalUtcDateTime": "2026-05-25T19:35:00",
+            "origin": {
+                "code": "DEL",
+                "airportName": "Indira Gandhi International Airport",
+                "countryCode": "IND"
+            },
+            "destination": {
+                "code": "JFK",
+                "airportName": "John F Kennedy International",
+                "countryCode": "USA"
+            },
+            "segments": [
+                {
+                    "segmentId": "c4811540-5afb-4d87-ac41-221f9f683812",
+                    "ordinal": 3,
+                    "operatingCarrier": {
+                        "flightNum": "0303",
+                        "carrierCode": "VS",
+                        "carrierName": "Virgin Atlantic"
+                    },
+                    "marketingCarrier": {
+                        "flightNum": "0303",
+                        "carrierCode": "VS",
+                        "carrierName": "Virgin Atlantic"
+                    },
+                    "scheduledDepartureLocalDateTime": "2026-05-25T02:05:00",
+                    "scheduledDepartureUtcDateTime": "2026-05-24T20:35:00",
+                    "scheduledArrivalLocalDateTime": "2026-05-25T07:20:00",
+                    "scheduledArrivalUtcDateTime": "2026-05-25T06:20:00",
+                    "origin": {
+                        "code": "DEL",
+                        "airportName": "Indira Gandhi International Airport",
+                        "countryCode": "IND"
+                    },
+                    "destination": {
+                        "code": "LHR",
+                        "airportName": "Heathrow Airport",
+                        "countryCode": "GBR"
+                    },
+                    "legs": [
+                        {
+                            "legId": "eb54ec9f-68d1-42a1-861b-76e7ada7cb6e",
+                            "ordinal": 3,
+                            "scheduledDepartureLocalDateTime": "2026-05-25T02:05:00",
+                            "scheduledDepartureUtcDateTime": "2026-05-24T20:35:00",
+                            "scheduledArrivalLocalDateTime": "2026-05-25T07:20:00",
+                            "scheduledArrivalUtcDateTime": "2026-05-25T06:20:00",
+                            "origin": {
+                                "code": "DEL",
+                                "airportName": "Indira Gandhi International Airport",
+                                "countryCode": "IND"
+                            },
+                            "destination": {
+                                "code": "LHR",
+                                "airportName": "Heathrow Airport",
+                                "countryCode": "GBR"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "segmentId": "d4fdbf10-727c-4a75-9dd5-1bf04adb292d",
+                    "ordinal": 4,
+                    "operatingCarrier": {
+                        "flightNum": "0045",
+                        "carrierCode": "VS",
+                        "carrierName": "Virgin Atlantic"
+                    },
+                    "marketingCarrier": {
+                        "flightNum": "0045",
+                        "carrierCode": "VS",
+                        "carrierName": "Virgin Atlantic"
+                    },
+                    "scheduledDepartureLocalDateTime": "2026-05-25T12:50:00",
+                    "scheduledDepartureUtcDateTime": "2026-05-25T11:50:00",
+                    "scheduledArrivalLocalDateTime": "2026-05-25T15:35:00",
+                    "scheduledArrivalUtcDateTime": "2026-05-25T19:35:00",
+                    "origin": {
+                        "code": "LHR",
+                        "airportName": "Heathrow Airport",
+                        "countryCode": "GBR"
+                    },
+                    "destination": {
+                        "code": "JFK",
+                        "airportName": "John F Kennedy International",
+                        "countryCode": "USA"
+                    },
+                    "legs": [
+                        {
+                            "legId": "73282d27-f5cb-41d7-b8b2-0195e22d1f8f",
+                            "ordinal": 4,
+                            "scheduledDepartureLocalDateTime": "2026-05-25T12:50:00",
+                            "scheduledDepartureUtcDateTime": "2026-05-25T11:50:00",
+                            "scheduledArrivalLocalDateTime": "2026-05-25T15:35:00",
+                            "scheduledArrivalUtcDateTime": "2026-05-25T19:35:00",
+                            "origin": {
+                                "code": "LHR",
+                                "airportName": "Heathrow Airport",
+                                "countryCode": "GBR"
+                            },
+                            "destination": {
+                                "code": "JFK",
+                                "airportName": "John F Kennedy International",
+                                "countryCode": "USA"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

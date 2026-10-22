@@ -1,0 +1,183 @@
+meta {
+  name: Flight Status By Number
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query FlightStatusByNumber(
+    $flightNumber: String!,
+    $departureDate: Date!,
+    $departureAirportCode: String!,
+    $selectedLegId: String
+  ) {
+    flightStatusByNumber(
+      flightNumber: $flightNumber,
+      departureDate: $departureDate,
+      departureAirportCode: $departureAirportCode,
+      selectedLegId: $selectedLegId
+    ) {
+      flightDate
+      flightNumber
+      selectedLegId
+      legs {
+        id
+        marketingFlightNumber
+        departure {
+          airportCode
+          terminal
+          gate
+          scheduledTime
+          estimatedTime
+          actualTime
+        }
+        arrival {
+          airportCode
+          terminal
+          gate
+          scheduledTime
+          estimatedTime
+          actualTime
+        }
+        aircraft {
+          type
+          deltaAircraftTypeCode
+          industryStandardAircraftTypeCode
+        }
+        status {
+          description
+          color
+          scheduledDepartureTime
+          scheduledArrivalTime
+          estimatedDepartureTime
+          estimatedArrivalTime
+          actualDepartureTime
+          actualArrivalTime
+        }
+        detail {
+          performance {
+            milesFlown
+            onTime
+            arrivalDelay30
+            arrivalDelay60
+            cancellation
+          }
+          position {
+            latitude
+            longitude
+            altitudeFeet
+            speedKnots
+            headingDegrees
+            lastUpdated
+          }
+          amenities {
+            code
+            name
+            description
+            available
+          }
+          meals {
+            code
+            name
+            description
+            available
+          }
+        }
+      }
+      activeLeg {
+        id
+        marketingFlightNumber
+        departure {
+          airportCode
+          terminal
+          gate
+          scheduledTime
+          estimatedTime
+          actualTime
+        }
+        arrival {
+          airportCode
+          terminal
+          gate
+          scheduledTime
+          estimatedTime
+          actualTime
+        }
+        aircraft {
+          type
+          deltaAircraftTypeCode
+          industryStandardAircraftTypeCode
+        }
+        status {
+          description
+          color
+          scheduledDepartureTime
+          scheduledArrivalTime
+          estimatedDepartureTime
+          estimatedArrivalTime
+          actualDepartureTime
+          actualArrivalTime
+        }
+        detail {
+          performance {
+            milesFlown
+            onTime
+            arrivalDelay30
+            arrivalDelay60
+            cancellation
+          }
+          position {
+            latitude
+            longitude
+            altitudeFeet
+            speedKnots
+            headingDegrees
+            lastUpdated
+          }
+          amenities {
+            code
+            name
+            description
+            available
+          }
+          meals {
+            code
+            name
+            description
+            available
+          }
+        }
+      }
+      warnings {
+        code
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "flightNumber": "0003",
+    "departureDate": "{{flightStatusDate}}",
+    "departureAirportCode": "LHR",
+    "arrivalAirportCode": "JFK",
+    "selectedLegId": "1"
+  }
+}
+
+script:pre-request {
+  const flightDate = new Date();
+  flightDate.setUTCDate(flightDate.getUTCDate() + 1);
+  bru.setVar("flightStatusDate", flightDate.toISOString().slice(0, 10));
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

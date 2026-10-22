@@ -1,0 +1,504 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/NdcOrderSearch/OrderHistoryFailurePayment HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"docType": "Indirect",
+	"dataList": {
+		"originDestinationAssociations": [
+			{
+				"odLabel": "OD1",
+				"originDestination": {
+					"originAirport": "LHR",
+					"destinationAirport": "DEL",
+					"departureDate": "2026-11-20"
+				},
+				"journeyRefIds": [
+					"JOUR1"
+				],
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			},
+			{
+				"odLabel": "OD2",
+				"originDestination": {
+					"originAirport": "DEL",
+					"destinationAirport": "LHR",
+					"departureDate": "2026-11-27"
+				},
+				"journeyRefIds": [
+					"JOUR2"
+				],
+				"flightSegmentRefIds": [
+					"SEG2"
+				]
+			}
+		],
+		"customerDetails": [
+			{
+				"custId": "ADULT_1",
+				"ptc": "ADT",
+				"firstName": "DAVID",
+				"lastName": "SMITH",
+				"gender": "X",
+				"dateOfBirth": "1997-02-12",
+				"contacts": {
+					"email": "TEST.SKYSCANNER@FLY.VIRGIN.COM",
+					"phone": "123456",
+					"phoneType": "H"
+				},
+				"firstNameNumber": "01",
+				"lastNameNumber": "01"
+			}
+		],
+		"orderInstructions": [],
+		"segmentDetails": [
+			{
+				"odRefId": "OD1",
+				"segmentId": "SEG1",
+				"airCraft": "351",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "302",
+				"originAirportCode": "LHR",
+				"destinationAirportCode": "DEL",
+				"classOfService": "K",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-11-21T02:35:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-11-20T12:35:00"
+				},
+				"flightDuration": "00:08:30:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-20T12:35:00"
+						},
+						"legSequenceNumber": "1",
+						"originAirportCode": "LHR",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-21T02:35:00"
+						},
+						"destinationAirportCode": "DEL",
+						"legDuration": "00:08:30:00",
+						"legId": "LEG1",
+						"carrierAircraftTypeCode": "351",
+						"carrierAircraftTypeName": "351"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "4",
+					"cabinName": "PREMIUM ECONOMY"
+				},
+				"status": {
+					"code": "HK"
+				}
+			},
+			{
+				"odRefId": "OD2",
+				"segmentId": "SEG2",
+				"airCraft": "351",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "303",
+				"originAirportCode": "DEL",
+				"destinationAirportCode": "LHR",
+				"classOfService": "K",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-11-27T09:30:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-11-27T05:00:00"
+				},
+				"flightDuration": "00:10:00:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-27T05:00:00"
+						},
+						"legSequenceNumber": "2",
+						"originAirportCode": "DEL",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-27T09:30:00"
+						},
+						"destinationAirportCode": "LHR",
+						"legDuration": "00:10:00:00",
+						"legId": "LEG2",
+						"carrierAircraftTypeCode": "351",
+						"carrierAircraftTypeName": "351"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "4",
+					"cabinName": "PREMIUM ECONOMY"
+				},
+				"status": {
+					"code": "HK"
+				}
+			}
+		],
+		"priceClass": [
+			{
+				"id": "PC1",
+				"cabinType": {
+					"cabinCode": "4",
+					"cabinName": "PREMIUM ECONOMY"
+				}
+			}
+		],
+		"journey": [
+			{
+				"journeyId": "JOUR1",
+				"duration": "08:30",
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			},
+			{
+				"journeyId": "JOUR2",
+				"duration": "10:00",
+				"flightSegmentRefIds": [
+					"SEG2"
+				]
+			}
+		]
+	},
+	"creationDateTime": {
+		"localDateTime": "12/02/2026 06:50:00"
+	},
+	"orderNumber": {
+		"orderId": "VS932SNZCRK26",
+		"ownerAirline": "VS"
+	},
+	"bookingReference": {
+		"rloc": "SNZCRK",
+		"rlocCreateDate": "12Feb26",
+		"rlocCreateDateTime": "06:50:00",
+		"externalRecordLocator": "E2GOS4",
+		"externalSystem": "1S"
+	},
+	"orderItems": [
+		{
+			"orderItemId": "VS932SNZCRK26-1",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"originDestinationRefIds": [
+						"OD1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"priceClassRefIds": [
+						"PC1"
+					],
+					"serviceDefinitionRefIds": [
+						"SV1"
+					]
+				},
+				{
+					"serviceId": "SV2",
+					"product": {
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"originDestinationRefIds": [
+						"OD2"
+					],
+					"segmentRefIds": [
+						"SEG2"
+					],
+					"priceClassRefIds": [
+						"PC1"
+					],
+					"serviceDefinitionRefIds": [
+						"SV2"
+					]
+				}
+			],
+			"accountableDocumentRefs": [
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520117092",
+					"issueDate": "2026-02-12",
+					"issueTime": "12:58:00",
+					"customerRefId": "ADULT_1"
+				},
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520117092",
+					"issueDate": "2026-02-12",
+					"issueTime": "12:58:00",
+					"customerRefId": "ADULT_1"
+				},
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520117093",
+					"issueDate": "2026-02-12",
+					"issueTime": "13:01:00",
+					"customerRefId": "ADULT_1"
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			}
+		}
+	],
+	"orderStatus": "Confirmed",
+	"parties": {
+		"participants": [
+			{
+				"partyType": "Seller",
+				"name": "Skyscanner",
+				"agencyID": "91281035",
+				"ordinal": "1",
+				"pccCode": "6UOL",
+				"contacts": {
+					"email": "Bandaru.JeevanNagaSai@fly.virgin.com"
+				},
+				"isCreditCardAccepted": true,
+				"requestAgentType": "IATA"
+			}
+		]
+	},
+	"orderHistory": [
+		{
+			"dataList": {
+				"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVID",
+						"lastName": "SMITH",
+						"gender": "X",
+						"dateOfBirth": "1997-02-12",
+						"travelDocuments": [],
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "302",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "DEL",
+						"classOfService": "K",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-21T02:35:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-20T12:35:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					},
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "303",
+						"operatingCarrier": "VS",
+						"originAirportCode": "DEL",
+						"destinationAirportCode": "LHR",
+						"classOfService": "K",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-27T09:30:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-27T05:00:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					}
+				]
+			},
+			"version": "1",
+			"changeDateTime": "2026-02-12T06:50:00Z",
+			"changeType": "OrderItemAdded"
+		},
+		{
+			"dataList": {
+				"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVID",
+						"lastName": "SMITH",
+						"gender": "X",
+						"dateOfBirth": "1997-02-12",
+						"travelDocuments": [],
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "302",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "DEL",
+						"classOfService": "K",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-21T02:35:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-20T12:35:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					},
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "303",
+						"operatingCarrier": "VS",
+						"originAirportCode": "DEL",
+						"destinationAirportCode": "LHR",
+						"classOfService": "K",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-27T09:30:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-27T05:00:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					}
+				]
+			},
+			"version": "2",
+			"changeDateTime": "2026-02-12T06:58:00Z",
+			"changeType": "DocumentIssuance"
+		},
+		{
+			"dataList": {
+				"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVID",
+						"lastName": "SMITH",
+						"gender": "X",
+						"dateOfBirth": "1997-02-12",
+						"travelDocuments": [],
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "302",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "DEL",
+						"classOfService": "K",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-21T02:35:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-20T12:35:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					},
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "303",
+						"operatingCarrier": "VS",
+						"originAirportCode": "DEL",
+						"destinationAirportCode": "LHR",
+						"classOfService": "K",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-27T09:30:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-27T05:00:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					}
+				]
+			},
+			"version": "3",
+			"changeDateTime": "2026-02-12T06:58:00Z",
+			"changeType": "PaymentFailure"
+		},
+		{
+			"dataList": {
+				"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVID",
+						"lastName": "SMITH",
+						"gender": "X",
+						"dateOfBirth": "1997-02-12",
+						"travelDocuments": [],
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "302",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "DEL",
+						"classOfService": "K",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-21T02:35:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-20T12:35:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					},
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "303",
+						"operatingCarrier": "VS",
+						"originAirportCode": "DEL",
+						"destinationAirportCode": "LHR",
+						"classOfService": "K",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-27T09:30:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-27T05:00:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					}
+				]
+			},
+			"version": "4",
+			"changeDateTime": "2026-02-12T07:01:00Z",
+			"changeType": "DocumentIssuance"
+		}
+	],
+	"id": "VS932SNZCRK26",
+	"partitionKey": "VS932SNZCRK26"
+}

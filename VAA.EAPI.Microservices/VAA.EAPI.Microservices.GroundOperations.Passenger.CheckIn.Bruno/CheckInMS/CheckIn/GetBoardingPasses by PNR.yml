@@ -1,0 +1,21 @@
+info:
+  name: GetBoardingPasses by PNR
+  type: http
+  seq: 11
+
+http:
+  method: GET
+  url: "{{checkinms}}/CheckIn/GetBoardingPassByPNR/ETQHBN/JFK"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: ""
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

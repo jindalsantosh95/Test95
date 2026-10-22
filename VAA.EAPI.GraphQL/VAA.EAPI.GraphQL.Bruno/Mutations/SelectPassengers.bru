@@ -1,0 +1,32 @@
+meta {
+  name: SelectPassengers
+  type: graphql
+  seq: 36
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation SelectPassengers($checkInId: String, $passengerIds: [String]) {
+    SelectPassengers(checkInId: $checkInId, passengerIds: $passengerIds) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "checkInId": "",
+    "passengerIds": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

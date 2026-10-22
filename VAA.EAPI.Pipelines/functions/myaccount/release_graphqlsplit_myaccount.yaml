@@ -1,0 +1,218 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  applicationName: ''
+  buildConfiguration: ''
+  testRepoPath_SIT: ''
+  testRepoPath_UAT: ''  
+  functionAppName_Secure_DEV: ''
+  functionAppName_Secure_SIT: ''
+  functionAppName_Secure_UAT: ''
+  functionAppName_Secure_PRD: ''
+  functionAppName_Public_DEV: ''
+  functionAppName_Public_SIT: ''
+  functionAppName_Public_UAT: ''
+  functionAppName_Public_PRD: ''
+  AppInsightsName_DEV: ''
+  AppInsightsName_SIT: ''
+  AppInsightsName_UAT: ''
+  AppInsightsName_PROD: ''
+  storageAccountName_DEV: ''
+  storageAccountName_SIT: ''
+  storageAccountName_UAT: ''
+  storageAccountName_PROD: ''
+  VARIABLE_GROUP_NAME_SIT: ''
+  VARIABLE_GROUP_NAME_UAT: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: '' 
+
+stages:
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml  
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DEV}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DEV}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment_DEV}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}  
+          AppInsightsName: ${{parameters.AppInsightsName_DEV}}
+          storageAccountName: ${{parameters.storageAccountName_DEV}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_SIT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_SIT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_SIT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_SIT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_SIT}}
+          storageAccountName: ${{parameters.storageAccountName_SIT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'BasicEnrolment_and_LoyaltyUpgrade_Regression_SIT'
+    displayName: 'BasicEnrolment_and_LoyaltyUpgrade_SIT' 
+    dependsOn: SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/myaccount/functionaltests_BasicEnrlandLoyaltyUpgrd.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+
+
+  - stage: 'Enrolment_Microservice_Regression_SIT'
+    displayName: 'EnrolmentMicroservice_SIT' 
+    dependsOn: BasicEnrolment_and_LoyaltyUpgrade_Regression_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/myaccount/functionaltests_EnrolmentMicroservice.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+  
+
+  - stage: 'Enrolment_GraphQl_Regression_SIT'
+    displayName: 'EnrolmentGraphQL_SIT' 
+    dependsOn: Enrolment_Microservice_Regression_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/myaccount/functionaltests_EnrolmentGraphQL.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+
+  - stage: 'Identity_Microservice_Regression_SIT'
+    displayName: 'IdentityMicroservice_SIT' 
+    dependsOn: Enrolment_GraphQl_Regression_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/myaccount/functionaltests_IdentityMicroservice.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_UAT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_UAT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_UAT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_UAT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}
+          AppInsightsName: ${{parameters.AppInsightsName_UAT}}
+          storageAccountName: ${{parameters.storageAccountName_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+    
+  - stage: 'BasicEnrolment_and_LoyaltyUpgrade_Regression_UAT'
+    displayName: 'BasicEnrolment_and_LoyaltyUpgrade_UAT' 
+    dependsOn: UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/myaccount/functionaltests_BasicEnrlandLoyaltyUpgrd.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+
+  - stage: 'Enrolment_Microservice_Regression_UAT'
+    displayName: 'EnrolmentMicroservice_UAT' 
+    dependsOn: BasicEnrolment_and_LoyaltyUpgrade_Regression_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/myaccount/functionaltests_EnrolmentMicroservice.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+
+  - stage: 'Enrolment_GraphQl_Regression_UAT'
+    displayName: 'EnrolmentGraphQL_UAT' 
+    dependsOn: Enrolment_Microservice_Regression_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/myaccount/functionaltests_EnrolmentGraphQL.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+
+  - stage: 'Identity_Microservice_Regression_UAT'
+    displayName: 'IdentityMicroservice_UAT' 
+    dependsOn: Enrolment_GraphQl_Regression_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/myaccount/functionaltests_IdentityMicroservice.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+
+
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_PRD}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_PRD}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_PROD}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_PROD}}        
+          serviceConnection: ${{variables.serviceConnection_PROD}}
+          subscriptionId: ${{variables.subscriptionId_PROD}}    
+          AppInsightsName: ${{parameters.AppInsightsName_PROD}}
+          storageAccountName: ${{parameters.storageAccountName_PROD}}   
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+                   
+                    

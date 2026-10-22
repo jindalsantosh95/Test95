@@ -1,0 +1,30 @@
+variables: 
+  - group: APIM
+  - name: agentPool
+    value: 'Azure Pipelines'    
+  - name: agentSpecification
+    value: 'windows-latest'                
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/publish_apim_arm_artifacts.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+
+  # CD (Deployment) Pipeline
+  - template: functions/apim_create_group.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      environment: 'DEV'
+      APIMServiceConnection: $(APIMServiceConnection_NonProd) 
+      APIMSubscriptionId: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName: $(APIMResourceGroupName_NonProd)      
+      APIMName: $(APIM_NonProd)
+      SubscriptionName: $(SubscriptionName)
+      OwnerName: $(OwnerName)
+      ProductName: $(ProductName)
+      

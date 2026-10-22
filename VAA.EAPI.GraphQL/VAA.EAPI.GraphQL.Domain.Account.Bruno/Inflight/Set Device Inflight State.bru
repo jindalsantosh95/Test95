@@ -1,0 +1,27 @@
+meta {
+  name: Set Device Inflight State
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SetDeviceInflightState {
+    setDeviceInflightState(
+      deviceId: "{{account_device_id}}"
+      sandboxId: "{{account_sandbox_id}}"
+    ) {
+      status
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

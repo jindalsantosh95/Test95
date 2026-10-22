@@ -1,0 +1,19 @@
+query AccountFlightDetails($page: Int!, $pageSize: Int!) {
+  accountFlightDetails(page: $page, pageSize: $pageSize) {
+    flightSegmentDetails {
+      operatingAirlineName
+      dateOfFlight
+      scheduledDepartureTime
+      originAirportName
+      originAirportCountry
+      originAirportCode
+      destinationAirportName
+      destinationAirportCountry
+      destinationAirportCode
+      flightNumber
+      operatingAirlineCode
+      numberOfDaysToDeparture
+      bookingReference
+    }
+  }
+}

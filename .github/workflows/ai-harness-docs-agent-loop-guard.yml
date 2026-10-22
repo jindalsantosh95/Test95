@@ -1,0 +1,28 @@
+name: ai-harness-docs-agent-loop-guard
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: docs-agent-loop-guard-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-docs-agent-loop:
+    name: verify-docs-agent-loop
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run docs and harness lightweight verification
+        shell: pwsh
+        run: |
+          ./scripts/verify.ps1 -ScopePath . -SkipBuild -SkipDeploymentCheck

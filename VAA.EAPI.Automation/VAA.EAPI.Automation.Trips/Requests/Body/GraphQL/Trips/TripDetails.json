@@ -1,0 +1,26 @@
+{
+  "query": "query TripDetails($request: TripDetailsRequestInput!) { TripDetails(request: $request) { id tripResourceId status id isAccountLinkedPNR product { supportedFlight bookingType sortByDate checkInEligible accessibleTravelEligible reference { pnrLocator createdDate orderId } slices { duration scheduledDepartureLocal scheduledDepartureUtc scheduledArrivalLocal scheduledArrivalUtc origin { code cityName terminalName } destination { code cityName terminalName } segments { operatingCarrier { carrierCode carrierName flightNumber } legs { origin { code terminalName cityName } destination { code terminalName cityName } status onAirDuration cabinClass { code productCode name } aircraft { code name subfleetCode planeName tailNumber } isStarlinkEligible onGroundDuration } id scheduledDepartureLocal scheduledDepartureUtc scheduledArrivalLocal scheduledArrivalUtc estimatedDepartureLocal estimatedDepartureUtc estimatedArrivalLocal estimatedArrivalUtc actualDepartureLocal actualDepartureUtc actualArrivalLocal actualArrivalUtc layoverDuration popsOpenDateTimeUtc popsCloseDateTimeUtc otherAirlineOperatedHelpTitle otherAirlineOperatedHelpText origin { terminalName code cityName } destination { terminalName code cityName } duration operationalStatus { type subType } isLayoverDurationValid } estimatedDepartureLocal estimatedDepartureUtc estimatedArrivalLocal estimatedArrivalUtc actualDepartureLocal actualDepartureUtc actualArrivalLocal actualArrivalUtc checkInEligible checkInOpensLocal } passengers { customerId } hotelDetails { hotelName checkIn checkOut } carDetails { name model className startDateLocal endDateLocal } extraDetails { name elementGroup isDisneyTicket } } travelDates { departureDate departureDateUtc returnDate returnDateUtc } destination { cityName countryName } passengers { passengerId associatedInfantId id loyaltyMembership { programmeCode number tierName } passengerType { code } lastName firstName slices { areTravelDocsComplete travelDocsStatusSummary segments { checkinStatus legs { seatAssignments { seat { name actualCabinClass { name } } } } } } leadPassenger birthDate } pos { countryCode cityCode currencyCode } responseStatus { errors { code message } } tripSearchRequest { givenNames surname pnrLocator createdDate flyingClubNumber bookingReference } payment { currencyCode balanceDue } }}",
+  "variables": {
+    "request": {
+      "tripDetails": [
+        {
+          "bookingReference": null,
+          "dateOfBirth": null,
+          "createdDate": null,
+          "givenNames": null,
+          "pnrLocator": null,
+          "surname": null
+        },
+        {
+          "bookingReference": null,
+          "dateOfBirth": null,
+          "createdDate": null,
+          "givenNames": null,
+          "pnrLocator": null,
+          "surname": null
+        }
+      ]
+    }
+  },
+  "operationName": "TripDetails"
+}

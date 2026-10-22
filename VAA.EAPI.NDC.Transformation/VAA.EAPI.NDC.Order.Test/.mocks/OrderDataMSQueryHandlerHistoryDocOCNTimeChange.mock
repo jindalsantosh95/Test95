@@ -1,0 +1,696 @@
+###Request
+GET https://Testresources.virginatlantic.com/dev/orderdata/orders/VS932SIVOZP26-History HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"DocType": "Indirect",
+	"PointOfSale": {
+		"CurrencyCode": "USD"
+	},
+	"CreationDateTime": {
+		"LocalDateTime": "2026-01-16T10:14:00Z"
+	},
+	"OrderNumber": {
+		"OrderId": "VS932SIVOZP26",
+		"OwnerAirline": "VS"
+	},
+	"BookingReference": {
+		"RLOC": "SIVOZP",
+		"RLOCCreateDate": "16Jan26",
+		"RLOCCreateDateTime": "10:14:00",
+		"ExternalRecordLocator": "EO3Q6M",
+		"ExternalSystem": "1S"
+	},
+	"OrderStatus": "Confirmed",
+	"Parties": {
+		"Participants": [
+			{
+				"PartyType": "Seller",
+				"Name": "Skyscanner",
+				"AgencyID": "00003333",
+				"Ordinal": "1",
+				"PccCode": "6UTL",
+				"Contacts": {
+					"Email": "agentemail@gmail.com"
+				},
+				"IsCreditCardAccepted": true,
+				"RequestAgentType": "TIDS"
+			}
+		]
+	},
+	"OrderRemarks": [
+		{
+			"ItemType": "SSR",
+			"Text": "XXTAW/"
+		}
+	],
+	"OrderHistory": [
+		{
+			"DataList": {
+				"OriginDestinationAssociations": [
+					{
+						"OdLabel": "OD1",
+						"OriginDestination": {
+							"OriginAirport": "LHR",
+							"DestinationAirport": "DEL",
+							"DepartureDate": "2026-08-05"
+						},
+						"JourneyRefIds": [
+							"JOUR1"
+						],
+						"FlightSegmentRefIds": [
+							"SEG1"
+						]
+					}
+				],
+				"CustomerDetails": [
+					{
+						"CustId": "ADULT_1",
+						"Ptc": "ADT",
+						"ItaPtc": "ADT",
+						"FirstName": "DAVID",
+						"LastName": "SMITH",
+						"Contacts": {
+							"Email": "TEST.SKYSCANNER@FLY.VIRGIN.COM",
+							"Phone": "123456",
+							"PhoneType": "H",
+							"CountryDailingCode": "44"
+						},
+						"FirstNameNumber": "01",
+						"LastNameNumber": "01",
+						"IsNameChanged": false,
+						"IsEmailUpdates": false
+					},
+					{
+						"CustId": "CHILD_1",
+						"Ptc": "CHD",
+						"ItaPtc": "CNN",
+						"FirstName": "DAVIDRVZGY",
+						"LastName": "SMITHSVHSU",
+						"FirstNameNumber": "01",
+						"LastNameNumber": "02",
+						"IsNameChanged": false,
+						"IsEmailUpdates": false
+					}
+				],
+				"OrderInstructions": [],
+				"SegmentDetails": [
+					{
+						"OdRefId": "OD1",
+						"SegmentId": "SEG1",
+						"AirCraft": "351",
+						"MarketingCarrier": "VS",
+						"MarketingFlightNumber": "302",
+						"OriginAirportCode": "LHR",
+						"DestinationAirportCode": "DEL",
+						"ClassOfService": "K",
+						"ScheduledArrivalTime": {
+							"LocalDateTime": "2026-08-06T02:00:00"
+						},
+						"ScheduledDepartureTime": {
+							"LocalDateTime": "2026-08-05T12:55:00"
+						},
+						"FlightDuration": "00:08:35:00",
+						"Legs": [
+							{
+								"ScheduledDepartureTime": {
+									"LocalDateTime": "2026-08-05T12:55:00"
+								},
+								"LegSequenceNumber": "1",
+								"OriginAirportCode": "LHR",
+								"ScheduledArrivalTime": {
+									"LocalDateTime": "2026-08-06T02:00:00"
+								},
+								"DestinationAirportCode": "DEL",
+								"LegDuration": "00:08:35:00",
+								"LegId": "LEG1",
+								"CarrierAircraftTypeCode": "A350",
+								"CarrierAircraftTypeName": "A350 (widebody)"
+							}
+						],
+						"CabinType": {
+							"CabinCode": "4",
+							"CabinName": "PREMIUM ECONOMY"
+						},
+						"SegmentSequence": 0,
+						"Status": {
+							"Code": "HK"
+						}
+					}
+				],
+				"BaggageAllowances": [
+					{
+						"BaggageAllowanceId": "BAG1",
+						"BaggageAllowanceTypeCode": "Checked",
+						"FreeBaggageAllowance": {
+							"AllowedBagCnt": 2,
+							"WeightInKilos": 0,
+							"DimensionAllowance": [
+								{
+									"HeightMeasure": "75",
+									"WidthMeasure": "43",
+									"LinearMeasure": "208",
+									"LengthMeasure": "90",
+									"LengthUnitOfMeasurement": 0
+								},
+								{
+									"HeightMeasure": "29.5",
+									"WidthMeasure": "16",
+									"LinearMeasure": "81",
+									"LengthMeasure": "35.5",
+									"LengthUnitOfMeasurement": 2
+								}
+							],
+							"WeightAllowance": [
+								{
+									"MaximumWeightMeasure": "23",
+									"WeightUnitOfMeasurement": 0
+								},
+								{
+									"MaximumWeightMeasure": "50",
+									"WeightUnitOfMeasurement": 1
+								}
+							]
+						}
+					},
+					{
+						"BaggageAllowanceId": "BAG2",
+						"BaggageAllowanceTypeCode": "CarryOn",
+						"FreeBaggageAllowance": {
+							"AllowedBagCnt": 1,
+							"WeightInKilos": 0,
+							"DimensionAllowance": [
+								{
+									"HeightMeasure": "56",
+									"WidthMeasure": "23",
+									"LinearMeasure": "115",
+									"LengthMeasure": "36",
+									"LengthUnitOfMeasurement": 0
+								},
+								{
+									"HeightMeasure": "22",
+									"WidthMeasure": "9",
+									"LinearMeasure": "45",
+									"LengthMeasure": "14",
+									"LengthUnitOfMeasurement": 2
+								}
+							],
+							"WeightAllowance": [
+								{
+									"MaximumWeightMeasure": "10",
+									"WeightUnitOfMeasurement": 0
+								},
+								{
+									"MaximumWeightMeasure": "22",
+									"WeightUnitOfMeasurement": 1
+								}
+							]
+						}
+					}
+				],
+				"Penalty": [
+					{
+						"Id": "PEN1",
+						"Type": "Change",
+						"MaxPrice": {
+							"Amount": {
+								"MonetaryAmount": "336.88",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							}
+						},
+						"MinPrice": {
+							"Amount": {
+								"MonetaryAmount": "336.88",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							}
+						},
+						"Text": "Before Departure: Change allowed for USD336.88"
+					},
+					{
+						"Id": "PEN2",
+						"Type": "Change",
+						"MaxPrice": {
+							"Amount": {
+								"MonetaryAmount": "336.88",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							}
+						},
+						"MinPrice": {
+							"Amount": {
+								"MonetaryAmount": "336.88",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							}
+						},
+						"Text": "After Departure: Change allowed for USD336.88"
+					},
+					{
+						"Id": "PEN3",
+						"Type": "Cancel",
+						"MaxPrice": {
+							"Amount": {
+								"MonetaryAmount": "512.06",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							}
+						},
+						"MinPrice": {
+							"Amount": {
+								"MonetaryAmount": "512.06",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							}
+						},
+						"Text": "Ticket refund for USD512.06"
+					}
+				],
+				"PriceClass": [
+					{
+						"Id": "PC1",
+						"FareBasisCode": "KGERB8JA",
+						"FareTypeCode": "ZCF",
+						"ProductName": "Premium",
+						"CabinType": {
+							"CabinCode": "4",
+							"CabinName": "Premium Economy"
+						}
+					}
+				],
+				"ServiceDefinitions": [
+					{
+						"ServiceDefinitionId": "SV1",
+						"Description": [
+							"A350 (widebody)",
+							"Alcohol & beverages provided",
+							"Seatback on-demand video",
+							"Premium dining experience",
+							"2-4-2 seat layout",
+							"Power & USB outlets",
+							"Extra large seat (38\" pitch)",
+							"Fast web browsing (fee)"
+						]
+					}
+				],
+				"Journey": [
+					{
+						"JourneyId": "JOUR1",
+						"Duration": "08:35",
+						"FlightSegmentRefIds": [
+							"SEG1"
+						]
+					}
+				]
+			},
+			"OrderItems": [
+				{
+					"OrderItemId": "VS932SIVOZP26-1",
+					"OwnerAirline": "VS",
+					"Services": [
+						{
+							"ServiceId": "SV1",
+							"Product": {
+								"ProductOwner": "VS",
+								"ProductName": "Premium",
+								"ProductType": "Flight"
+							},
+							"ServiceBeneficiaries": [
+								"ADULT_1"
+							],
+							"OriginDestinationRefIds": [
+								"OD1"
+							],
+							"SegmentRefIds": [
+								"SEG1"
+							],
+							"BaggageRefIds": [
+								"BAG1",
+								"BAG2"
+							],
+							"PenaltyRef": {
+								"ChangePenaltyRefIds": [
+									"PEN2",
+									"PEN3"
+								],
+								"CancellationPenaltyRefIds": [
+									"PEN1"
+								]
+							},
+							"PriceClassRefIds": [
+								"PC1"
+							],
+							"ServiceDefinitionRefIds": [
+								"SRV1"
+							]
+						}
+					],
+					"PriceDetails": [
+						{
+							"PriceComponentType": "BasePrice",
+							"Amount": {
+								"MonetaryAmount": "1257.50",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							},
+							"FareCalculation": "LON VS DEL657.98KGERB8JA NUC657.98END ROE0.750778"
+						},
+						{
+							"PriceComponentType": "BaseFare",
+							"Amount": {
+								"MonetaryAmount": "664.00",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							},
+							"BaseCurrencyAmount": {
+								"Amount": "494.00",
+								"Currency": "GBP"
+							},
+							"FareCalculation": "LON VS DEL657.98KGERB8JA NUC657.98END ROE0.750778"
+						},
+						{
+							"PriceComponentType": "TotalTax",
+							"Amount": {
+								"MonetaryAmount": "593.50",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							},
+							"TaxBreakup": [
+								{
+									"Code": "GB",
+									"Name": "United Kingdom Air Passenger Duty APD",
+									"Amount": {
+										"MonetaryAmount": "328.00",
+										"BaseCurrency": "USD",
+										"DecimalPrecisionCount": 0,
+										"PriceDifference": 0
+									},
+									"CountryCode": "GB",
+									"Refundable": false
+								},
+								{
+									"Code": "IN",
+									"Name": "India User Development Fee Arrivals",
+									"Amount": {
+										"MonetaryAmount": "3.60",
+										"BaseCurrency": "USD",
+										"DecimalPrecisionCount": 0,
+										"PriceDifference": 0
+									},
+									"CountryCode": "IN",
+									"Refundable": false
+								},
+								{
+									"Code": "UB",
+									"Name": "United Kingdom Passenger Service Charge Departures",
+									"Amount": {
+										"MonetaryAmount": "68.30",
+										"BaseCurrency": "USD",
+										"DecimalPrecisionCount": 0,
+										"PriceDifference": 0
+									},
+									"CountryCode": "GB",
+									"Refundable": false
+								},
+								{
+									"Code": "YQ",
+									"Name": "VS YQ surcharge",
+									"Amount": {
+										"MonetaryAmount": "164.00",
+										"BaseCurrency": "USD",
+										"DecimalPrecisionCount": 0,
+										"PriceDifference": 0
+									},
+									"Refundable": false
+								},
+								{
+									"Code": "YR",
+									"Name": "VS YR surcharge",
+									"Amount": {
+										"MonetaryAmount": "29.60",
+										"BaseCurrency": "USD",
+										"DecimalPrecisionCount": 0,
+										"PriceDifference": 0
+									},
+									"Refundable": false
+								}
+							],
+							"FareCalculation": "LON VS DEL657.98KGERB8JA NUC657.98END ROE0.750778"
+						}
+					],
+					"AccountableDocumentRefs": [
+						{
+							"DocumentType": "Ticket",
+							"DocumentNumber": "9327281872807",
+							"IssueDate": "2026-01-16",
+							"IssueTime": "11:14:00",
+							"CustomerRefId": "ADULT_1",
+							"AllFlown": false,
+							"FareCalculation": "LON VS DEL657.98KGERB8JA NUC657.98END ROE0.750778",
+							"Coupons": [
+								{
+									"SegmentRefId": "SEG1",
+									"CouponNumber": "1",
+									"TicketNumber": "9327281872807",
+									"CouponStatus": "OPEN",
+									"FareBasis": "KGERB8JA",
+									"TicketExpirationDate": "05Aug26",
+									"TicketEffectiveDate": "05Aug26"
+								}
+							],
+							"Primary": false
+						}
+					],
+					"ItemStatus": {
+						"Status": "Current"
+					},
+					"PaymentDetails": [
+						{
+							"Amount": {
+								"MonetaryAmount": "2348.0",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							},
+							"CardMethod": {
+								"CardNumber": "444433XXXXXX1111",
+								"CardBrandCode": "VI"
+							},
+							"PaymentReferenceId": "81588121",
+							"PaymentProcessingStatus": "SUCCESSFUL",
+							"PaymentCommitmentDateTime": "2026-01-16T16:14:54"
+						}
+					]
+				},
+				{
+					"OrderItemId": "VS932SIVOZP26-2",
+					"OwnerAirline": "VS",
+					"Services": [
+						{
+							"ServiceId": "SV1",
+							"Product": {
+								"ProductOwner": "VS",
+								"ProductName": "Premium",
+								"ProductType": "Flight"
+							},
+							"ServiceBeneficiaries": [
+								"CHILD_1"
+							],
+							"OriginDestinationRefIds": [
+								"OD1"
+							],
+							"SegmentRefIds": [
+								"SEG1"
+							],
+							"BaggageRefIds": [
+								"BAG1",
+								"BAG2"
+							],
+							"PenaltyRef": {
+								"ChangePenaltyRefIds": [
+									"PEN5",
+									"PEN6"
+								],
+								"CancellationPenaltyRefIds": [
+									"PEN4"
+								]
+							},
+							"PriceClassRefIds": [
+								"PC1"
+							],
+							"ServiceDefinitionRefIds": [
+								"SRV1"
+							]
+						}
+					],
+					"PriceDetails": [
+						{
+							"PriceComponentType": "BasePrice",
+							"Amount": {
+								"MonetaryAmount": "1090.50",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							},
+							"FareCalculation": "LON VS DEL493.48KGERB8JA/CH NUC493.48END ROE0.750778"
+						},
+						{
+							"PriceComponentType": "BaseFare",
+							"Amount": {
+								"MonetaryAmount": "497.00",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							},
+							"BaseCurrencyAmount": {
+								"Amount": "370.00",
+								"Currency": "GBP"
+							},
+							"FareCalculation": "LON VS DEL493.48KGERB8JA/CH NUC493.48END ROE0.750778"
+						},
+						{
+							"PriceComponentType": "TotalTax",
+							"Amount": {
+								"MonetaryAmount": "593.50",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							},
+							"TaxBreakup": [
+								{
+									"Code": "GB",
+									"Name": "United Kingdom Air Passenger Duty APD",
+									"Amount": {
+										"MonetaryAmount": "328.00",
+										"BaseCurrency": "USD",
+										"DecimalPrecisionCount": 0,
+										"PriceDifference": 0
+									},
+									"CountryCode": "GB",
+									"Refundable": false
+								},
+								{
+									"Code": "IN",
+									"Name": "India User Development Fee Arrivals",
+									"Amount": {
+										"MonetaryAmount": "3.60",
+										"BaseCurrency": "USD",
+										"DecimalPrecisionCount": 0,
+										"PriceDifference": 0
+									},
+									"CountryCode": "IN",
+									"Refundable": false
+								},
+								{
+									"Code": "UB",
+									"Name": "United Kingdom Passenger Service Charge Departures",
+									"Amount": {
+										"MonetaryAmount": "68.30",
+										"BaseCurrency": "USD",
+										"DecimalPrecisionCount": 0,
+										"PriceDifference": 0
+									},
+									"CountryCode": "GB",
+									"Refundable": false
+								},
+								{
+									"Code": "YQ",
+									"Name": "VS YQ surcharge",
+									"Amount": {
+										"MonetaryAmount": "164.00",
+										"BaseCurrency": "USD",
+										"DecimalPrecisionCount": 0,
+										"PriceDifference": 0
+									},
+									"Refundable": false
+								},
+								{
+									"Code": "YR",
+									"Name": "VS YR surcharge",
+									"Amount": {
+										"MonetaryAmount": "29.60",
+										"BaseCurrency": "USD",
+										"DecimalPrecisionCount": 0,
+										"PriceDifference": 0
+									},
+									"Refundable": false
+								}
+							],
+							"FareCalculation": "LON VS DEL493.48KGERB8JA/CH NUC493.48END ROE0.750778"
+						}
+					],
+					"AccountableDocumentRefs": [
+						{
+							"DocumentType": "Ticket",
+							"DocumentNumber": "9327281872808",
+							"IssueDate": "2026-01-16",
+							"IssueTime": "11:14:00",
+							"CustomerRefId": "CHILD_1",
+							"AllFlown": false,
+							"FareCalculation": "LON VS DEL493.48KGERB8JA/CH NUC493.48END ROE0.750778",
+							"Coupons": [
+								{
+									"SegmentRefId": "SEG1",
+									"CouponNumber": "1",
+									"TicketNumber": "9327281872808",
+									"CouponStatus": "OPEN",
+									"FareBasis": "KGERB8JA",
+									"TicketExpirationDate": "05Aug26",
+									"TicketEffectiveDate": "05Aug26"
+								}
+							],
+							"Primary": false
+						}
+					],
+					"ItemStatus": {
+						"Status": "Current"
+					},
+					"PaymentDetails": [
+						{
+							"Amount": {
+								"MonetaryAmount": "2348.0",
+								"BaseCurrency": "USD",
+								"DecimalPrecisionCount": 0,
+								"PriceDifference": 0
+							},
+							"CardMethod": {
+								"CardNumber": "444433XXXXXX1111",
+								"CardBrandCode": "VI"
+							},
+							"PaymentReferenceId": "81588121",
+							"PaymentProcessingStatus": "SUCCESSFUL",
+							"PaymentCommitmentDateTime": "2026-01-16T16:14:54"
+						}
+					]
+				}
+			],
+			"ChangeType": "OrderItemAdded",
+			"ChangeDateTime": "2026-01-16T10:14:00Z",
+			"Version": "1"
+		}
+	],
+	"id": "VS932SIVOZP26-History",
+	"PartitionKey": "VS932SIVOZP26-History",
+	"_rid": "u65aALxFz89B5QAAAAAAAA==",
+	"_self": "dbs/u65aAA==/colls/u65aALxFz88=/docs/u65aALxFz89B5QAAAAAAAA==/",
+	"_etag": "\"350098c6-0000-0c00-0000-696a8e5b0000\"",
+	"_attachments": "attachments/",
+	"_ts": 1768590939
+}

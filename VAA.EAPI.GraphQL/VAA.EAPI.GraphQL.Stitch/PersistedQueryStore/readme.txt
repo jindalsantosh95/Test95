@@ -1,0 +1,1 @@
+﻿With new queries add as linked files to VAA.EAPI.GraphQL/PersistedQueryStore

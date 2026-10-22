@@ -1,0 +1,16 @@
+meta {
+  name: Get Customers by Phone Number
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{customer_base_url}}/customerSearchByPhone/{{customer_phone_number}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

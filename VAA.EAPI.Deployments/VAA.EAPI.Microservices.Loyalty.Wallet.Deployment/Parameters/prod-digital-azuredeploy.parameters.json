@@ -1,0 +1,284 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "PROD"
+    },
+    "AppServicePlanName": {
+      "value": "vapreunaspdigital01"
+    },
+    "functionappName": {
+      "value": "va-pr-eun-wallet-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-pr-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avapeunase013"
+    },
+    "keyVaultName": {
+      "value": "va-pr-eun-loyalty-kv-01"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "wallet",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "PROD",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vapveunwalletsa01"
+    },
+    "AppInsightsName": {
+      "value": "va-pr-eun-wallet-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-pr-eun-law-020"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avapeunlaw020"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "KeyVaultUri": {
+      "value": "https://va-pr-eun-loyalty-kv-01.vault.azure.net/"
+    },
+    // Swagger / OpenAPI
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/2b812f93-ac9a-4076-b085-9b6aff727505/User_impersonation"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-Wallet Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This endpoint will provide wallet details ."
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": false
+    },
+    "OpenApi__ForceHttp": {
+      "value": true
+    },
+    "Appsetting:AAD:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:EapiMsClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-EapiMsClientId/)"
+    },
+    "Appsetting:EapiMSSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-EapiMsSecret/)"
+    },
+    //Wallet settings
+    "AppSetting:PassTypeIdentifier": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-PassTypeIdentifier/)"
+    },
+    "AppSetting:TeamIdentifier": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-TeamIdentifier/)"
+    },
+    "AppSetting:PassbookCertificate": {
+      "value": "PassbookCertificate"
+    },
+    "AppSetting:AppleWalletCertificate": {
+      "value": "AppleWalletCertificate"
+    },
+    "AppSetting:APNSPushCertificate": {
+      "value": "APNSPushCertificate"
+    },
+    "AppSetting:WalletBlobUrl": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/WalletBlobUrl/)"
+    },
+    "AppSetting:Red_Background_RGB": {
+      "value": "rgb(218, 5, 48)"
+    },
+    "AppSetting:Gold_Background_RGB": {
+      "value": "rgb(165, 139, 66)"
+    },
+    "AppSetting:Silver_Background_RGB": {
+      "value": "rgb(137, 149, 157)"
+    },
+    "AppSetting:WalletDBConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-StorageAccount/)"
+    },
+    "AppSetting:RegisterPassTable": {
+      "value": "WalletPassTable"
+    },
+    "AppSetting:PushPassTable": {
+      "value": "PushPassTable"
+    },
+    "AppSetting:WalletNotificationResponseUrl": {
+      "value": "https://digital.virginatlantic.com/Wallet/WalletNotificationResponse/{CorrelationId}"
+    },
+    "AppSetting:RecordCount": {
+      "value": "1000"
+    },
+    "AppSetting:ResponsePollingCount": {
+      "value": "50"
+    },
+    "AppSetting:ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "Appsetting:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-StorageAccount/)"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "WalletEventStore"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "value": "WalletResponse"
+    },
+    "AppSetting:WalletGeneratePassUrl": {
+      "value": "https://digital.virginatlantic.com/RunTheOperation/"
+    },
+    "AppSetting:WalletFacadeAppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-WalletFacadeAppId/)"
+    },
+    "AppSetting:CustomerMsUrl": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/"
+    },
+    "AppSetting:CustomerAppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-CustomerAppId/)"
+    },
+    "AppSetting:CustomerTransUrl": {
+      "value": "https://resources.virginatlantic.com/customertransactions/"
+    },
+    "AppSetting:CustomerTransAppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-CustomerTransAppId/)"
+    },
+    "AppSetting:EapiOcpSubId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-EapiOcpSubId/)"
+    },
+    "AppSetting:PushNotificationKeyId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-PushNotificationKeyId/)"
+    },
+    "AppSetting:IsDevelopmentServer": {
+      "value": false
+    },
+    "AppSetting:AppleApiDevEndpoint": {
+      "value": "https://api.sandbox.push.apple.com"
+    },
+    "AppSetting:AppleApiProdEndpoint": {
+      "value": "https://api.push.apple.com"
+    },
+    "AppSetting:AppleApiDevPort": {
+      "value": "2197"
+    },
+    "AppSetting:AppleApiProdPort": {
+      "value": "443"
+    },
+    "AppSetting:AirshipFlightEndpoint": {
+      "value": "https://wallet-api.asnapieu.com/v1/flights/project/id/boarding_pass_live/id"
+    },
+    "AppSetting:AirshipWalletLinkEndpoint": {
+      "value": "https://wallet-api.asnapieu.com/v1/links/adaptive/multiple/project/221"
+    },
+    "AppSetting:AirShipWalletAdaptivePassUrlPrefix": {
+      "value": "https://wallet-api.asnapieu.com/v1/pass/adaptive"
+    },
+    "AppSetting:AirshipTokenValue": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-AirshipTokenValue/)"
+    },
+    "AppSetting:RedisConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-Redisconnectionstring/)"
+    },
+    "AppSetting:BoardingPassSlidingExpiryHours": {
+      "value": "48"
+    },
+    "AppSetting:SecureProgramImageUrl": {
+      "value": "https://vaabrowse.virginatlantic.com/content/dam/vaa-home/grouped-boarding-pass-badges.png"
+    },
+    "AppSetting:SkyPriorityImgUrl": {
+      "value": "http://vaabrowse.virginatlantic.com/content/dam/vaa-home/sky-priority-badge.png"
+    },
+    "AppSetting:TSAPreImgUrl": {
+      "value": "http://vaabrowse.virginatlantic.com/content/dam/vaa-home/tsa-pre-badge.png"
+    },
+    "AppSetting:AirshipIosPremiumTemplate": {
+      "value": "337012"
+    },
+    "AppSetting:AirshipIosUpperTemplate": {
+      "value": "337015"
+    },
+    "AppSetting:AirshipIosDLTemplate": {
+      "value": "337013"
+    },
+    "AppSetting:AirshipIosOATemplate": {
+      "value": "337014"
+    },
+    "AppSetting:AirshipAndroidPremiumTemplate": {
+      "value": "337016"
+    },
+    "AppSetting:AirshipAndroidUpperTemplate": {
+      "value": "337017"
+    },
+    "AppSetting:AirshipAndroidDLTemplate": {
+      "value": "337018"
+    },
+    "AppSetting:AirshipAndroidOATemplate": {
+      "value": "337019"
+    },
+    "AppSetting:AirshipIosEconomyTemplate": {
+      "value": "337010"
+    },
+    "AppSetting:AirshipAndroidEconomyTemplate": {
+      "value": "337011"
+    },
+    "AppSetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/va-pr-eun-wallet-fn-01-Config-ServiceBusConnectionString/)"
+    }
+
+  }
+}

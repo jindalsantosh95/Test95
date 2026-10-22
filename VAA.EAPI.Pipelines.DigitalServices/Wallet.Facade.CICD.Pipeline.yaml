@@ -1,0 +1,120 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Facade/VAA.Facade.WalletFacade*
+    exclude: 
+      - VAA.EAPI.Facade/VAA.Facade.WalletFacade.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Facade/VAA.Facade.WalletFacade*
+    exclude: 
+      - VAA.EAPI.Facade/VAA.Facade.WalletFacade.bruno
+
+variables: 
+  
+  - group: Digital_Variables
+  - group: performance_variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines' 
+  - name: agentPool1
+    value: 'LoyaltySystems'  
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.Facade' 
+  - name: subRootPath
+    value: 'VAA.Facade'
+  - name: applicationName
+    value: 'WalletFacade'
+  - name: microserviceName
+    value: 'WalletFacade' 
+  - name: apimurlname
+    value: 'WalletFacade'            
+  - name: functionAppName_DEV
+    value: 'va-dv-eun-walletfacade-fn-01' 
+  - name: functionAppName_SIT
+    value: 'va-ts-eun-walletfacade-fn-01' 
+  - name: functionAppName_UAT
+    value: 'va-tu-eun-walletfacade-fn-01' 
+  - name: functionAppName_PROD
+    value: 'va-pr-eun-walletfacade-fn-01' 
+
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions_digital/build_walletfacade.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupName_Loyalty_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_Loyalty_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_Loyalty_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_Loyalty_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)  
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_Prod: $(subscriptionId_Prod)  
+
+  # CD (Deployment) Pipeline
+  - template: functions_digital/release_digital_facade.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_deployment: $(agentPool1)      
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      buildConfiguration: $(buildConfiguration)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      resourceGroupName_DEV: $(resourceGroupName_Loyalty_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_Loyalty_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_Loyalty_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_Loyalty_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      subscriptionId_NonProd: $(subscriptionId_NonProd) 
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_Prod: $(subscriptionId_Prod)    
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_PROD: $(functionAppName_PROD)
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)
+      workspaceResourceId: $(workspaceResourceId)
+      workspaceResourceId_prod: $(workspaceResourceId_prod)
+      asename: $(asename)
+      asename_prod: $(asename_prod)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)

@@ -1,0 +1,29 @@
+meta {
+  name: ManageBannerDetails
+  type: graphql
+  seq: 24
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation ManageBannerDetails($bannerCode: String) {
+    ManageBannerDetails(bannerCode: $bannerCode)
+  }
+}
+
+body:graphql:vars {
+  {
+    "bannerCode": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

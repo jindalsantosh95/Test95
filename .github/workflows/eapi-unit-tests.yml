@@ -1,0 +1,471 @@
+name: Automation - EAPI Unit Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_filter:
+        description: Optional project path/name filter. Leave blank to run all non-automation unit test projects.
+        required: false
+        default: ''
+      configuration:
+        description: Build configuration.
+        required: false
+        default: Release
+        type: choice
+        options:
+          - Release
+          - Debug
+      collect_coverage:
+        description: Collect XPlat Code Coverage and include Cobertura summary.
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  eapi-unit-tests:
+    name: EAPI unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Run unit tests with TRX output
+        id: run_tests
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $false
+          $repoRoot = $env:GITHUB_WORKSPACE
+          $resultsRoot = Join-Path $repoRoot 'TestResults'
+          New-Item -ItemType Directory -Path $resultsRoot -Force | Out-Null
+
+          $projectFilter = '${{ github.event.inputs.project_filter }}'
+          $configuration = '${{ github.event.inputs.configuration }}'
+          $collectCoverage = [System.Convert]::ToBoolean('${{ github.event.inputs.collect_coverage }}')
+
+          $excludedPathPatterns = @(
+            '/VAA\.EAPI\.Automation/',
+            '/bin/',
+            '/obj/'
+          )
+
+          $projects = Get-ChildItem -LiteralPath $repoRoot -Filter '*.csproj' -File -Recurse |
+            Where-Object {
+              $fullName = $_.FullName.Replace('\', '/')
+              $excluded = $false
+              foreach ($pattern in $excludedPathPatterns) {
+                if ($fullName -match $pattern) { $excluded = $true; break }
+              }
+
+              if ($excluded) { $false }
+              elseif ($_.Name -like '*Backup*' -or $fullName -like '*/VAA - Backup.*') { $false }
+              elseif (-not [string]::IsNullOrWhiteSpace($projectFilter) -and $fullName -notlike "*$projectFilter*" -and $_.Name -notlike "*$projectFilter*") { $false }
+              else {
+                $projectText = Get-Content -LiteralPath $fullName -Raw
+                $projectText -match 'Microsoft\.NET\.Test\.Sdk'
+              }
+            } |
+            Sort-Object FullName
+
+          if ($projects.Count -eq 0) {
+            throw "No non-automation unit test projects were discovered. Filter='$projectFilter'."
+          }
+
+          "## EAPI Unit Test Execution" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          "Discovered **$($projects.Count)** test project(s)." | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          "" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+
+          $failedProjects = [System.Collections.Generic.List[string]]::new()
+
+          function Get-TestProjectDisplayName {
+            param([System.IO.FileInfo]$Project)
+
+            $projectDirectoryName = Split-Path -Leaf (Split-Path -Parent $Project.FullName)
+            $projectBaseName = [System.IO.Path]::GetFileNameWithoutExtension($Project.Name)
+
+            if ($projectBaseName -match '(?i)(\.Tests?|\.UnitTests?)$') {
+              return $projectBaseName
+            }
+
+            if ($projectDirectoryName -match '(?i)(\.Tests?|\.UnitTests?)$') {
+              return $projectDirectoryName
+            }
+
+            return $projectBaseName
+          }
+
+          foreach ($project in $projects) {
+            $relativePath = [System.IO.Path]::GetRelativePath($repoRoot, $project.FullName)
+            $displayName = Get-TestProjectDisplayName -Project $project
+            $safeNameBase = ($displayName -replace '[^A-Za-z0-9_.-]', '_')
+            if ($safeNameBase.Length -gt 80) { $safeNameBase = $safeNameBase.Substring(0, 80).TrimEnd('.', '-', '_') }
+
+            $sha256 = [System.Security.Cryptography.SHA256]::Create()
+            $hashBytes = $sha256.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($relativePath))
+            $hash = (([System.BitConverter]::ToString($hashBytes)) -replace '-', '').Substring(0, 8).ToLowerInvariant()
+            $sha256.Dispose()
+            $safeName = "$safeNameBase-$hash"
+            $projectResults = Join-Path $resultsRoot $safeName
+            New-Item -ItemType Directory -Path $projectResults -Force | Out-Null
+            $displayName | Set-Content -LiteralPath (Join-Path $projectResults 'project-name.txt') -Encoding utf8
+            $relativePath | Set-Content -LiteralPath (Join-Path $projectResults 'project-path.txt') -Encoding utf8
+
+            Write-Host "Running $displayName ($relativePath)"
+            $testArgs = @(
+              'test',
+              $project.FullName,
+              '-c',
+              $configuration,
+              '--results-directory',
+              $projectResults,
+              '--logger',
+              "trx;LogFileName=$safeName.trx",
+              '-p:UseMicrosoftTestingPlatformRunner=false',
+              '-p:TestingPlatformDotnetTestSupport=false',
+              '--verbosity',
+              'normal'
+            )
+
+            if ($collectCoverage) {
+              $testArgs += @('--collect', 'XPlat Code Coverage')
+            }
+
+            & dotnet @testArgs
+            $projectTrxFiles = @(Get-ChildItem -LiteralPath $projectResults -Filter '*.trx' -File -Recurse -ErrorAction SilentlyContinue)
+            if ($projectTrxFiles.Count -gt 0) {
+              Write-Host "TRX files found for ${relativePath}:"
+              foreach ($trxFile in $projectTrxFiles) { Write-Host "  $($trxFile.FullName)" }
+            }
+            else {
+              Write-Host "No TRX files found for $relativePath under $projectResults" -ForegroundColor Yellow
+            }
+
+            $expectedTrx = Join-Path $projectResults "$safeName.trx"
+            if ($LASTEXITCODE -ne 0) {
+              $failedProjects.Add($relativePath)
+              Write-Host "Test project failed: $displayName ($relativePath)" -ForegroundColor Red
+            }
+            elseif (-not (Test-Path -LiteralPath $expectedTrx -PathType Leaf)) {
+              $failedProjects.Add("$relativePath (TRX not produced)")
+              Write-Host "Test project did not produce expected TRX: $expectedTrx" -ForegroundColor Red
+            }
+          }
+
+          "failed_project_count=$($failedProjects.Count)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "failed_projects<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          ($failedProjects -join "`n") | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Analyse unit test results
+        if: always()
+        run: |
+          $summaryPath = $env:GITHUB_STEP_SUMMARY
+          $resultsRoot = Join-Path $env:GITHUB_WORKSPACE 'TestResults'
+          $trxFiles = @(Get-ChildItem -LiteralPath $resultsRoot -Filter "*.trx" -File -Recurse -ErrorAction SilentlyContinue)
+          if ($trxFiles.Count -gt 0) {
+            Write-Host "TRX files available for analysis:"
+            foreach ($trxFile in $trxFiles) { Write-Host "  $($trxFile.FullName)" }
+          }
+          else {
+            Write-Host "No TRX files were found under $resultsRoot before analysis." -ForegroundColor Yellow
+          }
+
+          try {
+            $analysis = & "scripts/analyse-test-run-results.ps1" `
+              -ResultsDirectory $resultsRoot `
+              -SuiteName "EAPI Unit Tests" `
+              -EnvironmentName "manual"
+            if (-not [string]::IsNullOrWhiteSpace($analysis)) {
+              "`n$analysis" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+            }
+          }
+          catch {
+            "### Post-Test Failure Analysis`n`nUnable to generate failure analysis: $($_.Exception.Message)" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+          }
+
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eapi-unit-test-results
+          path: TestResults/**
+          if-no-files-found: warn
+
+      - name: Send Slack notification
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_EAPI_UNIT_TESTS }}
+          FAILED_PROJECT_COUNT: ${{ steps.run_tests.outputs.failed_project_count || 0 }}
+          FAILED_PROJECTS: ${{ steps.run_tests.outputs.failed_projects }}
+          PROJECT_FILTER: ${{ github.event.inputs.project_filter }}
+          CONFIGURATION: ${{ github.event.inputs.configuration }}
+          COLLECT_COVERAGE: ${{ github.event.inputs.collect_coverage }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:SLACK_WEBHOOK_URL)) {
+            Write-Host 'Slack webhook secret SLACK_WEBHOOK_URL_EAPI_UNIT_TESTS is not configured; skipping notification.'
+            exit 0
+          }
+
+          $failedCount = 0
+          [void][int]::TryParse($env:FAILED_PROJECT_COUNT, [ref]$failedCount)
+          $status = if ($failedCount -gt 0 -or $env:JOB_STATUS -ne 'success') { 'Failed' } else { 'Passed' }
+          $projectFilter = if ([string]::IsNullOrWhiteSpace($env:PROJECT_FILTER)) { 'All non-automation unit test projects' } else { $env:PROJECT_FILTER }
+          $coverage = if ($env:COLLECT_COVERAGE -eq 'true') { 'Enabled' } else { 'Disabled' }
+
+          $failedProjectsText = if ($failedCount -gt 0 -and -not [string]::IsNullOrWhiteSpace($env:FAILED_PROJECTS)) {
+            $text = $env:FAILED_PROJECTS.Trim()
+            if ($text.Length -gt 1800) { $text.Substring(0, 1800) + "`n...truncated" } else { $text }
+          }
+          else {
+            'None'
+          }
+
+          $codeFence = [string]::new([char]96, 3)
+          $failedProjectsBlock = "$codeFence`n$failedProjectsText`n$codeFence"
+
+          function Convert-CoverageMetricToDouble {
+            param([string]$Value)
+
+            $parsedValue = 0.0
+            if ([double]::TryParse($Value, [System.Globalization.NumberStyles]::Float, [System.Globalization.CultureInfo]::InvariantCulture, [ref]$parsedValue)) {
+              return $parsedValue
+            }
+
+            return 0.0
+          }
+
+          function Convert-CoverageRatioToPercent {
+            param(
+              [double]$Covered,
+              [double]$Valid
+            )
+
+            if ($Valid -le 0) { return 'unknown' }
+            return "$([math]::Round(($Covered / $Valid) * 100, 2))%"
+          }
+          function Format-CoverageRatioText {
+            param(
+              [double]$Covered,
+              [double]$Valid
+            )
+
+            if ($Valid -le 0) { return '' }
+            return "$Covered/$Valid"
+          }
+          function Get-CoverageSourceName {
+            param([System.IO.FileInfo]$CoverageFile)
+
+            $directory = $CoverageFile.Directory
+            while ($null -ne $directory) {
+              $metadataPath = Join-Path $directory.FullName 'project-name.txt'
+              if (Test-Path -LiteralPath $metadataPath -PathType Leaf) {
+                $metadataValue = (Get-Content -LiteralPath $metadataPath -Raw).Trim()
+                if (-not [string]::IsNullOrWhiteSpace($metadataValue)) {
+                  return $metadataValue
+                }
+              }
+
+              $directory = $directory.Parent
+            }
+
+            if ($null -ne $CoverageFile.Directory) {
+              $collectorDirectoryId = [guid]::Empty
+              if ([guid]::TryParse($CoverageFile.Directory.Name, [ref]$collectorDirectoryId) -and $null -ne $CoverageFile.Directory.Parent) {
+                return $CoverageFile.Directory.Parent.Name
+              }
+
+              return $CoverageFile.Directory.Name
+            }
+
+            return $CoverageFile.Name
+          }
+          function Format-SlackProjectName {
+            param([string]$Source)
+
+            if ($Source -eq 'Total') { return 'Total' }
+
+            $name = $Source -replace '^VAA\.EAPI\.', ''
+            $name = $name -replace '(?i)(\.UnitTests?|\.Tests?)$', ''
+            if ($name.Length -gt 72) {
+              return $name.Substring(0, 69).TrimEnd('.', '-', '_') + '...'
+            }
+
+            return $name
+          }
+
+          $coverageRows = @()
+          if ($env:COLLECT_COVERAGE -eq 'true') {
+            $resultsRoot = Join-Path $env:GITHUB_WORKSPACE 'TestResults'
+            $coverageFileHashes = @{}
+            $coverageFiles = @(
+              Get-ChildItem -LiteralPath $resultsRoot -Filter 'coverage.cobertura.xml' -File -Recurse -ErrorAction SilentlyContinue |
+                Sort-Object LastWriteTimeUtc -Descending |
+                Where-Object {
+                  $hash = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash
+                  if ($coverageFileHashes.ContainsKey($hash)) {
+                    $false
+                  }
+                  else {
+                    $coverageFileHashes[$hash] = $true
+                    $true
+                  }
+                }
+            )
+            if ($coverageFiles.Count -gt 0) {
+              $totalLinesCovered = 0.0
+              $totalLinesValid = 0.0
+              $totalBranchesCovered = 0.0
+              $totalBranchesValid = 0.0
+
+              foreach ($coverageFile in $coverageFiles) {
+                try {
+                  [xml]$coverageXml = Get-Content -LiteralPath $coverageFile.FullName -Raw -ErrorAction Stop
+                  $root = $coverageXml.coverage
+                  if ($null -eq $root) { continue }
+
+                  $linesCovered = Convert-CoverageMetricToDouble -Value ([string]$root.'lines-covered')
+                  $linesValid = Convert-CoverageMetricToDouble -Value ([string]$root.'lines-valid')
+                  $branchesCovered = Convert-CoverageMetricToDouble -Value ([string]$root.'branches-covered')
+                  $branchesValid = Convert-CoverageMetricToDouble -Value ([string]$root.'branches-valid')
+
+                  $totalLinesCovered += $linesCovered
+                  $totalLinesValid += $linesValid
+                  $totalBranchesCovered += $branchesCovered
+                  $totalBranchesValid += $branchesValid
+
+                  $projectName = Get-CoverageSourceName -CoverageFile $coverageFile
+                  $coverageRows += [pscustomobject]@{
+                    Source = $projectName
+                    LineCoverage = Convert-CoverageRatioToPercent -Covered $linesCovered -Valid $linesValid
+                    BranchCoverage = Convert-CoverageRatioToPercent -Covered $branchesCovered -Valid $branchesValid
+                    Lines = Format-CoverageRatioText -Covered $linesCovered -Valid $linesValid
+                    Branches = Format-CoverageRatioText -Covered $branchesCovered -Valid $branchesValid
+                    LineCoverageSort = if ($linesValid -gt 0) { $linesCovered / $linesValid } else { [double]::MaxValue }
+                    HasKnownLineCoverage = $linesValid -gt 0
+                  }
+                }
+                catch {
+                  Write-Host "Unable to read coverage file for Slack summary: $($coverageFile.FullName). $($_.Exception.Message)" -ForegroundColor Yellow
+                }
+              }
+
+              $totalCoverageRow = [pscustomobject]@{
+                Source = 'Total'
+                LineCoverage = Convert-CoverageRatioToPercent -Covered $totalLinesCovered -Valid $totalLinesValid
+                BranchCoverage = Convert-CoverageRatioToPercent -Covered $totalBranchesCovered -Valid $totalBranchesValid
+                Lines = Format-CoverageRatioText -Covered $totalLinesCovered -Valid $totalLinesValid
+                Branches = Format-CoverageRatioText -Covered $totalBranchesCovered -Valid $totalBranchesValid
+                LineCoverageSort = 0
+              }
+              $coverageRows = @($totalCoverageRow) + $coverageRows
+            }
+          }
+
+          $coverageSummaryText = if ($coverageRows.Count -gt 0) {
+            $coverageLines = [System.Collections.Generic.List[string]]::new()
+            $totalRow = @($coverageRows | Where-Object { $_.Source -eq 'Total' } | Select-Object -First 1)
+            $projectRows = @($coverageRows | Where-Object { $_.Source -ne 'Total' })
+            $projectLimit = 8
+
+            if ($totalRow.Count -gt 0) {
+              $row = $totalRow[0]
+              $coverageLines.Add("*Total*")
+              $coverageLines.Add("Line: $($row.LineCoverage)   Branch: $($row.BranchCoverage)")
+              $coverageLines.Add("Lines: $($row.Lines)   Branches: $($row.Branches)")
+              $coverageLines.Add('')
+            }
+
+            if ($projectRows.Count -gt 0) {
+              $knownProjectRows = @($projectRows | Where-Object { $_.HasKnownLineCoverage })
+              $unknownProjectRows = @($projectRows | Where-Object { -not $_.HasKnownLineCoverage })
+              $unknownLimit = 4
+
+              if ($knownProjectRows.Count -gt 0) {
+                $coverageLines.Add("*Lowest line coverage projects* ($([math]::Min($projectLimit, $knownProjectRows.Count)) of $($knownProjectRows.Count))")
+                foreach ($row in @($knownProjectRows | Sort-Object LineCoverageSort, Source | Select-Object -First $projectLimit)) {
+                  $coverageLines.Add("- $(Format-SlackProjectName -Source $row.Source): line $($row.LineCoverage), branch $($row.BranchCoverage)")
+                }
+              }
+
+              if ($unknownProjectRows.Count -gt 0) {
+                if ($coverageLines.Count -gt 0) { $coverageLines.Add('') }
+                $coverageLines.Add("*Projects with unknown line coverage* ($([math]::Min($unknownLimit, $unknownProjectRows.Count)) of $($unknownProjectRows.Count))")
+                foreach ($row in @($unknownProjectRows | Sort-Object Source | Select-Object -First $unknownLimit)) {
+                  $coverageLines.Add("- $(Format-SlackProjectName -Source $row.Source): branch $($row.BranchCoverage)")
+                }
+              }
+
+              if (($knownProjectRows.Count -gt $projectLimit) -or ($unknownProjectRows.Count -gt $unknownLimit)) {
+                $coverageLines.Add("_Full per-project coverage is in the GitHub summary and TestResults artifact._")
+              }
+            }
+
+            ($coverageLines -join "`n").Trim()
+          }
+          elseif ($env:COLLECT_COVERAGE -eq 'true') {
+            'Coverage was enabled, but no coverage.cobertura.xml files were found.'
+          }
+          else {
+            'Coverage disabled.'
+          }
+          if ($coverageSummaryText.Length -gt 1800) {
+            $coverageSummaryText = $coverageSummaryText.Substring(0, 1800) + "`n...truncated"
+          }
+
+          $payload = @{
+            text = "EAPI Unit Tests - $status"
+            blocks = @(
+              @{
+                type = 'section'
+                text = @{ type = 'mrkdwn'; text = "*EAPI Unit Tests - $status*`n<$env:RUN_URL|View workflow run>" }
+              },
+              @{
+                type = 'section'
+                fields = @(
+                  @{ type = 'mrkdwn'; text = "*Configuration:*`n$env:CONFIGURATION" },
+                  @{ type = 'mrkdwn'; text = "*Coverage:*`n$coverage" },
+                  @{ type = 'mrkdwn'; text = "*Project filter:*`n$projectFilter" },
+                  @{ type = 'mrkdwn'; text = "*Failed projects:*`n$failedCount" }
+                )
+              },
+              @{
+                type = 'section'
+                text = @{ type = 'mrkdwn'; text = "*Coverage summary:*`n$coverageSummaryText" }
+              },
+              @{
+                type = 'section'
+                text = @{ type = 'mrkdwn'; text = "*Failed project list:*`n$failedProjectsBlock" }
+              }
+            )
+          }
+
+          $json = $payload | ConvertTo-Json -Depth 10
+          Invoke-RestMethod -Method Post -Uri $env:SLACK_WEBHOOK_URL -ContentType 'application/json' -Body $json
+
+      - name: Fail workflow when tests fail
+        if: always()
+        run: |
+          $count = [int]'${{ steps.run_tests.outputs.failed_project_count || 0 }}'
+          if ($count -gt 0) {
+            Write-Host "Failed project count: $count" -ForegroundColor Red
+            Write-Host '${{ steps.run_tests.outputs.failed_projects }}'
+            exit 1
+          }
+
+          Write-Host 'All discovered unit test projects passed.'

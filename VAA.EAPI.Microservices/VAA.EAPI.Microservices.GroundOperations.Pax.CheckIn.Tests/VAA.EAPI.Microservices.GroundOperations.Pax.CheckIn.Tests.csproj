@@ -1,0 +1,355 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove=".mocks\**" />
+		<Compile Remove="xmn\**" />
+		<EmbeddedResource Remove=".mocks\**" />
+		<EmbeddedResource Remove="xmn\**" />
+		<None Remove=".mocks\**" />
+		<None Remove="xmn\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include=".mocks\BuildTransactionSummaryResponse.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include=".mocks\BuildTransactionSummaryFailureResponse.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+    <None Include=".mocks\BoardingDocumentResponse-HAND01.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\BoardingDocumentResponse-HAND02.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\BoardingDocumentResponse-F747BD.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportDetails-onwarddate-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportDetails-EGGXER-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportDetails-traveldocs-usa-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportDetails-traveldocs-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportDetails-secondarydocs-usa-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportDetails-secondarydocs-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportDetails-HAND01-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportDetails-HAND03-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportDetails-HAND02-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+	<None Include=".mocks\SeatsResponse-F747BDPNR.mock">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-Advisory-EZ3UPQ.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-Advisory-EMYQZW.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TRM-Requirements-EMYQZW-Advisory.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-TEST03-Get.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-EGGXER-Get.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-UMNR-Advisory.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-HAND11-Patch-ProhibittedSSR.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-HAND11.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-traveldocs-usa-Get.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-traveldocs-Get.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-secondarydocs-Get.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-secondarydocs-usa-Get.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-HAND02-POST.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-HAND03-Get.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-HAND02-PATCH-New-Selected.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Include=".mocks\TravelPartyResponse-HAND02-PATCH-2-Selected.mock">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+    <None Include=".mocks\TravelPartyResponse-HAND02-PATCH.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-HAND02-Get.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+    <None Include=".mocks\TravelPartyResponse-HAND02.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-DCHSGQ.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportDetails-a61a21d7-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-CI2HH6-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-E3RWWX-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-E3SKJP-DomesticOnly-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-E3SBTE-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-TRM404-NoErrorCode.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-TRM404-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-TRM404-InvalidPNR-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-EARYFL-PATCH-DefaultError.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-E7BWN6-PATCH-MultiPsg.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-InValidRequirementId.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-InValidCharacterFirstName.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-EGGXER-PATCH-ExpiredPassport.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-EARYFL-PATCH-PassportGermanResidency.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-EARYFL-PATCH-PassportGermanNationality.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-EARYFL-PATCH-PassportGermanCodes.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-EARYFL-POST-ReqException.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-EARYFL-PATCH-ReqException.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-EARYFL-PATCH-InValidPassport.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-EARYFL-PATCH-InValidName.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-EARYFL-Get.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-DCHSGQ-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-F747BD-PATCH-OK.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-CI2J64-POST.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-UMNR-Advisory.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND11-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-traveldocs-usa-Patch.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-traveldocs-Patch.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-H7F7VI-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-F75ERN-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND02-Patch-TripIdIssue-CT.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND02-Patch-NoCountryCode-CT.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND01-Patch-EmergencyContact.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND01-Patch-ReturnDate.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND01-Patch-SelfDeclarationForm.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-SecondaryDocument-Patch.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND01-Patch-ReturnDate-CheckIn.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND01-Patch-NoReturnDate-CheckIn.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND01-Patch-Passport.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND01-Post.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\SeatsResponse-F747BD.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\PassportData-HAND01-Get.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-G3JARJ-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-F6PM4A-Get.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-F6PM4A.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-F747BD-Post.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-F747BD-Get.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-F747BD.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-F74V92-Get.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-F74V92.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-F75ERN.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-F77JOI.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-F77LF3.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-H7F7VI.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-GW7VDV-Patch.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-GetResourcebyRequirementId.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-GPB6MC-Patch.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-HAND01-Get.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-HAND01-Patch.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-HAND01.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-LHR404.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-HYCS7F-Get.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TravelPartyResponse-HYCS7F.mock">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND02-GET.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND03-Post.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND03-Patch-SavePAss-SecDocErr.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND03-Patch-ReturnDate-SecDocErr.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND02-Patch-NoReturnDate.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND02-Patch.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\TRM-Requirements-HAND02-Post.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+		<PackageReference Include="Moq" Version="4.20.72" />
+		<PackageReference Include="xunit.v3" Version="3.2.2" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\VAA.EAPI.Core.Xunit\VAA.EAPI.Core.Xunit.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.Microservices.GroundOperations.Passenger.CheckIn\VAA.EAPI.Microservices.GroundOperations.Passenger.CheckIn.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,83 @@
+parameters:   
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''  
+  rootPath: ''
+  subRootPath: ''
+  applicationName: ''
+  SPECTRAL_DSN: ''
+  SPECTRAL_KEY: ''
+  deploymentroot: 'VAA.EAPI.Deployments'
+
+stages: 
+  - stage: 'Build'
+    jobs: 
+      - job: 'Build'
+        displayName: 'Build'  
+        pool:
+          name: ${{parameters.agentPool}} 
+          vmImage: ${{parameters.agentSpecification}}         
+      
+        steps:
+          # Task to install DotNet Core SDK
+          - task: UseDotNet@2
+            displayName: 'Install DotNet Core SDK' 
+            inputs:
+              packageType: 'sdk'
+              version: '10.0.x'
+          
+          # Task to build the project
+          - task: DotNetCoreCLI@2
+            displayName: 'Build Project'
+            inputs:
+              command: 'build'
+              projects: '**/${{parameters.subRootPath}}.${{parameters.applicationName}}.csproj'
+              arguments: '--configuration ${{parameters.buildConfiguration}}'
+
+          # Task to unit test the project
+          - task: DotNetCoreCLI@2
+            displayName: 'Test Project'
+            inputs:
+              command: 'test'
+              projects: '**/${{parameters.subRootPath}}.${{parameters.applicationName}}.Tests.csproj'
+              arguments: '--configuration ${{parameters.buildConfiguration}} --collect "XPlat Code coverage" -p:ParallelizeTestCollections=false --blame-hang --blame-hang-dump-type none --blame-hang-timeout 7m'
+
+          # Task to Install Report Generator Tool
+          #- script: 'dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.5.8'
+          #  displayName: 'Install ReportGenerator tool'
+
+          # Task to Create Reports
+          #- script: 'reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -filefilters:-*ItaFlightSearch.*;-*ITAProxy.*;-*VAA.EAPI.Common*;-*VAA.EAPI.Domain*;-*VAA.EAPI.Infrastructure* -classfilters:-*WesalServiceReference.* -reporttypes:"cobertura"'
+          #  displayName: 'Create reports'
+            
+          # Task to Publish Code Coverage
+          #- task: PublishCodeCoverageResults@1
+          #  displayName: 'Publish code coverage'
+          #  inputs: 
+          #    codecoverageTool: cobertura
+          #    summaryFileLocation: '$(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml'
+
+          # Task to publish the project
+          - task: DotNetCoreCLI@2
+            displayName: 'Publish Project'
+            inputs:
+              command: 'publish'
+              publishWebProjects: false
+              projects: '**/${{parameters.subRootPath}}.${{parameters.applicationName}}.csproj'
+              arguments: '--configuration ${{parameters.buildConfiguration}} --output $(build.ArtifactStagingDirectory)'
+              zipAfterPublish: true
+
+          # Task to copy the ARM files to artifactstagingdirectory
+          - task: CopyFiles@2
+            displayName: 'Copy ARM Files'
+            inputs:
+              SourceFolder: '${{parameters.deploymentroot}}/${{parameters.subRootPath}}.${{parameters.applicationName}}.Deployment'
+              TargetFolder: '$(build.ArtifactStagingDirectory)'
+
+          # task to publish build artifacts to Azure Pipelines 
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifacts' 
+            inputs:
+              PathtoPublish: '$(build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop' 
+              publishLocation: 'Container'

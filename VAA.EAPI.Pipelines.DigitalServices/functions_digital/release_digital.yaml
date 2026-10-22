@@ -1,0 +1,242 @@
+parameters:
+  agentPool: ''
+  agentPool_deployment: ''
+  agentSpecification: ''
+  resourceGroupName_DEV: ''
+  resourceGroupName_SIT: ''
+  resourceGroupName_UAT: ''
+  resourceGroupName_PROD: ''
+  applicationName: ''
+  microserviceName: ''
+  apimurlname: ''
+  buildConfiguration: ''
+  functionAppName_DEV: ''
+  functionAppName_SIT: ''
+  functionAppName_UAT: ''
+  functionAppName_PROD: ''
+  APIM_IP_DEV_SIT_UAT: '' 
+  APIM_IP_PRD: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''
+  workspaceResourceId: ''
+  workspaceResourceId_prod: ''
+  APIM_NonProd: ''
+  serviceConnection_NonProd: ''
+  serviceConnection_Prod: ''
+  APIMResourceGroupName_NonProd: ''  
+  APIMServiceConnection_NonProd: ''
+  APIMSubscriptionId_NonProd: ''
+  asename: ''
+  asename_prod: ''
+  VARIABLE_GROUP_NAME_DEV: ''
+  VARIABLE_GROUP_NAME_SIT: ''
+  VARIABLE_GROUP_NAME_UAT: ''
+
+
+stages:
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/DEV.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_digital.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_DEV}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}     
+
+  - stage: 'APIM_DEV'     
+    displayName: 'APIM - DEV' 
+    dependsOn: DEV   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_digital_apim.yaml
+        parameters:
+          apimEnv: 'DEV/'
+          apiEnv: '_DEV' 
+          apisEnv: 'dev'
+          environment: 'DEV'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}          
+          microserviceName: ${{parameters.microserviceName}}
+          apimurlname: ${{parameters.apimurlname}}
+          #productId: ${{parameters.productId}}    
+          functionAppName: ${{parameters.functionAppName_DEV}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_DEV}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}  
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}    
+          asename: ${{parameters.asename}}
+
+  - stage: 'Trips_Tests_DEV'
+    displayName: 'Trips_Tests_DEV' 
+    dependsOn: APIM_DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/Trips/tripsMSTests.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_DEV}}
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/SIT.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_digital.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_SIT}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_SIT}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}     
+
+  - stage: 'APIM_SIT'     
+    displayName: 'APIM - SIT' 
+    dependsOn: SIT 
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_digital_apim.yaml
+        parameters:
+          apimEnv: 'SIT/'
+          apiEnv: '_SIT' 
+          apisEnv: 'sit'
+          environment: 'SIT'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}          
+          microserviceName: ${{parameters.microserviceName}}
+          apimurlname: ${{parameters.apimurlname}}
+          #productId: ${{parameters.productId}}    
+          functionAppName: ${{parameters.functionAppName_SIT}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_SIT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}  
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}    
+          asename: ${{parameters.asename}}
+
+  - stage: 'Trips_Tests_SIT'
+    displayName: 'Trips_Tests_SIT' 
+    dependsOn: APIM_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/Trips/tripsMSTests.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SIT}}
+  
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/UAT.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_digital.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_UAT}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_UAT}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}     
+
+  - stage: 'APIM_UAT'     
+    displayName: 'APIM - UAT' 
+    dependsOn: UAT
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_digital_apim.yaml
+        parameters:
+          apimEnv: 'UAT/'
+          apiEnv: '_UAT' 
+          apisEnv: 'uat'
+          environment: 'UAT'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}          
+          microserviceName: ${{parameters.microserviceName}}
+          apimurlname: ${{parameters.apimurlname}}
+          #productId: ${{parameters.productId}}    
+          functionAppName: ${{parameters.functionAppName_UAT}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_UAT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}  
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}    
+          asename: ${{parameters.asename}}
+
+  - stage: 'Trips_Tests_UAT'
+    displayName: 'Trips_Tests_UAT' 
+    dependsOn: APIM_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/Trips/tripsMSTests.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_UAT}}
+          
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/PRD.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_digital.yaml  
+        parameters:
+          functionAppName: ${{parameters.functionAppName_PROD}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_PROD}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}   
+          APIM_IP: ${{parameters.APIM_IP_PRD}}  
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}  
+          workspaceResourceId: ${{parameters.workspaceResourceId_prod}}                   

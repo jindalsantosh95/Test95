@@ -1,0 +1,43 @@
+info:
+  name: Retrieve route flight status page data
+  type: http
+  seq: 1
+  tags:
+    - Flight_Status
+
+http:
+  method: GET
+  url: "{{baseUrl}}/flightstatus/routes/:departureAirportCode/:arrivalAirportCode/:scheduledDepartureDate"
+  headers:
+    - name: api-diagnostics
+      value: "true"
+  params:
+    - name: departureAirportCode
+      value: LHR
+      type: path
+    - name: timeRange
+      value: 1,2,3
+      type: query
+      disabled: true
+    - name: stops
+      value: 0,1,2
+      type: query
+      disabled: true
+    - name: first
+      value: "true"
+      type: query
+      disabled: true
+    - name: arrivalAirportCode
+      value: JFK
+      type: path
+    - name: scheduledDepartureDate
+      value: "{{flightStatusDate}}"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

@@ -1,0 +1,72 @@
+info:
+  name: Save Contact Tracing
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{checkinms}}/CheckIn/SaveContactTracing"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: "{\r
+
+      \    \"checkInId\": \"{{checkInId}}\",\r
+
+      \    \"applyToAllPassengers\": false,\r
+
+      \    \"contactTracings\": [\r
+
+      \        {\r
+
+      \            \"passengerId\": \"{{pax1_id}}\",\r
+
+      \            \"StreetAddress\": \"1 some street\",\r
+
+      \            \"City\": \"Boston\",\r
+
+      \            \"State\": \"MA\",\r
+
+      \            \"Zip\": \"12345\",\r
+
+      \            \"email\": \"jo@example.com\",\r
+
+      \            \"PrimaryPhoneNumber\": \"135-798-1032\",\r
+
+      \            \"PrimaryPhoneNumberCountryCode\": \"US\",\r
+
+      \            \"SecondaryPhoneNumber\": \"135-555-1032\",\r
+
+      \            \"SecondaryPhoneNumberCountryCode\": \"US\"\r
+
+      \        }\r
+
+      \    ]\r
+
+      }"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: "var json = res.getBody();\r
+
+        \r
+
+        bru.setVar('checkInid', json.checkInid);\r
+
+        console.log(\"Num pax: \" + json.passengers.length);\r
+
+        bru.setVar(\"pax1_id\", json.passengers[0].passengerId);\r
+
+        bru.setVar(\"pax1_givennames\", json.passengers[0].givenNames);\r
+
+        bru.setVar(\"pax1_surname\", json.passengers[0].surname);"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

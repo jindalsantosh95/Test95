@@ -1,0 +1,141 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "EnvironmentName": {
+      "value": "UAT"
+    },
+    "FunctionAppName": {
+      "value": "avaseunafnifgfacade"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-NDC-FACADE"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPNDCFACADE"
+    },
+    "AppInsightsName": {
+      "value": "avaseunaiifgfacade"
+    },
+    "vaultName": {
+      "value": "AVASEUNKVNDCFACADE"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "AppSetting:AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/"
+    },
+    "storageAccountName": {
+      "value": "avaseunstifgfacade"
+    },
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "AppSetting:WEBSITE_CONTENTSHARE": {
+      "value": "avadeunafnpdmfacade"
+    },
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    /*"Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },*/
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/4fdc51ad-c193-49df-8ce5-52145112fc3a/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Facade Layer - NDC IFG Facade"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to communicate between NDC transformation layer and Order Payment Microservice"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": "https://Testresources.virginatlantic.com/UAT/IFG/"
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndcfacade.vault.azure.net/secrets/avaseunafnifgfacade-Config-AzureAd-ClientId/)"
+    },
+    "Appsetting:AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndcfacade.vault.azure.net/secrets/avaseunafnifgfacade-Config-AzureAdb2c-ClientId/)"
+    },
+    "Appsetting:AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "Appsetting:AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndcfacade.vault.azure.net/secrets/avaseunafnifgfacade-Config-AzureAdb2c-TenantId/)"
+    },
+    "Appsetting:AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndcfacade.vault.azure.net/secrets/avaseunafnifgfacade-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "ReferenceMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndcfacade.vault.azure.net/secrets/avaseunafnifgfacade-Config-ReferenceMSSubscriptionKey/)"
+    },
+    "ReferenceMSUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/ReferenceMicroservice/"
+    },
+    "PaymentMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndcfacade.vault.azure.net/secrets/PaymentMSSubscriptionKey/)"
+    },
+    "PaymentMSUrl": {
+      "value": "https://testresources.virginatlantic.com/uat/digital/orderpaymentmicroservice/"
+    },
+    "OrderDataMSEndpoint": {
+      "value": "https://Testresources.virginatlantic.com/uat/orderdata/orders/"
+    },
+    "OrderDataMSSubscriptionKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvndcfacade.vault.azure.net/secrets/OrderDataMSSubscriptionKey/)"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "NDC IFG ms",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "NDC IFG Facade",
+        "ApplicationUsageIdList": "AVADEUNAFNNDCIFG"
+      }
+    }
+  }
+}

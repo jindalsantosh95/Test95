@@ -1,0 +1,32 @@
+info:
+  name: MsgCenter
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: "{{delta_msgcenter}}{{reservationResourceId}}"
+  headers:
+    - name: transactionid
+      value: "{{$randomUUID}}"
+    - name: channelid
+      value: MyTrips
+      disabled: true
+    - name: appid
+      value: DC
+      disabled: true
+    - name: x-air4_mytrips_test
+      value: "{{appname_test}}"
+    - name: channelid
+      value: DFMOBILE
+    - name: appid
+      value: D2
+  body:
+    type: json
+    data: ""
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

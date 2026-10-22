@@ -1,0 +1,121 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "functionAppName": {
+      "type": "string"
+    }, 
+    "asename": {
+      "type": "string"
+    },
+    "apimEnv": {
+      "type": "string"
+    },   
+    "APIMName": {
+      "type": "string"
+    },
+    "applicationName": {
+      "type": "string"
+    }, 
+    "apimurlname": {
+      "type": "string"
+    },
+    "apisEnv": {
+      "type": "string"
+    },
+    "tag": {
+      "type": "string",
+      "defaultValue": "Microservices"
+    }
+  },
+  "variables": {
+      "apiName": "[concat('VAA-EAPI-Microservices-', parameters('apimurlname'), '-microservice-', parameters('apisEnv'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'))]",      
+      "properties": {
+        "displayName": "[variables('apiName')]",
+        "apiRevision": "1",
+        "description": "[variables('apiName')]",
+        "subscriptionRequired": false,
+        "serviceUrl": "[concat('https://', parameters('functionAppName'), '.', parameters('asename'), '.appserviceenvironment.net/api')]",
+        "path": "[concat(parameters('apimEnv'), parameters('applicationName'))]",  
+        "value": "[concat('https://', parameters('functionAppName'), '.', parameters('asename'), '.appserviceenvironment.net/api/swagger.json')]",
+        "format": "openapi-link",            
+        "protocols": ["https"],
+        "isCurrent": true
+      }
+    },
+     {
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2021-08-01",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/renderswaggerdocument')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ],
+      "properties": {
+        "displayName": "Render Swagger Document",
+        "method": "GET",
+        "urlTemplate": "/swagger.json",
+        "request": {
+          "queryParameters": [],
+          "headers": []
+        },
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "Swagger JSON",
+            "representations": [
+              {
+                "contentType": "application/json"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/tags",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/', parameters('tag'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/tags",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/', 'Digital-First')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/tags",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/', 'Epic345')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/tags",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/', 'MyTrips')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/tags",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'), '/', parameters('apisEnv'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ]
+    }
+  ]
+}

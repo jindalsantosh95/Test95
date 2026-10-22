@@ -1,0 +1,85 @@
+meta {
+  name: Trip Details List Query
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query TripDetailsListQuery {
+    TripDetails(
+      request: {
+        tripDetails: [
+          {
+            pnrLocator: "{{trips_pnr}}"
+            givenNames: "{{trips_given_names}}"
+            surname: "{{trips_surname}}"
+          }
+        ]
+      }
+    ) {
+      status
+      id
+      reservationType
+      isAccountLinkedPNR
+      tripSearchRequest {
+        pnrLocator
+        givenNames
+        surname
+      }
+      responseStatus {
+        status
+        errors {
+          code
+          message
+        }
+      }
+      passengers {
+        id
+        givenNames
+        lastName
+        slices {
+          id
+        }
+      }
+      product {
+        bookingType
+        reference {
+          pnrLocator
+        }
+        slices {
+          origin {
+            code
+          }
+          destination {
+            code
+          }
+          scheduledDepartureLocal
+          scheduledArrivalLocal
+          segments {
+            legs {
+              origin {
+                code
+              }
+              destination {
+                code
+              }
+              scheduledDepartureLocal
+              scheduledArrivalLocal
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

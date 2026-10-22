@@ -1,0 +1,29 @@
+info:
+  name: Retrieve Booking
+  type: http
+  seq: 1
+  tags:
+    - Bookings
+
+http:
+  method: POST
+  url: "{{baseUrl}}/retrieveBooking"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "using": "HOLIDAYS",
+        "bookingReference": "{{bookingReference}}",
+        "surname": "EXAMPLE",
+        "dateOfBirth": "1980-01-01"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

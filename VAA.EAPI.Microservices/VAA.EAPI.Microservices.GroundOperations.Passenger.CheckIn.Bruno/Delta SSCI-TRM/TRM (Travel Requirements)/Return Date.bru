@@ -1,0 +1,35 @@
+meta {
+  name: Return Date
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{delta_trm}}/requirements/{{requirement_resource_id}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+  transactionId: VS-DigitalFirst-123-{{$guid}}
+  clientId: {{ping_client_id}}
+  X-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+  AppChannelName: {{AppChannelName}}
+  AppID: {{AppID}}
+}
+
+body:json {
+  {
+      "passengerResourceId": "{{passenger_resource_id1}}",
+      "using": "RETURNDATE",
+      "consent": true,
+      "returnDate": "{{returnDate}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

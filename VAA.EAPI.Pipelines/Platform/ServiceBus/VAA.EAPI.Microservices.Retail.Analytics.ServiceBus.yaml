@@ -1,0 +1,64 @@
+trigger:
+  branches:
+    include:
+    - '*'
+    
+  paths:
+    include:
+      
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.ServiceBus.Retail.Analytics*
+
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.ServiceBus.Retail.Analytics*
+  
+variables:  
+  - name: SolutionName
+    value: 'VAA.EAPI.Microservices.ServiceBus.Retail.Analytics'
+  - name: RootPath
+    value: 'VAA.EAPI.Deployments'
+  - name: BuildConfiguration
+    value: 'release'
+
+    
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+stages:
+ - stage: 'build'
+   
+   
+   jobs: 
+    - job: buildDev
+      displayName: Build Dev    
+      pool:
+       vmImage: 'windows-latest'
+      
+
+      steps: 
+       - template:  /VAA.EAPI.Pipelines/Platform/ServiceBus/templates/build.yml
+       #- template: templates/build.yml
+         parameters:
+          buildConfiguration: $(BuildConfiguration)
+          applicationName: $(SolutionName)     
+          RootPath:  $(RootPath)
+
+ - stage: 'DeploytoSANDBOX'
+   variables: 
+    - template: /VAA.EAPI.Pipelines/variables/ServiceBus-sb-var.yml
+   displayName: 'Deploy Service Bus to Sandbox' 
+   #condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+   dependsOn: build   
+   jobs:
+     - template: /VAA.EAPI.Pipelines/Platform/ServiceBus/templates/servicebus.yml  
+     #- template: templates/deployment.yml
+       parameters:
+        JobName: 'DeploytoSANDBOX'
+        ServiceConnection: ${{variables.ServiceConnection}}
+        Environment: ${{variables.Environment}}
+        RG_ServiceBus: ${{variables.RG_ServiceBus}}
+        Subscriptionid: ${{variables.Subscriptionid}}

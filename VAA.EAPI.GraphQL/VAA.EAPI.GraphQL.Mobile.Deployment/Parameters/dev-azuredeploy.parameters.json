@@ -1,0 +1,139 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "AppSetting:RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkventgraphql.vault.azure.net/secrets/AVADEUNAFNGRAPHQL-Config-RedisCacheConnectionString/)"
+    },
+    "NativeWebSocketsConfiguration": {
+      "value": {
+        "startupHookPath": "C:\\home\\site\\wwwroot\\hostextensions\\VAA.EAPI.GraphQL.WebSocketHost.dll",
+        "existingStartupHooks": "",
+        "workerProcessCount": "1",
+        "path": "/api/v1/GraphQL/ws"
+      }
+    },
+    "NativeWebSocketsBridgeSecret": { "value": "@Microsoft.KeyVault(SecretUri=https://avadeunkventgraphql.vault.azure.net/secrets/GraphQL-Native-WebSocket-Bridge-Secret/)" },
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkventgraphql.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "Dev"
+    },
+    "AppServicePlanName": {
+      "value": "vadveunaspdigital01"
+    },
+    "functionappName": {
+      "value": "VA-DV-EUN-GRAPHQLMOBILE-FN-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-dv-eun-mobile-kv-01"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "Graphql Mobile ",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "DEV",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vadveungraphqlmobilesa01"
+    },
+    "AppInsightsName": {
+      "value": "va-dv-eun-graphqlmobile-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    //swagger settings
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-Graphql Mobile"
+    },
+    "OpenApi__Description": {
+      "value": "This endpoint will provide Graphql Mobile details"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    "AppSetting:AllowIntrospection": {
+      "value": "true"
+    },
+    "AppSetting:PersistedQueryStore": {
+      "value": "PersistedQueryStore"
+    },
+
+    "Graphql": {
+      "value": {
+        "Endpoints": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-mobile-kv-01.vault.azure.net/secrets/GraphQL-Stitch-Endpoints/)",
+        "TimeOutInSeconds": 100,
+        "ResponseHeaders": "Set-Cookie"
+      }
+    }
+
+  }
+}

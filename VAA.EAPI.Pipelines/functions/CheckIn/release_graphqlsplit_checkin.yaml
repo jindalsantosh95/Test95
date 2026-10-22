@@ -1,0 +1,249 @@
+parameters:
+  agentPool: ''
+  agentPool_Sanity: ''
+  agentSpecification: ''
+  applicationName: ''
+  buildConfiguration: ''
+  testRepoPath_DEV: ''
+  testRepoPath_SIT: ''
+  testRepoPath_UAT: ''  
+  functionAppName_Secure_DEV: ''
+  functionAppName_Secure_SIT: ''
+  functionAppName_Secure_UAT: ''
+  functionAppName_Secure_PRD: ''
+  functionAppName_Public_DEV: ''
+  functionAppName_Public_SIT: ''
+  functionAppName_Public_UAT: ''
+  functionAppName_Public_PRD: ''
+  AppInsightsName_DEV: ''
+  AppInsightsName_SIT: ''
+  AppInsightsName_UAT: ''
+  AppInsightsName_PROD: ''
+  storageAccountName_DEV: ''
+  storageAccountName_DEV_P: ''
+  storageAccountName_SIT: ''
+  storageAccountName_SIT_P: ''
+  storageAccountName_UAT: ''
+  storageAccountName_UAT_P: ''
+  storageAccountName_PROD: ''
+  storageAccountName_PROD_P: ''  
+  location: ''
+  AppInsightsName_DT5: ''
+  appserviceplan_DT5: ''
+  resourceGroupName_DT5: ''
+  functionAppName_DT5: ''
+  KeyvaultName_DT5: ''
+  storageAccountName_DT5: ''
+  storageAccountName_P_DT5: ''
+  functionAppName_Secure_DT5: ''
+  functionAppName_Public_DT5: ''
+  VARIABLE_GROUP_NAME_SCHEMA: ''
+  VARIABLE_GROUP_NAME_NBF_DEV: ''
+  VARIABLE_GROUP_NAME_NBF_SIT: ''
+  VARIABLE_GROUP_NAME_NBF_UAT: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''
+  stitchfunctionAppName_DEV: ''
+  stitchfunctionAppName_SIT: ''
+  stitchfunctionAppName_UAT: ''
+  stitchfunctionAppName_PROD: ''
+  stitchrgname_DEV: ''
+  stitchrgname_SIT: ''
+  stitchrgname_UAT: ''
+  stitchrgname_PROD: ''
+  SLACK_API_TOKEN: ''
+  SLACK_TITLE: ''
+
+stages:
+
+  - stage: 'PR_Test5'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - Test5' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlstitch_Test5.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DT5}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DT5}}    
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: Test5
+          pr_name: PR_Test5
+          location: ${{parameters.location}}    
+          appserviceplan: ${{parameters.appserviceplan_DT5}}
+          keyvaultName: ${{parameters.KeyvaultName_DT5}}      
+          resourceGroupName: ${{parameters.resourceGroupName_DT5}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_DT5}}
+          storageAccountName: ${{parameters.storageAccountName_DT5}}
+          storageAccountName_P: ${{parameters.storageAccountName_P_DT5}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_storage.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DEV}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DEV}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment_DEV}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}  
+          AppInsightsName: ${{parameters.AppInsightsName_DEV}}
+          storageAccountName: ${{parameters.storageAccountName_DEV}}
+          storageAccountName_P: ${{parameters.storageAccountName_DEV_P}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+          stitchfunctionAppName: ${{parameters.stitchfunctionAppName_DEV}}
+          stitchrgname: ${{parameters.stitchrgname_DEV}}
+
+  - stage: 'GraphqlCheckIn_DEV'
+    displayName: 'GraphqlCheckIn_DEV' 
+    dependsOn: DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/CheckIn/functional_testing_GraphqlCheckIn.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool_Sanity}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_DEV}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_SIT}}
+
+  - stage: 'PaxOps_SchemaValidation_DEV'
+    displayName: 'PaxOps_SchemaValidation_DEV' 
+    dependsOn: DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_SchemaValidation.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SCHEMA}}
+          SLACK_API_TOKEN: ${{parameters.SLACK_API_TOKEN}}
+          SLACK_TITLE: ${{parameters.SLACK_TITLE}}
+
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_storage.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_SIT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_SIT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_SIT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_SIT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AppInsightsName: ${{parameters.AppInsightsName_SIT}}
+          storageAccountName: ${{parameters.storageAccountName_SIT}}
+          storageAccountName_P: ${{parameters.storageAccountName_SIT_P}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+          stitchfunctionAppName: ${{parameters.stitchfunctionAppName_SIT}}
+          stitchrgname: ${{parameters.stitchrgname_SIT}}
+
+  - stage: 'GraphqlCheckIn_SIT'
+    displayName: 'GraphqlCheckIn_SIT' 
+    dependsOn: SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/CheckIn/functional_testing_GraphqlCheckIn.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool_Sanity}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_SIT}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_SIT}}
+
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_storage.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_UAT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_UAT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_UAT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_UAT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}
+          AppInsightsName: ${{parameters.AppInsightsName_UAT}}
+          storageAccountName: ${{parameters.storageAccountName_UAT}}
+          storageAccountName_P: ${{parameters.storageAccountName_UAT_P}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+          stitchfunctionAppName: ${{parameters.stitchfunctionAppName_UAT}}
+          stitchrgname: ${{parameters.stitchrgname_UAT}}
+
+  - stage: 'GraphqlCheckIn_UAT'
+    displayName: 'GraphqlCheckIn_UAT' 
+    dependsOn: UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/CheckIn/functional_testing_GraphqlCheckIn.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool_Sanity}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_UAT}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_UAT}}
+
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphqlsplit_storage.yaml
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_PRD}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_PRD}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_PROD}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_PROD}}        
+          serviceConnection: ${{variables.serviceConnection_PROD}}
+          subscriptionId: ${{variables.subscriptionId_PROD}}    
+          AppInsightsName: ${{parameters.AppInsightsName_PROD}}
+          storageAccountName: ${{parameters.storageAccountName_PROD}}   
+          storageAccountName_P: ${{parameters.storageAccountName_PROD_P}} 
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+          stitchfunctionAppName: ${{parameters.stitchfunctionAppName_PROD}}
+          stitchrgname: ${{parameters.stitchrgname_PROD}}
+                   
+                           
+
+  

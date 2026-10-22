@@ -1,0 +1,278 @@
+###Request
+PATCH https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements/requirementsid-EGGXER HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "requirementsResourceId": "32c34db0-5499-4ddb-ad24-f6a86d8a5e92",
+    "checkin": false,
+    "travelRequirements": {
+        "id": "3c17d0a0-87f0-419e-97a3-09c4790ef84f",
+        "bookingReference": {
+            "id": "EGGXER",
+            "creationDate": "2026-01-01T00:00:00Z"
+        },
+        "trips": [
+            {
+                "id": "28fc6a8e-fca4-45a0-b06e-bb6f6018af99",
+                "ordinal": 0,
+                "departureStation": {
+                    "code": "LHR",
+                    "name": "Heathrow Airport",
+                    "country": {
+                        "code": "GB",
+                        "isoAlpha3Code": "GBR"
+                    }
+                },
+                "arrivalStation": {
+                    "code": "RUH",
+                    "name": "King Khalid International Airport",
+                    "country": {
+                        "code": "SA",
+                        "isoAlpha3Code": "SAU"
+                    }
+                },
+                "firstDepartureLocalDate": "2026-01-02T15:50:00Z",
+                "lastArrivalLocalDate": "2026-01-03T01:40:00+03:00",
+                "segments": [
+                    {
+                        "id": "d5c16a6f-5036-4994-8438-936926b0ea80",
+                        "ordinal": 1,
+                        "operatingCarrier": {
+                            "code": "VS",
+                            "name": "Virgin Atlantic"
+                        },
+                        "flightNum": "0242",
+                        "marketingSegment": {
+                            "flightNum": "0242",
+                            "marketingCarrier": [
+                                {
+                                    "code": "VS",
+                                    "name": "Virgin Atlantic"
+                                }
+                            ]
+                        },
+                        "legs": [
+                            {
+                                "id": "2c93e842-595e-4153-bbea-acc880d8d2af",
+                                "ordinal": 1,
+                                "departure": {
+                                    "station": {
+                                        "code": "LHR",
+                                        "name": "Heathrow Airport",
+                                        "country": {
+                                            "code": "GB",
+                                            "isoAlpha3Code": "GBR"
+                                        }
+                                    },
+                                    "estimatedDepartureLocalDateTime": "2026-01-02T15:50:00Z",
+                                    "scheduledDepartureLocalDateTime": "2026-01-02T15:50:00Z",
+                                    "estimatedDepartureUTCDateTime": "2026-01-02T15:50:00Z",
+                                    "scheduledDepartureUTCDateTime": "2026-01-02T15:50:00Z"
+                                },
+                                "arrival": {
+                                    "station": {
+                                        "code": "RUH",
+                                        "name": "King Khalid International Airport",
+                                        "country": {
+                                            "code": "SA",
+                                            "isoAlpha3Code": "SAU"
+                                        }
+                                    },
+                                    "estimatedArrivalLocalDateTime": "2026-01-03T01:40:00+03:00",
+                                    "scheduledArrivalLocalDateTime": "2026-01-03T01:40:00+03:00",
+                                    "estimatedArrivalUTCDateTime": "2026-01-02T22:40:00Z",
+                                    "scheduledArrivalUTCDateTime": "2026-01-02T22:40:00Z"
+                                },
+                                "international": true
+                            }
+                        ],
+                        "international": true,
+                        "transportType": "AIR"
+                    }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": true
+            }
+        ],
+        "passengers": [
+            {
+                "passengerResourceId": "87da617a-bd8e-47b8-aafa-3d02c15ca062",
+                "givenNames": "RICH",
+                "surname": "PLITT",
+                "nameNum": "01.01",
+                "customerId": "9999195374567",
+                "birthDate": "1948-01-01T00:00:00Z",
+                "status": {
+                    "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "2c93e842-595e-4153-bbea-acc880d8d2af",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "28fc6a8e-fca4-45a0-b06e-bb6f6018af99",
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "NOT_OK",
+                                                    "reason": "travelrequirement_030_006"
+                                                },
+                                                "exceptions": [
+                                                    {
+                                                        "code": "travelrequirement_030_006",
+                                                        "displayCode": "PassportExpiredBeforeDeparture",
+                                                        "message": "PassportExpiredBeforeDeparture",
+                                                        "category": "ERROR",
+                                                        "priority": 3
+                                                    }
+                                                ],
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "exceptions": [],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": false,
+                                "checkinEligible": false
+                            }
+                        ],
+                        "travelDocuments": [
+                            {
+                                "type": "PASSPORT",
+                                "givenNames": "RICH",
+                                "middleName": "",
+                                "surname": "PLITT",
+                                "birthDate": "1982-07-29",
+                                "gender": {
+                                    "code": "X"
+                                },
+                                "number": "AB8210281",
+                                "expirationDate": "2026-01-02",
+                                "issuingCountry": {
+                                    "code": "GBR",
+                                    "name": "United Kingdom",
+                                    "isoAlpha2Code": "GB"
+                                },
+                                "nationality": {
+                                    "code": "GBR",
+                                    "name": "United Kingdom",
+                                    "isoAlpha2Code": "GB"
+                                },
+                                "countryOfResidence": {
+                                    "code": "GBR",
+                                    "name": "United Kingdom",
+                                    "isoAlpha2Code": "GB"
+                                },
+                                "dataSourceType": "MANUAL",
+                                "methodOfDataEntry": "P",
+                                "documentFeature": "NONE",
+                                "sourceFromType": "PNR"
+                            }
+                        ],
+                        "contactInformation": [
+                            {
+                                "requirements": [
+                                    {
+                                        "type": "US_ADDRESS",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "PRIMARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "SECONDARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "EMAIL",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    }
+                                ],
+                                "address": {},
+                                "email": [
+                                    {
+                                        "verified": false,
+                                        "value": "3ACONQ@EXAMPLE.COM"
+                                    }
+                                ],
+                                "phone": [
+                                    {
+                                        "verified": false,
+                                        "preference": "PRIMARY",
+                                        "type": "MOBILE",
+                                        "countryCode": "",
+                                        "phoneNumber": "447461634228"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "batchResults": [
+        {
+            "request": {
+                "passengerResourceId": "87da617a-bd8e-47b8-aafa-3d02c15ca062",
+                "using": "PASSPORT",
+                "modified": false,
+                "saveToProfile": false
+            },
+            "error": {
+                "message": "SUCCESS"
+            }
+        }
+    ]
+}

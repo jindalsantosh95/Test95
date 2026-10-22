@@ -1,0 +1,18 @@
+###Request
+POST https://example.test/cjs/payment/app/amountgreater HTTP/1.1
+
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "type": "CPD",
+  "paymentSessions": [
+    {
+      "amountToPay": 1000.00,
+      "status": "PENDING",
+      "paymentLink": "https://example.test/payment/link"
+    }
+  ]
+}

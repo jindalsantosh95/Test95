@@ -1,0 +1,31 @@
+meta {
+  name: BaggageAllowance
+  type: graphql
+  seq: 11
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query BaggageAllowance($checkInId: String) {
+    BaggageAllowance(checkInId: $checkInId) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "checkInId": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

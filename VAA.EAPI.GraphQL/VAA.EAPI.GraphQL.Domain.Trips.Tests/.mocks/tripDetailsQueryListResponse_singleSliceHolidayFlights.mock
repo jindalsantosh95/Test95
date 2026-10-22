@@ -1,0 +1,136 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/tripmicroservice/tripsList/search HTTP/1.1
+
+$[?(@.confirmationNum == 'ZZ9ZZ9')]
+$[?(@.confirmationNum == 'YY8YY8')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "tripListResponse": [
+    {
+      "tripSearchRequest": {
+        "using": "PNR",
+        "confirmationNum": "ZZ9ZZ9",
+        "givenNames": "TEST",
+        "surname": "USER"
+      },
+      "tripDetails": {
+        "booking": {
+          "id": "trip-zz9zz9",
+          "pos": { "countryCode": "GB", "currencyCode": "GBP" },
+          "reservationType": "STD",
+          "passengers": [
+            { "givenNames": "TEST", "surname": "USER", "id": "p1" }
+          ],
+          "product": [
+            {
+              "bookingType": "AIRLINE",
+              "status": "CONFIRMED",
+              "reference": {
+                "pnrLocator": "ZZ9ZZ9",
+                "orderId": "ORDER-ONE",
+                "airlineDesignator": "VS",
+                "createdDate": "2026-04-08T00:00:00"
+              },
+              "slices": [
+                {
+                  "id": "1",
+                  "scheduledDepartureLocalDateTime": "2026-09-03T17:10:00",
+                  "scheduledDepartureUtcDateTime": "2026-09-03T21:10:00",
+                  "scheduledArrivalLocalDateTime": "2026-09-04T06:40:00",
+                  "scheduledArrivalUtcDateTime": "2026-09-04T10:40:00",
+                  "origin": { "code": "MCO", "terminalName": "Terminal 2" },
+                  "destination": { "code": "MAN", "terminalName": "Terminal 4" },
+                  "segments": [
+                    {
+                      "id": "1",
+                      "ordinal": 0,
+                      "scheduledDepartureLocalDateTime": "2026-09-03T17:10:00",
+                      "scheduledDepartureUtcDateTime": "2026-09-03T21:10:00",
+                      "scheduledArrivalLocalDateTime": "2026-09-04T06:40:00",
+                      "scheduledArrivalUtcDateTime": "2026-09-04T10:40:00",
+                      "scheduledArrivalBasedOnDepartureLocalDateTime": "2026-09-04T06:40:00",
+                      "operatingCarrier": { "carrierCode": "VS", "flightNumber": "012" },
+                      "marketingCarrier": { "carrierCode": "VS", "flightNumber": "012" },
+                      "origin": { "code": "MCO", "terminalName": "Terminal 2" },
+                      "destination": { "code": "MAN", "terminalName": "Terminal 4" },
+                      "legs": [
+                        { "id": "1", "status": "ON_TIME", "origin": { "code": "MCO", "terminalName": "Terminal 2" }, "destination": { "code": "MAN", "terminalName": "Terminal 4" } }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "status": 200
+      }
+    },
+    {
+      "tripSearchRequest": {
+        "using": "PNR",
+        "confirmationNum": "YY8YY8",
+        "givenNames": "TEST",
+        "surname": "USER"
+      },
+      "tripDetails": {
+        "booking": {
+          "id": "trip-yy8yy8",
+          "pos": { "countryCode": "GB", "currencyCode": "GBP" },
+          "reservationType": "STD",
+          "passengers": [
+            { "givenNames": "TEST", "surname": "USER", "id": "p1" }
+          ],
+          "product": [
+            {
+              "bookingType": "AIRLINE",
+              "status": "CONFIRMED",
+              "reference": {
+                "pnrLocator": "YY8YY8",
+                "orderId": "ORDER-TWO",
+                "airlineDesignator": "VS",
+                "createdDate": "2026-04-08T00:00:00"
+              },
+              "slices": [
+                {
+                  "id": "1",
+                  "scheduledDepartureLocalDateTime": "2026-09-06T20:30:00",
+                  "scheduledDepartureUtcDateTime": "2026-09-07T00:30:00",
+                  "scheduledArrivalLocalDateTime": "2026-09-07T09:40:00",
+                  "scheduledArrivalUtcDateTime": "2026-09-07T13:40:00",
+                  "origin": { "code": "MCO", "terminalName": "Terminal 2" },
+                  "destination": { "code": "MAN", "terminalName": "Terminal 4" },
+                  "segments": [
+                    {
+                      "id": "1",
+                      "ordinal": 0,
+                      "scheduledDepartureLocalDateTime": "2026-09-06T20:30:00",
+                      "scheduledDepartureUtcDateTime": "2026-09-07T00:30:00",
+                      "scheduledArrivalLocalDateTime": "2026-09-07T09:40:00",
+                      "scheduledArrivalUtcDateTime": "2026-09-07T13:40:00",
+                      "scheduledArrivalBasedOnDepartureLocalDateTime": "2026-09-07T09:40:00",
+                      "operatingCarrier": { "carrierCode": "VS", "flightNumber": "012" },
+                      "marketingCarrier": { "carrierCode": "VS", "flightNumber": "012" },
+                      "origin": { "code": "MCO", "terminalName": "Terminal 2" },
+                      "destination": { "code": "MAN", "terminalName": "Terminal 4" },
+                      "legs": [
+                        { "id": "1", "status": "ON_TIME", "origin": { "code": "MCO", "terminalName": "Terminal 2" }, "destination": { "code": "MAN", "terminalName": "Terminal 4" } }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "status": 200
+      }
+    }
+  ]
+}
+
+

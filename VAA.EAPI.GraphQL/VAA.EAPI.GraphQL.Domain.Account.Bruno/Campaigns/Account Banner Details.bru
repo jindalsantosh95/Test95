@@ -1,0 +1,29 @@
+meta {
+  name: Account Banner Details
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query AccountBannerDetails {
+    accountBannerDetails {
+      FCNumber
+      Banners {
+        bannerCode
+        lastShownDateTime
+        isLastShown
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

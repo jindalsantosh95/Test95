@@ -1,0 +1,31 @@
+meta {
+  name: virginAccountUpgrade
+  type: graphql
+  seq: 47
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation virginAccountUpgrade($virginAccountDetails: VirginAccountDetailsInput) {
+    virginAccountUpgrade(virginAccountDetails: $virginAccountDetails)
+  }
+}
+
+body:graphql:vars {
+  {
+    "virginAccountDetails": {
+      "termsAndConditionsAccepted": false
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

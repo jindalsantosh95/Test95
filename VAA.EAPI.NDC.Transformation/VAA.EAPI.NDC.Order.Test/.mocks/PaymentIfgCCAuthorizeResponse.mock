@@ -1,0 +1,30 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/DEV/IFGpayment/IFGCCAuthorizePayment HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+  "status": "FOP001",
+  "httpStatus": 200,
+  "trackID": "942ce0de-bf7a-487f-a13f-205c43b0748c",
+  "type": "VISA",
+  "description": "Payment Accepted. The transaction is validated successfully",
+  "pspMessage": [
+    "Primary processor - VSFACADE: PAYMENT_STATUS: 'AUTH_ACCEPTED', ID: '81880436'"
+  ],
+  "pspCode": [
+    "Primary processor - VSFACADE: 200"
+  ],
+  "paymentStatus": "AUTH_ACCEPTED",
+  "captureStatus": "PENDING",
+  "amountAuthorized": {
+    "currency": "GBP2",
+    "value": 78129
+  }
+}

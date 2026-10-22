@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Architecture fitness tests (harness engineering, Thread 3).
+    See ..\docs\HARNESS_ENGINEERING.md. These tests parse the solution's .csproj
+    files and assert project-layering invariants - they need no environment and
+    run offline as part of `dotnet test` and scripts/verify.ps1.
+
+    Nullable / ImplicitUsings are inherited from ..\Directory.Build.props.
+    Package versions are resolved from ..\Directory.Packages.props.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

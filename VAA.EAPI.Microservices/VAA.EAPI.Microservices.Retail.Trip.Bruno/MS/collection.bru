@@ -1,0 +1,43 @@
+meta {
+  name: Retail Trip Microservice
+}
+
+headers {
+  Accept: application/json
+  channel: {{channel}}
+  x-correlation-id: VS-RetailTrip-Bruno-{{$guid}}
+  api-channel: Bruno
+  ~Authorization: Bearer {{access_token}}
+  ~Ocp-Apim-Subscription-Key: {{apim_subscription_key}}
+}
+
+auth {
+  mode: none
+}
+
+vars {
+  trip_base_url: http://localhost:7071/api
+  channel: DFMOBILE
+  confirmation_number: ABC123
+  confirmation_number_2: DEF456
+  ticket_number: 9321234567890
+  given_names: Jane
+  surname: Doe
+  given_names_2: John
+  surname_2: Smith
+  departure_airport_code: LHR
+  trip_booking_id: replace-with-trip-booking-id
+  passenger_resource_id: replace-with-passenger-resource-id
+  deeplink_cache_id: replace-with-deeplink-cache-id
+  deeplink_option: TravelInsurance
+  pos_country_code: GB
+}
+
+vars:secret [
+  access_token,
+  apim_subscription_key
+]
+
+docs {
+  Select an environment and replace the placeholder booking values with approved non-production test data. Enable the Authorization and APIM headers only when the selected environment requires them. The passenger update request changes booking data; verify its variables before sending it.
+}

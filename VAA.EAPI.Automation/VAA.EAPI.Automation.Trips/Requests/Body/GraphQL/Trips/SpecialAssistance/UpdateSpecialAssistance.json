@@ -1,0 +1,11 @@
+{
+  "query": "mutation SelectSpecialAssistanceMutation($tripReservationId: String, $segmentIds: [String], $passengerId: String, $ssrCode: String, $ssrCategoryCode: String) { selectSpecialAssistanceMutation(tripReservationId: $tripReservationId, segmentIds: $segmentIds, passengerId: $passengerId, ssrCode: $ssrCode, ssrCategoryCode: $ssrCategoryCode) { passengers { passengerResourceId firstName lastName passengerSegments { flightSegment { segmentId ordinal operatingAirlines { code name } flightNumber marketingFlight { operatingSuffix flightNumber marketingAirlines { code name } } departureAirport { code name cityCode cityName } arrivalAirport { code name cityCode cityName } checkinStatus flightLegs { legId ordinal flightNumber scheduledDepartureLocal scheduledArrivalLocal } } serviceRequests { categoryCode categoryTitle categoryDetails { serviceCode serviceName isSelected isEligible features isChangeAllowed } isSegmentSelectEligible isServiceRequested isServiceChangeAllowed } } } }}",
+  "variables": {
+    "tripReservationId": "",
+    "segmentIds": [""],
+    "passengerId": "",
+    "ssrCode": "",
+    "ssrCategoryCode": ""
+  },
+  "operationName": "SelectSpecialAssistanceMutation"
+}

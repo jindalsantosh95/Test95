@@ -1,0 +1,21 @@
+name: Automation - Starlink Daily Regression
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub Actions schedules use UTC. The scheduled run targets TEST3.
+    - cron: "0 15 * * *"
+
+jobs:
+  starlink-regression:
+    uses: ./.github/workflows/qa-run-automation-suite.yml
+    with:
+      manifest_path: config/automation-suites/starlink-daily-regression.json
+      target_environment: test3
+      test_environment_json: >-
+        {"IN_FLIGHT_APPLICATIONS_RUN_OTP_TESTS":"false","IN_FLIGHT_APPLICATIONS_RUN_ACCOUNT_TESTS":"false","SAB_RUN_MODE":"BrowserStack","SAB_BROWSER":"chromium","SAB_HEADLESS":"true","SAB_TRACE":"false","SAB_BS_OS":"Windows","SAB_BS_OS_VERSION":"11","SAB_BS_BROWSER":"chrome","SAB_BS_BROWSER_VERSION":"latest","SAB_BS_SESSION_NAME":"Starlink Daily Regression","BROWSERSTACK_PROJECT":"Virgin Atlantic Web - Starlink","BROWSERSTACK_BUILD":"Starlink Daily Regression - ${{ github.run_number }}","BROWSERSTACK_LOCAL":"false"}
+      enable_slack_for_branch_runs: ${{ github.event_name == 'workflow_dispatch' }}
+    secrets:
+      browserstack_username: ${{ secrets.BROWSERSTACK_USERNAME }}
+      browserstack_access_key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL_STARLINK }}

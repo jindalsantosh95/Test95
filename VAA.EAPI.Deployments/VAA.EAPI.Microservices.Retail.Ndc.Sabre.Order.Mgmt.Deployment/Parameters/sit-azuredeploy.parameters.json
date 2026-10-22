@@ -1,0 +1,205 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sit",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "SIT"
+    },
+    "FunctionAppName": {
+      "value": "AVATEUNAFNNDCORDERMGMTMS"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-T-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVATEUNASPEAPI1"
+    },
+
+    "AppInsightsName": {
+      "value": "AVATEUNAINDCORDERMGMTMS"
+    },
+    "vaultName": {
+      "value": "AVATEUNKVEMS"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avateunstndcordermgmtms"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avateunafnndcordermgmtms"
+    },
+    "KeyVaultUri": {
+      "value": "https://avateunkvems.vault.azure.net/"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Ndc Sabre Order Management Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to fetch sabre order management data items"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    "ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNNDCORDERMGMTMS-Config-ServiceBusConnectionString/)"
+    },
+    "ServiceBusTopicName": {
+      "value": "ndcorderchangerequesteventmessage"
+    },
+    "MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNNDCORDERMGMTMS-Config-StorageAccount/)"
+    },
+    "MicroServiceEventStoreTableName": {
+      "value": "OrderEventStore"
+    },
+    "MicroServiceResponseTableName": {
+      "value": "OrderResponse"
+    },
+    "OrderChangeResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/SIT/NdcOrderManagement/order/response/{correlationid}"
+    },
+    "OrderCancelResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/SIT/NdcOrderManagement/ordercancel/response/{correlationid}"
+    },
+    "ResponseDelayTimeInMS": {
+      "value": "3000"
+    },
+    "ResponseDelayForOrderChangeTimeInMS": {
+      "value": "8000"
+    },
+    "ResponsePollingCount": {
+      "value": "50"
+    },
+    "RetryCount": {
+      "value": "0"
+    },
+    "MaxRetriesCount": {
+      "value": "3"
+    },
+    "DeletionRetryCounterLimit": {
+      "value": "3"
+    },
+    "ProdEnvIndicator": {
+      "value": "true"
+    },
+    "OrderDataServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/AVATEUNAFNNDCORDERMGMTMS-Config-OrderDataServiceBusConnectionString/)"
+    },
+    "OrderDataServiceBusTopicName": {
+      "value": "ndcorderrequesteventmessage"
+    },
+    "SabreUsername": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/SabreUsername/)"
+    },
+    "SabrePassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/SabrePassword/)"
+    },
+    "FromPartyId": {
+      "value": "Agency"
+    },
+    "ToPartyId": {
+      "value": "Sabre_API"
+    },
+    "PCC": {
+      "value": "09UI"
+    },
+    "Domain": {
+      "value": "DEFAULT"
+    },
+    "ConversationId": {
+      "value": "2021.01.DevStudio"
+    },
+    "SabreEndpoint": {
+      "value": "https://webservices.cert.platform.sabre.com"
+    },
+    "ManageCustomerResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/Sit/NdcOrderManagement/order/manageCustomer/response/{correlationid}"
+    },
+    "DirectTicketingPCC": {
+      "value": "6UOL,E8MM,6UUL,57EL,G4ZM,G5DM,G5CM,H1ZM,G5EM,G5FM,G5GM,G5HM,G5IM,G5JM,G5KM,G5LM"
+    },
+    "InterLineOperatingSegments": {
+      "value": "BW"
+    },
+    "SplitPnrResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/SIT/NdcOrderManagement/order/SplitPNR/response/{correlationid}"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "Sabre",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Sabre OrderManagementAPI AFN",
+        "ApplicationUsageIdList": "AVATEUNAFNNDCORDERMGMTMS"
+      }
+    }
+  }
+}

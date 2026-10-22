@@ -1,0 +1,1148 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;8032</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TestDataSamples\OfferMS\**" />
+    <EmbeddedResource Remove="TestDataSamples\OfferMS\**" />
+    <None Remove="TestDataSamples\OfferMS\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.50.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Core" Version="2.50.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.12" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignSearchResponseDB.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignSearchResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CustomerDTO.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignSearchRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\TargetedMembershipDocResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\MemberCampaignList.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\PromotionCreateEventProcessCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\PromotionCreateValid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerMS\AddressHistory\ListOfAddressHistory.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerMS\CustomerDocument\CustomerDoc.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerMS\CustomerDocument\CustomerDocUpdateEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerMS\AddressHistory\AddressHistoryCreateEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerMS\AddressHistory\AddressHistoryDocument.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerMS\Enrolment\EnrolmentRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerMS\Enrolment\MediaCodeValidationError.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	<None Update="TestDataSamples\CustomerMS\Account\CustomerDucomentQueryRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\CustomerMS\Account\CustomerDocumentRepoQueryRequest.json">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\CustomerMS\Account\CustomerDocumentResponse.json">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\CustomerSearch\CustomerSearchDocument.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerSearch\CustomerSearchGetResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerSearch\CustomerSearchUpdateEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerSearch\ListOfCustomerSearchDocs.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerSearch\MemberNumber.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\EmailMS\OTPEmailCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\InfrastructurePSS\DeltaResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\InfrastructurePSS\Request.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	<None Update="TestDataSamples\InfrastructurePSS\PSDSSyncRequest.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\InfrastructurePSS\UpdateSFPDResponse.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\LoyaltySyncMS\PSDSSyncEventCommandRequest.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+    <None Update="TestDataSamples\AccountDetails\ListOfTransactions.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignEnrolmentDoc\CampaignEnrolDoc.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignEnrolmentDoc\CampaignEnrolmentDocData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\Campaign.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignAssignCloudEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignAssignEventData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignAssignInvalidRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignAssignValidRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignCreateEventProcessCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignCreateInvalid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignCreateResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignCreateResponseQuery.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignCreateValid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignEnrolmentDocCloudEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignList.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignPromotionDelinkEventMessage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignPromotionDelinkingInvalid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignPromotionDelinkingValid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignPromotionLinkEventMessage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignPromotionLinkingInvalid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignPromotionLinkingValid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignRegisterProfileUpdateCloudEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignRetrievalResponseQuery.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignRetrievalResponseQueryInvalid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignTypeResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignTypeRetrieval.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignUnassignInValid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignUnassignResponseQuery.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignUnassignValid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\PromotionCampaignSearchResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\PromotionSearchRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\PromotionSearchResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\PromotionUpdateResponseQuery.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\PromotionUpdateEventProcessCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignUpdateEventProcessCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignUpdateResponseQuery.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\PromotionUpdateInValid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\PromotionUpdateValid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\ProfileUpdateEventDataFTG.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\ProfileUpdateEventDataInstantGold.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\ProfileUpdateEventDataInstantSilver.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\ProfileUpdateEventDataInstantSilverFTG.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\ProfileUpdateEventDataS2G.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\ProfileUpdateEventDataS2S.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\ProfileUpdateEventDataS2SFTG.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\TargetedMembershipDeleteCommandData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\TargetedMembershipDeleteEventData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\TargetedMembershipDocEventData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerTransactionMS\GroupDocuments.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerTransactionMS\GroupID.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	<None Update="TestDataSamples\CustomerTransactionMS\AwardDocLTG.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\CustomerTransactionMS\FCMDocument2MM.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\CustomerTransactionMS\AwardDocMMandWings.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\CustomerTransactionMS\TransactionDoc.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None> 
+	<None Update="TestDataSamples\CustomerTransactionMS\FCMDocument.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\CustomerTransactionMS\MemberShipChangeDoc.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\EnrolmentMS\EnrolmentRequestDataForValidatingDeDupCheck.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\EnrolmentMS\BlackListedEmailsResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\EnrolmentMS\ErrorDetailsResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ChannelInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CloudEvent.LoyaltyNotesRequestEventMessage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ContactNote-CosmosQueryResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\FlyingClubMember\D4718738-BADA-E0ED-E053-6941D90AAD4B.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\FlyingClubMember\FlyingClubMember-PATCH.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\FlyingClubMember\ListOfFlyingClubMembers.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\IdentityMS\AcquireTokenHandlerRequestForTicket.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\IdentityMS\HttpResponseMessage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\InRuleEngine\BirthdayBonusActionExecutionEventCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\InRuleEngine\ActionExecutionEventCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\InRuleEngine\CombinedRuleSetEventCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\InRuleEngine\ExecuteRuleResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\InRuleEngine\InRuleResponseCampaign.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\InRuleEngine\InRuleResponseBirthdayBonus.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\InRuleEngine\TierRuleSetEventCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ITAService\Response\Reshop_Response__Without_Repeting_PTC.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ITAService\Response\Reshop_Response__With_Repeting_PTC.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\AddressChangeEventData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\AddressUpdateNotificationEventData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\CustomerDocument.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\CustomerDtoResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\CustomerSearchDocument.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\FlyingclubMemberDocumentWithoutGroupId.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\FlyingclubMemberDocumentWithGroupId.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\FlyingclubMemberDocument.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerTransactionMS\GroupCreateEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustomerTransactionMS\GroupUpdateEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	<None Update="TestDataSamples\Activity\ActivityDoc.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+    <None Update="TestDataSamples\MemberManagement\FlyingclubMemberDocumentWithSSAMemberId.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\GroupDocument.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\GroupHistoryDocument.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\GroupHistoryDocumentResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\GroupDocumentResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\HouseHoldAccountLinkingRequestInvalid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\HouseHoldAccountLinkingRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\HouseholdDetailsRetrievalResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\HouseHoldDissolveCommandEventData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\LTGAwardEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\MemberContactData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\MembershipChangeDocument.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\MembershipChangeResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\FlyingclubMemberResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\MemberTierUpdateEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\PartnerProfileData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\PartnersResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\ProductData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\RetrieveMemberAccountDetailsRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\EnrolledMemberForPromotionRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\RetrieveMemberAccountDocumentData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\RetrieveMemberAccountReferenceData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\RetrieveMemberAccountDetailsResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\SupplementarySilverDeLinkingRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\TransactionDocument.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MemberManagement\TransactionResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MembershipChanges\MembershipChangeUpdateData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MembershipChanges\MembershipChangeCreateData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\MembershipChanges\MembershipChangeCreateEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Operations\AirportInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Operations\ListOfAirports.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderMS\DeltaOrderResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderMS\OrderMsRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderMS\OrderMsResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\BrandAPIResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\C5AEAY_FLOWN_ReshopRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\CabinConfigData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\ItaServiceBundleSolutionResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\CosmosResponseOfferDB.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\OfferSearchQueryRQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\OrderRepriceMandatoryMissing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\OrderRepriceValidRequestWithSinglePassengerForAllPtcs.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\OrderReshopBundledInValidRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\OrderSearchResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\BrandAPITokenResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\OrderReshopBundledValidRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\OrderRepriceValidRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\OrderRepriceControllerRequestData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\OrderRepriceValidRequestWithMultiPTC.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsResponseForMultiSegment.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\CabinTableEntityData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\PriceClassTableEntityData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsResponseForSingleSegmentReturnSinglePtc.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsResponseForSingleSegmentSinglePassengerForAllPtcs.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsResponseForSingleSegmentSinglePtc.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsSolutionForSingleSegmentReturnMultiPtc.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailswithError.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\AmenitiesTableEntityData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsResponseForSingleSegmentSinglePassengerForAllPtcsForOA.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceResponseMultiSegmentSinglePTC_1ADT_OAFlights.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceResponseMultiSegmentSinglePTC_1ADT_DLFlights.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsResponseForMultiSegmentMultiPtc.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsResponseForSingleSegmentSinglePtcforOA.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsResponseForSingleSegmentSinglePtcforDL.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\RepriceTripDetailsResponseForSingleSegmentSinglePassengerForAllPtcsForDL.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderReshopMS\ReshopResponseOfferDB.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\Air4PnrRetrieveResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\AmenitiesTableData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\BookingQueryHandlerRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\BookingQueryOrderDocResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\BrandAPIResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\Air4PnrRetrieveResponseVSFlight.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\FlightCustomer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearchRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\Air4PnrRetrieveResponseForConjuction.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\Air4TicketingProcessRetrieveResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\MultiSegment.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearcheTicketValidRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearchWithInvalidETicketNumber.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\SingleSegment.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\TicketingRetreiveResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\CarbonIndex-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\CarbonIndex-RQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\FareInformation-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Search-RQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Search-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Sort-D-RQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Sort-D-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Sort-P-RQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Sort-P-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Sort-R-RQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Sort-R-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Sort-S-RQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Sort-S-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Oneway\Summary-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Search-IB-RQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Search-IB-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Search-OB-RQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Search-OB-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Sort-D-IB-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Sort-D-OB-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Sort-P-IB-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Sort-P-OB-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Sort-R-IB-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Sort-R-OB-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Sort-S-IB-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Sort-S-OB-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\Return\Summary-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Search\SearchController\DynamicCabin-RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\ListOfTargetedMembership.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\TargertedMembershipCreateEventData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\TargertedMembershipPatchEventDataInvalid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\TargertedMembershipPatchEventData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\TargetedMembership-PATCH.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignDetails.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignRegisterCloudEvent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignRegisterEventData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignRegisterInvalid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignRegisterValid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignUpdateInvalid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignUpdateResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\CampaignUpdateValid.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CampaignManagementMS\ServiceResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\TargetedMembership-PATCH.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\TargetedMembership.Good.TargetedMembershipResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\TargetedMembership-DELETE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ContactNote-DELETE-BadID.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ContactNote-DELETE.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ContactNote-PATCH-BadID.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ContactNote-PATCH.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\TargetedMembership-POST-Good.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ContactNote-POST-Good.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ContactNotes.Good.ContactNotesResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\CustID.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="TestDataSamples\CustomerMS\CustomerAssignAward.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\EmailMS\CommunicationCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\EmailMS\WelcomeEmailEventProcessCommandRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\IdentityMS\IdentityMessageSubscriberRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\IdentityMS\IdentityRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\IdentityMS\IdentityRequestWithChannelVRED.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	<None Update="TestDataSamples\IdentityMS\ValidateAuthTokenCommandRequest.json">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\IdentityMS\ValidationFailedResponse.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\IdentityMS\LoginToken.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TestDataSamples\Infrastructure.Email\SendEmailRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Infrastructure.Email\SendEmailRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Infrastructure.Email\WorkFlowRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Infrastructure.Email\ACMEmailRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearchRequestWithOutFirstName.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearchRequestWithOutLastName.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearchRequestWithOutPNR.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearchResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearchValidRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearchValidRequestInvalidPtc.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\CabinTypeData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchRequestWithOutFirstName.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchRequestWithOutFirstName.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchRequestWithOutLastName.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchValidRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\AirportDetailsEventProcessCommandData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\AirportDetailsData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\GetBookingQueryData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\CustomerBookingControllerData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\GetBookingQueryRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\GetOrderIdRepoQueryData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearchInvalidResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\PnrRetrieveResonseWithInfantData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\CustomerOrderData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\RetrieveResposneTypeData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderDocData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\GetOrdersRepoQueryData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderSearchRequestData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\GetOrdersRepoQueryInvalidData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderDetailData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderSearchMS\OrderDocResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PassengerMS\AddPassengerRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PassengerMS\AddPhoneRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PassengerMS\AddPTCCodesRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PassengerMS\ManageMultipleTravelDocsAndSecureFlightRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PassengerMS\ChannelEntityData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\HttpRequestBody.LoyaltyNotes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\ListOfContactNotes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\LoyaltyNotes.Good.CustomerNumber.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\LoyaltyNotes.Good.MemberID.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\LoyaltyNotes.LoyaltyNotesCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\LoyaltyNotes.LoyaltyNotesResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\LoyaltyNotes.POST.HttpRequestBody.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="TestDataSamples\LoyaltyNotesRepoQuery_Customer.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="TestDataSamples\MemberID.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="TestDataSamples\OrderChange.TearDownCommandData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="TestDataSamples\LoyaltySync.GoodRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\LoyaltySync.SuccessMapperRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\LoyaltySyncFailureMapperRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\VoidOrderDetails-CPD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\OrderPaymentRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\UpdatePaymentControllerData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\CreateOrderResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\PaymentDetailsData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\PaymentRequestDataWithError.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\OrderPaymentStatusEventCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\OrderPaymentStatusEventCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\OrderPaymentCommandRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\OrderPaymentStatusRequest_Success.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\OrderPaymentStatusRequest_Success.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\FulfillmentDetails.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\APIResponseData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\PaymentEntityData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\OrderReadRepositoryCommandData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\PaymentUpdateEventProcessCommandData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\PaymentResponseData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\PaymentUpdateRepoCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\RetrievePaymentDetailsRepoQueryData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="TestDataSamples\PaymentMS\CosmosQueryCommandData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\PnrSearchData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\PaymentRequestData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\OrderDocRepositoryCommandData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\RefundUpdateRepoCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\OrderDetailsData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\TargetedMembershipPatchCommandData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TargetedMembership\TargetedMembershipCreateCommandData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TicketMS\EticketMapperData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\PaymentUpdateRequestData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\CountryDetailsData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\OrderResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\VoidTransactionDetails.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\VoidTransactionDetails.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\VoidOrderUpdateData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\VoidOrderDetailsData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\UpdatePaymentRequestCommandV2Data.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\PaymentUpdateStatusResponseQueryData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\PaymentMS\ServiceResponseQueryResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="TestDataSamples\TicketMS\VoidTicketEventCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TicketMS\VoidOrderDetails-RFC.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TicketMS\VoidOrderDetails-RFC-OK.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TicketMS\VoidTicketDetails.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TicketMS\VoidTicketEventCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TicketMS\VoidTicketEventCommand-multi-rows.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\TicketMS\VoidTicketEventCommand-Success.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderData.OrderCreateCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderData.OrderCreateCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderData.OrderReadRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderNotifyRequestCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderNotifyEventCommand.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OrderPayment.OrderReferenceId.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\Transaction\TransactionCreateEventData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\AddressLookUpMS\AddressDetailsRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\AddressLookUpMS\CompleteAddressDetailsResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\AddressLookUpMS\AddressLookUpServiceCommandV2Request.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\AddressLookUpMS\CompleteAddressLookUpResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\AddressLookUpMS\WesalServiceAddressDetailsResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\VAA.EAPI.Web.Common\VAA.EAPI.Web.Common.csproj" />
+  </ItemGroup>
+
+  <ProjectExtensions>
+    <VisualStudio><UserProperties /></VisualStudio>
+  </ProjectExtensions>
+</Project>
+
+

@@ -1,0 +1,59 @@
+###Request
+GET https://Testresources.virginatlantic.com/dev/orderpaymentmicroservice/order/payment/paymentDetails/TestPaymentRefIdFailedSSCIResponse HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+
+{
+  "paymentReferenceId": "TestPaymentRefIdFailedSSCIResponse",
+  "paymentDetails": [
+    {
+      "formOfPaymentId": "FOP-001",
+      "formOfPayments": "Card",
+      "amount": {
+        "monetaryAmount": "150.75",
+        "decimalPrecisionCount": 2,
+        "baseCurrency": "GBP"
+      },
+      "cardMethod": {
+        "cardType": "Visa",
+        "cardNumber": "4111111111111111",
+        "expiryDate": "12-28",
+        "cardholderName": "John Doe",
+        "cvv": "123",
+        "billingAddress": {
+          "addressType": "Billing",
+          "addressLine1": "10 High Street",
+          "addressLine2": "Apt 2B",
+          "addressLine3": "",
+          "city": "London",
+          "postalCode": "W1A 1AA",
+          "region": "Greater London",
+          "country": "GB",
+          "departureCity": ""
+        }
+      },
+      "payer": {
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "billingAddress": {
+        "addressType": "Billing",
+        "addressLine1": "10 High Street",
+        "addressLine2": "Apt 2B",
+        "addressLine3": "",
+        "city": "London",
+        "postalCode": "W1A 1AA",
+        "region": "Greater London",
+        "country": "GB",
+        "departureCity": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+###Request
+GET https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements/1f37c8b8-4f5a-4956-8fb0-67ee1c357ecd HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "requirementsResourceId": "1f37c8b8-4f5a-4956-8fb0-67ee1c357ecd",
+    "checkin": false,
+    "travelRequirements": {
+        "id": "266e7b24-b4cf-4fd0-b2d3-0300a3cf652b",
+        "trips": [
+            {
+                "id": "38c69590-bf4c-4f15-82d2-46ede402c481",
+                "ordinal": 0,
+                "departureStation": {
+                    "code": "BOS",
+                    "name": "Logan International Airport",
+                    "country": {
+                        "code": "US",
+                        "isoAlpha3Code": "USA"
+                    }
+                },
+                "arrivalStation": {
+                    "code": "LHR",
+                    "name": "Heathrow Airport",
+                    "country": {
+                        "code": "GB",
+                        "isoAlpha3Code": "GBR"
+                    }
+                },
+                "firstDepartureLocalDate": "2025-08-12T20:15:00-04:00",
+                "lastArrivalLocalDate": "2025-08-13T08:05:00+01:00",
+                "segments": [
+                    {
+                        "id": "b051b55b-7687-47b5-9256-2b5c9353bcaa",
+                        "ordinal": 1,
+                        "operatingCarrier": {
+                            "code": "VS",
+                            "name": "Virgin Atlantic"
+                        },
+                        "flightNum": "0158",
+                        "marketingSegment": {
+                            "flightNum": "0158",
+                            "marketingCarrier": [
+                                {
+                                    "code": "VS",
+                                    "name": "Virgin Atlantic"
+                                }
+                            ]
+                        },
+                        "legs": [
+                            {
+                                "id": "1b4a397a-77a6-4337-9ae7-3acf7dde4ec9",
+                                "ordinal": 1,
+                                "departure": {
+                                    "station": {
+                                        "code": "BOS",
+                                        "name": "Logan International Airport",
+                                        "country": {
+                                            "code": "US",
+                                            "isoAlpha3Code": "USA"
+                                        }
+                                    },
+                                    "estimatedDepartureLocalDateTime": "2025-08-12T20:15:00-04:00",
+                                    "scheduledDepartureLocalDateTime": "2025-08-12T20:15:00-04:00",
+                                    "estimatedDepartureUTCDateTime": "2025-08-13T00:15:00Z",
+                                    "scheduledDepartureUTCDateTime": "2025-08-13T00:15:00Z"
+                                },
+                                "arrival": {
+                                    "station": {
+                                        "code": "LHR",
+                                        "name": "Heathrow Airport",
+                                        "country": {
+                                            "code": "GB",
+                                            "isoAlpha3Code": "GBR"
+                                        }
+                                    },
+                                    "estimatedArrivalLocalDateTime": "2025-08-13T08:05:00+01:00",
+                                    "scheduledArrivalLocalDateTime": "2025-08-13T08:05:00+01:00",
+                                    "estimatedArrivalUTCDateTime": "2025-08-13T07:05:00Z",
+                                    "scheduledArrivalUTCDateTime": "2025-08-13T07:05:00Z"
+                                },
+                                "international": true
+                            }
+                        ],
+                        "international": true,
+                        "transportType": "AIR"
+                    }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": true
+            }
+        ],
+        "passengers": [
+            {
+                "passengerResourceId": "48ddc283-b6dd-40d0-99cb-15baa294d164",
+                "status": {
+                    "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "1b4a397a-77a6-4337-9ae7-3acf7dde4ec9",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "returnDateRequired": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "38c69590-bf4c-4f15-82d2-46ede402c481",
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "returnDateRequired": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": []
+                                    }
+                                ],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": false,
+                                "checkinEligible": false
+                            }
+                        ],
+                        "travelDocuments": [],
+                        "contactInformation": [
+                            {
+                                "requirements": [
+                                    {
+                                        "type": "US_ADDRESS",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "PRIMARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "SECONDARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "EMAIL",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    }
+                                ],
+                                "address": {},
+                                "email": [
+                                    {
+                                        "verified": false,
+                                        "value": "TE8X3K@EXAMPLE.COM"
+                                    }
+                                ],
+                                "phone": [
+                                    {
+                                        "verified": false,
+                                        "preference": "PRIMARY",
+                                        "type": "MOBILE",
+                                        "countryCode": "",
+                                        "phoneNumber": "447464540041"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

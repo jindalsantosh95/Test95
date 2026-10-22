@@ -1,0 +1,178 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+      <ImplicitUsings>enable</ImplicitUsings>
+      <Nullable>enable</Nullable>
+      <OutputType>Exe</OutputType>
+      <TargetFramework>net10.0</TargetFramework>
+      <IsPackable>false</IsPackable>
+
+      <!--To enable the Microsoft Testing Platform 'dotnet test' experience, add property: -->
+      <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+
+      <!--To enable the Microsoft Testing Platform native command line experience, add property: -->
+      <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+
+      <!--For more information on Microsoft Testing Platform support in xUnit.net, please visit: -->
+      <!--https://xunit.net/docs/getting-started/v3/microsoft-testing-platform-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VAA.EAPI.Core.Functions\VAA.EAPI.Core.Functions.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Core.Xunit\VAA.EAPI.Core.Xunit.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Infrastructure\VAA.EAPI.Infrastructure.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Microservices.Retail.Holidays\VAA.EAPI.Microservices.Retail.Holidays.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".mocks\holiday-document-download.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\auth_token.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-DocList - 6997658.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-DownloadDocLink - 48508701-NotFound.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-DownloadDocLink - 48508700-NotFound.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-DownloadDocLink - 48508732.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-PendingDocList - 6842564.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-DownloadDocLink - 48508731.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-DocList - 6996164.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6619029.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6465965.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6661809_InvalidLeadPaxRequest.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6822307_AdvCancelledBooking.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6824290_AdvanceBooking.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6833025_CarDetail.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	  <None Include=".mocks\travelBox-retrieveBooking- 6972415- HotelDisney_TwoSupplements.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\travelBox-retrieveBooking- 6843310- HotelDisney.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\travelBox-retrieveBooking- 6843314- HotelDisney.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\travelBox-retrieveBooking- 6843312- HotelDisney.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\travelBox-retrieveBooking- 6843319- HotelDisney.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6468392.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6995709_AMDBookingNonVS.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6995389_AMDBooking.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6836034.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6836033.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6833336_CoreCarProduct.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6996164_AncillaryCarProduct.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6874038-multiSecBooking.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking-7007912-multiLeg.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6999399-TboxError.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6908893 - CruiseOneofProduct.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6874036-withQUOTEProduct.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	  <None Include=".mocks\travelBox-retrieveBooking- 6834428- HotelDisney.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None> 
+	  <None Include=".mocks\travelBox-retrieveBooking- 7004639 - Universal.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6661909_ExpiredBooking.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6999383_ExpiredBooking.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6999382.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking_TransferOutsideAncillaries- 6997721.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking_TransferAncillaries- 7003539.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- 6661908.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking- CRUISEonly-6669809.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking - 1122334455.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".mocks\travelBox-retrieveBooking - 1234567890.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	  <None Include=".mocks\travelBox-retrieveBooking- 6996566-Disney.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\travelBox-retrieveBooking- 6996245-Disney.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+  </ItemGroup>
+
+</Project>

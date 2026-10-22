@@ -1,0 +1,43 @@
+meta {
+  name: Generate Flying Club Number
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{customer_base_url}}/GenerateFcNumber
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "deDupRequest": {
+      "id": "{{$guid}}",
+      "data": {
+        "customerDetails": {
+          "firstName": "{{customer_first_name}}",
+          "lastName": "{{customer_last_name}}",
+          "dateOfBirth": "{{customer_date_of_birth}}",
+          "customerType": "Loyalty",
+          "contactDetails": {
+            "emailDetails": [
+              {
+                "emailId": "{{customer_email}}"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

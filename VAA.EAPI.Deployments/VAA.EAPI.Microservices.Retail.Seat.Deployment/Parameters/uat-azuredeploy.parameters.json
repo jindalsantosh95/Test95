@@ -1,0 +1,278 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "UAT"
+    },
+    "FunctionAppName": {
+      "value": "AVASEUNAFNSEATMS"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPORDERMS"
+    },
+    "AppInsightsName": {
+      "value": "AVASEUNAISEAT"
+    },
+    "vaultName": {
+      "value": "AVASEUNKVEMS"
+    },
+    "DebugOptions": {
+      "value": "Y"
+    },
+    /*"AzureWebJobsStorage": {
+      "value": ""
+    },*/
+    "APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "e44aa921-2c5f-4f21-bbe6-0c621f0bc5c3"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avaseunstseatms"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    /*"AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkveapis.vault.azure.net/secrets/AVADEUNAFNCRMMICROSERV-Config-StorageAccount/)"
+    },*/
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "KeyVaultUri": {
+      "value": "https://avaseunkvems.vault.azure.net/"
+    },
+    "AppSetting:RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNVALIDATIONMICROSERV-Redis-Connectionstring/)"
+    },
+    "Appsetting:KeyVaultClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNSEATMS-Config-ClientId/)"
+    },
+    "Appsetting:KeyvaultClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNSEATMS-Config-ClientSecret/)"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "value": "a6441aec-a53a-4d6c-9e09-4454179ccdd0"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/a20229af-036d-4fbe-b960-86a115c69c5a/User_impersonation"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Order offer Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to Validate Agency Details"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": false
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": true
+    },
+    "ReferenceDataMicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNSEATMS-Config-ReferenceDataMicroServiceDBKey/)"
+    },
+    "CommonCachingSlidingExpirationInDay": {
+      "value": "1"
+    },
+    "CommonCachingAbsoluteExpirationInDay": {
+      "value": "1"
+    },
+    "OfferExpiryLimitInMinutes": {
+      "value": "30"
+    },
+    "Air4SeatV8EndPoint": {
+      "value": "https://soaws.vs01.vs.air4.com:12000/seat/v8"
+    },
+    "CosmosSqlDBConnectionMode": {
+      "value": "Gateway"
+    },
+    "OfferExpiryTimeLimit": {
+      "value": "20"
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avaseunstseatms-ds"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "DeltaCertificateName": {
+      "value": "NdcDLSoaCertificate"
+    },
+    "TestLab": {
+      "value": "TVTH"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNSEATMS-Config-ClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    "MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNSEATMS-Config-MicroServiceDBKey/)"
+    },
+    "MicroServiceEventStoreTableName": {
+      "value": "SeatFulfilmentEventStore"
+    },
+    "MicroServiceResponseTableName": {
+      "value": "SeatFulfilmentResponse"
+    },
+    "ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNSEATMS-Config-SeatServiceBusConnectionString/)"
+    },
+    "ServiceBusTopicName": {
+      "value": "seatfulfilmenteventmessage"
+    },
+    "SeatFulfilmentResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/UAT/SeatMicroservice/SeatFulfilment/correlationid"
+    },
+    "ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "ResponsePollingCount": {
+      "value": "50"
+    },
+    "OrderChangeServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNSEATMS-Config-OrderChangeServiceBusConnectionString/)"
+    },
+    "OrderSeatServiceBusTopicName": {
+      "value": "orderseatfulfilmentresponseeventmessage"
+    },
+    "PNRCommonV6EndPoint": {
+      "value": "https://webservices.vs01.vs.air4.com:31063/pnrcommon/v6"
+    },
+    "ApplicationId": {
+      "value": "ND"
+    },
+    "PoolType": {
+      "value": "STAMPING/VAA/NEW/DIST/CAPABILITY"
+    },
+    "AgentCityCode": {
+      "value": "LON"
+    },
+    "SecurityId": {
+      "value": "D027954"
+    },
+    "RoleIndicator": {
+      "value": "RESNDCSALES"
+    },
+    "OrderSeatDeleteServiceBusTopicName": {
+      "value": "orderseatdeletionresponseeventmessage"
+    },
+    "SeatDeletionServiceBusTopicName": {
+      "value": "deleteseatseventmessage"
+    },
+    "SeatDeletionResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/SeatMicroService/seat/delete/{correlationid}"
+    },
+    "EmailMSServiceBusTopicName": {
+      "value": "seatconfirmationemailmessagetopicname"
+    },
+    "EmailServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNFNEMAILMICROSERV-Config-ServiceBusConnectionString/)"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "Offer API",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Offer API AFN",
+        "ApplicationUsageIdList": "AVASEUNAFNOFFERMICROSERV"
+      }
+    }
+  }
+}

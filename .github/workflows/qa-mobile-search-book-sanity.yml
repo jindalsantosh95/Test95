@@ -1,0 +1,195 @@
+name: Automation - Mobile Search and Book
+on:
+  workflow_dispatch:
+    inputs:
+      pack:
+        description: Release pack (leave Sanity when selecting an exact test name)
+        required: true
+        default: Sanity
+        type: choice
+        options:
+          - Sanity
+          - Regression
+      test_name:
+        description: Optional exact iOS UI test method; blank runs the selected pack
+        required: false
+        type: string
+      app_id:
+        description: Optional bs:// override; blank selects latest shared VirginAtlantic SIT debug iOS IPA
+        required: false
+        type: string
+      ios_ref:
+        description: iOS source branch or commit to inventory (not proof of uploaded app provenance)
+        required: true
+        default: develop
+        type: string
+      app_commit:
+        description: Optional full iOS commit from the uploaded app build; leave blank if unknown
+        required: false
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: mobile-search-book-sanity
+  cancel-in-progress: false
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    outputs:
+      runner: ${{ steps.suite.outputs.runner_labels_json }}
+      timeout: ${{ steps.suite.outputs.timeout_minutes }}
+      filter: ${{ steps.selection.outputs.filter }}
+      pack: ${{ steps.selection.outputs.pack }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify reporting contracts offline
+        shell: pwsh
+        run: |
+          ./scripts/test-mobile-ios-coverage.ps1
+          ./scripts/test-mobile-release-slack.ps1
+          ./scripts/test-mobile-sanity-configuration.ps1
+          ./scripts/test-mobile-ios-app-selection.ps1
+          ./scripts/test-mobile-test-selection.ps1
+      - id: suite
+        shell: pwsh
+        run: ./scripts/resolve-automation-suite.ps1 -ManifestPath config/automation-suites/mobile-search-book-sanity.json -GithubOutputPath $env:GITHUB_OUTPUT
+      - id: selection
+        shell: pwsh
+        env:
+          MOBILE_TEST_NAME: ${{ inputs.test_name }}
+          MOBILE_REQUESTED_PACK: ${{ inputs.pack || 'Sanity' }}
+        run: ./scripts/resolve-mobile-test-selection.ps1 -Pack $env:MOBILE_REQUESTED_PACK -TestName $env:MOBILE_TEST_NAME -GithubOutputPath $env:GITHUB_OUTPUT
+  sanity:
+    needs: resolve
+    runs-on: ${{ fromJSON(needs.resolve.outputs.runner) }}
+    timeout-minutes: ${{ fromJSON(needs.resolve.outputs.timeout) }}
+    defaults:
+      run:
+        shell: powershell
+    env:
+      MOBILE_PROJECT: VAA.EAPI.Automation/VAA.EAPI.Automation.MobileApp.UI
+      RESULTS: TestResults/mobile-sanity-${{ github.run_id }}-${{ github.run_attempt }}
+      MOBILE_TEST_NAME: ${{ inputs.test_name }}
+      MOBILE_PACK: ${{ needs.resolve.outputs.pack }}
+      MOBILE_REQUESTED_PACK: ${{ inputs.pack || 'Sanity' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
+        with:
+          dotnet-version: 10.0.x
+      - name: Verify .NET SDK
+        run: |
+          dotnet --info
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $sdks = @(dotnet --list-sdks)
+          if ($LASTEXITCODE -ne 0 -or -not ($sdks -match '^10\.')) { throw 'A .NET 10 SDK is required.' }
+      - name: Verify runner reporting and selection compatibility offline
+        run: |
+          ./scripts/test-mobile-ios-coverage.ps1
+          ./scripts/test-mobile-release-slack.ps1
+          ./scripts/test-mobile-sanity-configuration.ps1
+          ./scripts/test-mobile-ios-app-selection.ps1
+          ./scripts/test-mobile-test-selection.ps1
+      - name: Detect iOS source-read credentials
+        id: source-credentials
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        run: |
+          "configured=$(((-not [string]::IsNullOrWhiteSpace($env:APP_ID)) -and (-not [string]::IsNullOrWhiteSpace($env:APP_KEY))).ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - name: Create read-only iOS source token
+        id: source-token
+        if: steps.source-credentials.outputs.configured == 'true'
+        continue-on-error: true
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          private-key: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+          owner: VAAD1ST
+          repositories: vaa-mobile-ios
+          permission-contents: read
+      - name: Check out iOS source for mapping only
+        id: ios-source
+        if: steps.source-token.outcome == 'success'
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          repository: VAAD1ST/vaa-mobile-ios
+          ref: ${{ inputs.ios_ref }}
+          token: ${{ steps.source-token.outputs.token }}
+          path: ios-coverage-source
+          persist-credentials: false
+      - name: Resolve and pin iOS app for this run
+        id: app
+        env:
+          MOBILE_APP_ID: ${{ inputs.app_id }}
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+        run: ./scripts/resolve-mobile-ios-app.ps1 -MetadataPath "$env:RESULTS/app-selection.json"
+      - name: Configure remote SIT run
+        env:
+          MOBILE_APP_ID: ${{ steps.app.outputs.app_id }}
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          LOYALTY_ACCOUNT_PASSWORD: ${{ secrets.LOYALTY_ACCOUNT_PASSWORD }}
+          KEY_VAULT_URL: ${{ secrets.KEY_VAULT_URL }}
+          KEY_VAULT_TENANT_ID: ${{ secrets.KEY_VAULT_TENANT_ID }}
+          KEY_VAULT_CLIENT_ID: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+          KEY_VAULT_CLIENT_SECRET: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+        run: ./scripts/configure-mobile-sanity-run.ps1 -Pack $env:MOBILE_PACK -TestName $env:MOBILE_TEST_NAME -BuildName "$env:MOBILE_PACK-iOS-SIT-$env:GITHUB_RUN_ID-$env:GITHUB_RUN_ATTEMPT"
+      - name: Run selected tests (up to four parallel sessions)
+        id: tests
+        env:
+          MOBILE_FILTER: ${{ needs.resolve.outputs.filter }}
+        run: |
+          dotnet test "$env:MOBILE_PROJECT/VAA.EAPI.Automation.MobileApp.UI.csproj" -c Release --filter $env:MOBILE_FILTER --results-directory $env:RESULTS --logger 'trx;LogFileName=sanity.trx'
+          $testExit = $LASTEXITCODE
+          if ($testExit -ne 0) { exit $testExit }
+          ./scripts/resolve-mobile-test-selection.ps1 -Pack $env:MOBILE_REQUESTED_PACK -TestName $env:MOBILE_TEST_NAME -TrxPath "$env:RESULTS/sanity.trx"
+      - name: Analyse current run
+        if: always()
+        run: |
+          if (Test-Path "$env:RESULTS/sanity.trx") {
+            ./scripts/analyse-test-run-results.ps1 -TrxPath "$env:RESULTS/sanity.trx" -SuiteName "Mobile-$env:MOBILE_PACK" -EnvironmentName SIT
+          }
+      - name: Inventory iOS source and map current results
+        if: always()
+        continue-on-error: true
+        env:
+          IOS_SOURCE_READY: ${{ steps.ios-source.outcome }}
+          IOS_APP_COMMIT: ${{ inputs.app_commit }}
+        run: |
+          $source = if ($env:IOS_SOURCE_READY -eq 'success') { 'ios-coverage-source' } else { '' }
+          ./scripts/get-mobile-ios-coverage.ps1 -IosRepository $source -AppCommit $env:IOS_APP_COMMIT -TrxPath "$env:RESULTS/sanity.trx" -OutputDirectory "$env:RESULTS/coverage"
+      - name: Remove private iOS source checkout
+        if: always()
+        run: |
+          if (Test-Path -LiteralPath 'ios-coverage-source') {
+            Remove-Item -LiteralPath 'ios-coverage-source' -Recurse -Force
+          }
+      - name: Upload results and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-sanity-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            ${{ env.RESULTS }}/
+            ${{ env.MOBILE_PROJECT }}/bin/Release/net10.0/TestResults/
+      - name: Post Slack summary
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          MOBILE_JOB_STATUS: ${{ job.status }}
+        run: |
+          ./scripts/publish-mobile-release-slack.ps1 -TrxPath "$env:RESULTS/sanity.trx" -Pack $env:MOBILE_PACK -TestName $env:MOBILE_TEST_NAME -JobStatus $env:MOBILE_JOB_STATUS -TargetEnvironment sit -RunUrl "https://github.com/VAAD1ST/eapi/actions/runs/$env:GITHUB_RUN_ID" -CoveragePath "$env:RESULTS/coverage/ios-coverage.json" -AppSelectionPath "$env:RESULTS/app-selection.json"
+      - name: Remove generated credentials
+        if: always()
+        run: |
+          foreach ($file in @("$env:MOBILE_PROJECT/local.settings.local.json", "$env:MOBILE_PROJECT/bin/Release/net10.0/local.settings.local.json")) {
+            if (Test-Path -LiteralPath $file) { Remove-Item -LiteralPath $file -Force }
+          }

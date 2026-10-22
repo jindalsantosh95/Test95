@@ -1,0 +1,33 @@
+meta {
+  name: Get Trip Details
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{order_data_base_url}}/trips/details
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "tripDetails": [
+      {
+        "firstName": "{{first_name}}",
+        "lastName": "{{last_name}}",
+        "pnrLocator": "{{pnr}}",
+        "createdDate": ""
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,66 @@
+info:
+  name: Get Ticket / Coupon Claim Status
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/status"
+  headers:
+    - name: Ocp-Apim-Subscription-Key
+      value: "{{ocpkey}}"
+  body:
+    type: json
+    data: |-
+      {
+        "RequestId": "",
+        "Requester": {
+          "FirstName": "John",
+          "LastName": "Doe",
+          "Email": "john.doe@example.com",
+          "Reason": "Inbound Delay",
+          "BookingReference": "ABC123",
+          "BookingDate": "0001-01-01"
+        },
+        "Entries": [
+          {
+            "PassengerRef": "01.01",
+            "PassengerName": "Alex Taylor",
+            "FlightDate": "2026-03-01",
+            "FlightNumber": 1,
+            "TicketNumber": "9321234567890",
+            "CouponNumber": "1"
+          },
+          {
+            "PassengerRef": "01.01",
+            "PassengerName": "Alex Taylor",
+            "FlightDate": "2026-03-05",
+            "FlightNumber": 2,
+            "TicketNumber": "9321234567890",
+            "CouponNumber": "2"
+          },
+          {
+            "PassengerRef": "02.01",
+            "PassengerName": "Jamie Taylor",
+            "FlightDate": "2026-03-01",
+            "FlightNumber": 1,
+            "TicketNumber": "9321234567891",
+            "CouponNumber": "1"
+          },
+          {
+            "PassengerRef": "02.01",
+            "PassengerName": "Jamie Taylor",
+            "FlightDate": "2026-03-05",
+            "FlightNumber": 2,
+            "TicketNumber": "9321234567891",
+            "CouponNumber": "2"
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

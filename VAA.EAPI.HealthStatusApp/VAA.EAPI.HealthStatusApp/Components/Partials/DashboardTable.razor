@@ -1,0 +1,134 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+@inject NavigationManager Navigation
+
+@rendermode InteractiveServer
+
+<table class="table" style="margin-bottom:5px;">
+    <thead>
+        <tr>
+            <th class="col-3">Service</th>
+            <th class="col-1">Status</th>
+            <th class="col-8">Description</th>
+        </tr>
+    </thead>
+</table>
+
+@if (Issues is null || !Issues.Any())
+{
+    <p class="col-12" style="text-align: center;">Any detail regarding Issues will appear here</p>
+}
+else
+{
+    <div class="scroll-container" style="width:100%" onmouseover="pauseScroll()" onmouseout="startScroll()">
+        <div class="table-wrapper">
+            <table id="healthStatusTable" class="table table_scroll">
+                <tbody>
+                    @foreach (var issue in Issues)
+                    {
+                        <tr>
+                            <td class="col-3">@issue.Service</td>
+                            <td class="col-1">
+                                @GetStatusText(issue.StatusCode)
+                            </td>
+                            <td class="col-8">@issue.Description</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IEnumerable<DashboardIssue> Issues { get; set; }
+
+    private string ScrollTimeInSeconds
+    {
+        get
+        {
+            return  Issues == null || Issues?.Count() < 3 ? "0s" : (4 * Issues.Count()).ToString() + "s";
+        }
+    }
+
+    private string GetStatusText(int? statusCode)
+    {
+        if (statusCode == null) return "Unhealthy";
+
+        return statusCode switch
+        {
+            0 => "Unhealthy",
+            1 => "Degraded",
+            2 => "Healthy",
+            _ => statusCode.ToString()
+        };
+    }
+}
+
+<style>
+    .scroll-container {
+        height: 10rem;
+        overflow: hidden;
+        position: relative;
+        border: 1px solid #ddd;
+    }
+
+    .table-wrapper {
+        height: 100%;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table_scroll {
+        animation: scroll-table @ScrollTimeInSeconds linear infinite;
+    }
+
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+    }
+</style>
+
+<script>
+    let tvtable = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        tvtable = document.querySelector('.table_scroll');
+        adjustTableHeight();
+
+        window.addEventListener('resize', adjustTableHeight);
+    });
+
+    function adjustTableHeight() {
+        const container = document.querySelector('.scroll-container');
+        const containerHeight = container.offsetHeight;
+        const tableHeight = tvtable.scrollHeight;
+
+        tvtable.style.height = `${2 * containerHeight}px`;
+    }
+
+    function pauseScroll() {
+            document.querySelector('.table_scroll').style.animationPlayState = 'paused';
+        document.querySelector('.table_scroll').style.transform = 'none!important';
+        document.querySelector('.table-wrapper').style.overflowY = 'auto';
+
+
+    }
+
+    function startScroll() {
+            document.querySelector('.table_scroll').style.animationPlayState = 'running';
+        document.querySelector('.table_scroll').style.transform = 'translateY(-100%)';
+            document.querySelector('.table-wrapper').style.overflowY = 'hidden';
+
+    }
+</script>

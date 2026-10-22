@@ -1,0 +1,36 @@
+query Query($offerSearchCriteria: OfferSearchCriteriaInput) {
+  searchOffers(offerSearchCriteria: $offerSearchCriteria) {    
+    offersSets {
+      offers {
+        additionalOfferProperties {
+          soldOut
+          lowestFareInCalendar
+          lowestFareInWeek
+          totalTripStopCnt
+        }
+        offerPricing {
+          totalAmt {
+            currencyEquivalentPrice {
+              currencyAmt
+              currencyCode
+            }
+            milesEquivalentPrice {
+              mileCnt
+            }
+          }
+        }
+        offerItems {
+          retailItems {
+            retailItemMetaData {
+              fareInformation {
+                priceCalendar {
+                  priceCalendarDate
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

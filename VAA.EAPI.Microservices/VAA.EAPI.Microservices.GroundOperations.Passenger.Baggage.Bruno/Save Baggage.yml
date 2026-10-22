@@ -1,0 +1,31 @@
+info:
+  name: Save Baggage
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baggagems}}/SaveBaggage"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{baggagems_ocp}}"
+  body:
+    type: json
+    data: |-
+      {
+            "travelPartyId": "{{travelPartyId}}",
+            "baggagePricing": [{
+              
+              "passengerNiN": "{{passengerNiN}}",
+              "baggageOfferId": "{{baggageOfferId}}",
+              "baggageCount": {{baggageCount}},
+              "totalPrice": {{totalPrice}}
+            }]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

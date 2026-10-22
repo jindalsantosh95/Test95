@@ -1,0 +1,20 @@
+###Request
+POST https://wallet-api.asnapieu.com/v1/links/adaptive/multiple/project/217 HTTP/1.1
+
+$[?(@.iosTemplateId == 'Test-2' && @.androidTemplateId == 'Test-6')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "links": [
+    {
+      "adaptiveLinkId": "upper-link",
+      "adaptiveLinkExternalId": "VS4-7/1/2026 6:00:00 PM-DIQJAF-01.01",
+      "url": "https://wallet-api.asnapieu.com/v1/pass/adaptive/upper-link",
+      "iosUrl": "https://wallet-api.asnapieu.com/v1/pass/adaptive/upper-link/ios",
+      "androidUrl": "https://wallet-api.asnapieu.com/v1/pass/adaptive/upper-link/android"
+    }
+  ]
+}

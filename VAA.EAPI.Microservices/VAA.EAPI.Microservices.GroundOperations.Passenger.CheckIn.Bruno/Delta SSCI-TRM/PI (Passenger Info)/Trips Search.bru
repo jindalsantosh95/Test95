@@ -1,0 +1,51 @@
+meta {
+  name: Trips Search
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{delta_trips_search}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  AppID: D2
+  ChannelId: DFMOBILE
+  x-air4_mytrips_test: {{air4_mytrips_test}}
+  transactionId: {{transactionId}}
+}
+
+body:json {
+  {
+      "using": "CONFIRMATION",
+      "confirmationNum": "{{pnr}}",
+      "givenNames": "{{pax1_firstname}}",
+      "surname": "{{pax1_lastname}}",
+      "departureAirportCode": "{{origin}}"
+  }
+}
+
+script:pre-request {
+  bru.setVar("transactionId", bru.interpolate("{{$guid}}"));
+}
+
+script:post-response {
+  const response = res.getBody();
+  const reservationResourceId =
+    response?.travelReservations?.[0]?.reservationResourceId;
+
+  if (!reservationResourceId) {
+    throw new Error(
+      "Trips Search did not return a reservationResourceId; verify the PNR, passenger name, and origin."
+    );
+  }
+
+  bru.setVar("reservationResourceId", reservationResourceId);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

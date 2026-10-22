@@ -1,0 +1,165 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
+		<OutputType>Exe</OutputType>
+		<Nullable>disable</Nullable>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="CSharpFunctionalExtensions" />
+		<PackageReference Include="HotChocolate" />
+		<PackageReference Include="HotChocolate.Subscriptions.Redis" />
+		<PackageReference Include="HotChocolate.AspNetCore" />
+		<PackageReference Include="HotChocolate.AspNetCore.Authorization" />
+		<PackageReference Include="HotChocolate.Data" />
+		<PackageReference Include="HotChocolate.PersistedQueries.FileSystem" />
+		<PackageReference Include="HotChocolate.Types" />
+		<PackageReference Include="HotChocolate.Types.NodaTime" />
+		<PackageReference Include="Microsoft.ApplicationInsights" />
+		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" />
+		<PackageReference Include="Microsoft.ApplicationInsights.WorkerService" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+		<PackageReference Include="Microsoft.Azure.Functions.Extensions" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.OpenApi" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Warmup" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" OutputItemType="Analyzer" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker" />
+		<PackageReference Include="Microsoft.Azure.WebJobs" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi.Core" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" />
+		<PackageReference Include="StackExchange.Redis.Extensions.Core" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Common\VAA.EAPI.GraphQL.Common.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Infrastructure\VAA.EAPI.GraphQL.Infrastructure.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="ErrorCodes\ErrorCodes.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="host.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="local.settings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</None>
+		<None Update="PersistedQueryStore\accountMemberDetails.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\carbonIndexBFF.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\brandBFF.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\bookUpdatePaymentStatusPqId.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\retrieveSummaryResponse.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\paymentDetailsResponsePqId.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\fareConditions.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\retrieveBasketDetailsPqId.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\retrieveCountries.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\retrieveFQTProgrammes.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\retrieveSeatMap.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\searchOffersBFF.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\searchOffersNextBFF.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\searchSummaryDeepLink.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\searchSummary.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\searchSummaryBFF.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\selectSeat.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\updateContactDetailsPqId.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\updatePassengerFQTMuation.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\updatePassengerMuationReqPqId.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\UpdateTnCMutation.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\updatePassengerMuationReq.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\updateContactDetails.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\retrieveBasketDetails.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\orderResponse.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\bookOrderCreate.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\brand.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\orderPaymentReferenceId.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\retrieveBasket.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\searchBookingSession.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\searchFare.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\searchFilterOffers.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="PersistedQueryStore\UpdateTnCMutationPqId.graphql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+  <ItemGroup>
+    <Compile Include="../NativeWebSockets/NativeSubscriptionRegistry.cs" Link="FunctionHost/WebSockets/NativeSubscriptionRegistry.cs" />
+    <Compile Include="../NativeWebSockets/RedisSubscriptionSessionStore.cs" Link="FunctionHost/WebSockets/RedisSubscriptionSessionStore.cs" />
+  </ItemGroup>
+  <Import Project="../NativeWebSocketHost.targets" />
+</Project>

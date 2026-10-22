@@ -1,0 +1,38 @@
+meta {
+  name: searchSummary
+  type: graphql
+  seq: 55
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query searchSummary($request: SearchSummaryRequestInput!) {
+    searchSummary(request: $request) {
+      __typename
+      voucherEligibility {
+        eligible
+        reasonCode
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {
+      "basketId": "",
+      "offerId": ""
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

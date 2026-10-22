@@ -1,0 +1,124 @@
+﻿namespace VAA.EAPI.Web.Book.Models.Basket
+{
+    public enum FQTValidationStatus
+    {
+        Unchecked,
+        Valid,
+        InvalidAccount,
+        NameMismatch
+    }
+
+    public enum JourneyType
+    {
+        OneWay,
+        Return,
+        MultiCity
+    }
+
+    public enum LocationType
+    {
+        None,
+        LHR,
+        ATL,
+        DEL,
+        AMS,
+        LGW,
+        MAN,
+        JFK,
+        BOM,
+        LAS,
+        LAX,
+        ANU,
+        BGI,
+        GND,
+        UVF,
+        LON,
+        EWR,
+        MCO,
+        IAD,
+        SFO,
+        BOS,
+        HKG,
+        PVG,
+        DXB,
+        JNB,
+        LOS,
+        CUN,
+        MBJ,
+        SIN,
+        SYD,
+        AKL,
+        BJS,
+        PEK,
+        HAV,
+        TAB,
+        BFS,
+        MEL,
+        MIA,
+        GLA,
+        BNE,
+        SEA,
+        MEX,
+        TLV,
+        AVP,
+        LUX,
+        GRU,
+        ABZ,
+        CDG,
+        EDI,
+        DUS,
+        BHD,
+        SOU,
+        EXT,
+        NQY,
+        NOC,
+        JER,
+        STR,
+        HAJ,
+        LYS,
+        BHX,
+        LCY,
+        NCL,
+        ORL,
+        NYC,
+        YVR,
+        TLS,
+        PAR,
+        TPA,
+        PDX,
+        CMF,
+        EGC,
+        ISB,
+        LHE,
+        SVD,
+        SJU,
+        CPT,
+        NAS,
+        AUS
+    }
+
+    public enum CabinType
+    {
+        EconomyLight,
+        EconomyClassic,
+        EconomyClassicFlex,
+        EconomyDelight,
+        EconomyDelightFlex,
+        Premium,
+        PremiumFlex,
+        Upper,
+        UpperFlex
+    }
+    public enum FlightScenarioType
+    {
+        Virgin,
+        NonVirgin,
+        VirginAndNonVirgin
+    }
+    public enum SeatPriceType
+    {
+        None = 0,
+        Free,
+        Paid
+    }
+}

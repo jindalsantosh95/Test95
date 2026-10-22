@@ -1,0 +1,42 @@
+trigger: none
+
+pr:
+  branches:
+    include:
+      - main
+    
+  paths:
+    include:
+      - VAA.EAPI.Automation/VAA.EAPI.Automation*
+    exclude:
+      - VAA.EAPI.Automation/VAA.EAPI.Automation.bruno
+
+variables: 
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'
+  - name: rootPath
+    value: 'VAA.EAPI.Automation'
+  - name: subRootPath
+    value: 'VAA.EAPI.Automation'
+
+
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_PR.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      solutionPath: VAA.EAPI.Automation.sln
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)

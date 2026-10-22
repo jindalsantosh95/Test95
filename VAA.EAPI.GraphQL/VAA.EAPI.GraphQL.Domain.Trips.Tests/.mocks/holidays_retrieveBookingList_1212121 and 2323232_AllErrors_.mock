@@ -1,0 +1,57 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBookingList HTTP/1.1
+
+$[?(@.bookingReference == '1212121')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"tripListResponse": [
+		{
+			"tripSearchRequest": {
+				"using": "HOLIDAYS",
+				"surname": "TEST",
+				"bookingReference": "1212121",
+				"dateOfBirth": "1996-05-11"
+			},
+			"tripDetails": {
+				"errors": [
+					{
+						"id": "a599c787-6d33-4135-9d83-e1c8034645ec",
+						"code": "HOL007",
+						"message": "The request could not be processed at this point in time",
+						"developerMessage": "Error connecting source system | TimeStamp: 11/05/2026 11:00:36",
+						"errorSource": "Demaze API"
+					}
+				],
+				"status": 400
+			}
+		},
+		{
+			"tripSearchRequest": {
+				"using": "HOLIDAYS",
+				"surname": "TEST",
+				"bookingReference": "2323232",
+				"dateOfBirth": "1996-05-11"
+			},
+			"tripDetails": {
+				"errors": [
+					{
+						"id": "a599c787-6d33-4135-9d83-e1c8034645ec",
+						"code": "HOL001",
+						"message": "The requested data is not available.",
+						"developerMessage": "CruiseBookingErrorCode | TimeStamp: 11/05/2026 11:00:36",
+						"errorSource": "Source system"
+					}
+				],
+				"status": 400
+			}
+		}
+	]
+}

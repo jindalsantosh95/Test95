@@ -1,0 +1,160 @@
+meta {
+  name: Review and Pay Details (Post)
+  type: http
+  seq: 16
+}
+
+post {
+  url: {{delta_ssci}}/{{travelparty_id}}/reviewAndPayDetail
+  body: json
+  auth: inherit
+}
+
+headers {
+  AppChannelName: DFMOBILE
+  AppID: D2
+  ClientID: VAMobileAppAIR4_CC_SI
+  ~appid: OCI
+}
+
+body:json {
+      {        
+      "creditCardType": "{{payment_creditCardType}}",
+      "creditCardNumber": "{{payment_creditCardNumber}}",
+      "creditFirstName": "{{payment_creditFirstName}}",
+      "creditLastName": "{{payment_creditLastName}}",
+      "expirationMonth": "{{payment_expirationMonth}}",
+      "expirationYear": "{{payment_expirationYear}}",
+      "securityCode": "{{payment_securityCode}}",
+      "address1": "{{payment_address1}}",
+      "address2": "{{payment_address2}}",
+      "city": "{{payment_city}}",  
+      "country": "{{payment_country}}",    
+      "zipCode": "{{payment_zipCode}}",
+      "paymentReferenceId": "{{paymentReferenceId}}",
+      "psd2ErrorKey": "",
+      "paymentAmount": "{{payment_paymentAmount}}",
+      "paymentAmountDecimal": "00",
+      "currencyCode": "{{payment_currencyCode}}",
+      "payWithMilesToggle": false,
+      "selectedPaxNIN": "01.01"
+       }      
+   
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+example {
+  name: example
+  
+  request: {
+    url: {{delta_ssci}}/{{travelparty_id}}/reviewAndPayDetail
+    method: POST
+    mode: json
+    headers: {
+      AppChannelName: DFMOBILE
+      AppID: D2
+      ClientID: VAMobileAppAIR4_CC_SI
+      ~testlab: TVTH
+      ~X-VirginAtlantic_appname_Test: afa0893645aa8eb651843a9ad038de8181363aaaacf7a21d2343575f22d1f094
+      ~appid: OCI
+    }
+  
+    body:json: {
+          {        
+          "creditCardType": "{{payment_creditCardType}}",
+          "creditCardNumber": "{{payment_creditCardNumber}}",
+          "creditFirstName": "{{payment_creditFirstName}}",
+          "creditLastName": "{{payment_creditLastName}}",
+          "expirationMonth": "{{payment_expirationMonth}}",
+          "expirationYear": "{{payment_expirationYear}}",
+          "securityCode": "{{payment_securityCode}}",
+          "address1": "{{payment_address1}}",
+          "address2": "{{payment_address2}}",
+          "city": "{{payment_city}}",  
+          "country": "{{payment_country}}",    
+          "zipCode": "{{payment_zipCode}}",
+          "paymentReferenceId": "{{paymentReferenceId}}",
+          "psd2ErrorKey": "",
+          "paymentAmount": "{{payment_paymentAmount}}",
+          "paymentAmountDecimal": "00",
+          "currencyCode": "{{payment_currencyCode}}",
+          "payWithMilesToggle": false,
+          "selectedPaxNIN": "01.01"
+           }      
+
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: text/json
+      x-amzn-requestid: f30c882f-fab2-42b4-8da9-cf0c08e4ce4e
+      access-control-allow-origin: *
+      access-control-allow-headers: Content-Type
+      x-amz-apigw-id: Xi49VES2IAMFdmg=
+      access-control-allow-methods: POST
+      x-amzn-trace-id: Root=1-69710854-6ef39cf14175ad924c09b4df;Parent=49397960126e9bd3;Sampled=0;Lineage=1:e80372c9:0
+      vary: Accept-Encoding
+      content-length: 428
+      date: Wed, 21 Jan 2026 17:09:56 GMT
+      connection: keep-alive
+      server-timing: cdn-cache; desc=MISS, edge; dur=99, origin; dur=16154, ak_p; desc="1769015380549_34844718_230440000_1622290_8088_25_41_-";dur=1
+      akamai-grn: 0.2eb01302.1769015380.dbc3c40
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "departureDate": "21 Jan 2026",
+          "confirmationNum": "D3NMQ3",
+          "departureAirportCode": "ATL",
+          "arrivalAirportCode": "LHR",
+          "departureAirportName": "Atlanta-Intl, GA",
+          "arrivalAirportName": "London-Heathrow, England",
+          "transactionDate": "Wednesday January 21, 2026",
+          "totalAmtUSD": "75",
+          "totalAmtUSDDecimal": "00",
+          "withUSDAmt": true,
+          "withLocalAmt": false,
+          "emailSent": false,
+          "emailCancelled": false,
+          "withMilesAmount": false,
+          "passengerList": [
+            {
+              "firstName": "Reginia",
+              "lastName": "Deinert",
+              "productList": [
+                {
+                  "description": "Baggage Fee",
+                  "flightNumber": "VS0104",
+                  "creditCard": "VI**6892",
+                  "productTotalAmt": "75",
+                  "productTotalAmtDecimal": "00",
+                  "currency": "USD",
+                  "premiumEconomyPurchase": false,
+                  "numberOfBags": 0
+                }
+              ],
+              "displayNamesSeparately": true
+            }
+          ],
+          "nextAction": "success",
+          "currencyCode": "USD",
+          "showPaymentWidget": false,
+          "selectedPaxNiN": "01.01",
+          "nextPaxNiN": "01.01"
+        }
+      '''
+    }
+  }
+}

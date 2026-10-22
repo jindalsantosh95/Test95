@@ -1,0 +1,53 @@
+meta {
+  name: Submit Secondary Document
+  type: http
+  seq: 9
+}
+
+patch {
+  url: {{delta_trm}}/requirements/{{requirement_resource_id}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+  transactionId: VS-DigitalFirst-123-{{$guid}}
+  clientId: {{ping_client_id}}
+  X-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+  AppChannelName: {{AppChannelName}}
+  AppId: {{AppID}}
+}
+
+body:json {
+  {
+    "requests": [
+      {
+        "tripId": "{{trip_resource_id1}}",
+        "passengerResourceId": "{{passenger_resource_id1}}",
+        "using": "SECONDARY_DOC",
+        "documentForm": {
+          "digitalVerificationEligible": false,
+          "link": {
+            "linkId": "{{secondary_document_id}}"
+          }
+        },
+        "country": {
+          "code": "{{secondary_document_country_code}}"
+        },
+        "consent": true
+      }
+    ]
+  }
+}
+
+script:post-response {
+  var body = res.getBody();
+  bru.setVar("travel_requirements_response", JSON.stringify(body));
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

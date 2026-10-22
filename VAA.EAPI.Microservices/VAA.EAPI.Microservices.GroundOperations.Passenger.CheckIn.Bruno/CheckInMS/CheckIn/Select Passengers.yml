@@ -1,0 +1,31 @@
+info:
+  name: Select Passengers
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{checkinms}}/CheckIn/selectPassengers"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: "{\r
+
+      \    \"checkInId\": \"{{checkInId}}\",\r
+
+      \    \"selectedPassengerIds\": [\r
+
+      \        \"{{pax1_id}}\"\r
+
+      \    ]\r
+
+      }"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

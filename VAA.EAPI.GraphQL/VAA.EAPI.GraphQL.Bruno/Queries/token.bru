@@ -1,0 +1,30 @@
+meta {
+  name: token
+  type: graphql
+  seq: 61
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query token($appId: String, $microService: String) {
+    token(appId: $appId, microService: $microService)
+  }
+}
+
+body:graphql:vars {
+  {
+    "appId": "",
+    "microService": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,319 @@
+﻿@page "/tvdashboard"
+@attribute [Authorize(Policy = "RequireSpecificGroup")]
+@inject HttpClient Http
+@inject ISignalRService SignalRService
+@using VAA.EAPI.HealthStatusApp.Models.MetricsModels
+@using VAA.EAPI.HealthStatusApp.SignalRClasses
+@using VAA.EAPI.HealthStatusApp.Components.Partials
+@using Microsoft.AspNetCore.SignalR.Client
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@inject ILogger<Index> Logger
+
+<div class="service-dashboard" @onmousemove="OnUserActivity">
+    <div class="tv-conatianer">
+        @if (bannerText != null)
+        {
+            <div class="col-12" style="display:flex; justify-content:center;">
+                <div class="col-12">
+                    <TopBanner BannerText=@bannerText />
+                </div>
+            </div>
+
+        }
+
+
+        <div class="card" style="width:57%">
+            <div class="card-header">
+                Function Apps
+            </div>
+            <div class="card-body tt_tv_body" style="align-items: center;">
+                <div style="align-items: center; justify-content: center;padding:0 15px;" class="tt_tv_pie">
+                    <a href="api-check" style="display: flex;justify-content: center;cursor: pointer;text-decoration: none;color: inherit;">
+                        <div style="width:160px;">
+                            <Pie Scores="@ApimPie"></Pie>
+                        </div>
+                    </a>
+                    <div style="display: flex; justify-content: center; gap: 1rem;">
+                        @if(ApimPie != null)
+                        {
+                            <a style="padding: 0 0 0 1rem;white-space: nowrap;">@ApimPie?.FirstScore Healthy</a>
+                            <a style="padding: 0 0 0 1rem;white-space: nowrap;">@ApimPie?.SecondScore Unhealthy</a>
+                        }
+                    </div>
+                </div>
+
+                <div class="tt_tv_table" style="width:75%">
+                    <TinyTable Issues=Issues></TinyTable>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card" style="width: 40%;">
+            <div class="card-header">
+                Service Now Incidents
+            </div>
+            <div class="card-body" style="max-height: calc(6 * 40px); overflow-y: auto;padding:1rem">
+                @if (Incidents is null || !Incidents.Any())
+                {
+                    <p class="col-12" style="text-align: center;">Any detail regarding Issues will appear here</p>
+                }
+                else
+                {
+                    <table class="table table-striped" style="margin-bottom:5px;">
+                        <thead>
+                            <tr>
+                                <th class="col-2">Incident</th>
+                                <th class="col-6">Description</th>
+                                <th class="col-2">Created</th>
+                                <th class="col-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var incident in Incidents)
+                            {
+                                <tr class="issue-row_home">
+                                    <td class="col-2">@incident.IncidentNumber</td>
+                                    <td class="col-6">@incident.Shortdescription</td>
+                                    <td class="col-2">@incident.Created.ToString("dd/MMM/yyyy HH:mm:ss")</td>
+                                    <td class="col-2">@incident.State</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+
+        <CosmosDbContainer Services=@CosmosServices />
+
+        <ServiceBusContainer Services=@ServiceBusServices />
+
+        <GraphQLContainer Services=@GraphQlServices />
+
+
+        <div class="card" style="width:180px; height:145px;">
+            <div class="card-header" style="padding: .25rem 1rem;">
+                Msoft Azure Status
+            </div>
+            <div class="card-body">
+                <SpeedDial Score=@rssScore></SpeedDial>
+                <a style="display:flex; justify-content:center;margin-top:-50px">@AzureStatusText</a>
+            </div>
+
+        </div>
+
+        <div class="card" style="width:80%">
+            <div class="card-header">
+                Live Automation Tests
+            </div>
+            <div class="card-body">
+
+                @if (HeimdallResult != null)
+                {
+                    <h5 style="display: grid; grid-template-columns: repeat(5, 1fr); ; gap: 10px; align-items: center; text-align: center; margin-top: .25rem;flex-wrap: wrap; width: 100%;">
+                        <span>Run At: @(HeimdallResult?.TimeStamp.ToString("dd/MMM/yyyy HH:mm:ss"))</span>
+                        <span class="insights-text">Total Tests: @(HeimdallResult?.NumberofTests ?? 0)</span>
+                        <span class="insights-text">Passed: @(HeimdallResult?.NumberSuccesful ?? 0)</span>
+                        <span class="insights-text">Failed: @(HeimdallResult?.NumberFailed ?? 0)</span>
+                        <span class="insights-text">Skipped: @(HeimdallResult?.NumberSkipped ?? 0)</span>
+                    </h5>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private HubConnection? hubConnection;
+    private string insightsHeartStyle = "bi-heart-pulse-fill waiting";
+    private string insightsText = "Connecting to Insights Function App";
+    private LatestHeimdallResult HeimdallResult;
+    private string bannerText = "";
+    private string rssScore = "0";
+    private PieScoresModel ApimPie;
+    private string AzureStatusText = "Checking Feed...";
+    private IEnumerable<DashboardIssue> Issues;
+    private IEnumerable<ServiceNowViewModel> Incidents;
+    private Dictionary<string,bool> ServiceBusServices;
+    private Dictionary<string,bool> CosmosServices;
+    private Dictionary<string,bool> GraphQlServices;
+    private string InsightsHeartStyle = "Connecting...";
+    private string InsightsText = "bi-heart";
+    private bool isHandlerRegistered = false;
+    private bool _isSignalRInitialized = false;
+    private bool IsPageVisible = false;
+    private bool isInactive = false;
+    private DateTime lastActivityTime;
+    private readonly TimeSpan inactivityThreshold = TimeSpan.FromMinutes(5);
+    private CancellationTokenSource inactivityMonitorCancellationTokenSource;
+
+
+
+    protected override void OnInitialized()
+    {
+        IsPageVisible = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_isSignalRInitialized)
+        {
+            try
+            {
+                hubConnection = SignalRService.GetConnection();
+
+                if (!SignalRService.IsConnected)
+                    await SignalRService.StartConnectionAsync();
+
+                _isSignalRInitialized = true;
+
+                if (!isHandlerRegistered)
+                {
+
+                    hubConnection.On<DashboardModel>("ReceiveInitialHealthStatus", async (dashboardModel) =>
+                    {
+                        await UpdateInsightsEl(dashboardModel.IsInsightsHealthy);
+                        bannerText = "Issue with " + dashboardModel.BannerText;
+                        HeimdallResult = dashboardModel.HeimdallResult;
+                        rssScore = dashboardModel.AzureRssScore.ToString();
+                        if (dashboardModel.AzureRssScore == 0)
+                        {
+                            AzureStatusText = "Advisory Issues with Azure";
+                        }
+                        else if (dashboardModel.AzureRssScore == -50)
+                        {
+                            AzureStatusText = "Issues With Azure";
+                        }
+                        else
+                        {
+                            AzureStatusText = "No Issues With Azure";
+                        }
+
+                        ApimPie = dashboardModel.Pie;
+                        Issues = dashboardModel.DashboardIssues;
+                        Incidents = dashboardModel.ServiceNowViewModels;
+
+                        ServiceBusServices = dashboardModel.ServiceBusServices;
+                        CosmosServices = dashboardModel.CosmosServices;
+                        GraphQlServices = dashboardModel.GraphQlServices;
+
+                        if(IsPageVisible)
+                            await UpdateHeader("Azure Service Dashboard", TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.Now, TimeZoneInfo.Local.Id, "GMT Standard Time").ToString("dd/MMM/yyyy HH:mm:ss"), InsightsText, InsightsHeartStyle);
+
+                        await InvokeAsync(() =>
+                        {
+                            StateHasChanged();
+                        });
+                    });
+
+
+                    isHandlerRegistered = true;
+                }
+
+                await hubConnection.InvokeAsync("GetInsightsStatus");
+
+                lastActivityTime = DateTime.Now;
+                StartInactivityMonitor();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during SignalR setup: {ex.Message}");
+            }
+        }
+    }
+
+    private async Task UpdateInsightsEl(bool IsHealthy)
+    {
+        InsightsHeartStyle = IsHealthy ? "bi-heart-pulse-fill" : "bi-heartbreak-fill";
+        InsightsText = IsHealthy ? "Insights App Healthy" : "Insights App Unhealthy";
+    }
+
+    private async Task UpdateHeader(string title, string time, string insightsText, string insightsHeartStyle)
+    {
+        await JSRuntime.InvokeVoidAsync("updateHeader", title, time, insightsText, insightsHeartStyle);
+    }
+
+    private void OnUserActivity()
+    {
+        lastActivityTime = DateTime.Now;
+        isInactive = false;
+    }
+
+    private async Task StartInactivityMonitor()
+    {
+        inactivityMonitorCancellationTokenSource?.Cancel();
+        inactivityMonitorCancellationTokenSource = new CancellationTokenSource();
+
+        try
+        {
+            while (!inactivityMonitorCancellationTokenSource.Token.IsCancellationRequested && !isInactive)
+            {
+                await Task.Delay(1000, inactivityMonitorCancellationTokenSource.Token);
+
+                if ((DateTime.Now - lastActivityTime) > inactivityThreshold)
+                {
+                    isInactive = true;
+                    await HandleInactivity();
+                }
+            }
+        }
+        catch (TaskCanceledException)
+        {
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error tv monitoring inactivity");
+        }
+    }
+
+
+    private async Task HandleInactivity()
+    {
+        await DisposeAsync();
+        Navigation.NavigateTo("/metrics");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        IsPageVisible = false;
+        try
+        {
+            inactivityMonitorCancellationTokenSource?.Cancel();
+            inactivityMonitorCancellationTokenSource?.Dispose();
+            inactivityMonitorCancellationTokenSource = null;
+            await Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error during component disposal");
+        }
+    }
+}
+
+
+<script>
+    function updateHeader(title, time, insightsText, insightsHeartStyle) {
+        document.querySelector(".header-title").textContent = title;
+
+        if (time) {
+            document.querySelector(".header-time").textContent = "Last Checked: " + time;
+        }
+
+        if (insightsText) {
+            document.querySelector(".header-insights-label").textContent = insightsText;
+        }
+
+        if (insightsHeartStyle) {
+            const icon = document.querySelector(".insightsHeartStyle");
+            if (icon) {
+                icon.className = "bi " + insightsHeartStyle;
+            }
+        }
+    }
+</script>

@@ -1,0 +1,12 @@
+mutation AccountRefreshToken($request: RefreshTokenRequestInput) {
+  accountRefreshToken(request: $request) {
+    tokenType
+    scope
+    expiresIn
+    accessToken
+    refreshToken
+    idToken
+    continuationToken
+    requiresMFA
+  }
+}

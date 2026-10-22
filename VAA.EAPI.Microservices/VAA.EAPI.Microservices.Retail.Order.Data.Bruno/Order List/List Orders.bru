@@ -1,0 +1,30 @@
+meta {
+  name: List Orders
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{order_data_base_url}}/orderList
+  body: none
+  auth: inherit
+}
+
+params:query {
+  CreationDateFrom: {{creation_date_from}}
+  CreationDateTo: {{creation_date_to}}
+  ~LastModifiedDateFrom: {{last_modified_date_from}}
+  ~LastModifiedDateTo: {{last_modified_date_to}}
+  ~OrderCancellationDate: {{order_cancellation_date}}
+  ~PaymentStatus: {{payment_status}}
+  ~TravelDateFrom: {{travel_date_from}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  The creation-date window is enabled by default. Toggle the other optional filters as needed.
+}

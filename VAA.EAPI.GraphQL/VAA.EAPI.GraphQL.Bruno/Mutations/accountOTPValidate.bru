@@ -1,0 +1,32 @@
+meta {
+  name: accountOTPValidate
+  type: graphql
+  seq: 10
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation accountOTPValidate($emailId: String, $otp: Int!) {
+    accountOTPValidate(emailId: $emailId, otp: $otp) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "emailId": "",
+    "otp": 0
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

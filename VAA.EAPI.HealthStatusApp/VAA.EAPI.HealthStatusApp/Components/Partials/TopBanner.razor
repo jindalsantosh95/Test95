@@ -1,0 +1,23 @@
+﻿@inject NavigationManager Navigation
+
+
+@rendermode InteractiveServer
+
+@if(!string.IsNullOrEmpty(BannerText))
+{
+    <div class="top-banner">
+        <div class="card" style="background-color:ghostwhite;width:100%">
+            <div class="card-body" style="justify-content: center;display: flex;">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span class="banner-text">
+                    @BannerText
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter] public string BannerText { get; set; }
+}

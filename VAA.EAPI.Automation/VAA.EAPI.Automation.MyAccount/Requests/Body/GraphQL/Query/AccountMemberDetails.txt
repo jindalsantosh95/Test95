@@ -1,0 +1,136 @@
+query AccountMemberDetails($vouchersCount: Int!, $activitiesCount: Int!, $flightsCount: Int!) {
+  accountMemberDetails(vouchersCount: $vouchersCount, activitiesCount: $activitiesCount, flightsCount: $flightsCount) {
+    voucherResponse {
+      voucherDetails {
+        type
+        source
+        description
+        issueDate
+        expiryDate
+        status
+        number
+        isGifted
+      }
+      errorResponse {
+        message
+        extentions {
+          exception
+          code
+        }
+      }
+    }
+    flightDetails {
+      flightSegmentDetails {
+        operatingAirlineName
+        dateOfFlight
+        scheduledDepartureTime
+        originAirportName
+        originAirportCountry
+        originAirportCode
+        destinationAirportName
+        destinationAirportCountry
+        destinationAirportCode
+        flightNumber
+        operatingAirlineCode
+        numberOfDaysToDeparture
+        bookingReference
+        showClaimsBanner
+        virginPoints
+        tierPoints
+      }
+      errorResponse {
+        message
+        extentions {
+          exception
+          code
+        }
+      }
+    }
+    activityResponse {
+      activityDetails {
+        activityDate
+        transactionProcessedDate
+        partnerName
+        statement
+        virginPoints
+        tierPoints
+        partnerCode
+        transactionId
+        transactionType
+      }
+      errorResponse {
+        message
+        extentions {
+          exception
+          code
+        }
+      }
+    }
+    flyingClubMemberDetails {
+      memberType
+      firstName
+      lastName
+      dateofBirth
+      gender
+      email
+      contactNumber
+      countryCode
+      address {
+        addressType
+        addressLine1
+        addressLine2
+        addressLine3
+        companyName
+        city
+        postalCode
+        region
+        country
+        preferredFlag
+        primary
+        countryCode
+        countryName
+        postCode
+        landlordOrCompanyName
+        province
+        addressVerified
+        valid
+        metroArea
+      }
+      isVAAMarketingPreferred
+      preferredPartnerFFP
+      headOfGroupMemberNumber
+      tierCode
+      preferredName
+      fCMembershipNumber
+      fCJoinDate
+      dateTierPointsReset
+      upgradeByDate
+      tierPoints
+      tierPointsNeedToReachNextTier
+      flownMiles
+      totalVirginPoints
+      customerID
+      profileID
+      retainTierPoints
+      tierPointsNeedToRetain
+      rollingTierPoints
+      revisedRetainTierPoints
+      revisedRollingTierPoints
+      memberStatus {
+        isWingsMemeber
+        isLifeTimeGoldMember
+        isMillionMiler
+        is2MillionMiler
+      }
+      tierThresholdDetails {
+        tierPointsForRetainToGold
+        tierPointsForRetainToSilver
+        tierPointsForRedToSilver
+        tierPointsForSilverToGold
+      }
+    }
+    vouchersCount
+    activitiesCount
+    flightsCount
+  }
+}

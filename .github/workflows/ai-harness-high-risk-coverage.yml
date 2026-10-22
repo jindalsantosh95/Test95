@@ -1,0 +1,96 @@
+name: ai-harness-high-risk-coverage
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, labeled, unlabeled]
+    branches: [main]
+
+concurrency:
+  group: harness-coverage-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: harness-coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate harness coverage section
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = (context.payload.pull_request.labels || []).map(l => l.name);
+            const isHighRisk = labels.includes("high-risk");
+            if (!isHighRisk) {
+              core.info("PR is not labeled high-risk; harness coverage gate passes.");
+              return;
+            }
+
+            const body = context.payload.pull_request.body || "";
+            const requiredFields = [
+              "Failure mode:",
+              "Guide:",
+              "Sensor:",
+              "Lifecycle:",
+              "Policy:",
+              "Scope:",
+              "Dependencies:",
+              "Assumptions:",
+              "Impacted sensors:",
+              "Rollback/owner:"
+            ];
+
+            if (!body.includes("## Harness Coverage")) {
+              core.setFailed("Missing '## Harness Coverage' section for a high-risk PR.");
+              return;
+            }
+
+            if (!body.includes("## Context Routing")) {
+              core.setFailed("Missing '## Context Routing' section for a high-risk PR.");
+              return;
+            }
+
+            const missing = requiredFields.filter(field => !body.includes(field));
+            if (missing.length > 0) {
+              core.setFailed(
+                `High-risk PR is missing required harness coverage fields: ${missing.join(", ")}`
+              );
+              return;
+            }
+
+            const lines = body.split(/\r?\n/);
+            const isFieldOrHeading = (text) =>
+              requiredFields.some(nextLabel => text.startsWith(nextLabel)) ||
+              text.startsWith("## ");
+
+            function getFieldValue(label) {
+              const idx = lines.findIndex(line => line.trim().startsWith(label));
+              if (idx < 0) return "";
+
+              const collected = [];
+              const firstLineRemainder = lines[idx].trim().slice(label.length).trim();
+              if (firstLineRemainder.length > 0 && !isFieldOrHeading(firstLineRemainder)) {
+                collected.push(firstLineRemainder);
+              }
+
+              for (let i = idx + 1; i < lines.length; i++) {
+                const trimmed = lines[i].trim();
+                if (isFieldOrHeading(trimmed)) {
+                  break;
+                }
+                if (trimmed.length > 0) {
+                  collected.push(trimmed);
+                }
+              }
+
+              return collected.join(" ").trim();
+            }
+
+            const missingValues = requiredFields.filter(field => getFieldValue(field).length === 0);
+            if (missingValues.length > 0) {
+              core.setFailed(
+                `High-risk PR has empty harness coverage field values: ${missingValues.join(", ")}`
+              );
+              return;
+            }
+
+            core.info("High-risk harness coverage fields are present.");

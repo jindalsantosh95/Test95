@@ -1,0 +1,29 @@
+meta {
+  name: virginAccountUpdateCustomerDetails
+  type: graphql
+  seq: 46
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation virginAccountUpdateCustomerDetails($request: VirginAccountCustomerUpdateInput) {
+    virginAccountUpdateCustomerDetails(request: $request)
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

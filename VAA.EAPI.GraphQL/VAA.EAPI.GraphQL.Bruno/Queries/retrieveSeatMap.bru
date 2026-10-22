@@ -1,0 +1,31 @@
+meta {
+  name: retrieveSeatMap
+  type: graphql
+  seq: 42
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query retrieveSeatMap($request: SeatMapRequestInput) {
+    retrieveSeatMap(request: $request) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

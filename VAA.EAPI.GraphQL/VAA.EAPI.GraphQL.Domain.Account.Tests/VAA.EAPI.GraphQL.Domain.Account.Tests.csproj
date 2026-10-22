@@ -1,0 +1,411 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <None Include=".mocks\AddressV3*.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\LinkedToken*.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\Summary*.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\AccountLinkingProofCreate.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\AccountLinkingIdentityTimeout.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\AccountLinkingCustomerTimeout.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\AccountLinkingCustomerFailure.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\AccountLinkingProofBadRequest.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\CustomerProfileSearchMissingMemberNumber.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\AccountLinkingProofRedeem.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdIdentity.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdFlyingClubMember.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviter.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInvitee.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdAdultIdentity.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdAdultCustomer.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdAdultTier.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdAdultInviter.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdAdultInvitee.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviteeIdentity.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviteeCustomer.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviteeTier.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviteeInviter.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviteeInvitee.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviterMember.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviterIdentity.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviterCustomer.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviterTier.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviterInviter.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviterInvitee.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviterInviteeCustomer.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\RetrieveHouseholdInviterInviteeTier.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerHouseholdDetails.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerHouseholdDetailsEmpty.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerHouseholdDetailsPartial.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerHouseholdDetailsNoCustomer.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerChildCustomer.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerNoCustomer.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerFailedChildCustomer.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerIdentityEmptyParent.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerIdentityPartialParent.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerIdentityNoCustomerParent.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerIdentityError.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerIdentityMalformed.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerIdentityLoyaltyErrorParent.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerHouseholdDetailsError.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerCustomerTransactionsChild.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerCustomerTransactionsTierDetailsChild.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerMemberCustomAttributesChild.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerActivityTransactionChild.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerActivityVredChild.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerActivityVredChildFailure.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerActivityProducts.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerActivityPartnerProfile.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerTenureFailureFlyingClubMember.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerTenureFailureTierDetails.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerTenureFailureMemberCustomAttributes.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\YoungFlyerTenureFailureActivityTransaction.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\EnrolmentProviderYoungFlyerDeDup.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\EnrolmentProviderYoungFlyerIdentity.mock" CopyToOutputDirectory="Always" />
+    <None Include=".mocks\MobileEnrolmentMarketingPreferenceDeDup.mock" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <None Include=".mocks\FlyingClubAccount.mock"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
+	  <None Include=".mocks\FlyingClubCustomer.mock"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
+	  <None Include=".mocks\FlyingClubCustomerProfile.mock"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
+	  <None Include=".mocks\FlyingClubTokenIssue.mock"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
+	  <None Include=".mocks\FlyingClubTokenValidation.mock"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
+	  <None Include=".mocks\ActivityFlyingClubMemberResponse.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ActivityTransactionResponse.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ActivityVredStatementResponse.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AuthTokenCustomerIdMissing.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AuthTokenMemberStatusMissing.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\Countries.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CustomerProfileSearch.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CustomerProfileSearchInactive.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CustomerProfileSearchSuspended.mock">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CustomerResponseByMemberNumber.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GetAwardsByCustIDResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GetBookingDetails.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GetCustTransByCustIdResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GetSegmentDistance.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PdmGetFlownDetails.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\RetrieveVoucherResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SignIn.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GetCustomerEmail.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\UpdateCampaignBadResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CustomerProfileSearchMissingEmail.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GetCustomerNullCustomerByMember.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\UpdatePreferencesErrorResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\UpdatePreferencesResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\UpdateTicketStatus.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\UpdateTicketStatusFailure.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PdmGetFlownDetailsFailure.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+		<PackageReference Include="HotChocolate.AspNetCore" Version="12.22.6" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.12.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+		<PackageReference Include="Moq" Version="4.20.72" />
+		<PackageReference Include="xunit" Version="2.9.3" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Core.Functions\VAA.EAPI.GraphQL.Core.Functions.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Core.Xunit\VAA.EAPI.GraphQL.Core.Xunit.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Domain.Account\VAA.EAPI.GraphQL.Domain.Account.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Framework.Tests\VAA.EAPI.GraphQL.Framework.Tests.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.GraphQL.Infrastructure\VAA.EAPI.GraphQL.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include=".mocks\AssignCampaignBadResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AssignCampaignResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\InflightConnectivityResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\TrackAnalyticsResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AirlineDetailsResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AirportDetailsResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AirportsDistanceAndCountries.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AuthToken.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AuthTokenBadResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CabinClassResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\DuplicateTransactionResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CreateTransactionResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CustomerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CustomerSearchByEmail.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsAuthTokenBad.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsAuthTokenGood.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsCountries.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsCustomerByMember.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsCustomerByMemberVac.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsCustomerProfile.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsCustomerProfileVac.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsFailCountries.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsFailThresholdValues.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsFcMember.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsFcMemberVac.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsLoyaltyMember.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsThresholdValues.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsTierDetails.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\MemberDetailsVredVirginPoints.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GenerateStatemenResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\TenureInactive.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\TenureActive.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GetCustTransactionResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\InRuleResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PartnerProfileResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PasswordResetMock.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\GetCustomer.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\InviteMemberValidationInvalidInvitee.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\InviteMemberValidationValidInvitee.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\DeDupGenerateFcNumber.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OtpTokenValidation.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OtpValidation.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ProductDetailResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\RegisterMemberToB2C.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SkyEligibilityCheckResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SkyFeedbackResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\TokenProvider.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\UpdateCampaignResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ValidatePasswordPolicies.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ValidatePcmEligibilityBadResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ValidatePcmEligibilityResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\VredCreateTransactionResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\VredCreateTransBadResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraSignUpCustomerProfileSearchError.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraOtpGenerateAccountSignUp.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraSignUpOtpGenerate.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraSignUpOtpGenerateError.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraOtpValidationFallbackEntraServiceError.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraOtpValidationFallbackOtpTokenValidation.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraOtpValidationFallbackValidateOtp.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraOtpValidationSuccess.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraOtpValidationTokenValidationError.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraOtpValidationValidateOtpErrorEntraServiceError.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraOtpValidationValidateOtpErrorOtpTokenValidation.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraOtpValidationValidateOtpErrorValidateOtp.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraEnrolCompleteSignUpSuccess.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraEnrolCompleteSignUpError.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraEnrolCompleteSignUpEmptyErrors.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\EntraEnrolCompleteSignUpEmptyBody.mock">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\StampingFutureBookingsSinglePnr.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\StampingFutureBookingsEmpty.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\StampingPnrDetailsEligible.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\StampingPnrDetailsAlreadyStamped.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\StampingStampFcNumberToPnr.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,65 @@
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+
+
+@if (DotComViewModel != null && DotComViewModel.CosmosDbModels?.Any() == false && DotComViewModel.ServicePlanModels?.Any() == false)
+{
+    <p>No models available.</p>
+}
+else{
+    @if (DotComViewModel?.CosmosDbModels?.Any() == true)
+    {
+        foreach (var model in DotComViewModel.CosmosDbModels)
+        {
+            <div class="card g-col-12" style="width:80%;height:400px;">
+                <div class="card-header">
+                    @model.ServiceName
+                </div>
+
+                <MetricsChart MetricsData="@model.CosmosDbMetrics" />
+            </div>
+        }
+    }
+    @if (DotComViewModel?.ServicePlanModels?.Any() == true)
+    {
+        foreach (var model in DotComViewModel.ServicePlanModels)
+        {
+            <div class="card card-home card-home-pie-body g-col-12 g-col-lg-6">
+                <div class="card-header">
+                    @model.ServicePlanFriendlyName
+                </div>
+                <div class="card-body card-sp-pie-body">
+                    <div style="text-align: center; font-weight: bold;">
+                        @model.ServicePlanName
+                    </div>
+
+                    <div class="serviceplan-pie-container">
+                        <div style="width:250px">
+                            <PieAvgMax Scores="@model.ServicePlanCPUPie"></PieAvgMax>
+                            <div class="ScoreText-width" style="text-align: center;">
+                                <a>CPU Avg: @model.cpuPercentageAverage%</a><br>
+                                <a>CPU Max: @model.cpuPercentageMax%</a>
+                            </div>
+                        </div>
+                        <div style="width:250px">
+                            <PieAvgMax Scores="@model.ServicePlanMemoryPie"></PieAvgMax>
+                            <div class="ScoreText-width" style="text-align: center;">
+                                <a>Used Memory Avg: @model.usedMemoryPercentageAverage%</a><br>
+                                <a>Used Memory Max: @model.usedMemoryPercentageMax%</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    }
+}
+
+
+
+
+
+@code {
+    [Parameter] public DotComModel DotComViewModel { get; set; }
+    [Parameter] public string TabName { get; set; }
+}

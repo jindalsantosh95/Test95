@@ -1,0 +1,7 @@
+{
+  "query": "query UpsellOffersQuery($tripReservationId: String) { UpsellOffersQuery(tripReservationID: $tripReservationId) { bookingId upsellEligible slices { id scheduledDepartureLocal scheduledArrivalLocal origin { code airportName } destination { code airportName } } segments { id operatingCarrier { flightNumber carrierCode carrierName } marketingCarrier { flightNumber carrierCode carrierName } legs { id operating { flightNumber carrierCode carrierName } scheduledDepartureLocal scheduledArrivalLocal scheduledArrivalBasedOnDepartureLocal } operating { flightNumber carrierCode carrierName } marketing { flightNumber carrierCode carrierName } upsellOffers { offerItemNumber cabinClass { code name productCode productName amenities { name } } upsellOfferDetails { ordinal offerType currencyCode baseAmt totalAmount loyaltyProgram { name owner { code name } } } offerPriority displayPriority availableSeatsRemaining } } }}",
+  "variables": {
+    "tripReservationId": ""
+  },
+  "operationName": "UpsellOffersQuery"
+}

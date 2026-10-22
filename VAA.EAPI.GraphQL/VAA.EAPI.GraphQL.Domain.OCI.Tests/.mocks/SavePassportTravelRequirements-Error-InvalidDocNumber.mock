@@ -1,0 +1,20 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements/savepassport HTTP/1.1
+
+$[?(@.passengerId == '01.01|TRM-Invalid-Document-Number')]
+
+###Response
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+[
+    {
+        "code": "travelrequirement_030_005",
+        "message": "Hmm, we couldn’t recognise that passport number. Try entering it again, just as it appears in your passport.",
+        "title": "Something's not quite right"
+    }
+]

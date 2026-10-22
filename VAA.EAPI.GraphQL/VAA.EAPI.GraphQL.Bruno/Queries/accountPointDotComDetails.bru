@@ -1,0 +1,29 @@
+meta {
+  name: accountPointDotComDetails
+  type: graphql
+  seq: 9
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query accountPointDotComDetails($onBehalf: String) {
+    accountPointDotComDetails(onBehalf: $onBehalf)
+  }
+}
+
+body:graphql:vars {
+  {
+    "onBehalf": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

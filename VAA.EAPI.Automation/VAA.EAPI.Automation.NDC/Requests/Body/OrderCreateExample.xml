@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IATA_OrderCreateRQ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersMessage">
+  <DistributionChain>
+    <DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+      <Ordinal>0</Ordinal>
+      <OrgRole>Seller</OrgRole>
+      <ParticipatingOrg>
+        <Name>Skyscanner</Name>
+        <OrgID>91281035</OrgID>
+      </ParticipatingOrg>
+    </DistributionChainLink>
+  </DistributionChain>
+  <Request>
+    <CreateOrder xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+      <AcceptSelectedQuotedOfferList>
+        <SelectedPricedOffer>
+          <OfferRefID>5W3W0l9qkhKSySX8M9a0fB001|db376dc4-aea4-44cd-8e5a-439bdd652fb6||2</OfferRefID>
+          <OwnerCode>VS</OwnerCode>
+          <SelectedOfferItem>
+            <OfferItemRefID>5W3W0l9qkhKSySX8M9a0fB001|db376dc4-aea4-44cd-8e5a-439bdd652fb6||2-1</OfferItemRefID>
+            <PaxRefID>ADULT_1</PaxRefID>
+          </SelectedOfferItem>
+          <TotalOfferPriceAmount CurCode="GBP">609.21</TotalOfferPriceAmount>
+        </SelectedPricedOffer>
+      </AcceptSelectedQuotedOfferList>
+    </CreateOrder>
+    <DataLists xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+      <ContactInfoList>
+        <ContactInfo>
+          <ContactInfoID>CID_1</ContactInfoID>
+          <EmailAddress>
+            <EmailAddressText>zUhmU@gmail.com</EmailAddressText>
+          </EmailAddress>
+          <Phone>
+            <ContactTypeText>Home</ContactTypeText>
+            <CountryDialingCode>44</CountryDialingCode>
+            <PhoneNumber>123456</PhoneNumber>
+          </Phone>
+        </ContactInfo>
+      </ContactInfoList>
+      <PaxList>
+        <Pax>
+          <ContactInfoRefID>CID_1</ContactInfoRefID>
+          <PaxID>ADULT_1</PaxID>
+          <PTC>ADT</PTC>
+          <Individual>
+            <IndividualID>IND1</IndividualID>
+            <Birthdate>1956-03-16</Birthdate>
+            <GenderCode>F</GenderCode>
+            <TitleName>Mr</TitleName>
+            <GivenName>David</GivenName>
+            <Surname>Smith</Surname>
+          </Individual>
+        </Pax>
+      </PaxList>
+    </DataLists>
+    <PaymentFunctions xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+      <PaymentMethodCriteria>
+        <PaymentTypeCode>CC</PaymentTypeCode>
+      </PaymentMethodCriteria>
+      <PaymentProcessingDetails>
+        <Amount CurCode="GBP">609.21</Amount>
+        <PaymentMethod>
+          <PaymentCard>
+            <CardNumber>5201281505129736</CardNumber>
+            <CardSecurityCode>123</CardSecurityCode>
+            <CardTypeText>CA</CardTypeText>
+            <ExpirationDate>1223</ExpirationDate>
+            <SecurePaymentVersion2>
+              <AuthenticationValue>ODQzNjgwNjU0ZjM3N2JmYTg0NTM</AuthenticationValue>
+              <TrxStatusText>Y</TrxStatusText>
+              <ElectronicCommerceInd>02</ElectronicCommerceInd>
+              <DirectoryServerTrxID>c272b04f-6e7b-43a2-bb78-90f4fb94aa25</DirectoryServerTrxID>
+            </SecurePaymentVersion2>
+            <SecureProgram>
+              <EnrollmentStatusText>CardEnrolled3DS2.1.0</EnrollmentStatusText>
+            </SecureProgram>
+            <CardholderAddress>
+              <StreetText>8</StreetText>
+              <StreetText>Cobbles Crescent</StreetText>
+              <PostalCode>RH108HA</PostalCode>
+              <CityName>Crawley</CityName>
+              <CountryCode>GB</CountryCode>
+            </CardholderAddress>
+          </PaymentCard>
+        </PaymentMethod>
+        <Payer>
+          <PayerEmailAddress>
+            <EmailAddressText>Test@fly.virgin.com</EmailAddressText>
+          </PayerEmailAddress>
+          <PayerName>
+            <IndividualName>
+              <GivenName>David</GivenName>
+              <Surname>Smith</Surname>
+            </IndividualName>
+          </PayerName>
+          <PayerPhoneNumber>
+            <ContactTypeText>PER</ContactTypeText>
+            <CountryDialingCode>44</CountryDialingCode>
+            <PhoneNumber>9999999999</PhoneNumber>
+          </PayerPhoneNumber>
+          <PaymentAddress>
+            <PostalAddress>
+              <StreetText>8</StreetText>
+              <StreetText>Cobbles Crescent</StreetText>
+              <PostalCode>RH108HA</PostalCode>
+              <CityName>Crawley</CityName>
+              <CountryCode>GB</CountryCode>
+            </PostalAddress>
+          </PaymentAddress>
+        </Payer>
+      </PaymentProcessingDetails>
+    </PaymentFunctions>
+  </Request>
+</IATA_OrderCreateRQ>

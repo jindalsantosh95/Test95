@@ -1,0 +1,107 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+      <ImplicitUsings>enable</ImplicitUsings>
+      <Nullable>enable</Nullable>
+      <OutputType>Exe</OutputType>
+      <TargetFramework>net10.0</TargetFramework>
+      <IsPackable>false</IsPackable>
+
+      <!--To enable the Microsoft Testing Platform 'dotnet test' experience, add property: -->
+      <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+
+      <!--To enable the Microsoft Testing Platform native command line experience, add property: -->
+      <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+
+      <!--For more information on Microsoft Testing Platform support in xUnit.net, please visit: -->
+      <!--https://xunit.net/docs/getting-started/v3/microsoft-testing-platform-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VAA.EAPI.Core.Functions\VAA.EAPI.Core.Functions.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Core.Xunit\VAA.EAPI.Core.Xunit.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Microservices.Framework.Tests\VAA.EAPI.Microservices.Framework.Tests.csproj" />
+    <ProjectReference Include="..\VAA.EAPI.Microservices.Retail.Offer\VAA.EAPI.Microservices.Retail.Offer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".mocks\*.mock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\ITAResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\OfferPriceQuery\Revenue_DistributedCacheRS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\OfferPriceQuery\Revenue_DeltaGqlRS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\OfferPriceQuery\Revenue_OfferMsRQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\FlexiDateSearchQuery\Award_DeltaGqlRS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\FlexiDateSearchQuery\Revenue_DeltaGqlRS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\FlexiDateSearchQuery\Award_OfferMsRQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\FlexiDateSearchQuery\Revenue_OfferMsRQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\MixedAvailability_DeltaGqlQueryRS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\MixedAvailability_CalendarOfferRQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\CityCode_DeltaGqlQueryRS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\DeltaOffer_RQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\DeltaOffer_RS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\OfferMS_FlexiDateSearchRQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\OfferRequest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\Reward_Saver_DeltaGqlQueryRS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\Reward_Saver_OfferSearchRQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\CityCode_OfferMsRQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestDataSamples\OfferMS\SpecificDate_OfferMsRQ.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

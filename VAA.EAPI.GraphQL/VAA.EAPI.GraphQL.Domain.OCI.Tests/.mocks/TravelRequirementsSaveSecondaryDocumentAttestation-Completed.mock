@@ -1,0 +1,56 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements/SaveSecondaryDocumentAttestation HTTP/1.1
+
+$[?(@.passengerId == '01.01|secondary-document-resource-id' && @.sliceId == 'slice-secondary-document')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "requirementsId": "requirements-id",
+  "reference": { "pnrLocator": "CNMLQN", "createdDate": "2026-05-31" },
+  "slices": [{ "sliceId": "slice-secondary-document", "segments": [] }],
+  "passengers": [{
+    "passengerId": "01.01|secondary-document-resource-id",
+    "givenNames": "TRAVEL",
+    "surname": "TEST",
+    "documents": [],
+    "sliceRequirements": [{
+      "sliceId": "slice-secondary-document",
+      "passportProvided": true,
+      "passportVerified": true,
+      "contactTracing": "NOT_REQUIRED",
+      "returnDateStatus": "NOT_REQUIRED",
+      "passportErrors": [],
+      "secondaryDocumentStatus": "COMPLETE",
+      "overall": "PART_COMPLETE",
+      "secondaryDocuments": [{
+        "documentType": "ETA",
+        "countryCode": "USA",
+        "countryName": null,
+        "name": "ETA",
+        "displayName": "ESTA",
+        "status": "COMPLETE",
+        "secondaryDocumentApplicationOptions": [
+          {
+            "secondaryDocumentId": "ETA_1",
+            "applicationType": "Vendor",
+            "title": "Apply with Sherpa",
+            "message": "Sherpa will guide you through the process from start to finish. Once it's approved, come back here and confirm you're ready to travel.",
+            "url": "https://apply.joinsherpa.com/travel-restrictions/USA?affiliateId=virginatlantic",
+            "urlText": "Apply with Sherpa"
+          },
+          {
+            "secondaryDocumentId": "ETA_1",
+            "applicationType": "Government",
+            "title": "ESTA",
+            "message": "Complete your ESTA through the official government website. Once it's approved, come back here and confirm you're ready to travel.",
+            "url": "https://esta.cbp.dhs.gov/",
+            "urlText": "Apply on government website"
+          }
+        ]
+      }]
+    }]
+  }]
+}

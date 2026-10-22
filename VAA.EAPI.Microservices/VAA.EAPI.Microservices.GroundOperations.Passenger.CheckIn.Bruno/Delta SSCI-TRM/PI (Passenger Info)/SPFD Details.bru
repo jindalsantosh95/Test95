@@ -1,0 +1,84 @@
+meta {
+  name: SPFD Details
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{delta_spfd_pi}}/{{reservationResourceId}}
+  body: none
+  auth: inherit
+}
+
+headers {
+  AppID: D2
+  channelid: DFMOBILE
+  x-air4_mytrips_test: {{air4_mytrips_test}}
+  transactionId: {{transactionId}}
+}
+
+script:post-response {
+  const response = res.getBody();
+
+  const passengers =
+    response?.passengerInformation?.passengers ??
+    response?.passengers ??
+    [];
+
+  const valueOrNull = (value) =>
+    typeof value === "string" && value.trim() !== "" ? value : null;
+
+  const programNumber = (passenger, program) => {
+    const programs =
+      passenger?.advancePassengerInformation?.trustedTravelerPrograms ?? [];
+
+    return valueOrNull(
+      programs.find((item) => item?.program === program)?.number
+    );
+  };
+
+  const passenger1 = passengers[0];
+
+  bru.setVar(
+    "passenger1ResourceId",
+    valueOrNull(passenger1?.passengerResourceId)
+  );
+  bru.setVar(
+    "passenger1RedressNumber",
+    programNumber(passenger1, "REDRESS_NUMBER")
+  );
+  bru.setVar(
+    "passenger1KnownTravelerNumber",
+    programNumber(passenger1, "KNOWN_TRAVELER_NUMBER")
+  );
+  bru.setVar(
+    "passenger1CanadaTravelerNumber",
+    programNumber(passenger1, "CANADA_TRAVELER_NUMBER")
+  );
+
+  const passenger2 = passengers[1];
+
+  if (passenger2) {
+    bru.setVar(
+      "passenger2ResourceId",
+      valueOrNull(passenger2.passengerResourceId)
+    );
+    bru.setVar(
+      "passenger2RedressNumber",
+      programNumber(passenger2, "REDRESS_NUMBER")
+    );
+    bru.setVar(
+      "passenger2KnownTravelerNumber",
+      programNumber(passenger2, "KNOWN_TRAVELER_NUMBER")
+    );
+    bru.setVar(
+      "passenger2CanadaTravelerNumber",
+      programNumber(passenger2, "CANADA_TRAVELER_NUMBER")
+    );
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

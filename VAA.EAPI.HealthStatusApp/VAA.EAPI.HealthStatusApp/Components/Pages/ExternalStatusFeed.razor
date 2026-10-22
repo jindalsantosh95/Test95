@@ -1,0 +1,174 @@
+﻿@page "/external-feeds"
+@attribute [Authorize(Policy = "RequireSpecificGroup")]
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+@using VAA.EAPI.HealthStatusApp.Services
+@using System.ServiceModel.Syndication
+@rendermode InteractiveServer
+@inject IAzureStatusFeedService azureService
+@inject IServiceNowService serviceNowService
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+
+<div class="service-dashboard" style="padding:2rem;">
+    <div class="accordion" id="accordion" style="border: 2px solid #61126b; border-radius: 10px;">
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
+                    Service Now Incidents
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordion">
+                <div class="card card-body">
+                        @if (Incidents == null || !Incidents.Any())
+                        {
+                            <p style="text-align: center;">Any detail regarding Issues will appear here</p>
+                        }
+                        else
+                        {
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>IncidentNumber</th>
+                                        <th>Channel</th>
+                                        <th>Category</th>
+                                        <th>Priority</th>
+                                        <th>ConfigurationItem</th>
+                                        <th>Description</th>
+                                        <th>Created</th>
+                                        <th>State</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var incident in Incidents)
+                                    {
+                                        <tr>
+                                            <td>@incident.IncidentNumber</td>
+                                            <td>@incident.Channel</td>
+                                            <td>@incident.Category</td>
+                                            <td>@incident.Priority</td>
+                                            <td>@incident.ConfigurationItem</td>
+                                            <td>@incident.Shortdescription</td>
+                                            <td>@incident.Created.ToString("dd/MMM/yyyy HH:mm:ss")</td>
+                                            <td>@incident.State</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                        aria-expanded="false" aria-controls="collapseTwo">
+                    Azure Status Feed
+                </button>
+
+                <div>
+                    <a id="MsStatus" href="https://azure.status.microsoft/en-gb/status" target="_blank" class="azure_btn">Azure Status ></a>
+                </div>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion">
+                <div class="card card-body">
+                    @if (feedItems == null)
+                    {
+                        <div>
+                            <i class="bi bi-cloud-lightning-rain"></i>
+                            <span>An error occurred getting Microsoft Azure status feed. Please check logs.</span>
+                        </div>
+                    }
+                    else if (!feedItems.Any())
+                    {
+                        <div>
+                            <i class="bi bi-speedometer2"></i>
+                            <span>There are <strong>no</strong> current issues being reported by Azure</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <ul>
+                            @foreach (var item in feedItems)
+                            {
+                                <li>
+                                    <a href="@item.Links[0].Uri" target="_blank">@item.Title.Text</a>
+                                    <div>
+                                        @if (IsHtml(item.Summary.Text))
+                                        {
+                                            @((MarkupString)item.Summary.Text)
+                                        }
+                                        else
+                                        {
+                                            @item.Summary.Text
+                                        }
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<SyndicationItem>? feedItems;
+    private IEnumerable<ServiceNowViewModel> Incidents;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            feedItems = await azureService.GetRssFeedAsync();
+            await fetchServiceNowIncidents();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in OnInitializedAsync: {ex.Message}");
+        }
+    }
+
+    private bool IsHtml(string input)
+    {
+        return !string.IsNullOrEmpty(input) && input.Contains("<") && input.Contains(">");
+    }
+
+    private async Task fetchServiceNowIncidents()
+    {
+        var serviceNowDboRequests = await serviceNowService.GetServiceNowFeedAsync();
+        Incidents = serviceNowDboRequests.Select(x => new ServiceNowViewModel
+            {
+                IncidentNumber = x.Number,
+                Category = x.Category,
+                Channel = x.Channel,
+                Priority = x.Priority,
+                ConfigurationItem = x.ConfigurationItem,
+                Created = x.Created,
+                Shortdescription = x.Shortdescription,
+                State = x.State
+            });
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await UpdateHeader("Service Now and Azure Incidents");
+        }
+    }
+
+    private async Task UpdateHeader(string title)
+    {
+        await JSRuntime.InvokeVoidAsync("updateHeaderTitle", title);
+    }
+}
+
+<script>
+    function updateHeaderTitle(title) {
+        document.querySelector(".header-title").textContent = title;
+    }
+</script>

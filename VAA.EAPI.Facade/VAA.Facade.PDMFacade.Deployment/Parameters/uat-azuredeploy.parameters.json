@@ -1,0 +1,156 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "EnvironmentName": {
+      "value": "UAT"
+    },
+    "FunctionAppName": {
+      "value": "avaseunafnpdmfacade"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPCOMMONEAPI"
+    },
+    "AppInsightsName": {
+      "value": "avaseunaipdmfacade"
+    },
+    "vaultName": {
+      "value": "AVASEUNKVEMS"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "AppSetting:AzureWebJobsStorage": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/"
+    },
+    "storageAccountName": {
+      "value": "avaseunstpdmfacade"
+    },
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "AppSetting:WEBSITE_CONTENTSHARE": {
+      "value": "avadeunafnpdmfacade"
+    },
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    /*"Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },*/
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "PDM Facade"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "Partner data Managment Facade ."
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    //Facade Settings
+    "Appsetting:PdmAppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/PDM-AzureAdClientId/)"
+    },
+    "Appsetting:EapiMsClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/PDM-AzureAdClientId/)"
+    },
+    "Appsetting:EapiMSSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/PDMFacade-EAPIMS-Secret/)"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/PDMFacade-AzureAdClientId/)"
+    },
+    "Appsetting:AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/PDMFacade-AzureAdClientId/)"
+    },
+    "Appsetting:AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "Appsetting:AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsetting:PdmOcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/PDMFacade-PdmOcpKey/)"
+    },
+    "Appsetting:PdmUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/pdmms/"
+    },
+    "Appsetting:OcpKeyHeader": {
+      "value": "Ocp-Apim-Subscription-Key"
+    },
+    "Appsetting:OnlineRetroEndpoint": {
+      "value": "OnlineRetroCredit"
+    },
+    "Appsetting:RetroFeedbackEndpoint": {
+      "value": "OnlineRetroCreditFeedback"
+    },
+    "Appsetting:AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:aad:tenantid": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "PDM ms",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "pdm",
+        "ApplicationUsageIdList": "AVADEUNAFNPDM"
+      }
+    }
+  }
+}

@@ -1,0 +1,126 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "actionGroupsname": {
+      "type": "string"
+    },
+    "emailAddress": {
+      "type": "string"
+    },
+    "alertname": {
+      "type": "string"
+    },
+    "ResourceLocation": {
+      "type": "string"
+    },
+    "ResourceGroupSubscriptionId": {
+      "type": "string"
+    },
+    "ServerFarmIdRg": {
+      "type": "string"
+    },
+    "queryrules": {
+      "type": "string"
+    },
+    "Tags": {
+      "type": "Object"
+    },
+    "actionGroupsshortname": {
+      "type": "string"
+    }
+
+  },
+  "resources": [
+    {
+      "type": "microsoft.insights/actionGroups",
+      "apiVersion": "2022-06-01",
+      "name": "[parameters('actionGroupsname')]",
+      "location": "Global",
+      "tags": "[parameters('Tags')]",
+      "properties": {
+        "groupShortName": "[parameters('actionGroupsshortname')]",
+        "enabled": true,
+        "emailReceivers": [
+          {
+            "name": "[concat(parameters('actionGroupsname'), '_-EmailAction-')]",
+            "emailAddress": "[parameters('emailAddress')]",
+            "useCommonAlertSchema": false
+          }
+        ],
+        "smsReceivers": [],
+        "webhookReceivers": [],
+        "eventHubReceivers": [],
+        "itsmReceivers": [],
+        "azureAppPushReceivers": [],
+        "automationRunbookReceivers": [],
+        "voiceReceivers": [],
+        "logicAppReceivers": [],
+        "azureFunctionReceivers": [],
+        "armRoleReceivers": []
+      }
+    },
+
+    {
+      "type": "microsoft.insights/scheduledqueryrules",
+      "apiVersion": "2021-08-01",
+      "name": "[concat('Exceptions_ ', parameters('alertname'))]",
+      "location": "[parameters('ResourceLocation')]",
+      "tags": "[parameters('Tags')]",
+      "properties": {
+        "displayName": "[concat('Exceptions_ ', parameters('alertname'))]",
+        "description": "[concat('Exceptions_ ', parameters('alertname'))]",
+        "severity": 1,
+        "enabled": true,
+        "evaluationFrequency": "PT5M",
+        "scopes": [
+          "[concat('/subscriptions/', parameters('ResourceGroupSubscriptionId'), '/resourceGroups/', parameters('ServerFarmIdRg'),'/providers/microsoft.insights/components/', parameters('AppInsightsName'))]"
+        ],
+        "targetResourceTypes": [
+          "microsoft.insights/components"
+        ],
+        "windowSize": "PT5M",
+        "overrideQueryTimeRange": "P2D",
+        "criteria": {
+          "allOf": [
+            {
+              "query": "[parameters('queryrules')]",
+              "timeAggregation": "Total",
+              "metricMeasureColumn": "count_",
+              "dimensions": [
+                {
+                  "name": "operation_Name",
+                  "operator": "Include",
+                  "values": [
+                    "*"
+                  ]
+                }
+              ],
+              "operator": "GreaterThanOrEqual",
+              "threshold": 5,
+              "failingPeriods": {
+                "numberOfEvaluationPeriods": 1,
+                "minFailingPeriodsToAlert": 1
+              }
+            }
+          ]
+        },
+        "autoMitigate": false,
+        "actions": {
+          "actionGroups": [
+            "[concat('/subscriptions/', parameters('ResourceGroupSubscriptionId'), '/resourceGroups/', parameters('ServerFarmIdRg'), '/providers/microsoft.insights/actionGroups/', parameters('actionGroupsname'))]"
+          ],
+          "customProperties": {}
+        }
+      }
+    }
+  ]
+
+}
+
+
+
+

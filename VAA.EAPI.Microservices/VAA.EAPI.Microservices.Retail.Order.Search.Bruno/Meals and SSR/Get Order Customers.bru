@@ -1,0 +1,24 @@
+meta {
+  name: Get Order Customers
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{order_search_base_url}}/order/{{order_id}}/customers
+  body: none
+  auth: inherit
+}
+
+headers {
+  pnr: {{pnr}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Set order_id and pnr to matching test data. The customer projection includes customer services such as preSelectMeal where they exist.
+}

@@ -1,0 +1,295 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "E2E Test Scenarios",
+  "description": "End-to-end GraphQL booking test scenarios. Add new tests by adding entries to the scenarios array.",
+  "type": "object",
+  "required": ["scenarios"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "scenarios": {
+      "type": "array",
+      "description": "List of test scenarios to execute.",
+      "items": {
+    "type": "object",
+    "required": ["testName"],
+    "additionalProperties": false,
+    "properties": {
+      "testName": {
+        "type": "string",
+        "description": "Unique name for this test scenario — shown in the test runner output."
+      },
+      "origin": {
+        "type": "string",
+        "description": "Departure airport code.",
+        "enum": ["LHR", "JFK", "ATL", "LAX", "BOS", "MCO", "IAD", "DEL", "TLV", "MBJ", "SVD", "JNB", "LON", "NYC", "SFO", "LGW", "MAN", "EWR", "SIN", "HKG", "DXB", "AMS", "CDG", "DUB", "BOM", "GRU", "SYD", "AKL"]
+      },
+      "destination": {
+        "type": "string",
+        "description": "Arrival airport code.",
+        "enum": ["LHR", "JFK", "ATL", "LAX", "BOS", "MCO", "IAD", "DEL", "TLV", "MBJ", "SVD", "JNB", "LON", "NYC", "SFO", "LGW", "MAN", "EWR", "SIN", "HKG", "DXB", "AMS", "CDG", "DUB", "BOM", "GRU", "SYD", "AKL"]
+      },
+      "multiCityLocations": {
+        "type": "array",
+        "description": "Airport codes for multi-city journeys (pairs of origin/destination for each slice). Required when journeyType is MultiCity.",
+        "items": { "type": "string" }
+      },
+      "journeyType": {
+        "type": "string",
+        "description": "Type of journey.",
+        "enum": ["OneWay", "Return", "MultiCity"],
+        "default": "OneWay"
+      },
+      "fareFamily": {
+        "type": "string",
+        "description": "Fare class to book.",
+        "enum": ["ECON", "ECONOMYDELIGHT", "ECONOMYLIGHT", "COMFORTPLUSPREMIUMECON", "BUSFIRST", "ECONCLASSICFLEXIBLE", "ECONDELIGHTFLEXIBLE", "COMFORTPLUSPREMIUMFLEXIBLE", "BUSFIRSTFLEXIBLE", "AWARDECONOMY", "AWARDCOMFORTPLUSPREMIUMECONOMY", "AWARDBUSINESSFIRST"],
+        "default": "ECON"
+      },
+      "flightType": {
+        "type": "string",
+        "description": "Airline to search for.",
+        "enum": ["VS", "DL", "AF", "KL", "KE"],
+        "default": "VS"
+      },
+      "inboundFlightType": {
+        "type": "string",
+        "description": "Optional airline for the inbound sector of a return journey.",
+        "enum": ["VS", "DL", "AF", "KL", "KE"]
+      },
+
+      "adults": {
+        "type": "integer", "minimum": 0, "default": 1,
+        "description": "Number of adult passengers."
+      },
+      "teens": {
+        "type": "integer", "minimum": 0, "default": 1,
+        "description": "Number of teen passengers."
+      },
+      "children": {
+        "type": "integer", "minimum": 0, "default": 0,
+        "description": "Number of child passengers."
+      },
+      "validateChildMealRemarks": {
+        "type": "boolean", "default": false,
+        "description": "Poll the downstream PNR and verify OrderMgmt eventing stamps allocated CHML remarks for child passengers."
+      },
+      "infants": {
+        "type": "integer", "minimum": 0, "default": 0,
+        "description": "Number of infant passengers."
+      },
+
+      "bookingType": {
+        "type": "string",
+        "description": "Revenue = standard purchase, Redemption = points-only award, PayWithPoints = part cash + part points.",
+        "enum": ["Revenue", "Redemption", "PayWithPoints"],
+        "default": "Revenue"
+      },
+      "loyaltyTierCode": {
+        "type": "string",
+        "description": "Flying Club tier for redemption/PWP/CoBrand scenarios.",
+        "enum": ["Red", "Silver", "Gold"]
+      },
+      "minLoyaltyPoints": {
+        "type": "integer", "default": 1000000,
+        "description": "Minimum points the loyalty account must have."
+      },
+      "payWithPointsAmount": {
+        "type": "string",
+        "description": "Points amount for pay-with-points scenarios."
+      },
+
+      "paymentMethod": {
+        "type": "string",
+        "description": "How the customer pays.",
+        "enum": ["Card", "PayPal", "ThreeDS"],
+        "default": "Card"
+      },
+      "cardNumber": {
+        "type": "string", "default": "4761344136141390",
+        "description": "Card number for payment. Only used when paymentMethod is Card or ThreeDS."
+      },
+      "cardType": {
+        "type": "string",
+        "description": "Card brand.",
+        "enum": ["Visa", "MasterCard", "AMEX"],
+        "default": "Visa"
+      },
+      "is3DS": {
+        "type": "boolean", "default": false,
+        "description": "Whether the card requires 3D Secure authentication."
+      },
+      "usePlaywrightForHpp": {
+        "type": "boolean", "default": false,
+        "description": "Runs supported direct hosted-payment-page card, PayPal, or 3DS interaction through Playwright instead of Selenium. Co-brand support remains experimental and is not enabled in regression data."
+      },
+      "paymentCountry": {
+        "type": "string", "default": "United Kingdom",
+        "description": "Billing country for the card payment."
+      },
+      "state": {
+        "type": "string",
+        "description": "Billing state (required for US billing addresses)."
+      },
+      "postcode": {
+        "type": "string",
+        "description": "Billing postcode/zip. If omitted, defaults are applied from paymentCountry/state."
+      },
+      "paymentCardType": {
+        "type": "string",
+        "description": "Specific card type enum for insurance scenarios.",
+        "enum": ["Visa", "Mastercard", "Discover", "Diners", "Visa3DS"]
+      },
+
+      "seatMode": {
+        "type": "string",
+        "description": "None = no seat selection, OneWay = select seats for outbound only, AllSectors = select for all sectors, ClearDown = select then verify seats clear on basket update.",
+        "enum": ["None", "OneWay", "AllSectors", "ClearDown"],
+        "default": "None"
+      },
+      "seatProductName": {
+        "type": "string",
+        "description": "Seat product to select. Required when seatMode is not None.",
+        "enum": ["Standard Seat", "Preferred Seat - Economy Cabin", "Economy Delight seat", "Premium Economy Cabin Seat", "Upper Class seat"]
+      },
+      "cabinName": {
+        "type": "string",
+        "description": "Cabin code for seat selection. Required when seatMode is not None.",
+        "enum": ["VSCL", "VSDT", "VSPE", "VSUP"]
+      },
+
+      "insurance": {
+        "type": "string",
+        "description": "None = skip insurance, Accept = quote and accept, Reject = quote and reject.",
+        "enum": ["None", "Accept", "Reject"],
+        "default": "None"
+      },
+
+      "isCoBrand": {
+        "type": "boolean", "default": false,
+        "description": "Whether this is a Synchrony co-brand card scenario."
+      },
+      "coBrandLastName": {
+        "type": "string",
+        "description": "Last name for the co-brand application. Required when isCoBrand is true."
+      },
+      "coBrandFirstName": {
+        "type": "string",
+        "description": "First name for the co-brand application. Required when isCoBrand is true."
+      },
+      "synchronyApplicationStatus": {
+        "type": "string",
+        "description": "Expected Synchrony application decision. Required when isCoBrand is true.",
+        "enum": ["APPROVED", "REFERRED", "DECLINED"]
+      },
+
+      "isRewardSearch": {
+        "type": "boolean", "default": false,
+        "description": "Whether the search should use the reward/award flag."
+      },
+      "flyingClubPassenger": {
+        "type": "boolean", "default": false,
+        "description": "Whether the passenger is a Flying Club member (for seat + loyalty scenarios)."
+      },
+      "isLoggedIn": {
+        "type": "boolean", "default": false,
+        "description": "Whether to authenticate a Flying Club test member before a revenue booking search."
+      },
+      "flyingClubTier": {
+        "type": "string",
+        "description": "Flying Club tier when flyingClubPassenger is true.",
+        "enum": ["Red", "Silver", "Gold"]
+      },
+      "expectFraudCheck": {
+        "type": "boolean", "default": false,
+        "description": "Whether the order is expected to trigger a fraud check (e.g. near departure date + high-risk country)."
+      },
+      "useNearDepartureDate": {
+        "type": "boolean", "default": false,
+        "description": "Set departure date to tomorrow instead of the normal future date."
+      },
+      "departureDate": { "type": "string", "description": "Optional fixed departure date in yyyy-MM-ddTHH:mm:ss format for route-specific availability checks." },
+      "isMultiCity": {
+        "type": "boolean", "default": false,
+        "description": "Whether this is a multi-city search (uses multiCityLocations instead of origin/destination)."
+      },
+
+      "categories": {
+        "type": "array",
+        "description": "Test trait categories for filtering in the test runner.",
+        "items": {
+          "type": "string",
+          "enum": ["LocalRun", "BookGraphQLRegression", "BookGraphQl-Regression", "BookE2ERegression", "Book-E2E-Regression", "Book-Core-Regression", "BookGraphQLSmoke", "BookGraphQl-Smoke", "Book-Smoke", "BookGraphQLPSSITSanity", "BookGlobalProtectRequired", "BookEdgeCase", "BookFeatureMultiCity", "BookFeatureInsurance", "SharedServicesSignOff"]
+        },
+        "default": ["LocalRun"]
+      },
+
+      "useExplicitSearchOverload": { "type": "boolean", "default": false, "description": "Use the explicit OfferSearchGraphQL overload with individual parameters instead of TestConfig." },
+      "useUpdateBasketShortcut": { "type": "boolean", "default": false, "description": "Use the UpdateBasketWithPassengerContactAndTnCs shortcut method." },
+      "randomOffer": { "type": "boolean", "default": false, "description": "Whether to pick a random offer from search results." },
+      "requiredLegOperatingAirlineCode": { "type": "string", "description": "Optional leg-level operating airline code that selected offers must contain." },
+      "validateInsurancePriceWithPaymentMS": { "type": "boolean", "default": false, "description": "Validate insurance price against the payment microservice response." },
+      "validateInsuranceInOrderDoc": { "type": "boolean", "default": false, "description": "Validate accepted insurance in the PNR order document." },
+      "validateRejectedInsuranceInOrderDoc": { "type": "boolean", "default": false, "description": "Validate rejected insurance flag in the PNR order document." },
+      "useSynchronyCardPayment": { "type": "boolean", "default": false, "description": "Use Synchrony card details on the HPP payment page." },
+      "fullPointsSelection": { "type": "boolean", "default": false, "description": "Select full points amount in pay-with-points converter." },
+      "hasPaidSeat": { "type": "boolean", "default": false, "description": "Include a paid seat selection (for insurance + seat combo tests)." },
+      "hasFreeSeat": { "type": "boolean", "default": false, "description": "Include a free seat selection (for insurance + seat combo tests)." },
+      "useRetryHelperForLoyalty": { "type": "boolean", "default": false, "description": "Use the retry helper when retrieving loyalty account details." },
+      "writeToAzure": { "type": "boolean", "default": true, "description": "Write PNR to Azure storage table after order creation." },
+      "validateRedemptionBasket": { "type": "boolean", "default": false, "description": "Run the full redemption basket validation (membership points, FC details, flight price)." },
+      "validatePaymentRetreive": { "type": "boolean", "default": false, "description": "Validate payment retrieve response against basket totals." },
+      "validateVoucherConfirmation": { "type": "boolean", "default": false, "description": "Apply a voucher and validate its settled state through Order Create confirmation." },
+      "voucherRedemptionType": { "type": "string", "enum": ["COMPANION", "UPGRADE"], "description": "Voucher redemption option required by the scenario." },
+      "voucherType": { "type": "string", "description": "Optional voucher product substring required when selecting the loyalty fixture." },
+      "exactVoucherCount": { "type": "integer", "minimum": 1, "description": "Require the selected loyalty fixture to contain exactly this many eligible vouchers." },
+      "expectedAppliedVoucherCount": { "type": "integer", "minimum": 1, "maximum": 2, "description": "Require the selected redemption option to apply exactly this many vouchers." },
+      "requireAllVouchersMatchType": { "type": "boolean", "default": false, "description": "Require every stored voucher on the selected fixture to match voucherType." },
+      "voucherMinimumPoints": { "type": "integer", "minimum": 0, "default": 300000, "description": "Minimum points balance required when selecting the voucher-backed loyalty fixture." }
+    },
+
+    "allOf": [
+      {
+        "if": { "properties": { "seatMode": { "not": { "const": "None" } } }, "required": ["seatMode"] },
+        "then": { "required": ["seatProductName", "cabinName"] }
+      },
+      {
+        "if": { "properties": { "bookingType": { "enum": ["Redemption", "PayWithPoints"] } } },
+        "then": { "required": ["loyaltyTierCode"] }
+      },
+      {
+        "if": { "properties": { "bookingType": { "const": "PayWithPoints" } } },
+        "then": { "required": ["payWithPointsAmount"] }
+      },
+      {
+        "if": { "properties": { "isCoBrand": { "const": true } } },
+        "then": { "required": ["coBrandLastName", "coBrandFirstName", "synchronyApplicationStatus", "loyaltyTierCode"] }
+      },
+      {
+        "if": { "properties": { "isMultiCity": { "const": true } } },
+        "then": { "required": ["multiCityLocations"] },
+        "else": { "required": ["origin", "destination"] }
+      },
+      {
+        "if": { "properties": { "flyingClubPassenger": { "const": true } } },
+        "then": { "required": ["flyingClubTier"] }
+      },
+      {
+        "if": { "properties": { "isLoggedIn": { "const": true } } },
+        "then": { "required": ["loyaltyTierCode"] }
+      },
+      {
+        "if": { "properties": { "paymentMethod": { "const": "ThreeDS" } } },
+        "then": { "required": ["cardNumber"] }
+      },
+      {
+        "if": {
+          "properties": { "validateVoucherConfirmation": { "const": true } },
+          "required": ["validateVoucherConfirmation"]
+        },
+        "then": { "required": ["voucherRedemptionType", "exactVoucherCount", "expectedAppliedVoucherCount"] }
+      }
+    ]
+  }
+    }
+  }
+}

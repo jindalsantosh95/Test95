@@ -1,0 +1,19 @@
+###Request
+POST https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements HTTP/1.1
+
+$[?(@.confirmationNum == 'E3SKJP')]
+
+###Response
+HTTP/1.1 400 Bad Request
+Content-Type: application/json; charset=utf-8
+
+{
+  "exceptions": [
+    {
+      "code": "travelrequirement_020_003",
+      "message": "We're sorry, this destination is not enabled for Delta FlyReady, but your trip may still have government or health requirements.",
+      "developerMessage": "PNR contains only domestic trip"
+    }
+  ],
+  "moreInfo": []
+}

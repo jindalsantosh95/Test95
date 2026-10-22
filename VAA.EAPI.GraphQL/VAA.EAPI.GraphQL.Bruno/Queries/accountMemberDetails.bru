@@ -1,0 +1,33 @@
+meta {
+  name: accountMemberDetails
+  type: graphql
+  seq: 8
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query accountMemberDetails($vouchersCount: Int!, $activitiesCount: Int!, $flightsCount: Int!) {
+    accountMemberDetails(vouchersCount: $vouchersCount, activitiesCount: $activitiesCount, flightsCount: $flightsCount) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "vouchersCount": 0,
+    "activitiesCount": 0,
+    "flightsCount": 0
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

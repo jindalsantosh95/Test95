@@ -1,0 +1,143 @@
+﻿name: ai-delivery-sequence-goal-comment-monitor
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_comment:
+    types: [created]
+  issue_comment:
+    types: [created]
+  workflow_run:
+    workflows: [Copilot Label Automation]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Optional pull request number to monitor immediately.
+        required: false
+        type: number
+
+permissions:
+  actions: write
+  contents: read
+  pull-requests: read
+
+jobs:
+  dispatch-comment-loops:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: sequence-goal-comment-monitor
+      cancel-in-progress: false
+
+    steps:
+      - name: Detect sequence-goal GitHub App credentials
+        id: app-credentials
+        shell: pwsh
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        run: |
+          "configured=$(((-not [string]::IsNullOrWhiteSpace($env:APP_ID)) -and (-not [string]::IsNullOrWhiteSpace($env:APP_PRIVATE_KEY))).ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Create sequence-goal GitHub App token
+        id: app-token
+        if: steps.app-credentials.outputs.configured == 'true'
+        uses: actions/create-github-app-token@v2
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ env.APP_PRIVATE_KEY }}
+
+      - name: Dispatch comment agents for open sequence-goal PRs
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const marker = "Automated PR raised by the sequence goal loop after goal completion.";
+            const appSlug = "${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}";
+            if (context.eventName === "issue_comment" && !context.payload.issue?.pull_request) {
+              core.info(`Issue #${context.payload.issue?.number || "unknown"} is not a pull request; no workers will be dispatched.`);
+              return;
+            }
+
+            const workflowRun = context.payload.workflow_run;
+            const scheduledRecovery = context.eventName === "schedule";
+            if (context.eventName === "workflow_run" && workflowRun?.conclusion !== "success") {
+              core.info(`Copilot workflow concluded with ${workflowRun?.conclusion || "unknown"}; no workers will be dispatched.`);
+              return;
+            }
+
+            const dispatchRef = context.eventName === "workflow_dispatch"
+              ? context.ref.replace("refs/heads/", "")
+              : (context.payload.repository?.default_branch || "main");
+            const requestedPr = scheduledRecovery
+              ? null
+              : context.payload.inputs?.pr_number
+                ? Number(context.payload.inputs.pr_number)
+                : context.payload.pull_request?.number
+                  ? Number(context.payload.pull_request.number)
+                   : context.payload.issue?.pull_request && context.payload.issue?.number
+                     ? Number(context.payload.issue.number)
+                     : workflowRun?.pull_requests?.[0]?.number
+                       ? Number(workflowRun.pull_requests[0].number)
+                       : null;
+
+            if (scheduledRecovery) {
+              core.info("Scheduled recovery is scanning all trusted open sequence-goal PRs for AI and human comments missed by blocked events.");
+            }
+
+            async function getCandidatePullRequests() {
+              if (requestedPr) {
+                const { data: pullRequest } = await github.rest.pulls.get({
+                  owner,
+                  repo,
+                  pull_number: requestedPr
+                });
+                return [pullRequest];
+              }
+
+              return await github.paginate(github.rest.pulls.list, {
+                owner,
+                repo,
+                state: "open",
+                base: "main",
+                per_page: 100
+              });
+            }
+
+            const candidates = await getCandidatePullRequests();
+            const openSequenceGoalPrs = candidates.filter(pullRequest =>
+              pullRequest.state === "open" &&
+              pullRequest.base?.ref === "main" &&
+              pullRequest.head?.repo?.full_name === `${owner}/${repo}` &&
+              ["github-actions", "github-actions[bot]", appSlug, `${appSlug}[bot]`].includes(pullRequest.user?.login || "") &&
+              (pullRequest.head?.ref || "") !== "" &&
+              pullRequest.head.ref !== "main" &&
+              (pullRequest.body || "").includes(marker));
+
+            core.info(`Open sequence-goal PRs to monitor: ${openSequenceGoalPrs.map(pr => `#${pr.number}`).join(", ") || "none"}`);
+
+            for (const pullRequest of openSequenceGoalPrs) {
+              for (const workflow_id of [
+                "ai-delivery-sequence-goal-human-comment-loop.yml",
+                "ai-delivery-sequence-goal-pr-review-loop.yml"
+              ]) {
+                await github.rest.actions.createWorkflowDispatch({
+                  owner,
+                  repo,
+                  workflow_id,
+                  ref: dispatchRef,
+                  inputs: {
+                    pr_number: String(pullRequest.number)
+                  }
+                });
+                core.info(`Dispatched ${workflow_id} on ${dispatchRef} for PR #${pullRequest.number}.`);
+              }
+            }

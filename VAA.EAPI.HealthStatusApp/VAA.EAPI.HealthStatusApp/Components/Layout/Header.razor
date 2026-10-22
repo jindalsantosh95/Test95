@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+@inject NavigationManager Navigation
+@inject ILogger<Header> Logger
+
+<h1 class="header-title" style="padding-right: 10px; margin-bottom: 0; color:white">@Title</h1>
+<div class="insights-function">
+    <p class="last-checked header-time" style="font-size: medium; margin-bottom:0;color:white;"></p>
+    <i class="insightsHeartStyle"></i>
+    <label class="form-check-label header-insights-label" style="align-self: center;color:white;" for="flexSwitchCheckCheckedDisabled">
+    </label>
+</div>
+
+@code {
+    private string Title { get; set; } = "Monitoring Dashboard";
+}

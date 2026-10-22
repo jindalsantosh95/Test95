@@ -1,0 +1,131 @@
+{
+  "defaultGroup": "Trips Booking",
+  "defaultCustomerImpact": "Customers may experience issues viewing or managing trips in-app.",
+  "groupOrder": [
+    "Club Seats",
+    "Trips Booking",
+    "SSR",
+    "Upsell",
+    "Loyalty Tests and MYA",
+    "DeepLink",
+    "Holidays",
+    "Holiday Payments",
+    "Holiday Documents"
+  ],
+  "groupRules": [
+    {
+      "pattern": "Seat",
+      "group": "Club Seats"
+    },
+    {
+      "pattern": "Meal|SSR|SpecialAssistance|SpecialMeals",
+      "group": "SSR"
+    },
+    {
+      "pattern": "Upsell",
+      "group": "Upsell"
+    },
+    {
+      "pattern": "DeepLinks",
+      "group": "DeepLink"
+    },
+    {
+      "pattern": "Loyalty|LoggedInUser|MYA|MyAccount",
+      "group": "Loyalty Tests and MYA"
+    },
+    {
+      "pattern": "HolidayPayment|HolidaysPayment",
+      "group": "Holiday Payments"
+    },
+    {
+      "pattern": "HolidayDocuments",
+      "group": "Holiday Documents"
+    },
+    {
+      "pattern": "Holiday",
+      "group": "Holidays"
+    }
+  ],
+  "customerImpactRules": [
+    {
+      "pattern": "Seat",
+      "impact": "Customers may be unable to view or select seats in-app."
+    },
+    {
+      "pattern": "Meal|SSR|SpecialAssistance|SpecialMeals",
+      "impact": "Customers may be unable to manage special assistance or meal preferences."
+    },
+    {
+      "pattern": "Upsell",
+      "impact": "Customers may be unable to view or purchase upgrade offers."
+    },
+    {
+      "pattern": "DeepLinks",
+      "impact": "Deep links may not open expected trip screens in-app."
+    },
+    {
+      "pattern": "Loyalty|LoggedInUser|MYA|MyAccount",
+      "impact": "Logged-in or loyalty-linked trip experiences may be unavailable."
+    },
+    {
+      "pattern": "HolidayPayment|HolidaysPayment",
+      "impact": "Holiday payment journeys may fail for customers."
+    },
+    {
+      "pattern": "HolidayDocuments",
+      "impact": "Customers may be unable to access holiday travel documents."
+    },
+    {
+      "pattern": "Holiday",
+      "impact": "Holiday booking retrieval may be unavailable in-app."
+    }
+  ],
+  "holidayGroups": [
+    "Holiday Payments",
+    "Holiday Documents",
+    "Holidays"
+  ],
+  "holidayLinePattern": "(?i)holiday|disney",
+  "dataUnavailableReasonPattern": "not available in storage|data unavailable|No matching .* found|No usable .* found|incomplete or invalid in storage|Could not find a different PNR",
+  "priorityContextKeys": [
+    "route",
+    "flightType",
+    "pnr",
+    "confirmationNum",
+    "bookingReference",
+    "reference",
+    "isSeats",
+    "isPaidSeats",
+    "tripType",
+    "travelDate",
+    "departureDate",
+    "origin",
+    "destination",
+    "cabin",
+    "fareType",
+    "optionStatus",
+    "tripResourceId",
+    "tripId",
+    "bookingId",
+    "holidayType",
+    "holidayStatus"
+  ],
+  "priorityContextLabels": {
+    "flighttype": "flightType",
+    "confirmationnum": "confirmationNum",
+    "bookingreference": "bookingReference",
+    "bookingid": "bookingId",
+    "tripresourceid": "tripResourceId",
+    "tripid": "tripId",
+    "optionstatus": "optionStatus",
+    "holidaystatus": "holidayStatus",
+    "holidaytype": "holidayType",
+    "leadname": "leadName",
+    "dateofbirth": "dateOfBirth",
+    "ispaidseats": "isPaidSeats",
+    "isseats": "isSeats",
+    "triptype": "tripType",
+    "traveldate": "travelDate",
+    "departuredate": "departureDate"
+  }
+}

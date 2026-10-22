@@ -1,0 +1,40 @@
+meta {
+  name: Update Order Document
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{order_data_base_url}}/order
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "id": "{{order_id}}",
+    "partitionKey": "{{order_id}}",
+    "docType": "NDC",
+    "orderNumber": {
+      "orderId": "{{order_id}}",
+      "ownerAirline": "VS"
+    },
+    "bookingReference": {
+      "rLOC": "{{pnr}}"
+    },
+    "version": 1
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  STATE-CHANGING: this publishes an order-update event. Retrieve the complete OrderDocument first, use approved test data, and verify the selected environment before sending.
+}

@@ -1,0 +1,170 @@
+name: ai-harness-drift-parity
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+concurrency:
+  group: harness-drift-parity
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  drift:
+    name: drift-parity
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          # Fetching every remote ref fails on Windows when branch names differ
+          # only by case. Parity checks need only the selected workflow ref.
+          fetch-depth: 1
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Inventory drift check
+        shell: pwsh
+        run: |
+          ./scripts/check-harness-enforcement-inventory.ps1 -FailOnGap
+
+      - name: Context routing freshness check
+        shell: pwsh
+        run: |
+          ./scripts/check-context-routing.ps1 -MaxAgeDays 30
+
+      - name: Remediation log freshness check
+        shell: pwsh
+        run: |
+          ./scripts/check-harness-remediation-log.ps1 -MaxReviewAgeDays 14
+
+      - name: Operational harness enrollment and evidence check
+        shell: pwsh
+        run: |
+          ./scripts/check-operational-harness.ps1 -MaxReviewAgeDays 30
+
+      - name: Recovery and diagnostic replay exercise
+        shell: pwsh
+        run: |
+          ./scripts/invoke-agent-recovery-exercise.ps1 -RunId "scheduled-${{ github.run_id }}-${{ github.run_attempt }}"
+          ./scripts/check-agent-recovery.ps1 -RequireEvidence
+
+      - name: General self-correcting loop exercise
+        shell: pwsh
+        run: |
+          ./scripts/invoke-self-correcting-loop-exercise.ps1 -RunId "scheduled-${{ github.run_id }}-${{ github.run_attempt }}"
+          ./scripts/check-self-correcting-loop.ps1 -RequireEvidence
+
+      - name: Behavior harness coverage and mutation strength
+        shell: pwsh
+        run: |
+          ./scripts/invoke-behavior-harness-mutation-exercise.ps1 -RunId "scheduled-${{ github.run_id }}-${{ github.run_attempt }}"
+          ./scripts/check-behavior-harness-strength.ps1 -RequireEvidence
+
+      - name: Repository architecture fitness and mutation strength
+        shell: pwsh
+        run: |
+          ./scripts/invoke-architecture-fitness-mutation-exercise.ps1 -RunId "scheduled-${{ github.run_id }}-${{ github.run_attempt }}"
+          ./scripts/check-architecture-fitness-strength.ps1 -RequireEvidence
+
+      - name: Agent memory lifecycle and cross-process resume
+        shell: pwsh
+        run: |
+          $evidence = Join-Path $env:RUNNER_TEMP "agent-memory-${{ github.run_id }}-${{ github.run_attempt }}"
+          ./scripts/invoke-agent-memory-lifecycle-exercise.ps1 -EvidenceDirectory $evidence
+          ./scripts/check-agent-memory-lifecycle.ps1 -EvidencePath (Join-Path $evidence 'summary.json')
+
+      - name: Agent resource and cost budget enforcement
+        shell: pwsh
+        run: |
+          $evidence = Join-Path $env:RUNNER_TEMP "agent-resource-budget-${{ github.run_id }}-${{ github.run_attempt }}"
+          ./scripts/invoke-agent-resource-budget-exercise.ps1 -EvidenceDirectory $evidence
+          ./scripts/check-agent-resource-budget-strength.ps1 -EvidencePath (Join-Path $evidence 'summary.json')
+
+      - name: Agent tool integration and executable environment
+        shell: pwsh
+        run: |
+          $evidence = "TestResults/agent-tool-environment/scheduled-${{ github.run_id }}-${{ github.run_attempt }}"
+          ./scripts/check-agent-tool-environment.ps1 -Profile docs-local -Probe
+          ./scripts/invoke-agent-tool-environment-exercise.ps1 -EvidenceDirectory $evidence
+          ./scripts/check-agent-tool-environment-strength.ps1 -EvidencePath (Join-Path $evidence 'summary.json')
+
+      - name: Agent observability bounded-query exercise
+        shell: pwsh
+        run: |
+          $evidence = "TestResults/agent-observability/scheduled-${{ github.run_id }}-${{ github.run_attempt }}"
+          ./scripts/invoke-agent-observability-exercise.ps1 -EvidenceDirectory $evidence
+          ./scripts/check-agent-observability-strength.ps1 -EvidencePath (Join-Path $evidence 'summary.json')
+
+      - name: Continuous maturity transition exercise
+        shell: pwsh
+        run: |
+          $evidence = Join-Path $env:RUNNER_TEMP "harness-maturity-exercise-${{ github.run_id }}-${{ github.run_attempt }}"
+          ./scripts/invoke-harness-maturity-evidence-exercise.ps1 -EvidenceDirectory $evidence
+          ./scripts/check-harness-maturity-evidence-strength.ps1 -EvidencePath (Join-Path $evidence 'summary.json')
+
+      - name: Repository parity verify
+        shell: pwsh
+        run: |
+          ./scripts/verify.ps1 -ScopePath . -SkipBuild
+
+      - name: Capture observed docs harness
+        shell: pwsh
+        run: |
+          ./scripts/invoke-observed-docs-harness.ps1 -RunId "scheduled-${{ github.run_id }}-${{ github.run_attempt }}"
+          ./scripts/check-agent-observability.ps1 -RequireEvidence
+
+      - name: Restore and record continuous maturity evidence
+        if: always()
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $history = Join-Path $env:RUNNER_TEMP 'harness-maturity-history'
+          $output = Join-Path $env:RUNNER_TEMP 'harness-maturity-current'
+          New-Item -ItemType Directory -Path $history -Force | Out-Null
+          $response = gh api "repos/${{ github.repository }}/actions/artifacts?per_page=100" | ConvertFrom-Json
+          $artifact = @($response.artifacts | Where-Object { -not $_.expired -and $_.name -like 'harness-maturity-*' } | Sort-Object { [DateTimeOffset]::Parse($_.created_at) } -Descending | Select-Object -First 1)
+          if ($artifact.Count -eq 1) {
+            $zip = Join-Path $history 'previous.zip'
+            $headers = @{ Authorization = "Bearer $env:GH_TOKEN"; Accept = 'application/vnd.github+json' }
+            Invoke-WebRequest -Uri $artifact[0].archive_download_url -Headers $headers -OutFile $zip
+            Expand-Archive -LiteralPath $zip -DestinationPath (Join-Path $history 'previous') -Force
+            Remove-Item -LiteralPath $zip -Force
+          }
+          ./scripts/update-harness-maturity-evidence.ps1 `
+            -HistoryDirectory $history `
+            -OutputDirectory $output `
+            -RunId "${{ github.run_id }}-${{ github.run_attempt }}" `
+            -Outcome '${{ job.status }}' `
+            -Trigger '${{ github.event_name }}'
+          ./scripts/check-harness-maturity-evidence.ps1 `
+            -LedgerPath (Join-Path $output 'maturity-ledger.json') `
+            -SummaryPath (Join-Path $output 'maturity-summary.json')
+
+      - name: Upload continuous maturity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: harness-maturity-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 365
+          if-no-files-found: error
+          path: ${{ runner.temp }}/harness-maturity-current/
+
+      - name: Upload observed docs harness evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-harness-observability-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 30
+          if-no-files-found: warn
+          path: TestResults/docs-harness-observability/

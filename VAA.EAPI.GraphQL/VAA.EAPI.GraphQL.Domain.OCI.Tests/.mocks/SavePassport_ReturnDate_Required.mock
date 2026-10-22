@@ -1,0 +1,151 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/CheckIn/savePassport HTTP/1.1
+
+$[?(@.passengerId == '01.01|return|date|required')]
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "travelPartyId": "c560fd14-a567-4b08-9466-83d3eee22c1a",
+    "requirementsId": "b8fd46f2-3981-47e4-a210-f380ce515762",
+    "reference": {
+        "pnrLocator": "TEST02",
+        "createdDate": "2025-09-08"
+    },
+    "passengers": [
+        {
+            "passengerId": "01.01|return|date|required",
+            "givenNames": "ANNA",
+            "surname": "GELZINIS",
+            "dateOfBirth": "1958-09-08",
+            "email": "MYI90W@EXAMPLE.COM",
+            "phone": {
+                "countryCode": "",
+                "number": "447463776949"
+            },
+            "documents": [
+                {
+                    "documentType": "PASSPORT",
+                    "givenNames": "ANNA",
+                    "surname": "GELZINIS",
+                    "dateOfBirth": "1958-09-08",
+                    "gender": {
+                        "code": "M"
+                    },
+                    "documentNumber": "986708765",
+                    "expirationDate": "2032-11-03",
+                    "issuingCountry": {
+                        "code": "GBR"
+                    },
+                    "nationality": {
+                        "code": "GBR"
+                    },
+                    "countryOfResidence": {
+                        "code": "GBR"
+                    }
+                }
+            ],
+            "requirements": {
+                "passportProvided": true,
+                "passportVerified": false,
+                "contactTracing": "TO_COMPLETE",
+                "returnDateStatus": "REQUIRED",
+                "checkinEligible": true,
+                "passportErrors": [],
+                "secondaryDocumentStatus": "REQUIRED",
+                "overall": "PART_COMPLETE"
+            },
+            "contactTracing": {
+                "inTransit": false,
+                "email": "MYI90W@EXAMPLE.COM",
+                "noEmail": false,
+                "primaryPhoneNumber": "447463776949",
+                "primaryPhoneNumberCountryCode": ""
+            }
+        }
+    ],
+    "currentSlice": {
+        "sliceId": "0e5a9906-09a9-48e1-b70e-95a82d465bd9",
+        "scheduledDepartureLocalDateTime": "2025-09-11T13:25:00",
+        "scheduledDepartureUtcDateTime": "2025-09-11T12:25:00",
+        "scheduledArrivalLocalDateTime": "2025-09-11T15:30:00",
+        "scheduledArrivalUtcDateTime": "2025-09-11T22:30:00",
+        "origin": {
+            "terminalName": "Terminal 3",
+            "code": "LHR",
+            "airportName": "Heathrow Airport",
+            "countryCode": "GBR"
+        },
+        "destination": {
+            "code": "SEA",
+            "airportName": "Tacoma International",
+            "countryCode": "USA"
+        },
+        "segments": [
+            {
+                "segmentId": "02d7f7be-e608-4b1a-97d7-c0880a87988d",
+                "ordinal": 1,
+                "operatingCarrier": {
+                    "flightNum": "0105",
+                    "carrierCode": "VS",
+                    "carrierName": "Virgin Atlantic"
+                },
+                "marketingCarrier": {
+                    "flightNum": "0105",
+                    "carrierCode": "VS",
+                    "carrierName": "Virgin Atlantic"
+                },
+                "scheduledDepartureLocalDateTime": "2025-09-11T13:25:00",
+                "scheduledDepartureUtcDateTime": "2025-09-11T12:25:00",
+                "scheduledArrivalLocalDateTime": "2025-09-11T15:30:00",
+                "scheduledArrivalUtcDateTime": "2025-09-11T22:30:00",
+                "origin": {
+                    "terminalName": "Terminal 3",
+                    "code": "LHR",
+                    "airportName": "Heathrow Airport",
+                    "countryCode": "GBR"
+                },
+                "destination": {
+                    "code": "SEA",
+                    "airportName": "Tacoma International",
+                    "countryCode": "USA"
+                },
+                "legs": [
+                    {
+                        "legId": "a6bbbd33-a665-423e-8a9e-963bdeb22199",
+                        "ordinal": 1,
+                        "scheduledDepartureLocalDateTime": "2025-09-11T13:25:00",
+                        "scheduledDepartureUtcDateTime": "2025-09-11T12:25:00",
+                        "scheduledArrivalLocalDateTime": "2025-09-11T15:30:00",
+                        "scheduledArrivalUtcDateTime": "2025-09-11T22:30:00",
+                        "origin": {
+                            "code": "LHR",
+                            "airportName": "Heathrow Airport",
+                            "countryCode": "GBR"
+                        },
+                        "destination": {
+                            "code": "SEA",
+                            "airportName": "Tacoma International",
+                            "countryCode": "USA"
+                        },
+                        "distanceMiles": 4813,
+                        "flightDuration": "10H 5M",
+                        "aircraftTypeName": "Airbus A330-900neo Passenger",
+                        "status": "On time"
+                    }
+                ]
+            }
+        ]
+    },
+    "onlineCheckInStatus": {
+        "available": true
+    },
+    "applyEmergencyContactToAllPax": true,
+    "applyContactTracingToAllPax": true
+}

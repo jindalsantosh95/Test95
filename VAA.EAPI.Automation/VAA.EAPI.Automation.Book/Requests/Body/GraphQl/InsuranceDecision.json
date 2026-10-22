@@ -1,0 +1,9 @@
+{
+  "query": "mutation insuranceDecision($request: UpdateInsuranceDecisionRequestInput) { insuranceDecision(request: $request) { basketId isInsuranceAdded people { id firstName lastName dateOfBirth gender validation type membershipDetails { fqtNumber fqtProgramme fqtValidityStatus } } contactDetails { emailAddress phoneNumber alternativePhoneNumber acceptPost acceptTelephone acceptEmail acceptTextMessage validation } termsAndConditions { accepted validation } validation summary { totalPrice flightPrice totalSeatPrice insurancePrice voucherBalance voucherAmount voucherRemaining departureDate inboundFlights { airlineName flightNumber airline departing { iata name } arriving { iata name } departingAt arrivingAt cabinClass sectors { airlineName flightNumber airline departing { iata name } arriving { iata name } departingAt arrivingAt cabinClass } } outboundFlights { airlineName flightNumber airline departing { iata name } arriving { iata name } departingAt arrivingAt cabinClass sectors { sectorId airlineName flightNumber airline departing { iata name } arriving { iata name } departingAt arrivingAt cabinClass } } } }}",
+  "variables": {
+    "request": {
+      "basketId": "",
+      "insuranceSelected": null
+    }
+  }
+}

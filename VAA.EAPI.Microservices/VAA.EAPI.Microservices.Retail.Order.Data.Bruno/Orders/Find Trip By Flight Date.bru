@@ -1,0 +1,29 @@
+meta {
+  name: Find Trip By Flight Date
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{order_data_base_url}}/scv/orders/by-flight-date
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "pnr": "{{pnr}}",
+    "flightDate": "31AUG25",
+    "firstName": "{{first_name}}",
+    "lastName": "{{last_name}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

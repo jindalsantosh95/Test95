@@ -1,0 +1,38 @@
+﻿@page "/Principles"
+@using System.Diagnostics
+@attribute [Authorize(Policy = "RequireSpecificGroup")]
+
+<PageTitle>Error</PageTitle>
+
+<div class="principles-background">
+
+</div>
+
+<style>
+    .principles-background {
+        background-image: url('/images/principles.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        padding: 20px;
+    }
+</style>
+
+@code {
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    private string? RequestId { get; set; }
+    private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
+    protected override void OnInitialized() =>
+        RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
+}

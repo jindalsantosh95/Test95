@@ -1,0 +1,74 @@
+﻿mutation selectSeat($request: SelectSeatRequestInput) {
+  selectSeat(request: $request) {
+    flightSegment {
+      segmentId
+      marketingCarrier
+      marketingFlightNumber
+      operatingCarrier
+      operatingFlightNumber
+      originAirportCode
+      destinationAirportCode
+      scheduledArrivalTime {
+          utcDateTime
+          localDateTime
+      }
+      scheduledDepartureTime {
+          utcDateTime
+          localDateTime
+      }
+    }
+    flightPassengerSeatMap {
+      firstName
+      lastName
+      seatNumber
+      pos
+      price {
+        amount
+        currency
+      }
+    }
+    cabinClass
+    seatMap {
+      seatOfferId
+      equipment
+      details
+      configuration
+      rows {
+        rowNumber
+        overWing
+        columns {
+          type
+          seatNumber
+          availability
+          attributes
+          offers {
+            offerId
+            offerItemId
+            customerId
+            productId
+            productName
+            fareProduct
+            flightIdRef
+            price {
+              amount
+              currency
+            }
+          }
+          overWing
+          marketingInfo {
+            descText
+            url
+          }
+          offSet
+        }
+        exitLeft
+        exitRight
+      }
+     }
+      fareFamily
+      fareProduct {
+        id
+        name
+      }
+    }
+}

@@ -1,0 +1,35 @@
+meta {
+  name: selectMealMutation
+  type: graphql
+  seq: 35
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation selectMealMutation($tripReservationId: String, $segmentId: String, $passengerId: String, $ssrCode: String, $applyToAll: Boolean!) {
+    selectMealMutation(tripReservationId: $tripReservationId, segmentId: $segmentId, passengerId: $passengerId, ssrCode: $ssrCode, applyToAll: $applyToAll) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "tripReservationId": "",
+    "segmentId": "",
+    "passengerId": "",
+    "ssrCode": "",
+    "applyToAll": false
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

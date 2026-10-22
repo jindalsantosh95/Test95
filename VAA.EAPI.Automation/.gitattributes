@@ -1,0 +1,10 @@
+# The git pre-commit hook is a POSIX shell script - it must keep LF line
+# endings, or it fails to run under sh on a CRLF checkout.
+.githooks/pre-commit text eol=lf
+*.sh text eol=lf
+
+# C# sources use CRLF (.editorconfig sets end_of_line = crlf for *.cs). Pin the
+# checkout EOL so it is deterministic on every platform: without this, a Linux /
+# LF checkout makes dotnet format --verify-no-changes (scripts/verify.ps1) report
+# new .cs files as needing CRLF normalisation, failing the harness on its own files.
+*.cs text eol=crlf

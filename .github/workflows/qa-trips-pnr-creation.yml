@@ -1,0 +1,61 @@
+name: Automation - Trips PNR Creation
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: "Target environment for the test config"
+        required: true
+        default: "sit"
+        type: choice
+        options:
+          - dev
+          - sit
+          - uat
+  schedule:
+    # Monday run at 03:00 UTC (03:00 UK in winter; 04:00 UK during BST).
+    - cron: "0 3 * * 1"
+    # Tuesday to Friday run at 01:00 UTC (01:00 UK in winter; 02:00 UK during BST).
+    - cron: "0 1 * * 2-5"
+    # UAT runs two hours after the corresponding SIT run.
+    - cron: "0 5 * * 1"
+    - cron: "0 3 * * 2-5"
+
+jobs:
+  trips-pnr-creation:
+    if: github.event_name != 'schedule' || (github.event.schedule == '0 3 * * 1' || github.event.schedule == '0 1 * * 2-5')
+    uses: ./.github/workflows/qa-run-automation-suite.yml
+    with:
+      manifest_path: >-
+        ${{ github.event_name == 'workflow_dispatch'
+            && inputs.target_environment == 'uat'
+            && 'config/automation-suites/trips-pnr-creation-uat.json'
+            || 'config/automation-suites/trips-pnr-creation.json' }}
+      target_environment: ${{ github.event.inputs.target_environment || 'sit' }}
+      enable_slack_for_branch_runs: ${{ github.event_name == 'workflow_dispatch' }}
+      use_playwright_for_hpp: true
+    secrets:
+      key_vault_url: ${{ secrets.KEY_VAULT_URL }}
+      key_vault_tenant_id: ${{ secrets.KEY_VAULT_TENANT_ID }}
+      key_vault_client_id: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+      key_vault_client_secret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+      hpp_vaa_digital_first_token: ${{ secrets.HPP_VAA_DIGITAL_FIRST_TOKEN }}
+      hpp_delta_enterprise_payments_token: ${{ secrets.HPP_DELTA_ENTERPRISE_PAYMENTS_TOKEN }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL_TRIPS }}
+
+  trips-pnr-creation-uat:
+    if: github.event_name == 'schedule' && (github.event.schedule == '0 5 * * 1' || github.event.schedule == '0 3 * * 2-5')
+    uses: ./.github/workflows/qa-run-automation-suite.yml
+    with:
+      manifest_path: config/automation-suites/trips-pnr-creation-uat.json
+      target_environment: uat
+      enable_slack_for_branch_runs: false
+      use_playwright_for_hpp: true
+    secrets:
+      key_vault_url: ${{ secrets.KEY_VAULT_URL }}
+      key_vault_tenant_id: ${{ secrets.KEY_VAULT_TENANT_ID }}
+      key_vault_client_id: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+      key_vault_client_secret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+      hpp_vaa_digital_first_token: ${{ secrets.HPP_VAA_DIGITAL_FIRST_TOKEN }}
+      hpp_delta_enterprise_payments_token: ${{ secrets.HPP_DELTA_ENTERPRISE_PAYMENTS_TOKEN }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL_TRIPS }}

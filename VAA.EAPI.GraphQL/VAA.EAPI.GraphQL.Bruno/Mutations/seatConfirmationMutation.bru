@@ -1,0 +1,31 @@
+meta {
+  name: seatConfirmationMutation
+  type: graphql
+  seq: 33
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation seatConfirmationMutation($tripReservationId: String) {
+    seatConfirmationMutation(tripReservationId: $tripReservationId) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "tripReservationId": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

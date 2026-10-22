@@ -1,0 +1,223 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.NDCHealthCheck*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Deployment*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search*
+      
+
+    exclude: 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Concierge*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Account*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Book*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Operations*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Basket*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.NDCHealthCheck*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.RefData*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Loyalty*  
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Security*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Servicing*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.VHols*
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.WebForms* 
+      - VAA.EAPI.GraphQL/VAA.EAPI.GraphQL.Domain.Search.bruno
+
+
+variables: 
+  - group: APIM  
+  - group: APIM_IP
+  - group: Common_Variables
+  - group: AzureWebJobsStorage
+  - group: Graphql_Search
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'
+  - name: testRepoPath_SIT
+    value: ''   
+  - name: testRepoPath_UAT
+    value: ''      
+  - name: rootPath
+    value: 'VAA.EAPI.GraphQL'
+  - name: subRootPath
+    value: 'VAA.EAPI'    
+  - name: applicationName
+    value: 'GraphQL'
+  - name: slotName
+    value: 'DS' 
+  - name: functionAppName_Secure_DT1
+    value: 'avadeunafngrphsrchdt1'
+  - name: functionAppName_Secure_DT2
+    value: 'avadeunafngrphsrchdt2'
+  - name: functionAppName_Secure_DT3
+    value: 'avadeunafngrphsrchdt3'
+  - name: functionAppName_Secure_DT4
+    value: 'avadeunafngrphsrchdt4'
+  - name: functionAppName_Secure_DT5
+    value: 'avadeunafngrphsrchdt5'
+  - name: functionAppName_Secure_DEV
+    value: 'AVADEUNAFNGRAPHQLSEARCH'
+  - name: functionAppName_Secure_SIT
+    value: 'AVATEUNAFNGRAPHQLSEARCH'
+  - name: functionAppName_Secure_UAT
+    value: 'AVASEUNAFNGRAPHQLSEARCH'
+  - name: functionAppName_Secure_PRD
+    value: 'AVAPEUNAFNGRAPHQLSEARCH'  
+  - name: functionAppName_Public_DT1
+    value: 'avadeunafngrphsrchpdt1'
+  - name: functionAppName_Public_DT2
+    value: 'avadeunafngrphsrchpdt2'
+  - name: functionAppName_Public_DT3
+    value: 'avadeunafngrphsrchpdt3'
+  - name: functionAppName_Public_DT4
+    value: 'avadeunafngrphsrchpdt4'
+  - name: functionAppName_Public_DT5
+    value: 'avadeunafngrphsrchpdt5'    
+  - name: functionAppName_Public_DEV
+    value: 'AVADEUNAFNGRAPHQLSEARCHP'
+  - name: functionAppName_Public_SIT
+    value: 'AVATEUNAFNGRAPHQLSEARCHP'
+  - name: functionAppName_Public_UAT
+    value: 'AVASEUNAFNGRAPHQLSEARCHP'
+  - name: functionAppName_Public_PRD
+    value: 'AVAPEUNAFNGRAPHQLSEARCHP' 
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_graphqlsearch.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName)
+      resourceGroupName_DEV: $(resourceGroupNameGraphql_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameGraphql_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameGraphql_UAT)
+      resourceGroupName_PROD: $(resourceGroupNameGraphql_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_graphqlsplit_nbf_slot_Test5.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      location: $(location)
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)   
+      resourceGroupName_DT1: $(resourceGroupNameGQLNBF_DT1)
+      resourceGroupName_DT2: $(resourceGroupNameGQLNBF_DT2)
+      resourceGroupName_DT3: $(resourceGroupNameGQLNBF_DT3)
+      resourceGroupName_DT4: $(resourceGroupNameGQLNBF_DT4)
+      resourceGroupName_DT5: $(resourceGroupNameGQLNBF_DT5)
+      resourceGroupName_DEV: $(resourceGroupNameGraphql_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameGraphql_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameGraphql_UAT)
+      resourceGroupName_PROD: $(resourceGroupNameGraphql_PROD)  
+      functionAppName_Secure_DT1: $(functionAppName_Secure_DT1)
+      functionAppName_Secure_DT2: $(functionAppName_Secure_DT2)      
+      functionAppName_Secure_DT3: $(functionAppName_Secure_DT3)
+      functionAppName_Secure_DT4: $(functionAppName_Secure_DT4) 
+      functionAppName_Secure_DT5: $(functionAppName_Secure_DT5)  
+      functionAppName_Secure_DEV: $(functionAppName_Secure_DEV)
+      functionAppName_Secure_SIT: $(functionAppName_Secure_SIT)
+      functionAppName_Secure_UAT: $(functionAppName_Secure_UAT)
+      functionAppName_Secure_PRD: $(functionAppName_Secure_PRD)
+      functionAppName_Public_DT1: $(functionAppName_Public_DT1)
+      functionAppName_Public_DT2: $(functionAppName_Public_DT2)
+      functionAppName_Public_DT3: $(functionAppName_Public_DT3)
+      functionAppName_Public_DT4: $(functionAppName_Public_DT4)
+      functionAppName_Public_DT5: $(functionAppName_Public_DT5)
+      functionAppName_Public_DEV: $(functionAppName_Public_DEV)
+      functionAppName_Public_SIT: $(functionAppName_Public_SIT)
+      functionAppName_Public_UAT: $(functionAppName_Public_UAT)
+      functionAppName_Public_PRD: $(functionAppName_Public_PRD)
+      AppInsightsName_DT1 : $(AppInsightsName_DT1)
+      AppInsightsName_DT2 : $(AppInsightsName_DT2)
+      AppInsightsName_DT3 : $(AppInsightsName_DT3)
+      AppInsightsName_DT4 : $(AppInsightsName_DT4)
+      AppInsightsName_DT5 : $(AppInsightsName_DT5)
+      KeyvaultName_DT1: $(vaultName_DT1)
+      KeyvaultName_DT2: $(vaultName_DT2)
+      KeyvaultName_DT3: $(vaultName_DT3)
+      KeyvaultName_DT4: $(vaultName_DT4)
+      KeyvaultName_DT5: $(vaultName_DT5)
+      appserviceplan_DT1: $(appserviceplan_DT1)
+      appserviceplan_DT2: $(appserviceplan_DT2)
+      appserviceplan_DT3: $(appserviceplan_DT3)
+      appserviceplan_DT4: $(appserviceplan_DT4)
+      appserviceplan_DT5: $(appserviceplan_DT5)
+      AppInsightsName_DEV: $(AppInsightsName_DEV)
+      AppInsightsName_SIT: $(AppInsightsName_SIT)
+      AppInsightsName_UAT: $(AppInsightsName_UAT)
+      AppInsightsName_PROD: $(AppInsightsName_PROD)
+      storageAccountName_DT1: $(storageAccountName_DT1)
+      storageAccountName_DT2: $(storageAccountName_DT2)
+      storageAccountName_DT3: $(storageAccountName_DT3)
+      storageAccountName_DT4: $(storageAccountName_DT4)
+      storageAccountName_DT5: $(storageAccountName_DT5)
+      storageAccountName_P_DT1: $(storageAccountName_P_DT1)
+      storageAccountName_P_DT2: $(storageAccountName_P_DT2)
+      storageAccountName_P_DT3: $(storageAccountName_P_DT3)
+      storageAccountName_P_DT4: $(storageAccountName_P_DT4)
+      storageAccountName_P_DT5: $(storageAccountName_P_DT5)
+      storageAccountName_DEV: $(storageAccountName_DEV)
+      storageAccountName_SIT: $(storageAccountName_SIT)
+      storageAccountName_UAT: $(storageAccountName_UAT)
+      storageAccountName_PROD: $(storageAccountName_PROD)
+      storageAccountName_DEV_P: $(storageAccountName_DEV_P)
+      storageAccountName_SIT_P: $(storageAccountName_SIT_P)
+      storageAccountName_UAT_P: $(storageAccountName_UAT_P)
+      storageAccountName_PROD_P: $(storageAccountName_PROD_P)
+      VARIABLE_GROUP_NAME_SCHEMA: "SchemaValidation_DEV"
+      VARIABLE_GROUP_NAME_NBF_DT1: "TESTING_NBF_DT1"
+      VARIABLE_GROUP_NAME_NBF_DT2: "TESTING_NBF_DT2"
+      VARIABLE_GROUP_NAME_NBF_DT3: "TESTING_NBF_DT3"
+      VARIABLE_GROUP_NAME_NBF_DT4: "TESTING_NBF_DT4"
+      VARIABLE_GROUP_NAME_NBF_DT5: "TESTING_NBF_DT5"
+      VARIABLE_GROUP_NAME_NBF_DEV: "TESTING_NBF_DEV"
+      VARIABLE_GROUP_NAME_NBF_SIT: "TESTING_NBF_SIT"
+      VARIABLE_GROUP_NAME_NBF_UAT: "TESTING_NBF_UAT"
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER) 
+      SLACK_API_TOKEN: $(SLACK_API_TOKEN)
+      SLACK_TITLE: $(SLACK_TITLE_SEARCH)

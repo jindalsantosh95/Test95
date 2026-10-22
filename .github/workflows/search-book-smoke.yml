@@ -1,0 +1,810 @@
+name: Automation - Search and Book GraphQL Regression
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: "Target environment for the test config"
+        required: true
+        default: "sit"
+        type: choice
+        options:
+          - dev
+          - sit
+          - uat
+          - all
+      test_suite:
+        description: "Regression suite to run"
+        required: true
+        default: "both"
+        type: choice
+        options:
+          - both
+          - search
+          - book
+      book_hpp_mode:
+        description: "HPP driver for Book regression (scenario uses per-test opt-ins)"
+        required: true
+        default: "playwright"
+        type: choice
+        options:
+          - scenario
+          - playwright
+          - selenium
+      enable_failure_trace_manifest:
+        description: "Generate a failure-only manifest for optional local Azure tracing"
+        required: true
+        default: true
+        type: boolean
+  schedule:
+    # Weekday staggered runs (UTC)
+    - cron: "30 2 * * 1-5" # sit
+    - cron: "50 2 * * 1-5" # uat
+
+concurrency:
+  group: search-and-book-graphql-regression-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  resolve-targets:
+    name: Resolve Target Environments
+    runs-on: ubuntu-latest
+    outputs:
+      environments: ${{ steps.resolve.outputs.environments }}
+    steps:
+      - name: Resolve environments
+        id: resolve
+        shell: pwsh
+        run: |
+          $eventName = "${{ github.event_name }}"
+          $schedule = "${{ github.event.schedule }}"
+          $manualTarget = "${{ github.event.inputs.target_environment }}"
+
+          $targets = @()
+
+          if ($eventName -eq "schedule") {
+            switch ($schedule) {
+              "30 2 * * 1-5" { $targets = @("sit") }
+              "50 2 * * 1-5" { $targets = @("uat") }
+              default { $targets = @("sit") }
+            }
+          }
+          else {
+            switch ($manualTarget) {
+              "all" { $targets = @("dev", "sit", "uat") }
+              "dev" { $targets = @("dev") }
+              "sit" { $targets = @("sit") }
+              "uat" { $targets = @("uat") }
+              default { $targets = @("sit") }
+            }
+          }
+
+          $json = ConvertTo-Json -InputObject $targets -Compress
+          "environments=$json" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          Write-Host "Resolved target environments: $($targets -join ', ')"
+
+  search-graphql-regression:
+    name: "Search GraphQL Regression (${{ matrix.target_env }})"
+    needs: resolve-targets
+    if: ${{ github.event_name == 'schedule' || github.event.inputs.test_suite == 'both' || github.event.inputs.test_suite == 'search' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target_env: ${{ fromJson(needs.resolve-targets.outputs.environments) }}
+    environment: ${{ matrix.target_env }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      env: ${{ matrix.target_env }}
+      BaseUrl: ${{ vars.BASE_URL }}
+      graphQlSearch: ${{ vars.GRAPHQL_SEARCH_PATH }}
+      graphQlBook: ${{ vars.GRAPHQL_BOOK_PATH }}
+      graphQlMyAccountPublic: ${{ vars.GRAPHQL_MYACCOUNT_PUBLIC_PATH }}
+      HAS_SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore VAA.EAPI.Automation/VAA.EAPI.Automation.Search/VAA.EAPI.Automation.Search.csproj
+
+      - name: Build
+        run: dotnet build VAA.EAPI.Automation/VAA.EAPI.Automation.Search/VAA.EAPI.Automation.Search.csproj -c Release --no-restore
+
+      - name: Run Search GraphQL regression tests
+        shell: pwsh
+        env:
+          TEST_FILTER: Category=SearchGraphQl-Regression
+          LoyaltyAccountPassword: ${{ secrets.LOYALTY_ACCOUNT_PASSWORD }}
+          KeyVaultUrl: ${{ secrets.KEY_VAULT_URL }}
+          KeyVaultTenantId: ${{ secrets.KEY_VAULT_TENANT_ID }}
+          KeyVaultClientId: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+          KeyVaultClientSecret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+        run: |
+          dotnet test "VAA.EAPI.Automation/VAA.EAPI.Automation.Search/VAA.EAPI.Automation.Search.csproj" `
+            -c Release `
+            --no-build `
+            --filter "$env:TEST_FILTER" `
+            --results-directory "TestResults" `
+            --logger "trx;LogFileName=Search-graphql-regression-$env:env.trx"
+
+      - name: Publish Search test summary
+        id: publish_summary
+        if: always()
+        shell: pwsh
+        run: |
+          $summaryPath = $env:GITHUB_STEP_SUMMARY
+
+          function Write-DefaultOutputs() {
+            "total=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "passed=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "failed=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "skipped=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "pass_rate=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "duration=n/a" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "failure_summary=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "pnr_details=None captured" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          }
+
+          function Write-MinimalSummary([string]$reason) {
+            Write-DefaultOutputs
+            "## Search GraphQL Regression Summary ($env:env)`n`n$reason" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+          }
+
+          function Escape-Markdown([string]$value) {
+            if ([string]::IsNullOrWhiteSpace($value)) { return "" }
+            return $value.Replace("|", "\|").Replace("`r", " ").Replace("`n", " ").Trim()
+          }
+
+          $trxFile = Get-ChildItem -Path "TestResults" -Filter "*.trx" -File -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTimeUtc -Descending |
+            Select-Object -First 1
+
+          if ($null -eq $trxFile) {
+            Write-MinimalSummary "No TRX file was found in TestResults."
+            exit 0
+          }
+
+          [xml]$trx = $null
+          try {
+            [xml]$trx = Get-Content -Path $trxFile.FullName -ErrorAction Stop
+          }
+          catch {
+            Write-MinimalSummary "Unable to parse TRX file ``$($trxFile.Name)``. Error: $($_.Exception.Message)"
+            exit 0
+          }
+
+          if ($null -eq $trx.TestRun -or $null -eq $trx.TestRun.ResultSummary -or $null -eq $trx.TestRun.ResultSummary.Counters) {
+            Write-MinimalSummary "TRX file ``$($trxFile.Name)`` is missing ResultSummary counters."
+            exit 0
+          }
+
+          function Get-CounterValue($value) {
+            if ($null -eq $value -or [string]::IsNullOrWhiteSpace([string]$value)) { return 0 }
+            return [int]$value
+          }
+
+          $counters = $trx.TestRun.ResultSummary.Counters
+          $total = Get-CounterValue $counters.total
+          $passed = Get-CounterValue $counters.passed
+          $failed = Get-CounterValue $counters.failed
+          $skipped = Get-CounterValue $counters.notExecuted
+          $passRate = if ($total -gt 0) { [math]::Round(($passed / $total) * 100, 2) } else { 0 }
+          [datetime]$startTime = [datetime]::MinValue
+          [datetime]$finishTime = [datetime]::MinValue
+          $durationText = "n/a"
+          if ($null -ne $trx.TestRun.Times -and [datetime]::TryParse($trx.TestRun.Times.start, [ref]$startTime) -and [datetime]::TryParse($trx.TestRun.Times.finish, [ref]$finishTime)) {
+            $duration = $finishTime - $startTime
+            $durationText = "$([int]$duration.TotalMinutes)m $($duration.Seconds)s"
+          }
+
+          $failedResults = @()
+          if ($null -ne $trx.TestRun.Results -and $null -ne $trx.TestRun.Results.UnitTestResult) {
+            $failedResults = @($trx.TestRun.Results.UnitTestResult | Where-Object { $_.outcome -eq "Failed" })
+          }
+          $allResults = @()
+          if ($null -ne $trx.TestRun.Results -and $null -ne $trx.TestRun.Results.UnitTestResult) {
+            $allResults = @($trx.TestRun.Results.UnitTestResult)
+          }
+
+          $failureSummaryText = "None"
+          if ($failedResults.Count -gt 0) {
+            $failureSummaryItems = $failedResults |
+              ForEach-Object {
+                $message = $_.Output.ErrorInfo.Message
+                if ([string]::IsNullOrWhiteSpace($message)) { "No error message" }
+                else { ($message -split "`r?`n")[0].Trim() }
+              } |
+              Group-Object |
+              Sort-Object Count -Descending |
+              Select-Object -First 5 |
+              ForEach-Object {
+                $firstLine = $_.Name
+                if ($firstLine.Length -gt 140) { $firstLine = $firstLine.Substring(0, 140) + "..." }
+                "$($_.Count)x $firstLine"
+              }
+
+            if ($failureSummaryItems.Count -gt 0) {
+              $failureSummaryText = ($failureSummaryItems -join "`n")
+            }
+          }
+
+          $pnrDetailsText = "None captured"
+          $pnrDetailsItems = $allResults |
+            ForEach-Object {
+              $testName = $_.testName
+              $stdOut = $_.Output.StdOut
+              if ([string]::IsNullOrWhiteSpace($stdOut)) {
+                return $null
+              }
+
+              $pnrMatch = [regex]::Match($stdOut, '(?im)\bpnr(?:locator)?\b["\s:=]*(?<value>[A-Z0-9]{5,8})')
+              if (-not $pnrMatch.Success) {
+                $pnrMatch = [regex]::Match($stdOut, '(?im)"pnr"\s*:\s*"(?<value>[^"]+)"')
+              }
+              if (-not $pnrMatch.Success) {
+                return $null
+              }
+
+              $lastNameMatch = [regex]::Match($stdOut, '(?im)"lastName"\s*:\s*"(?<value>[^"]+)"')
+              if (-not $lastNameMatch.Success) {
+                $lastNameMatch = [regex]::Match($stdOut, "(?im)\blast\s*name\b[\""\s:=]*(?<value>[A-Za-z'-]+)")
+              }
+
+              $pnrValue = $pnrMatch.Groups["value"].Value.Trim()
+              $lastNameValue = if ($lastNameMatch.Success) { $lastNameMatch.Groups["value"].Value.Trim() } else { "unknown" }
+              if ([string]::IsNullOrWhiteSpace($pnrValue)) {
+                return $null
+              }
+
+              "$testName | PNR=$pnrValue | LastName=$lastNameValue"
+            } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Select-Object -Unique -First 12
+
+          if ($pnrDetailsItems.Count -gt 0) {
+            $pnrDetailsText = ($pnrDetailsItems -join "`n")
+          }
+
+          $codeFence = '```'
+
+          $summaryLines = @(
+            "## Search GraphQL Regression Summary ($env:env)",
+            "",
+            "| Metric | Value |",
+            "| --- | ---: |",
+            "| TRX | ``$($trxFile.Name)`` |",
+            "| Total | **$total** |",
+            "| Passed | **$passed** |",
+            "| Failed | **$failed** |",
+            "| Skipped | **$skipped** |",
+            "| Pass Rate | **$passRate%** |",
+            "| Duration | **$durationText** |",
+            "",
+            "### Failure Summary",
+            $codeFence,
+            $failureSummaryText,
+            $codeFence,
+            "",
+            "### PNR Details (Scenario | PNR | LastName)",
+            $codeFence,
+            $pnrDetailsText,
+            $codeFence
+          )
+
+          "total=$total" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "passed=$passed" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "failed=$failed" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "skipped=$skipped" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "pass_rate=$passRate" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "duration=$durationText" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "failure_summary<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $failureSummaryText | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "pnr_details<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $pnrDetailsText | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+          $summaryLines -join "`n" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+
+          try {
+            $analysis = & "scripts/analyse-test-run-results.ps1" `
+              -ResultsDirectory "TestResults" `
+              -SuiteName "Search GraphQL Regression" `
+              -EnvironmentName $env:env
+            if (-not [string]::IsNullOrWhiteSpace($analysis)) {
+              "`n$analysis" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+            }
+          }
+          catch {
+            "### Post-Test Failure Analysis`n`nUnable to generate failure analysis: $($_.Exception.Message)" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+          }
+
+      - name: Notify Slack summary
+        if: always() && github.ref == 'refs/heads/main' && env.HAS_SLACK_WEBHOOK == 'true'
+        shell: pwsh
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          JOB_STATUS: ${{ job.status }}
+          TOTAL: ${{ steps.publish_summary.outputs.total }}
+          PASSED: ${{ steps.publish_summary.outputs.passed }}
+          FAILED: ${{ steps.publish_summary.outputs.failed }}
+          SKIPPED: ${{ steps.publish_summary.outputs.skipped }}
+          PASS_RATE: ${{ steps.publish_summary.outputs.pass_rate }}
+          DURATION: ${{ steps.publish_summary.outputs.duration }}
+          FAILURE_SUMMARY: ${{ steps.publish_summary.outputs.failure_summary }}
+          PNR_DETAILS: ${{ steps.publish_summary.outputs.pnr_details }}
+          TARGET_ENV: ${{ matrix.target_env }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          switch ($env:JOB_STATUS) {
+            "success" { $statusEmoji = ":white_check_mark:"; $statusText = "Passed" }
+            "failure" { $statusEmoji = ":x:"; $statusText = "Failed" }
+            "cancelled" { $statusEmoji = ":warning:"; $statusText = "Cancelled" }
+            default { $statusEmoji = ":warning:"; $statusText = "Unknown" }
+          }
+
+          $codeFence = '```'
+
+          $payload = @{
+            text = "$statusEmoji Search GraphQL Regression ($statusText)"
+            blocks = @(
+              @{
+                type = "section"
+                text = @{ type = "mrkdwn"; text = "$statusEmoji *Search GraphQL Regression* (Env: $($env:TARGET_ENV))" }
+              },
+              @{
+                type = "section"
+                fields = @(
+                  @{ type = "mrkdwn"; text = "*Total:*`n$($env:TOTAL)" },
+                  @{ type = "mrkdwn"; text = "*Passed:*`n$($env:PASSED)" },
+                  @{ type = "mrkdwn"; text = "*Failed:*`n$($env:FAILED)" },
+                  @{ type = "mrkdwn"; text = "*Skipped:*`n$($env:SKIPPED)" },
+                  @{ type = "mrkdwn"; text = "*Pass Rate:*`n$($env:PASS_RATE)%" },
+                  @{ type = "mrkdwn"; text = "*Duration:*`n$($env:DURATION)" }
+                )
+              },
+              @{
+                type = "section"
+                text = @{ type = "mrkdwn"; text = "*Failure Summary (Top):*`n$codeFence`n$($env:FAILURE_SUMMARY)`n$codeFence" }
+              },
+              @{
+                type = "section"
+                text = @{ type = "mrkdwn"; text = "*PNR Details (Scenario | PNR | LastName):*`n$codeFence`n$($env:PNR_DETAILS)`n$codeFence" }
+              },
+              @{
+                type = "actions"
+                elements = @(
+                  @{ type = "button"; text = @{ type = "plain_text"; text = "View Workflow Run" }; url = "$($env:RUN_URL)" }
+                )
+              }
+            )
+          } | ConvertTo-Json -Depth 8
+
+          try {
+            Invoke-RestMethod -Method Post -Uri $env:SLACK_WEBHOOK_URL -ContentType "application/json" -Body $payload
+          }
+          catch {
+            Write-Host "::warning::Slack notification failed: $($_.Exception.Message)"
+          }
+
+      - name: Upload Search results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Search-graphql-regression-results-${{ matrix.target_env }}
+          path: TestResults/*.trx
+          if-no-files-found: warn
+          retention-days: 7
+
+  book-core-regression:
+    name: "Book GraphQL Core Regression (${{ matrix.target_env }})"
+    needs: resolve-targets
+    if: ${{ github.event_name == 'schedule' || github.event.inputs.test_suite == 'both' || github.event.inputs.test_suite == 'book' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target_env: ${{ fromJson(needs.resolve-targets.outputs.environments) }}
+    environment: ${{ matrix.target_env }}
+    # Book endpoints are network-restricted, so run this job on the VM-hosted runner.
+    runs-on: [self-hosted, Windows, eapi-automation]
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: powershell
+    env:
+      env: ${{ matrix.target_env }}
+      BaseUrl: ${{ vars.BASE_URL }}
+      graphQlSearch: ${{ vars.GRAPHQL_SEARCH_PATH }}
+      graphQlBook: ${{ vars.GRAPHQL_BOOK_PATH }}
+      graphQlMyAccountPublic: ${{ vars.GRAPHQL_MYACCOUNT_PUBLIC_PATH }}
+      # Scheduled events have no workflow inputs, so default them to Playwright.
+      # Manual runs continue to honour the selected scenario/playwright/selenium mode.
+      BookHppAutomationMode: ${{ github.event.inputs.book_hpp_mode || 'playwright' }}
+      BookHppPlaywrightHeadless: "true"
+      # Keep the shared Windows VM responsive while Book scenarios reach HPP in parallel.
+      HPP_PLAYWRIGHT_MAX_CONCURRENT_SESSIONS: "2"
+      HPP_PAGE_ALLOWED_ORIGINS: ${{ vars.HPP_PAGE_ALLOWED_ORIGINS || 'https://enterprisepaymentshpp-si.vs01.vs.air4.com' }}
+      HPP_HEADER_ALLOWED_ORIGINS: ${{ vars.HPP_HEADER_ALLOWED_ORIGINS || 'https://enterprisepaymentshppapi-si.vs01.vs.air4.com,https://stg.virginatlantic.com' }}
+      HppVaaDigitalFirstToken: ${{ secrets.HPP_VAA_DIGITAL_FIRST_TOKEN }}
+      HppDeltaEnterprisePaymentsToken: ${{ secrets.HPP_DELTA_ENTERPRISE_PAYMENTS_TOKEN }}
+      LoyaltyAccountPassword: ${{ secrets.LOYALTY_ACCOUNT_PASSWORD }}
+      HAS_SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+      ENABLE_FAILURE_TRACE_MANIFEST: ${{ github.event_name == 'schedule' || inputs.enable_failure_trace_manifest }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Display .NET SDK
+        run: dotnet --info
+
+      - name: Restore
+        run: dotnet restore VAA.EAPI.Automation/VAA.EAPI.Automation.Book/VAA.EAPI.Automation.Book.csproj
+
+      - name: Build
+        run: dotnet build VAA.EAPI.Automation/VAA.EAPI.Automation.Book/VAA.EAPI.Automation.Book.csproj -c Release --no-restore
+
+      - name: Capture existing browser processes
+        shell: powershell
+        run: |
+          & "scripts/capture-browser-process-diagnostics.ps1" `
+            -SnapshotName "before-tests" `
+            -OutputDirectory "BrowserProcessDiagnostics"
+
+      - name: Run Book GraphQL core regression tests
+        shell: powershell
+        env:
+          TEST_FILTER: Category=Book-Core-Regression
+          KeyVaultUrl: ${{ secrets.KEY_VAULT_URL }}
+          KeyVaultTenantId: ${{ secrets.KEY_VAULT_TENANT_ID }}
+          KeyVaultClientId: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+          KeyVaultClientSecret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+        run: |
+          dotnet test "VAA.EAPI.Automation/VAA.EAPI.Automation.Book/VAA.EAPI.Automation.Book.csproj" `
+            -c Release `
+            --no-build `
+            --filter "$env:TEST_FILTER" `
+            --results-directory "TestResults" `
+            --logger "trx;LogFileName=Book-graphql-core-regression-$env:env.trx"
+
+      - name: Capture browser processes after tests
+        if: always()
+        continue-on-error: true
+        shell: powershell
+        run: |
+          & "scripts/capture-browser-process-diagnostics.ps1" `
+            -SnapshotName "after-tests-before-cleanup" `
+            -OutputDirectory "BrowserProcessDiagnostics" `
+            -BaselinePath "BrowserProcessDiagnostics/before-tests.csv"
+
+      - name: Publish Book test summary
+        id: publish_summary
+        if: always()
+        shell: powershell
+        run: |
+          $summaryPath = $env:GITHUB_STEP_SUMMARY
+
+          function Write-DefaultOutputs() {
+            "total=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "passed=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "failed=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "skipped=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "pass_rate=0" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "duration=n/a" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "failure_summary=None" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "pnr_details=None captured" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          }
+
+          function Write-MinimalSummary([string]$reason) {
+            Write-DefaultOutputs
+            "## Book GraphQL Core Regression Summary ($env:env)`n`n$reason" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+          }
+
+          $trxFile = Get-ChildItem -Path "TestResults" -Filter "*.trx" -File -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTimeUtc -Descending |
+            Select-Object -First 1
+
+          if ($null -eq $trxFile) {
+            Write-MinimalSummary "No TRX file was found in TestResults."
+            exit 0
+          }
+
+          [xml]$trx = $null
+          try {
+            [xml]$trx = Get-Content -Path $trxFile.FullName -ErrorAction Stop
+          }
+          catch {
+            Write-MinimalSummary "Unable to parse TRX file ``$($trxFile.Name)``. Error: $($_.Exception.Message)"
+            exit 0
+          }
+
+          if ($null -eq $trx.TestRun -or $null -eq $trx.TestRun.ResultSummary -or $null -eq $trx.TestRun.ResultSummary.Counters) {
+            Write-MinimalSummary "TRX file ``$($trxFile.Name)`` is missing ResultSummary counters."
+            exit 0
+          }
+
+          function Get-CounterValue($value) {
+            if ($null -eq $value -or [string]::IsNullOrWhiteSpace([string]$value)) { return 0 }
+            return [int]$value
+          }
+
+          $counters = $trx.TestRun.ResultSummary.Counters
+          $total = Get-CounterValue $counters.total
+          $passed = Get-CounterValue $counters.passed
+          $failed = Get-CounterValue $counters.failed
+          $skipped = Get-CounterValue $counters.notExecuted
+          $passRate = if ($total -gt 0) { [math]::Round(($passed / $total) * 100, 2) } else { 0 }
+          [datetime]$startTime = [datetime]::MinValue
+          [datetime]$finishTime = [datetime]::MinValue
+          $durationText = "n/a"
+          if ($null -ne $trx.TestRun.Times -and [datetime]::TryParse($trx.TestRun.Times.start, [ref]$startTime) -and [datetime]::TryParse($trx.TestRun.Times.finish, [ref]$finishTime)) {
+            $duration = $finishTime - $startTime
+            $durationText = "$([int]$duration.TotalMinutes)m $($duration.Seconds)s"
+          }
+
+          $failedResults = @()
+          if ($null -ne $trx.TestRun.Results -and $null -ne $trx.TestRun.Results.UnitTestResult) {
+            $failedResults = @($trx.TestRun.Results.UnitTestResult | Where-Object { $_.outcome -eq "Failed" })
+          }
+
+          $allResults = @()
+          if ($null -ne $trx.TestRun.Results -and $null -ne $trx.TestRun.Results.UnitTestResult) {
+            $allResults = @($trx.TestRun.Results.UnitTestResult)
+          }
+          $failureSummaryText = "None"
+          if ($failedResults.Count -gt 0) {
+            $failureSummaryItems = $failedResults |
+              ForEach-Object {
+                $message = $_.Output.ErrorInfo.Message
+                if ([string]::IsNullOrWhiteSpace($message)) { "No error message" }
+                else { ($message -split "`r?`n")[0].Trim() }
+              } |
+              Group-Object |
+              Sort-Object Count -Descending |
+              Select-Object -First 5 |
+              ForEach-Object {
+                $firstLine = $_.Name
+                if ($firstLine.Length -gt 140) { $firstLine = $firstLine.Substring(0, 140) + "..." }
+                "$($_.Count)x $firstLine"
+              }
+
+            if ($failureSummaryItems.Count -gt 0) {
+              $failureSummaryText = ($failureSummaryItems -join "`n")
+            }
+          }
+
+          $pnrDetailsText = "None captured"
+          $pnrDetailsSources = @()
+          if ($null -ne $trx.TestRun.Output -and -not [string]::IsNullOrWhiteSpace($trx.TestRun.Output.StdOut)) {
+            $pnrDetailsSources += [pscustomobject]@{ TestName = "Run output"; StdOut = [string]$trx.TestRun.Output.StdOut }
+          }
+          $pnrDetailsSources += @($allResults | ForEach-Object {
+            [pscustomobject]@{ TestName = $_.testName; StdOut = [string]$_.Output.StdOut }
+          })
+
+          $pnrDetailsItems = @($pnrDetailsSources |
+            ForEach-Object {
+              $stdOut = $_.StdOut
+              if ([string]::IsNullOrWhiteSpace($stdOut)) {
+                return $null
+              }
+
+              $explicitMatches = [regex]::Matches($stdOut, '(?im)Book PNR Detail:\s*Scenario=(?<scenario>.*?)\s*\|\s*PNR=(?<pnr>[A-Z0-9]{5,8})\s*\|\s*Last Name=(?<lastName>[^\r\n|]+)')
+              if ($explicitMatches.Count -eq 0) {
+                return $null
+              }
+
+              return @($explicitMatches | ForEach-Object {
+                $scenarioName = $_.Groups["scenario"].Value.Trim()
+                $pnrValue = $_.Groups["pnr"].Value.Trim()
+                $lastNameValue = $_.Groups["lastName"].Value.Trim()
+                "$scenarioName | PNR=$pnrValue | LastName=$lastNameValue"
+              })
+            } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Select-Object -Unique -First 12)
+
+          if ($pnrDetailsItems.Count -gt 0) {
+            $pnrDetailsText = ($pnrDetailsItems -join "`n")
+          }
+          $codeFence = '```'
+
+          $summaryLines = @(
+            "## Book GraphQL Core Regression Summary ($env:env)",
+            "",
+            "| Metric | Value |",
+            "| --- | ---: |",
+            "| TRX | ``$($trxFile.Name)`` |",
+            "| Total | **$total** |",
+            "| Passed | **$passed** |",
+            "| Failed | **$failed** |",
+            "| Skipped | **$skipped** |",
+            "| Pass Rate | **$passRate%** |",
+            "| Duration | **$durationText** |",
+            "",
+            "### Failure Summary",
+            $codeFence,
+            $failureSummaryText,
+            $codeFence,
+            "",
+            "### PNR Details (Scenario | PNR | LastName)",
+            $codeFence,
+            $pnrDetailsText,
+            $codeFence
+          )
+
+          "total=$total" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "passed=$passed" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "failed=$failed" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "skipped=$skipped" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "pass_rate=$passRate" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "duration=$durationText" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "failure_summary<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $failureSummaryText | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "pnr_details<<EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $pnrDetailsText | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "EOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+          $summaryLines -join "`n" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+
+          try {
+            $analysisParameters = @{
+              ResultsDirectory = "TestResults"
+              SuiteName = "Book GraphQL Core Regression"
+              EnvironmentName = $env:env
+            }
+            if ($failed -gt 0 -and $env:ENABLE_FAILURE_TRACE_MANIFEST -eq "true") {
+              $analysisParameters.TraceManifestPath = "TestResults/trace-manifest-book-$env:env.json"
+              $analysisParameters.WorkflowRunUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
+            $analysis = & "scripts/analyse-test-run-results.ps1" @analysisParameters
+            if (-not [string]::IsNullOrWhiteSpace($analysis)) {
+              "`n$analysis" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+            }
+          }
+          catch {
+            "### Post-Test Failure Analysis`n`nUnable to generate failure analysis: $($_.Exception.Message)" | Out-File -FilePath $summaryPath -Encoding utf8 -Append
+          }
+
+      - name: Notify Slack summary
+        if: always() && github.ref == 'refs/heads/main' && env.HAS_SLACK_WEBHOOK == 'true'
+        shell: powershell
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          JOB_STATUS: ${{ job.status }}
+          TOTAL: ${{ steps.publish_summary.outputs.total }}
+          PASSED: ${{ steps.publish_summary.outputs.passed }}
+          FAILED: ${{ steps.publish_summary.outputs.failed }}
+          SKIPPED: ${{ steps.publish_summary.outputs.skipped }}
+          PASS_RATE: ${{ steps.publish_summary.outputs.pass_rate }}
+          DURATION: ${{ steps.publish_summary.outputs.duration }}
+          FAILURE_SUMMARY: ${{ steps.publish_summary.outputs.failure_summary }}
+          PNR_DETAILS: ${{ steps.publish_summary.outputs.pnr_details }}
+          TARGET_ENV: ${{ matrix.target_env }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          switch ($env:JOB_STATUS) {
+            "success" { $statusEmoji = ":white_check_mark:"; $statusText = "Passed" }
+            "failure" { $statusEmoji = ":x:"; $statusText = "Failed" }
+            "cancelled" { $statusEmoji = ":warning:"; $statusText = "Cancelled" }
+            default { $statusEmoji = ":warning:"; $statusText = "Unknown" }
+          }
+
+          $codeFence = '```'
+
+          $payload = @{
+            text = "$statusEmoji Book GraphQL Core Regression ($statusText)"
+            blocks = @(
+              @{
+                type = "section"
+                text = @{ type = "mrkdwn"; text = "$statusEmoji *Book GraphQL Core Regression* (Env: $($env:TARGET_ENV))" }
+              },
+              @{
+                type = "section"
+                fields = @(
+                  @{ type = "mrkdwn"; text = "*Total:*`n$($env:TOTAL)" },
+                  @{ type = "mrkdwn"; text = "*Passed:*`n$($env:PASSED)" },
+                  @{ type = "mrkdwn"; text = "*Failed:*`n$($env:FAILED)" },
+                  @{ type = "mrkdwn"; text = "*Skipped:*`n$($env:SKIPPED)" },
+                  @{ type = "mrkdwn"; text = "*Pass Rate:*`n$($env:PASS_RATE)%" },
+                  @{ type = "mrkdwn"; text = "*Duration:*`n$($env:DURATION)" }
+                )
+              },
+              @{
+                type = "section"
+                text = @{ type = "mrkdwn"; text = "*Failure Summary (Top):*`n$codeFence`n$($env:FAILURE_SUMMARY)`n$codeFence" }
+              },
+              @{
+                type = "section"
+                text = @{ type = "mrkdwn"; text = "*PNR Details (Scenario | PNR | LastName):*`n$codeFence`n$($env:PNR_DETAILS)`n$codeFence" }
+              },
+              @{
+                type = "actions"
+                elements = @(
+                  @{ type = "button"; text = @{ type = "plain_text"; text = $(if ($env:JOB_STATUS -eq "failure") { "View Failure Details" } else { "View Workflow Run" }) }; url = "$($env:RUN_URL)" }
+                )
+              }
+            )
+          } | ConvertTo-Json -Depth 8
+
+          try {
+            Invoke-RestMethod -Method Post -Uri $env:SLACK_WEBHOOK_URL -ContentType "application/json" -Body $payload
+          }
+          catch {
+            Write-Host "::warning::Slack notification failed: $($_.Exception.Message)"
+          }
+
+      - name: Upload Book results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Book-graphql-core-regression-results-${{ matrix.target_env }}
+          path: |
+            TestResults/*.trx
+            TestResults/trace-manifest-*.json
+            VAA.EAPI.Automation/TestResults/playwright/**/network-diagnostics.json
+            VAA.EAPI.Automation/TestResults/playwright/**/*.png
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Clean generated runner files
+        if: always()
+        continue-on-error: true
+        shell: powershell
+        run: |
+          $generatedPaths = @(
+            (Join-Path $env:GITHUB_WORKSPACE "TestResults"),
+            (Join-Path $env:GITHUB_WORKSPACE "TestInput")
+          )
+
+          foreach ($path in $generatedPaths) {
+            if (Test-Path -LiteralPath $path) {
+              Remove-Item -LiteralPath $path -Recurse -Force -ErrorAction SilentlyContinue
+            }
+          }
+
+          $automationRoot = Join-Path $env:GITHUB_WORKSPACE "VAA.EAPI.Automation"
+          if (Test-Path -LiteralPath $automationRoot) {
+            Get-ChildItem -LiteralPath $automationRoot -Directory -Recurse -Force -ErrorAction SilentlyContinue |
+              Where-Object { $_.Name -in @("bin", "obj", "TestResults") } |
+              Sort-Object { $_.FullName.Length } -Descending |
+              ForEach-Object {
+                Remove-Item -LiteralPath $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
+              }
+          }
+
+      - name: Capture browser processes after cleanup
+        if: always()
+        continue-on-error: true
+        shell: powershell
+        run: |
+          & "scripts/capture-browser-process-diagnostics.ps1" `
+            -SnapshotName "after-cleanup" `
+            -OutputDirectory "BrowserProcessDiagnostics" `
+            -BaselinePath "BrowserProcessDiagnostics/before-tests.csv"
+
+      - name: Upload browser process diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Book-browser-process-diagnostics-${{ matrix.target_env }}
+          path: BrowserProcessDiagnostics/*.csv
+          if-no-files-found: warn
+          retention-days: 7

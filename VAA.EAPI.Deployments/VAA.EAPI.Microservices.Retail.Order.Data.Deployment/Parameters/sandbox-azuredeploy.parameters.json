@@ -1,0 +1,181 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sandbox",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "SANDBOX"
+    },
+    "AppServicePlanName": {
+      "value": "avaieunasp001"
+    },
+    "appName": {
+      "value": "Avaieunafnorderdatamicroserv"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-i-eun-ase-001"
+    },
+    "aseName": {
+      "value": "avaieunase001"
+    },
+    "keyVaultName": {
+      "value": "avaieunkv001"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "EAPINDCORDERDATA",
+        "DOMAIN": "NDC ORDERDATA DEVELOPER",
+        "ENVIRONMENT": "DEV",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "appinsightname": {
+      "value": "avaieunaiorder"
+    },
+    "storageaccountName": {
+      "value": "avaieunstndcorderdatams"
+    },
+    "appinsightkey": {
+      "value": "a4d42cb2-e656-48c8-ad23-3a55877394d3"
+    },
+    "appinsight_string": {
+      "value": "InstrumentationKey=a4d42cb2-e656-48c8-ad23-3a55877394d3;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=f802c536-e6d7-449e-bb9c-b22f8d49872c"
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+
+
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNORDERDATAMICROSERV-Config-ServiceBusConnectionString/)"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "value": "Order"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "value": "OrderDataStore"
+    },
+    "Appsetting:OrderCreateEventHandlerTopicName": {
+      "value": "order"
+    },
+    "Appsetting:OrderCreateSubscriptionName": {
+      "value": "OrderCreateSubscriber"
+    },
+    "Appsetting:OrderDBEndpoint": {
+      "value": "https://avadeuncmdbsingleorderview.documents.azure.com:443/"
+    },
+    "Appsetting:OrderCollection": {
+      "value": "OrderCollection"
+    },
+    "NotificationServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Notification-Config-ServiceBusConnectionString/)"
+    },
+    "NotificationOrderReadBatchSize": {
+      "value": "50"
+    },
+    "Appsetting:DatabaseName": {
+      "value": "SingleOrderViewDB_Dev"
+    },
+    "Appsetting:CosmosSqlDBConnectionMode": {
+      "value": "Gateway"
+    },
+    "Appsetting:OrderCreateResponseEventType": {
+      "value": "VAA.Order.Data.OrderNotificationCreateStatus"
+    },
+    "Appsetting:PaymentUpdateSubscriberTopicName": {
+      "value": "Payment"
+    },
+    "Appsetting:PaymentUpdateSubscriptionName": {
+      "value": "PaymentUpdateSubscriber"
+    },
+    "Appsetting:ServiceBusTopicNameTicket": {
+      "value": "ticket"
+    },
+    "Appsetting:RefundUpdateSubscriberTopicName": {
+      "value": "Payment"
+    },
+    "Appsetting:RefundUpdateSubscriptionName": {
+      "value": "VoidOrderUpdateSubscriber"
+    },
+    "Appsetting:RefundReason": {
+      "value": "Risk Free Cancellation"
+    },
+
+    "Appsetting:OrderServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVAIEUNAFNORDERDATAMICROSERV-Config-OrderStoreServiceBusConnectionString/)"
+    },
+    "ServiceBusTopicNameOrder": {
+      "value": "orderrequesteventmessage"
+    },
+    "NDCOrderCollection": {
+      "value": "NDCOrderCollection"
+    },
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/AVADEUNAFNORDERDATAMICROSERV-ClientID/)"
+    },
+
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "OrderSCVDBEndpoint": {
+      "value": ""
+    },
+    "OrderDB": {
+      "value": "OrderDB"
+    },
+    "OrdersCollection": {
+      "value": "OrdersCollection"
+    },
+    "EnableMockView": {
+      "value": "false"
+    },
+    "CustomerOrderAssociation": {
+      "value": "CustomerOrderAssociation"
+    }
+
+  }
+}

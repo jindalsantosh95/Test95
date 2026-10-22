@@ -1,0 +1,140 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Reference*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Retail.Reference*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Reference.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Reference*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.Retail.Reference*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.Retail.Reference.bruno
+
+variables: 
+  - group: Common_Variables
+  - group: performance_variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: AzureWebJobsStorage
+  - name: agentPool
+    value: 'Azure Pipelines'    
+  - name: agentPool1
+    value: 'LoyaltySystems'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: subRootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: applicationName
+    value: 'Retail.Reference'
+  - name: microserviceName
+    value: 'reference' 
+  - name: productId
+    value: 'EAPIReference'  
+  - name: apimurlname
+    value: 'Reference'         
+  - name: functionAppName_DEV
+    value: 'avadeunafnreferencemicro' 
+  - name: functionAppName_SIT
+    value: 'avateunafnreferencemicro'
+  - name: functionAppName_UAT
+    value: 'avaseunafnreferencemicro' 
+  - name: functionAppName_SANDBOX
+    value: 'avaieunafnreferencemicro'
+  - name: functionAppName_PRD
+    value: 'avapeunafnreferencemicro'    
+  - name: testRepoPath_SIT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'   
+  - name: testRepoPath_UAT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'                
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_apim.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_slot_apim_withproduct_withsb_reference.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_SANDBOX: $(agentPool1)
+      agentSpecification: $(agentSpecification) 
+      buildConfiguration: $(buildConfiguration)  
+      location: $(location)                     
+      applicationName: $(applicationName)  
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      productId: $(productId)
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      subscriptionId_Prod: $(subscriptionId_Prod)          
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_SANDBOX: $(functionAppName_SANDBOX)
+      functionAppName_PRD: $(functionAppName_PRD)  
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)
+      VARIABLE_GROUP_NAME_NBF_DEV: "TESTING_NBF_DEV"
+      VARIABLE_GROUP_NAME_NBF_SIT: "TESTING_NBF_SIT"
+      VARIABLE_GROUP_NAME_NBF_UAT: "TESTING_NBF_UAT"
+      VARIABLE_GROUP_NAME_MYA_DEV: "TESTING_MYACCOUNT_VARIABLES_DEV"
+      VARIABLE_GROUP_NAME_MYA_SIT: "TESTING_MYACCOUNT_VARIABLES_SIT"
+      VARIABLE_GROUP_NAME_MYA_UAT: "TESTING_MYACCOUNT_VARIABLES_UAT"
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)                
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      sanityfile: functional_testing_reference.yaml
+      sanityfilewithmya: functional_testing_reference_with_mya.yaml
+      #Performance Variables
+      functionAppName_PRFM: $(Ref_functionAppName_PRFM)
+      appInsightsName_PRFM: $(Ref_applicationInsigts_PRFM)
+      storageAccName_PRFM: $(Ref_storageacc_PRFM)
+      keyvault_PRFM: $(Keyvault_old_PRFM)
+      resourceGroupName_PRFM: $(Digital_Old_Rg)
+      AppServicePlanName_PRFM: $(AppServicePlanName)
+                                            

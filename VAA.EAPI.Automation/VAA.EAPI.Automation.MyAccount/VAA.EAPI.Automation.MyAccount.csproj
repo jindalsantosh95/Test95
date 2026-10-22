@@ -1,0 +1,218 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Azure.Cosmos.Table" />
+		<PackageReference Include="Microsoft.Data.SqlClient" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="xunit" />
+		<PackageReference Include="xunit.runner.visualstudio">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\VAA.EAPI.Automation.Core.Delta\VAA.EAPI.Automation.Core.Delta.csproj" />
+	  <ProjectReference Include="..\VAA.EAPI.Automation.Core.UI\VAA.EAPI.Automation.Core.UI.csproj" />
+	  <ProjectReference Include="..\VAA.EAPI.Automation.Core\VAA.EAPI.Automation.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="VAA.EAPI.Infrastructure">
+			<HintPath>..\Assemblies\VAA.EAPI.Infrastructure.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="local.settings.local.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>		
+		<None Update="Requests\Body\AddressLookUp\AddressLookUp.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\AddressLookUp\AdressLookUpWesalService.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Enrolment\Enrolment.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Enrolment\OtpGeneration.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Enrolment\ValidateOtp.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Enrolment\VRedProfile.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountCreateYoungFlyerAccount.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountEntraOtpValidation.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountEntraPasswordSubmission.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountMemberSignIn.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountRefreshToken.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\ClaimVSPoints.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\ClaimPartnerFlightPoints.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\AccountEnableWifiForDevice.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AmexRegisterCampaign.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountEntraEnrolMember.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountEntraOTPGenerate.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountPasswordResetStart.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\InflightEnrolCustomer.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountInviteMember.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountInviteMemberAction.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\UpdatePreference.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountUpdateAddressDetails.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\AccountUpdateEmailAddress.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Mutation\UpdateMemberPhoneNumber.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\AccountMemberDetails.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\AccountManagedYoungFlyerAccounts.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\AccountPointDotComDetails.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\AccountAddressDetails.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\AccountActivityDetails.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\AccountBannerDetails.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\MemberVoucherDetails.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\AccountManageAccount.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\AccountTenureDetails.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\AccountValidatePassword.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\RetrieveHouseHoldAccount.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\SetDeviceInflightState.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\AccountFlightDetails.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\EmailOtpGeneration.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Enrolment.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Enrolment_Basic_GraphQL.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\Query\ValidatePcmEligibility.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\GraphQL\ValidateEmailOtp.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\IdentityFacadeLayer\ResetPassword.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsCustomerAPI\CreateMemberTier.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsCustomerAPI\UpdateMemberTier.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\CreateFlightAccrual.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\ProfileUpdate.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\AwardVoucher.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\LoopsFrontendAPI\StatusUpdate.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Microservices\Automatching.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Microservices\SkyTeamClaimDetails.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Microservices\BookingDetails.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Microservices\Enrolment.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Microservices\LoyalityUpgrade.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Vred\CreateTransaction.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\Vred\VAEnrolment.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Requests\Body\SOA\LoyaltyProfileSyncAdd.xml">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Requests\Body\GraphQL\Mutation\" />
+	</ItemGroup>
+</Project>

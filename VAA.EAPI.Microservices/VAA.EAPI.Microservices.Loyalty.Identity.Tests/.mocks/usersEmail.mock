@@ -1,0 +1,33 @@
+﻿###Request
+GET https://tempuri.org/v1.0/usersEmail?$filter=identities/any(c:c/issuerAssignedIdeq'deventratest@test.com'andc/issuereq'entratenant.onmicrosoft.com') HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users",
+    "value": [
+        {
+            "id": "12345678-1234-1234-1234-123456789012",
+            "businessPhones": [],
+            "displayName": "Test User",
+            "givenName": "Test",
+            "mail": "deventratest@test.com",
+            "surname": "User",
+            "userPrincipalName": "11735621",
+            "identities": [{
+                "signInType": "emailAddress",
+                "issuer": "entratenant.onmicrosoft.com",
+                "issuerAssignedId": "deventratest@test.com"
+            }],
+            "accountEnabled": true,
+            "createdDateTime": "2024-01-15T10:30:00Z",
+            "lastSignInDateTime": "2025-06-10T14:22:00Z"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Get Customer Search Document
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{customer_base_url}}/customerSearch/{{customer_member_number}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

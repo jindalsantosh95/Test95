@@ -1,0 +1,12 @@
+mutation SaveAppointmentBooking($bookingDetails: AppointmentBookingRequestInput) {
+  SaveAppointmentBooking(bookingDetails: $bookingDetails) {
+    appointmentReferenceId
+    date
+    store
+    slotDetails {
+      startTime
+      endTime
+      isAvailable
+    }
+  }
+}

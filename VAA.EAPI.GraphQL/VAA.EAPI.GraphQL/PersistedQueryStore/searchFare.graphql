@@ -1,0 +1,127 @@
+query searchFare {
+  searchFare {
+      slices {
+        current
+        total
+      }
+      criteria {
+        origin {
+          code
+          cityName
+          countryName
+        }
+        destination {
+          code
+          cityName
+          countryName
+        }
+        departing
+      }
+      slice {
+        fareFamilyTypes
+        flightsAndFares {
+          flight {
+            segments {
+              metal {
+                family
+                name
+              }
+              airline {
+                code
+                name
+              }
+              flightNumber
+              operatingFlightNumber
+              operatingAirline {
+                code
+                name
+              }
+              duration
+              departure
+              arrival
+              stopCount
+              connection
+              legs {
+                duration
+                departure
+                arrival
+                stopOver
+              }
+            }
+            duration
+            arrival
+            departure
+          }
+          fares {
+            availability
+            content {
+              cabinName
+              features {
+                type
+                description
+              }
+            }
+            price {
+              tax
+              priceDifference
+              priceDifferenceSign
+              amountIncludingTax
+              amount
+              currency
+            }
+            fareSegments {
+              cabinName
+              bookingClass
+            }
+            available
+            fareFamilyType
+            links {
+              rel
+              href
+            }
+            id
+            fareId
+          }
+        }
+        id
+        fareId
+      }
+      flightSortLinks {
+        selectedSort
+        availableSortFields
+        links {
+          rel
+          href
+          name
+        }
+      }
+      flightSearchFilters {
+        filters {
+          name
+          enabled
+          count
+          values {
+            values {
+              airline
+              connections
+              lower
+              upper
+            }
+            selected
+            enabled
+            count
+            minPrice
+            displayName
+            links {
+               rel
+               href
+            }
+
+          }
+          displayName
+        }
+        total
+        count
+      }
+    }
+  }

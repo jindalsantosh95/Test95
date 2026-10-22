@@ -1,0 +1,13 @@
+using System.Collections.Generic;
+
+
+namespace VAA.EAPI.NDC.Offer.Domain.Model.Order
+{
+    public class ProductFeature
+    {
+        public IEnumerable<Description> FeatureDescriptions { get; set; }
+        public IEnumerable<Description> FeatureValues { get; set; }
+
+
+    }
+}

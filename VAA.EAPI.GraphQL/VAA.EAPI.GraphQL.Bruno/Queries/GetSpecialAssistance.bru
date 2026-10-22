@@ -1,0 +1,31 @@
+meta {
+  name: GetSpecialAssistance
+  type: graphql
+  seq: 27
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query GetSpecialAssistance($tripReservationID: String) {
+    GetSpecialAssistance(tripReservationID: $tripReservationID) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "tripReservationID": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

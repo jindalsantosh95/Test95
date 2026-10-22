@@ -1,0 +1,307 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "AppInsightsName": {
+      "value": "AVAPEUNAICAMPAIGNMANAGEMENT"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPI-LOYALTY"
+    },
+    "AppSetting:APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "value": "InstrumentationKey=99b6c98f-732b-4178-a287-51a7d6645fe1;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    },
+    "Appsetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "Appsetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-StorageAccount/)"
+    },
+    "Appsettings:AppInsightsKey": {
+      "value": "99b6c98f-732b-4178-a287-51a7d6645fe1"
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVAPEUNAFNCAMPAIGNMANAGEMENT"
+    },
+    "Appsettings:WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-StorageAccount/)"
+    },
+    "Appsettings:WEBSITE_CONTENTSHARE": {
+      "value": "avapeunafncampaignmgmt-ds"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-ServiceBusConnectionString/)"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "value": "campaignmanagementeventmessages"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "Appsettings:OpenApi__DocTitle": {
+      "value": "Campaign Management Microservice"
+    },
+    "Appsettings:OpenApi__Description": {
+      "value": "This API provides ability to Assign Register and Update Campaign"
+    },
+    "Appsettings:MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-MicroserviceDBKey/)"
+    },
+    "AppsettingsSCV:CommonRefDBConnString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-CommonRefDBConnString/)"
+    },
+    "Appsettings:SCV:ReportingDBConnString":{
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAICAMPAIGNMANAGEMENT-SCV-ReportingDBConnString/)"
+    },
+    "Appsettings:MicroServiceEventStoreTableName": {
+      "value": "CampaignEventStore"
+    },
+    "Appsettings:DatabaseID": {
+      "value": "https://database.windows.net/.default"
+    },
+    "Appsettings:AzureADEndpoint": {
+      "value": "https://login.microsoftonline.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AppsettingsAzureAd:Instance": {
+      "value": "https://login.microsoftonline.com"
+    },
+    "Appsettings:CampaignUpdateResponseUrl": {
+      "value": "https://resources.virginatlantic.com/campaignmanagement/campaignupdate/response/{correlationid}"
+    },
+    "Appsettings:ResponsePollingCount": {
+      "value": "50"
+    },
+    "Appsettings:ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "Appsettings:OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/dev/campaignmanagementmicroservice/,https://testresources.virginatlantic.com/sit/campaignmanagementmicroservice/,https://testresources.virginatlantic.com/campaignmanagementmicroservice/,https://resources.virginatlantic.com/campaignmanagementmicroservice/"
+    },
+    "Appsettings:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsettings:OpenApi__Version": {
+      "value": "v4"
+    },
+    "Appsettings:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsettings:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/aa3e56cb-c8db-4017-bac3-2b8c628d6345/.default"
+    },
+    "Appsettings:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsettings:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "Appsettings:MicroServiceResponseTableName": {
+      "value": "CampaignResponse"
+    },
+    "Appsettings:EmailTriggerTopicName": {
+      "value": "enrolcustomer"
+    },
+    "Appsettings:CustomerTranscationTopicName": {
+      "value": "customertransactioneventmessages"
+    },
+    "Appsetting:CustomerServiceBusTopicName": {
+      "value": "customertransactioneventmessages"
+    },
+    "AppsettingsAzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-AzureAdClientId/)"
+    },
+    "AppsettingsAzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-AzureAdTenantId/)"
+    },
+    "AppsettingsAzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "Appsettings:CampaignManagement:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-CampaignMgmtAppId/)"
+    },
+    "Appsettings:CampaignManagement:ClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-CampaignMgmtClientSecret/)"
+    },
+    "Appsettings:CustomerTxnMS:ResourceId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-CampaignMgmtResourceId/)"
+    },
+    "Appsettings:CampaignManagement:OcpSubID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-CampaignManagementOcpSubID/)"
+    },
+    "Appsettings:CustomerTxnMSDetailsEndpoint": {
+      "value": "https://resources.virginatlantic.com/customertransactions/"
+    },
+    //Create Campaign
+    "Appsettings:CampaignCreateResponseUrl": {
+      "value": "https://resources.virginatlantic.com/campaignmanagement/campaigncreate/response/{correlationid}"
+    },
+    //Campagin Unassign
+    "Appsettings:CustomerTransactionMicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-CustomerTransactionMicroServiceDBKey/)"
+    },
+    "Appsettings:CustomerTransactionMicroServiceEventStoreTableName": {
+      "value": "CustomerTransactionEvents"
+    },
+    "Appsettings:CustomerTransactionMicroServiceResponseTableName": {
+      "value": "CustomerTransactionEventResponses"
+    },
+    "Appsettings:CampaignUnassignResponseUrl": {
+      "value": "https://resources.virginatlantic.com/campaignmanagement/unassignCampaign/response/{correlationid}"
+    },
+    "Appsettings:CampaignManagement:CampaignsListRetrievalUrl": {
+      "value": "https://resources.virginatlantic.com/campaignmanagement/CampaignsDownload"
+    },
+
+    // Campaign Linking
+    "Appsettings:CampaignPromotionLinkResponseUrl": {
+      "value": "https://resources.virginatlantic.com/campaignmanagement/linkCampaignPromotion/response/{correlationid}"
+    },
+    "Appsettings:ContainerNameForCampaigns":{
+      "value": "campaigns"
+    },
+
+    //Blob Connection
+    "Appsettings:BlobConnStringForDownloads": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNLOYALTYMBRMGMT-Config-StorageAccount/)"
+    },
+
+    "Appsettings:ContainerNameForPromotions": {
+      "value": "promotions"
+    },
+
+    //Loyalty ServiceBus Topic Name
+    "Appsettings:LoyaltyMemberServiceBusTopicName": {
+      "value": "loyaltymembermanagementeventmessages"
+    },
+
+    // Promotion update
+    "Appsettings:PromotionUpdateResponseUrl": {
+      "value": "https://resources.virginatlantic.com/campaignmanagement/promotionupdate/response/{correlationid}"
+    },
+
+    // Promotion Create Response Url
+    "Appsettings:PromotionCreateResponseUrl": {
+      "value": "https://resources.virginatlantic.com/campaignmanagement/promotioncreate/response/{correlationid}"
+    },
+
+    // Promotion Delink
+    "Appsettings:CampaignPromotionDelinkResponseUrl": {
+      "value": "https://resources.virginatlantic.com/campaignmanagement/DelinkCampaignPromotion/response/{correlationid}"
+    },
+    //Slot Settings
+    "storageAccountName": {
+      "value": "avapeunstcampaignmgmt"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+
+    //Customer Settings
+    "MaxConcurrentCalls": {
+      "value": "10"
+    },
+    "Customer:ResourceId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-CustomerClientId/)"
+    },
+    "Customer:UrlGetbyCustID": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/customer/{customerid}"
+    },
+    "Customer:UrlGetByMemNum": {
+      "value": "https://resources.virginatlantic.com/customermicroservice/customer/loyalty/{memberid}"
+    },
+    "CommonCachingSlidingExpiration": {
+      "value": "0.12:00:00"
+    },
+    "CommonCachingAbsoluteExpiration": {
+      "value": "0.12:00:00"
+    },
+    "ContainerNameForCampaignAssociatedMembers": {
+      "value": "associatedmembersforcampaign"
+    },
+
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/AVAPEUNAFNCAMPAIGNMANAGEMENT-Config-AzureAdClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+
+    "tags": {
+      "value": {
+        "InitialProjectCode": "457",
+        "InitialProjectName": "Campaign Management",
+        "InitialBudgetCode": "9094",
+        "ActiveStatus": "PROD",
+        "Purpose": "Support functions for the Customer API AFN",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

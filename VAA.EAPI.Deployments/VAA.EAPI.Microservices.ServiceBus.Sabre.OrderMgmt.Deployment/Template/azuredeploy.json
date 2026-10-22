@@ -1,0 +1,89 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "String"
+    },
+    "servicebusName": {
+      "type": "String"
+    },
+    "topics": {
+      "type": "Array"
+    },
+    "topicsubscription": {
+      "type": "Array"
+    },
+    "tags": {
+      "type": "Object"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.ServiceBus/namespaces",
+      "apiVersion": "2022-01-01-preview",
+      "name": "[parameters('servicebusName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard",
+        "tier": "Standard"
+      },
+      "properties": {
+        "disableLocalAuth": false,
+        "zoneRedundant": false
+      },
+      "condition": "[not(empty(parameters('servicebusName')))]"
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/topics",
+      "apiVersion": "2022-01-01-preview",
+      "name": "[concat(parameters('servicebusName'),'/',parameters('topics')[copyIndex()])]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('servicebusName'))]"
+      ],
+      "properties": {
+        "maxMessageSizeInKilobytes": 256,
+        "defaultMessageTimeToLive": "P14D",
+        "maxSizeInMegabytes": 1024,
+        "requiresDuplicateDetection": false,
+        "duplicateDetectionHistoryTimeWindow": "PT10M",
+        "enableBatchedOperations": true,
+        "status": "Active",
+        "supportOrdering": true,
+        "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+        "enablePartitioning": false,
+        "enableExpress": false
+      },
+      "copy": {
+        "name": "servicebus-topic-loop",
+        "count": "[length(parameters('topics'))]"
+      },
+      "condition": "[not(empty(parameters('topics')))]"
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+      "apiVersion": "2022-01-01-preview",
+      "name": "[concat(parameters('servicebusName'), '/', parameters('topicsubscription')[copyindex()].topic, '/', parameters('topicsubscription')[copyIndex()].name)]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces/topics',parameters('servicebusName'),parameters('topicsubscription')[copyindex()].topic)]"
+      ],
+      "properties": {
+        "lockDuration": "PT30S",
+        "requiresSession": "false",
+        "defaultMessageTimeToLive": "P14D",
+        "deadLetteringOnMessageExpiration": "false",
+        "maxDeliveryCount": "10",
+        "enableBatchedOperations": "false",
+        "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S"
+      },
+      "copy": {
+        "name": "subscriptionLoop",
+        "count": "[length(parameters('topicsubscription'))]"
+      },
+      "condition": "[not(empty(parameters('topicsubscription')))]"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+parameters:
+ - name: buildConfiguration
+   type: string
+   default: 'debug'
+ - name: applicationName
+   type: string
+   default: 'debug'
+ - name: RootPath
+   type: string
+
+steps:
+ - task: UseDotNet@2
+   inputs:
+        packageType: 'sdk'
+        version: '10.0.x'
+
+ - task: DotNetCoreCLI@2
+   displayName: 'Build Project'
+   inputs:
+      command: 'build'
+      projects: '**/${{parameters.applicationName}}.csproj'
+      arguments: '--configuration ${{parameters.buildConfiguration}}'
+ - task: DotNetCoreCLI@2
+   displayName: Test
+   inputs:
+       command: test
+       projects: '**/${{parameters.applicationName}}.Tests.csproj'
+       arguments: '--configuration ${{parameters.buildConfiguration}}'
+ - task: DotNetCoreCLI@2
+   displayName: 'Publish Project'
+   inputs:
+     command: 'publish'
+     publishWebProjects: false
+     projects: '**/${{parameters.applicationName}}.csproj'
+     arguments: '--configuration ${{parameters.buildConfiguration}} --output $(Build.ArtifactStagingDirectory)'
+     zipAfterPublish: true
+ - task: CopyFiles@2
+   displayName: 'Copy ARM Files'
+   inputs:
+    SourceFolder: '${{parameters.RootPath}}/${{parameters.applicationName}}.Deployment'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+        
+ - task: PublishBuildArtifacts@1
+   inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop' 
+    publishLocation: 'Container'   

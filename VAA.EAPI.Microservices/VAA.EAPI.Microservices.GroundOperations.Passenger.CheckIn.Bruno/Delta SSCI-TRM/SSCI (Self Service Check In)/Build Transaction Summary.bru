@@ -1,0 +1,35 @@
+meta {
+  name: Build Transaction Summary
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{delta_ssci_checkin}}/buildTransactionSummary/{{travelparty_id}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  AppChannelName: {{ssci_channel_name}}
+  AppID: {{ssci_appid}}
+  ClientID: {{ping_client_id}}
+  ~Authorization: Bearer {{DL_Token}}
+}
+
+body:json {
+  {
+    "recordLocator": "{{pnr}}",
+    "originAirportCode": "{{origin}}",
+    "transactionError": "no error/ api test"
+  }
+}
+
+vars:pre-request {
+  DL_Token: 
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

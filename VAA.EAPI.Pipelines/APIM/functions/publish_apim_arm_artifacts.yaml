@@ -1,0 +1,28 @@
+parameters:   
+  agentPool: ''
+  agentSpecification: ''
+
+stages: 
+  - stage: 'publishArtifacts'
+    jobs: 
+      - job: 'publishArtifacts'
+        displayName: 'publishArtifacts'  
+        pool:
+          name: ${{parameters.agentPool}} 
+          vmImage: ${{parameters.agentSpecification}}         
+          
+        steps: 
+          # Task to copy the ARM files to artifactstagingdirectory
+          - task: CopyFiles@2
+            displayName: 'Copy ARM Files'
+            inputs:
+              SourceFolder: 'VAA.EAPI.Pipelines/APIM'
+              TargetFolder: '$(build.ArtifactStagingDirectory)'
+
+          # task to publish ARM artifacts to Azure Pipelines 
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifacts' 
+            inputs:
+              PathtoPublish: '$(build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop' 
+              publishLocation: 'Container'

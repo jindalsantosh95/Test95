@@ -1,0 +1,44 @@
+meta {
+  name: Refresh Token
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{identity_base_url}}/RefreshToken
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "refreshToken": "{{refresh_token}}",
+    "scopes": [
+      "{{identity_scope}}",
+      "offline_access"
+    ]
+  }
+}
+
+script:post-response {
+  var body = res.getBody();
+  
+  if (body && body.accessToken) {
+    bru.setVar("access_token", body.accessToken);
+  }
+  if (body && body.refreshToken) {
+    bru.setVar("refresh_token", body.refreshToken);
+  }
+  if (body && body.idToken) {
+    bru.setVar("id_token", body.idToken);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

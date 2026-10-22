@@ -1,0 +1,95 @@
+parameters: 
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  testRepoPath: ''
+  rootPath: ''
+  sanityrootpath: 'VAA.EAPI.Automation'
+  RestoreBuildProjects: '**/*.csproj'
+  variableGroupName: ''
+  environment: ''
+  SLACK_API_TOKEN: ''
+
+jobs: 
+  - job: 'SanityTesting'
+    displayName: 'Schema Validation Sanity Testing'
+    pool:
+      name: ${{parameters.agentPool}}
+      vmImage: ${{parameters.agentSpecification}}
+    variables:
+      - group: ${{parameters.variableGroupName}}
+
+    steps:
+      # Task to checkout the repository
+      - checkout: 'self'
+        displayName: 'Checkout Testing Repository'
+
+      # Task to install DotNet Core SDK
+      - task: UseDotNet@2
+        displayName: 'Install DotNet Core SDK' 
+        inputs:
+          packageType: 'sdk'
+          version: '10.0.x'
+    
+      # Task to build the project
+      - task: DotNetCoreCLI@2
+        displayName: 'Build Project'
+        inputs:
+          command: build
+          projects: |
+            ${{parameters.sanityrootpath}}/VAA.EAPI.Automation.MobileApp/VAA.EAPI.Automation.MobileApp.csproj
+         # arguments: '--configuration $(BuildConfiguration) --no-restore'
+
+
+      # task to perform the sanity test 
+      - task: VSTest@2
+        displayName: 'Schema Validation Sanity Testing' 
+        inputs:
+          testAssemblyVer2: |
+            **\VAA.EAPI.Automation.MobileApp.dll
+            **\*Tests.dll
+            !**\obj\**
+          testFiltercriteria: 'Category=SchemaValidation'
+          testRunTitle: 'Schema Validation Sanity Test'
+          rerunFailedTests: true
+          rerunType: basedOnTestFailureCount
+          rerunMaxAttempts: 0
+        continueOnError: true
+
+      #Slack Notificaiton if the test case fails 
+      # - task: kasunkodagoda.slack-notification.slack-notification-task.SlackNotification@6
+      #   displayName: 'Slack: Notify if Tests Fail'
+      #   condition: always()
+      #   inputs:
+      #     #slackWebhookUri: '{{parameters.SLACK_WEBHOOK_URL}}'
+      #     slackApiToken: '$(SLACK_API_TOKEN)'
+      #     channel: '#df-api-core-team'
+      #     notificationType: 'ChatMessage'
+      #     #channel: 'C09FND6DATU'
+      #     slackMessage: "Hello from DevOps ✅"
+      #     slackTitle: 'Test Failure Notification'
+      #       # *Test Failures Detected in Pipeline*  
+      #       # Pipeline: `$(Build.DefinitionName)`  
+      #       # Build Number: `$(Build.BuildNumber)`  
+      #       # Branch: `$(Build.SourceBranchName)`  
+      #       # <$(Build.BuildUri)|View Build> 
+
+      - task: kasunkodagoda.slack-notification.slack-notification-task.SlackNotification@6
+        displayName: 'Slack: Notify if Tests Fail'
+        condition: always()
+        inputs:
+          slackApiToken: '$(SLACK_API_TOKEN)'
+          channel: '#df-api-core-team'
+          notificationType: 'ChatMessage'
+          Title: 'GraphQL Schema Change Detected in Paxops'
+          Message: "Test Failure Notification" 
+          Text : |
+            Pipeline: `$(Build.DefinitionName)`
+            Build Number: `$(Build.BuildNumber)` 
+            Branch: `$(Build.SourceBranchName)`
+            <https://dev.azure.com/virginatlantic/Enterprise%20API%20Management%20Team/_build/results?buildId=$(Build.BuildId)|View Build>
+             
+
+          
+
+          

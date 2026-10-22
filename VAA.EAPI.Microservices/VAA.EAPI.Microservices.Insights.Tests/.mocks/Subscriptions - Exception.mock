@@ -1,0 +1,14 @@
+###Request
+GET https://management.azure.com/subscriptions?api-version=2025-04-01 HTTP/1.1
+Authorization: Bearer ERROR_TOKEN
+
+###Response
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json;
+
+{
+  "error": {
+	"code": "Unauthorized",
+	"message": "Authentication failed. The 'Authorization' header is invalid."
+  }
+}

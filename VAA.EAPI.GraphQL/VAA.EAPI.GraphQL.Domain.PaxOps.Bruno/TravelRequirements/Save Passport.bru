@@ -1,0 +1,337 @@
+meta {
+  name: Save Passport
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SavePassportTravelRequirements{
+    SavePassportTravelRequirements(
+      request:{
+          travelRequirementsId: "{{travelRequirementsId}}",
+          passengerId: "{{pax1_Id}}",
+          isScanned: false
+          document: 
+              {
+              documentType: PASSPORT,
+              givenNames: "{{pax1_GivenNames}}",
+              surname: "{{pax1_Surname}}"
+              dateOfBirth: "{{pax1_DateOfBirth}}",
+              gender:{
+                  code : "{{pax1_Gender}}"
+              },
+              documentNumber: "{{pax1_DocumentNumber}}",
+              expirationDate: "{{pax1_DocumentExpiryDate}}",
+              issuingCountry:{
+                  code: "{{countryCode}}"
+              },
+              nationality:{
+                  code: "{{countryCode}}"
+              },
+              countryOfResidence:{
+                  code: "{{countryCode}}"
+              }
+          }
+      }
+    )
+      {
+      travelRequirementsId
+      applyEmergencyContactToAllPax
+      reference
+      {
+          pnrLocator,
+          createdDate
+      },
+      passengers{
+        passengerId
+        passengerFirstNin
+        passengerLastNin
+        passengerType {
+          code
+          name
+          category
+        }
+        givenNames
+        surname
+        associatedAdultFullName
+        associatedAdultPassengerId
+        isInfantPassenger
+        dateOfBirth
+        email
+        phone {
+          countryCode
+          number
+        }
+        loyaltyMembership {
+          programmeCode
+          number
+        }
+        documents {
+          documentType
+          givenNames
+          surname
+          dateOfBirth
+          birthDate
+          gender {
+            code
+          }
+          documentNumber
+          expirationDate
+          expiryDate
+          issuingCountry {
+            code
+          }
+          nationality {
+            code
+          }
+          countryOfResidence {
+            code
+          }
+        }
+        emergencyContact {
+          firstName
+          lastName
+          phoneCountryCode
+          phoneNumber
+        }
+        requirements
+        {
+          sliceId,
+          passportRequired,
+          passportProvided,
+          passportVerified,
+          baggageDeclared,
+          contactTracing,
+          contactTracingAvailableFromUtc,
+          contactTracingAvailableFromDescription,
+          checkedIn,
+          overall,
+          returnDateStatus,
+          isReturnDateDeclined,
+          returnDate,
+          checkinEligible,
+          secondaryDocumentStatus,
+          secondaryDocuments {
+            documentType
+            countryCode
+            countryCode3Letter
+            countryName
+            name
+            displayName
+            status
+            secondaryDocumentApplicationOptions {
+              secondaryDocumentId
+              applicationType
+              title
+              message
+              url
+              urlText
+            }
+          }
+          governmentForms {
+            status
+            id
+            linkId
+            title
+            url
+          }
+          passportErrors
+          {
+              code,
+              message,
+              title,
+              category,
+              displayCode
+          }
+        }
+        sliceRequirements
+        {
+          sliceId,
+          passportProvided,
+          passportVerified,
+          baggageDeclared,
+          contactTracing,
+          contactTracingAvailableFromUtc,
+          contactTracingAvailableFromDescription,
+          checkedIn,
+          overall,
+          unhappyPassport,
+          returnDateStatus,
+          isReturnDateDeclined,
+          returnDate,
+          checkinEligible,
+          secondaryDocumentStatus,
+          secondaryDocuments {
+            documentType
+            countryCode
+            countryCode3Letter
+            countryName
+            name
+            displayName
+            status
+            secondaryDocumentApplicationOptions {
+              secondaryDocumentId
+              applicationType
+              title
+              message
+              url
+              urlText
+            }
+          }
+          
+          governmentForms {
+            status
+            id
+            linkId
+            title
+            url
+            availableFromUtc
+            availableFromDescription
+            isAvailable
+          }
+          
+          passportErrors
+          {
+              code,
+              message,
+              title,
+              category,
+              displayCode
+          }
+          travelRequirementErrors
+          {
+              code,
+              message,
+              title,
+              category,
+              displayCode
+          }
+        }
+        emergencyContact
+        {
+          passengerId,
+          firstName,
+          lastName,
+          phoneCountryCode,
+          phoneNumber,
+          passengerRefused
+        }
+        contactTracing
+        {
+          passengerId,
+          streetAddress,
+          city,
+          state,
+          zip,
+          email,
+          inTransit,
+          noEmail,
+          noSecondaryPhoneNumber,
+          primaryPhoneNumber,primaryPhoneNumberCountryCode,
+          secondaryPhoneNumber,
+          secondaryPhoneNumberCountryCode
+        }
+      }
+      slices {
+          sliceId,
+          scheduledDepartureLocalDateTime,
+          scheduledDepartureUtcDateTime,
+          scheduledArrivalLocalDateTime,
+          scheduledArrivalUtcDateTime,
+          origin
+          {
+              terminalName
+              code
+              airportName
+              countryCode
+              countryName
+          },
+          destination
+          {
+              terminalName
+              code
+              airportName
+              countryCode
+              countryName
+              cityName
+          },
+          segments {
+            segmentId
+            ordinal
+            operatingCarrier
+            {
+              flightNum
+              carrierCode
+            }
+            marketingCarrier
+            {
+              flightNum
+              carrierCode
+            }
+            scheduledDepartureLocalDateTime
+            scheduledDepartureUtcDateTime
+            scheduledArrivalLocalDateTime
+            scheduledArrivalUtcDateTime
+            origin{
+              terminalName
+              code
+              airportName
+              countryCode
+              countryName  
+            }
+            destination{
+              terminalName
+              code
+              airportName
+              cityName
+              countryCode
+              countryName
+            }
+            legs {
+              legId
+            }
+          }
+      }
+     }
+  }
+}
+
+script:post-response {
+  var travelRequirements = res.body.data.SavePassportTravelRequirements;
+
+  const passenger = travelRequirements?.passengers?.find(
+    passenger => passenger.passengerId === bru.getVar("pax1_Id")
+  ) ?? travelRequirements?.passengers?.[0];
+  const sliceRequirements = passenger?.sliceRequirements?.find(
+    requirements => requirements.sliceId === bru.getVar("slice1_Id")
+  ) ?? passenger?.sliceRequirements?.[0];
+  const governmentForm = sliceRequirements?.governmentForms?.[0];
+  const secondaryDocument = sliceRequirements?.secondaryDocuments?.[0];
+  
+  if (governmentForm) {
+    bru.setVar("governmentFormId", governmentForm.id);
+    bru.setVar("governmentFormLinkId", governmentForm.linkId);
+    bru.setVar("governmentFormText", governmentForm.title);
+    bru.setVar("governmentFormHref", governmentForm.url);
+  }
+
+  if (secondaryDocument) {
+    const applicationOptions = secondaryDocument.secondaryDocumentApplicationOptions ?? [];
+    const governmentApplication = applicationOptions.find(x => x.applicationType === "Government");
+    const vendorApplication = applicationOptions.find(x => x.applicationType === "Vendor");
+    const primaryApplication = governmentApplication ?? vendorApplication;
+    bru.setVar("secondaryDocumentId", primaryApplication?.secondaryDocumentId ?? "");
+    bru.setVar("secondaryDocumentCountryCode", secondaryDocument.countryCode ?? "");
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

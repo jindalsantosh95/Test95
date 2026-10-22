@@ -1,0 +1,112 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''   
+  SubscriptionName: ''
+  OwnerName: ''
+  productId: '' 
+  firstName: ''
+  lastName: ''
+  email: ''
+  APIM_NonProd: ''
+  APIM_Prod: ''
+  APIMResourceGroupName_NonProd: ''  
+  APIMServiceConnection_NonProd: ''
+  APIMSubscriptionId_NonProd: ''
+  APIMResourceGroupName_Prod: ''    
+  APIMServiceConnection_Prod: ''
+  APIMSubscriptionId_Prod: ''
+  APIM_IP_DEV_SIT_UAT: '' 
+  APIM_IP_PRD: ''
+
+
+stages:                     
+
+  - stage: 'APIM_DEV'     
+    displayName: 'APIM - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))  
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/APIMSubscription/deployment_Subscription.yaml
+        parameters:
+          environment: 'DEV'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}    
+          SubscriptionName: ${{parameters.SubscriptionName}}
+          OwnerName: ${{parameters.OwnerName}}
+          productId: ${{parameters.productId}}  
+          firstName: ${{parameters.firstName}}
+          lastName: ${{parameters.lastName}}
+          email: ${{parameters.email}}  
+          APIMName: ${{parameters.APIM_NonProd}}  
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}              
+
+  
+  - stage: 'APIM_SIT'     
+    displayName: 'APIM - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/APIMSubscription/deployment_Subscription.yaml
+        parameters:
+          environment: 'SIT'   
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          SubscriptionName: ${{parameters.SubscriptionName}}  
+          OwnerName: ${{parameters.OwnerName}}
+          productId: ${{parameters.productId}}   
+          firstName: ${{parameters.firstName}}
+          lastName: ${{parameters.lastName}}
+          email: ${{parameters.email}}               
+          APIMName: ${{parameters.APIM_NonProd}}          
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}  
+          
+ 
+
+  - stage: 'APIM_UAT'
+    displayName: 'APIM - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/APIMSubscription/deployment_Subscription.yaml
+        parameters:
+          environment: 'UAT'                              
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          SubscriptionName: ${{parameters.SubscriptionName}}  
+          OwnerName: ${{parameters.OwnerName}}
+          productId: ${{parameters.productId}}
+          firstName: ${{parameters.firstName}}
+          lastName: ${{parameters.lastName}}
+          email: ${{parameters.email}}                  
+          APIMName: ${{parameters.APIM_NonProd}}           
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}} 
+          
+  
+
+  - stage: 'APIM_PROD'  
+    displayName: 'APIM - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/APIMSubscription/deployment_Subscription.yaml
+        parameters:
+          environment: 'PROD'                     
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          SubscriptionName: ${{parameters.SubscriptionName}} 
+          OwnerName: ${{parameters.OwnerName}} 
+          productId: ${{parameters.productId}} 
+          firstName: ${{parameters.firstName}}
+          lastName: ${{parameters.lastName}}
+          email: ${{parameters.email}}                          
+          APIMName: ${{parameters.APIM_Prod}}           
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_Prod}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_Prod}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_Prod}}          
+          APIM_IP: ${{parameters.APIM_IP_PRD}}  

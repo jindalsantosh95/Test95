@@ -1,0 +1,56 @@
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+
+@if (Models?.Any() == true)
+{
+    foreach (var model in Models)
+    {
+        <div class="card card-home card-home-pie-body g-col-12 g-col-md-3" style="width:80%">
+            <div class="card-header">
+                @model.RedisCacheName
+            </div>
+            <div class="card-body card-home-pie-body">
+                <PieAvgMax Scores="@model.RedisPie"></PieAvgMax>
+
+                @if (model.AvailableMemoryInMB != 0)
+                {
+                    <div class="ScoreText-width" style="display: grid; grid-template-rows: repeat(3, auto); gap: 10px; align-items: center; text-align: left; padding-left: 1rem;">
+
+                        <a>Available Memory: @model.AvailableMemoryInMB MB</a>
+                        <a>Used Memory: @model.UsedMemoryInMB MB</a>
+                        <a>Connected Clients: @model.NumberOfConnectedClients</a>
+                    </div>
+
+                }
+                else if (model.AvailableMemoryInMB == 0 && model.UsedMemoryPercentage > 0)
+                {
+                    <div class="ScoreText-width" style="display: grid; grid-template-rows: repeat(3, auto); gap: 10px; align-items: center; text-align: left; padding-left: 1rem;">
+                        <a style="padding: 0 0 0 1rem;">Available Memory: 0mb </a>
+                        <a style="padding: 0 0 0 1rem;">Used Memory : @model.UsedMemoryInMB mb</a>
+                        <a style="padding: 0 0 0 1rem;">Connected Clients: @model.NumberOfConnectedClients</a>
+                    </div>
+                }
+                else if (model.AvailableMemoryInMB == 0 && model.UsedMemoryPercentage == 0)
+                {
+                    <div class="ScoreText-width" style="display: grid; grid-template-rows: repeat(3, auto); gap: 10px; align-items: center; text-align: left; padding-left: 1rem;">
+                        <a style="padding: 0 0 0 1rem;">Not Currently Used </a>
+                        <a style="padding: 0 0 0 1rem;">Used Memory : @model.UsedMemoryInMB mb</a>
+                        <a style="padding: 0 0 0 1rem;">Connected Clients: @model.NumberOfConnectedClients</a>
+                    </div>
+                }
+                else
+                {
+                    <p>Please Check Azure Portal.</p>
+                }
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>No models available.</p>
+}
+
+@code {
+    [Parameter] public IEnumerable<RedisCacheMetricsModel> Models { get; set; }
+    [Parameter] public string TabName { get; set; }
+}

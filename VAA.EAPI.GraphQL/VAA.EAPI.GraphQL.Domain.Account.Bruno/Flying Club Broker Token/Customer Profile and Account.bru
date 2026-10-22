@@ -1,0 +1,52 @@
+meta {
+  name: Customer Profile and Account
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_secure}}
+  body: graphql
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{flying_club_broker_token}}
+}
+
+body:graphql {
+  query FlyingClubCustomerProfile {
+    loyaltyFlyingClubCustomerProfile {
+      customer {
+        customerId
+        loyaltyNumber
+        firstName
+        lastName
+        dateOfBirth
+        status
+      }
+      profile {
+        reasonForTravel
+        brand
+        preferences {
+          preferenceType
+          preferenceSubType
+          preferenceValue
+        }
+      }
+      account {
+        memberNumber
+        tierCode
+        totalTierPoints
+        virginTierPoints
+        memberType
+        headOfGroupMemberNumber
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,438 @@
+query orderResponse($basketId: String) {
+  orderResponse(basketId: $basketId) {
+    pointOfSale {
+      countryCode
+      cityCode
+    }
+    customerProfile {
+      firstName
+      lastName
+      membershipDetails {
+        fqtProgramme
+        fqtNumber
+        fqtTierCode
+        fqtPoints
+      }
+    }
+    people {
+      id
+      firstName
+      lastName
+      dateOfBirth
+      gender
+      profilePassenger
+      validation
+      type
+      membershipDetails {
+        fqtProgramme
+        fqtNumber
+        fqtValidityStatus
+        validation
+      }
+    }
+    newVacCreated
+    vACCustomer {
+      firstName
+      lastName
+    }
+    earnPoints {
+        earnTierPoints
+        earnVirginPoints
+        earnGroupVirginPoints
+    }
+    summary {
+      isAwardSearch
+      flightPrice
+      membershipPoints
+      voucherApplied
+      hasSufficientPoints
+      voucherPoints
+      pointsToPay
+      voucherDetails {
+        bestOption {
+          optionId
+          optionName
+          redemptionType
+          selectionReason
+        }
+        redemptionOptions {
+          optionId
+          optionName
+          redemptionType
+          appliedVouchers {
+            voucherId
+            pointsUsed
+          }
+          coveredPassengers
+          pointsToPay
+          totalPointsUsed
+          cashToPay
+        }
+        availableVouchers {
+          voucherId
+          name
+          type
+          balancePoints
+          expiryDate
+        }
+      }
+      voucherRedemptionSelection {
+        maxVouchersToUse
+        selectedVoucherIds
+        selectedOptionId
+      }
+      selectedPayWithPointsOption {
+        amount
+        currencyCode
+        loyaltyPoints
+      }
+      voucherBalance
+      voucherAmount
+      tracking {
+        bookingReference
+        emailAddress
+        acceptPost
+        acceptTelephone
+        acceptEmail
+        acceptTextMessage
+      }
+      tours
+      cruises
+      seatsNotBooked
+      voucherExpiry
+      partyComposition {
+        adults
+        children
+        teens
+        infants
+        total
+      }
+      membershipMiles
+      bookingType
+      pennies
+      minDeposit
+      voucherRemaining
+      resortFees
+      ineligibleMember
+      promotionalDiscount
+      includes {
+        hotel
+        villa
+        flight
+        car
+        transfer
+        extras
+        disneyExtras
+        vRoom
+        additional
+      }
+      inactivePromotionalDiscount
+      membershipTierMiles
+      directDebit
+      totalPriceWithoutDiscount
+      cars
+      name
+      pricePerPerson
+      minimumMembershipMiles
+      totalSeatPrice
+      totalPrice
+      priceCurrency
+      balanceDueDate
+      locationDescription
+      membershipDiscount
+      extras
+      paymentAmount
+      termsAndConditions
+      duration
+      returnDate
+      onlineDiscount
+      membershipMilesMultiplier
+      transfers
+      locationId
+      milesExchangeRate
+      upSellShown
+      membershipNumberType
+      discountType
+      departureDate
+      outboundFlights {
+        airlineName
+        flightNumber
+        airline
+        departing {
+          iata
+          name
+        }
+        arriving {
+          iata
+          name
+        }
+        departingAt
+        arrivingAt
+        cabinClass
+        sectors {
+        sectorId
+          airlineName
+          airCraftDetail
+          flightNumber
+          airline
+          operatingAirline
+          operatingAirlineName
+          leg {
+            airline
+            airlineName
+            operatingAirline
+            operatingAirlineName
+          }
+          departing {
+            iata
+            name
+          }
+          arriving {
+            iata
+            name
+          }
+          departingAt
+          arrivingAt
+          cabinClass
+          duration
+          pnr
+        }
+      }
+
+      lastChanceUpSellOptions
+      inboundFlights {
+        airlineName
+        flightNumber
+        airline
+        departing {
+          iata
+          name
+        }
+        arriving {
+          iata
+          name
+        }
+        departingAt
+        arrivingAt
+        cabinClass
+        sectors {
+        sectorId
+          airlineName
+          airCraftDetail
+          flightNumber
+          airline
+          operatingAirline
+          operatingAirlineName
+          leg {
+            airline
+            airlineName
+            operatingAirline
+            operatingAirlineName
+          }
+          departing {
+            iata
+            name
+          }
+          arriving {
+            iata
+            name
+          }
+          departingAt
+          arrivingAt
+          cabinClass
+          duration
+          pnr
+        }
+      }
+       slices {
+        airlineName
+        flightNumber
+        airline
+        departing {
+          iata
+          name
+        }
+        arriving {
+          iata
+          name
+        }
+        departingAt
+        arrivingAt
+        cabinClass
+        sectors {
+          sectorId
+          airCraftDetail
+          airlineName
+          flightNumber
+          airline
+          operatingAirline
+          operatingAirlineName
+          leg {
+            airline
+            airlineName
+            operatingAirline
+            operatingAirlineName
+          }
+          departing {
+            iata
+            name
+          }
+          arriving {
+            iata
+            name
+          }
+          departingAt
+          arrivingAt
+          cabinClass
+          duration
+          pnr
+        }
+      } 
+      milesAvailable
+      locationName
+      balanceDue
+      lastChanceAddons
+      milesBalance
+      membershipNumber
+      hotels
+      upSell
+      milesIncrements
+      promotionalCodeValue
+      flightPassengerSeatMap {
+        passengerId
+        passengerFirstName
+        passengerLastName
+        seatDetails {
+          sectorId
+          seatNumber
+          pos
+          price {
+            amount
+            currency
+          } 
+        }
+        linkedInfant {
+          infantPassengerId
+          infantFirstName
+          infantLastName
+        }
+      }
+          flightPassengerBaggage {
+      flightRefId
+      carryOnBag {
+        passengerBaggageAllowance {
+          freeBaggageAllowance {
+            allowedBagCnt
+            weight {
+              unitOfMeasureCnt
+              unitOfMeasure
+            }
+            dimensionAllowance {
+              height
+              width
+              linear
+              length
+              unitOfMeasure
+            }
+          }
+          paidBaggage {
+            weight {
+              unitOfMeasureCnt
+              unitOfMeasure
+            }
+            dimensionAllowance {
+              height
+              width
+              linear
+              length
+              unitOfMeasure
+            }
+            price {
+              amount
+              currency
+            }
+          }
+        }
+      }
+      checkedBag {
+        passengerBaggageAllowance {
+          freeBaggageAllowance {
+            allowedBagCnt
+            weight {
+              unitOfMeasureCnt
+              unitOfMeasure
+            }
+            dimensionAllowance {
+              height
+              width
+              linear
+              length
+              unitOfMeasure
+            }
+          }
+          paidBaggage {
+            weight {
+              unitOfMeasureCnt
+              unitOfMeasure
+            }
+            dimensionAllowance {
+              height
+              width
+              linear
+              length
+              unitOfMeasure
+            }
+            price {
+              amount
+              currency
+            }
+          }
+        }
+      }
+    }
+   }
+    bookingReference
+    infants
+    children
+    configuration {
+      membershipMilesEnabled
+      membershipMilesSpendingEnabled
+      membershipDiscountEnabled
+      tacticalPromoCodeDiscountEnabled
+      affinityDiscountsEnabled
+    }
+    adults
+    leadPassenger {
+      name
+      firstName
+      lastName
+      type
+      dateOfBirth
+      gender
+      address {
+        postCode
+        lineOne
+        lineTwo
+        townCity
+      }
+      contact {
+        emailAddress
+        phoneNumber
+        alternativePhoneNumber
+      }
+    }
+
+    paymentInformation {
+      paymentStatus
+      obfusticatedCard
+      cardType
+      paymentAmount
+    }
+    warnings{
+        code
+        message
+        type
+    }
+    resourceType
+  }
+}

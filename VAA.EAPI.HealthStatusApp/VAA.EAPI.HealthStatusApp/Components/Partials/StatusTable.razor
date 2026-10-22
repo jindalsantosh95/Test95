@@ -1,0 +1,215 @@
+﻿@inject IJSRuntime JS
+@inject HttpClient Http
+@inject ISignalRService SignalRService
+@using Microsoft.AspNetCore.SignalR.Client
+@using VAA.EAPI.HealthStatusApp.SignalRClasses
+@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+
+
+
+<div id="dataTableContainer" class="statustable-container">
+    <table id="apimTable" class="display table-striped" style="width:100%; padding:1.5rem;">
+        <thead>
+            <tr>
+                <th>Service</th>
+                <th>Status</th>
+                <th>StatusCode</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@if (!isTableInitialized)
+{
+    <div class="lds-roller" style="    width: 100%;
+height:16rem;
+    display: flex;
+padding-top: 5rem;
+    justify-content: center;">
+        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+
+}
+
+<StatusTableModal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged" ServiceName="@ServiceName" ServiceUrl="@ServiceUrl" ServiceBusRows="@ServiceBusRows" CosmosRows="@CosmosRows" />
+
+@code {
+    [Parameter] public string TabName { get; set; }
+    [Parameter] public string? SelectedService { get; set; }
+    private List<APIMStatusModel> Rows = new List<APIMStatusModel>();
+    private string ServiceName;
+    private string ServiceUrl;
+    private Dictionary<string, bool> ServiceBusRows;
+    private Dictionary<string, bool> CosmosRows;
+    private HubConnection? hubConnection;
+    private bool isModalVisible;
+    private bool isTableInitialized = false;
+    private DotNetObjectReference<StatusTable>? dotNetHelper;
+    private bool isHandlerRegistered = false;
+    private bool _isSignalRInitialized = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_isSignalRInitialized)
+        {
+
+            hubConnection = SignalRService.GetConnection();
+
+            if (!isHandlerRegistered)
+            {
+
+                hubConnection.On<IEnumerable<APIMStatusModel>>("ReceiveAPIMStatusTable", async (apimResults) =>
+                {
+                    Rows = apimResults.ToList();
+                    if (!isTableInitialized)
+                    {
+                        dotNetHelper = DotNetObjectReference.Create(this);
+                        await JS.InvokeVoidAsync("initializeDataTable", Rows, dotNetHelper, SelectedService);
+                        isTableInitialized = true;
+                    }
+                    else
+                    {
+                        await JS.InvokeVoidAsync("updateTable", Rows);
+                    }
+                    StateHasChanged();
+                });
+
+                isHandlerRegistered = true;
+            }
+            if (!SignalRService.IsConnected)
+                await SignalRService.StartConnectionAsync();
+
+            _isSignalRInitialized = true;
+
+            try
+            {
+                while (hubConnection.State != HubConnectionState.Connected)
+                {
+                    await Task.Delay(200);
+                }
+                await hubConnection.InvokeAsync("GetAPIMStatusTable");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching initial health status: {ex.Message}");
+            }
+        }
+        
+    }
+
+
+    public void Dispose()
+    {
+        dotNetHelper?.Dispose();
+    }
+
+    [JSInvokable]
+    public void OpenModal(string name, string url, Dictionary<string, bool> serviceBusChecks, Dictionary<string, bool> cosmosChecks)
+    {
+        isModalVisible = true;
+        ServiceName = name;
+        ServiceUrl = url;
+        ServiceBusRows = serviceBusChecks;
+        CosmosRows = cosmosChecks;
+        InvokeAsync(StateHasChanged);
+    }
+
+    [JSInvokable]
+    public string GetSelectedService()
+    {
+        return SelectedService ?? "";
+    }
+
+    private void OnModalVisibilityChanged(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
+}
+
+
+<script>
+    var dataTable;
+    var dotNetHelperInstance;
+    var initialSearchApplied = false;
+
+    function getStatusIcon(statusCode) {
+        if (statusCode == 200) {
+            return '<i class="bi bi-check-circle text-success"></i>';
+        } else {
+            return '<i class="bi bi-x-octagon-fill text-danger"></i>';
+        }
+    }
+
+    function initializeDataTable(data, dotNetHelper, selectedService) {
+        dotNetHelperInstance = dotNetHelper;
+
+        if ($.fn.DataTable.isDataTable('#apimTable')) {
+            $('#apimTable').DataTable().destroy();
+        }
+
+        dataTable = $('#apimTable').DataTable({
+            data: data,
+            columns: [
+                { data: "serviceName", title: "Service" },
+                { 
+                    data: "statusCode", 
+                    title: "Status",
+                    render: function(data, type, row) {
+                        if (type === 'display' || type === 'filter') {
+                            return getStatusIcon(data);
+                        }
+                        return data;
+                    },
+                    type: "html"
+                },
+                { data: "statusCode", title: "StatusCode" },
+                { data: "description", title: "Description" },
+                {
+                    data: null,
+                    title: "Actions",
+                    render: function (data, type, row) {
+                        if ((data.serviceBusChecks && Object.keys(data.serviceBusChecks).length > 0) ||
+                            (data.cosmosChecks && Object.keys(data.cosmosChecks).length > 0)) {
+                            return '<button class="editbtn btn btn-primary">More</button>';
+                        }
+                        return '';
+                    }
+                }
+            ],
+            destroy: true,
+            responsive: true,
+            rowReorder: {
+                selector: 'td:nth-child(2)'
+            },
+            initComplete: function(settings, json) {
+                if (selectedService && !initialSearchApplied) {
+                    this.api().search(selectedService).draw();
+                    initialSearchApplied = true;
+                }
+            }
+        });
+
+        $('#apimTable').on('click', 'button.editbtn', function () {
+            var rowData = dataTable.row($(this).parents('tr')).data();
+            console.log(rowData);
+            dotNetHelperInstance.invokeMethodAsync('OpenModal', rowData.serviceName, rowData.serviceUrl, rowData.serviceBusChecks, rowData.cosmosChecks);
+        });
+
+        var loaderElement = document.querySelector('.lds-roller');
+        if (loaderElement) {
+            loaderElement.style.display = 'none';
+        }
+    }
+
+    function updateTable(data) {
+        if (dataTable) {
+            dataTable.clear().rows.add(data).draw();
+        } else {
+            initializeDataTable(data, dotNetHelperInstance, null);
+        }
+    }
+</script>

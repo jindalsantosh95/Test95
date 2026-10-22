@@ -1,0 +1,19 @@
+name: Human Review Comments Event
+
+on:
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_comment:
+    types: [created, deleted]
+
+permissions: {}
+
+jobs:
+  record-review-event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record pull request review activity
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "Review activity on PR #$PR_NUMBER"

@@ -1,0 +1,293 @@
+query summaryResponse($basketId: String) {
+  summaryResponse(basketId: $basketId) {
+    price {
+      amount
+      currency
+      tax
+      priceDifference
+      priceDifferenceSign
+      amountIncludingTax
+      awardPoints
+    }
+    flights {
+      flightId
+      segments {
+        metal {
+          family
+          name
+        }
+        airline {
+          code
+          name
+        }
+        flightNumber
+        operatingFlightNumber
+        operatingAirline {
+          code
+          name
+        }
+        origin {
+          code
+          cityName
+          countryName
+          airportName
+        }
+        destination {
+          code
+          cityName
+          countryName
+          airportName
+        }
+        duration
+        departure
+        arrival
+        stopCount
+        connection
+        legs {
+          origin {
+            code
+            cityName
+            countryName
+            airportName
+          }
+          destination {
+            code
+            cityName
+            countryName
+            airportName
+          }
+          duration
+          departure
+          arrival
+          stopOver
+          isDominantLeg
+          operatingAirline {
+            code
+            name
+          }
+          marketingAirline {
+            code
+            name
+          }
+        }
+        bookingClass
+        fareBasisCode
+        dominantFareProduct
+      }
+      duration
+      fareFamilyType
+      fareFamilyFees {
+        change {
+            assessment
+            headline
+            description
+            fee {
+                amount
+                currency
+            }
+        }
+        cancellation {
+            assessment
+            headline
+            description
+            fee {
+                amount
+                currency
+            }
+        }
+      }
+      cabinName
+      origin {
+        code
+        cityName
+        countryName
+        airportName
+      }
+      arrival
+      destination {
+        code
+        cityName
+        countryName
+        airportName
+      }
+      departure
+      id
+      fareId
+    }
+    upgrades {
+      fareFamilyType
+      price {
+        amount
+        currency
+        tax
+        priceDifference
+        priceDifferenceSign
+        amountIncludingTax
+      }
+      content {
+        cabinName
+        upgradeImage
+        features {
+          description
+        }
+      }
+      links {
+        rel
+        href
+      }
+      id
+      fareId
+    }
+    fareCalculationSummary {
+      fares {
+        passengerType
+        quantity
+        price {
+          amount
+          currency
+          tax
+          priceDifference
+          priceDifferenceSign
+          amountIncludingTax
+          awardPoints
+        }
+      }
+      taxes {
+        code
+        description
+        price {
+          amount
+          currency
+          tax
+          priceDifference
+          priceDifferenceSign
+          amountIncludingTax
+        }
+      }
+    }
+    fareCalculations {
+      passengerType
+      fare {
+        amount
+        currency
+        tax
+        priceDifference
+        priceDifferenceSign
+        amountIncludingTax
+        awardPoints
+      }
+      taxes {
+        code
+        description
+        price {
+          amount
+          currency
+          tax
+          priceDifference
+          priceDifferenceSign
+          amountIncludingTax
+        }
+      }
+    }
+    links {
+      rel
+      href
+    }
+    id
+    fareId
+    isSaverFare
+    upgradeFareId
+    voucherApplied
+    hasSufficientPoints
+    voucherPoints
+    pointsToPay
+    voucherDetails {
+      redemptionOptions {
+        optionId
+        appliedVouchers {
+          voucherId
+          pointsUsed
+        }
+      }
+    }
+    voucherRedemptionSelection {
+      selectedVoucherIds
+      selectedOptionId
+    }
+    flightPassengerBaggage {
+      flightRefId
+      carryOnBag {
+        passengerBaggageAllowance {
+          freeBaggageAllowance {
+            allowedBagCnt
+            weight {
+              unitOfMeasureCnt
+              unitOfMeasure
+            }
+            dimensionAllowance {
+              height
+              width
+              linear
+              length
+              unitOfMeasure
+            }
+          }
+          paidBaggage {
+            weight {
+              unitOfMeasureCnt
+              unitOfMeasure
+            }
+            dimensionAllowance {
+              height
+              width
+              linear
+              length
+              unitOfMeasure
+            }
+            price {
+              amount
+              currency
+            }
+          }
+        }
+      }
+
+      checkedBag {
+        passengerBaggageAllowance {
+          freeBaggageAllowance {
+            allowedBagCnt
+            weight {
+              unitOfMeasureCnt
+              unitOfMeasure
+            }
+            dimensionAllowance {
+              height
+              width
+              linear
+              length
+              unitOfMeasure
+            }
+          }
+          paidBaggage {
+            weight {
+              unitOfMeasureCnt
+              unitOfMeasure
+            }
+            dimensionAllowance {
+              height
+              width
+              linear
+              length
+              unitOfMeasure
+            }
+            price {
+              amount
+              currency
+            }
+          }
+        }
+      }
+    }
+       
+  }
+}

@@ -1,0 +1,11 @@
+###Request
+POST https://example.test/cjs/payment/app/test2 HTTP/1.1
+
+###Response
+HTTP/1.1 303 See Other
+Content-Type: application/json; charset=utf-8
+Location: https://stg.virginatlantic.com/cjs-checkout-api/v2/cpd/payment
+Set-Cookie: mmb-session=xyz; Path=/; Secure
+Set-Cookie: com.virginholidays.payment.v2=orig;Version=1;Path=/;SameSite=None;Secure;HttpOnly
+Set-Cookie: not-allowed=1; Path=/; Secure
+

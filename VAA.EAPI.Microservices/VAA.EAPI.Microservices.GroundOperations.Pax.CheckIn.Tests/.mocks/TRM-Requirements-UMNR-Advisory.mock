@@ -1,0 +1,222 @@
+###Request
+POST https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements HTTP/1.1
+
+$[?(@.confirmationNum == 'UMNRPR')]
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "requirementsResourceId": "aab4be94-1212-460d-af3e-cc2e453a73df",
+    "checkin": false,
+    "travelRequirements": {
+        "id": "fe228b43-0c7c-4836-a5c5-7f85be74ac74",
+        "bookingReference": {
+            "id": "UMNRPR",
+            "creationDate": "2026-03-26T00:00:00Z"
+        },
+        "trips": [
+            {
+                "id": "bfcb4825-177b-4c9e-855b-0871b1912e15",
+                "ordinal": 0,
+                "departureStation": {
+                    "code": "LHR",
+                    "name": "Heathrow Airport",
+                    "country": {
+                        "code": "GB",
+                        "isoAlpha3Code": "GBR"
+                    }
+                },
+                "arrivalStation": {
+                    "code": "BOM",
+                    "name": "Chhatrapati Shivaji Intl",
+                    "country": {
+                        "code": "IN",
+                        "isoAlpha3Code": "IND"
+                    }
+                },
+                "firstDepartureLocalDate": "2026-03-27T12:20:00Z",
+                "lastArrivalLocalDate": "2026-03-28T02:50:00+05:30",
+                "segments": [
+                    {
+                        "id": "45f4fa49-eb3b-4c15-9c9b-57e0d36321c6",
+                        "ordinal": 1,
+                        "operatingCarrier": {
+                            "code": "VS",
+                            "name": "Virgin Atlantic"
+                        },
+                        "flightNum": "0358",
+                        "marketingSegment": {
+                            "flightNum": "0358",
+                            "marketingCarrier": [
+                                {
+                                    "code": "VS",
+                                    "name": "Virgin Atlantic"
+                                }
+                            ]
+                        },
+                        "legs": [
+                            {
+                                "id": "576aabda-9662-4277-b5f9-b6ff64c0e2b2",
+                                "ordinal": 1,
+                                "departure": {
+                                    "station": {
+                                        "code": "LHR",
+                                        "name": "Heathrow Airport",
+                                        "country": {
+                                            "code": "GB",
+                                            "isoAlpha3Code": "GBR"
+                                        }
+                                    },
+                                    "estimatedDepartureLocalDateTime": "2026-03-27T12:20:00Z",
+                                    "scheduledDepartureLocalDateTime": "2026-03-27T12:20:00Z",
+                                    "estimatedDepartureUTCDateTime": "2026-03-27T12:20:00Z",
+                                    "scheduledDepartureUTCDateTime": "2026-03-27T12:20:00Z"
+                                },
+                                "arrival": {
+                                    "station": {
+                                        "code": "BOM",
+                                        "name": "Chhatrapati Shivaji Intl",
+                                        "country": {
+                                            "code": "IN",
+                                            "isoAlpha3Code": "IND"
+                                        }
+                                    },
+                                    "estimatedArrivalLocalDateTime": "2026-03-28T02:50:00+05:30",
+                                    "scheduledArrivalLocalDateTime": "2026-03-28T02:50:00+05:30",
+                                    "estimatedArrivalUTCDateTime": "2026-03-27T21:20:00Z",
+                                    "scheduledArrivalUTCDateTime": "2026-03-27T21:20:00Z"
+                                },
+                                "international": true
+                            }
+                        ],
+                        "international": true,
+                        "transportType": "AIR"
+                    }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": true
+            }
+        ],
+        "passengers": [
+            {
+                "passengerResourceId": "eee674ee-54ad-441e-8c16-257db4b27e40",
+                "givenNames": "MINOR",
+                "surname": "TEST",
+                "nameNum": "01.01",
+                "customerId": "9999167532192",
+                "birthDate": "2013-01-13T00:00:00Z",
+                "status": {
+                    "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "576aabda-9662-4277-b5f9-b6ff64c0e2b2",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "returnDateRequired": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "bfcb4825-177b-4c9e-855b-0871b1912e15",
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "returnDateRequired": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": []
+                                    }
+                                ],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": false,
+                                "checkinEligible": false
+                            }
+                        ],
+                        "travelDocuments": [],
+                        "contactInformation": [
+                            {
+                                "requirements": [
+                                    {
+                                        "type": "US_ADDRESS",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "PRIMARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "SECONDARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "EMAIL",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    }
+                                ],
+                                "address": {},
+                                "phone": [
+                                    {
+                                        "verified": false,
+                                        "preference": "PRIMARY",
+                                        "countryCode": "",
+                                        "phoneNumber": "7823212390"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

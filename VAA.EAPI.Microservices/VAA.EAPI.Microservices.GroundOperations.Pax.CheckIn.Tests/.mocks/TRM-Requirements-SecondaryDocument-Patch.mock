@@ -1,0 +1,101 @@
+###Request
+PATCH https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements/secondary-document-requirements-id HTTP/1.1
+
+$[?(@.requests[0].using == 'SECONDARY_DOC')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "requirementsResourceId": "secondary-document-requirements-id",
+  "travelRequirements": {
+    "bookingReference": {
+      "id": "TEST01",
+      "creationDate": "2026-08-16T00:00:00Z"
+    },
+    "trips": [{
+      "id": "0432af91-b8ce-4f9e-889f-e9d036a1b90b",
+      "ordinal": 0,
+      "departureStation": { "code": "LHR", "name": "Heathrow Airport", "country": { "code": "GB", "isoAlpha3Code": "GBR" } },
+      "arrivalStation": { "code": "JFK", "name": "John F Kennedy International", "country": { "code": "US", "isoAlpha3Code": "USA" } },
+      "firstDepartureLocalDate": "2026-08-20T11:20:00+01:00",
+      "lastArrivalLocalDate": "2026-08-20T14:05:00-04:00",
+      "segments": [{
+        "id": "ba6fdb08-beef-4ed4-92d8-50113b51bd8e",
+        "ordinal": 1,
+        "operatingCarrier": { "code": "VS", "name": "Virgin Atlantic" },
+        "flightNum": "0009",
+        "marketingSegment": { "flightNum": "0009", "marketingCarrier": [{ "code": "VS", "name": "Virgin Atlantic" }] },
+        "legs": [{
+          "id": "2a557460-61dc-41c5-8ae6-6136bc70cf7b",
+          "ordinal": 1,
+          "departure": { "station": { "code": "LHR", "name": "Heathrow Airport", "country": { "code": "GB", "isoAlpha3Code": "GBR" } }, "scheduledDepartureLocalDateTime": "2026-08-20T11:20:00+01:00", "scheduledDepartureUTCDateTime": "2026-08-20T10:20:00Z" },
+          "arrival": { "station": { "code": "JFK", "name": "John F Kennedy International", "country": { "code": "US", "isoAlpha3Code": "USA" } }, "scheduledArrivalLocalDateTime": "2026-08-20T14:05:00-04:00", "scheduledArrivalUTCDateTime": "2026-08-20T18:05:00Z" },
+          "international": true
+        }],
+        "international": true,
+        "transportType": "AIR"
+      }],
+      "flown": false,
+      "missingCountryCode": false,
+      "checkin": false
+    }],
+    "passengers": [{
+      "passengerResourceId": "4db1e051-37e4-4836-a13b-f921809e3ed4",
+      "givenNames": "PSGKOKO",
+      "surname": "TEST",
+      "nameNum": "01.01",
+      "customerId": "9999130177935",
+      "birthDate": "1986-08-26T00:00:00Z",
+      "status": { "code": "NOT_COMPLETE" },
+      "advancePassengerInformation": [{
+        "passengerTripHealthRequirements": [{
+          "tripId": "0432af91-b8ce-4f9e-889f-e9d036a1b90b",
+          "status": { "code": "NOT_COMPLETE" },
+          "requirementCategories": [{
+            "type": "TRAVEL_DOCUMENTS",
+            "status": { "code": "NOT_COMPLETE" },
+            "requirements": [{
+              "requirementType": "PASSPORT",
+              "status": { "code": "PRESENT" },
+              "returnDateRequired": true,
+              "verified": false
+            }, {
+              "requirementType": "SECONDARY_DOC",
+              "requirementOptions": ["ETA"],
+              "status": { "code": "PRESENT" },
+              "country": { "code": "US", "isoAlpha3Code": "USA" },
+              "links": [{
+                "linkId": "ETA_1",
+                "name": "Electronic Travel Authorization",
+                "text": "<p>Passengers with a British biometric passport with nationality \"British Citizen\" do not need a visa for a maximum of 90 days if they have an ESTA authorization obtained prior to boarding via https://esta.cbp.dhs.gov/ and travel as tourists, on business or in transit.</p>",
+                "source": "vendor",
+                "href": "https://help.virginatlantic.com/gb/en/travel-advice.html"
+              }],
+              "transit": false
+            }]
+          }],
+          "exceptions": [],
+          "flown": false,
+          "missingCountryCode": false,
+          "checkin": false,
+          "checkinEligible": false
+        }],
+        "travelDocuments": [{
+          "type": "PASSPORT",
+          "subType": "P",
+          "givenNames": "PSGKOKO",
+          "surname": "TEST",
+          "birthDate": "1986-08-26",
+          "gender": { "code": "M", "name": "Male" },
+          "number": "990057406",
+          "expirationDate": "2032-04-10",
+          "issuingCountry": { "code": "GBR", "name": "United Kingdom", "isoAlpha2Code": "GB" },
+          "nationality": { "code": "GBR", "name": "United Kingdom", "isoAlpha2Code": "GB" },
+          "countryOfResidence": { "code": "GBR", "name": "United Kingdom", "isoAlpha2Code": "GB" }
+        }]
+      }]
+    }]
+  }
+}

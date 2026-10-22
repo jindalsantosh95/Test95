@@ -1,0 +1,31 @@
+meta {
+  name: accountUpdateAddressDetails
+  type: graphql
+  seq: 15
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation accountUpdateAddressDetails($updateAddressDetail: UpdateMemberAddressRequestInput) {
+    accountUpdateAddressDetails(updateAddressDetail: $updateAddressDetail)
+  }
+}
+
+body:graphql:vars {
+  {
+    "updateAddressDetail": {
+      "memberType": "Household"
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

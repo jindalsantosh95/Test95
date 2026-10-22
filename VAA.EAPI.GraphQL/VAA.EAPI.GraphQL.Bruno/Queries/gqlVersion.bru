@@ -1,0 +1,25 @@
+meta {
+  name: gqlVersion
+  type: graphql
+  seq: 30
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query gqlVersion {
+    gqlVersion {
+      __typename
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

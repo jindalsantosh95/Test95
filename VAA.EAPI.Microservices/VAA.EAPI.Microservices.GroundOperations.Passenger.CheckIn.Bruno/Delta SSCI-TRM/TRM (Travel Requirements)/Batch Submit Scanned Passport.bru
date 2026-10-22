@@ -1,0 +1,2421 @@
+meta {
+  name: Batch Submit Scanned Passport
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{delta_trm}}/requirements/{{requirement_resource_id}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+  transactionId: VS-DigitalFirst-123-{{$guid}}
+  clientId: {{ping_client_id}}
+  configOptions: [{'nativeTravelDocs':'true'}]
+  X-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+  AppChannelName: {{AppChannelName}}
+  AppId: {{AppID}}
+}
+
+body:json {
+  {"requests":[ 
+      {
+        "passengerResourceId": "{{passenger_resource_id1}}",
+        "using": "PASSPORT",
+        "identityDocument": {
+          "type": "PASSPORT",
+          "givenNames": "{{passenger_givenNames1}}",
+          "surname": "{{passenger_surname1}}",
+          "birthDate": "{{passenger_dob1}}",
+          "gender": {
+              "code": "M"
+          },
+          "number": "{{passport_number}}",
+          "expirationDate": "2030-05-01",
+          "issuingCountry": {
+              "code": "{{passport_country}}"
+          },
+          "nationality": {
+              "code": "{{passport_country}}"
+          },
+          "countryOfResidence": {
+              "code": "{{passport_country}}"
+          },
+          "dataSourceType": "MACHINE_READABLE_ZONE",
+          "methodOfDataEntry": "S",
+          "status": "NOT_FOUND",
+          "result": "SUCCESS",
+          "sourceFromType": "PNR"
+      },
+      "consent": true,
+      "modified": true,
+      "saveToProfile": false
+  }]}
+}
+
+script:post-response {
+  var body = res.getBody();
+  bru.setEnvVar("travel_requirements_response", JSON.stringify(body));
+  
+  const travelRequirements = body.travelRequirements ?? body;
+  const passenger = travelRequirements.passengers?.find(
+    passenger => passenger.passengerResourceId === bru.getVar("passenger_resource_id1")
+  ) ?? travelRequirements.passengers?.[0];
+  const tripId = bru.getVar("trip_resource_id1") ?? travelRequirements.trips?.[0]?.id;
+  const governmentForm = passenger?.advancePassengerInformation
+    ?.flatMap(information => information.passengerTripHealthRequirements ?? [])
+    ?.find(requirement => requirement.tripId === tripId)
+    ?.requirementCategories
+    ?.find(category => category.type === "GOVERNMENT_FORMS")
+    ?.requirements
+    ?.flatMap(requirement => requirement.links ?? [])
+    ?.find(link => link.id && link.linkId && link.text && link.href);
+  
+  if (governmentForm) {
+    bru.setVar("government_form_id", governmentForm.id);
+    bru.setVar("government_form_link_id", governmentForm.linkId);
+    bru.setVar("government_form_text", governmentForm.text);
+    bru.setVar("government_form_href", governmentForm.href);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+example {
+  name: Example ESTA required
+  
+  request: {
+    url: {{delta_trm}}/requirements/{{requirement_resource_id}}
+    method: PATCH
+    mode: json
+    headers: {
+      Content-Type: application/json
+      Accept: application/json
+      transactionId: VS-DigitalFirst-123-{{$guid}}
+      clientId: {{ping_client_id}}
+      configOptions: [{'nativeTravelDocs':'true'}]
+      X-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+      AppChannelName: {{AppChannelName}}
+      AppId: {{AppID}}
+    }
+  
+    body:json: {
+      {"requests":[ 
+          {
+            "passengerResourceId": "{{passenger_resource_id1}}",
+            "using": "PASSPORT",
+            "identityDocument": {
+              "type": "PASSPORT",
+              "givenNames": "{{passenger_givenNames1}}",
+              "surname": "{{passenger_surname1}}",
+              "birthDate": "{{passenger_dob1}}",
+              "gender": {
+                  "code": "M"
+              },
+              "number": "{{passport_number}}",
+              "expirationDate": "2030-05-01",
+              "issuingCountry": {
+                  "code": "{{passport_country}}"
+              },
+              "nationality": {
+                  "code": "{{passport_country}}"
+              },
+              "countryOfResidence": {
+                  "code": "{{passport_country}}"
+              },
+              "dataSourceType": "MACHINE_READABLE_ZONE",
+              "methodOfDataEntry": "S",
+              "status": "NOT_FOUND",
+              "result": "SUCCESS",
+              "sourceFromType": "PNR"
+          },
+          "consent": true,
+          "modified": true,
+          "saveToProfile": false
+      }]}
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      x-amzn-requestid: 8101799d-f487-4253-b164-caac03a4e64e
+      access-control-allow-origin: *
+      access-control-allow-headers: Content-Type,X-Amz-Date,Authorization,X-Api-Key,clientId,transactionId,testLab,channelId,configOptions,X-Zone-Type,X-Environment,X-Api-Name
+      x-amz-apigw-id: A3EkAFR1vHcEjNA=
+      access-control-allow-methods: DELETE,GET,HEAD,OPTIONS,PUT,POST,PATCH
+      x-amzn-trace-id: Root=1-6a5f814c-1616ece4519bad490f7ed2fe;Parent=23f49d9c1ad3d536;Sampled=0;Lineage=2:41bb0c3a:0
+      vary: Accept-Encoding
+      expires: Tue, 21 Jul 2026 14:25:22 GMT
+      cache-control: max-age=0, no-cache, no-store
+      pragma: no-cache
+      date: Tue, 21 Jul 2026 14:25:22 GMT
+      transfer-encoding: chunked
+      connection: keep-alive, Transfer-Encoding
+      strict-transport-security: max-age=86400 ; includeSubDomains ; preload
+      akamai-grn: 0.cdb01302.1784643916.a8b8f3fc
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "requirementsResourceId": "25dd94eb-8aa5-420d-812c-f3b46526b29d",
+          "checkin": false,
+          "travelRequirements": {
+            "id": "08f9d9c3-17a3-4944-add1-e6d0348c6a3d",
+            "bookingReference": {
+              "id": "EZRY5S",
+              "creationDate": "2026-07-20T00:00:00Z"
+            },
+            "trips": [
+              {
+                "id": "54c15c04-5c50-4393-b167-3c0224446e39",
+                "ordinal": 0,
+                "departureStation": {
+                  "code": "LHR",
+                  "name": "Heathrow Airport",
+                  "country": {
+                    "code": "GB",
+                    "isoAlpha3Code": "GBR"
+                  }
+                },
+                "arrivalStation": {
+                  "code": "JFK",
+                  "name": "John F Kennedy International",
+                  "country": {
+                    "code": "US",
+                    "isoAlpha3Code": "USA"
+                  }
+                },
+                "firstDepartureLocalDate": "2026-07-22T08:20:00+01:00",
+                "lastArrivalLocalDate": "2026-07-22T11:30:00-04:00",
+                "segments": [
+                  {
+                    "id": "db3b2f9a-118c-44c2-acbf-d74d5cf42eb7",
+                    "ordinal": 1,
+                    "operatingCarrier": {
+                      "code": "VS",
+                      "name": "Virgin Atlantic"
+                    },
+                    "flightNum": "0003",
+                    "marketingSegment": {
+                      "flightNum": "0003",
+                      "marketingCarrier": [
+                        {
+                          "code": "VS",
+                          "name": "Virgin Atlantic"
+                        }
+                      ]
+                    },
+                    "legs": [
+                      {
+                        "id": "1b21acde-37e9-4588-894b-6be03322b858",
+                        "ordinal": 1,
+                        "departure": {
+                          "station": {
+                            "code": "LHR",
+                            "name": "Heathrow Airport",
+                            "country": {
+                              "code": "GB",
+                              "isoAlpha3Code": "GBR"
+                            }
+                          },
+                          "estimatedDepartureLocalDateTime": "2026-07-22T08:20:00+01:00",
+                          "scheduledDepartureLocalDateTime": "2026-07-22T08:20:00+01:00",
+                          "estimatedDepartureUTCDateTime": "2026-07-22T07:20:00Z",
+                          "scheduledDepartureUTCDateTime": "2026-07-22T07:20:00Z"
+                        },
+                        "arrival": {
+                          "station": {
+                            "code": "JFK",
+                            "name": "John F Kennedy International",
+                            "country": {
+                              "code": "US",
+                              "isoAlpha3Code": "USA"
+                            }
+                          },
+                          "estimatedArrivalLocalDateTime": "2026-07-22T11:30:00-04:00",
+                          "scheduledArrivalLocalDateTime": "2026-07-22T11:30:00-04:00",
+                          "estimatedArrivalUTCDateTime": "2026-07-22T15:30:00Z",
+                          "scheduledArrivalUTCDateTime": "2026-07-22T15:30:00Z"
+                        },
+                        "international": true
+                      }
+                    ],
+                    "international": true,
+                    "transportType": "AIR"
+                  }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": true
+              },
+              {
+                "id": "1c71a0e6-c8f9-4998-88b3-602119356df5",
+                "ordinal": 1,
+                "departureStation": {
+                  "code": "JFK",
+                  "name": "John F Kennedy International",
+                  "country": {
+                    "code": "US",
+                    "isoAlpha3Code": "USA"
+                  }
+                },
+                "arrivalStation": {
+                  "code": "LHR",
+                  "name": "Heathrow Airport",
+                  "country": {
+                    "code": "GB",
+                    "isoAlpha3Code": "GBR"
+                  }
+                },
+                "firstDepartureLocalDate": "2026-07-22T18:00:00-04:00",
+                "lastArrivalLocalDate": "2026-07-23T06:20:00+01:00",
+                "segments": [
+                  {
+                    "id": "e2c542aa-cdd2-4b2a-bedf-3d1d0d212908",
+                    "ordinal": 2,
+                    "operatingCarrier": {
+                      "code": "VS",
+                      "name": "Virgin Atlantic"
+                    },
+                    "flightNum": "0004",
+                    "marketingSegment": {
+                      "flightNum": "0004",
+                      "marketingCarrier": [
+                        {
+                          "code": "VS",
+                          "name": "Virgin Atlantic"
+                        }
+                      ]
+                    },
+                    "legs": [
+                      {
+                        "id": "ea985af6-6494-4540-b476-e7000c1c294a",
+                        "ordinal": 2,
+                        "departure": {
+                          "station": {
+                            "code": "JFK",
+                            "name": "John F Kennedy International",
+                            "country": {
+                              "code": "US",
+                              "isoAlpha3Code": "USA"
+                            }
+                          },
+                          "estimatedDepartureLocalDateTime": "2026-07-22T18:00:00-04:00",
+                          "scheduledDepartureLocalDateTime": "2026-07-22T18:00:00-04:00",
+                          "estimatedDepartureUTCDateTime": "2026-07-22T22:00:00Z",
+                          "scheduledDepartureUTCDateTime": "2026-07-22T22:00:00Z"
+                        },
+                        "arrival": {
+                          "station": {
+                            "code": "LHR",
+                            "name": "Heathrow Airport",
+                            "country": {
+                              "code": "GB",
+                              "isoAlpha3Code": "GBR"
+                            }
+                          },
+                          "estimatedArrivalLocalDateTime": "2026-07-23T06:20:00+01:00",
+                          "scheduledArrivalLocalDateTime": "2026-07-23T06:20:00+01:00",
+                          "estimatedArrivalUTCDateTime": "2026-07-23T05:20:00Z",
+                          "scheduledArrivalUTCDateTime": "2026-07-23T05:20:00Z"
+                        },
+                        "international": true
+                      }
+                    ],
+                    "international": true,
+                    "transportType": "AIR"
+                  }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": false
+              }
+            ],
+            "passengers": [
+              {
+                "passengerResourceId": "4b20e180-0351-4341-86c6-f6a9ad247493",
+                "givenNames": "REX",
+                "surname": "STUDER",
+                "nameNum": "01.01",
+                "customerId": "9999135498625",
+                "birthDate": "1983-07-22T00:00:00Z",
+                "status": {
+                  "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                  {
+                    "passengerLegHealthRequirements": [
+                      {
+                        "datedOperatingLegId": "1b21acde-37e9-4588-894b-6be03322b858",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": true
+                              }
+                            ]
+                          },
+                          {
+                            "type": "GOVERNMENT_FORMS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "CONTACT_TRACING",
+                                "status": {
+                                  "code": "NOT_PRESENT"
+                                },
+                                "acceptanceWindow": {
+                                  "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                  "from": "PT72H",
+                                  "to": ""
+                                },
+                                "effectivity": {
+                                  "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                  "effectiveUTCDate": "2021-11-08 04:01:00Z",
+                                  "expirationUTCDate": "2029-11-08 00:00:00Z",
+                                  "effectiveLocalDate": "2021-11-08 00:00:00Z",
+                                  "expirationLocalDate": "2029-11-08 00:00:00Z"
+                                },
+                                "ageEligibility": {
+                                  "minimumAge": 0,
+                                  "maximumAge": 0
+                                },
+                                "ruleId": "LEG_INTL_US-S1LHRJFK",
+                                "digitalVerificationEligible": false
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "NOT_COMPLETE"
+                        }
+                      },
+                      {
+                        "datedOperatingLegId": "ea985af6-6494-4540-b476-e7000c1c294a",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": true
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "COMPLETE"
+                        }
+                      }
+                    ],
+                    "passengerTripHealthRequirements": [
+                      {
+                        "tripId": "54c15c04-5c50-4393-b167-3c0224446e39",
+                        "status": {
+                          "code": "NOT_COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": true
+                              },
+                              {
+                                "requirementType": "SECONDARY_DOC",
+                                "requirementOptions": [
+                                  "ETA"
+                                ],
+                                "status": {
+                                  "code": "NOT_PRESENT"
+                                },
+                                "country": {
+                                  "code": "US",
+                                  "isoAlpha3Code": "USA"
+                                },
+                                "links": [
+                                  {
+                                    "linkId": "ETA_1",
+                                    "name": "Electronic Travel Authorization",
+                                    "text": "<p>Passengers with a British biometric passport with nationality \"British Citizen\" do not need a visa for a maximum of 90 days if they have an ESTA authorization obtained prior to boarding via https://esta.cbp.dhs.gov/ . They must have a return/onward ticket and travel as tourists, on business or in transit.</p>",
+                                    "source": "vendor",
+                                    "href": "https://help.virginatlantic.com/gb/en/travel-advice.html"
+                                  }
+                                ],
+                                "transit": false
+                              }
+                            ]
+                          },
+                          {
+                            "type": "GOVERNMENT_FORMS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "CONTACT_TRACING",
+                                "status": {
+                                  "code": "PRESENT",
+                                  "reason": ""
+                                },
+                                "acceptanceWindow": {
+                                  "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                  "from": "PT72H",
+                                  "to": ""
+                                },
+                                "effectivity": {
+                                  "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                  "effectiveUTCDate": "2021-11-08 04:01:00Z",
+                                  "expirationUTCDate": "2029-11-08 00:00:00Z",
+                                  "effectiveLocalDate": "2021-11-08 00:00:00Z",
+                                  "expirationLocalDate": "2029-11-08 00:00:00Z"
+                                },
+                                "ageEligibility": {
+                                  "minimumAge": 0,
+                                  "maximumAge": 0
+                                },
+                                "ruleId": "LEG_INTL_US-S1LHRJFK",
+                                "digitalVerificationEligible": false
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": true,
+                        "checkinEligible": true
+                      },
+                      {
+                        "tripId": "1c71a0e6-c8f9-4998-88b3-602119356df5",
+                        "status": {
+                          "code": "COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": true
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": false,
+                        "checkinEligible": true
+                      }
+                    ],
+                    "travelDocuments": [
+                      {
+                        "type": "PASSPORT",
+                        "givenNames": "REX",
+                        "surname": "STUDER",
+                        "birthDate": "1983-07-22",
+                        "gender": {
+                          "code": "M"
+                        },
+                        "number": "431276122",
+                        "expirationDate": "2030-05-01",
+                        "issuingCountry": {
+                          "code": "GBR",
+                          "name": "United Kingdom",
+                          "isoAlpha2Code": "GB"
+                        },
+                        "nationality": {
+                          "code": "GBR",
+                          "name": "United Kingdom",
+                          "isoAlpha2Code": "GB"
+                        },
+                        "countryOfResidence": {
+                          "code": "GBR",
+                          "name": "United Kingdom",
+                          "isoAlpha2Code": "GB"
+                        },
+                        "dataSourceType": "MACHINE_READABLE_ZONE",
+                        "methodOfDataEntry": "S",
+                        "documentFeature": "MRD",
+                        "status": "NOT_FOUND",
+                        "result": "SUCCESS",
+                        "sourceFromType": "PNR"
+                      }
+                    ],
+                    "contactInformation": [
+                      {
+                        "requirements": [
+                          {
+                            "type": "US_ADDRESS",
+                            "required": true,
+                            "allowEmpty": false
+                          },
+                          {
+                            "type": "PRIMARY_PHONE",
+                            "required": true,
+                            "allowEmpty": false
+                          },
+                          {
+                            "type": "SECONDARY_PHONE",
+                            "required": false,
+                            "allowEmpty": true
+                          },
+                          {
+                            "type": "EMAIL",
+                            "required": false,
+                            "allowEmpty": true
+                          }
+                        ],
+                        "address": {
+                          "declined": false,
+                          "streetAddress": "456 PARK AVE",
+                          "countryCode": "USA",
+                          "stateCode": "NY",
+                          "cityCode": "NEW YORK",
+                          "zipCode": "10022"
+                        },
+                        "email": [
+                          {
+                            "verified": true,
+                            "value": "Q87ZIK@EXAMPLE.COM"
+                          }
+                        ],
+                        "phone": [
+                          {
+                            "verified": true,
+                            "preference": "PRIMARY",
+                            "type": "MOBILE",
+                            "countryCode": "61",
+                            "phoneNumber": "0273962933"
+                          },
+                          {
+                            "verified": true,
+                            "preference": "SECONDARY",
+                            "type": "MOBILE",
+                            "countryCode": "61",
+                            "phoneNumber": "0304384353"
+                          }
+                        ]
+                      }
+                    ],
+                    "emergencyContact": [
+                      {
+                        "firstName": "REX",
+                        "lastName": "STUDER",
+                        "countryCode": "FI",
+                        "phoneNumber": "0481785308"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "passengerResourceId": "30f29d0e-0902-45fd-bf57-111f23d087f2",
+                "givenNames": "BROOKE",
+                "surname": "THACKER",
+                "nameNum": "04.01",
+                "customerId": "9999135498591",
+                "birthDate": "2026-01-20T00:00:00Z",
+                "status": {
+                  "code": "COMPLETE"
+                },
+                "advancePassengerInformation": [
+                  {
+                    "passengerLegHealthRequirements": [
+                      {
+                        "datedOperatingLegId": "1b21acde-37e9-4588-894b-6be03322b858",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "COMPLETE"
+                        }
+                      },
+                      {
+                        "datedOperatingLegId": "ea985af6-6494-4540-b476-e7000c1c294a",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "COMPLETE"
+                        }
+                      }
+                    ],
+                    "passengerTripHealthRequirements": [
+                      {
+                        "tripId": "54c15c04-5c50-4393-b167-3c0224446e39",
+                        "status": {
+                          "code": "COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": true,
+                        "checkinEligible": true
+                      },
+                      {
+                        "tripId": "1c71a0e6-c8f9-4998-88b3-602119356df5",
+                        "status": {
+                          "code": "COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": false,
+                        "checkinEligible": true
+                      }
+                    ],
+                    "travelDocuments": [
+                      {
+                        "type": "PASSPORT",
+                        "subType": "P",
+                        "givenNames": "BROOKE",
+                        "surname": "THACKER",
+                        "birthDate": "2026-01-20",
+                        "gender": {
+                          "code": "F",
+                          "name": "Female"
+                        },
+                        "number": "788122929",
+                        "expirationDate": "2033-01-21",
+                        "issuingCountry": {
+                          "code": "USA",
+                          "name": "United States of America",
+                          "isoAlpha2Code": "US"
+                        },
+                        "nationality": {
+                          "code": "USA",
+                          "name": "United States of America",
+                          "isoAlpha2Code": "US"
+                        },
+                        "countryOfResidence": {
+                          "code": "USA",
+                          "name": "United States of America",
+                          "isoAlpha2Code": "US"
+                        },
+                        "methodOfDataEntry": "P",
+                        "documentFeature": "NONE",
+                        "sourceFromType": "PNR"
+                      }
+                    ],
+                    "contactInformation": [
+                      {
+                        "requirements": [
+                          {
+                            "type": "US_ADDRESS",
+                            "required": true,
+                            "allowEmpty": false
+                          },
+                          {
+                            "type": "PRIMARY_PHONE",
+                            "required": true,
+                            "allowEmpty": false
+                          },
+                          {
+                            "type": "SECONDARY_PHONE",
+                            "required": false,
+                            "allowEmpty": true
+                          },
+                          {
+                            "type": "EMAIL",
+                            "required": false,
+                            "allowEmpty": true
+                          }
+                        ],
+                        "address": {
+                          "declined": false,
+                          "streetAddress": "456 PARK AVE",
+                          "countryCode": "USA",
+                          "stateCode": "NY",
+                          "cityCode": "NEW YORK",
+                          "zipCode": "10022"
+                        },
+                        "email": [
+                          {
+                            "verified": true,
+                            "value": "GX4N6B@EXAMPLE.COM"
+                          }
+                        ],
+                        "phone": [
+                          {
+                            "verified": true,
+                            "preference": "PRIMARY",
+                            "type": "MOBILE",
+                            "countryCode": "91",
+                            "phoneNumber": "0909926737"
+                          },
+                          {
+                            "verified": true,
+                            "preference": "SECONDARY",
+                            "type": "MOBILE",
+                            "countryCode": "91",
+                            "phoneNumber": "0868606429"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "infant": true
+              },
+              {
+                "passengerResourceId": "fd31911c-9708-4a7f-8311-6ccd26fee2dd",
+                "givenNames": "ANNELIESE",
+                "surname": "LEAN",
+                "nameNum": "02.01",
+                "customerId": "9999135498617",
+                "birthDate": "2013-07-22T00:00:00Z",
+                "status": {
+                  "code": "COMPLETE"
+                },
+                "advancePassengerInformation": [
+                  {
+                    "passengerLegHealthRequirements": [
+                      {
+                        "datedOperatingLegId": "1b21acde-37e9-4588-894b-6be03322b858",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "COMPLETE"
+                        }
+                      },
+                      {
+                        "datedOperatingLegId": "ea985af6-6494-4540-b476-e7000c1c294a",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "COMPLETE"
+                        }
+                      }
+                    ],
+                    "passengerTripHealthRequirements": [
+                      {
+                        "tripId": "54c15c04-5c50-4393-b167-3c0224446e39",
+                        "status": {
+                          "code": "COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": true,
+                        "checkinEligible": true
+                      },
+                      {
+                        "tripId": "1c71a0e6-c8f9-4998-88b3-602119356df5",
+                        "status": {
+                          "code": "COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": false,
+                        "checkinEligible": true
+                      }
+                    ],
+                    "travelDocuments": [
+                      {
+                        "type": "PASSPORT",
+                        "subType": "P",
+                        "givenNames": "ANNELIESE",
+                        "surname": "LEAN",
+                        "birthDate": "2013-07-22",
+                        "gender": {
+                          "code": "F",
+                          "name": "Female"
+                        },
+                        "number": "A21555265",
+                        "expirationDate": "2033-08-22",
+                        "issuingCountry": {
+                          "code": "USA",
+                          "name": "United States of America",
+                          "isoAlpha2Code": "US"
+                        },
+                        "nationality": {
+                          "code": "USA",
+                          "name": "United States of America",
+                          "isoAlpha2Code": "US"
+                        },
+                        "countryOfResidence": {
+                          "code": "USA",
+                          "name": "United States of America",
+                          "isoAlpha2Code": "US"
+                        },
+                        "methodOfDataEntry": "P",
+                        "documentFeature": "NONE",
+                        "sourceFromType": "PNR"
+                      }
+                    ],
+                    "contactInformation": [
+                      {
+                        "requirements": [
+                          {
+                            "type": "US_ADDRESS",
+                            "required": true,
+                            "allowEmpty": false
+                          },
+                          {
+                            "type": "PRIMARY_PHONE",
+                            "required": true,
+                            "allowEmpty": false
+                          },
+                          {
+                            "type": "SECONDARY_PHONE",
+                            "required": false,
+                            "allowEmpty": true
+                          },
+                          {
+                            "type": "EMAIL",
+                            "required": false,
+                            "allowEmpty": true
+                          }
+                        ],
+                        "address": {
+                          "declined": false,
+                          "streetAddress": "456 PARK AVE",
+                          "countryCode": "USA",
+                          "stateCode": "NY",
+                          "cityCode": "NEW YORK",
+                          "zipCode": "10022"
+                        },
+                        "email": [
+                          {
+                            "verified": true,
+                            "value": "N91H3Z@EXAMPLE.COM"
+                          }
+                        ],
+                        "phone": [
+                          {
+                            "verified": true,
+                            "preference": "PRIMARY",
+                            "type": "MOBILE",
+                            "countryCode": "86",
+                            "phoneNumber": "0664316382"
+                          },
+                          {
+                            "verified": true,
+                            "preference": "SECONDARY",
+                            "type": "MOBILE",
+                            "countryCode": "39",
+                            "phoneNumber": "0187279999"
+                          }
+                        ]
+                      }
+                    ],
+                    "emergencyContact": [
+                      {
+                        "firstName": "REX",
+                        "lastName": "STUDER",
+                        "countryCode": "FI",
+                        "phoneNumber": "0481785308"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "passengerResourceId": "aa8b8f63-4ffa-4804-8921-ab33b501c07d",
+                "givenNames": "ARIANNA",
+                "surname": "POPOWSKI",
+                "nameNum": "03.01",
+                "customerId": "9999135498609",
+                "birthDate": "2021-07-22T00:00:00Z",
+                "status": {
+                  "code": "COMPLETE"
+                },
+                "advancePassengerInformation": [
+                  {
+                    "passengerLegHealthRequirements": [
+                      {
+                        "datedOperatingLegId": "1b21acde-37e9-4588-894b-6be03322b858",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "COMPLETE"
+                        }
+                      },
+                      {
+                        "datedOperatingLegId": "ea985af6-6494-4540-b476-e7000c1c294a",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "COMPLETE"
+                        }
+                      }
+                    ],
+                    "passengerTripHealthRequirements": [
+                      {
+                        "tripId": "54c15c04-5c50-4393-b167-3c0224446e39",
+                        "status": {
+                          "code": "COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": true,
+                        "checkinEligible": true
+                      },
+                      {
+                        "tripId": "1c71a0e6-c8f9-4998-88b3-602119356df5",
+                        "status": {
+                          "code": "COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": false
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": false,
+                        "checkinEligible": true
+                      }
+                    ],
+                    "travelDocuments": [
+                      {
+                        "type": "PASSPORT",
+                        "subType": "P",
+                        "givenNames": "ARIANNA",
+                        "surname": "POPOWSKI",
+                        "birthDate": "2021-07-22",
+                        "gender": {
+                          "code": "X",
+                          "name": "Unknown"
+                        },
+                        "number": "543011276",
+                        "expirationDate": "2035-07-29",
+                        "issuingCountry": {
+                          "code": "USA",
+                          "name": "United States of America",
+                          "isoAlpha2Code": "US"
+                        },
+                        "nationality": {
+                          "code": "USA",
+                          "name": "United States of America",
+                          "isoAlpha2Code": "US"
+                        },
+                        "countryOfResidence": {
+                          "code": "USA",
+                          "name": "United States of America",
+                          "isoAlpha2Code": "US"
+                        },
+                        "methodOfDataEntry": "P",
+                        "documentFeature": "NONE",
+                        "sourceFromType": "PNR"
+                      }
+                    ],
+                    "contactInformation": [
+                      {
+                        "requirements": [
+                          {
+                            "type": "US_ADDRESS",
+                            "required": true,
+                            "allowEmpty": false
+                          },
+                          {
+                            "type": "PRIMARY_PHONE",
+                            "required": true,
+                            "allowEmpty": false
+                          },
+                          {
+                            "type": "SECONDARY_PHONE",
+                            "required": false,
+                            "allowEmpty": true
+                          },
+                          {
+                            "type": "EMAIL",
+                            "required": false,
+                            "allowEmpty": true
+                          }
+                        ],
+                        "address": {
+                          "declined": false,
+                          "streetAddress": "456 PARK AVE",
+                          "countryCode": "USA",
+                          "stateCode": "NY",
+                          "cityCode": "NEW YORK",
+                          "zipCode": "10022"
+                        },
+                        "email": [
+                          {
+                            "verified": true,
+                            "value": "YUSI0Q@EXAMPLE.COM"
+                          }
+                        ],
+                        "phone": [
+                          {
+                            "verified": true,
+                            "preference": "PRIMARY",
+                            "type": "MOBILE",
+                            "countryCode": "1",
+                            "phoneNumber": "0337753089"
+                          },
+                          {
+                            "verified": true,
+                            "preference": "SECONDARY",
+                            "type": "MOBILE",
+                            "countryCode": "33",
+                            "phoneNumber": "0240408896"
+                          }
+                        ]
+                      }
+                    ],
+                    "emergencyContact": [
+                      {
+                        "firstName": "REX",
+                        "lastName": "STUDER",
+                        "countryCode": "FI",
+                        "phoneNumber": "0481785308"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "batchResults": [
+            {
+              "request": {
+                "passengerResourceId": "4b20e180-0351-4341-86c6-f6a9ad247493",
+                "using": "PASSPORT",
+                "modified": false,
+                "saveToProfile": false
+              },
+              "error": {
+                "message": "SUCCESS"
+              }
+            }
+          ]
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: BGI Visa
+  
+  request: {
+    url: {{delta_trm}}/requirements/{{requirement_resource_id}}
+    method: PATCH
+    mode: json
+    headers: {
+      Content-Type: application/json
+      Accept: application/json
+      transactionId: VS-DigitalFirst-123-{{$guid}}
+      clientId: {{ping_client_id}}
+      configOptions: [{'nativeTravelDocs':'true'}]
+      X-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+      AppChannelName: {{AppChannelName}}
+      AppId: {{AppID}}
+    }
+  
+    body:json: {
+      {"requests":[ 
+          {
+            "passengerResourceId": "{{passenger_resource_id1}}",
+            "using": "PASSPORT",
+            "identityDocument": {
+              "type": "PASSPORT",
+              "givenNames": "{{passenger_givenNames1}}",
+              "surname": "{{passenger_surname1}}",
+              "birthDate": "{{passenger_dob1}}",
+              "gender": {
+                  "code": "M"
+              },
+              "number": "{{passport_number}}",
+              "expirationDate": "2030-05-01",
+              "issuingCountry": {
+                  "code": "{{passport_country}}"
+              },
+              "nationality": {
+                  "code": "{{passport_country}}"
+              },
+              "countryOfResidence": {
+                  "code": "{{passport_country}}"
+              },
+              "dataSourceType": "MACHINE_READABLE_ZONE",
+              "methodOfDataEntry": "S",
+              "status": "NOT_FOUND",
+              "result": "SUCCESS",
+              "sourceFromType": "PNR"
+          },
+          "consent": true,
+          "modified": true,
+          "saveToProfile": false
+      }]}
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      x-amzn-requestid: b74dad23-d37d-47a5-af33-1798d479791f
+      access-control-allow-origin: *
+      access-control-allow-headers: Content-Type,X-Amz-Date,Authorization,X-Api-Key,clientId,transactionId,testLab,channelId,configOptions,X-Zone-Type,X-Environment,X-Api-Name
+      x-amz-apigw-id: BATghEKxPHcEGug=
+      access-control-allow-methods: DELETE,GET,HEAD,OPTIONS,PUT,POST,PATCH
+      x-amzn-trace-id: Root=1-6a6332cf-532e4468758301ab7b6f8959;Parent=7661659361afea98;Sampled=0;Lineage=2:41bb0c3a:0
+      vary: Accept-Encoding
+      expires: Fri, 24 Jul 2026 09:39:32 GMT
+      cache-control: max-age=0, no-cache, no-store
+      pragma: no-cache
+      date: Fri, 24 Jul 2026 09:39:32 GMT
+      transfer-encoding: chunked
+      connection: keep-alive, Transfer-Encoding
+      strict-transport-security: max-age=86400 ; includeSubDomains ; preload
+      akamai-grn: 0.cdb01302.1784885967.ee28a50e
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "requirementsResourceId": "67743998-5be5-4aa2-8ad8-cb5c9a1b6587",
+          "checkin": false,
+          "travelRequirements": {
+            "id": "42f9d257-5667-437c-a94f-0a5c31f55033",
+            "bookingReference": {
+              "id": "E5CCSH",
+              "creationDate": "2026-07-24T00:00:00Z"
+            },
+            "trips": [
+              {
+                "id": "c4b7032c-adf6-4f58-89b9-48c86af5db7c",
+                "ordinal": 0,
+                "departureStation": {
+                  "code": "LHR",
+                  "name": "Heathrow Airport",
+                  "country": {
+                    "code": "GB",
+                    "isoAlpha3Code": "GBR"
+                  }
+                },
+                "arrivalStation": {
+                  "code": "BGI",
+                  "name": "Grantley Adams International Airport",
+                  "country": {
+                    "code": "BB",
+                    "isoAlpha3Code": "BRB"
+                  }
+                },
+                "firstDepartureLocalDate": "2026-07-27T09:35:00+01:00",
+                "lastArrivalLocalDate": "2026-07-27T13:30:00-04:00",
+                "segments": [
+                  {
+                    "id": "81da3d24-ac5a-4326-b4ab-f19d903938fc",
+                    "ordinal": 1,
+                    "operatingCarrier": {
+                      "code": "VS",
+                      "name": "Virgin Atlantic"
+                    },
+                    "flightNum": "0185",
+                    "marketingSegment": {
+                      "flightNum": "0185",
+                      "marketingCarrier": [
+                        {
+                          "code": "VS",
+                          "name": "Virgin Atlantic"
+                        }
+                      ]
+                    },
+                    "legs": [
+                      {
+                        "id": "c6970169-20ae-414b-8dad-e6cbef53df50",
+                        "ordinal": 1,
+                        "departure": {
+                          "station": {
+                            "code": "LHR",
+                            "name": "Heathrow Airport",
+                            "country": {
+                              "code": "GB",
+                              "isoAlpha3Code": "GBR"
+                            }
+                          },
+                          "estimatedDepartureLocalDateTime": "2026-07-27T09:35:00+01:00",
+                          "scheduledDepartureLocalDateTime": "2026-07-27T09:35:00+01:00",
+                          "estimatedDepartureUTCDateTime": "2026-07-27T08:35:00Z",
+                          "scheduledDepartureUTCDateTime": "2026-07-27T08:35:00Z"
+                        },
+                        "arrival": {
+                          "station": {
+                            "code": "BGI",
+                            "name": "Grantley Adams International Airport",
+                            "country": {
+                              "code": "BB",
+                              "isoAlpha3Code": "BRB"
+                            }
+                          },
+                          "estimatedArrivalLocalDateTime": "2026-07-27T13:30:00-04:00",
+                          "scheduledArrivalLocalDateTime": "2026-07-27T13:30:00-04:00",
+                          "estimatedArrivalUTCDateTime": "2026-07-27T17:30:00Z",
+                          "scheduledArrivalUTCDateTime": "2026-07-27T17:30:00Z"
+                        },
+                        "international": true
+                      }
+                    ],
+                    "international": true,
+                    "transportType": "AIR"
+                  }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": false
+              },
+              {
+                "id": "4bbeb09b-53d6-4b1f-9eda-dd69d71ad794",
+                "ordinal": 1,
+                "departureStation": {
+                  "code": "BGI",
+                  "name": "Grantley Adams International Airport",
+                  "country": {
+                    "code": "BB",
+                    "isoAlpha3Code": "BRB"
+                  }
+                },
+                "arrivalStation": {
+                  "code": "LHR",
+                  "name": "Heathrow Airport",
+                  "country": {
+                    "code": "GB",
+                    "isoAlpha3Code": "GBR"
+                  }
+                },
+                "firstDepartureLocalDate": "2026-08-24T19:50:00-04:00",
+                "lastArrivalLocalDate": "2026-08-25T09:20:00+01:00",
+                "segments": [
+                  {
+                    "id": "b67c2abb-fe15-462d-9929-0a5e31fe5e93",
+                    "ordinal": 2,
+                    "operatingCarrier": {
+                      "code": "VS",
+                      "name": "Virgin Atlantic"
+                    },
+                    "flightNum": "0186",
+                    "marketingSegment": {
+                      "flightNum": "0186",
+                      "marketingCarrier": [
+                        {
+                          "code": "VS",
+                          "name": "Virgin Atlantic"
+                        }
+                      ]
+                    },
+                    "legs": [
+                      {
+                        "id": "6b29dd93-13ff-4abb-806c-7cb774c3937c",
+                        "ordinal": 2,
+                        "departure": {
+                          "station": {
+                            "code": "BGI",
+                            "name": "Grantley Adams International Airport",
+                            "country": {
+                              "code": "BB",
+                              "isoAlpha3Code": "BRB"
+                            }
+                          },
+                          "estimatedDepartureLocalDateTime": "2026-08-24T19:50:00-04:00",
+                          "scheduledDepartureLocalDateTime": "2026-08-24T19:50:00-04:00",
+                          "estimatedDepartureUTCDateTime": "2026-08-24T23:50:00Z",
+                          "scheduledDepartureUTCDateTime": "2026-08-24T23:50:00Z"
+                        },
+                        "arrival": {
+                          "station": {
+                            "code": "LHR",
+                            "name": "Heathrow Airport",
+                            "country": {
+                              "code": "GB",
+                              "isoAlpha3Code": "GBR"
+                            }
+                          },
+                          "estimatedArrivalLocalDateTime": "2026-08-25T09:20:00+01:00",
+                          "scheduledArrivalLocalDateTime": "2026-08-25T09:20:00+01:00",
+                          "estimatedArrivalUTCDateTime": "2026-08-25T08:20:00Z",
+                          "scheduledArrivalUTCDateTime": "2026-08-25T08:20:00Z"
+                        },
+                        "international": true
+                      }
+                    ],
+                    "international": true,
+                    "transportType": "AIR"
+                  }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": false
+              }
+            ],
+            "passengers": [
+              {
+                "passengerResourceId": "233c0fa9-bbd7-4133-ba16-9afc4efef8d8",
+                "givenNames": "ONE",
+                "surname": "VIRGINTEST",
+                "nameNum": "01.01",
+                "customerId": "9999135241132",
+                "birthDate": "1986-10-30T00:00:00Z",
+                "status": {
+                  "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                  {
+                    "passengerLegHealthRequirements": [
+                      {
+                        "datedOperatingLegId": "c6970169-20ae-414b-8dad-e6cbef53df50",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": true
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "COMPLETE"
+                        }
+                      },
+                      {
+                        "datedOperatingLegId": "6b29dd93-13ff-4abb-806c-7cb774c3937c",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": true
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "COMPLETE"
+                        }
+                      }
+                    ],
+                    "passengerTripHealthRequirements": [
+                      {
+                        "tripId": "c4b7032c-adf6-4f58-89b9-48c86af5db7c",
+                        "status": {
+                          "code": "COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": true
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": false,
+                        "checkinEligible": true
+                      },
+                      {
+                        "tripId": "4bbeb09b-53d6-4b1f-9eda-dd69d71ad794",
+                        "status": {
+                          "code": "NOT_COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": true
+                              },
+                              {
+                                "requirementType": "SECONDARY_DOC",
+                                "requirementOptions": [
+                                  "E_VISA"
+                                ],
+                                "status": {
+                                  "code": "NOT_PRESENT"
+                                },
+                                "country": {
+                                  "code": "GB",
+                                  "isoAlpha3Code": "GBR"
+                                },
+                                "links": [
+                                  {
+                                    "linkId": "E_VISA_1",
+                                    "name": "Electronic Visa",
+                                    "text": "<p>Visas can be in physical form, or a digital eVisa. If it is a digital eVisa, receipt by airlines of the response message ‘0A – Valid Permission to Travel Found’ from the Home Office is satisfactory evidence of permission to travel. In the absence of the response message, airlines can check the evidence of an e-Visa at <a href=\"https://www.gov.uk/check-immigration-status\">https://www.gov.uk/check-immigration-status</a>, using a share code provided by the passenger.</p>",
+                                    "source": "government",
+                                    "href": "https://www.gov.uk/check-immigration-status"
+                                  },
+                                  {
+                                    "linkId": "E_VISA_2",
+                                    "name": "Electronic Visa",
+                                    "text": "Travel Advice Page",
+                                    "source": "vendor",
+                                    "href": "https://help.virginatlantic.com/gb/en/travel-advice.html"
+                                  }
+                                ],
+                                "transit": false
+                              }
+                            ]
+                          },
+                          {
+                            "type": "GOVERNMENT_FORMS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": []
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": false,
+                        "checkinEligible": true
+                      }
+                    ],
+                    "travelDocuments": [
+                      {
+                        "type": "PASSPORT",
+                        "givenNames": "ONE",
+                        "surname": "VIRGINTEST",
+                        "birthDate": "1986-10-30",
+                        "gender": {
+                          "code": "M"
+                        },
+                        "number": "431276122",
+                        "expirationDate": "2030-05-01",
+                        "issuingCountry": {
+                          "code": "IND",
+                          "name": "India",
+                          "isoAlpha2Code": "IN"
+                        },
+                        "nationality": {
+                          "code": "IND",
+                          "name": "India",
+                          "isoAlpha2Code": "IN"
+                        },
+                        "countryOfResidence": {
+                          "code": "IND",
+                          "name": "India",
+                          "isoAlpha2Code": "IN"
+                        },
+                        "dataSourceType": "MACHINE_READABLE_ZONE",
+                        "methodOfDataEntry": "S",
+                        "documentFeature": "MRD",
+                        "status": "NOT_FOUND",
+                        "result": "SUCCESS",
+                        "sourceFromType": "PNR"
+                      }
+                    ],
+                    "contactInformation": [
+                      {
+                        "requirements": [
+                          {
+                            "type": "US_ADDRESS",
+                            "required": false,
+                            "allowEmpty": true
+                          },
+                          {
+                            "type": "PRIMARY_PHONE",
+                            "required": false,
+                            "allowEmpty": true
+                          },
+                          {
+                            "type": "SECONDARY_PHONE",
+                            "required": false,
+                            "allowEmpty": true
+                          },
+                          {
+                            "type": "EMAIL",
+                            "required": false,
+                            "allowEmpty": true
+                          }
+                        ],
+                        "address": {},
+                        "phone": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "passengerResourceId": "b56c2dd4-9d7d-4f7f-b61e-7a93ba0e9191",
+                "givenNames": "TWO",
+                "surname": "VIRGINTEST",
+                "nameNum": "02.01",
+                "customerId": "9999135241124",
+                "birthDate": "1986-03-31T00:00:00Z",
+                "status": {
+                  "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                  {
+                    "passengerLegHealthRequirements": [
+                      {
+                        "datedOperatingLegId": "c6970169-20ae-414b-8dad-e6cbef53df50",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "NOT_PRESENT"
+                                },
+                                "returnDateRequired": false
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "NOT_COMPLETE"
+                        }
+                      },
+                      {
+                        "datedOperatingLegId": "6b29dd93-13ff-4abb-806c-7cb774c3937c",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "NOT_PRESENT"
+                                },
+                                "returnDateRequired": false
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "NOT_COMPLETE"
+                        }
+                      }
+                    ],
+                    "passengerTripHealthRequirements": [
+                      {
+                        "tripId": "c4b7032c-adf6-4f58-89b9-48c86af5db7c",
+                        "status": {
+                          "code": "NOT_COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "NOT_PRESENT"
+                                },
+                                "returnDateRequired": false
+                              }
+                            ]
+                          },
+                          {
+                            "type": "GOVERNMENT_FORMS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": []
+                          }
+                        ],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": false,
+                        "checkinEligible": false
+                      },
+                      {
+                        "tripId": "4bbeb09b-53d6-4b1f-9eda-dd69d71ad794",
+                        "status": {
+                          "code": "NOT_COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "NOT_PRESENT"
+                                },
+                                "returnDateRequired": false
+                              }
+                            ]
+                          },
+                          {
+                            "type": "GOVERNMENT_FORMS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": []
+                          }
+                        ],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": false,
+                        "checkinEligible": false
+                      }
+                    ],
+                    "travelDocuments": [],
+                    "contactInformation": [
+                      {
+                        "requirements": [
+                          {
+                            "type": "US_ADDRESS",
+                            "required": false,
+                            "allowEmpty": true
+                          },
+                          {
+                            "type": "PRIMARY_PHONE",
+                            "required": false,
+                            "allowEmpty": true
+                          },
+                          {
+                            "type": "SECONDARY_PHONE",
+                            "required": false,
+                            "allowEmpty": true
+                          },
+                          {
+                            "type": "EMAIL",
+                            "required": false,
+                            "allowEmpty": true
+                          }
+                        ],
+                        "address": {},
+                        "phone": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "batchResults": [
+            {
+              "request": {
+                "passengerResourceId": "233c0fa9-bbd7-4133-ba16-9afc4efef8d8",
+                "using": "PASSPORT",
+                "modified": false,
+                "saveToProfile": false
+              },
+              "error": {
+                "message": "SUCCESS"
+              }
+            }
+          ]
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Indian travelling to USA
+  
+  request: {
+    url: {{delta_trm}}/requirements/{{requirement_resource_id}}
+    method: PATCH
+    mode: json
+    headers: {
+      Content-Type: application/json
+      Accept: application/json
+      transactionId: VS-DigitalFirst-123-{{$guid}}
+      clientId: {{ping_client_id}}
+      configOptions: [{'nativeTravelDocs':'true'}]
+      X-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+      AppChannelName: {{AppChannelName}}
+      AppId: {{AppID}}
+    }
+  
+    body:json: {
+      {"requests":[ 
+          {
+            "passengerResourceId": "{{passenger_resource_id1}}",
+            "using": "PASSPORT",
+            "identityDocument": {
+              "type": "PASSPORT",
+              "givenNames": "{{passenger_givenNames1}}",
+              "surname": "{{passenger_surname1}}",
+              "birthDate": "1994-01-24",
+              "gender": {
+                  "code": "M"
+              },
+              "number": "{{passport_number}}",
+              "expirationDate": "2030-05-01",
+              "issuingCountry": {
+                  "code": "{{passport_country}}"
+              },
+              "nationality": {
+                  "code": "{{passport_country}}"
+              },
+              "countryOfResidence": {
+                  "code": "{{passport_country}}"
+              },
+              "dataSourceType": "MACHINE_READABLE_ZONE",
+              "methodOfDataEntry": "S",
+              "status": "NOT_FOUND",
+              "result": "SUCCESS",
+              "sourceFromType": "PNR"
+          },
+          "consent": true,
+          "modified": true,
+          "saveToProfile": false
+      }]}
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      x-amzn-requestid: fe2783a2-6eb0-4d55-9808-07237453c818
+      access-control-allow-origin: *
+      access-control-allow-headers: Content-Type,X-Amz-Date,Authorization,X-Api-Key,clientId,transactionId,testLab,channelId,configOptions,X-Zone-Type,X-Environment,X-Api-Name
+      x-amz-apigw-id: BUY6GH7zPHcEmbw=
+      access-control-allow-methods: DELETE,GET,HEAD,OPTIONS,PUT,POST,PATCH
+      x-amzn-trace-id: Root=1-6a6b3b73-46fd16a46470789e47ecc7f2;Parent=76badc7303762252;Sampled=0;Lineage=2:41bb0c3a:0
+      vary: Accept-Encoding
+      expires: Thu, 30 Jul 2026 11:54:31 GMT
+      cache-control: max-age=0, no-cache, no-store
+      pragma: no-cache
+      date: Thu, 30 Jul 2026 11:54:31 GMT
+      transfer-encoding: chunked
+      connection: keep-alive, Transfer-Encoding
+      strict-transport-security: max-age=86400 ; includeSubDomains ; preload
+      akamai-grn: 0.cdb01302.1785412467.336db608
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "requirementsResourceId": "f095a744-8a6d-47e7-a760-1e75cbab0a36",
+          "checkin": false,
+          "travelRequirements": {
+            "id": "114c8721-0068-4394-8605-184a7c2eb7ce",
+            "bookingReference": {
+              "id": "C7H3F3",
+              "creationDate": "2026-07-27T00:00:00Z"
+            },
+            "trips": [
+              {
+                "id": "ec0802d5-2908-4ee3-9a3c-38a39918ddd3",
+                "ordinal": 0,
+                "departureStation": {
+                  "code": "LHR",
+                  "name": "London Heathrow Airport",
+                  "country": {
+                    "code": "GB",
+                    "name": "United Kingdom",
+                    "isoAlpha3Code": "GBR"
+                  },
+                  "city": {
+                    "name": "London"
+                  }
+                },
+                "arrivalStation": {
+                  "code": "JFK",
+                  "name": "John F Kennedy International Airport",
+                  "country": {
+                    "code": "US",
+                    "name": "United States of America",
+                    "isoAlpha3Code": "USA"
+                  },
+                  "city": {
+                    "name": "New York"
+                  }
+                },
+                "firstDepartureLocalDate": "2026-08-04T11:45:00+01:00",
+                "lastArrivalLocalDate": "2026-08-04T14:56:00-04:00",
+                "segments": [
+                  {
+                    "id": "4bff611e-dac2-4d47-891d-efcf78505681",
+                    "ordinal": 1,
+                    "operatingCarrier": {
+                      "code": "DL",
+                      "name": "Delta Air Lines"
+                    },
+                    "flightNum": "4007",
+                    "marketingSegment": {
+                      "flightNum": "4007",
+                      "marketingCarrier": [
+                        {
+                          "code": "VS",
+                          "name": "Virgin Atlantic Airways"
+                        }
+                      ]
+                    },
+                    "legs": [
+                      {
+                        "id": "37148791-ef62-49ea-8d8b-59765c975b06",
+                        "ordinal": 1,
+                        "departure": {
+                          "station": {
+                            "code": "LHR",
+                            "name": "London Heathrow Airport",
+                            "country": {
+                              "code": "GB",
+                              "name": "United Kingdom",
+                              "isoAlpha3Code": "GBR"
+                            },
+                            "city": {
+                              "name": "London"
+                            }
+                          },
+                          "estimatedDepartureLocalDateTime": "2026-08-04T11:45:00+01:00",
+                          "scheduledDepartureLocalDateTime": "2026-08-04T11:45:00+01:00",
+                          "estimatedDepartureUTCDateTime": "2026-08-04T10:45:00Z",
+                          "scheduledDepartureUTCDateTime": "2026-08-04T10:45:00Z"
+                        },
+                        "arrival": {
+                          "station": {
+                            "code": "JFK",
+                            "name": "John F Kennedy International Airport",
+                            "country": {
+                              "code": "US",
+                              "name": "United States of America",
+                              "isoAlpha3Code": "USA"
+                            },
+                            "city": {
+                              "name": "New York"
+                            }
+                          },
+                          "estimatedArrivalLocalDateTime": "2026-08-04T14:56:00-04:00",
+                          "scheduledArrivalLocalDateTime": "2026-08-04T14:56:00-04:00",
+                          "estimatedArrivalUTCDateTime": "2026-08-04T18:56:00Z",
+                          "scheduledArrivalUTCDateTime": "2026-08-04T18:56:00Z"
+                        },
+                        "international": true
+                      }
+                    ],
+                    "international": true,
+                    "transportType": "AIR"
+                  }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": false
+              }
+            ],
+            "passengers": [
+              {
+                "passengerResourceId": "7fea379b-63ac-4d5c-9270-d1e626f92bdb",
+                "givenNames": "VALORIE",
+                "surname": "PETTS",
+                "nameNum": "01.01",
+                "customerId": "9999133778648",
+                "birthDate": "1994-01-24T00:00:00Z",
+                "status": {
+                  "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                  {
+                    "passengerLegHealthRequirements": [
+                      {
+                        "datedOperatingLegId": "37148791-ef62-49ea-8d8b-59765c975b06",
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT"
+                                },
+                                "returnDateRequired": false,
+                                "verified": true
+                              }
+                            ]
+                          },
+                          {
+                            "type": "GOVERNMENT_FORMS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "CONTACT_TRACING",
+                                "status": {
+                                  "code": "NOT_PRESENT"
+                                },
+                                "acceptanceWindow": {
+                                  "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                  "from": "PT72H",
+                                  "to": ""
+                                },
+                                "effectivity": {
+                                  "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                  "effectiveUTCDate": "2021-11-08 04:01:00Z",
+                                  "expirationUTCDate": "2029-11-08 00:00:00Z",
+                                  "effectiveLocalDate": "2021-11-08 00:00:00Z",
+                                  "expirationLocalDate": "2029-11-08 00:00:00Z"
+                                },
+                                "ageEligibility": {
+                                  "minimumAge": 0,
+                                  "maximumAge": 0
+                                },
+                                "ruleId": "LEG_INTL_US-S1LHRJFK",
+                                "digitalVerificationEligible": false
+                              }
+                            ]
+                          }
+                        ],
+                        "status": {
+                          "code": "NOT_COMPLETE"
+                        }
+                      }
+                    ],
+                    "passengerTripHealthRequirements": [
+                      {
+                        "tripId": "ec0802d5-2908-4ee3-9a3c-38a39918ddd3",
+                        "status": {
+                          "code": "NOT_COMPLETE"
+                        },
+                        "requirementCategories": [
+                          {
+                            "type": "TRAVEL_DOCUMENTS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "PASSPORT",
+                                "status": {
+                                  "code": "PRESENT",
+                                  "reason": ""
+                                },
+                                "returnDateRequired": false,
+                                "verified": true
+                              },
+                              {
+                                "requirementType": "SECONDARY_DOC",
+                                "requirementOptions": [
+                                  "EMBASSY_VISA"
+                                ],
+                                "status": {
+                                  "code": "NOT_PRESENT"
+                                },
+                                "country": {
+                                  "code": "US",
+                                  "isoAlpha3Code": "USA"
+                                },
+                                "links": [
+                                  {
+                                    "linkId": "EMBASSY_VISA_1",
+                                    "name": "Visa",
+                                    "text": "<p>Passengers must have a valid visa issued by the USA.</p>|<p>Passengers with an Authorization for Parole of an Alien into the United States (Form I-512) or an Authorization to Transport for Parole of a Noncitizen into the United States (Form I-512L) do not need a visa.</p>|<p>Passengers with an Employment Authorization Card (Form I-766) do not need a visa if endorsed \"Serves as I-512 Advance Parole\" or \"Valid for re-entry to US\".</p>",
+                                    "source": "vendor",
+                                    "href": "https://help.virginatlantic.com/gb/en/travel-advice.html"
+                                  },
+                                  {
+                                    "linkId": "EMBASSY_VISA_2",
+                                    "name": "Visa",
+                                    "text": "<p>Immediate family members of nationals of Colombia, Cuba, Ecuador, El Salvador, Guatemala, Haiti, Honduras, Nicaragua and Venezuela traveling under the Family Reunification Parole (FRP) or of nationals of Ukraine traveling under \"United for Ukraine\" status process do not need a visa if they:<br />- have an approved Advance Travel Authorization (ATA) issued by U.S. Customs and Border Protection (CBP) to seek parole; and<br />- have a valid passport; and<br />- travel together with the national of Colombia, Cuba, Ecuador, El Salvador, Guatemala, Haiti, Honduras, Nicaragua, Ukraine or Venezuela or contact the U.S. Customs and Border Protection (CBP).<br />Immediate family members may be of any nationality and are limited to spouse or common-law partner and unmarried children under the age of 21.<br />Passengers can check the status of their ATA at <a href=\"https://my.uscis.gov/\">https://my.uscis.gov/</a> .</p>",
+                                    "source": "government",
+                                    "href": "https://my.uscis.gov/"
+                                  }
+                                ],
+                                "transit": false
+                              }
+                            ]
+                          },
+                          {
+                            "type": "GOVERNMENT_FORMS",
+                            "status": {
+                              "code": "NOT_COMPLETE"
+                            },
+                            "requirements": [
+                              {
+                                "requirementType": "CONTACT_TRACING",
+                                "status": {
+                                  "code": "NOT_PRESENT",
+                                  "reason": ""
+                                },
+                                "acceptanceWindow": {
+                                  "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                  "from": "PT72H",
+                                  "to": ""
+                                },
+                                "effectivity": {
+                                  "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                  "effectiveUTCDate": "2021-11-08 04:01:00Z",
+                                  "expirationUTCDate": "2029-11-08 00:00:00Z",
+                                  "effectiveLocalDate": "2021-11-08 00:00:00Z",
+                                  "expirationLocalDate": "2029-11-08 00:00:00Z"
+                                },
+                                "ageEligibility": {
+                                  "minimumAge": 0,
+                                  "maximumAge": 0
+                                },
+                                "ruleId": "LEG_INTL_US-S1LHRJFK",
+                                "digitalVerificationEligible": false
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptions": [],
+                        "flown": false,
+                        "missingCountryCode": false,
+                        "checkin": false,
+                        "checkinEligible": false
+                      }
+                    ],
+                    "travelDocuments": [
+                      {
+                        "type": "PASSPORT",
+                        "givenNames": "VALORIE",
+                        "surname": "PETTS",
+                        "birthDate": "1994-01-24",
+                        "gender": {
+                          "code": "M"
+                        },
+                        "number": "431276122",
+                        "expirationDate": "2030-05-01",
+                        "issuingCountry": {
+                          "code": "IND",
+                          "name": "India",
+                          "isoAlpha2Code": "IN"
+                        },
+                        "nationality": {
+                          "code": "IND",
+                          "name": "India",
+                          "isoAlpha2Code": "IN"
+                        },
+                        "countryOfResidence": {
+                          "code": "IND",
+                          "name": "India",
+                          "isoAlpha2Code": "IN"
+                        },
+                        "dataSourceType": "MACHINE_READABLE_ZONE",
+                        "methodOfDataEntry": "S",
+                        "documentFeature": "MRD",
+                        "status": "NOT_FOUND",
+                        "result": "SUCCESS",
+                        "sourceFromType": "PNR"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "batchResults": [
+            {
+              "request": {
+                "passengerResourceId": "7fea379b-63ac-4d5c-9270-d1e626f92bdb",
+                "using": "PASSPORT",
+                "modified": false,
+                "saveToProfile": false
+              },
+              "error": {
+                "message": "SUCCESS"
+              }
+            }
+          ]
+        }
+      '''
+    }
+  }
+}

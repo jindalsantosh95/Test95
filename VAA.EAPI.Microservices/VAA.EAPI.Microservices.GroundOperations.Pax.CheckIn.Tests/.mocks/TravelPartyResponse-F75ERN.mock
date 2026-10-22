@@ -1,0 +1,41 @@
+###Request
+POST https://stg.virginatlantic.com/PCCOciWeb/apiv2/travelparties HTTP/1.1
+
+$[?(@.recordLocator == 'F75ERN')]
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+  "bauFlow": false,
+  "checkinAdvisory": {
+    "advisoryText1": "Unfortunately, government regulations require you check in at the airport, either at the kiosk or with an agent, for this flight",
+    "advisoryText2": "You can always view your trip details at {0}.",
+    "advisoryText3": "{0}",
+    "checkinAdvisory": true,
+    "errorMessage": "doNotBoardOnFindPnr",
+    "title": "Advisory"
+  },
+  "displayContactTracing": false,
+  "hasGroupLeaderFlag": false,
+  "hasGroupPNRFlag": false,
+  "passengers": [
+    {
+      "checkedInOnASL": false,
+      "firstNIN": "01",
+      "firstName": "DONOTBOARD",
+      "infantPresent": false,
+      "lastNIN": "01",
+      "lastName": "TESTING",
+      "visaRequired": false
+    }
+  ],
+  "recordLocator": "F75ERN",
+  "saferTravelEnabled": false,
+  "transitingUS": false
+}

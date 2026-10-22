@@ -1,0 +1,5 @@
+#!/bin/sh
+# Fast-fail new C# formatting and encoding regressions before a branch reaches CI.
+
+repo_root="$(git rev-parse --show-toplevel)" || exit 1
+pwsh -NoProfile -File "$repo_root/VAA.EAPI.Automation/scripts/verify.ps1" -Base origin/main -SkipBuild

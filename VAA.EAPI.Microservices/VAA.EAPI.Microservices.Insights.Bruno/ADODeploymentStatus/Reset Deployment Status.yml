@@ -1,0 +1,18 @@
+info:
+  name: Reset Deployment Status
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/deploymentstatus/reset"
+  headers:
+    - name: Ocp-Apim-Subscription-Key
+      value: "{{ocpkey}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

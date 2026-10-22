@@ -1,0 +1,32 @@
+meta {
+  name: Custom Email OTP Send
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{identity_base_url}}/CustomEmailOTPSend
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "data": {
+      "dataType": "microsoft.graph.onOtpSendRequestData",
+      "otpContext": {
+        "identifier": "{{identity_email}}",
+        "oneTimeCode": "{{otp_code}}"
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,25 @@
+meta {
+  name: accountBannerDetails
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query accountBannerDetails {
+    accountBannerDetails {
+      __typename
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

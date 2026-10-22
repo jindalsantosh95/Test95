@@ -1,0 +1,1545 @@
+{
+  "$schema": "./e2e-scenario-schema.json",
+  "scenarios": [
+    {
+      "testName": "Order_OneWay_InsuranceReject_FraudCheck_LHR-ATL_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "ATL",
+      "paymentCountry": "Nigeria",
+      "insurance": "Reject",
+      "expectFraudCheck": true,
+      "useNearDepartureDate": true,
+      "validateRejectedInsuranceInOrderDoc": true,
+      "categories": [
+        "BookGraphQLRegression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Seat_OneWay_SeatSelection_InsuranceReject_LHR-ATL_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "usePlaywrightForHpp": true,
+      "origin": "LHR",
+      "destination": "ATL",
+      "flightType": "VS",
+      "seatMode": "OneWay",
+      "seatProductName": "Standard Seat",
+      "cabinName": "VSCL",
+      "insurance": "Reject",
+      "categories": [
+        "BookGraphQLRegression",
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_InsuranceReject_LON-NYC_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LON",
+      "destination": "NYC",
+      "journeyType": "Return",
+      "teens": 0,
+      "seatMode": "AllSectors",
+      "seatProductName": "Standard Seat",
+      "cabinName": "VSCL",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_InsuranceReject_NYC-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "NYC",
+      "destination": "LHR",
+      "journeyType": "Return",
+      "teens": 0,
+      "seatMode": "AllSectors",
+      "seatProductName": "Standard Seat",
+      "cabinName": "VSCL",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_InsuranceReject_LHR-ATL_2ADT_1YTH_1CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "ATL",
+      "journeyType": "Return",
+      "adults": 2,
+      "children": 1,
+      "seatMode": "AllSectors",
+      "seatProductName": "Preferred Seat - Economy Cabin",
+      "cabinName": "VSCL",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_ECONOMYDELIGHT_InsuranceReject_LHR-BOS_2ADT_1YTH_1CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "BOS",
+      "journeyType": "Return",
+      "fareFamily": "ECONOMYDELIGHT",
+      "adults": 2,
+      "children": 1,
+      "seatMode": "AllSectors",
+      "seatProductName": "Economy Delight seat",
+      "cabinName": "VSDT",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_ECONCLASSICFLEXIBLE_InsuranceReject_LHR-ATL_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "ATL",
+      "journeyType": "Return",
+      "fareFamily": "ECONCLASSICFLEXIBLE",
+      "seatMode": "AllSectors",
+      "seatProductName": "Preferred Seat - Economy Cabin",
+      "cabinName": "VSCL",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_ECONDELIGHTFLEXIBLE_InsuranceReject_LHR-ATL_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "ATL",
+      "journeyType": "Return",
+      "fareFamily": "ECONDELIGHTFLEXIBLE",
+      "seatMode": "AllSectors",
+      "seatProductName": "Economy Delight seat",
+      "cabinName": "VSDT",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_COMFORTPLUSPREMIUMECON_InsuranceReject_LHR-ATL_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "ATL",
+      "journeyType": "Return",
+      "fareFamily": "COMFORTPLUSPREMIUMECON",
+      "flightType": "VS",
+      "seatMode": "AllSectors",
+      "seatProductName": "Premium Economy Cabin Seat",
+      "cabinName": "VSPE",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_COMFORTPLUSPREMIUMFLEXIBLE_InsuranceReject_ATL-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "LHR",
+      "journeyType": "Return",
+      "fareFamily": "COMFORTPLUSPREMIUMFLEXIBLE",
+      "seatMode": "AllSectors",
+      "seatProductName": "Preferred Seat - Economy Cabin",
+      "cabinName": "VSPE",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_BUSFIRST_InsuranceReject_LHR-JFK_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "journeyType": "Return",
+      "fareFamily": "BUSFIRST",
+      "flightType": "VS",
+      "adults": 1,
+      "teens": 0,
+      "children": 0,
+      "infants": 0,
+      "seatMode": "AllSectors",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "randomOffer": true,
+      "insurance": "Reject",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_BUSFIRSTFLEXIBLE_InsuranceReject_LHR-MCO_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "MCO",
+      "journeyType": "Return",
+      "fareFamily": "BUSFIRSTFLEXIBLE",
+      "seatMode": "AllSectors",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_OneWay_SeatSelection_BUSFIRST_PayPal_InsuranceReject_LHR-ATL_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "usePlaywrightForHpp": true,
+      "origin": "LHR",
+      "destination": "ATL",
+      "fareFamily": "BUSFIRST",
+      "seatMode": "OneWay",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "paymentMethod": "PayPal",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "Book-Core-Regression",
+        "BookGraphQLRegression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Seat_OneWay_SeatSelection_BUSFIRST_PayPal_InsuranceReject_ATL-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "LHR",
+      "fareFamily": "BUSFIRST",
+      "seatMode": "OneWay",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "paymentMethod": "PayPal",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "BookGraphQLRegression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_BUSFIRST_PayPal_InsuranceReject_LHR-ATL_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "ATL",
+      "journeyType": "Return",
+      "fareFamily": "BUSFIRST",
+      "seatMode": "AllSectors",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "paymentMethod": "PayPal",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_BUSFIRSTFLEXIBLE_PayPal_InsuranceReject_LHR-MCO_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "MCO",
+      "journeyType": "Return",
+      "fareFamily": "BUSFIRSTFLEXIBLE",
+      "seatMode": "AllSectors",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "paymentMethod": "PayPal",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_BUSFIRST_PayPal_InsuranceReject_BOS-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "BOS",
+      "destination": "LHR",
+      "journeyType": "Return",
+      "fareFamily": "BUSFIRST",
+      "seatMode": "AllSectors",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "paymentMethod": "PayPal",
+      "insurance": "Reject",
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_OneWay_SeatClearDown_CombinedBasketUpdate_DirectSearchInput_LHR-DEL_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "DEL",
+      "children": 1,
+      "infants": 1,
+      "seatMode": "ClearDown",
+      "seatProductName": "Standard Seat",
+      "cabinName": "VSCL",
+      "useExplicitSearchOverload": true,
+      "useUpdateBasketShortcut": true,
+      "validatePaymentRetreive": true,
+      "writeToAzure": false
+    },
+    {
+      "testName": "Seat_OneWay_SeatClearDown_ECONOMYDELIGHT_CombinedBasketUpdate_DirectSearchInput_ATL-LHR_1ADT_1YTH_0CHD_1INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "LHR",
+      "fareFamily": "ECONOMYDELIGHT",
+      "teens": 0,
+      "infants": 1,
+      "seatMode": "ClearDown",
+      "seatProductName": "Economy Delight seat",
+      "cabinName": "VSDT",
+      "useExplicitSearchOverload": true,
+      "useUpdateBasketShortcut": true,
+      "validatePaymentRetreive": true,
+      "writeToAzure": false,
+      "categories": [
+        "Book-Core-Regression"
+      ]
+    },
+    {
+      "testName": "Seat_OneWay_SeatSelection_CombinedBasketUpdate_DirectSearchInput_LHR-ATL_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "ATL",
+      "teens": 0,
+      "seatMode": "OneWay",
+      "seatProductName": "Standard Seat",
+      "cabinName": "VSCL",
+      "paymentCountry": "United States",
+      "state": "Alaska",
+      "postcode": "99501",
+      "useExplicitSearchOverload": true,
+      "useUpdateBasketShortcut": true,
+      "randomOffer": false,
+      "validatePaymentRetreive": true,
+      "usePlaywrightForHpp": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Seat_OneWay_SeatSelection_FlyingClubGold_CombinedBasketUpdate_DirectSearchInput_LHR-MCO_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "MCO",
+      "children": 1,
+      "infants": 1,
+      "seatMode": "OneWay",
+      "seatProductName": "Standard Seat",
+      "cabinName": "VSCL",
+      "flyingClubPassenger": true,
+      "flyingClubTier": "Gold",
+      "useExplicitSearchOverload": true,
+      "useUpdateBasketShortcut": true,
+      "randomOffer": false,
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_OneWay_SeatSelection_BUSFIRST_FlyingClubRed_CombinedBasketUpdate_DirectSearchInput_LHR-JNB_1ADT_1YTH_1CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JNB",
+      "fareFamily": "BUSFIRST",
+      "children": 1,
+      "seatMode": "OneWay",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "flyingClubPassenger": true,
+      "flyingClubTier": "Red",
+      "useExplicitSearchOverload": true,
+      "useUpdateBasketShortcut": true,
+      "randomOffer": false,
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "Seat_OneWay_SeatSelection_ThreeDS_CombinedBasketUpdate_DirectSearchInput_LHR-JFK_4ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "usePlaywrightForHpp": true,
+      "origin": "LHR",
+      "destination": "JFK",
+      "adults": 4,
+      "teens": 0,
+      "seatMode": "OneWay",
+      "seatProductName": "Preferred Seat - Economy Cabin",
+      "cabinName": "VSCL",
+      "paymentMethod": "ThreeDS",
+      "cardNumber": "4444333322221111",
+      "is3DS": true,
+      "useExplicitSearchOverload": true,
+      "useUpdateBasketShortcut": true,
+      "validatePaymentRetreive": true,
+      "categories": [
+        "Book-Core-Regression",
+        "BookGlobalProtectRequired"
+      ]
+    },
+    {
+      "testName": "Seat_OneWay_SeatSelection_BUSFIRST_ThreeDS_CombinedBasketUpdate_DirectSearchInput_BOS-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "usePlaywrightForHpp": true,
+      "origin": "BOS",
+      "destination": "LHR",
+      "fareFamily": "BUSFIRST",
+      "seatMode": "OneWay",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "paymentMethod": "ThreeDS",
+      "cardNumber": "4444333322221111",
+      "is3DS": true,
+      "useExplicitSearchOverload": true,
+      "useUpdateBasketShortcut": true,
+      "validatePaymentRetreive": true,
+      "categories": [
+        "BookGlobalProtectRequired"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_ThreeDS_CombinedBasketUpdate_DirectSearchInput_LHR-JFK_2ADT_1YTH_1CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "journeyType": "Return",
+      "adults": 2,
+      "children": 1,
+      "seatMode": "AllSectors",
+      "seatProductName": "Standard Seat",
+      "cabinName": "VSCL",
+      "paymentMethod": "ThreeDS",
+      "cardNumber": "4444333322221111",
+      "is3DS": true,
+      "useExplicitSearchOverload": true,
+      "useUpdateBasketShortcut": true,
+      "validatePaymentRetreive": true,
+      "categories": [
+        "BookGlobalProtectRequired"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_BUSFIRST_ThreeDS_CombinedBasketUpdate_DirectSearchInput_BOS-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "BOS",
+      "destination": "LHR",
+      "journeyType": "Return",
+      "fareFamily": "BUSFIRST",
+      "seatMode": "AllSectors",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "paymentMethod": "ThreeDS",
+      "cardNumber": "4444333322221111",
+      "is3DS": true,
+      "useExplicitSearchOverload": true,
+      "useUpdateBasketShortcut": true,
+      "validatePaymentRetreive": true,
+      "categories": [
+        "BookGlobalProtectRequired"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_LHR-MBJ_2ADT_1YTH_1CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "MBJ",
+      "journeyType": "Return",
+      "adults": 2,
+      "children": 1,
+      "seatMode": "AllSectors",
+      "seatProductName": "Standard Seat",
+      "cabinName": "VSCL",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "BookEdgeCase"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_ECONCLASSICFLEXIBLE_LHR-SVD_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "SVD",
+      "journeyType": "Return",
+      "fareFamily": "ECONCLASSICFLEXIBLE",
+      "seatMode": "AllSectors",
+      "seatProductName": "Preferred Seat - Economy Cabin",
+      "cabinName": "VSCL",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "BookEdgeCase"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_ECONDELIGHTFLEXIBLE_LHR-SVD_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "SVD",
+      "journeyType": "Return",
+      "fareFamily": "ECONDELIGHTFLEXIBLE",
+      "seatMode": "AllSectors",
+      "seatProductName": "Economy Delight seat",
+      "cabinName": "VSDT",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "BookEdgeCase"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_COMFORTPLUSPREMIUMECON_LHR-SVD_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "SVD",
+      "journeyType": "Return",
+      "fareFamily": "COMFORTPLUSPREMIUMECON",
+      "seatMode": "AllSectors",
+      "seatProductName": "Premium Economy Cabin Seat",
+      "cabinName": "VSPE",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "BookEdgeCase"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_BUSFIRST_LHR-MBJ_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "MBJ",
+      "journeyType": "Return",
+      "fareFamily": "BUSFIRST",
+      "seatMode": "AllSectors",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "BookEdgeCase"
+      ]
+    },
+    {
+      "testName": "Seat_Return_SeatAllSectors_BUSFIRSTFLEXIBLE_LHR-MBJ_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "MBJ",
+      "journeyType": "Return",
+      "fareFamily": "BUSFIRSTFLEXIBLE",
+      "seatMode": "AllSectors",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "validatePaymentRetreive": true,
+      "categories": [
+        "BookEdgeCase"
+      ]
+    },
+    {
+      "testName": "Redemption_OneWay_RewardSearch_AWARDECONOMY_DirectSearchInput_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "usePlaywrightForHpp": true,
+      "origin": "LHR",
+      "destination": "JFK",
+      "fareFamily": "AWARDECONOMY",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Red",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "useExplicitSearchOverload": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "VoucherConfirmation_OneWay_Companion_AWARDECONOMY_LHR-JFK_2ADT_0YTH_0CHD_0INF_ValidatesSettledBasket",
+      "usePlaywrightForHpp": true,
+      "origin": "LHR",
+      "destination": "JFK",
+      "fareFamily": "AWARDECONOMY",
+      "adults": 2,
+      "teens": 0,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Red",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "validateVoucherConfirmation": true,
+      "voucherRedemptionType": "COMPANION",
+      "voucherType": "Virgin Red US credit card",
+      "exactVoucherCount": 2,
+      "expectedAppliedVoucherCount": 1,
+      "requireAllVouchersMatchType": true,
+      "voucherMinimumPoints": 50000,
+      "useExplicitSearchOverload": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "VoucherConfirmation_OneWay_Upgrade_AWARDCOMFORTPLUSPREMIUMECONOMY_LHR-JFK_1ADT_0YTH_0CHD_0INF_ValidatesSettledBasket",
+      "usePlaywrightForHpp": true,
+      "origin": "LHR",
+      "destination": "JFK",
+      "fareFamily": "AWARDCOMFORTPLUSPREMIUMECONOMY",
+      "adults": 1,
+      "teens": 0,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Silver",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "validateVoucherConfirmation": true,
+      "voucherRedemptionType": "UPGRADE",
+      "exactVoucherCount": 1,
+      "expectedAppliedVoucherCount": 1,
+      "useExplicitSearchOverload": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "VoucherConfirmation_Return_Companion_AWARDECONOMY_LHR-JFK_2ADT_0YTH_0CHD_0INF_ValidatesSettledBasket",
+      "usePlaywrightForHpp": true,
+      "origin": "LHR",
+      "destination": "JFK",
+      "journeyType": "Return",
+      "fareFamily": "AWARDECONOMY",
+      "adults": 2,
+      "teens": 0,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Red",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "validateVoucherConfirmation": true,
+      "voucherRedemptionType": "COMPANION",
+      "voucherType": "Virgin Red US credit card",
+      "exactVoucherCount": 2,
+      "expectedAppliedVoucherCount": 1,
+      "requireAllVouchersMatchType": true,
+      "voucherMinimumPoints": 50000,
+      "useExplicitSearchOverload": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "VoucherConfirmation_Return_Upgrade_AWARDCOMFORTPLUSPREMIUMECONOMY_LHR-JFK_1ADT_0YTH_0CHD_0INF_ValidatesSettledBasket",
+      "usePlaywrightForHpp": true,
+      "origin": "LHR",
+      "destination": "JFK",
+      "journeyType": "Return",
+      "fareFamily": "AWARDCOMFORTPLUSPREMIUMECONOMY",
+      "adults": 1,
+      "teens": 0,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Silver",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "validateVoucherConfirmation": true,
+      "voucherRedemptionType": "UPGRADE",
+      "exactVoucherCount": 1,
+      "expectedAppliedVoucherCount": 1,
+      "useExplicitSearchOverload": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "VoucherConfirmation_Return_Companion_AWARDECONOMY_LHR-JFK_4ADT_0YTH_0CHD_0INF_TwoVouchers",
+      "usePlaywrightForHpp": true,
+      "origin": "LHR",
+      "destination": "JFK",
+      "journeyType": "Return",
+      "fareFamily": "AWARDECONOMY",
+      "adults": 4,
+      "teens": 0,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Red",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "validateVoucherConfirmation": true,
+      "voucherRedemptionType": "COMPANION",
+      "voucherType": "Virgin Red US credit card",
+      "exactVoucherCount": 2,
+      "expectedAppliedVoucherCount": 2,
+      "requireAllVouchersMatchType": true,
+      "voucherMinimumPoints": 100000,
+      "useExplicitSearchOverload": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Redemption_OneWay_RewardSearch_AWARDCOMFORTPLUSPREMIUMECONOMY_DirectSearchInput_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "fareFamily": "AWARDCOMFORTPLUSPREMIUMECONOMY",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Silver",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "useExplicitSearchOverload": true
+    },
+    {
+      "testName": "Redemption_OneWay_RewardSearch_AWARDECONOMY_DirectSearchInput_ATL-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "LHR",
+      "fareFamily": "AWARDECONOMY",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Gold",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "useExplicitSearchOverload": true
+    },
+    {
+      "testName": "Redemption_OneWay_RewardSearch_AWARDBUSINESSFIRST_DirectSearchInput_ATL-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "LHR",
+      "fareFamily": "AWARDBUSINESSFIRST",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Red",
+      "cardNumber": "5200000000001005",
+      "cardType": "MasterCard",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "useExplicitSearchOverload": true
+    },
+    {
+      "testName": "Redemption_Return_RewardSearch_AWARDECONOMY_DirectSearchInput_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "journeyType": "Return",
+      "fareFamily": "AWARDECONOMY",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Red",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "useExplicitSearchOverload": true
+    },
+    {
+      "testName": "Redemption_Return_RewardSearch_AWARDCOMFORTPLUSPREMIUMECONOMY_DirectSearchInput_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "journeyType": "Return",
+      "fareFamily": "AWARDCOMFORTPLUSPREMIUMECONOMY",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Silver",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "useExplicitSearchOverload": true
+    },
+    {
+      "testName": "Redemption_Return_RewardSearch_AWARDECONOMY_DirectSearchInput_ATL-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "LHR",
+      "journeyType": "Return",
+      "fareFamily": "AWARDECONOMY",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Gold",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "useExplicitSearchOverload": true
+    },
+    {
+      "testName": "Redemption_Return_RewardSearch_AWARDBUSINESSFIRST_DirectSearchInput_ATL-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "LHR",
+      "journeyType": "Return",
+      "fareFamily": "AWARDBUSINESSFIRST",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Red",
+      "cardNumber": "5200000000001005",
+      "cardType": "MasterCard",
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "useExplicitSearchOverload": true
+    },
+    {
+      "testName": "Redemption_OneWay_RewardSearch_AWARDECONOMY_ThreeDS_DirectSearchInput_LHR-ATL_1ADT_1YTH_0CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "ATL",
+      "fareFamily": "AWARDECONOMY",
+      "teens": 0,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "loyaltyTierCode": "Red",
+      "paymentMethod": "ThreeDS",
+      "cardNumber": "4444333322221111",
+      "is3DS": true,
+      "isRewardSearch": true,
+      "validateRedemptionBasket": true,
+      "useExplicitSearchOverload": true,
+      "categories": [
+        "BookGlobalProtectRequired"
+      ]
+    },
+    {
+      "testName": "PartialPwp_OneWay_DirectSearchInput_LHR-JFK_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "teens": 0,
+      "bookingType": "PayWithPoints",
+      "loyaltyTierCode": "Red",
+      "payWithPointsAmount": "9000",
+      "useExplicitSearchOverload": true,
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "PartialPwp_OneWay_DirectSearchInput_ATL-LHR_1ADT_2YTH_0CHD_0INF_ValidatesEndToEnd",
+      "usePlaywrightForHpp": true,
+      "origin": "ATL",
+      "destination": "LHR",
+      "teens": 2,
+      "bookingType": "PayWithPoints",
+      "loyaltyTierCode": "Red",
+      "payWithPointsAmount": "150000",
+      "useExplicitSearchOverload": true,
+      "validatePaymentRetreive": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "PartialPwp_OneWay_DirectSearchInput_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "loyaltyTierCode": "Red",
+      "payWithPointsAmount": "150000",
+      "useExplicitSearchOverload": true,
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "PartialPwp_OneWay_DirectSearchInput_LHR-JFK_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd_Case2",
+      "origin": "LHR",
+      "destination": "JFK",
+      "teens": 0,
+      "bookingType": "PayWithPoints",
+      "loyaltyTierCode": "Silver",
+      "payWithPointsAmount": "190000",
+      "useExplicitSearchOverload": true,
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "PartialPwp_OneWay_DirectSearchInput_JFK-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "teens": 0,
+      "bookingType": "PayWithPoints",
+      "loyaltyTierCode": "Gold",
+      "payWithPointsAmount": "190000",
+      "useExplicitSearchOverload": true,
+      "validatePaymentRetreive": true
+    },
+    {
+      "testName": "MultiCity_MultiCity_LHR-JFK-JFK-LAX-LAX-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "usePlaywrightForHpp": true,
+      "multiCityLocations": [
+        "LHR",
+        "JFK",
+        "JFK",
+        "LAX",
+        "LAX",
+        "LHR"
+      ],
+      "isMultiCity": true,
+      "journeyType": "MultiCity",
+      "categories": [
+        "Book-Core-Regression",
+        "BookFeatureMultiCity",
+        "LocalRun"
+      ]
+    },
+    {
+      "testName": "MultiCity_MultiCity_IAD-LHR-LHR-DEL-DEL-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "multiCityLocations": [
+        "IAD",
+        "LHR",
+        "LHR",
+        "DEL",
+        "DEL",
+        "LHR"
+      ],
+      "isMultiCity": true,
+      "journeyType": "MultiCity",
+      "categories": [
+        "BookFeatureMultiCity",
+        "LocalRun"
+      ]
+    },
+    {
+      "testName": "MultiCity_MultiCity_TLV-LHR-LHR-JFK-ATL-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "multiCityLocations": [
+        "TLV",
+        "LHR",
+        "LHR",
+        "JFK",
+        "ATL",
+        "LHR"
+      ],
+      "isMultiCity": true,
+      "journeyType": "MultiCity",
+      "categories": [
+        "BookFeatureMultiCity",
+        "LocalRun"
+      ]
+    },
+    {
+      "testName": "MultiCity_MultiCity_LHR-DEL-DEL-LHR-LHR-JFK_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "multiCityLocations": [
+        "LHR",
+        "DEL",
+        "DEL",
+        "LHR",
+        "LHR",
+        "JFK"
+      ],
+      "isMultiCity": true,
+      "journeyType": "MultiCity",
+      "categories": [
+        "BookFeatureMultiCity",
+        "LocalRun"
+      ]
+    },
+    {
+      "testName": "CoBrand_OneWay_JFK-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "isCoBrand": true,
+      "loyaltyTierCode": "Gold",
+      "coBrandLastName": "BERNAL",
+      "coBrandFirstName": "OPTIMA",
+      "synchronyApplicationStatus": "APPROVED"
+    },
+    {
+      "testName": "CoBrand_OneWay_ATL-LHR_1ADT_2YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "LHR",
+      "adults": 1,
+      "teens": 2,
+      "isCoBrand": true,
+      "loyaltyTierCode": "Gold",
+      "coBrandLastName": "Refer",
+      "coBrandFirstName": "Joe",
+      "synchronyApplicationStatus": "REFERRED"
+    },
+    {
+      "testName": "CoBrand_OneWay_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "children": 1,
+      "infants": 1,
+      "isCoBrand": true,
+      "loyaltyTierCode": "Silver",
+      "coBrandLastName": "Decline",
+      "coBrandFirstName": "Joe",
+      "synchronyApplicationStatus": "DECLINED"
+    },
+    {
+      "testName": "CoBrand_OneWay_RewardSearch_AWARDECONOMY_JFK-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "fareFamily": "AWARDECONOMY",
+      "isCoBrand": true,
+      "isRewardSearch": true,
+      "loyaltyTierCode": "Red",
+      "coBrandLastName": "BERNAL",
+      "coBrandFirstName": "OPTIMA",
+      "synchronyApplicationStatus": "APPROVED"
+    },
+    {
+      "testName": "CoBrand_OneWay_RewardSearch_AWARDECONOMY_ATL-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "LHR",
+      "fareFamily": "AWARDECONOMY",
+      "isCoBrand": true,
+      "isRewardSearch": true,
+      "loyaltyTierCode": "Gold",
+      "coBrandLastName": "Refer",
+      "coBrandFirstName": "Joe",
+      "synchronyApplicationStatus": "REFERRED"
+    },
+    {
+      "testName": "CoBrand_OneWay_RewardSearch_AWARDECONOMY_JFK-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd_Case2",
+      "origin": "JFK",
+      "destination": "LHR",
+      "fareFamily": "AWARDECONOMY",
+      "isCoBrand": true,
+      "isRewardSearch": true,
+      "loyaltyTierCode": "Silver",
+      "coBrandLastName": "Decline",
+      "coBrandFirstName": "Joe",
+      "synchronyApplicationStatus": "DECLINED"
+    },
+    {
+      "testName": "CoBrand_OneWay_InsuranceAccept_JFK-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "isCoBrand": true,
+      "loyaltyTierCode": "Red",
+      "coBrandLastName": "BERNAL",
+      "coBrandFirstName": "OPTIMA",
+      "synchronyApplicationStatus": "APPROVED",
+      "useSynchronyCardPayment": true,
+      "insurance": "Accept",
+      "validateInsuranceInOrderDoc": true
+    },
+    {
+      "testName": "CoBrand_OneWay_InsuranceAccept_PaidSeat_FullPoints_JFK-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "isCoBrand": true,
+      "bookingType": "PayWithPoints",
+      "fullPointsSelection": true,
+      "hasPaidSeat": true,
+      "loyaltyTierCode": "Red",
+      "coBrandLastName": "BERNAL",
+      "coBrandFirstName": "OPTIMA",
+      "synchronyApplicationStatus": "APPROVED",
+      "useSynchronyCardPayment": true,
+      "insurance": "Accept",
+      "validateInsuranceInOrderDoc": true
+    },
+    {
+      "testName": "Order_Return_InsuranceAccept_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "usePlaywrightForHpp": true,
+      "origin": "LHR",
+      "destination": "JFK",
+      "journeyType": "Return",
+      "children": 1,
+      "infants": 1,
+      "insurance": "Accept",
+      "paymentCardType": "Mastercard",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "Book-Core-Regression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Order_Return_InsuranceAccept_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "journeyType": "Return",
+      "children": 1,
+      "infants": 1,
+      "insurance": "Accept",
+      "paymentCardType": "Visa",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "Book-Core-Regression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Order_Return_NoSeats_NoInsurance_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "journeyType": "Return",
+      "children": 1,
+      "validateChildMealRemarks": true,
+      "infants": 1,
+      "paymentCardType": "Visa",
+      "categories": [
+        "Book-Core-Regression",
+        "BookGraphQLPSSITSanity",
+        "SharedServicesSignOff",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Order_OneWay_InsuranceReject_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "children": 1,
+      "infants": 1,
+      "insurance": "Reject",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateRejectedInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Order_OneWay_InsuranceReject_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "children": 1,
+      "infants": 1,
+      "insurance": "Reject",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateRejectedInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Redemption_OneWay_RewardSearch_AWARDECONOMY_InsuranceAccept_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "fareFamily": "AWARDECONOMY",
+      "isRewardSearch": true,
+      "insurance": "Accept",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Redemption_OneWay_RewardSearch_AWARDECONOMY_InsuranceAccept_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "fareFamily": "AWARDECONOMY",
+      "isRewardSearch": true,
+      "insurance": "Accept",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Redemption_OneWay_RewardSearch_AWARDECONOMY_InsuranceAccept_PaidSeat_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "fareFamily": "AWARDECONOMY",
+      "isRewardSearch": true,
+      "insurance": "Accept",
+      "hasPaidSeat": true,
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Redemption_OneWay_RewardSearch_AWARDECONOMY_InsuranceAccept_PaidSeat_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "Redemption",
+      "fareFamily": "AWARDECONOMY",
+      "isRewardSearch": true,
+      "insurance": "Accept",
+      "hasPaidSeat": true,
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "PartialPwp_OneWay_InsuranceAccept_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "insurance": "Accept",
+      "loyaltyTierCode": "Red",
+      "payWithPointsAmount": "1000000",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "PartialPwp_OneWay_InsuranceAccept_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "insurance": "Accept",
+      "loyaltyTierCode": "Red",
+      "payWithPointsAmount": "1000000",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "FullPwp_OneWay_InsuranceAccept_FullPoints_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "fullPointsSelection": true,
+      "insurance": "Accept",
+      "loyaltyTierCode": "Red",
+      "minLoyaltyPoints": 1900000,
+      "payWithPointsAmount": "1900000",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "FullPwp_OneWay_InsuranceAccept_FullPoints_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "fullPointsSelection": true,
+      "insurance": "Accept",
+      "loyaltyTierCode": "Red",
+      "minLoyaltyPoints": 1900000,
+      "payWithPointsAmount": "1900000",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "FullPwp_OneWay_InsuranceAccept_PaidSeat_FullPoints_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "fullPointsSelection": true,
+      "hasPaidSeat": true,
+      "insurance": "Accept",
+      "loyaltyTierCode": "Red",
+      "minLoyaltyPoints": 1900000,
+      "payWithPointsAmount": "1900000",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "FullPwp_OneWay_InsuranceAccept_PaidSeat_FullPoints_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "fullPointsSelection": true,
+      "hasPaidSeat": true,
+      "insurance": "Accept",
+      "loyaltyTierCode": "Red",
+      "minLoyaltyPoints": 1900000,
+      "payWithPointsAmount": "1900000",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "FullPwp_OneWay_InsuranceAccept_FreeSeat_FullPoints_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "fullPointsSelection": true,
+      "hasFreeSeat": true,
+      "insurance": "Accept",
+      "loyaltyTierCode": "Gold",
+      "minLoyaltyPoints": 8000000,
+      "payWithPointsAmount": "8000000",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "Book-Core-Regression",
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "FullPwp_OneWay_InsuranceAccept_FreeSeat_FullPoints_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "fullPointsSelection": true,
+      "hasFreeSeat": true,
+      "insurance": "Accept",
+      "loyaltyTierCode": "Gold",
+      "minLoyaltyPoints": 8000000,
+      "payWithPointsAmount": "8000000",
+      "validateInsurancePriceWithPaymentMS": true,
+      "validateInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "FullPwp_OneWay_InsuranceReject_FullPoints_LHR-JFK_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "fullPointsSelection": true,
+      "insurance": "Reject",
+      "loyaltyTierCode": "Gold",
+      "minLoyaltyPoints": 8000000,
+      "payWithPointsAmount": "8000000",
+      "useRetryHelperForLoyalty": true,
+      "validateRejectedInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "FullPwp_OneWay_InsuranceReject_FullPoints_JFK-LHR_1ADT_1YTH_1CHD_1INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "LHR",
+      "children": 1,
+      "infants": 1,
+      "bookingType": "PayWithPoints",
+      "fullPointsSelection": true,
+      "insurance": "Reject",
+      "loyaltyTierCode": "Gold",
+      "minLoyaltyPoints": 8000000,
+      "payWithPointsAmount": "8000000",
+      "useRetryHelperForLoyalty": true,
+      "validateRejectedInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLRegression",
+        "BookGraphQLPSSITSanity",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Order_OneWay_DEL-LHR_2ADT_1YTH_1CHD_0INF_ValidatesEndToEnd",
+      "origin": "DEL",
+      "destination": "LHR",
+      "adults": 2,
+      "teens": 1,
+      "children": 1,
+      "validateRejectedInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLPSSITSanity",
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    },
+    {
+      "testName": "Order_OneWay_BLR-LHR_2ADT_1YTH_1CHD_0INF_ValidatesEndToEnd",
+      "origin": "BLR",
+      "destination": "LHR",
+      "adults": 2,
+      "teens": 1,
+      "children": 1,
+      "validateRejectedInsuranceInOrderDoc": true,
+      "categories": [
+        "BookFeatureInsurance",
+        "BookGraphQLPSSITSanity"
+      ]
+    },
+    {
+      "testName": "Seat_OneWay_WamosOperatedLeg_COMFORTPLUSPREMIUMECON_MAN-ATL_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "MAN",
+      "destination": "ATL",
+      "fareFamily": "COMFORTPLUSPREMIUMECON",
+      "teens": 0,
+      "seatMode": "OneWay",
+      "seatProductName": "Premium Economy Cabin Seat",
+      "cabinName": "VSPE",
+      "requiredLegOperatingAirlineCode": "EB",
+      "categories": [
+        "Book-Functional"
+      ]
+    },
+    {
+      "testName": "Seat_Return_WamosOperatedLeg_BUSFIRST_MAN-ATL-MAN_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "MAN",
+      "destination": "ATL",
+      "journeyType": "Return",
+      "fareFamily": "BUSFIRST",
+      "teens": 0,
+      "seatMode": "AllSectors",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "requiredLegOperatingAirlineCode": "EB",
+      "categories": [
+        "Book-Functional"
+      ]
+    },
+    {
+      "testName": "Seat_OneWay_WamosOperatedLeg_BUSFIRST_MAN-JFK_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "MAN",
+      "destination": "JFK",
+      "fareFamily": "BUSFIRST",
+      "teens": 0,
+      "seatMode": "OneWay",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "requiredLegOperatingAirlineCode": "EB",
+      "categories": [
+        "Book-Functional"
+      ]
+    },
+    {
+      "testName": "Seat_Return_WamosOperatedLeg_COMFORTPLUSPREMIUMECON_MAN-JFK-MAN_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "MAN",
+      "destination": "JFK",
+      "journeyType": "Return",
+      "fareFamily": "COMFORTPLUSPREMIUMECON",
+      "teens": 0,
+      "seatMode": "AllSectors",
+      "seatProductName": "Premium Economy Cabin Seat",
+      "cabinName": "VSPE",
+      "requiredLegOperatingAirlineCode": "EB",
+      "categories": [
+        "Book-Functional"
+      ]
+    },
+    {
+      "testName": "Seat_OneWay_WamosOperatedLeg_COMFORTPLUSPREMIUMECON_ATL-MAN_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "MAN",
+      "fareFamily": "COMFORTPLUSPREMIUMECON",
+      "teens": 0,
+      "seatMode": "OneWay",
+      "seatProductName": "Premium Economy Cabin Seat",
+      "cabinName": "VSPE",
+      "requiredLegOperatingAirlineCode": "EB",
+      "categories": [
+        "Book-Functional"
+      ]
+    },
+    {
+      "testName": "Seat_Return_WamosOperatedLeg_BUSFIRST_ATL-MAN-ATL_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "MAN",
+      "journeyType": "Return",
+      "fareFamily": "BUSFIRST",
+      "teens": 0,
+      "seatMode": "AllSectors",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "requiredLegOperatingAirlineCode": "EB",
+      "categories": [
+        "Book-Functional"
+      ]
+    },
+    {
+      "testName": "Seat_OneWay_WamosOperatedLeg_BUSFIRST_JFK-MAN_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "MAN",
+      "fareFamily": "BUSFIRST",
+      "teens": 0,
+      "seatMode": "OneWay",
+      "seatProductName": "Upper Class seat",
+      "cabinName": "VSUP",
+      "requiredLegOperatingAirlineCode": "EB",
+      "categories": [
+        "Book-Functional"
+      ]
+    },
+    {
+      "testName": "Seat_Return_WamosOperatedLeg_COMFORTPLUSPREMIUMECON_JFK-MAN-JFK_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "JFK",
+      "destination": "MAN",
+      "journeyType": "Return",
+      "fareFamily": "COMFORTPLUSPREMIUMECON",
+      "teens": 0,
+      "seatMode": "AllSectors",
+      "seatProductName": "Premium Economy Cabin Seat",
+      "cabinName": "VSPE",
+      "requiredLegOperatingAirlineCode": "EB",
+      "categories": [
+        "Book-Functional"
+      ]
+    },
+    {
+      "testName": "Order_Return_MixedCarrier_VS-DL_LHR-JFK_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "journeyType": "Return",
+      "flightType": "VS",
+      "inboundFlightType": "DL",
+      "teens": 0,
+      "categories": [
+        "Book-Core-Regression"
+      ]
+    },
+    {
+      "testName": "Order_OneWay_LoggedInRevenue_LHR-JFK_1ADT_0YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "LHR",
+      "destination": "JFK",
+      "teens": 0,
+      "isLoggedIn": true,
+      "loyaltyTierCode": "Red",
+      "minLoyaltyPoints": 0,
+      "useRetryHelperForLoyalty": true,
+      "categories": [
+        "Book-Core-Regression"
+      ]
+    },
+    {
+      "testName": "Order_OneWay_DL_InsuranceReject_ATL-LHR_1ADT_1YTH_0CHD_0INF_ValidatesEndToEnd",
+      "origin": "ATL",
+      "destination": "LHR",
+      "teens": 0,
+      "flightType": "DL",
+      "insurance": "Reject",
+      "validateRejectedInsuranceInOrderDoc": true,
+      "categories": [
+        "Book-Core-Regression",
+        "Book-E2E-Regression"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.10.12217.157 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{AB827F8E-AA33-4502-9F17-EE7F8F0DDD72}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6F146630-9DCD-4AAC-8484-14F7FCA46D8B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VAA.EAPI.Domain", "VAA.EAPI.Domain\VAA.EAPI.Domain.csproj", "{D5DEBAB9-350B-4829-99D1-C8579C900BA4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{610166E9-E1B1-4F97-B46F-07F17B535CA7} = {610166E9-E1B1-4F97-B46F-07F17B535CA7}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VAA.EAPI.Infrastructure", "VAA.EAPI.Infrastructure\VAA.EAPI.Infrastructure.csproj", "{2C7A1909-6AD2-4FC8-8BE6-536A653DA47E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VAA.EAPI.Common", "VAA.EAPI.Common\VAA.EAPI.Common.csproj", "{610166E9-E1B1-4F97-B46F-07F17B535CA7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VAA.EAPI.Infrastructure.Email", "VAA.EAPI.Infrastructure.Email\VAA.EAPI.Infrastructure.Email.csproj", "{84491D08-D2F2-479F-B359-01BB6AFC0D05}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VAA.EAPI.Pipelines", "VAA.EAPI.Pipelines", "{06B6E08E-6438-4954-9CD6-71C80A789FDC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "functions", "functions", "{FC172F71-7C04-44C5-8E29-10BEA8C81E2A}"
+	ProjectSection(SolutionItems) = preProject
+		..\VAA.EAPI.Pipelines\functions\build.yaml = ..\VAA.EAPI.Pipelines\functions\build.yaml
+		..\VAA.EAPI.Pipelines\functions\build_apim.yaml = ..\VAA.EAPI.Pipelines\functions\build_apim.yaml
+		..\VAA.EAPI.Pipelines\functions\build_facade.yaml = ..\VAA.EAPI.Pipelines\functions\build_facade.yaml
+		..\VAA.EAPI.Pipelines\functions\build_graphql.yaml = ..\VAA.EAPI.Pipelines\functions\build_graphql.yaml
+		..\VAA.EAPI.Pipelines\functions\build_test.yaml = ..\VAA.EAPI.Pipelines\functions\build_test.yaml
+		..\VAA.EAPI.Pipelines\functions\deployment.yaml = ..\VAA.EAPI.Pipelines\functions\deployment.yaml
+		..\VAA.EAPI.Pipelines\functions\deployment_apim.yaml = ..\VAA.EAPI.Pipelines\functions\deployment_apim.yaml
+		..\VAA.EAPI.Pipelines\functions\deployment_graphql.yaml = ..\VAA.EAPI.Pipelines\functions\deployment_graphql.yaml
+		..\VAA.EAPI.Pipelines\functions\deployment_graphql_slot.yaml = ..\VAA.EAPI.Pipelines\functions\deployment_graphql_slot.yaml
+		..\VAA.EAPI.Pipelines\functions\deployment_latest.yaml = ..\VAA.EAPI.Pipelines\functions\deployment_latest.yaml
+		..\VAA.EAPI.Pipelines\functions\deployment_sandbox.yaml = ..\VAA.EAPI.Pipelines\functions\deployment_sandbox.yaml
+		..\VAA.EAPI.Pipelines\functions\deployment_slot.yaml = ..\VAA.EAPI.Pipelines\functions\deployment_slot.yaml
+		..\VAA.EAPI.Pipelines\functions\functional_testing.yaml = ..\VAA.EAPI.Pipelines\functions\functional_testing.yaml
+		..\VAA.EAPI.Pipelines\functions\release.yaml = ..\VAA.EAPI.Pipelines\functions\release.yaml
+		..\VAA.EAPI.Pipelines\functions\release_apim.yaml = ..\VAA.EAPI.Pipelines\functions\release_apim.yaml
+		..\VAA.EAPI.Pipelines\functions\release_apim_sandbox.yaml = ..\VAA.EAPI.Pipelines\functions\release_apim_sandbox.yaml
+		..\VAA.EAPI.Pipelines\functions\release_dev.yaml = ..\VAA.EAPI.Pipelines\functions\release_dev.yaml
+		..\VAA.EAPI.Pipelines\functions\release_graphql.yaml = ..\VAA.EAPI.Pipelines\functions\release_graphql.yaml
+		..\VAA.EAPI.Pipelines\functions\release_graphql_slot.yaml = ..\VAA.EAPI.Pipelines\functions\release_graphql_slot.yaml
+		..\VAA.EAPI.Pipelines\functions\release_graphql_slot_integratedFNTest.yaml = ..\VAA.EAPI.Pipelines\functions\release_graphql_slot_integratedFNTest.yaml
+		..\VAA.EAPI.Pipelines\functions\release_Loops.yaml = ..\VAA.EAPI.Pipelines\functions\release_Loops.yaml
+		..\VAA.EAPI.Pipelines\functions\release_sandbox.yaml = ..\VAA.EAPI.Pipelines\functions\release_sandbox.yaml
+		..\VAA.EAPI.Pipelines\functions\release_slot.yaml = ..\VAA.EAPI.Pipelines\functions\release_slot.yaml
+		..\VAA.EAPI.Pipelines\functions\release_slot_Loops.yaml = ..\VAA.EAPI.Pipelines\functions\release_slot_Loops.yaml
+		..\VAA.EAPI.Pipelines\functions\rollback.yaml = ..\VAA.EAPI.Pipelines\functions\rollback.yaml
+		..\VAA.EAPI.Pipelines\functions\sanitytesting.yaml = ..\VAA.EAPI.Pipelines\functions\sanitytesting.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "variables", "variables", "{9339E42F-6C46-48AA-8A77-CC83EACDF062}"
+	ProjectSection(SolutionItems) = preProject
+		..\VAA.EAPI.Pipelines\variables\DEV.yaml = ..\VAA.EAPI.Pipelines\variables\DEV.yaml
+		..\VAA.EAPI.Pipelines\variables\GraphQL.yaml = ..\VAA.EAPI.Pipelines\variables\GraphQL.yaml
+		..\VAA.EAPI.Pipelines\variables\PRD.yaml = ..\VAA.EAPI.Pipelines\variables\PRD.yaml
+		..\VAA.EAPI.Pipelines\variables\SANDBOX.yaml = ..\VAA.EAPI.Pipelines\variables\SANDBOX.yaml
+		..\VAA.EAPI.Pipelines\variables\ServiceBus-dev-var.yml = ..\VAA.EAPI.Pipelines\variables\ServiceBus-dev-var.yml
+		..\VAA.EAPI.Pipelines\variables\ServiceBus-prod-var.yml = ..\VAA.EAPI.Pipelines\variables\ServiceBus-prod-var.yml
+		..\VAA.EAPI.Pipelines\variables\ServiceBus-sit-var.yml = ..\VAA.EAPI.Pipelines\variables\ServiceBus-sit-var.yml
+		..\VAA.EAPI.Pipelines\variables\ServiceBus-uat-var.yml = ..\VAA.EAPI.Pipelines\variables\ServiceBus-uat-var.yml
+		..\VAA.EAPI.Pipelines\variables\SIT.yaml = ..\VAA.EAPI.Pipelines\variables\SIT.yaml
+		..\VAA.EAPI.Pipelines\variables\UAT.yaml = ..\VAA.EAPI.Pipelines\variables\UAT.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform", "Platform", "{AC122311-B17F-4B29-B6D8-791CDCB65182}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceBus", "ServiceBus", "{DC5F1063-DCA2-42AB-9CC1-9364B1803D91}"
+	ProjectSection(SolutionItems) = preProject
+		..\VAA.EAPI.Pipelines\Platform\ServiceBus\VAA.EAPI.Microservices.CampaignManagement.ServiceBus.yml = ..\VAA.EAPI.Pipelines\Platform\ServiceBus\VAA.EAPI.Microservices.CampaignManagement.ServiceBus.yml
+		..\VAA.EAPI.Pipelines\Platform\ServiceBus\VAA.EAPI.Microservices.ServiceBus.yml = ..\VAA.EAPI.Pipelines\Platform\ServiceBus\VAA.EAPI.Microservices.ServiceBus.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{0541EF4E-D40A-465E-827A-C07C249EBDDE}"
+	ProjectSection(SolutionItems) = preProject
+		..\VAA.EAPI.Pipelines\Platform\ServiceBus\templates\build.yml = ..\VAA.EAPI.Pipelines\Platform\ServiceBus\templates\build.yml
+		..\VAA.EAPI.Pipelines\Platform\ServiceBus\templates\servicebus.yml = ..\VAA.EAPI.Pipelines\Platform\ServiceBus\templates\servicebus.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LogicApp", "LogicApp", "{2904CDDA-CD5F-4D57-B951-594B563EE40A}"
+	ProjectSection(SolutionItems) = preProject
+		..\VAA.EAPI.Pipelines\Platform\LogicApp\VAA.EAPI.Microservices.LogicApp.yml = ..\VAA.EAPI.Pipelines\Platform\LogicApp\VAA.EAPI.Microservices.LogicApp.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{08B17F13-A9EA-43DF-BCD8-153506434DF5}"
+	ProjectSection(SolutionItems) = preProject
+		..\VAA.EAPI.Pipelines\Platform\LogicApp\templates\build.yml = ..\VAA.EAPI.Pipelines\Platform\LogicApp\templates\build.yml
+		..\VAA.EAPI.Pipelines\Platform\LogicApp\templates\logicapp.yml = ..\VAA.EAPI.Pipelines\Platform\LogicApp\templates\logicapp.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VAA.EAPI.Infrastructure.PSS", "VAA.EAPI.Infrastructure.PSS\VAA.EAPI.Infrastructure.PSS.csproj", "{F5C2CDDC-7C6A-436C-8784-65955CC08DD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VAA.EAPI.Domain.Virgin", "VAA.EAPI.Domain.Virgin\VAA.EAPI.Domain.Virgin.csproj", "{27C1E9D4-9B9A-4A72-9191-C4DA82AE4B91}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIM", "APIM", "{F2DE66D3-CADE-46C8-B6F4-36D905598B59}"
+	ProjectSection(SolutionItems) = preProject
+		..\VAA.EAPI.Pipelines\APIM\APIM.Add.Group.User.yaml = ..\VAA.EAPI.Pipelines\APIM\APIM.Add.Group.User.yaml
+		..\VAA.EAPI.Pipelines\APIM\APIM.Add.User.yaml = ..\VAA.EAPI.Pipelines\APIM\APIM.Add.User.yaml
+		..\VAA.EAPI.Pipelines\APIM\APIM.Create.Group.yaml = ..\VAA.EAPI.Pipelines\APIM\APIM.Create.Group.yaml
+		..\VAA.EAPI.Pipelines\APIM\APIM.Create.Product.yaml = ..\VAA.EAPI.Pipelines\APIM\APIM.Create.Product.yaml
+		..\VAA.EAPI.Pipelines\APIM\APIM.Create.Subscription.yaml = ..\VAA.EAPI.Pipelines\APIM\APIM.Create.Subscription.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "functions", "functions", "{B48F6EDF-EFB4-4027-8078-A982B05BB3C8}"
+	ProjectSection(SolutionItems) = preProject
+		..\VAA.EAPI.Pipelines\APIM\functions\apim_add_group_user.yaml = ..\VAA.EAPI.Pipelines\APIM\functions\apim_add_group_user.yaml
+		..\VAA.EAPI.Pipelines\APIM\functions\apim_add_user.yaml = ..\VAA.EAPI.Pipelines\APIM\functions\apim_add_user.yaml
+		..\VAA.EAPI.Pipelines\APIM\functions\apim_create_group.yaml = ..\VAA.EAPI.Pipelines\APIM\functions\apim_create_group.yaml
+		..\VAA.EAPI.Pipelines\APIM\functions\apim_create_product.yaml = ..\VAA.EAPI.Pipelines\APIM\functions\apim_create_product.yaml
+		..\VAA.EAPI.Pipelines\APIM\functions\apim_create_subscription.yaml = ..\VAA.EAPI.Pipelines\APIM\functions\apim_create_subscription.yaml
+		..\VAA.EAPI.Pipelines\APIM\functions\publish_apim_arm_artifacts.yaml = ..\VAA.EAPI.Pipelines\APIM\functions\publish_apim_arm_artifacts.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{85C0AF9E-DE13-4398-ADCE-CC605690D538}"
+	ProjectSection(SolutionItems) = preProject
+		..\VAA.EAPI.Pipelines\APIM\templates\apim_add_group_user.json = ..\VAA.EAPI.Pipelines\APIM\templates\apim_add_group_user.json
+		..\VAA.EAPI.Pipelines\APIM\templates\apim_add_user.json = ..\VAA.EAPI.Pipelines\APIM\templates\apim_add_user.json
+		..\VAA.EAPI.Pipelines\APIM\templates\apim_create_group.json = ..\VAA.EAPI.Pipelines\APIM\templates\apim_create_group.json
+		..\VAA.EAPI.Pipelines\APIM\templates\apim_create_product.json = ..\VAA.EAPI.Pipelines\APIM\templates\apim_create_product.json
+		..\VAA.EAPI.Pipelines\APIM\templates\apim_create_subscription.json = ..\VAA.EAPI.Pipelines\APIM\templates\apim_create_subscription.json
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VAA.EAPI.Core.Xunit", "VAA.EAPI.Core.Xunit\VAA.EAPI.Core.Xunit.csproj", "{DB4EA32B-FE68-492E-BDFD-59710A383E81}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VAA.EAPI.Core.Functions", "VAA.EAPI.Core.Functions\VAA.EAPI.Core.Functions.csproj", "{010DC3AD-72CE-4779-B878-9D11EC70A69C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VAA.EAPI.Microservices.Framework.Tests", "VAA.EAPI.Microservices.Framework.Tests\VAA.EAPI.Microservices.Framework.Tests.csproj", "{E6D3CEAA-06CE-4C74-BA3D-58FD7FBD0EB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAA.EAPI.Microservices.FlightOperations.Crew", "VAA.EAPI.Microservices.FlightOperations.Crew\VAA.EAPI.Microservices.FlightOperations.Crew.csproj", "{8F92CF75-A019-D363-6B24-BC0E4E7691B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAA.EAPI.Microservices.FlightOperations.Flights", "VAA.EAPI.Microservices.FlightOperations.Flights\VAA.EAPI.Microservices.FlightOperations.Flights.csproj", "{A3B1D56C-C3A4-91CE-AB0F-D57D6572216A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAA.EAPI.Microservices.FlightOperations.Crew.Tests", "VAA.EAPI.Microservices.FlightOperations.Crew.Tests\VAA.EAPI.Microservices.FlightOperations.Crew.Tests.csproj", "{4E8C03E0-67A5-AAAE-9700-E116563E09C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAA.EAPI.Microservices.FlightOperations.Flights.Tests", "VAA.EAPI.Microservices.FlightOperations.Flights.Tests\VAA.EAPI.Microservices.FlightOperations.Flights.Tests.csproj", "{E5F7BFB4-6A80-C907-7FB8-B65F2E09295C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAA.EAPI.Microservices.Tests", "VAA.EAPI.Microservices.Tests\VAA.EAPI.Microservices.Tests.csproj", "{66FF3A20-F24C-C97F-E082-263F0B554B74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAA.EAPI.Microservices.FlightOperations.Catering", "VAA.EAPI.Microservices.FlightOperations.Catering\VAA.EAPI.Microservices.FlightOperations.Catering.csproj", "{EE8F6819-500A-42F9-1050-F99338E4A2BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAA.EAPI.Microservices.FlightOperations.Catering.Tests", "VAA.EAPI.Microservices.FlightOperations.Catering.Tests\VAA.EAPI.Microservices.FlightOperations.Catering.Tests.csproj", "{A40F9445-4AC8-43E9-A60C-573BE55CA124}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D5DEBAB9-350B-4829-99D1-C8579C900BA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5DEBAB9-350B-4829-99D1-C8579C900BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5DEBAB9-350B-4829-99D1-C8579C900BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5DEBAB9-350B-4829-99D1-C8579C900BA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C7A1909-6AD2-4FC8-8BE6-536A653DA47E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C7A1909-6AD2-4FC8-8BE6-536A653DA47E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C7A1909-6AD2-4FC8-8BE6-536A653DA47E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C7A1909-6AD2-4FC8-8BE6-536A653DA47E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{610166E9-E1B1-4F97-B46F-07F17B535CA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{610166E9-E1B1-4F97-B46F-07F17B535CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{610166E9-E1B1-4F97-B46F-07F17B535CA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{610166E9-E1B1-4F97-B46F-07F17B535CA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84491D08-D2F2-479F-B359-01BB6AFC0D05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84491D08-D2F2-479F-B359-01BB6AFC0D05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84491D08-D2F2-479F-B359-01BB6AFC0D05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84491D08-D2F2-479F-B359-01BB6AFC0D05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5C2CDDC-7C6A-436C-8784-65955CC08DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5C2CDDC-7C6A-436C-8784-65955CC08DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5C2CDDC-7C6A-436C-8784-65955CC08DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5C2CDDC-7C6A-436C-8784-65955CC08DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27C1E9D4-9B9A-4A72-9191-C4DA82AE4B91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C1E9D4-9B9A-4A72-9191-C4DA82AE4B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C1E9D4-9B9A-4A72-9191-C4DA82AE4B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27C1E9D4-9B9A-4A72-9191-C4DA82AE4B91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB4EA32B-FE68-492E-BDFD-59710A383E81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB4EA32B-FE68-492E-BDFD-59710A383E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB4EA32B-FE68-492E-BDFD-59710A383E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB4EA32B-FE68-492E-BDFD-59710A383E81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{010DC3AD-72CE-4779-B878-9D11EC70A69C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{010DC3AD-72CE-4779-B878-9D11EC70A69C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{010DC3AD-72CE-4779-B878-9D11EC70A69C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{010DC3AD-72CE-4779-B878-9D11EC70A69C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6D3CEAA-06CE-4C74-BA3D-58FD7FBD0EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D3CEAA-06CE-4C74-BA3D-58FD7FBD0EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D3CEAA-06CE-4C74-BA3D-58FD7FBD0EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D3CEAA-06CE-4C74-BA3D-58FD7FBD0EB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F92CF75-A019-D363-6B24-BC0E4E7691B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F92CF75-A019-D363-6B24-BC0E4E7691B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F92CF75-A019-D363-6B24-BC0E4E7691B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F92CF75-A019-D363-6B24-BC0E4E7691B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3B1D56C-C3A4-91CE-AB0F-D57D6572216A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3B1D56C-C3A4-91CE-AB0F-D57D6572216A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3B1D56C-C3A4-91CE-AB0F-D57D6572216A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3B1D56C-C3A4-91CE-AB0F-D57D6572216A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E8C03E0-67A5-AAAE-9700-E116563E09C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E8C03E0-67A5-AAAE-9700-E116563E09C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E8C03E0-67A5-AAAE-9700-E116563E09C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E8C03E0-67A5-AAAE-9700-E116563E09C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5F7BFB4-6A80-C907-7FB8-B65F2E09295C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5F7BFB4-6A80-C907-7FB8-B65F2E09295C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5F7BFB4-6A80-C907-7FB8-B65F2E09295C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5F7BFB4-6A80-C907-7FB8-B65F2E09295C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66FF3A20-F24C-C97F-E082-263F0B554B74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66FF3A20-F24C-C97F-E082-263F0B554B74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66FF3A20-F24C-C97F-E082-263F0B554B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66FF3A20-F24C-C97F-E082-263F0B554B74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE8F6819-500A-42F9-1050-F99338E4A2BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE8F6819-500A-42F9-1050-F99338E4A2BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE8F6819-500A-42F9-1050-F99338E4A2BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE8F6819-500A-42F9-1050-F99338E4A2BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A40F9445-4AC8-43E9-A60C-573BE55CA124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A40F9445-4AC8-43E9-A60C-573BE55CA124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A40F9445-4AC8-43E9-A60C-573BE55CA124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A40F9445-4AC8-43E9-A60C-573BE55CA124}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FC172F71-7C04-44C5-8E29-10BEA8C81E2A} = {06B6E08E-6438-4954-9CD6-71C80A789FDC}
+		{9339E42F-6C46-48AA-8A77-CC83EACDF062} = {06B6E08E-6438-4954-9CD6-71C80A789FDC}
+		{AC122311-B17F-4B29-B6D8-791CDCB65182} = {06B6E08E-6438-4954-9CD6-71C80A789FDC}
+		{DC5F1063-DCA2-42AB-9CC1-9364B1803D91} = {AC122311-B17F-4B29-B6D8-791CDCB65182}
+		{0541EF4E-D40A-465E-827A-C07C249EBDDE} = {DC5F1063-DCA2-42AB-9CC1-9364B1803D91}
+		{2904CDDA-CD5F-4D57-B951-594B563EE40A} = {AC122311-B17F-4B29-B6D8-791CDCB65182}
+		{08B17F13-A9EA-43DF-BCD8-153506434DF5} = {2904CDDA-CD5F-4D57-B951-594B563EE40A}
+		{F2DE66D3-CADE-46C8-B6F4-36D905598B59} = {06B6E08E-6438-4954-9CD6-71C80A789FDC}
+		{B48F6EDF-EFB4-4027-8078-A982B05BB3C8} = {F2DE66D3-CADE-46C8-B6F4-36D905598B59}
+		{85C0AF9E-DE13-4398-ADCE-CC605690D538} = {F2DE66D3-CADE-46C8-B6F4-36D905598B59}
+		{DB4EA32B-FE68-492E-BDFD-59710A383E81} = {6F146630-9DCD-4AAC-8484-14F7FCA46D8B}
+		{010DC3AD-72CE-4779-B878-9D11EC70A69C} = {6F146630-9DCD-4AAC-8484-14F7FCA46D8B}
+		{E6D3CEAA-06CE-4C74-BA3D-58FD7FBD0EB8} = {6F146630-9DCD-4AAC-8484-14F7FCA46D8B}
+		{8F92CF75-A019-D363-6B24-BC0E4E7691B5} = {AB827F8E-AA33-4502-9F17-EE7F8F0DDD72}
+		{A3B1D56C-C3A4-91CE-AB0F-D57D6572216A} = {AB827F8E-AA33-4502-9F17-EE7F8F0DDD72}
+		{4E8C03E0-67A5-AAAE-9700-E116563E09C6} = {6F146630-9DCD-4AAC-8484-14F7FCA46D8B}
+		{E5F7BFB4-6A80-C907-7FB8-B65F2E09295C} = {6F146630-9DCD-4AAC-8484-14F7FCA46D8B}
+		{66FF3A20-F24C-C97F-E082-263F0B554B74} = {6F146630-9DCD-4AAC-8484-14F7FCA46D8B}
+		{EE8F6819-500A-42F9-1050-F99338E4A2BD} = {AB827F8E-AA33-4502-9F17-EE7F8F0DDD72}
+		{A40F9445-4AC8-43E9-A60C-573BE55CA124} = {6F146630-9DCD-4AAC-8484-14F7FCA46D8B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08DFA0F7-1B61-44CF-809E-EB3195213FFA}
+	EndGlobalSection
+EndGlobal

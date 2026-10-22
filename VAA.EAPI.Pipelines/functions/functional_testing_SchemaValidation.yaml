@@ -1,0 +1,133 @@
+parameters: 
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  testRepoPath: ''
+  rootPath: ''
+  sanityrootpath: 'VAA.EAPI.Automation'
+  RestoreBuildProjects: '**/*.csproj'
+  variableGroupName: ''
+  environment: ''
+  SLACK_API_TOKEN: ''
+  SLACK_TITLE: ''
+
+jobs: 
+  - job: 'SanityTesting'
+    displayName: 'Schema Validation Sanity Testing'
+    pool:
+      name: ${{parameters.agentPool}}
+      vmImage: ${{parameters.agentSpecification}}
+    variables:
+      - group: ${{parameters.variableGroupName}}
+
+    steps:
+      # Task to checkout the repository
+      - checkout: 'self'
+        displayName: 'Checkout Testing Repository'
+
+      # Task to install DotNet Core SDK
+      - task: UseDotNet@2
+        displayName: 'Install DotNet Core SDK' 
+        inputs:
+          packageType: 'sdk'
+          version: '10.0.x'
+    
+      # Task to build the project
+      - task: DotNetCoreCLI@2
+        displayName: 'Build Project'
+        inputs:
+          command: build
+          projects: |
+            ${{parameters.sanityrootpath}}/VAA.EAPI.Automation.MobileApp/VAA.EAPI.Automation.MobileApp.csproj
+         # arguments: '--configuration $(BuildConfiguration) --no-restore'
+
+
+      # task to perform the sanity test 
+      - task: VSTest@2
+        displayName: 'Schema Validation Sanity Testing' 
+        inputs:
+          testAssemblyVer2: |
+            **\VAA.EAPI.Automation.MobileApp.dll
+            **\*Tests.dll
+            !**\obj\**
+          testFiltercriteria: 'Category=SchemaValidation'
+          testRunTitle: 'Schema Validation Sanity Test'
+          resultsFolder: '$(System.DefaultWorkingDirectory)/TestResults'
+          rerunFailedTests: true
+          rerunType: basedOnTestFailureCount
+          rerunMaxAttempts: 0
+        continueOnError: true
+
+
+      # Publish the test results so we can check pass/fail status
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results'
+        name: PublishResults
+        inputs:
+          testResultsFormat: 'VSTest'
+          testResultsFiles: '$(System.DefaultWorkingDirectory)/TestResults/*.trx'
+          failTaskOnFailedTests: false
+
+      # Step 3 - Check if any tests failed
+      - powershell: |
+         Write-Host "🔍 Searching for TRX test result files..."
+    
+         $trx = Get-ChildItem "$(System.DefaultWorkingDirectory)/TestResults" -Filter *.trx -Recurse | Select-Object -First 1
+
+         if (-not $trx) {
+           Write-Host "No TRX file found → 0 tests executed."
+           Write-Host "##vso[task.setvariable variable=FailedTestsCount]0"
+           Write-Host "##vso[task.setvariable variable=TotalTestsCount]0"
+           exit 0
+         }
+
+         [xml]$xml = Get-Content $trx.FullName
+
+         # Handle XML namespace
+         $ns = New-Object System.Xml.XmlNamespaceManager($xml.NameTable)
+         $ns.AddNamespace("ns", $xml.DocumentElement.NamespaceURI)
+
+         # Get result summary
+         $summary = $xml.SelectSingleNode("//ns:ResultSummary/ns:Counters", $ns)
+         if ($summary -eq $null) {
+           Write-Host "Counters not found → assuming 0 tests executed"
+           Write-Host "##vso[task.setvariable variable=FailedTestsCount]0"
+           Write-Host "##vso[task.setvariable variable=TotalTestsCount]0"
+           exit 0
+          }
+
+         $total = [int]$summary.total
+         $failed = [int]$summary.failed
+
+         Write-Host "TRX Summary → Total: $total   Failed: $failed"
+
+         Write-Host "##vso[task.setvariable variable=TotalTestsCount]$total"
+         Write-Host "##vso[task.setvariable variable=FailedTestsCount]$failed"
+        name: CheckResults
+        displayName: "Analyze Test Results"
+
+
+
+
+
+      - task: kasunkodagoda.slack-notification.slack-notification-task.SlackNotification@6
+        displayName: 'Slack: Notify if Tests Fail'
+        condition: |
+         or(
+           ne(variables['FailedTestsCount'], '0'),
+           eq(variables['TotalTestsCount'], '0')
+          )
+        inputs:
+          slackApiToken: '$(SLACK_API_TOKEN)'
+          channel: '#df-api-core-team'
+          notificationType: 'ChatMessage'
+          Title: '${{parameters.SLACK_TITLE}}'
+          Message: "Test Failure Notification" 
+          Text : |
+            Pipeline: `$(Build.DefinitionName)`
+            Build Number: `$(Build.BuildNumber)` 
+            Branch: `$(Build.SourceBranchName)`
+            Total Tests: $(TotalTestsCount)
+            Failed Tests: $(FailedTestsCount)
+            <https://dev.azure.com/virginatlantic/Enterprise%20API%20Management%20Team/_build/results?buildId=$(Build.BuildId)|View Build>
+             

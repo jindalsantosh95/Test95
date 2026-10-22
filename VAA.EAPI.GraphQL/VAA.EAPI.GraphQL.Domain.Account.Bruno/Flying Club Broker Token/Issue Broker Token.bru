@@ -1,0 +1,37 @@
+meta {
+  name: Issue Broker Token
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_secure}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation IssueFlyingClubBrokerToken {
+    loyaltyIssueFlyingClubApplicationToken(
+      request: { flyingClubAccountNumber: "{{account_member_number}}" }
+    ) {
+      accessToken
+      tokenType
+      expiresIn
+    }
+  }
+}
+
+script:post-response {
+  var body = res.getBody();
+  var token = body?.data?.loyaltyIssueFlyingClubApplicationToken?.accessToken;
+
+  if (typeof token === "string" && token.length > 0) {
+    bru.setVar("flying_club_broker_token", token);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

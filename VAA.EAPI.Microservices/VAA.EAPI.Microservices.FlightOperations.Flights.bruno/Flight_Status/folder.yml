@@ -1,0 +1,22 @@
+info:
+  name: Flight_Status
+  type: folder
+  seq: 1
+
+request:
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{ocpkey}}"
+  auth: inherit
+  scripts:
+    - type: before-request
+      code: |-
+        if (!bru.getVar("flightStatusDate")) {
+          const now = new Date();
+          const today = [
+            now.getFullYear(),
+            String(now.getMonth() + 1).padStart(2, "0"),
+            String(now.getDate()).padStart(2, "0")
+          ].join("-");
+          bru.setVar("flightStatusDate", today);
+        }

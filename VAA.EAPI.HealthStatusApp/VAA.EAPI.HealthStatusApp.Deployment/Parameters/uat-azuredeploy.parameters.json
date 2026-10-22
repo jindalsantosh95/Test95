@@ -1,0 +1,97 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "WebAppName": {
+      "value": "avaseunawaservicedashboard"
+    },
+    "ResourceGroup": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPCOMMONEAPI"
+    },
+    "KeyVaultName": {
+      "value": "AVASEUNKVEMS"
+    },
+    "AppInsightsName": {
+      "value": "avaseunaihealthstatusapp"
+    },
+    "AzureAD_Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAD_Domain": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/DigitalMonitoring-Domain/)"
+    },
+    "AzureAD_TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/DigitalMonitoring-Tenant-Id/)"
+    },
+    "AzureAD_ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/DigitalMonitoring-Client-Id/)"
+    },
+    "AzureAD_ClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/DigitalMonitoring-Client-Secret/)"
+    },
+    "AzureAD_CallbackPath": {
+      "value": "/signin-oidc"
+    },
+    "AzureAD_OAuth2AllowIdTokenImplicitFlow": {
+      "value": true
+    },
+    "AADGroupId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/DigitalMonitoring-AD-Group-Id/)"
+    },
+    "ServiceNowUsername": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/ServiceNowUsername/)"
+    },
+    "ServiceNowPassword": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/ServiceNowPassword/)"
+    },
+    "ServiceNowUrl": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/ServiceNowUrl/)"
+    },
+    "HEALTH_CHECK_SUBSCRIPTION_KEY": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/DigitalMonitoring-Health-Check-Subscription-Key/)"
+    },
+    "HEALTH_CHECK_SUBSCRIPTION_KEY_TEST": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/DigitalMonitoring-Health-Check-Subscription-Key-Test/)"
+    },
+    "HEALTH_CHECK_URL": {
+      "value": "https://Testresources.virginatlantic.com/UAT/InsightsMicroservice/"
+    },
+    "HEALTH_CHECK_TEST_URL": {
+      "value": ""
+    },
+    "HEALTH_CHECK_Definition_Ids": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/HEALTH-CHECK-Defintion-Ids/)"
+    },
+    "HEALTH_CHECK_HEIMDALL_ID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/HEALTH-CHECK-HEIMDALL-ID/)"
+    },
+    "HEALTH_CHECK_HEIMDALL_KEY": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/HEALTH-CHECK-HEIMDALL-KEY/)"
+    },
+    "HEALTH_CHECK_COSMOS": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/HEALTH-CHECK-COSMOS/)"
+    },
+    "ApplicationInsightsAgent_EXTENSION_VERSION": {
+      "value": "~2"
+    },
+    "XDT_MicrosoftApplicationInsights_Mode": {
+      "value": "default"
+    },
+    "WEBSITE_TIME_ZONE": {
+      "value": "GMT Standard Time"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "HealthStatusApp",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "HealthStatus",
+        "ApplicationUsageIdList": "HealthStatusApp"
+      }
+    }
+  }
+}

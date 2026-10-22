@@ -1,0 +1,56 @@
+info:
+  name: Create Transaction
+  type: http
+  seq: 1
+  tags:
+    - Transactions
+
+http:
+  method: POST
+  url: "{{baseUrl}}/VredTransaction/createTransaction"
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+    - name: x-correlation-id
+      value: "VRED-Bruno-{{$randomUUID}}"
+    - name: api-channel
+      value: Bruno
+    - name: Authorization
+      value: "Bearer {{accessToken}}"
+      disabled: true
+    - name: Ocp-Apim-Subscription-Key
+      value: "{{ocpApimSubscriptionKey}}"
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "customerId": "{{customerId}}",
+        "memberNumber": "{{memberNumber}}",
+        "activityDate": "{{activityDate}}",
+        "partnerName": "Bruno Test Partner",
+        "partnerCode": "BRUNO",
+        "partnerCategory": "Synthetic Test Partner",
+        "productName": "Synthetic Test Product",
+        "productCategory": "Manual Adjustment",
+        "productDescription": "Synthetic request from the Vred Bruno collection",
+        "transactionSource": "Bruno",
+        "points": 100,
+        "comments": "Synthetic Bruno transaction",
+        "createdBy": "Bruno",
+        "updatedBy": "Bruno",
+        "transactionSubType": "Product",
+        "transactionChannel": "WEB",
+        "activityType": "Accrual",
+        "status": "Processed",
+        "statementText": "Synthetic Bruno transaction"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

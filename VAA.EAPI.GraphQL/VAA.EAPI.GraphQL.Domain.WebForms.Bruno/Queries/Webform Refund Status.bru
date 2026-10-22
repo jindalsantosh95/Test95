@@ -1,0 +1,56 @@
+meta {
+  name: Webform Refund Status
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_public}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query WebformRefundStatus($form: RefundFormInput) {
+    webformRefundStatus(form: $form) {
+      requestId
+      requester {
+        firstName
+        lastName
+        email
+        reason
+        bookingReference
+        bookingDate
+      }
+      entries {
+        passengerRef
+        passengerName
+        flightDate
+        flightNumber
+        ticketNumber
+        couponNumber
+        claimNumber
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "form": {
+      "requester": {
+        "firstName": "sample",
+        "lastName": "sample",
+        "email": "sample",
+        "bookingReference": "sample",
+        "bookingDate": "2000-01-01"
+      },
+      "entries": []
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

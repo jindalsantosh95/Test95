@@ -1,0 +1,701 @@
+{
+  "specversion": "1.0",
+  "type": "VAA.Order.InitiateOrderChange",
+  "source": "ndcorderchangerequesteventmessage",
+  "id": "562f5ad6-eee1-4e5b-abc1-e2edd38eba6e",
+  "time": "2026-03-24 06:11:05 PM",
+  "subject": "OrderChange",
+  "dataContentType": "application/json",
+  "data": {
+    "pos": {
+      "cityCode": "LON",
+      "countryCode": "GB",
+      "currencyCode": "GBP"
+    },
+    "parties": {
+      "participants": [
+        {
+          "partyType": "Seller",
+          "name": "Skyscanner",
+          "agencyID": "91281035",
+          "ordinal": "1",
+          "pccCode": "6UOL",
+          "isCreditCardAccepted": true
+        }
+      ]
+    },
+    "rloc": "TJLFMF",
+    "paymentDetails": [
+      {
+        "amount": {
+          "monetaryAmount": "0.00",
+          "baseCurrency": "GBP"
+        }
+      }
+    ],
+    "dataList": {
+      "originDestinationAssociations": [
+        {
+          "odLabel": "OD1",
+          "originDestination": {
+            "originAirport": "LHR",
+            "destinationAirport": "ATL",
+            "departureDate": "2026-12-04"
+          },
+          "journeyRefIds": [
+            "JOUR1"
+          ]
+        }
+      ],
+      "customerDetails": [
+        {
+          "custId": "ADULT_1",
+          "ptc": "ADT",
+          "itaPtc": "ADT",
+          "firstName": "abc",
+          "lastName": "xyz",
+          "contacts": {
+            "email": "TEST.SKYSCANNER@FLY.VIRGIN.COM",
+            "phone": "123456",
+            "phoneType": "H",
+            "countryDailingCode": "44"
+          },
+          "firstNameNumber": "01",
+          "lastNameNumber": "01"
+        }
+      ],
+      "orderInstructions": [],
+      "segmentDetails": [
+        {
+          "odRefId": "OD1",
+          "segmentId": "SEG1",
+          "airCraft": "351",
+          "marketingCarrier": "VS",
+          "marketingFlightNumber": "103",
+          "originAirportCode": "LHR",
+          "destinationAirportCode": "ATL",
+          "classOfService": "V",
+          "scheduledArrivalTime": {
+            "localDateTime": "2026-12-04T15:15"
+          },
+          "scheduledDepartureTime": {
+            "localDateTime": "2026-12-04T10:45"
+          },
+          "flightDuration": "09:30",
+          "legs": [
+            {
+              "scheduledDepartureTime": {
+                "localDateTime": "2026-12-04T10:45"
+              },
+              "legSequenceNumber": "1",
+              "originAirportCode": "LHR",
+              "operatingCarrier": "VS",
+              "scheduledArrivalTime": {
+                "localDateTime": "2026-12-04T15:15"
+              },
+              "destinationAirportCode": "ATL",
+              "legDuration": "570",
+              "stopOverDuration": "",
+              "originTerminal": "3",
+              "destinationTerminal": "I",
+              "carrierAircraftTypeCode": "A350",
+              "carrierAircraftTypeName": "A350 (widebody)"
+            }
+          ],
+          "cabinType": {
+            "cabinCode": "5",
+            "cabinName": "Economy"
+          },
+          "connectionOrStopOver": "O",
+          "serviceDefinitionsRefID": "SV1",
+          "ticketNotValidAfter": "2026-12-04",
+          "ticketNotValidBefore": "2026-12-04"
+        }
+      ],
+      "baggageAllowances": [
+        {
+          "baggageAllowanceId": "BAG1",
+          "baggageAllowanceTypeCode": "Checked",
+          "freeBaggageAllowance": {
+            "allowedBagCnt": 1,
+            "dimensionAllowance": [
+              {
+                "heightMeasure": "75",
+                "widthMeasure": "43",
+                "linearMeasure": "208",
+                "lengthMeasure": "90"
+              },
+              {
+                "heightMeasure": "29.5",
+                "widthMeasure": "16",
+                "linearMeasure": "81",
+                "lengthMeasure": "35.5",
+                "lengthUnitOfMeasurement": 2
+              }
+            ],
+            "weightAllowance": [
+              {
+                "maximumWeightMeasure": "23"
+              },
+              {
+                "maximumWeightMeasure": "50",
+                "weightUnitOfMeasurement": 1
+              }
+            ]
+          }
+        },
+        {
+          "baggageAllowanceId": "BAG2",
+          "baggageAllowanceTypeCode": "CarryOn",
+          "freeBaggageAllowance": {
+            "allowedBagCnt": 1,
+            "dimensionAllowance": [
+              {
+                "heightMeasure": "56",
+                "widthMeasure": "23",
+                "linearMeasure": "115",
+                "lengthMeasure": "36"
+              },
+              {
+                "heightMeasure": "22",
+                "widthMeasure": "9",
+                "linearMeasure": "45",
+                "lengthMeasure": "14",
+                "lengthUnitOfMeasurement": 2
+              }
+            ],
+            "weightAllowance": [
+              {
+                "maximumWeightMeasure": "10"
+              },
+              {
+                "maximumWeightMeasure": "22",
+                "weightUnitOfMeasurement": 1
+              }
+            ]
+          }
+        }
+      ],
+      "penalty": [
+        {
+          "id": "PEN1",
+          "type": "Change",
+          "maxPrice": {
+            "amount": {
+              "monetaryAmount": "150.0",
+              "baseCurrency": "GBP"
+            }
+          },
+          "minPrice": {
+            "amount": {
+              "monetaryAmount": "150.0",
+              "baseCurrency": "GBP"
+            }
+          },
+          "text": "Before Departure: Change allowed for GBP150.00"
+        },
+        {
+          "id": "PEN2",
+          "type": "Change",
+          "maxPrice": {
+            "amount": {
+              "monetaryAmount": "150.0",
+              "baseCurrency": "GBP"
+            }
+          },
+          "minPrice": {
+            "amount": {
+              "monetaryAmount": "150.0",
+              "baseCurrency": "GBP"
+            }
+          },
+          "text": "After Departure: Change allowed for GBP150.00"
+        },
+        {
+          "id": "PEN3",
+          "type": "Cancel",
+          "maxPrice": {
+            "amount": {
+              "monetaryAmount": "280.0",
+              "baseCurrency": "GBP"
+            }
+          },
+          "minPrice": {
+            "amount": {
+              "monetaryAmount": "280.0",
+              "baseCurrency": "GBP"
+            }
+          },
+          "text": "Ticket refund for GBP280.00"
+        }
+      ],
+      "priceClass": [
+        {
+          "id": "PC1",
+          "fareBasisCode": "LYCRB8XA",
+          "fareTypeCode": "EUP",
+          "productName": "Economy Delight",
+          "cabinType": {
+            "cabinCode": "5",
+            "cabinName": "Economy"
+          }
+        }
+      ],
+      "serviceDefinitions": [
+        {
+          "serviceDefinitionId": "SV1",
+          "description": [
+            "A350 (widebody)",
+            "Alcohol & beverages provided",
+            "Seatback on-demand video",
+            "Meals and drinks included",
+            "3-3-3 seat layout",
+            "USB outlet",
+            "Standard seat (31\" pitch)",
+            "Fast web browsing (fee)"
+          ]
+        }
+      ],
+      "journey": [
+        {
+          "journeyId": "JOUR1",
+          "duration": "09:30",
+          "flightSegmentRefIds": [
+            "SEG1"
+          ]
+        }
+      ]
+    },
+    "selectedOffers": [
+      {
+        "offerId": "37a285d8-e247-4687-b360-d3d56a163b31|GDLNVND2ltAT3uAWH0PL1M001",
+        "offerItems": [
+          {
+            "offerItemId": "37a285d8-e247-4687-b360-d3d56a163b31|GDLNVND2ltAT3uAWH0PL1M001-1",
+            "services": [
+              {
+                "serviceId": "SRV1",
+                "product": {
+                  "productOwner": "VS",
+                  "productCode": "",
+                  "productName": "",
+                  "productType": "Flight"
+                },
+                "productSegmentAssociation": {
+                  "offerSegmentRefIds": [
+                    "OSEG1"
+                  ]
+                },
+                "serviceBeneficiaries": [
+                  "ADULT_1"
+                ],
+                "journeyRefIds": [
+                  "JOUR1"
+                ],
+                "priceClassRefIds": [
+                  "PC1"
+                ],
+                "penaltyRef": {
+                  "changePenaltyRefIds": [
+                    "PEN1",
+                    "PEN2"
+                  ],
+                  "cancellationPenaltyRefIds": [
+                    "PEN3"
+                  ]
+                },
+                "baggageRefIds": [
+                  "BAG1",
+                  "BAG2"
+                ],
+                "flightSegmentsRefIds": [
+                  "SEG1"
+                ]
+              }
+            ],
+            "offeritemPricing": [
+              {
+                "fareCalculationText": "LON VS ATL M770.61LYCRB8XA NUC770.61END ROE0.733176",
+                "salePrice": [
+                  {
+                    "priceComponentType": "BasePrice",
+                    "priceComponentName": "",
+                    "amount": {
+                      "monetaryAmount": "927.89",
+                      "baseCurrency": "GBP"
+                    }
+                  },
+                  {
+                    "priceComponentType": "BaseFare",
+                    "priceComponentName": "",
+                    "amount": {
+                      "monetaryAmount": "565.00",
+                      "baseCurrency": "GBP"
+                    },
+                    "baseCurrencyAmount": {
+                      "amount": "565.00",
+                      "currency": "GBP"
+                    }
+                  },
+                  {
+                    "priceComponentType": "TotalTax",
+                    "priceComponentName": "",
+                    "amount": {
+                      "monetaryAmount": "362.89",
+                      "baseCurrency": "GBP"
+                    },
+                    "taxBreakup": [
+                      {
+                        "code": "GB",
+                        "name": "United Kingdom Air Passenger Duty APD",
+                        "amount": {
+                          "monetaryAmount": "102.00",
+                          "baseCurrency": "GBP"
+                        },
+                        "countryCode": "GB"
+                      },
+                      {
+                        "code": "UB",
+                        "name": "United Kingdom Passenger Service Charge Departures",
+                        "amount": {
+                          "monetaryAmount": "50.79",
+                          "baseCurrency": "GBP"
+                        },
+                        "countryCode": "GB"
+                      },
+                      {
+                        "code": "US",
+                        "name": "US International Arrival Tax",
+                        "amount": {
+                          "monetaryAmount": "17.50",
+                          "baseCurrency": "GBP"
+                        },
+                        "countryCode": "US"
+                      },
+                      {
+                        "code": "XA",
+                        "name": "United States APHIS Passenger Fee Passengers",
+                        "amount": {
+                          "monetaryAmount": "2.90",
+                          "baseCurrency": "GBP"
+                        },
+                        "countryCode": "US"
+                      },
+                      {
+                        "code": "XY",
+                        "name": "United States Immigration User Fee",
+                        "amount": {
+                          "monetaryAmount": "5.20",
+                          "baseCurrency": "GBP"
+                        },
+                        "countryCode": "US"
+                      },
+                      {
+                        "code": "YC",
+                        "name": "United States Customs User Fee",
+                        "amount": {
+                          "monetaryAmount": "5.50",
+                          "baseCurrency": "GBP"
+                        },
+                        "countryCode": "US"
+                      },
+                      {
+                        "code": "YQ",
+                        "name": "VS YQ surcharge",
+                        "amount": {
+                          "monetaryAmount": "165.00",
+                          "baseCurrency": "GBP"
+                        }
+                      },
+                      {
+                        "code": "YR",
+                        "name": "VS YR surcharge",
+                        "amount": {
+                          "monetaryAmount": "14.00",
+                          "baseCurrency": "GBP"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "salePriceDifference": [
+                  {
+                    "priceComponentType": "BaseFare",
+                    "priceComponentName": "",
+                    "amount": {
+                      "monetaryAmount": "0.00",
+                      "baseCurrency": "GBP"
+                    }
+                  },
+                  {
+                    "priceComponentType": "TotalTax",
+                    "priceComponentName": "",
+                    "amount": {
+                      "monetaryAmount": "0.00",
+                      "baseCurrency": "GBP"
+                    }
+                  }
+                ],
+                "originalSalePrice": [
+                  {
+                    "priceComponentType": "BaseFare",
+                    "amount": {
+                      "monetaryAmount": "565.00",
+                      "baseCurrency": "GBP"
+                    }
+                  },
+                  {
+                    "priceComponentType": "BasePrice",
+                    "amount": {
+                      "monetaryAmount": "927.89",
+                      "baseCurrency": "GBP"
+                    }
+                  },
+                  {
+                    "priceComponentType": "TotalTax",
+                    "priceComponentName": "",
+                    "amount": {
+                      "monetaryAmount": "362.89",
+                      "baseCurrency": "GBP"
+                    },
+                    "taxBreakup": [
+                      {
+                        "code": "GB",
+                        "amount": {
+                          "monetaryAmount": "102.00",
+                          "baseCurrency": "GBP"
+                        }
+                      },
+                      {
+                        "code": "UB",
+                        "amount": {
+                          "monetaryAmount": "50.79",
+                          "baseCurrency": "GBP"
+                        }
+                      },
+                      {
+                        "code": "US",
+                        "amount": {
+                          "monetaryAmount": "17.50",
+                          "baseCurrency": "GBP"
+                        }
+                      },
+                      {
+                        "code": "XA",
+                        "amount": {
+                          "monetaryAmount": "2.90",
+                          "baseCurrency": "GBP"
+                        }
+                      },
+                      {
+                        "code": "XY",
+                        "amount": {
+                          "monetaryAmount": "5.20",
+                          "baseCurrency": "GBP"
+                        }
+                      },
+                      {
+                        "code": "YC",
+                        "amount": {
+                          "monetaryAmount": "5.50",
+                          "baseCurrency": "GBP"
+                        }
+                      },
+                      {
+                        "code": "YQ",
+                        "amount": {
+                          "monetaryAmount": "165.00",
+                          "baseCurrency": "GBP"
+                        }
+                      },
+                      {
+                        "code": "YR",
+                        "amount": {
+                          "monetaryAmount": "14.00",
+                          "baseCurrency": "GBP"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "orderAmendments": [
+      {
+        "productType": 2,
+        "orderByReference": [
+          {
+            "itemsForDeletion": [
+              {
+                "orderItemId": "VS932TJLFMF26-1"
+              }
+            ],
+            "itemsForAddition": {
+              "offerRefID": "37a285d8-e247-4687-b360-d3d56a163b31|GDLNVND2ltAT3uAWH0PL1M001",
+              "offerItems": [
+                {
+                  "offerItemId": "37a285d8-e247-4687-b360-d3d56a163b31|GDLNVND2ltAT3uAWH0PL1M001-1"
+                }
+              ]
+            },
+            "customerReference": [
+              "ADULT_1"
+            ]
+          }
+        ],
+        "customerPrices": {
+          "ptc": "ADT",
+          "fareCalc": "LON VS ATL M770.61LYCRB8XA NUC770.61END ROE0.733176",
+          "priceDetails": [
+            {
+              "priceComponentType": 2,
+              "priceComponentName": "BasePriceEnum"
+            }
+          ]
+        },
+        "flightItems": [
+          {
+            "actionContext": 1,
+            "segments": [
+              {
+                "odRefId": "OD1",
+                "segmentId": "SEG1",
+                "airCraft": "351",
+                "marketingCarrier": "VS",
+                "marketingFlightNumber": "103",
+                "originAirportCode": "LHR",
+                "destinationAirportCode": "ATL",
+                "classOfService": "V",
+                "scheduledArrivalTime": {
+                  "localDateTime": "2026-12-04T15:15"
+                },
+                "scheduledDepartureTime": {
+                  "localDateTime": "2026-12-04T10:45"
+                },
+                "flightDuration": "09:30",
+                "legs": [
+                  {
+                    "scheduledDepartureTime": {
+                      "localDateTime": "2026-12-04T10:45"
+                    },
+                    "legSequenceNumber": "1",
+                    "originAirportCode": "LHR",
+                    "operatingCarrier": "VS",
+                    "scheduledArrivalTime": {
+                      "localDateTime": "2026-12-04T15:15"
+                    },
+                    "destinationAirportCode": "ATL",
+                    "legDuration": "570",
+                    "stopOverDuration": "",
+                    "originTerminal": "3",
+                    "destinationTerminal": "I",
+                    "carrierAircraftTypeCode": "A350",
+                    "carrierAircraftTypeName": "A350 (widebody)"
+                  }
+                ],
+                "cabinType": {
+                  "cabinCode": "5",
+                  "cabinName": "Economy"
+                },
+                "connectionOrStopOver": "O",
+                "serviceDefinitionsRefID": "SV1",
+                "ticketNotValidAfter": "2026-12-04",
+                "ticketNotValidBefore": "2026-12-04"
+              }
+            ]
+          },
+          {
+            "actionContext": 0,
+            "segments": [
+              {
+                "odRefId": "OD1",
+                "segmentId": "SEG1",
+                "airCraft": "351",
+                "marketingCarrier": "VS",
+                "marketingFlightNumber": "103",
+                "originAirportCode": "LHR",
+                "destinationAirportCode": "ATL",
+                "classOfService": "V",
+                "scheduledArrivalTime": {
+                  "localDateTime": "2026-12-03T15:15:00"
+                },
+                "scheduledDepartureTime": {
+                  "localDateTime": "2026-12-03T10:45:00"
+                },
+                "flightDuration": "00:09:30:00",
+                "legs": [
+                  {
+                    "scheduledDepartureTime": {
+                      "localDateTime": "2026-12-03T10:45:00"
+                    },
+                    "legSequenceNumber": "1",
+                    "originAirportCode": "LHR",
+                    "scheduledArrivalTime": {
+                      "localDateTime": "2026-12-03T15:15:00"
+                    },
+                    "destinationAirportCode": "ATL",
+                    "legDuration": "00:09:30:00",
+                    "legId": "LEG1",
+                    "carrierAircraftTypeCode": "A350",
+                    "carrierAircraftTypeName": "A350 (widebody)"
+                  }
+                ],
+                "cabinType": {
+                  "cabinCode": "5",
+                  "cabinName": "ECONOMY"
+                },
+                "fareBasis": "LYCRB8XA",
+                "status": {
+                  "code": "HK"
+                },
+                "ticketNotValidAfter": "2026-12-03",
+                "ticketNotValidBefore": "2026-12-03"
+              }
+            ]
+          }
+        ],
+        "customerReference": [
+          "ADULT_1"
+        ]
+      }
+    ],
+    "channelId": "NDC",
+    "accountableDocumentRefs": [
+      {
+        "documentType": "Ticket",
+        "documentNumber": "9322520363074",
+        "issueDate": "2026-07-27",
+        "issueTime": "07:04:00",
+        "customerRefId": "ADULT_1",
+        "fareCalculation": "LON VS NYC M2237.03WYS0AFKA VS LON M2061.71SYJ0D8KA NUC4298.74END ROE0.747193 XFJFK4.5",
+        "coupons": [
+          {
+            "segmentRefId": "SEG1",
+            "couponNumber": "1",
+            "ticketNumber": "9322520363074",
+            "couponStatus": "OPEN",
+            "fareBasis": "WYS0AFKA",
+            "ticketExpirationDate": "27Jul26",
+            "ticketEffectiveDate": "27Jul26"
+          },
+          {
+            "segmentRefId": "SEG2",
+            "couponNumber": "2",
+            "ticketNumber": "9322520363074",
+            "couponStatus": "OPEN",
+            "fareBasis": "SYJ0D8KA",
+            "ticketExpirationDate": "19Dec26",
+            "ticketEffectiveDate": "19Dec26"
+          }
+        ]
+      }
+    ],
+    "transactionId": [
+      "81854056"
+    ]
+  }
+}

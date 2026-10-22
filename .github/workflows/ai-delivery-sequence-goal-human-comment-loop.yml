@@ -1,0 +1,777 @@
+﻿name: ai-delivery-sequence-goal-human-comment-loop
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to process.
+        required: true
+        type: number
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+  statuses: read
+
+jobs:
+  human-comment-loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      SEQUENCE_GOAL_HUMAN_COMMENT_MAX_ATTEMPTS: 1
+      SEQUENCE_GOAL_HUMAN_COMMENT_MAX_CHANGED_FILES: 100
+    concurrency:
+      group: sequence-goal-pr-mutation-${{ github.event.inputs.pr_number || github.run_id }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Detect sequence-goal GitHub App credentials
+        id: app-credentials
+        shell: pwsh
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        run: |
+          "configured=$(((-not [string]::IsNullOrWhiteSpace($env:APP_ID)) -and (-not [string]::IsNullOrWhiteSpace($env:APP_PRIVATE_KEY))).ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Create sequence-goal GitHub App token
+        id: app-token
+        if: steps.app-credentials.outputs.configured == 'true'
+        uses: actions/create-github-app-token@v2
+        env:
+          APP_ID: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.SEQUENCE_GOAL_GITHUB_APP_PRIVATE_KEY }}
+        with:
+          app-id: ${{ env.APP_ID }}
+          private-key: ${{ env.APP_PRIVATE_KEY }}
+
+      - name: Enforce attempt budget
+        shell: pwsh
+        run: |
+          if ([int]'${{ github.run_attempt }}' -gt [int]$env:SEQUENCE_GOAL_HUMAN_COMMENT_MAX_ATTEMPTS) {
+            throw "Human-comment loop exceeded its attempt budget of $env:SEQUENCE_GOAL_HUMAN_COMMENT_MAX_ATTEMPTS. Triage the previous run before starting a new workflow run."
+          }
+
+      - name: Resolve PR context
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            let prNumber = null;
+
+            if (context.payload.pull_request?.number) {
+              prNumber = context.payload.pull_request.number;
+            } else if (context.payload.issue?.pull_request && context.payload.issue?.number) {
+              prNumber = context.payload.issue.number;
+            } else if (context.payload.inputs?.pr_number) {
+              prNumber = Number(context.payload.inputs.pr_number);
+            }
+
+            if (!prNumber) {
+              core.setOutput("should_process", "false");
+              core.setOutput("skip_reason", "No pull request context found.");
+              return;
+            }
+
+            const { data: pullRequest } = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: prNumber
+            });
+
+            const isSequenceGoalPr = (pullRequest.body || "").includes("Automated PR raised by the sequence goal loop after goal completion.");
+            const isSameRepositoryBranch = pullRequest.head.repo?.full_name === `${owner}/${repo}`;
+            const appSlug = "${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}";
+            const isTrustedAuthor = new Set(["github-actions", "github-actions[bot]", appSlug, `${appSlug}[bot]`]).has(pullRequest.user?.login || "");
+            const headBranch = pullRequest.head.ref || "";
+            const hasEligibleHeadBranch = headBranch !== "" && headBranch !== "main";
+            const targetsMain = pullRequest.base.ref === "main";
+            const isOpen = pullRequest.state === "open";
+
+            core.setOutput("number", String(prNumber));
+            core.setOutput("head_ref", pullRequest.head.ref);
+            core.setOutput("head_sha", pullRequest.head.sha);
+            core.setOutput("base_ref", pullRequest.base.ref);
+            core.setOutput("should_process", String(isSequenceGoalPr && isSameRepositoryBranch && isTrustedAuthor && hasEligibleHeadBranch && targetsMain && isOpen));
+            core.setOutput("skip_reason", !isSequenceGoalPr
+              ? "PR is not a sequence-goal delivery PR."
+              : !isSameRepositoryBranch
+                ? "PR head is not in this repository; refusing to run write-capable agent loop."
+                : !isTrustedAuthor
+                  ? "PR author is not trusted for write-capable sequence-goal automation."
+                  : !hasEligibleHeadBranch
+                    ? "PR head branch must be a non-main branch."
+                    : !targetsMain
+                      ? "PR does not target main."
+                    : !isOpen
+                      ? "PR is not open."
+                      : "");
+
+      - name: Check out PR head
+        if: steps.pr.outputs.should_process == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr.outputs.head_ref }}
+          fetch-depth: 1
+          token: ${{ steps.app-token.outputs.token || github.token }}
+
+      - name: Fetch PR and base history
+        if: steps.pr.outputs.should_process == 'true'
+        shell: pwsh
+        env:
+          PR_HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+          PR_BASE_REF: ${{ steps.pr.outputs.base_ref }}
+        run: |
+          if ((git rev-parse --is-shallow-repository) -eq 'true') {
+            git fetch --no-tags --unshallow origin
+          }
+          git fetch --no-tags origin `
+            "+refs/heads/$($env:PR_HEAD_REF):refs/remotes/origin/$($env:PR_HEAD_REF)" `
+            "+refs/heads/$($env:PR_BASE_REF):refs/remotes/origin/$($env:PR_BASE_REF)"
+
+      - name: Collect non-AI comments
+        id: comments
+        if: steps.pr.outputs.should_process == 'true'
+        uses: actions/github-script@v7
+        env:
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        with:
+          script: |
+            const fs = require("fs");
+            const path = require("path");
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = Number("${{ steps.pr.outputs.number }}");
+            const aiAuthors = new Set([
+              "copilot",
+              "copilot[bot]",
+              "copilot-pull-request-reviewer",
+              "copilot-pull-request-reviewer[bot]",
+              "codex",
+              "codex[bot]",
+              "github-actions[bot]"
+            ]);
+            const generatedHumanCommentMarker = "<!-- sequence-goal-open-points human-comment -->";
+
+            function authorLogin(comment) {
+              return (comment?.user?.login || comment?.author?.login || "").toLowerCase();
+            }
+
+            function isNonAiComment(comment) {
+              const login = authorLogin(comment);
+              const body = comment?.body || "";
+              return !body.includes("[from-codex]")
+                && (body.includes(generatedHumanCommentMarker) || (Boolean(login)
+                  && !aiAuthors.has(login)
+                  && !login.endsWith("[bot]")));
+            }
+
+            const items = [];
+            if (context.payload.comment && isNonAiComment(context.payload.comment)) {
+              const comment = context.payload.comment;
+              if (context.payload.pull_request) {
+                items.push({
+                  kind: "review-comment",
+                  replyToCommentDatabaseId: comment.id,
+                  author: comment.user?.login,
+                  body: comment.body || "",
+                  path: comment.path || null,
+                  line: comment.line || null,
+                  url: comment.html_url || null,
+                  decision: null,
+                  responseComment: null,
+                  actionSummary: null
+                });
+              } else {
+                items.push({
+                  kind: "issue-comment",
+                  issueCommentId: comment.id,
+                  author: comment.user?.login,
+                  body: comment.body || "",
+                  url: comment.html_url || null,
+                  decision: null,
+                  responseComment: null,
+                  actionSummary: null
+                });
+              }
+            }
+
+            if (context.payload.review && isNonAiComment(context.payload.review) && (context.payload.review.body || "").trim()) {
+              items.push({
+                kind: "review-summary",
+                reviewId: context.payload.review.id,
+                author: context.payload.review.user?.login,
+                body: context.payload.review.body || "",
+                url: context.payload.review.html_url || null,
+                state: context.payload.review.state || null,
+                decision: null,
+                responseComment: null,
+                actionSummary: null
+              });
+            }
+
+            function isCodexResponseFor(comment, kind, id) {
+              const body = comment?.body || "";
+              const login = authorLogin(comment);
+              const responseAppSlug = "${{ vars.SEQUENCE_GOAL_GITHUB_APP_SLUG }}";
+              const trustedResponseAuthors = new Set([...aiAuthors, "github-actions", "github-actions[bot]", ...(responseAppSlug ? [responseAppSlug, `${responseAppSlug}[bot]`] : [])]);
+              if (!trustedResponseAuthors.has(login)) return false;
+              if (!body.includes("[from-codex]")) return false;
+              if (body.includes(`<!-- sequence-goal-response:${kind}:${id} -->`)) return true;
+              return kind === "review-thread" && !body.includes("<!-- sequence-goal-response:") && /Evidence:\s*https:\/\/github\.com\/[^/]+\/[^/]+\/actions\/runs\/\d+/i.test(body);
+            }
+
+            if (context.eventName === "workflow_dispatch") {
+              const prComments = (await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number: prNumber,
+                per_page: 100
+              })).map(comment => ({
+                ...comment,
+                author: comment.user,
+                databaseId: comment.id,
+                url: comment.html_url,
+                createdAt: comment.created_at
+              }));
+              const reviews = (await github.paginate(github.rest.pulls.listReviews, {
+                owner,
+                repo,
+                pull_number: prNumber,
+                per_page: 100
+              })).map(review => ({
+                ...review,
+                author: review.user,
+                databaseId: review.id,
+                url: review.html_url,
+                createdAt: review.submitted_at || review.created_at
+              }));
+
+              const query = `
+                query($owner: String!, $repo: String!, $prNumber: Int!, $threadCursor: String) {
+                  repository(owner: $owner, name: $repo) {
+                    pullRequest(number: $prNumber) {
+                      reviewThreads(first: 100, after: $threadCursor) {
+                        pageInfo { hasNextPage endCursor }
+                        nodes {
+                          id
+                          isResolved
+                          path
+                          line
+                          comments(last: 50) {
+                            nodes {
+                              id
+                              databaseId
+                              author { login }
+                              body
+                              path
+                              line
+                              url
+                              createdAt
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+              const reviewThreads = [];
+              let threadCursor = null;
+              do {
+                const result = await github.graphql(query, { owner, repo, prNumber, threadCursor });
+                const connection = result.repository.pullRequest.reviewThreads;
+                reviewThreads.push(...connection.nodes);
+                threadCursor = connection.pageInfo.hasNextPage
+                  ? connection.pageInfo.endCursor
+                  : null;
+              } while (threadCursor);
+
+              for (const thread of reviewThreads) {
+                if (thread.isResolved) continue;
+
+                const orderedComments = [...thread.comments.nodes]
+                  .sort((left, right) => new Date(left.createdAt) - new Date(right.createdAt));
+                const latestCodexResponseAt = orderedComments
+                  .filter(comment => isCodexResponseFor(comment, "review-thread", thread.id))
+                  .map(comment => new Date(comment.createdAt))
+                  .sort((left, right) => right - left)[0] || null;
+
+                const unhandledHumanComments = orderedComments.filter(comment => {
+                  const login = (comment.author?.login || "").toLowerCase();
+                  const body = comment.body || "";
+                  return !body.includes("[from-codex]")
+                    && (body.includes(generatedHumanCommentMarker) || (login
+                      && !aiAuthors.has(login)
+                      && !login.endsWith("[bot]")))
+                    && (!latestCodexResponseAt || new Date(comment.createdAt) > latestCodexResponseAt);
+                });
+
+                const humanComment = unhandledHumanComments[unhandledHumanComments.length - 1];
+                if (!humanComment) continue;
+                items.push({
+                  kind: "review-thread",
+                  threadId: thread.id,
+                  replyToCommentDatabaseId: humanComment.databaseId,
+                  author: humanComment.author?.login,
+                  body: humanComment.body || "",
+                  path: thread.path || humanComment.path || null,
+                  line: thread.line || humanComment.line || null,
+                  url: humanComment.url || null,
+                  decision: null,
+                  responseComment: null,
+                  actionSummary: null
+                });
+              }
+
+              for (const comment of prComments) {
+                if (!isNonAiComment({ author: comment.author, body: comment.body })) continue;
+                const alreadyAnswered = prComments.some(candidate =>
+                  isCodexResponseFor(candidate, "issue-comment", comment.databaseId) && new Date(candidate.createdAt) > new Date(comment.createdAt));
+                if (alreadyAnswered) continue;
+
+                items.push({
+                  kind: "issue-comment",
+                  issueCommentId: comment.databaseId,
+                  author: comment.author?.login,
+                  body: comment.body || "",
+                  url: comment.url || null,
+                  decision: null,
+                  responseComment: null,
+                  actionSummary: null
+                });
+              }
+
+              for (const review of reviews) {
+                if (!review.body || !review.body.trim()) continue;
+                if (!isNonAiComment({ author: review.author, body: review.body })) continue;
+                const alreadyAnswered = prComments.some(candidate =>
+                  isCodexResponseFor(candidate, "review-summary", review.databaseId) && new Date(candidate.createdAt) > new Date(review.createdAt));
+                if (alreadyAnswered) continue;
+
+                items.push({
+                  kind: "review-summary",
+                  reviewId: review.databaseId,
+                  author: review.author?.login,
+                  body: review.body || "",
+                  url: review.url || null,
+                  state: review.state || null,
+                  decision: null,
+                  responseComment: null,
+                  actionSummary: null
+                });
+              }
+            }
+
+            const evidenceDir = ".codex/agent-loop/human-comments";
+            fs.mkdirSync(evidenceDir, { recursive: true });
+            const { data: livePr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
+            if (livePr.state !== "open") throw new Error("PR became terminal before human-comment evidence collection completed.");
+            const runAttempt = Number(process.env.RUN_ATTEMPT);
+            const evidencePath = path.join(evidenceDir, `pr-${prNumber}-${context.runId}-${runAttempt}.json`).replace(/\\/g, "/");
+            const immutablePath = path.join(process.env.RUNNER_TEMP, `human-comment-${prNumber}-${context.runId}-${runAttempt}-immutable.json`);
+            const evidence = {
+              prNumber,
+              branch: livePr.head.ref,
+              base: livePr.base.ref,
+              headSha: livePr.head.sha,
+              runId: String(context.runId),
+              runAttempt,
+              runUrl: `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`,
+              collectedAtUtc: new Date().toISOString(),
+              policy: {
+                resolveHumanThreads: false,
+                expectedDecisions: ["agree", "disagree", "not-applicable"]
+              },
+              comments: items
+            };
+
+            fs.writeFileSync(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`, "utf8");
+            fs.writeFileSync(immutablePath, `${JSON.stringify(evidence, null, 2)}\n`, "utf8");
+            core.setOutput("evidence_path", evidencePath);
+            core.setOutput("immutable_path", immutablePath);
+            core.setOutput("immutable_sha256", require("crypto").createHash("sha256").update(fs.readFileSync(immutablePath)).digest("hex"));
+            core.setOutput("has_comments", String(items.length > 0));
+            core.info(`Non-AI comments collected: ${items.length}`);
+
+      - name: Set up Node for Codex CLI
+        if: steps.comments.outputs.has_comments == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Codex CLI
+        if: steps.comments.outputs.has_comments == 'true'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          npm install -g @openai/codex@0.146.0
+          codex --version
+
+      - name: Run human comment agent
+        if: steps.comments.outputs.has_comments == 'true'
+        timeout-minutes: 30
+        shell: pwsh
+        env:
+          PR_HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SEQUENCE_GOAL_HUMAN_COMMENT_AGENT_COMMAND_JSON: ${{ secrets.SEQUENCE_GOAL_HUMAN_COMMENT_AGENT_COMMAND_JSON }}
+          SEQUENCE_GOAL_REVIEW_AGENT_MODEL: ${{ vars.SEQUENCE_GOAL_REVIEW_AGENT_MODEL || 'gpt-6-sol' }}
+          SEQUENCE_GOAL_HUMAN_COMMENT_AGENT_MODEL: ${{ vars.SEQUENCE_GOAL_HUMAN_COMMENT_AGENT_MODEL || vars.SEQUENCE_GOAL_REVIEW_AGENT_MODEL || 'gpt-6-sol' }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:OPENAI_API_KEY)) {
+            throw "OPENAI_API_KEY secret is required for autonomous human comment handling."
+          }
+
+          ./scripts/run-sequence-goal-human-comment-agent.ps1 `
+            -PrNumber ${{ steps.pr.outputs.number }} `
+            -CommentEvidencePath '${{ steps.comments.outputs.evidence_path }}' `
+            -BranchName $env:PR_HEAD_REF
+
+      - name: Upload human-comment resource and cost evidence
+        if: always() && steps.comments.outputs.has_comments == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-resource-sequence-goal-human-comment-loop-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          if-no-files-found: error
+          path: TestResults/agent-resource/
+
+      - name: Validate human comment decisions
+        if: steps.comments.outputs.has_comments == 'true'
+        shell: pwsh
+        env:
+          IMMUTABLE_PATH: ${{ steps.comments.outputs.immutable_path }}
+          IMMUTABLE_SHA256: ${{ steps.comments.outputs.immutable_sha256 }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidencePath = '${{ steps.comments.outputs.evidence_path }}'
+          $evidence = Get-Content -LiteralPath $evidencePath -Raw | ConvertFrom-Json
+          $actualImmutableSha256 = (Get-FileHash -LiteralPath $env:IMMUTABLE_PATH -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actualImmutableSha256 -cne $env:IMMUTABLE_SHA256.ToLowerInvariant()) { throw 'Workflow-owned human-comment identity snapshot changed after collection.' }
+          $immutable = Get-Content -LiteralPath $env:IMMUTABLE_PATH -Raw | ConvertFrom-Json
+          $rootFields = @('prNumber','branch','base','headSha','runId','runAttempt')
+          foreach ($field in $rootFields) { if ($evidence.$field -cne $immutable.$field) { throw "Agent changed workflow-owned human-comment root identity field '$field'." } }
+          $mutableFields = @('decision','responseComment','actionSummary')
+          $identity = { param($items) @($items | ForEach-Object { $item = [ordered]@{}; foreach ($property in $_.PSObject.Properties) { if ($property.Name -notin $mutableFields) { $item[$property.Name] = $property.Value } }; [pscustomobject]$item }) | ConvertTo-Json -Depth 10 -Compress }
+          if ((& $identity $evidence.comments) -cne (& $identity $immutable.comments)) { throw 'Agent changed workflow-owned human-comment identity fields.' }
+          $protectedPatterns = @(
+            '^\.github/', '^\.githooks/', '^\.codex/hooks/', '^\.codex/skills/', '^scripts/',
+            '(^|/)local\.settings.*\.json$', '(^|/)appsettings.*\.json$',
+            '(^|/)serviceDependencies/', '(^|/)PublishProfiles/'
+          )
+          $failures = @()
+          foreach ($comment in @($evidence.comments)) {
+            $path = ([string]$comment.path) -replace '\\', '/'
+            if (-not [string]::IsNullOrWhiteSpace($path) -and ($protectedPatterns | Where-Object { $path -match $_ }).Count -gt 0) {
+              $comment.decision = 'not-applicable'
+              $comment.responseComment = "This feedback targets protected automation path '$path'. The comment agent did not mutate that path; a human maintainer must assess and apply any change. Other safe feedback was processed normally."
+              $comment.actionSummary = $null
+            }
+            if ([string]::IsNullOrWhiteSpace([string]$comment.decision) -or $comment.decision -notin @('agree', 'disagree', 'not-applicable')) {
+              $failures += "Comment from $($comment.author) must set decision to agree, disagree, or not-applicable."
+            }
+            if ([string]::IsNullOrWhiteSpace([string]$comment.responseComment)) {
+              $failures += "Comment from $($comment.author) must include a responseComment."
+            }
+            if ($comment.decision -eq 'agree' -and [string]::IsNullOrWhiteSpace([string]$comment.actionSummary)) {
+              $failures += "Agreed comment from $($comment.author) must include an actionSummary."
+            }
+          }
+
+          if ($failures.Count -gt 0) {
+            throw ($failures -join '; ')
+          }
+          $evidence | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $evidencePath -Encoding utf8
+
+      - name: Validate generated human-comment changes
+        if: steps.comments.outputs.has_comments == 'true'
+        id: generated
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          ./scripts/normalize-generated-line-endings.ps1 -Base origin/main
+
+          $currentEvidence = ('${{ steps.comments.outputs.evidence_path }}' -replace '\\', '/')
+          $otherEvidence = @(@(& git diff --cached --name-only --no-renames; & git diff --name-only --no-renames HEAD; & git ls-files --others --exclude-standard) |
+            ForEach-Object { $_ -replace '\\', '/' } |
+            Where-Object { $_ -match '^\.codex/agent-loop/' -and $_ -cne $currentEvidence } |
+            Sort-Object -Unique)
+          foreach ($file in $otherEvidence) {
+            git ls-files --error-unmatch -- $file 2>$null | Out-Null
+            if ($LASTEXITCODE -eq 0) { git restore --source=HEAD --staged --worktree -- $file }
+            elseif (Test-Path -LiteralPath $file -PathType Leaf) { Remove-Item -LiteralPath $file -Force }
+          }
+
+          $changedFiles = @(
+            @(& git diff --cached --name-only --no-renames; & git diff --name-only --no-renames HEAD; & git ls-files --others --exclude-standard) |
+            ForEach-Object { $_ -replace '\\', '/' } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Sort-Object -Unique
+          )
+
+          if ($changedFiles.Count -eq 0) {
+            "has_changes=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Host "Human comment agent produced no file changes."
+            exit 0
+          }
+
+          if ($changedFiles.Count -gt [int]$env:SEQUENCE_GOAL_HUMAN_COMMENT_MAX_CHANGED_FILES) {
+            throw "Human comment agent changed $($changedFiles.Count) files, above SEQUENCE_GOAL_HUMAN_COMMENT_MAX_CHANGED_FILES=$env:SEQUENCE_GOAL_HUMAN_COMMENT_MAX_CHANGED_FILES."
+          }
+
+          $allowPatterns = @(
+            ('^{0}$' -f [regex]::Escape($currentEvidence)),
+            '^docs/',
+            '^VAA\.EAPI\.[^/]+/',
+            '^VAA\.EAPI\.Automation/'
+          )
+          $blockedPatterns = @(
+            '^\.github/',
+            '^\.githooks/',
+            '^\.codex/hooks/',
+            '^\.codex/skills/',
+            '^scripts/',
+            '(^|/)local\.settings.*\.json$',
+            '(^|/)appsettings.*\.json$',
+            '(^|/)serviceDependencies/',
+            '(^|/)PublishProfiles/'
+          )
+
+          function Reset-BlockedChanges {
+            param([string[]]$Patterns)
+
+            $dirtyFiles = @(@(& git diff --cached --name-only --no-renames; & git diff --name-only --no-renames HEAD; & git ls-files --others --exclude-standard)) |
+              ForEach-Object { $_ -replace '\\', '/' } |
+              Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+              Sort-Object -Unique
+
+            foreach ($file in $dirtyFiles) {
+              if (($Patterns | Where-Object { $file -match $_ }).Count -eq 0) {
+                continue
+              }
+
+              git ls-files --error-unmatch -- $file 2>$null | Out-Null
+              if ($LASTEXITCODE -eq 0) {
+                git restore --source=HEAD --staged --worktree -- $file
+              } elseif (Test-Path -LiteralPath $file -PathType Leaf) {
+                Remove-Item -LiteralPath $file -Force
+              }
+              Write-Host "Discarded protected-path change from human-comment agent: $file"
+            }
+          }
+
+          Reset-BlockedChanges -Patterns $blockedPatterns
+          $changedFiles = @(
+            @(& git diff --cached --name-only --no-renames; & git diff --name-only --no-renames HEAD; & git ls-files --others --exclude-standard) |
+            ForEach-Object { $_ -replace '\\', '/' } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Sort-Object -Unique
+          )
+
+          if ($changedFiles.Count -eq 0) {
+            "has_changes=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Host "Human comment agent produced no file changes after discarding protected-path changes."
+            exit 0
+          }
+
+          $blocked = @()
+          foreach ($file in $changedFiles) {
+            if (($blockedPatterns | Where-Object { $file -match $_ }).Count -gt 0) {
+              $blocked += "$file (blocked sensitive path)"
+              continue
+            }
+            if (($allowPatterns | Where-Object { $file -match $_ }).Count -eq 0) {
+              $blocked += "$file (not allowlisted)"
+            }
+          }
+
+          if ($blocked.Count -gt 0) {
+            throw "Human comment agent produced blocked changes: $($blocked -join '; ')"
+          }
+
+          foreach ($file in $changedFiles) {
+            git add -A -- $file
+          }
+
+          "has_changes=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Verify human-comment changes
+        if: steps.comments.outputs.has_comments == 'true' && steps.generated.outputs.has_changes == 'true'
+        timeout-minutes: 15
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $humanCommentChangedFiles = @(
+            & git diff --cached --name-only --diff-filter=ACMRD |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+          )
+          if ($humanCommentChangedFiles.Count -eq 0) {
+            throw 'Human-comment verification was requested without staged agent changes.'
+          }
+
+          $humanCommentMarkdownFiles = @($humanCommentChangedFiles | Where-Object { $_.EndsWith('.md', [StringComparison]::OrdinalIgnoreCase) -and (Test-Path -LiteralPath $_ -PathType Leaf) })
+          if ($humanCommentMarkdownFiles.Count -gt 0) {
+            try {
+              & ./scripts/check-mermaid-diagrams.ps1 -Path $humanCommentMarkdownFiles
+            } catch {
+              throw "Mermaid render validation failed for human-comment-agent Markdown changes: $($_.Exception.Message)"
+            }
+          }
+
+          $scopesJson = & ./scripts/resolve-verify-scopes.ps1 -ChangedFiles $humanCommentChangedFiles
+          $scopes = @($scopesJson | ConvertFrom-Json)
+          if ($scopes.Count -eq 0) {
+            $scopes = @([PSCustomObject]@{ kind = 'ScopePath'; path = '.' })
+          }
+
+          foreach ($scope in $scopes) {
+            $kind = [string]$scope.kind
+            $path = [string]$scope.path
+            if ($kind -eq 'SolutionPath') {
+              & ./scripts/verify.ps1 -SolutionPath $path -SkipBuild
+            } elseif ($kind -eq 'ProjectPath') {
+              & ./scripts/verify.ps1 -ProjectPath $path -SkipBuild
+            } elseif ($kind -eq 'ScopePath') {
+              & ./scripts/verify.ps1 -ScopePath $path -SkipBuild -SkipDeploymentCheck
+            } else {
+              throw "Unknown verify scope kind '$kind'."
+            }
+
+            if ($LASTEXITCODE -ne 0) {
+              throw "Verification failed for $kind '$path'."
+            }
+          }
+
+      - name: Commit human-comment changes
+        if: steps.comments.outputs.has_comments == 'true' && steps.generated.outputs.has_changes == 'true'
+        shell: pwsh
+        env:
+          PR_HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ((git diff --cached --name-only).Length -eq 0) {
+            Write-Host "No staged human-comment changes to commit."
+            exit 0
+          }
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "fix(sequence-goal): address human PR feedback"
+          $branch = $env:PR_HEAD_REF
+          git push origin "HEAD:$branch"
+          if ($LASTEXITCODE -ne 0) {
+            throw "PR head moved during comment handling; refusing to rebase stale comment decisions. Monitoring will recollect the current head."
+          }
+
+      - name: Persist handled human-comment evidence in coordinator PR
+        id: persist_evidence
+        if: steps.comments.outputs.has_comments == 'true'
+        shell: pwsh
+        env:
+          PR_HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $expectedHead = (git rev-parse HEAD).Trim()
+          $livePr = gh pr view ${{ steps.pr.outputs.number }} --repo '${{ github.repository }}' --json state,headRefOid | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0 -or $livePr.state -ne 'OPEN' -or $livePr.headRefOid -ne $expectedHead) { throw 'PR became terminal or changed head before human-comment evidence finalization.' }
+          $remote = @(git ls-remote --heads origin "refs/heads/$env:PR_HEAD_REF")
+          if ($LASTEXITCODE -ne 0 -or $remote.Count -ne 1 -or ($remote[0] -split '\s+')[0] -ne $expectedHead) { throw 'PR head changed before human-comment evidence finalization; monitoring will recollect it.' }
+          ./scripts/finalize-sequence-goal-pr-evidence.ps1 -PrNumber ${{ steps.pr.outputs.number }} -EvidencePath '${{ steps.comments.outputs.evidence_path }}' -RetainEvidence
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to finalize human-comment evidence.' }
+          git diff --quiet
+          $diffExitCode = $LASTEXITCODE
+          if ($diffExitCode -eq 0) {
+            Write-Host 'Human-comment evidence batch was already finalized; continuing from the unchanged coordinator head.'
+            "finalized_head=$expectedHead" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            exit 0
+          }
+          if ($diffExitCode -ne 1) { throw "Failed to inspect finalized human-comment evidence (git diff exit code $diffExitCode)." }
+          git config user.name "github-actions[bot]"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to configure the Git user name.' }
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to configure the Git user email.' }
+          git add -A -- docs/sequence-diagrams '${{ steps.comments.outputs.evidence_path }}'
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to stage finalized human-comment evidence.' }
+          git commit -m "chore(sequence-goal): finalize human-comment evidence"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to commit finalized human-comment evidence.' }
+          git push origin "HEAD:$env:PR_HEAD_REF"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to push finalized human-comment evidence.' }
+          "finalized_head=$((git rev-parse HEAD).Trim())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Reply to human comments without resolving
+        if: steps.comments.outputs.has_comments == 'true'
+        uses: actions/github-script@v7
+        env:
+          EXPECTED_FINALIZED_HEAD: ${{ steps.persist_evidence.outputs.finalized_head }}
+        with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
+          script: |
+            const fs = require("fs");
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = Number("${{ steps.pr.outputs.number }}");
+            const evidencePath = "${{ steps.comments.outputs.evidence_path }}";
+            const evidence = JSON.parse(fs.readFileSync(evidencePath, "utf8"));
+            const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+            const resources = evidence.resourceUsage;
+
+            for (const comment of evidence.comments || []) {
+              const { data: currentPr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
+              if (currentPr.state !== "open" || currentPr.head.sha !== process.env.EXPECTED_FINALIZED_HEAD) throw new Error(`PR became terminal or changed head before replying to human feedback; expected open at ${process.env.EXPECTED_FINALIZED_HEAD}, found ${currentPr.state} at ${currentPr.head.sha}.`);
+              const correlationId = comment.kind === "review-thread" ? comment.threadId
+                : comment.kind === "issue-comment" ? comment.issueCommentId
+                : comment.reviewId;
+              const decision = comment.decision || "not-applicable";
+              const actionSummary = comment.actionSummary ? `\n\nAction summary: ${comment.actionSummary}` : "";
+              const resourceKind = decision === "agree" ? "Agent fix/comment resources" : "Agent comment-review resources";
+              const resourceLines = resources ? [
+                `${resourceKind} maximum budget: ${resources.maximumLabel}`,
+                `${resourceKind} actual: ${resources.actualLabel}`
+              ] : [];
+              const body = [
+                `[from-codex] ${comment.responseComment}`,
+                "",
+                `Decision: ${decision}${actionSummary}`,
+                ...resourceLines,
+                `Evidence: ${runUrl}`,
+                "",
+                "Note: human/non-AI review threads are intentionally not resolved by the agent loop.",
+                `<!-- sequence-goal-response:${comment.kind}:${correlationId} -->`
+              ].join("\n");
+
+              if (comment.replyToCommentDatabaseId) {
+                await github.rest.pulls.createReplyForReviewComment({
+                  owner,
+                  repo,
+                  pull_number: prNumber,
+                  comment_id: comment.replyToCommentDatabaseId,
+                  body
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: prNumber,
+                  body
+                });
+              }
+            }
+
+      - name: Skip summary
+        if: steps.pr.outputs.should_process != 'true'
+        shell: pwsh
+        run: |
+          Write-Host "${{ steps.pr.outputs.skip_reason }}"
+
+      - name: No non-AI comments summary
+        if: steps.pr.outputs.should_process == 'true' && steps.comments.outputs.has_comments != 'true'
+        shell: pwsh
+        run: |
+          Write-Host "No non-AI comments to process."
+

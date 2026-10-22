@@ -1,0 +1,50 @@
+﻿###Request
+GET https://tempuri.org/orderdata/futurebookings HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "FlightBookingsDetails": 
+    [
+        {
+            "RecordLocator" : "PNR1234",
+            "BookingDate" : "2025-10-10",
+            "Segments": 
+            [
+                {   
+                    "SegmentID": "Segement1",
+                    "OperatingFlight": 
+                    {
+                        "AirlineCode":"VS",
+                        "Number": 123
+                    },
+                    "MarketingFlight": 
+                    {
+                        "AirlineCode":"VS",
+                        "Number": 321
+                    },
+                    "Departure": "2025-10-10T12:00:00+000",
+                    "Origin": "LHR",
+                    "Destination": "JFK",
+                    "Cabin": "Economy",
+                    "Eligibility": "POPS"
+                }
+            ],
+            "Passengers": 
+            [
+                {     
+                    "PassengerId": "Passenger1",
+                    "FirstName": "Bob",
+                    "LastName": "Smith",
+                    "FrequentFlyerNumber": "9106309454"
+                }
+            ]
+        }
+    ]
+}

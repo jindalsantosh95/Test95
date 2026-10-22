@@ -1,0 +1,115 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": {
+      "value": "PROD"
+    },
+    "AppServicePlanName": {
+      "value": "vapreunaspdigital01"
+    },
+    "functionappName": {
+      "value": "va-pr-eun-entrafacade-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-pr-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avapeunase013"
+    },
+    "keyVaultName": {
+      "value": "va-pr-eun-loyalty-kv-01"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "Entra Facade",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "PROD",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vapveunentrafacadesa01"
+    },
+    "AppInsightsName": {
+      "value": "va-pr-eun-entrafacade-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-pr-eun-law-020"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avapeunlaw020"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "Appsetting:AAD:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "Appsetting:AAD:Authority": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "Appsetting:EapiMsClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/entrafacade-Config-EapiMsClientId/)"
+    },
+    "Appsetting:EapiMSSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/entrafacade-Config-EapiMsSecret/)"
+    },
+    "AppSetting:IdentityMS:OcpKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/entrafacade-Config-IdentityMSOcpKey/)"
+    },
+    "AppSetting:IdentityMS:AppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pr-eun-loyalty-kv-01.vault.azure.net/secrets/entrafacade-Config-IdentityMSAppId/)"
+    },
+    "AppSetting:IdentityMS:Url": {
+      "value": "https://resources.virginatlantic.com/identitymicroservice/"
+    },
+    //swagger settings
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-Entra Facade"
+    },
+    "OpenApi__Description": {
+      "value": "This endpoint will provide Entra facade information"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "OpenApi__ForceHttp": {
+      "value": "true"
+    }
+
+
+  }
+}

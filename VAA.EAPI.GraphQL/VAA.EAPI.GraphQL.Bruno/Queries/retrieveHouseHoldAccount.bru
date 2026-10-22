@@ -1,0 +1,33 @@
+meta {
+  name: retrieveHouseHoldAccount
+  type: graphql
+  seq: 40
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query retrieveHouseHoldAccount($retrieveHHAccountRequest: RetrieveHHAccountRequestInput) {
+    retrieveHouseHoldAccount(retrieveHHAccountRequest: $retrieveHHAccountRequest) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "retrieveHHAccountRequest": {
+      "memberType": "Household"
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

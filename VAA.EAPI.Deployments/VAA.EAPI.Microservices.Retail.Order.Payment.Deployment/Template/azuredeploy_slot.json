@@ -1,0 +1,1218 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "type": "secureObject",
+      "defaultValue": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "",
+        "Site": "datadoghq.com",
+        "Environment": "",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "type": "string"
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "ServerFarmIdRg": {
+      "type": "string"
+    },
+    "FunctionAppName": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "appsettingsAppInsightsKey": {
+      "type": "string"
+    },
+    "AppSettingAzureWebJobsStorage": {
+      "type": "string"
+    },
+    "AppsettingAzureWebJobsSecretStorageType": {
+      "type": "string"
+    },
+    "appsettingsWEBSITE_CONTENTSHARE": {
+      "type": "string"
+    },
+    "Appsetting:OrderPaymentResponseUrl": {
+      "type": "string"
+    },
+    "Appsetting:AzureAd:Instance": {
+      "type": "string"
+    },
+    "Appsetting:AzureAd:TenantId": {
+      "type": "string"
+    },
+    "Appsetting:AzureAd:ClientId": {
+      "type": "string"
+    },
+    "Appsetting:AzureAd:TokenV1Issuer": {
+      "type": "string"
+    },
+    "Appsetting:ServiceBusTopicName": {
+      "type": "string"
+    },
+    "Appsetting:ServiceBusConnectionString": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceEventStoreTableName": {
+      "type": "string"
+    },
+    "Appsetting:MicroServiceResponseTableName": {
+      "type": "string"
+    },
+    "Appsetting:ReferenceDataMicroServiceDBKey": {
+      "type": "string"
+    },
+    "Appsetting:CommonCachingSlidingExpirationInDay": {
+      "type": "string"
+    },
+    "Appsetting:commoncachingabsoluteexpirationinday": {
+      "type": "string"
+    },
+    "Appsetting:OrderPaymentStatusEventHandlerTopicName": {
+      "type": "string"
+    },
+    "Appsetting:OrderPaymentStatusEventSubscriptionName": {
+      "type": "string"
+    },
+    "Appsetting:DeltaMpiApiAuthority": {
+      "type": "string"
+    },
+    "Appsetting:DeltaMPIApiClientId": {
+      "type": "string"
+    },
+    "Appsetting:DeltaMPIApiClientSecret": {
+      "type": "string"
+    },
+    "Appsetting:DeltaMpiApiUrl": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Description": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Scope": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__Version": {
+      "type": "string"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "type": "bool"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "type": "bool"
+    },
+    "Appsetting:MockOrderPaymentService": {
+      "type": "bool"
+    },
+    //Azure B2C settings
+    "AzureAdB2C:ClientId": {
+      "type": "string"
+    },
+    "AzureAdB2C:Instance": {
+      "type": "string"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "type": "string"
+    },
+    "AzureAdB2C:TenantId": {
+      "type": "string"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "type": "string"
+    },
+    "Appsetting:EnableMultiplePayment": {
+      "type": "bool"
+    },
+    "Appsetting:PaymentStatusRetryAfterValue": {
+      "type": "string"
+    },
+    "Appsetting:VoidTransactionSubscriptionName": {
+      "type": "string"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "type": "string"
+    },
+    "Appsetting:Air4PaymentStagingEnvPar": {
+      "type": "string"
+    },
+    "Air4HppPaymentLink": {
+      "type": "string"
+    },
+    "IPRestriction": {
+      "type": "string"
+    },
+    "DlPaymentAuthenticationUrl": {
+      "type": "string"
+    },
+    "DlPaymentApiApplicationId": {
+      "type": "string"
+    },
+    "DlPaymentApiChannelId": {
+      "type": "string"
+    },
+    "DlPaymentApiGenerateRefIdUri": {
+      "type": "string"
+    },
+    "DlPaymentClientId": {
+      "type": "string"
+    },
+    "DlPaymentClientSecret": {
+      "type": "string"
+    },
+    "PRIMockEnabled": {
+      "type": "string"
+    },
+    "DlPaymentobjectName": {
+      "type": "string"
+    },
+    "DlPaymentApiGetPaymentDetailsUrl": {
+      "type": "string"
+    },
+    "DlPaymentDetailMockEnabled": {
+      "type": "string"
+    },
+    "DlPaymentPurchasePath": {
+      "type": "string"
+    },
+    "DlPaymentApiFormsOfPaymentsUrl": {
+      "type": "string"
+    },
+    "DlPaymentApiVoidUrl": {
+      "type": "string"
+    },
+    "MockVoidPaymentService": {
+      "type": "bool"
+    },
+    "DlPaymentApiCaptureUrl": {
+      "type": "string"
+    },
+    "MspFinancialInstAccountHolderName": {
+      "type": "string"
+    },
+    "MspFinancialInstProviderId": {
+      "type": "string"
+    },
+    "MspFinancialInstReturnUrl": {
+      "type": "string"
+    },
+    "MspFinancialInstcountryCode": {
+      "type": "string"
+    },
+    "DlGooglePay": {
+      "type": "string"
+    },
+    "DlformsOfPaymentsGooglePay": {
+      "type": "string"
+    },
+    "DlPaymentApiPurchaseInsuranceUri": {
+      "type": "string"
+    },
+    "DlPurchaseInsuranceUsername": {
+      "type": "string"
+    },
+    "DlPurchaseInsurancePassword": {
+      "type": "string"
+    },
+    "AllianzProviderName": {
+      "type": "string"
+    },
+    "DlPaymentClearDetailsUrl": {
+      "type": "string"
+    },
+    "ServiceBusTopicClearPaymentDetails": {
+      "type": "string"
+    },
+    "EnableClearCVV": {
+      "type": "string"
+    },
+    //Slot settings
+    "SlotName": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "String"
+    },
+    "vaultName": {
+      "type": "string"
+    },
+    "ResourceGroupSubscriptionId": {
+      "type": "string"
+    },
+    "actionGroupsServiceNow": {
+      "type": "string"
+    },
+    "actionGroupsEAPISupport": {
+      "type": "string"
+    },
+    "emailAddressServiceNow": {
+      "type": "string"
+    },
+    "emailAddressEAPISupport": {
+      "type": "string"
+    },
+
+    //CPD
+    "CPDSaltkey": {
+      "type": "string"
+    },
+    "CPDAuthUsername": {
+      "type": "string"
+    },
+    "CPDAuthPassword": {
+      "type": "string"
+    },
+    "CPDInitializeRequestUrl": {
+      "type": "string"
+    },
+    "CPDAuthorizeRequestUrl": {
+      "type": "string"
+    },
+    "CPDCaptureRequestUrl": {
+      "type": "string"
+    },
+    "CPDRefundRequestUrl": {
+      "type": "string"
+    },
+    "CPDGetTransactionStatusRequestUrl": {
+      "type": "string"
+    },
+    "PaymentCollection": {
+      "type": "string"
+    },
+    "PaymentDatabaseName": {
+      "type": "string"
+    },
+    "PaymentDBEndpoint": {
+      "type": "string"
+    },
+    "CPDAccount": {
+      "type": "string"
+    },
+    "CPDMotoAccount": {
+      "type": "string"
+    },
+    "CPDClientId": {
+      "type": "string"
+    },
+    "CpdBlobStorageUri": {
+      "type": "string"
+    },
+    "CpdContainerName": {
+      "type": "string"
+    },
+    "CpdCountryBlob": {
+      "type": "string"
+    },
+    "CpdBlobStorageSaSKey": {
+      "type": "string"
+    },
+    "RetryCount": {
+      "type": "string"
+    },
+    "BlobConnString": {
+      "type": "string"
+    },
+    "RpaNtdhContainerName": {
+      "type": "string"
+    },
+    "GetPaymentDocQuery": {
+      "type": "string"
+    },
+    "GetRefundPaymentDocQuery": {
+      "type": "string"
+    },
+    "VredAuthenticationUrl": {
+      "type": "string"
+    },
+    "VredApiClientId": {
+      "type": "string"
+    },
+    "VredApiClientSecret": {
+      "type": "string"
+    },
+    "VredEngagementUrl": {
+      "type": "string"
+    },
+    "SynchronyAuthenticationUrl": {
+      "type": "string"
+    },
+    "SynchronyApiClientId": {
+      "type": "string"
+    },
+    "SynchronyApiClientSecret": {
+      "type": "string"
+    },
+    "SynchronyDataShareAPIUrl": {
+      "type": "string"
+    },
+    "SynchronyEncryptionPublicKey": {
+      "type": "string"
+    },
+    "CreatePaymentDocumentResponseUrl": {
+      "type": "string"
+    },
+    "ResponseDelayTimeInMS": {
+      "type": "string"
+    },
+    "ResponsePollingCount": {
+      "type": "string"
+    },
+    "SynchronyAcorId": {
+      "type": "string"
+    },
+    "SynchronySiteCode": {
+      "type": "string"
+    },
+    "MobileViewPaymentUrl": {
+      "type": "string"
+    },
+    "ARCEcomAccount": {
+      "type": "string"
+    },
+    "ARCMotoAccount": {
+      "type": "string"
+    },
+
+    //Holiday Payment
+    "CjsCheckoutPaymentAppUrl": {
+      "type": "string"
+    },
+    "CjsCheckoutPaymentAppVersion": {
+      "type": "string"
+    },
+    "MmbQueryLoginUrl": {
+      "type": "string"
+    },
+    "CjsCheckoutPaymentAmountUrl": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "ResourceLocation": "[resourceGroup().location]",
+    "InitialProjectCode": "414",
+    "InitialProjectName": "Order API",
+    "InitialBudgetCode": "9054",
+    "ActiveStatus": "[if(equals(parameters('EnvironmentName'),'PROD'),'PROD','NONPROD')]",
+    "Purpose": "Support functions for the Order API AFN",
+    "ApplicationUsageIdList": "AVADEUNAFNORDER",
+    "subnetName": "",
+    "SiteResourceID": "[resourceId('Microsoft.Web/Sites', parameters('FunctionAppName'))]",
+    "netFrameworkVersion": "v10.0"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('FunctionAppName')]",
+      "location": "[variables('ResourceLocation')]",
+      "kind": "functionapp",
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]"
+      },
+      "tags": {
+        "ApplicationUsageIdList": "[variables('ApplicationUsageIdList')]",
+        "InitialProjectCode": "[variables('InitialProjectCode')]",
+        "InitialProjectName": "[variables('InitialProjectName')]",
+        "InitialBudgetCode": "[variables('InitialBudgetCode')]",
+        "ActiveStatus": "[variables('ActiveStatus')]",
+        "displayName": "[variables('InitialProjectName')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/slots",
+      "kind": "functionapp",
+      "name": "[concat(parameters('FunctionAppName'), '/',parameters('SlotName'))]",
+      "apiVersion": "2021-03-01",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [ "[variables('SiteResourceID')]" ],
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('FunctionAppName'),'-',parameters('SlotName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('FunctionAppName'),'-',parameters('SlotName'),  '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId(parameters('ServerFarmIdRg'), 'Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "LoggingProvider",
+              "value": "[parameters('DataDog').LoggingProvider]"
+            },
+            {
+              "name": "DatadogLogsEndpoint",
+              "value": "[parameters('DataDog').LogsEndpoint]"
+            },
+            {
+              "name": "DatadogApiKey",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_API_KEY",
+              "value": "[parameters('DataDog').ApiKey]"
+            },
+            {
+              "name": "DD_SITE",
+              "value": "[parameters('DataDog').Site]"
+            },
+            {
+              "name": "DD_SERVICE",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "DD_ENV",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DD_VERSION",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DD_TRACE_ENABLED",
+              "value": "[string(parameters('DataDog').TraceEnabled)]"
+            },
+            {
+              "name": "DD_RUNTIME_METRICS_ENABLED",
+              "value": "[string(parameters('DataDog').RuntimeMetricsEnabled)]"
+            },
+            {
+              "name": "DatadogService",
+              "value": "[parameters('FunctionAppName')]"
+            },
+            {
+              "name": "environment",
+              "value": "[parameters('DataDog').Environment]"
+            },
+            {
+              "name": "DatadogSource",
+              "value": "[parameters('DataDog').Source]"
+            },
+            {
+              "name": "DatadogVersion",
+              "value": "[parameters('DataDog').Version]"
+            },
+            {
+              "name": "DatadogTags",
+              "value": "[concat(parameters('DataDog').Tags, if(empty(parameters('DataDog').Tags), '', ','), 'cloud_provider:azure,subscription_id:', subscription().subscriptionId, ',resource_group:', resourceGroup().name, ',name:', parameters('FunctionAppName'), '/', parameters('SlotName'), ',type:microsoft.web/sites/slots,resource_id:', resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName')))]"
+            },
+            {
+              "name": "DatadogBaggageAllowList",
+              "value": "[parameters('DataDog').BaggageAllowList]"
+            },
+            {
+              "name": "DatadogMinimumLogLevel",
+              "value": "[parameters('DataDog').MinimumLogLevel]"
+            },
+            {
+              "name": "DatadogQueueCapacity",
+              "value": "[string(parameters('DataDog').QueueCapacity)]"
+            },
+            {
+              "name": "DatadogBatchSize",
+              "value": "[string(parameters('DataDog').BatchSize)]"
+            },
+            {
+              "name": "DatadogFlushIntervalMilliseconds",
+              "value": "[string(parameters('DataDog').FlushIntervalMilliseconds)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet-isolated"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[parameters('appsettingsAppInsightsKey')]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            {
+              "name": "AzureWebJobsSecretStorageType",
+              "value": "[parameters('AppsettingAzureWebJobsSecretStorageType')]"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[parameters('appsettingsWEBSITE_CONTENTSHARE')]"
+            },
+              {
+                "name": "OrderPaymentResponseUrl",
+                "value": "[parameters('Appsetting:OrderPaymentResponseUrl')]"
+              },
+              {
+                "name": "CjsCheckoutPaymentAppUrl",
+                "value": "[parameters('CjsCheckoutPaymentAppUrl')]"
+              },
+              {
+                "name": "CjsCheckoutPaymentAppVersion",
+                "value": "[parameters('CjsCheckoutPaymentAppVersion')]"
+              },
+              {
+                "name": "MmbQueryLoginUrl",
+                "value": "[parameters('MmbQueryLoginUrl')]"
+              },
+              {
+                "name": "CjsCheckoutPaymentAmountUrl",
+                "value": "[parameters('CjsCheckoutPaymentAmountUrl')]"
+              },
+              {
+                "name": "AzureAd:Instance",
+                "value": "[parameters('Appsetting:AzureAd:Instance')]"
+              },
+            {
+              "name": "AzureAd:TenantId",
+              "value": "[parameters('Appsetting:AzureAd:TenantId')]"
+            },
+            {
+              "name": "AzureAd:ClientId",
+              "value": "[parameters('Appsetting:AzureAd:ClientId')]"
+            },
+            {
+              "name": "AzureAd:TokenV1Issuer",
+              "value": "[parameters('Appsetting:AzureAd:TokenV1Issuer')]"
+            },
+            {
+              "name": "ServiceBusConnectionString",
+              "value": "[parameters('Appsetting:ServiceBusConnectionString')]"
+            },
+            {
+              "name": "ServiceBusTopicName",
+              "value": "[parameters('Appsetting:ServiceBusTopicName')]"
+            },
+            {
+              "name": "MicroServiceDBKey",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+            },
+            {
+              "name": "MicroServiceEventStoreTableName",
+              "value": "[parameters('Appsetting:MicroServiceEventStoreTableName')]"
+            },
+            {
+              "name": "MicroServiceResponseTableName",
+              "value": "[parameters('Appsetting:MicroServiceResponseTableName')]"
+            },
+            {
+              "name": "ReferenceDataMicroServiceDBKey",
+              "value": "[parameters('Appsetting:ReferenceDataMicroServiceDBKey')]"
+            },
+            {
+              "name": "CommonCachingSlidingExpirationInDay",
+              "value": "[parameters('Appsetting:CommonCachingSlidingExpirationInDay')]"
+            },
+            {
+              "name": "commoncachingabsoluteexpirationinday",
+              "value": "[parameters('Appsetting:commoncachingabsoluteexpirationinday')]"
+            },
+            {
+              "name": "OrderPaymentStatusEventHandlerTopicName",
+              "value": "[parameters('Appsetting:OrderPaymentStatusEventHandlerTopicName')]"
+            },
+            {
+              "name": "OrderPaymentStatusEventSubscriptionName",
+              "value": "[parameters('Appsetting:OrderPaymentStatusEventSubscriptionName')]"
+            },
+            {
+              "name": "DeltaMpiApiAuthority",
+              "value": "[parameters('Appsetting:DeltaMpiApiAuthority')]"
+            },
+            {
+              "name": "DeltaMPIApiClientId",
+              "value": "[parameters('Appsetting:DeltaMPIApiClientId')]"
+            },
+            {
+              "name": "DeltaMPIApiClientSecret",
+              "value": "[parameters('Appsetting:DeltaMPIApiClientSecret')]"
+            },
+            {
+              "name": "DeltaMpiApiUrl",
+              "value": "[parameters('Appsetting:DeltaMpiApiUrl')]"
+            },
+            {
+              "name": "WEBSITE_DNS_SERVER",
+              "value": "[parameters('Appsetting:WEBSITE_DNS_SERVER')]"
+            },
+            {
+              "name": "WEBSITE_VNET_ROUTE_ALL",
+              "value": "[parameters('Appsetting:WEBSITE_VNET_ROUTE_ALL')]"
+            },
+            {
+              "name": "WEBSITE_DNS_ALT_SERVER",
+              "value": "[parameters('Appsetting:WEBSITE_DNS_ALT_SERVER')]"
+            },
+            {
+              "name": "OpenApi__DocTitle",
+              "value": "[parameters('Appsetting:OpenApi__DocTitle')]"
+            },
+            {
+              "name": "OpenApi__Description",
+              "value": "[parameters('Appsetting:OpenApi__Description')]"
+            },
+            {
+              "name": "OpenApi__HostNames",
+              "value": "[parameters('Appsetting:OpenApi__HostNames')]"
+            },
+            {
+              "name": "OpenApi__TokenUrl",
+              "value": "[parameters('Appsetting:OpenApi__TokenUrl')]"
+            },
+            {
+              "name": "OpenApi__Scope",
+              "value": "[parameters('Appsetting:OpenApi__Scope')]"
+            },
+
+            {
+              "name": "OpenApi__DocVersion",
+              "value": "[parameters('Appsetting:OpenApi__DocVersion')]"
+            },
+            {
+              "name": "OpenApi__Version",
+              "value": "[parameters('Appsetting:OpenApi__Version')]"
+            },
+            {
+              "name": "OpenApi__ForceHttps",
+              "value": "[parameters('Appsetting:OpenApi__ForceHttps')]"
+            },
+            {
+              "name": "OpenApi__ForceHttp",
+              "value": "[parameters('Appsetting:OpenApi__ForceHttp')]"
+            },
+            //Azure B2C Settings
+            {
+              "name": "AzureAdB2C:ClientId",
+              "value": "[parameters('AzureAdB2C:ClientId')]"
+            },
+            {
+              "name": "AzureAdB2C:Instance",
+              "value": "[parameters('AzureAdB2C:Instance')]"
+            },
+            {
+              "name": "AzureAdB2C:SignUpSignInPolicyId",
+              "value": "[parameters('AzureAdB2C:SignUpSignInPolicyId')]"
+            },
+            {
+              "name": "AzureAdB2C:TenantId",
+              "value": "[parameters('AzureAdB2C:TenantId')]"
+            },
+            {
+              "name": "AzureAdB2C:TokenV1Issuer",
+              "value": "[parameters('AzureAdB2C:TokenV1Issuer')]"
+            },
+            {
+              "name": "MockOrderPaymentService",
+              "value": "[parameters('Appsetting:MockOrderPaymentService')]"
+            },
+            {
+              "name": "EnableMultiplePayment",
+              "value": "[parameters('Appsetting:EnableMultiplePayment')]"
+            },
+            {
+              "name": "PaymentStatusRetryAfterValue",
+              "value": "[parameters('Appsetting:PaymentStatusRetryAfterValue')]"
+            },
+            {
+              "name": "VoidTransactionSubscriptionName",
+              "value": "[parameters('Appsetting:VoidTransactionSubscriptionName')]"
+            },
+            {
+              "name": "Air4PaymentStagingEnvPar",
+              "value": "[parameters('Appsetting:Air4PaymentStagingEnvPar')]"
+            },
+            {
+              "name": "Air4HppPaymentLink",
+              "value": "[parameters('Air4HppPaymentLink')]"
+            },
+            {
+              "name": "DlPaymentAuthenticationUrl",
+              "value": "[parameters('DlPaymentAuthenticationUrl')]"
+            },
+            {
+              "name": "DlPaymentApiApplicationId",
+              "value": "[parameters('DlPaymentApiApplicationId')]"
+            },
+            {
+              "name": "DlPaymentApiChannelId",
+              "value": "[parameters('DlPaymentApiChannelId')]"
+            },
+            {
+              "name": "DlPaymentApiGenerateRefIdUri",
+              "value": "[parameters('DlPaymentApiGenerateRefIdUri')]"
+            },
+            {
+              "name": "DlPaymentClientId",
+              "value": "[parameters('DlPaymentClientId')]"
+            },
+            {
+              "name": "DlPaymentClientSecret",
+              "value": "[parameters('DlPaymentClientSecret')]"
+            },
+            {
+              "name": "PRIMockEnabled",
+              "value": "[parameters('PRIMockEnabled')]"
+            },
+            {
+              "name": "DlPaymentobjectName",
+              "value": "[parameters('DlPaymentobjectName')]"
+            },
+            {
+              "name": "DlPaymentApiGetPaymentDetailsUrl",
+              "value": "[parameters('DlPaymentApiGetPaymentDetailsUrl')]"
+            },
+            {
+              "name": "DlPaymentDetailMockEnabled",
+              "value": "[parameters('DlPaymentDetailMockEnabled')]"
+            },
+            {
+              "name": "DlPaymentPurchasePath",
+              "value": "[parameters('DlPaymentPurchasePath')]"
+            },
+            {
+              "name": "DlPaymentApiFormsOfPaymentsUrl",
+              "value": "[parameters('DlPaymentApiFormsOfPaymentsUrl')]"
+            },
+            {
+              "name": "DlPaymentApiCaptureUrl",
+              "value": "[parameters('DlPaymentApiCaptureUrl')]"
+            },
+            {
+              "name": "DlPaymentApiVoidUrl",
+              "value": "[parameters('DlPaymentApiVoidUrl')]"
+            },
+            {
+              "name": "MockVoidPaymentService",
+              "value": "[parameters('MockVoidPaymentService')]"
+            },
+            {
+              "name": "MspFinancialInstAccountHolderName",
+              "value": "[parameters('MspFinancialInstAccountHolderName')]"
+            },
+            {
+              "name": "MspFinancialInstProviderId",
+              "value": "[parameters('MspFinancialInstProviderId')]"
+            },
+            {
+              "name": "MspFinancialInstReturnUrl",
+              "value": "[parameters('MspFinancialInstReturnUrl')]"
+            },
+            {
+              "name": "MspFinancialInstcountryCode",
+              "value": "[parameters('MspFinancialInstcountryCode')]"
+            },
+            {
+              "name": "DlGooglePay",
+              "value": "[parameters('DlGooglePay')]"
+            },
+            {
+              "name": "DlformsOfPaymentsGooglePay",
+              "value": "[parameters('DlformsOfPaymentsGooglePay')]"
+            },
+
+            //insurance purchase
+            {
+              "name": "DlPaymentApiPurchaseInsuranceUri",
+              "value": "[parameters('DlPaymentApiPurchaseInsuranceUri')]"
+            },
+            {
+              "name": "DlPurchaseInsuranceUsername",
+              "value": "[parameters('DlPurchaseInsuranceUsername')]"
+            },
+            {
+              "name": "DlPurchaseInsurancePassword",
+              "value": "[parameters('DlPurchaseInsurancePassword')]"
+            },
+            {
+              "name": "AllianzProviderName",
+              "value": "[parameters('AllianzProviderName')]"
+            },
+            {
+              "name": "DlPaymentClearDetailsUrl",
+              "value": "[parameters('DlPaymentClearDetailsUrl')]"
+            },
+            {
+              "name": "ServiceBusTopicClearPaymentDetails",
+              "value": "[parameters('ServiceBusTopicClearPaymentDetails')]"
+            },
+            {
+              "name": "EnableClearCVV",
+              "value": "[parameters('EnableClearCVV')]"
+            },
+            //CPD
+            {
+              "name": "CPDSaltkey",
+              "value": "[parameters('CPDSaltkey')]"
+            },
+            {
+              "name": "CPDAuthUsername",
+              "value": "[parameters('CPDAuthUsername')]"
+            },
+            {
+              "name": "CPDAuthPassword",
+              "value": "[parameters('CPDAuthPassword')]"
+            },
+            {
+              "name": "CPDInitializeRequestUrl",
+              "value": "[parameters('CPDInitializeRequestUrl')]"
+            },
+            {
+              "name": "CPDAuthorizeRequestUrl",
+              "value": "[parameters('CPDAuthorizeRequestUrl')]"
+            },
+            {
+              "name": "CPDCaptureRequestUrl",
+              "value": "[parameters('CPDCaptureRequestUrl')]"
+            },
+            {
+              "name": "CPDRefundRequestUrl",
+              "value": "[parameters('CPDRefundRequestUrl')]"
+            },
+            {
+              "name": "CPDGetTransactionStatusRequestUrl",
+              "value": "[parameters('CPDGetTransactionStatusRequestUrl')]"
+            },
+            {
+              "name": "CPDAccount",
+              "value": "[parameters('CPDAccount')]"
+            },
+            {
+              "name": "CPDMotoAccount",
+              "value": "[parameters('CPDMotoAccount')]"
+            },
+            {
+              "name": "CPDClientId",
+              "value": "[parameters('CPDClientId')]"
+            },
+            {
+              "name": "PaymentCollection",
+              "value": "[parameters('PaymentCollection')]"
+            },
+            {
+              "name": "PaymentDatabaseName",
+              "value": "[parameters('PaymentDatabaseName')]"
+            },
+            {
+              "name": "PaymentDBEndpoint",
+              "value": "[parameters('PaymentDBEndpoint')]"
+            },
+            {
+              "name": "CpdBlobStorageUri",
+              "value": "[parameters('CpdBlobStorageUri')]"
+            },
+            {
+              "name": "CpdContainerName",
+              "value": "[parameters('CpdContainerName')]"
+            },
+            {
+              "name": "CpdCountryBlob",
+              "value": "[parameters('CpdCountryBlob')]"
+            },
+            {
+              "name": "CpdBlobStorageSaSKey",
+              "value": "[parameters('CpdBlobStorageSaSKey')]"
+            },
+            {
+              "name": "RetryCount",
+              "value": "[parameters('RetryCount')]"
+            },
+            {
+              "name": "BlobConnString",
+              "value": "[parameters('BlobConnString')]"
+            },
+            {
+              "name": "RpaNtdhContainerName",
+              "value": "[parameters('RpaNtdhContainerName')]"
+            },
+            {
+              "name": "GetPaymentDocQuery",
+              "value": "[parameters('GetPaymentDocQuery')]"
+            },
+            {
+              "name": "GetRefundPaymentDocQuery",
+              "value": "[parameters('GetRefundPaymentDocQuery')]"
+            },
+            {
+              "name": "VredAuthenticationUrl",
+              "value": "[parameters('VredAuthenticationUrl')]"
+            },
+            {
+              "name": "VredApiClientId",
+              "value": "[parameters('VredApiClientId')]"
+            },
+            {
+              "name": "VredApiClientSecret",
+              "value": "[parameters('VredApiClientSecret')]"
+            },
+            {
+              "name": "VredEngagementUrl",
+              "value": "[parameters('VredEngagementUrl')]"
+            },
+            {
+              "name": "SynchronyAuthenticationUrl",
+              "value": "[parameters('SynchronyAuthenticationUrl')]"
+            },
+            {
+              "name": "SynchronyApiClientId",
+              "value": "[parameters('SynchronyApiClientId')]"
+            },
+            {
+              "name": "SynchronyApiClientSecret",
+              "value": "[parameters('SynchronyApiClientSecret')]"
+            },
+            {
+              "name": "SynchronyDataShareAPIUrl",
+              "value": "[parameters('SynchronyDataShareAPIUrl')]"
+            },
+            {
+              "name": "SynchronyEncryptionPublicKey",
+              "value": "[parameters('SynchronyEncryptionPublicKey')]"
+            },
+            {
+              "name": "CreatePaymentDocumentResponseUrl",
+              "value": "[parameters('CreatePaymentDocumentResponseUrl')]"
+            },
+            {
+              "name": "ResponseDelayTimeInMS",
+              "value": "[parameters('ResponseDelayTimeInMS')]"
+            },
+            {
+              "name": "ResponsePollingCount",
+              "value": "[parameters('ResponsePollingCount')]"
+            },
+            {
+              "name": "SynchronyAcorId",
+              "value": "[parameters('SynchronyAcorId')]"
+            },
+            {
+              "name": "SynchronySiteCode",
+              "value": "[parameters('SynchronySiteCode')]"
+            },
+            {
+              "name": "MobileViewPaymentUrl",
+              "value": "[parameters('MobileViewPaymentUrl')]"
+            },
+            {
+              "name": "ARCEcomAccount",
+              "value": "[parameters('ARCEcomAccount')]"
+            },
+            {
+              "name": "ARCMotoAccount",
+              "value": "[parameters('ARCMotoAccount')]"
+            }
+          ]
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true, // Not swapped!
+        "redundancyMode": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/slots/config",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('FunctionAppName'), '/',parameters('SlotName'),'/web')]",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName'))]",
+        "[variables('SiteResourceID')]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$[parameters('FunctionAppName')]__[parameters('SlotName')]",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": false, // SWAPPED!
+        "webSocketsEnabled": false,
+        "alwaysOn": true, // Not swapped!
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": true
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "https://portal.azure.com", // Not swapped!
+            "https://functions.azure.com",
+            "https://functions-staging.azure.com",
+            "https://functions-next.azure.com"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "[parameters('IPRestriction')]",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow_APIM",
+            "description": "Allow APIM Access" // Not swapped!
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false, // Not swapped!
+        "minTlsVersion": "1.2",
+        "scmMinTlsVersion": "1.0",
+        "ftpsState": "AllAllowed",
+        "reservedInstanceCount": 0
+      }
+    },
+    {
+
+      "type": "Microsoft.Web/sites/slots/hostNameBindings",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(parameters('FunctionAppName'), '/', parameters('SlotName'),'/', parameters('FunctionAppName'), '-',parameters('SlotName'),'.azurewebsites.net')]",
+      "location": "[variables('ResourceLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/slots', parameters('FunctionAppName'), parameters('SlotName'))]",
+        "[variables('SiteResourceID')]"
+      ],
+      "properties": {
+        "siteName": "[concat(parameters('FunctionAppName'),'(',parameters('SlotName'),')')]",
+        "hostNameType": "Verified"
+      }
+    },
+
+    {
+      "type": "microsoft.insights/components",
+      "kind": "web",
+      "name": "[parameters('AppInsightsName')]",
+      "apiVersion": "2015-05-01",
+      "location": "[Variables('ResourceLocation')]",
+      "tags": {
+        "ApplicationUsageIdList": "[variables('ApplicationUsageIdList')]",
+        "InitialProjectCode": "[variables('InitialProjectCode')]",
+        "InitialProjectName": "[variables('InitialProjectName')]",
+        "InitialBudgetCode": "[variables('InitialBudgetCode')]",
+        "ActiveStatus": "[variables('ActiveStatus')]",
+        "displayName": "[variables('InitialProjectName')]"
+      },
+      "properties": {
+        "applicationId": "[variables('SiteResourceID')]",
+        "Application_Type": "web"
+      },
+      "dependsOn": [ "[resourceId('Microsoft.Web/sites', parameters('FunctionAppName'))]" ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[concat(parameters('vaultName'), '/add')]",
+      "apiVersion": "2019-09-01",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[reference(concat('Microsoft.Web/sites/', parameters('FunctionAppName')), '2018-02-01','Full').identity.tenantId]",
+            "objectId": "[reference(concat('Microsoft.Web/sites/', parameters('FunctionAppName')), '2018-02-01','Full').identity.principalId]",
+            "permissions": {
+              "keys": [ "Get", "List" ],
+              "secrets": [ "Get", "List" ],
+              "certificates": [ "Get", "List" ],
+              "storage": [ "all" ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

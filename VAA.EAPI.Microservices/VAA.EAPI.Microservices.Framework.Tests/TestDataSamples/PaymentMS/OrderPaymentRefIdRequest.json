@@ -1,0 +1,167 @@
+{
+  "pos": {
+    "cityCode": "LON",
+    "countryCode": "GB",
+    "deviceInfo": "",
+    "ipAddress": "10.11.12.13",
+    "browserInfo": "PostmanRuntime/7.43.0",
+    "currencyNumber": "826"
+  },
+  "paymentAmt": {
+    "currencyEquivalentPrice": {
+      "amount": {
+        "monetaryAmount": "1139.12",
+        "currency": "GBP"
+      }
+    }
+  },
+  "selectedoffers": [
+    {
+      "productType": "Flight",
+      "productCode": "",
+      "services": [
+        {
+          "journeyRefIds": [
+            "JOUR1"
+          ],
+          "flightSegmentsRefIds": [
+            "FSEGVS302LHRDEL1"
+          ],
+          "fareDetails": {
+            "fareBasisCode": "UGG8B8SA",
+            "fareSegments": [
+              {
+                "cabinName": "VSCL",
+                "bookingClass": "U"
+              }
+            ]
+          }
+        }
+      ],
+      "serviceBeneficiaries": [
+        "ADT_1"
+      ]
+    }
+  ],
+  "customerDetails": [
+    {
+      "custId": "0",
+      "ptc": "ADT",
+      "firstName": "David",
+      "lastName": "Smith",
+      "gender": "M",
+      "dateOfBirth": "2000-01-21",
+      "contacts": {
+        "email": "test@test.com",
+        "phone": "1234567890",
+        "countrycode": "91",
+        "phoneAreaNumber": "123"
+      }
+    }
+  ],
+  "flightSegments": [
+    {
+      "odRefId": "LHR-DEL",
+      "segmentId": "FSEGVS302LHRDEL1",
+      "airCraft": "351",
+      "marketingCarrier": "VS",
+      "marketingFlightNumber": "302",
+      "operatingCarrier": "VS",
+      "operatingFlightNumber": "302",
+      "originAirportCode": "LHR",
+      "originCityCode": "LON",
+      "destinationAirportCode": "DEL",
+      "destinationCityCode": "BOM",
+      "classOfService": "U",
+      "scheduledArrivalTime": {
+        "localDateTime": "2025-11-13T02:40"
+      },
+      "scheduledDepartureTime": {
+        "localDateTime": "2025-11-12T12:35"
+      },
+      "flightDuration": "08:35",
+      "legs": [
+        {
+          "scheduledDepartureTime": {
+            "localDateTime": "2025-11-12T12:35"
+          },
+          "originAirportCode": "LHR",
+          "scheduledArrivalTime": {
+            "localDateTime": "2025-11-13T02:40"
+          },
+          "destinationAirportCode": "DEL",
+          "legDuration": "08:35",
+          "legId": "1-1-1",
+          "distance": {
+            "unit": "MI",
+            "distance": 4181
+          }
+        }
+      ],
+      "fareBasis": "UGG8B8SA",
+      "connectionOrStopOver": "0"
+    },
+    {
+      "odRefId": "DEL-BOM",
+      "segmentId": "FSEGVS8743DELBOM2",
+      "airCraft": "321",
+      "marketingCarrier": "VS",
+      "marketingFlightNumber": "8743",
+      "operatingCarrier": "6E",
+      "operatingFlightNumber": "6814",
+      "originAirportCode": "DEL",
+      "originCityCode": "LON",
+      "destinationAirportCode": "BOM",
+      "destinationCityCode": "BOM",
+      "classOfService": "U",
+      "scheduledArrivalTime": {
+        "localDateTime": "2025-11-20T09:10"
+      },
+      "scheduledDepartureTime": {
+        "localDateTime": "2025-11-20T07:00"
+      },
+      "flightDuration": "02:10",
+      "legs": [
+        {
+          "scheduledDepartureTime": {
+            "localDateTime": "2025-11-20T07:00"
+          },
+          "originAirportCode": "DEL",
+          "scheduledArrivalTime": {
+            "localDateTime": "2025-11-20T09:10"
+          },
+          "destinationAirportCode": "BOM",
+          "legDuration": "02:10",
+          "legId": "2-1-1",
+          "distance": {
+            "unit": "MI",
+            "distance": 707
+          }
+        }
+      ],
+      "fareBasis": "UGG8B8SA",
+      "connectionOrStopOver": "0"
+    }
+  ],
+  "journey": [
+    {
+      "journeyId": "JOUR1",
+      "duration": "08:35",
+      "flightSegmentRefIds": [
+        "FSEGVS302LHRDEL1"
+      ]
+    },
+    {
+      "journeyId": "JOUR2",
+      "duration": "02:10",
+      "flightSegmentRefIds": [
+        "FSEGVS8743DELBOM2"
+      ]
+    }
+  ],
+  "additionalConfigParams": {
+    "failureRedirectUrl": "https://travelplus-test5.webdev.vholsinternal.co.uk/flight-only/payment/failed",
+    "successRedirectUrl": "https://travelplus-test5.webdev.vholsinternal.co.uk/flight-only/payment/captured"
+  },
+  "tripType": "MULTICITY"
+}

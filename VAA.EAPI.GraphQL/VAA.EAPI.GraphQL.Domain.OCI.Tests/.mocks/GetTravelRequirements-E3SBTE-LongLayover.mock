@@ -1,0 +1,42 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements HTTP/1.1
+
+$[?(@.pnrLocator == 'E3SBTE')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "requirementsId": "long-layover-requirements",
+  "reference": { "pnrLocator": "E3SBTE" },
+  "passengers": [
+    {
+      "passengerId": "01.01|long-layover-passenger",
+      "givenNames": "PSGTHREEECD",
+      "surname": "TEST",
+      "sliceRequirements": [
+        {
+          "sliceId": "international-slice",
+          "passportRequired": true,
+          "overall": "TO_COMPLETE"
+        },
+        {
+          "sliceId": "domestic-slice",
+          "passportRequired": false,
+          "overall": "COMPLETE"
+        }
+      ]
+    }
+  ],
+  "slices": [
+    {
+      "sliceId": "international-slice",
+      "segments": []
+    },
+    {
+      "sliceId": "domestic-slice",
+      "segments": []
+    }
+  ]
+}

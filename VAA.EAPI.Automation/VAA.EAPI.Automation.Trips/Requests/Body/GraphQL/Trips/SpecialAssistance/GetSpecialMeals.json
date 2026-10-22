@@ -1,0 +1,7 @@
+{
+  "query": "query GetSpecialMeals($tripReservationId: String) { GetSpecialMeals(tripReservationID: $tripReservationId) { passengers { passengerResourceId firstName lastName passengerSegments { flightSegment { segmentId ordinal operatingAirlines { code name } flightNumber marketingFlight { operatingSuffix flightNumber marketingAirlines { code name } } departureAirport { code name cityCode cityName } arrivalAirport { code name cityCode cityName } checkinStatus flightLegs { legId ordinal flightNumber scheduledDepartureLocal scheduledArrivalLocal } } mealSelection { isSelected selectedChoice availableChoices { code description } isEligible isChangeAllowed } } } }}",
+  "variables": {
+    "tripReservationId": ""
+  },
+  "operationName": "GetSpecialMeals"
+}

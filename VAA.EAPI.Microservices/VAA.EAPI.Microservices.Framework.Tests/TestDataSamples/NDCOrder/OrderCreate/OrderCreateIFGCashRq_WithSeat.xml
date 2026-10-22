@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<IATA_OrderCreateRQ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersMessage">
+    <DistributionChain>
+        <DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+            <ContactInfo>
+                <ContactInfoID>AgentContactInfoID</ContactInfoID>
+                <EmailAddress>
+                    <EmailAddressText>abc.xyz@test.com</EmailAddressText>
+                </EmailAddress>
+            </ContactInfo>
+            <Ordinal>1</Ordinal>
+            <OrgRole>Seller</OrgRole>
+            <ParticipatingOrg>
+                <Name>Skyscanner</Name>
+                <OrgID>91281035</OrgID>
+            </ParticipatingOrg>
+        </DistributionChainLink>
+        <DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+            <Ordinal>2</Ordinal>
+            <OrgRole>Carrier</OrgRole>
+            <ParticipatingOrg>
+                <Name>VIRGIN ATLANTIC</Name>
+                <OrgID>VS</OrgID>
+            </ParticipatingOrg>
+        </DistributionChainLink>
+    </DistributionChain>
+    <Request>
+        <CreateOrder xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+            <AcceptSelectedQuotedOfferList>
+                <SelectedPricedOffer>
+                    <OfferRefID>ddf28790-f0c1-47d5-9ff6-22b1cb80c504|8r4LQnL2uQ8S0h9P771ZD1001</OfferRefID>
+                    <OwnerCode>VS</OwnerCode>
+                    <SelectedOfferItem>
+                        <OfferItemRefID>ddf28790-f0c1-47d5-9ff6-22b1cb80c504|8r4LQnL2uQ8S0h9P771ZD1001-1</OfferItemRefID>
+                        <PaxRefID>ADULT_1</PaxRefID>
+                    </SelectedOfferItem>
+                    <TotalOfferPriceAmount CurCode="GBP">587.32</TotalOfferPriceAmount>
+                </SelectedPricedOffer>
+                <SelectedPricedOffer>
+                    <OfferRefID>5ae3359f-12e1-431f-a8f7-fed44b1eac9b</OfferRefID>
+                    <OwnerCode>VS</OwnerCode>
+                    <SelectedOfferItem>
+                        <OfferItemRefID>83d40879-ef5a-48fe-a836-356f2e686c94_FA|1_19_37</OfferItemRefID>
+                        <PaxRefID>ADULT_1</PaxRefID>
+                        <SelectedSeat>
+                            <ColumnID>A</ColumnID>
+                            <SeatRowNumber>54</SeatRowNumber>
+                        </SelectedSeat>
+                    </SelectedOfferItem>
+                    <TotalOfferPriceAmount CurCode="GBP">44</TotalOfferPriceAmount>
+                </SelectedPricedOffer>
+            </AcceptSelectedQuotedOfferList>
+        </CreateOrder>
+        <DataLists xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+            <ContactInfoList>
+                <ContactInfo>
+                    <ContactInfoID>CID_1</ContactInfoID>
+                    <EmailAddress>
+                        <EmailAddressText>abc.xyz@test.com</EmailAddressText>
+                    </EmailAddress>
+                    <Phone>
+                        <ContactTypeText>Home</ContactTypeText>
+                        <CountryDialingCode>xx</CountryDialingCode>
+                        <PhoneNumber>xxxxxxxxx</PhoneNumber>
+                    </Phone>
+                </ContactInfo>
+            </ContactInfoList>
+            <PaxList>
+                <Pax>
+                    <ContactInfoRefID>CID_1</ContactInfoRefID>
+                    <Individual>
+                        <Birthdate>0001-01-01</Birthdate>
+                        <GenderCode>X</GenderCode>
+                        <GivenName>ABC</GivenName>
+                        <Surname>XYZ</Surname>
+                    </Individual>
+                    <PaxID>ADULT_1</PaxID>
+                    <PTC>ADT</PTC>
+                </Pax>
+            </PaxList>
+        </DataLists>
+        <PaymentFunctions xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+            <PaymentMethodCriteria>
+                <PaymentTypeCode>CA</PaymentTypeCode>
+            </PaymentMethodCriteria>
+            <PaymentProcessingDetails>
+                <Amount CurCode="GBP">631.32</Amount>
+                <PaymentMethod>
+                    <SettlementPlan>
+                        <PaymentTypeCode>CA</PaymentTypeCode>
+                    </SettlementPlan>
+                </PaymentMethod>
+            </PaymentProcessingDetails>
+        </PaymentFunctions>
+    </Request>
+</IATA_OrderCreateRQ>

@@ -1,0 +1,64 @@
+meta {
+  name: Submit Emergency Contact
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{delta_trm}}/requirements/{{requirement_resource_id}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+  transactionId: VS-DigitalFirst-123-{{$guid}}
+  clientId: {{ping_client_id}}
+  x-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+}
+
+body:json {
+  {
+    "requests": [
+      {
+        "passengerResourceId": "{{passenger_resource_id1}}",
+        "using": "EMERGENCY_CONTACT",
+            "emergencyContact": [
+              {
+                "declined": false,
+                "type": "PRIMARY",
+                "countryCode": "US",
+                "phoneNumber": "1234567143123218",
+                "firstName": "TEST",
+                "lastName": "CONTACT"
+              }
+            ]
+      },
+      {
+        "passengerResourceId": "{{passenger_resource_id2}}",
+        "using": "EMERGENCY_CONTACT",
+            "emergencyContact": [
+              {
+                "declined": false,
+                "type": "PRIMARY",
+                "countryCode": "US",
+                "phoneNumber": "1234567143123218",
+                "firstName": "TEST",
+                "lastName": "CONTACT"
+              }
+            ]
+      }
+    ]
+  }
+}
+
+script:post-response {
+  var body = res.getBody();
+  bru.setEnvVar("travel_requirements_response", JSON.stringify(body));
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

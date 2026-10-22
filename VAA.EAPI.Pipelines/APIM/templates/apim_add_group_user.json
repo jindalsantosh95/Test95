@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "APIMName": {
+            "type": "string",
+            "defaultValue": "avaxeunamcag001"            
+        },
+        "GroupName": {
+            "type": "string"
+        },
+        "UserName": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+          "type": "Microsoft.ApiManagement/service/groups",
+          "apiVersion": "2021-12-01-preview",
+          "name": "[concat(parameters('APIMName'), '/', parameters('GroupName'))]",
+          "properties": {
+              "displayName": "[parameters('GroupName')]",
+              "description": "[concat(parameters('GroupName'), ' team group.')]",
+              "type": "custom"
+          }
+        },
+        {
+            "type": "Microsoft.ApiManagement/service/groups/users",
+            "apiVersion": "2021-12-01-preview",
+            "name": "[concat(parameters('APIMName'), '/', parameters('UserName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/groups', parameters('APIMName'), parameters('GroupName'))]"
+            ]
+        }                      
+    ]
+}

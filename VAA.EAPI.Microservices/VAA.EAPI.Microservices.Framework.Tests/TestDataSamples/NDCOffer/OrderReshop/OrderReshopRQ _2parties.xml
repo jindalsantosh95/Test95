@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2019 rel. 3 sp1 (x64) (http://www.altova.com) by Mahendar Thooyamani (Virgin Atlantic Airways Ltd) -->
+<IATA_OrderReshopRQ xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersMessage" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<DistributionChain>
+		<DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<Ordinal>1</Ordinal>
+			<OrgRole>Seller</OrgRole>
+			<ParticipatingOrg>
+				<Name>ABCTravel</Name>
+				<OrgID>12345678</OrgID>
+			</ParticipatingOrg>
+		</DistributionChainLink>
+		<DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<Ordinal>1</Ordinal>
+			<OrgRole>Seller</OrgRole>
+			<ParticipatingOrg>
+				<Name>Skyscanner</Name>
+				<OrgID>91281035</OrgID>
+			</ParticipatingOrg>
+		</DistributionChainLink>
+	</DistributionChain>
+	<Request>
+		<BookingRef xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<BookingID>C66PHV</BookingID>
+		</BookingRef>
+		<OrderRefID xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">VS932C66PHV23</OrderRefID>
+		<UpdateOrder xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<ReshopOrder>
+				<ReshopOrderChoice>
+					<ServiceOrder>
+						<AddOfferItems>
+							<FlightRelatedCriteria xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+								<FlightCriteria>
+									<FlightCharacteristicsCriteria>
+										<CharacteristicCode>Direct</CharacteristicCode>
+										<PrefLevel>
+											<PrefLevelCode>Required</PrefLevelCode>
+										</PrefLevel>
+									</FlightCharacteristicsCriteria>
+								</FlightCriteria>
+							</FlightRelatedCriteria>
+							<FlightRequest>
+								<FlightRequestOriginDestinationsCriteria>
+									<OriginDestCriteria>
+										<CabinType>
+											<CabinTypeCode>4</CabinTypeCode>
+											<PrefLevel>
+												<PrefLevelCode>Required</PrefLevelCode>
+											</PrefLevel>
+										</CabinType>
+										<DestArrivalCriteria>
+											<IATA_LocationCode>TLV</IATA_LocationCode>
+										</DestArrivalCriteria>
+										<OriginDepCriteria>
+											<Date>2023-09-03</Date>
+											<IATA_LocationCode>LHR</IATA_LocationCode>
+										</OriginDepCriteria>
+									</OriginDestCriteria>
+								</FlightRequestOriginDestinationsCriteria>
+							</FlightRequest>
+						</AddOfferItems>
+						<DeleteOrderItem>
+							<OrderItemRefID>VS932C66PHV23-1</OrderItemRefID>
+							<RetainServiceID>SV2</RetainServiceID>
+						</DeleteOrderItem>
+						<DeleteOrderItem>
+							<OrderItemRefID>VS932C66PHV23-2</OrderItemRefID>
+							<RetainServiceID>SV2</RetainServiceID>
+						</DeleteOrderItem>
+						<DeleteOrderItem>
+							<OrderItemRefID>VS932C66PHV23-3</OrderItemRefID>
+							<RetainServiceID>SV2</RetainServiceID>
+						</DeleteOrderItem>
+					</ServiceOrder>
+				</ReshopOrderChoice>
+			</ReshopOrder>
+		</UpdateOrder>
+	</Request>
+</IATA_OrderReshopRQ>

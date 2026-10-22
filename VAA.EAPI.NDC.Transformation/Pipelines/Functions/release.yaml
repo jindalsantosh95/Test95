@@ -1,0 +1,140 @@
+parameters:
+  agentPool: ''
+  agentPool_SANDBOX: ''
+  agentSpecification: ''
+  buildConfiguration: ''   
+  functionAppName_DEV: ''
+  functionAppName_SIT: ''
+  functionAppName_SANDBOX: ''
+  functionAppName_UAT: ''
+  functionAppName_PRD: ''
+  AzureWebJobsStorage_DEV: ''
+  AzureWebJobsStorage_SIT: ''
+  AzureWebJobsStorage_UAT: ''
+  AzureWebJobsStorage_SANDBOX: ''
+  AzureWebJobsStorage_PROD: '' 
+  slotName: ''
+  APIM_IP_DEV_SIT_UAT: '' 
+  APIM_IP_PRD: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''
+  WEBSITE_DNS_ALT_SERVER_SANDBOX: ''
+  WEBSITE_DNS_SERVER_SANDBOX: ''
+
+stages:
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines/Variables/dev.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines/Functions/deployment.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_DEV}}
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}          
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}} 
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_DEV}}       
+          slotName: ${{parameters.slotName}}
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines/Variables/sit.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines/Functions/deployment.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_SIT}}
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}                 
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}  
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_SIT}}       
+          slotName: ${{parameters.slotName}}
+                                         
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines/Variables/uat.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines/Functions/deployment.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_UAT}}
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}                 
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}} 
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}} 
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_UAT}}       
+          slotName: ${{parameters.slotName}}
+  
+          
+  - stage: 'SANDBOX'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines/Variables/sandbox.yaml
+    displayName: 'Deployment - SANDBOX' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines/Functions/deployment.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_SANDBOX}}
+          agentPool: ${{parameters.agentPool_SANDBOX}}
+          agentSpecification: ${{parameters.agentSpecification}}                
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          #APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}  
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER_SANDBOX}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER_SANDBOX}}
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_SANDBOX}}       
+          slotName: ${{parameters.slotName}}
+          
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.NDC.Transformation/Pipelines/Variables//prod.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.NDC.Transformation/Pipelines/Functions/deployment.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_PRD}}
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}                 
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName}}        
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}   
+          APIM_IP: ${{parameters.APIM_IP_PRD}}  
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}  
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_PROD}}       
+          slotName: ${{parameters.slotName}}

@@ -1,0 +1,34 @@
+info:
+  name: Check Payment
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{baggagems}}/CheckPayment"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{baggagems_ocp}}"
+  body:
+    type: json
+    data: |-
+      {
+        "travelPartyId": "{{travelPartyId}}",
+        "paymentPending": true
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setVar("ipAddress", "192.168.1.100");
+        bru.setVar("classOfService", "X");
+        bru.setVar("successRedirectUrl", "https://www.google.com/");
+        bru.setVar("failureRedirectUrl", "");
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

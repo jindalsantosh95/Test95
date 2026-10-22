@@ -1,0 +1,33 @@
+meta {
+  name: Booking
+  type: graphql
+  seq: 12
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query Booking($tripDetailsRequest: TripsDetailsRequestInput) {
+    Booking(tripDetailsRequest: $tripDetailsRequest) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "tripDetailsRequest": {
+      "using": "PNR"
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

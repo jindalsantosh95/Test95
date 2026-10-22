@@ -1,0 +1,150 @@
+meta {
+  name: Save Emergency Contact
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SaveEmergencyContactTravelRequirements {
+    SaveEmergencyContactTravelRequirements(
+      travelRequirementsId: "{{travelRequirementsId}}"
+      applyToAllPassengers: true
+      emergencyContacts: [
+        {
+          passengerId: "{{pax1_Id}}"
+          firstName: "Emergency"
+          lastName: "Contact"
+          phoneCountryCode: "GB"
+          phoneNumber: "7700900000"
+          passengerRefused: false
+        }
+      ]
+    ) {
+      travelRequirementsId
+      applyEmergencyContactToAllPax
+      reference {
+        pnrLocator
+        createdDate
+      }
+      passengers {
+        passengerId
+        givenNames
+        surname
+        dateOfBirth
+        emergencyContact {
+          passengerId
+          firstName
+          lastName
+          phoneCountryCode
+          phoneNumber
+          passengerRefused
+        }
+        requirements {
+          sliceId
+          passportProvided
+          passportVerified
+          baggageDeclared
+          contactTracing
+          contactTracingAvailableFromUtc
+          contactTracingAvailableFromDescription
+          checkedIn
+          overall
+          returnDateStatus
+          isReturnDateDeclined
+          returnDate
+          checkinEligible
+          secondaryDocumentStatus
+          secondaryDocuments {
+            documentType
+            countryCode
+            countryName
+            name
+            displayName
+            status
+            secondaryDocumentApplicationOptions {
+              secondaryDocumentId
+              applicationType
+              title
+              message
+              url
+            }
+          }
+          passportErrors {
+            code
+            message
+            category
+            displayCode
+          }
+        }
+        sliceRequirements {
+          sliceId
+          passportProvided
+          passportVerified
+          baggageDeclared
+          contactTracing
+          contactTracingAvailableFromUtc
+          contactTracingAvailableFromDescription
+          checkedIn
+          overall
+          unhappyPassport
+          returnDateStatus
+          isReturnDateDeclined
+          returnDate
+          checkinEligible
+          secondaryDocumentStatus
+          secondaryDocuments {
+            documentType
+            countryCode
+            countryName
+            name
+            displayName
+            status
+            secondaryDocumentApplicationOptions {
+              secondaryDocumentId
+              applicationType
+              title
+              message
+              url
+            }
+          }
+          passportErrors {
+            code
+            message
+            category
+            displayCode
+          }
+        }
+      }
+      slices {
+        sliceId
+        origin {
+          code
+          countryCode
+        }
+        destination {
+          code
+          countryCode
+        }
+      }
+    }
+  }
+}
+
+script:post-response {
+  var travelRequirements = res.body.data.SaveEmergencyContactTravelRequirements;
+  
+  if (travelRequirements?.travelRequirementsId) {
+    bru.setVar("travelRequirementsId", travelRequirements.travelRequirementsId);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

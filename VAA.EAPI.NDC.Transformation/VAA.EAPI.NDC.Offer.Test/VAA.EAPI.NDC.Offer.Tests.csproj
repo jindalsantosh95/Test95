@@ -1,0 +1,97 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+
+        <!--To enable the Microsoft Testing Platform 'dotnet test' experience, add property: -->
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+
+        <!--To enable the Microsoft Testing Platform native command line experience, add property: -->
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+
+        <!--For more information on Microsoft Testing Platform support in xUnit.net, please visit: -->
+        <!--https://xunit.net/docs/getting-started/v3/microsoft-testing-platform-->
+
+    </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+		<PackageReference Include="Moq" Version="4.20.72" />
+        <PackageReference Include="xunit.v3" Version="3.2.2" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\VAA.EAPI.Microservices\VAA.EAPI.Core.Xunit\VAA.EAPI.Core.Xunit.csproj" />
+	  <ProjectReference Include="..\..\VAA.EAPI.Microservices\VAA.EAPI.Microservices.Framework.Tests\VAA.EAPI.Microservices.Framework.Tests.csproj" />
+	  <ProjectReference Include="..\VAA.EAPI.NDC.Offer\VAA.EAPI.NDC.Offer.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include=".mocks\AirportDetailsQueryHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\BrandMsCommandHandlerPartialFlownResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\BrandMsCommandHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderReshopQueryHandlerPartialFlownResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ReshopFareFamilyQueryHandler.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferPriceUpSellOffersQueryHandler.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AirShoppingMSQueryHandlerAICarrier.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ConfigurationMSUpsellOfferQueryHandler.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\FareFamilyQueryHandler.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ITAFareTypeCodeQueryHandler.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\BspMarketCurrencyQueryHandler.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\BspMarketPaymentQueryHandler.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AirShoppingMSQueryHandler.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderSearchMSQueryHandlerDocumentPartialFlown.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerDocumentPartialFlown.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ValidationMSCommandHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

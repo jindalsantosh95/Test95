@@ -1,0 +1,17 @@
+info:
+  name: Retrieve Document Download Link
+  type: http
+  seq: 3
+  tags:
+    - Documents
+
+http:
+  method: GET
+  url: "{{baseUrl}}/retrieveDocumentDownloadLink/{{documentId}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 30000
+  followRedirects: true
+  maxRedirects: 5

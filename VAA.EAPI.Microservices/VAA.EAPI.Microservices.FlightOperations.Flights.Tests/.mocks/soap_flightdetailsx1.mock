@@ -1,0 +1,142 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/aims HTTP/1.1
+SOAPAction: http://tempuri.org/IAIMSWebService/FlightDetailsX1
+--Content-Type: text/xml
+--Host: testresources.virginatlantic.com
+
+--<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:aims="http://schemas.datacontract.org/2004/07/AIMS.Data.AimsWebService">
+--   <soapenv:Header/>
+--   <soapenv:Body>
+--      <tem:FlightDetailsX1>
+--         <!--Optional:-->
+--         <tem:UN>test</tem:UN>
+--         <!--Optional:-->
+--         <tem:PSW>test</tem:PSW>
+--         <!--Optional:-->
+--         <tem:PM>
+--            <!--Optional:-->
+--            <aims:DepArrMode>0</aims:DepArrMode>
+--            <!--Optional:-->
+--            <aims:FlightACType>351</aims:FlightACType>
+--            <!--Optional:-->
+--            <aims:FlightArr></aims:FlightArr>
+--            <!--Optional:-->
+--            <aims:FlightCarrier>?</aims:FlightCarrier>
+--            <!--Optional:-->
+--            <aims:FlightDep></aims:FlightDep>
+--            <!--Optional:-->
+--            <aims:FlightLegCd>?</aims:FlightLegCd>
+--            <!--Optional:-->
+--            <aims:FlightNum>355</aims:FlightNum>
+--            <!--Optional:-->
+--            <aims:FromDD>21</aims:FromDD>
+--            <!--Optional:-->
+--            <aims:FromHH>00</aims:FromHH>
+--            <!--Optional:-->
+--            <aims:FromMin>01</aims:FromMin>
+--            <!--Optional:-->
+--            <aims:FromMonth>12</aims:FromMonth>
+--            <!--Optional:-->
+--            <aims:FromYYYY>2023</aims:FromYYYY>
+--            <!--Optional:-->
+--            <aims:ToDD>21</aims:ToDD>
+--            <!--Optional:-->
+--            <aims:ToHH>23</aims:ToHH>
+--            <!--Optional:-->
+--            <aims:ToMin>59</aims:ToMin>
+--            <!--Optional:-->
+--            <aims:ToMonth>12</aims:ToMonth>
+--            <!--Optional:-->
+--            <aims:ToYYYY>2023</aims:ToYYYY>
+--         </tem:PM>
+--      </tem:FlightDetailsX1>
+--   </soapenv:Body>
+--</soapenv:Envelope>
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Set-Cookie: ARRAffinity=73b6a3ac224b9145644e28a47f3f1000313254c5bdddc9080e4da8990870a8ef;Path=/;Domain=vs-awstest.aims.aero; secure; HttpOnly
+Date: Tue, 10 Jun 2025 11:14:18 GMT
+
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body>
+        <FlightDetailsX1Response xmlns="http://tempuri.org/">
+            <FlightDetailsX1Result xmlns:a="http://schemas.datacontract.org/2004/07/AIMS.Data.AimsWebService" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <a:ErrorExplanation/>
+                <a:FlightCount>1</a:FlightCount>
+                <a:FlightListX1>
+                    <a:TAIMSFlightX1>
+                        <a:FlightAcType>351</a:FlightAcType>
+                        <a:FlightActualDayArr>21/12/2023</a:FlightActualDayArr>
+                        <a:FlightActualDayDep>21/12/2023</a:FlightActualDayDep>
+                        <a:FlightArr>LHR</a:FlightArr>
+                        <a:FlightArrDelays>
+                            <a:FlightDelay>
+                                <a:FDelayCode>099 </a:FDelayCode>
+                                <a:FDelayTime>27</a:FDelayTime>
+                                <a:SubDelayCodeDescription/>
+                            </a:FlightDelay>
+                        </a:FlightArrDelays>
+                        <a:FlightAssocCrwRtes>
+                            <a:AssosiatedCrewRouteInfo>
+                                <a:RouteDate>19/12/2023</a:RouteDate>
+                                <a:RouteName>354C</a:RouteName>
+                            </a:AssosiatedCrewRouteInfo>
+                            <a:AssosiatedCrewRouteInfo>
+                                <a:RouteDate>19/12/2023</a:RouteDate>
+                                <a:RouteName>354F</a:RouteName>
+                            </a:AssosiatedCrewRouteInfo>
+                        </a:FlightAssocCrwRtes>
+                        <a:FlightAta>15:17</a:FlightAta>
+                        <a:FlightAtd>04:41</a:FlightAtd>
+                        <a:FlightBlkTime>10:36</a:FlightBlkTime>
+                        <a:FlightCarrier>VS</a:FlightCarrier>
+                        <a:FlightDD>21</a:FlightDD>
+                        <a:FlightDate>21/12/2023</a:FlightDate>
+                        <a:FlightDep>BOM</a:FlightDep>
+                        <a:FlightDepDelays>
+                            <a:FlightDelay>
+                                <a:FDelayCode>001 </a:FDelayCode>
+                                <a:FDelayTime>6</a:FDelayTime>
+                                <a:SubDelayCodeDescription/>
+                            </a:FlightDelay>
+                        </a:FlightDepDelays>
+                        <a:FlightDesc>VS355 </a:FlightDesc>
+                        <a:FlightEta>14:50</a:FlightEta>
+                        <a:FlightEtd>05:05</a:FlightEtd>
+                        <a:FlightLegCD> </a:FlightLegCD>
+                        <a:FlightMM>12</a:FlightMM>
+                        <a:FlightNo>355</a:FlightNo>
+                        <a:FlightNoOfPax>187</a:FlightNoOfPax>
+                        <a:FlightReg>G-VEVE</a:FlightReg>
+                        <a:FlightSta>14:50</a:FlightSta>
+                        <a:FlightStatus>Arrived</a:FlightStatus>
+                        <a:FlightStd>04:35</a:FlightStd>
+                        <a:FlightTDOWN>15:12</a:FlightTDOWN>
+                        <a:FlightTKOFF>05:02</a:FlightTKOFF>
+                        <a:FlightType>Scheduled Service</a:FlightType>
+                        <a:FlightYY>2023</a:FlightYY>
+                        <a:Cancelled>0</a:Cancelled>
+                        <a:ETADay>21/12/2023</a:ETADay>
+                        <a:ETDday>21/12/2023</a:ETDday>
+                        <a:NextCarrier>1</a:NextCarrier>
+                        <a:NextDEP>LHR</a:NextDEP>
+                        <a:NextDay>21/12/2023</a:NextDay>
+                        <a:NextFlt>354</a:NextFlt>
+                        <a:NextLegCd> </a:NextLegCd>
+                        <a:NextStd>1035</a:NextStd>
+                        <a:TaxiArr>5</a:TaxiArr>
+                        <a:TaxiDep>21</a:TaxiDep>
+                    </a:TAIMSFlightX1>
+                </a:FlightListX1>
+            </FlightDetailsX1Result>
+        </FlightDetailsX1Response>
+    </s:Body>
+</s:Envelope>

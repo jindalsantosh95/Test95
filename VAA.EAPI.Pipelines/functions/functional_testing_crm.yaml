@@ -1,0 +1,42 @@
+parameters: 
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  variableGroupName: ''
+  environment: ''
+  SourceFolder: '$(Build.SourcesDirectory)/VAA.EAPI.Automation/'
+
+jobs: 
+  - job: 'FunctionalTesting'
+    displayName: 'Functional Testing CRM'
+    pool:
+      name: ${{parameters.agentPool}}
+      vmImage: ${{parameters.agentSpecification}}
+    variables:
+      - group: ${{parameters.variableGroupName}}
+    steps:
+     - template: /VAA.EAPI.Pipelines/functions/build_selected_automation.yaml
+       parameters:
+         buildConfiguration: ${{parameters.buildConfiguration}}
+         projects: |
+           VAA.EAPI.Automation/VAA.EAPI.Automation.CRM/VAA.EAPI.Automation.CRM.csproj
+           VAA.EAPI.Automation/VAA.EAPI.Automation.MobileApp/VAA.EAPI.Automation.MobileApp.csproj
+
+      # task to perform the sanity test 
+     - task: VSTest@2
+       displayName: 'CRM Testing' 
+       inputs:
+          testAssemblyVer2: |
+            ${{parameters.SourceFolder}}\VAA.EAPI.Automation.CRM\bin\${{parameters.buildConfiguration}}\net10.0\VAA.EAPI.Automation.CRM.dll
+            **\*Tests.dll
+          testFiltercriteria: 'Category=EuClaimForm'
+          testRunTitle: 'EuClaimForm Functional Test'
+
+     - task: VSTest@2
+       displayName: 'AirportData Testing' 
+       inputs:
+          testAssemblyVer2: |
+            ${{parameters.SourceFolder}}\VAA.EAPI.Automation.MobileApp\bin\${{parameters.buildConfiguration}}\net10.0\VAA.EAPI.Automation.MobileApp.dll
+            **\*Tests.dll
+          testFiltercriteria: 'Category=AirportData'
+          testRunTitle: 'Airport Data Functional Test'

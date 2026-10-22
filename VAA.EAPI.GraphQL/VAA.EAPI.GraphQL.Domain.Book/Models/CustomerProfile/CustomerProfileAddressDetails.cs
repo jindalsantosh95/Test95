@@ -1,0 +1,29 @@
+﻿namespace VAA.EAPI.GraphQL.Domain.Book.Models.CustomerProfile
+{
+    public  class CustomerProfileAddressDetails
+    {
+        public string AdditionalComments { get; set; }
+        public string AddressId { get; set; }
+        public string AddressLine1 { get; set; }
+        public string AddressType { get; set; }
+        public string AddressVerified { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string LastUpdatedBy { get; set; }
+        public DateTime LastUpdatedOn { get; set; }
+        public string MetroArea { get; set; }
+        public string PostalStatus { get; set; }
+        public string PostCode { get; set; }
+        public string Primary { get; set; }
+        public string Province { get; set; }
+        public string SourceIdentifier { get; set; }
+        public string SourceSystem { get; set; }
+        public string Valid { get; set; }
+        public string GeoCodeValidFlag { get; set; }
+        public string AddressVerificationStatus { get; set; }
+        public string GroupAddress { get; set; }
+        public string PartnerFileId { get; set; }
+    }
+}

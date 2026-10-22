@@ -1,0 +1,33 @@
+meta {
+  name: Create Proof
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{identity_base_url}}/account-linking-proof
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "flyingClubAccountNumber": "{{identity_member_number}}",
+    "transactionId": "{{account_linking_transaction_id}}",
+    "clientId": "{{account_linking_client_id}}",
+    "resource": "{{account_linking_resource}}",
+    "scope": "account:read"
+  }
+}
+
+docs {
+  Internal EAPI diagnostic only. Authenticate as the approved GraphQL application with
+  Loyalty.Identity.AccountLinkingProof.Create. External callers use GraphQL instead.
+  The public GraphQL input never accepts a Flying Club account number; GraphQL resolves it
+  from the authenticated customer. Use a synthetic test account here.
+  The response is proof and expiresAtUtc. Never log or commit the proof.
+}

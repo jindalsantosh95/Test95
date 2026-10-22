@@ -1,0 +1,489 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''   
+  applicationName: ''
+  microserviceName: ''
+  productId: '' 
+  apimurlname: ''
+  appserviceplan_DT1: ''
+  appserviceplan_DT2: ''
+  appserviceplan_DT3: ''
+  appserviceplan_DT4: ''
+  AppInsightsName_DT1: ''
+  AppInsightsName_DT2: ''
+  AppInsightsName_DT3: ''
+  AppInsightsName_DT4: ''
+  resourceGroupName_DT1: ''
+  resourceGroupName_DT2: ''
+  resourceGroupName_DT3: ''
+  resourceGroupName_DT4: ''
+  resourceGroupName_DEV: ''
+  resourceGroupName_SIT: ''
+  resourceGroupName_UAT: ''
+  resourceGroupName_PROD: ''
+  serviceConnection_NonProd: ''
+  serviceConnection_Prod: ''
+  subscriptionId_NonProd: ''
+  subscriptionId_Prod: ''   
+  functionAppName_DT1: ''
+  functionAppName_DT2: ''
+  functionAppName_DT3: ''
+  functionAppName_DT4: ''
+  functionAppName_DEV: ''
+  functionAppName_SIT: ''
+  functionAppName_UAT: ''
+  functionAppName_PRD: '' 
+  storageAccountName_Test1: ''
+  storageAccountName_Test2: ''
+  storageAccountName_Test3: ''
+  storageAccountName_Test4: ''
+  KeyvaultName_DT1: ''
+  KeyvaultName_DT2: ''
+  KeyvaultName_DT3: ''
+  KeyvaultName_DT4: ''
+  testRepoPath_SIT: ''
+  testRepoPath_UAT: ''
+  APIM_NonProd: ''
+  APIM_Prod: ''
+  APIMResourceGroupName_NonProd: ''  
+  APIMServiceConnection_NonProd: ''
+  APIMSubscriptionId_NonProd: ''
+  APIMResourceGroupName_Prod: ''    
+  APIMServiceConnection_Prod: ''
+  APIMSubscriptionId_Prod: ''
+  APIM_IP_DEV_SIT_UAT: '' 
+  APIM_IP_PRD: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''  
+  sanityfile: ''
+  VARIABLE_GROUP_NAME_NBF_DEV: ''
+  VARIABLE_GROUP_NAME_NBF_SIT: ''
+  VARIABLE_GROUP_NAME_NBF_UAT: ''
+
+stages:       
+
+  - stage: 'PR_Test_1'
+    displayName: 'Deployment - Test1' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_slot_test5.yaml
+        parameters:
+          functionAppName: ${{parameters.functionAppName_DT1}}     
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: PR
+          pr_name: PR_Test1
+          location: ${{parameters.location}}      
+          appserviceplan: ${{parameters.appserviceplan_DT1}}    
+          resourceGroupName: ${{parameters.resourceGroupName_DT1}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}  
+          AppInsightsName: ${{parameters.AppInsightsName_DT1}}
+          storageAccountName: ${{parameters.storageAccountName_Test1}}
+          keyvaultName: ${{parameters.KeyvaultName_DT1}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'APIM_DT1'     
+    displayName: 'APIM - DEV DT1' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: PR_Test_1   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim_eapi.yaml  
+        parameters:
+          apimEnv: 'DEV/DT1/'
+          apiEnv: '_DT1' 
+          apisEnv: 'dev'
+          environment: 'DEV'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}          
+          microserviceName: ${{parameters.microserviceName}}
+          apimurlname: ${{parameters.apimurlname}}
+          productId: ${{parameters.productId}}    
+          functionAppName: ${{parameters.functionAppName_DT1}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_DT1}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}  
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}  
+
+
+  - stage: 'PR_Test_2'
+    displayName: 'Deployment - Test2' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_slot_test5.yaml
+        parameters:
+          functionAppName: ${{parameters.functionAppName_DT2}}     
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: PR
+          pr_name: PR_Test2
+          location: ${{parameters.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_DT2}}    
+          appserviceplan: ${{parameters.appserviceplan_DT2}}    
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}  
+          AppInsightsName: ${{parameters.AppInsightsName_DT2}}
+          storageAccountName: ${{parameters.storageAccountName_Test2}}
+          keyvaultName: ${{parameters.KeyvaultName_DT2}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'APIM_DT2'     
+    displayName: 'APIM - DEV DT2' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: PR_Test_2   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim_eapi.yaml  
+        parameters:
+          apimEnv: 'DEV/DT2/'
+          apiEnv: '_DT2' 
+          apisEnv: 'dev'
+          environment: 'DEV'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}          
+          microserviceName: ${{parameters.microserviceName}}
+          apimurlname: ${{parameters.apimurlname}}
+          productId: ${{parameters.productId}}    
+          functionAppName: ${{parameters.functionAppName_DT2}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_DT2}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}  
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+
+  - stage: 'PR_Test_3'
+    displayName: 'Deployment - Test3' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_slot_test5.yaml
+        parameters:
+          functionAppName: ${{parameters.functionAppName_DT3}}     
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: PR
+          pr_name: PR_Test3
+          location: ${{parameters.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_DT3}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}  
+          AppInsightsName: ${{parameters.AppInsightsName_DT3}}
+          storageAccountName: ${{parameters.storageAccountName_Test3}}
+          keyvaultName: ${{parameters.KeyvaultName_DT3}}
+          appserviceplan: ${{parameters.appserviceplan_DT3}} 
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'APIM_DT3'     
+    displayName: 'APIM - DEV DT3' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: PR_Test_3   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim_eapi.yaml  
+        parameters:
+          apimEnv: 'DEV/DT3/'
+          apiEnv: '_DT3' 
+          apisEnv: 'dev'
+          environment: 'DEV'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}          
+          microserviceName: ${{parameters.microserviceName}}
+          apimurlname: ${{parameters.apimurlname}}
+          productId: ${{parameters.productId}}    
+          functionAppName: ${{parameters.functionAppName_DT3}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_DT3}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}   
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+
+  - stage: 'PR_Test_4'
+    displayName: 'Deployment - Test4' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_slot_test5.yaml
+        parameters:
+          functionAppName: ${{parameters.functionAppName_DT4}}     
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: PR
+          pr_name: PR_Test4
+          location: ${{parameters.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_DT4}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}
+          AppInsightsName: ${{parameters.AppInsightsName_DT4}}
+          storageAccountName: ${{parameters.storageAccountName_Test4}}
+          appserviceplan: ${{parameters.appserviceplan_DT4}} 
+          keyvaultName: ${{parameters.KeyvaultName_DT4}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'APIM_DT4'     
+    displayName: 'APIM - DEV DT4' 
+    condition: and(succeeded(),eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+    dependsOn: PR_Test_4  
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim_eapi.yaml  
+        parameters:
+          apimEnv: 'DEV/DT4/'
+          apiEnv: '_DT4' 
+          apisEnv: 'dev'
+          environment: 'DEV'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}          
+          microserviceName: ${{parameters.microserviceName}}
+          apimurlname: ${{parameters.apimurlname}}
+          productId: ${{parameters.productId}}    
+          functionAppName: ${{parameters.functionAppName_DT4}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_DT4}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}  
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+
+  - stage: 'AFN_DEV'
+    displayName: 'AFN - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml
+        parameters:
+          environment: 'DEV'
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          location: ${{parameters.location}}         
+          applicationName: ${{parameters.applicationName}}
+          functionAppName: ${{parameters.functionAppName_DEV}}                          
+          resourceGroupName: ${{parameters.resourceGroupName_DEV}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}
+
+  - stage: 'APIM_DEV'     
+    displayName: 'APIM - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: AFN_DEV   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim_eapi.yaml  
+        parameters:
+          apimEnv: 'DEV/'
+          apiEnv: '_DEV' 
+          apisEnv: 'dev'
+          environment: 'DEV'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}          
+          microserviceName: ${{parameters.microserviceName}}
+          apimurlname: ${{parameters.apimurlname}}
+          productId: ${{parameters.productId}}    
+          functionAppName: ${{parameters.functionAppName_DEV}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_DEV}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}  
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}   
+
+  - stage: 'Testing_DEV'
+    displayName: 'NBF Sanity Test' 
+    dependsOn: APIM_DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/${{parameters.sanityfile}}
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_DEV}}     
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_DEV}}           
+
+  - stage: 'AFN_SIT'
+    displayName: 'AFN - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml  
+        parameters:
+          environment: 'SIT' 
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}   
+          location: ${{parameters.location}}           
+          applicationName: ${{parameters.applicationName}}
+          functionAppName: ${{parameters.functionAppName_SIT}}                          
+          resourceGroupName: ${{parameters.resourceGroupName_SIT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}} 
+
+  - stage: 'APIM_SIT'     
+    displayName: 'APIM - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: AFN_SIT   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim_eapi.yaml  
+        parameters:
+          environment: 'SIT'  
+          apimEnv: 'SIT/'
+          apiEnv: '_SIT'   
+          apisEnv: 'sit'                               
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          microserviceName: ${{parameters.microserviceName}}  
+          apimurlname: ${{parameters.apimurlname}}
+          productId: ${{parameters.productId}}                      
+          functionAppName: ${{parameters.functionAppName_SIT}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_SIT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}          
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}  
+
+  - stage: 'Testing_SIT'
+    displayName: 'NBF Sanity Test' 
+    dependsOn: APIM_SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/${{parameters.sanityfile}}
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_SIT}}     
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_SIT}}  
+                                                      
+  - stage: 'AFN_UAT'
+    displayName: 'AFN - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml  
+        parameters:
+          environment: 'UAT'          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}   
+          location: ${{parameters.location}}          
+          applicationName: ${{parameters.applicationName}}         
+          functionAppName: ${{parameters.functionAppName_UAT}}                          
+          resourceGroupName: ${{parameters.resourceGroupName_UAT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          subscriptionId: ${{parameters.subscriptionId_NonProd}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}   
+
+  - stage: 'APIM_UAT'
+    displayName: 'APIM - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: AFN_UAT   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim_eapi.yaml
+        parameters:
+          environment: 'UAT'   
+          apimEnv: 'UAT/'
+          apiEnv: '_UAT'      
+          apisEnv: 'uat'                           
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}} 
+          microserviceName: ${{parameters.microserviceName}}  
+          apimurlname: ${{parameters.apimurlname}}
+          productId: ${{parameters.productId}}                     
+          functionAppName: ${{parameters.functionAppName_UAT}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_UAT}}       
+          serviceConnection: ${{parameters.serviceConnection_NonProd}}
+          APIMName: ${{parameters.APIM_NonProd}}           
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_NonProd}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_NonProd}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_NonProd}}          
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}} 
+          
+  - stage: 'Testing_UAT'
+    displayName: 'NBF Sanity Test' 
+    dependsOn: APIM_UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/${{parameters.sanityfile}}
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}  
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          testRepoPath: ${{parameters.testRepoPath_UAT}}     
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_UAT}}  
+
+  - stage: 'AFN_PROD'
+    displayName: 'AFN - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_latest.yaml
+        parameters:
+          environment: 'PROD'                     
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}   
+          location: ${{parameters.location}}         
+          applicationName: ${{parameters.applicationName}}
+          functionAppName: ${{parameters.functionAppName_PRD}}                          
+          resourceGroupName: ${{parameters.resourceGroupName_PROD}}       
+          serviceConnection: ${{parameters.serviceConnection_Prod}}
+          subscriptionId: ${{parameters.subscriptionId_Prod}}
+          APIM_IP: ${{parameters.APIM_IP_PRD}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+
+  - stage: 'APIM_PROD'  
+    displayName: 'APIM - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: AFN_PROD   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_apim_eapi.yaml 
+        parameters:
+          environment: 'PROD'
+          apimEnv: ''
+          apiEnv: ''        
+          apisEnv: ''                         
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}  
+          microserviceName: ${{parameters.microserviceName}}  
+          productId: ${{parameters.productId}}        
+          apimurlname: ${{parameters.apimurlname}}                     
+          functionAppName: ${{parameters.functionAppName_PRD}}                      
+          resourceGroupName: ${{parameters.resourceGroupName_PROD}}       
+          serviceConnection: ${{parameters.serviceConnection_Prod}}
+          APIMName: ${{parameters.APIM_Prod}}           
+          APIMResourceGroupName: ${{parameters.APIMResourceGroupName_Prod}}       
+          APIMServiceConnection: ${{parameters.APIMServiceConnection_Prod}}
+          APIMSubscriptionId: ${{parameters.APIMSubscriptionId_Prod}}          
+          APIM_IP: ${{parameters.APIM_IP_PRD}} 

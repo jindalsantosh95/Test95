@@ -1,0 +1,29 @@
+meta {
+  name: accountPnrLinkEnrolment
+  type: graphql
+  seq: 12
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation accountPnrLinkEnrolment($request: CustomerDTOInput) {
+    accountPnrLinkEnrolment(request: $request)
+  }
+}
+
+body:graphql:vars {
+  {
+    "request": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,41 @@
+###Request
+GET https://tempuri.org/3 HTTP
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options
+Content-Type: text/html; charset=utf-8
+Response-Delay: 00:00:00
+this test worked {Guid()}
+
+<functions>
+    Guid(): {Guid()}
+    DateTime(yyyy-MM-dd): {DateTime(yyyy-MM-dd)}
+    DateTime(yyyy-MM-dd, 1): {DateTime(yyyy-MM-dd, 1)}
+    DateTime(yyyy-MM-dd, -1): {DateTime(yyyy-MM-dd, -1)}
+    DateTime(yyyy-MM-dd, 1, week): {DateTime(yyyy-MM-dd, 1, week)}
+    RandomNumber(10): {RandomNumber(10)}
+    RandomNumber(100, 200): {RandomNumber(100, 200)}
+    RandomDateTime(): {RandomDateTime()}
+    RandomString(): {RandomString()}
+    RandomString(20): {RandomString(20)}
+    RandomString(20, "RandomString: {0}"): {RandomString(20, "RandomString: {0}")}
+    RandomItem(fred, bob): {RandomItem(fred, bob)}
+    RandomItem(Guid(), RandomNumber(10), RandomDateTime(), RandomString()): {RandomItem({Guid()}, {RandomNumber(10)}, {RandomDateTime()}, {RandomString()})}
+
+    {Loop(10)}
+    <level>
+      Level 0 Iteration: {Index()} {Guid()}
+
+      {Loop(5)}
+      <level>
+        Level 1 Iteration: {Index()} {RandomNumber(10)}
+        </level>
+      {Loop}
+
+      </level>
+    {Loop}
+
+</functions>

@@ -1,0 +1,89 @@
+info:
+  name: Get Travel Requirements
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{checkinms}}/TravelRequirements"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: |-
+      {
+          "pnrLocator": "{{pnrLocator}}",
+          "givenNames": "{{pax1_givennames}}",
+          "surname": "{{pax1_surname}}"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: pnrLocator
+      value: GYK7C4
+  scripts:
+    - type: after-response
+      code: |-
+        var json = res.getBody();
+
+        function generateDocumentNumber() {
+            return "9" + Math.floor(10000000 + Math.random() * 90000000);
+        }
+
+        function generateExpiryDate() {
+            const date = new Date();
+            const randomDays = Math.floor(Math.random() * (5 * 365));
+            date.setFullYear(date.getFullYear() + 5);
+            date.setDate(date.getDate() + randomDays);
+            return date.toISOString().split('T')[0];
+        }
+
+        //considering happy path for first slice
+        bru.setVar("slice1_id", json.slices[0].sliceId);
+        var destination = json.slices[0].destination.countryCode;
+        bru.setVar("countryCode", destination);
+
+        bru.setVar('requirementsId', json.requirementsId);
+        console.log("Num pax: " + json.passengers.length);
+        bru.setVar("pax1_id", json.passengers[0].passengerId);
+        bru.setVar("pax1_givennames", json.passengers[0].givenNames);
+        bru.setVar("pax1_surname", json.passengers[0].surname);
+        bru.setVar("pax1_DOB",json.passengers[0].dateOfBirth);
+        bru.setVar("pax1_documentNumber", json.passengers?.[0]?.documents?.[0]?.documentNumber || generateDocumentNumber());
+        bru.setVar("pax1_docExpiryDate", json.passengers?.[0]?.documents?.[0]?.expirationDate || generateExpiryDate());
+        bru.setVar("pax1_gender", json.passengers?.[0]?.documents?.[0]?.gender?.code || "M");
+
+        const pax1SliceRequirements = json.passengers?.[0]?.sliceRequirements?.find(
+          sliceRequirements => sliceRequirements.sliceId === json.slices?.[0]?.sliceId
+        ) || json.passengers?.[0]?.sliceRequirements?.[0];
+        const secondaryDocument = pax1SliceRequirements?.secondaryDocuments?.[0];
+
+        if (secondaryDocument) {
+          bru.setVar("secondaryDocumentType", secondaryDocument.documentType);
+          bru.setVar("secondaryDocumentCountryCode", secondaryDocument.countryCode || "");
+          bru.setVar("secondaryDocumentCountryName", secondaryDocument.countryName || "");
+          bru.setVar("secondaryDocumentStatus", secondaryDocument.status);
+          const applicationOptions = secondaryDocument.secondaryDocumentApplicationOptions ?? [];
+          const governmentApplication = applicationOptions.find(x => x.applicationType === "Government");
+          const vendorApplication = applicationOptions.find(x => x.applicationType === "Vendor");
+          const primaryApplication = governmentApplication || vendorApplication;
+          bru.setVar("secondaryDocumentId", primaryApplication?.secondaryDocumentId || "");
+        }
+
+        if (json.passengers.length > 1) { // Check if there is a second passenger
+        bru.setVar("pax2_id", json.passengers[1].passengerId);
+        bru.setVar("pax2_givennames", json.passengers[1].givenNames);
+        bru.setVar("pax2_surname", json.passengers[1].surname);
+        bru.setVar("pax2_DOB",json.passengers[1].dateOfBirth);
+        bru.setVar("pax2_documentNumber", json.passengers?.[1]?.documents?.[0]?.documentNumber || generateDocumentNumber());
+          bru.setVar("pax2_docExpiryDate", json.passengers?.[1]?.documents?.[0]?.expirationDate || generateExpiryDate() );
+        }
+        bru.setVar("pax2_gender", json.passengers?.[1]?.documents?.[0]?.gender?.code || "F");
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

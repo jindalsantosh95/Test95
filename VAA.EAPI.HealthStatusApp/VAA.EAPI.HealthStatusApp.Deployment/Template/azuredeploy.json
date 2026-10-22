@@ -1,0 +1,317 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "WebAppName": {
+      "type": "String"
+    },
+    "ResourceGroup": {
+      "type": "string"
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "KeyVaultName": {
+      "type": "string"
+    },
+    "AzureAD_Instance": {
+      "type": "string"
+    },
+    "AzureAD_Domain": {
+      "type": "string"
+    },
+    "AzureAD_TenantId": {
+      "type": "string"
+    },
+    "AzureAD_ClientId": {
+      "type": "string"
+    },
+    "AzureAD_ClientSecret": {
+      "type": "string"
+    },
+    "AzureAD_CallbackPath": {
+      "type": "string"
+    },
+    "AzureAD_OAuth2AllowIdTokenImplicitFlow": {
+      "type": "bool"
+    },
+    "AADGroupId": {
+      "type": "string"
+    },
+    "ServiceNowUsername": {
+      "type": "string"
+    },
+    "ServiceNowPassword": {
+      "type": "string"
+    },
+    "ServiceNowUrl": {
+      "type": "string"
+    },
+    "AppInsightsName": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "Object"
+    },
+    "HEALTH_CHECK_SUBSCRIPTION_KEY": {
+      "type": "string"
+    },
+    "HEALTH_CHECK_SUBSCRIPTION_KEY_TEST": {
+      "type": "string"
+    },
+    "HEALTH_CHECK_URL": {
+      "type": "string"
+    },
+    "HEALTH_CHECK_TEST_URL": {
+      "type": "string"
+    },
+    "HEALTH_CHECK_Definition_Ids": {
+      "type": "string"
+    },
+    "HEALTH_CHECK_HEIMDALL_ID": {
+      "type": "string"
+    },
+    "HEALTH_CHECK_HEIMDALL_KEY": {
+      "type": "string"
+    },
+    "HEALTH_CHECK_COSMOS": {
+      "type": "string"
+    },
+    /*"APPLICATIONINSIGHTS_CONNECTION_STRING": {
+      "type": "String"
+    },*/
+    "ApplicationInsightsAgent_EXTENSION_VERSION": {
+      "type": "String"
+    },
+    "XDT_MicrosoftApplicationInsights_Mode": {
+      "type": "String"
+    },
+    "WEBSITE_TIME_ZONE": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "ResourceLocation": "[resourceGroup().location]",
+    "SiteResourceID": "[resourceId('Microsoft.Web/Sites', parameters('WebAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "microsoft.insights/components",
+      "kind": "web",
+      "name": "[parameters('AppInsightsName')]",
+      "apiVersion": "2015-05-01",
+      "location": "[Variables('ResourceLocation')]",
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "applicationId": "[variables('SiteResourceID')]",
+        "Application_Type": "web"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('WebAppName')]",
+      "location": "North Europe",
+      "kind": "app",
+      "identity": {
+        "principalId": "",
+        "tenantId": "",
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "serverFarmId": "[resourceId(parameters('ResourceGroup'), 'Microsoft.Web/serverFarms', parameters('AppServicePlanName'))]"
+
+      }
+    },
+    
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2022-09-01",
+      "name": "[concat(parameters('WebAppName'), '/web')]",
+      "location": "North Europe",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('WebAppName'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php",
+          "hostingstart.html"
+        ],
+        "netFrameworkVersion": "v10.0",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "remoteDebuggingVersion": "VS2022",
+        "httpLoggingEnabled": false,
+        "acrUseManagedIdentityCreds": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "scmType": "None",
+        "use32BitWorkerProcess": true,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": true
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "vnetRouteAllEnabled": false,
+        "vnetPrivatePortsCount": 0,
+        "publicNetworkAccess": "Enabled",
+        "localMySqlEnabled": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "scmMinTlsVersion": "1.2",
+        "ftpsState": "FtpsOnly",
+        "preWarmedInstanceCount": 0,
+        "elasticWebAppScaleLimit": 0,
+        "functionsRuntimeScaleMonitoringEnabled": false,
+        "minimumElasticInstanceCount": 0,
+        "appSettings": [
+          {
+            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('AppInsightsName')), '2020-02-02').ConnectionString]"
+          },
+          {
+            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('AppInsightsName')), '2020-02-02').InstrumentationKey]"
+          },
+          {
+            "name": "HEALTH_CHECK_SUBSCRIPTION_KEY",
+            "value": "[parameters('HEALTH_CHECK_SUBSCRIPTION_KEY')]"
+          },
+          {
+            "name": "HEALTH_CHECK_SUBSCRIPTION_KEY_TEST",
+            "value": "[parameters('HEALTH_CHECK_SUBSCRIPTION_KEY_TEST')]"
+          },
+          {
+            "name": "HEALTH_CHECK_URL",
+            "value": "[parameters('HEALTH_CHECK_URL')]"
+          },
+          {
+            "name": "HEALTH_CHECK_TEST_URL",
+            "value": "[parameters('HEALTH_CHECK_TEST_URL')]"
+          },
+          {
+            "name": "HEALTH_CHECK_Definition_Ids",
+            "value": "[parameters('HEALTH_CHECK_Definition_Ids')]"
+          },
+          {
+            "name": "HEALTH_CHECK_HEIMDALL_ID",
+            "value": "[parameters('HEALTH_CHECK_HEIMDALL_ID')]"
+          },
+          {
+            "name": "HEALTH_CHECK_HEIMDALL_KEY",
+            "value": "[parameters('HEALTH_CHECK_HEIMDALL_KEY')]"
+          },
+          {
+            "name": "HEALTH_CHECK_COSMOS",
+            "value": "[parameters('HEALTH_CHECK_COSMOS')]"
+          },
+          {
+            "name": "ServiceNowUsername",
+            "value": "[parameters('ServiceNowUsername')]"
+          },
+          {
+            "name": "ServiceNowPassword",
+            "value": "[parameters('ServiceNowPassword')]"
+          },
+          {
+            "name": "ServiceNowUrl",
+            "value": "[parameters('ServiceNowUrl')]"
+          },
+          {
+            "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+            "value": "~2"
+          },
+          {
+            "name": "XDT_MicrosoftApplicationInsights_Mode",
+            "value": "default"
+          },
+          {
+            "name": "AzureAD_Instance",
+            "value": "[parameters('AzureAD_Instance')]"
+          },
+          {
+            "name": "AzureAD_Domain",
+            "value": "[parameters('AzureAD_Domain')]"
+          },
+          {
+            "name": "AzureAD_TenantId",
+            "value": "[parameters('AzureAD_TenantId')]"
+          },
+          {
+            "name": "AzureAD_ClientId",
+            "value": "[parameters('AzureAD_ClientId')]"
+          },
+          {
+            "name": "AzureAD_ClientSecret",
+            "value": "[parameters('AzureAD_ClientSecret')]"
+          },
+          {
+            "name": "AzureAD_CallbackPath",
+            "value": "[parameters('AzureAD_CallbackPath')]"
+          },
+          {
+            "name": "AzureAD_OAuth2AllowIdTokenImplicitFlow",
+            "value": "[parameters('AzureAD_OAuth2AllowIdTokenImplicitFlow')]"
+          },
+          {
+            "name": "AADGroupId",
+            "value": "[parameters('AADGroupId')]"
+          },
+          {
+            "name": "WEBSITE_TIME_ZONE",
+            "value": "[parameters('WEBSITE_TIME_ZONE')]"
+          }
+
+
+        ]
+        /*"cors": {
+          "allowedOrigins": [
+            "[parameters('PrmAllowedOrigins1')]",
+            "[parameters('PrmAllowedOrigins2')]",
+            "[parameters('PrmAllowedOrigins3')]",
+            "[parameters('PrmAllowedOrigins4')]",
+            "[parameters('PrmAllowedOrigins5')]"
+          ],
+          "supportCredentials": true
+        }*/
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[concat(parameters('KeyVaultName'), '/add')]",
+      "apiVersion": "2019-09-01",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[reference(concat('Microsoft.Web/sites/', parameters('WebAppName')), '2018-02-01','Full').identity.tenantId]",
+            "objectId": "[reference(concat('Microsoft.Web/sites/', parameters('WebAppName')), '2018-02-01','Full').identity.principalId]",
+            "permissions": {
+              "keys": [ "Get", "List" ],
+              "secrets": [ "Get", "List" ],
+              "certificates": [ "Get", "List" ],
+              "storage": [ "all" ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,752 @@
+###Request
+POST https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements HTTP/1.1
+
+$[?(@.confirmationNum == 'H7F7VI')]
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "requirementsResourceId": "1f37c8b8-4f5a-4956-8fb0-67ee1c357ecd",
+    "checkin": false,
+    "travelRequirements": {
+        "id": "b81226b7-f2e8-4319-8187-6eed7be13630",
+        "bookingReference": {
+            "id": "H7F7VI",
+            "creationDate": "2025-08-03T00:00:00Z"
+        },
+        "trips": [
+            {
+                "id": "f7c8b852-4aee-4637-97a5-b980c52c6513",
+                "ordinal": 0,
+                "departureStation": {
+                    "code": "DTW",
+                    "name": "Detroit",
+                    "country": {
+                        "code": "US",
+                        "isoAlpha3Code": "USA"
+                    }
+                },
+                "arrivalStation": {
+                    "code": "LHR",
+                    "name": "London Heathrow",
+                    "country": {
+                        "code": "US",
+                        "isoAlpha3Code": "USA"
+                    }
+                },
+                "firstDepartureLocalDate": "2025-08-04T19:00:00-04:00",
+                "lastArrivalLocalDate": "2025-08-05T14:00:00+02:00",
+                "segments": [
+                    {
+                        "id": "452d0c34-36e0-4cc8-87c0-a8504316e293",
+                        "ordinal": 1,
+                        "operatingCarrier": {
+                            "code": "VS",
+                            "name": "Virgin Atlantic"
+                        },
+                        "flightNum": "0010",
+                        "marketingSegment": {
+                            "flightNum": "0010",
+                            "marketingCarrier": [
+                                {
+                                    "code": "VS",
+                                    "name": "Virgin Atlantic"
+                                }
+                            ]
+                        },
+                        "legs": [
+                            {
+                                "id": "90808b4a-29f5-4628-b1b9-44f09e1b91e9",
+                                "ordinal": 1,
+                                "departure": {
+                                    "station": {
+                                        "code": "DTW",
+                                        "name": "Detroit",
+                                        "country": {
+                                            "code": "US",
+                                            "isoAlpha3Code": "USA"
+                                        }
+                                    },
+                                    "estimatedDepartureLocalDateTime": "2025-08-04T19:00:00-04:00",
+                                    "scheduledDepartureLocalDateTime": "2025-08-04T19:00:00-04:00",
+                                    "estimatedDepartureUTCDateTime": "2025-08-04T23:00:00Z",
+                                    "scheduledDepartureUTCDateTime": "2025-08-04T23:00:00Z"
+                                },
+                                "arrival": {
+                                    "station": {
+                                        "code": "LHR",
+                                        "name": "Heathrow Airport",
+                                        "country": {
+                                            "code": "GB",
+                                            "isoAlpha3Code": "GBR"
+                                        }
+                                    },
+                                    "estimatedArrivalLocalDateTime": "2025-08-05T07:15:00+01:00",
+                                    "scheduledArrivalLocalDateTime": "2025-08-05T07:15:00+01:00",
+                                    "estimatedArrivalUTCDateTime": "2025-08-05T06:15:00Z",
+                                    "scheduledArrivalUTCDateTime": "2025-08-05T06:15:00Z"
+                                },
+                                "international": true
+                            }
+                        ],
+                        "international": true,
+                        "transportType": "AIR"
+                    }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": true
+            }
+        ],
+        "passengers": [
+            {
+                "passengerResourceId": "0d051466-aae5-40d8-8931-6ef0921723be",
+                "givenNames": "SAFDFA",
+                "surname": "TESTONE",
+                "nameNum": "01.01",
+                "customerId": "9999234247451",
+                "birthDate": "1991-01-01T00:00:00Z",
+                "status": {
+                    "code": "COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "90808b4a-29f5-4628-b1b9-44f09e1b91e9",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            },
+                            {
+                                "datedOperatingLegId": "aa3aabf0-c3d5-4b94-ac04-416e21f3db60",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "f7c8b852-4aee-4637-97a5-b980c52c6513",
+                                "status": {
+                                    "code": "COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "exceptions": [],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": true,
+                                "checkinEligible": true
+                            }
+                        ],
+                        "travelDocuments": [
+                            {
+                                "type": "PASSPORT",
+                                "subType": "P",
+                                "givenNames": "SAFDFA",
+                                "surname": "TESTONE",
+                                "birthDate": "1991-01-01",
+                                "gender": {
+                                    "code": "M",
+                                    "name": "Male"
+                                },
+                                "number": "241341341",
+                                "expirationDate": "2035-05-04",
+                                "issuingCountry": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "nationality": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "countryOfResidence": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "methodOfDataEntry": "P",
+                                "documentFeature": "NONE",
+                                "sourceFromType": "PNR"
+                            }
+                        ],
+                        "emergencyContact": [
+                            {
+                                "declined": true,
+								"type": "MOBILE",
+                                "countryCode": "+1",
+                                "phoneNumber": "3424324234433"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "passengerResourceId": "8a715f33-e7eb-4b63-8e55-52dd75013e78",
+                "givenNames": "ASCASCA",
+                "surname": "TESTFIVE",
+                "nameNum": "05.01",
+                "customerId": "9999234247410",
+                "birthDate": "2025-05-05T00:00:00Z",
+                "status": {
+                    "code": "COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "90808b4a-29f5-4628-b1b9-44f09e1b91e9",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            },
+                            {
+                                "datedOperatingLegId": "aa3aabf0-c3d5-4b94-ac04-416e21f3db60",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "f7c8b852-4aee-4637-97a5-b980c52c6513",
+                                "status": {
+                                    "code": "COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "exceptions": [],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": true,
+                                "checkinEligible": true
+                            }
+                        ],
+                        "travelDocuments": [
+                            {
+                                "type": "PASSPORT",
+                                "subType": "P",
+                                "givenNames": "ASCASCA",
+                                "surname": "TESTFIVE",
+                                "birthDate": "2025-05-05",
+                                "gender": {
+                                    "code": "F",
+                                    "name": "Female"
+                                },
+                                "number": "624353414",
+                                "expirationDate": "2035-07-07",
+                                "issuingCountry": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "nationality": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "countryOfResidence": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "methodOfDataEntry": "P",
+                                "documentFeature": "NONE",
+                                "sourceFromType": "PNR"
+                            }
+                        ]
+                    }
+                ],
+                "infant": true
+            },
+            {
+                "passengerResourceId": "b76b3a63-d897-4579-a71c-51fa6c30a37d",
+                "givenNames": "SFVSDVS",
+                "surname": "TESTTWO",
+                "nameNum": "02.01",
+                "customerId": "9999234247444",
+                "birthDate": "1992-02-02T00:00:00Z",
+                "status": {
+                    "code": "NOT_COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "90808b4a-29f5-4628-b1b9-44f09e1b91e9",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "returnDateRequired": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                }
+                            },
+                            {
+                                "datedOperatingLegId": "aa3aabf0-c3d5-4b94-ac04-416e21f3db60",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "returnDateRequired": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "f7c8b852-4aee-4637-97a5-b980c52c6513",
+                                "status": {
+                                    "code": "NOT_COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "NOT_COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "NOT_PRESENT"
+                                                },
+                                                "returnDateRequired": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": []
+                                    }
+                                ],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": false,
+                                "checkinEligible": false
+                            }
+                        ],
+                        "travelDocuments": []
+                    }
+                ]
+            },
+            {
+                "passengerResourceId": "ee3a0f56-6f3c-4bca-8c44-9cc8309b238c",
+                "givenNames": "VWFWEDFW",
+                "surname": "TESTTHREE",
+                "nameNum": "03.01",
+                "customerId": "9999234247436",
+                "birthDate": "2013-03-03T00:00:00Z",
+                "status": {
+                    "code": "COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "90808b4a-29f5-4628-b1b9-44f09e1b91e9",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            },
+                            {
+                                "datedOperatingLegId": "aa3aabf0-c3d5-4b94-ac04-416e21f3db60",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "f7c8b852-4aee-4637-97a5-b980c52c6513",
+                                "status": {
+                                    "code": "COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "exceptions": [],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": true,
+                                "checkinEligible": true
+                            }
+                        ],
+                        "travelDocuments": [
+                            {
+                                "type": "PASSPORT",
+                                "subType": "P",
+                                "givenNames": "VWFWEDFW",
+                                "surname": "TESTTHREE",
+                                "birthDate": "2013-03-03",
+                                "gender": {
+                                    "code": "F",
+                                    "name": "Female"
+                                },
+                                "number": "413413413",
+                                "expirationDate": "2035-07-06",
+                                "issuingCountry": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "nationality": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "countryOfResidence": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "methodOfDataEntry": "P",
+                                "documentFeature": "NONE",
+                                "sourceFromType": "PNR"
+                            }
+                        ],
+                        "emergencyContact": [
+                            {
+                                "declined": true,
+								"type": "MOBILE",
+                                "countryCode": "+1",
+                                "phoneNumber": "3424324234433"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "passengerResourceId": "70149bf5-b1f0-4324-849c-1055764eae1c",
+                "givenNames": "OISDASDA",
+                "surname": "TESTFOUR",
+                "nameNum": "04.01",
+                "customerId": "9999234247428",
+                "birthDate": "2014-04-04T00:00:00Z",
+                "status": {
+                    "code": "COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "90808b4a-29f5-4628-b1b9-44f09e1b91e9",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            },
+                            {
+                                "datedOperatingLegId": "aa3aabf0-c3d5-4b94-ac04-416e21f3db60",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "f7c8b852-4aee-4637-97a5-b980c52c6513",
+                                "status": {
+                                    "code": "COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "exceptions": [],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": true,
+                                "checkinEligible": true
+                            }
+                        ],
+                        "travelDocuments": [
+                            {
+                                "type": "PASSPORT",
+                                "subType": "P",
+                                "givenNames": "OISDASDA",
+                                "surname": "TESTFOUR",
+                                "birthDate": "2014-04-04",
+                                "gender": {
+                                    "code": "F",
+                                    "name": "Female"
+                                },
+                                "number": "763545324",
+                                "expirationDate": "2034-09-09",
+                                "issuingCountry": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "nationality": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "countryOfResidence": {
+                                    "code": "USA",
+                                    "name": "United States of America (the)",
+                                    "isoAlpha2Code": "US"
+                                },
+                                "methodOfDataEntry": "P",
+                                "documentFeature": "NONE",
+                                "sourceFromType": "PNR"
+                            }
+                        ],
+                        "emergencyContact": [
+                            {
+                                "declined": true,
+								"type": "MOBILE",
+                                "countryCode": "+1",
+                                "phoneNumber": "3424324234433"
+								
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

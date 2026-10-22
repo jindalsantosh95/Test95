@@ -1,0 +1,29 @@
+meta {
+  name: accountUpdateEmailAddress
+  type: graphql
+  seq: 16
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation accountUpdateEmailAddress($newEmailAddress: UpdateEmailRequestInput) {
+    accountUpdateEmailAddress(newEmailAddress: $newEmailAddress)
+  }
+}
+
+body:graphql:vars {
+  {
+    "newEmailAddress": {}
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

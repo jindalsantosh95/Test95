@@ -1,0 +1,29 @@
+meta {
+  name: Bulk Update Member Status
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{customer_base_url}}/BulkMemberStatusUpdate
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "memberNumber": [
+      "{{customer_member_number}}"
+    ],
+    "memberStatus": "{{customer_member_status}}"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

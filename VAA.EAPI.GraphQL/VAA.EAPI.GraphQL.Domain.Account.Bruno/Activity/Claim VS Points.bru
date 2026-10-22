@@ -1,0 +1,48 @@
+meta {
+  name: Claim VS Points
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation ClaimVSPoints {
+    claimVSPoints(
+      ticketNumber: "{{account_ticket_number}}"
+      fcNumber: "{{account_member_number}}"
+    ) {
+      totalVirginPoints
+      totalTierPoints
+      totalBonusPoints
+      segmentDetails {
+        operatingAirlineName
+        operatingAirlineCode
+        dateOfFlight
+        flightNumber
+        originAirportCode
+        destinationAirportCode
+        virginPoints
+        tierPoints
+        bonusPoints
+        isPartialTransaction
+      }
+      errorResponse {
+        message
+        extentions {
+          code
+          exception
+        }
+      }
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

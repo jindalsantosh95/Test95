@@ -1,0 +1,40 @@
+###Request
+GET https://Testresources.virginatlantic.com/DEV/NdcOrderManagement/order/response/disrupted-hold-booking-cancellation HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "docType": "Indirect",
+  "dataList": {
+    "originDestinationAssociations": [
+      { "odLabel": "OD1", "originDestination": { "originAirport": "LHR", "destinationAirport": "MIA", "departureDate": "2027-07-07" }, "journeyRefIds": ["JOUR1"], "flightSegmentRefIds": ["SEG1"] },
+      { "odLabel": "OD2", "originDestination": { "originAirport": "MIA", "destinationAirport": "LHR", "departureDate": "2027-07-11" }, "journeyRefIds": ["JOUR2"], "flightSegmentRefIds": ["SEG2"] }
+    ],
+    "customerDetails": [ { "custId": "ADULT_1", "ptc": "ADT", "itaPtc": "ADT", "firstName": "DAVID", "lastName": "SMITH" } ],
+    "segmentDetails": [
+      { "odRefId": "OD1", "segmentId": "SEG1", "airCraft": "789", "marketingCarrier": "VS", "marketingFlightNumber": "5", "originAirportCode": "LHR", "destinationAirportCode": "MIA", "classOfService": "T", "scheduledDepartureTime": { "localDateTime": "2027-07-07T11:00:00" }, "scheduledArrivalTime": { "localDateTime": "2027-07-07T15:55:00" }, "flightDuration": "09:55:00", "legs": [ { "scheduledDepartureTime": { "localDateTime": "2027-07-07T11:00:00" }, "originAirportCode": "LHR", "scheduledArrivalTime": { "localDateTime": "2027-07-07T15:55:00" }, "destinationAirportCode": "MIA", "legDuration": "09:55:00", "carrierAircraftTypeCode": "789", "carrierAircraftTypeName": "789" } ], "cabinType": { "cabinCode": "5", "cabinName": "ECONOMY" }, "status": { "code": "HK" } },
+      { "odRefId": "OD2", "segmentId": "SEG2", "airCraft": "789", "marketingCarrier": "VS", "marketingFlightNumber": "6", "originAirportCode": "MIA", "destinationAirportCode": "LHR", "classOfService": "T", "scheduledDepartureTime": { "localDateTime": "2027-07-11T18:20:00" }, "scheduledArrivalTime": { "localDateTime": "2027-07-12T08:00:00" }, "flightDuration": "08:40:00", "legs": [ { "scheduledDepartureTime": { "localDateTime": "2027-07-11T18:20:00" }, "originAirportCode": "MIA", "scheduledArrivalTime": { "localDateTime": "2027-07-12T08:00:00" }, "destinationAirportCode": "LHR", "legDuration": "08:40:00", "carrierAircraftTypeCode": "787", "carrierAircraftTypeName": "787 (widebody)" } ], "cabinType": { "cabinCode": "5", "cabinName": "ECONOMY" }, "status": { "code": "HK" } }
+    ],
+    "priceClass": [
+      { "id": "PC1", "fareBasisCode": "OYARD8LA", "fareTypeCode": "ERU", "productName": "Economy Light" },
+      { "id": "PC2", "fareBasisCode": "OYBRD8LA", "fareTypeCode": "ERU", "productName": "Economy Light" }
+    ],
+    "journey": [ { "journeyId": "JOUR1", "duration": "09:55", "flightSegmentRefIds": ["SEG1"] }, { "journeyId": "JOUR2", "duration": "08:40", "flightSegmentRefIds": ["SEG2"] } ]
+  },
+  "pointOfSale": { "countryCode": "GB", "currencyCode": "GBP" },
+  "orderNumber": { "orderId": "VS932SSGCJB26", "ownerAirline": "VS" },
+  "bookingReference": { "rloc": "SSGCJB" },
+  "timeLimits": [ { "type": "TicketingTimeLimit", "limit": "2026-10-08T08:52+01:00" } ],
+  "orderItems": [ {
+    "orderItemId": "VS932SSGCJB26-1", "ownerAirline": "VS", "accountableDocumentRefs": [],
+    "services": [
+      { "serviceId": "SV1", "product": { "productType": "Flight" }, "serviceBeneficiaries": ["ADULT_1"], "originDestinationRefIds": ["OD1"], "segmentRefIds": ["SEG1"], "priceClassRefIds": ["PC1"] },
+      { "serviceId": "SV2", "product": { "productType": "Flight" }, "serviceBeneficiaries": ["ADULT_1"], "originDestinationRefIds": ["OD2"], "segmentRefIds": ["SEG2"], "priceClassRefIds": ["PC2"] }
+    ],
+    "priceDetails": [ { "priceComponentType": "BasePrice", "amount": { "monetaryAmount": "631.83", "baseCurrency": "GBP" }, "fareCalculation": "LON VS MIA M13.52OYARD8LA VS LON M33.14OYBRD8LA NUC46.66END" } ], "paymentDetails": [], "itemStatus": { "status": "Current" }
+  } ],
+  "orderStatus": "Confirmed", "parties": { "participants": [ { "partyType": "Seller", "name": "Skyscanner", "agencyID": "91281035", "ordinal": "1", "pccCode": "6UOL" } ] },
+  "changeType": "FlightCancellation", "version": 1, "id": "VS932SSGCJB26", "partitionKey": "VS932SSGCJB26"
+}

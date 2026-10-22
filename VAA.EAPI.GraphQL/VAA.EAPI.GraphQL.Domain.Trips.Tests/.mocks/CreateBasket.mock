@@ -1,0 +1,152 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/basketmicroservice/basket HTTP/1.1
+
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "basketId": "e04f9fc4-e41b-48ec-943b-2573c1ab75fa",
+    "people": [],
+    "addressDetails": {
+        "validation": "INVALID"
+    },
+    "contactDetails": {},
+    "termsAndConditions": {},
+    "flightsearchRequest": {},
+    "flightPassengerSeatMap": [
+        {
+            "sectorId": "1",
+            "seatOfferId": "",
+            "pos": "",
+            "selectedSeatOfferId": "",
+            "passengerId": "bf25a509-3c41-4105-a769-0bff6868aaf1",
+            "seatNumber": "",
+            "price": {}
+        }
+    ],
+    "earnPoints": {},
+    "insuranceQuotes": [],
+    "bookingDetails": {
+        "pnrLocator": "CJV3BF",
+        "pos": {
+            "countryCode": "GB",
+            "currencyCode": "GBP",
+            "cityCode" : "LON"
+        },
+        "passenger": [
+            {
+                "id": "bf25a509-3c41-4105-a769-0bff6868aaf1",
+                "firstName": "TEST",
+                "lastName": "TEST",
+                "customerId": "01-01",
+                "type": "ADT",
+                "membershipDetails": {}
+            }
+        ],
+        "slices": [
+            {
+                "id": "1",
+                "scheduledDepartureLocalDateTime": "2025-12-13T08:55:00",
+                "scheduledArrivalLocalDateTime": "2025-12-13T12:15:00",
+                "origin": {
+                    "terminalName": "Terminal 3",
+                    "code": "LHR",
+                    "airportName": "Heathrow Airport",
+                    "cityName": "London Heathrow",
+                    "countryCode": "GB"
+                },
+                "destination": {
+                    "terminalName": "Terminal 4",
+                    "code": "JFK",
+                    "airportName": "John F Kennedy International",
+                    "cityName": "New York",
+                    "countryCode": "US"
+                },
+                "segments": [
+                    {
+                        "id": "1",
+                        "operatingCarrier": {
+                            "flightNumber": "0003",
+                            "carrierCode": "VS",
+                            "carrierName": "Virgin Atlantic",
+                            "operationalSuffix": "VS"
+                        },
+                        "marketingCarrier": {
+                            "flightNumber": "0003",
+                            "carrierCode": "VS",
+                            "carrierName": "Virgin Atlantic",
+                            "operationalSuffix": "VS"
+                        },
+                        "scheduledDepartureLocalDateTime": "2025-12-13T08:55:00",
+                        "scheduledArrivalLocalDateTime": "2025-12-13T12:15:00",
+                        "origin": {
+                            "code": "LHR",
+                            "airportName": "Heathrow Airport",
+                            "cityName": "London Heathrow",
+                            "countryCode": "GB"
+                        },
+                        "destination": {
+                            "code": "JFK",
+                            "airportName": "John F Kennedy International",
+                            "cityName": "New York",
+                            "countryCode": "US"
+                        },
+                        "legs": [
+                            {
+                                "id": "1",
+                                "operating": {
+                                    "flightNumber": "0003",
+                                    "carrierCode": "VS",
+                                    "carrierName": "Virgin Atlantic"
+                                },
+                                "scheduledDepartureLocalDateTime": "2025-12-13T08:55:00",
+                                "scheduledArrivalLocalDateTime": "2025-12-13T12:15:00",
+                                "origin": {
+                                    "terminalName": "Terminal 3",
+                                    "code": "LHR",
+                                    "airportName": "Heathrow Airport",
+                                    "cityName": "London Heathrow",
+                                    "countryCode": "GB"
+                                },
+                                "destination": {
+                                    "terminalName": "Terminal 4",
+                                    "code": "JFK",
+                                    "airportName": "John F Kennedy International",
+                                    "cityName": "New York",
+                                    "countryCode": "US"
+                                },
+                                "cabinClass": {
+                                    "code": "C",
+                                    "productCode": "VSUP",
+                                    "name": "Upper Class"
+                                },
+                                "aircraft": {
+                                    "code": "351",
+                                    "name": "Airbus A350-1000"
+                                }
+                            }
+                        ],
+                        "fareBasisCode": "EY5EBDSA"
+                    }
+                ]
+            }
+        ],
+        "seatDetails": [
+            {
+                "segmentId": "1",
+                "seatNumber": "1D",
+                "seatClass": {
+                    "cabinCode": "C",
+                    "cabinProductCode": "VSUP"
+                },
+                "passengerId": "bf25a509-3c41-4105-a769-0bff6868aaf1"
+            }
+        ]
+    }
+}

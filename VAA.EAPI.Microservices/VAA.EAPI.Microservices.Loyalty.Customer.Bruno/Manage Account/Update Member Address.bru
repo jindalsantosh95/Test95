@@ -1,0 +1,38 @@
+meta {
+  name: Update Member Address
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{customer_base_url}}/{{customer_id}}/UpdateMemberAddress
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "newAddressDetails": {
+      "addressType": "Home",
+      "addressLine1": "{{customer_address_line_1}}",
+      "addressLine2": "{{customer_address_line_2}}",
+      "city": "{{customer_city}}",
+      "postalCode": "{{customer_postal_code}}",
+      "country": "{{customer_country}}",
+      "preferredFlag": "Y",
+      "addressVerified": true
+    },
+    "customerIds": [
+      "{{customer_id}}"
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

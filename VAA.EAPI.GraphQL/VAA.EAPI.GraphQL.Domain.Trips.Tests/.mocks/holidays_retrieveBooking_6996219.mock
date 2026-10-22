@@ -1,0 +1,838 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBooking HTTP/1.1
+
+$[?( @.bookingReference == '6996219' )]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "booking": {
+        "id": "6996219",        
+        "summary": {
+            "vipBooking": false,
+            "travelDates": {
+                        "startDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 30, day)}",
+                        "endDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 45, day)}"
+                    }
+        },
+        "payment": {
+            "deposit": 400.0,
+            "balanceDue": 22628.6,
+            "totalPriceToBePaid": 27554.32,
+            "totalPaidAmount": 4925.72,
+            "depositRealised": true,
+            "depositReceived": true,
+            "currencyCode": "GBP",
+            "pastPayments": [
+                {
+					"currencyAmount": 350.0,
+					"realisedDate": "2025-02-06T15:47:15",
+					"paymentCurrency": "GBP",
+					"paymentMethodCode": "CRCD",
+					"realised": true,
+					"receiptDate": "2025-02-06T15:47:15",
+                    "transactionType": "Pay"
+				},
+                {
+					"currencyAmount": 100.0,
+					"realisedDate": "2025-02-06T15:47:15",
+					"paymentCurrency": "GBP",
+					"paymentMethodCode": "CRCD",
+					"realised": true,
+					"receiptDate": "2025-02-06T15:47:15",
+                    "transactionType": "Refund"
+				},
+                {
+					"currencyAmount": 50.0,
+					"realisedDate": "2025-02-06T15:47:15",
+					"paymentCurrency": "GBP",
+					"paymentMethodCode": "BTRF",
+					"realised": true,
+					"receiptDate": "2025-02-06T15:47:15",
+                    "transactionType": "Refund"
+				},
+                {
+					"currencyAmount": 250.0,
+					"realisedDate": "2025-02-06T15:47:15",
+					"paymentCurrency": "GBP",
+					"paymentMethodCode": "IBTX",
+					"realised": true,
+					"receiptDate": "2025-02-06T15:47:15",
+                    "transactionType": "Correction"
+				}
+            ]
+        },
+        "status": "Confirmed",
+        "holidayProducts": [
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "VS",
+                    "highlight": "PREMIUM/ECONOMY CLASSIC",
+                    "primaryAttribute": "LHR",
+                    "secondaryAttribute": "LAX",
+                    "travelDates": {
+                        "startDate": "2026-10-27T00:00:00",
+                        "endDate": "2026-11-11T00:00:00"
+                    },
+                    "discount": 0.0,
+                    "vipBooking": false
+                },
+                "bookedUser": "WEB BOOKING",
+                "bookedDate": "2026-01-13T00:00:00",
+                "modifiedDate": "2026-01-13T00:00:00",
+                "rate": {
+                    "price": 3443.8,
+                    "priceWithTax": 3443.8,
+                    "tax": 2451.96,
+                    "basePrice": 3443.8,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "childCount": 1,
+                    "travellers": [
+                        {
+                            "firstName": "TestFirst NameThree",
+                            "lastName": "Walker",
+                            "leadTraveller": true,
+                            "title": "Mr",
+                            "dateOfBirth": "1988-11-29T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst NameFour",
+                            "lastName": "lawson",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "1989-03-25T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "TestFirst NameTwo",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "2008-07-03T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst Name",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "2017-11-21T00:00:00",
+                            "gender": "F"
+                        }
+                    ]
+                },
+                "flightDetails": {
+                    "sectors": [
+                        {
+                            "origin": {
+                                "code": "LHR"
+                            },
+                            "destination": {
+                                "code": "LAX"
+                            },
+                            "segments": [
+                                {
+                                    "operatingCarrier": {
+                                        "flightNumber": "7",
+                                        "carrierCode": "VS"
+                                    },
+                                    "marketingCarrier": {
+                                        "carrierCode": "VS"
+                                    },
+                                    "scheduledDepartureLocal": "2026-10-27T11:20:00",
+                                    "scheduledArrivalLocal": "2026-10-27T15:35:00",
+                                    "origin": {
+                                        "code": "LHR"
+                                    },
+                                    "destination": {
+                                        "code": "LAX"
+                                    },
+                                    "legs": [
+                                        {
+                                            "operating": {
+                                                "flightNumber": "7",
+                                                "carrierCode": "VS"
+                                            },
+                                            "marketing": {
+                                                "carrierCode": "VS"
+                                            },
+                                            "scheduledDepartureLocal": "2026-10-27T11:20:00",
+                                            "scheduledArrivalLocal": "2026-10-27T15:35:00",
+                                            "origin": {
+                                                "code": "LHR"
+                                            },
+                                            "destination": {
+                                                "code": "LAX"
+                                            },
+                                            "onAirDuration": "675",
+                                            "aircraft": {
+                                                "subfleetCode": "351"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "scheduledDepartureLocal": "2026-10-27T11:20:00",
+                            "scheduledArrivalLocal": "2026-10-27T15:35:00"
+                        },
+                        {
+                            "origin": {
+                                "code": "LAX"
+                            },
+                            "destination": {
+                                "code": "LHR"
+                            },
+                            "segments": [
+                                {
+                                    "operatingCarrier": {
+                                        "flightNumber": "8",
+                                        "carrierCode": "VS"
+                                    },
+                                    "marketingCarrier": {
+                                        "carrierCode": "VS"
+                                    },
+                                    "scheduledDepartureLocal": "2026-11-10T16:35:00",
+                                    "scheduledArrivalLocal": "2026-11-11T10:55:00",
+                                    "origin": {
+                                        "code": "LAX"
+                                    },
+                                    "destination": {
+                                        "code": "LHR"
+                                    },
+                                    "legs": [
+                                        {
+                                            "operating": {
+                                                "flightNumber": "8",
+                                                "carrierCode": "VS"
+                                            },
+                                            "marketing": {
+                                                "carrierCode": "VS"
+                                            },
+                                            "scheduledDepartureLocal": "2026-11-10T16:35:00",
+                                            "scheduledArrivalLocal": "2026-11-11T10:55:00",
+                                            "origin": {
+                                                "code": "LAX"
+                                            },
+                                            "destination": {
+                                                "code": "LHR"
+                                            },
+                                            "onAirDuration": "620",
+                                            "aircraft": {
+                                                "subfleetCode": "351"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "scheduledDepartureLocal": "2026-11-10T16:35:00",
+                            "scheduledArrivalLocal": "2026-11-11T10:55:00"
+                        }
+                    ],
+                    "airlineLocator": {
+                        "pnrLocator": "ETNWM4"
+                    },
+                    "isBookingSourceAir4": true
+                },
+                "isAncillaryProduct": false,
+                "tbxProductId": "FLT"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Chevrolet - Suburban or similar",
+                    "highlight": "Premium SUV",
+                    "primaryAttribute": "Los Angeles International Airport",
+                    "secondaryAttribute": "Los Angeles International Airport",
+                    "travelDates": {
+                        "startDate": "2026-10-27T00:00:00",
+                        "endDate": "2026-11-10T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "14",
+                        "durationType": "DAYS"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-10-27T17:35:00",
+                    "endTime": "2026-11-10T13:35:00",
+                    "travelTimings": {
+                        "startTime": "2026-10-27T17:35:00",
+                        "endTime": "2026-11-10T13:35:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "WEB BOOKING",
+                "bookedDate": "2026-01-13T00:00:00",
+                "modifiedDate": "2026-01-15T00:00:00",
+                "rate": {
+                    "price": 997.72,
+                    "priceWithTax": 997.72,
+                    "tax": 0.0,
+                    "basePrice": 997.72,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "childCount": 1,
+                    "travellers": [
+                        {
+                            "firstName": "TestFirst NameThree",
+                            "lastName": "Walker",
+                            "leadTraveller": true,
+                            "title": "Mr",
+                            "dateOfBirth": "1988-11-29T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst NameFour",
+                            "lastName": "lawson",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "1989-03-25T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "TestFirst NameTwo",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "2008-07-03T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst Name",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "2017-11-21T00:00:00",
+                            "gender": "F"
+                        }
+                    ]
+                },
+                "carDetails": {
+                    "name": " - ",
+                    "model": "Suburban or similar",
+                    "make": "Chevrolet",
+                    "class": "PSUV",
+                    "className": "Premium SUV",
+                    "type": "5D",
+                    "typeName": "5 Door",
+                    "maxBaggage": 6,
+                    "transmissionType": "Automatic",
+                    "pickUpLocations": [
+                        {
+                            "cityCode": "LAX",
+                            "cityName": "Los Angeles",
+                            "countryCode": "US",
+                            "countryName": "USA",
+                            "address": "Hertz\nLos Angeles Airport\n9000 Airport Blvd\nLOS ANGELES\nCA 900450000\n\nOpening times\n24/7"
+                        }
+                    ],
+                    "returnLocations": [
+                        {
+                            "cityCode": "LAX",
+                            "cityName": "Los Angeles",
+                            "countryCode": "US",
+                            "countryName": "USA",
+                            "address": "Hertz\nLos Angeles Airport\n9000 Airport Blvd\nLOS ANGELES\nCA 900450000\n\nOpening times\n24/7"
+                        }
+                    ],
+                    "destination": {
+                        "cityCode": "LAX",
+                        "cityName": "Los Angeles",
+                        "countryCode": "US",
+                        "countryName": "USA",
+                        "stateCode": "CA",
+                        "stateName": "California"
+                    },
+                    "selectedPickupLocation": {
+                        "cityCode": "LAX",
+                        "cityName": "Los Angeles",
+                        "countryCode": "US",
+                        "countryName": "USA",
+                        "address": "Hertz\nLos Angeles Airport\n9000 Airport Blvd\nLOS ANGELES\nCA 900450000\n\nOpening times\n24/7"
+                    },
+                    "selectedReturnLocation": {
+                        "cityCode": "LAX",
+                        "cityName": "Los Angeles",
+                        "countryCode": "US",
+                        "countryName": "USA",
+                        "address": "Hertz\nLos Angeles Airport\n9000 Airport Blvd\nLOS ANGELES\nCA 900450000\n\nOpening times\n24/7"
+                    },
+                    "contractType": "CAR_HIRE"
+                },
+                "isAncillaryProduct": false,
+                "tbxProductId": "CAR"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "29-10-2026",
+                    "highlight": "Universal Express Ticket",
+                    "primaryAttribute": " EXP - USA",
+                    "travelDates": {
+                        "startDate": "2026-10-29T00:00:00",
+                        "endDate": "2026-10-29T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "1",
+                        "durationType": "DAYS"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-10-29T12:00:00",
+                    "endTime": "2026-10-29T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-10-29T12:00:00",
+                        "endTime": "2026-10-29T00:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "WEB BOOKING",
+                "bookedDate": "2026-01-13T00:00:00",
+                "modifiedDate": "2026-01-13T00:00:00",
+                "rate": {
+                    "price": 651.4,
+                    "priceWithTax": 651.4,
+                    "tax": 0.0,
+                    "basePrice": 651.4,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "childCount": 1,
+                    "travellers": [
+                        {
+                            "firstName": "TestFirst NameThree",
+                            "lastName": "Walker",
+                            "leadTraveller": true,
+                            "title": "Mr",
+                            "dateOfBirth": "1988-11-29T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst NameFour",
+                            "lastName": "lawson",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "1989-03-25T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "TestFirst NameTwo",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "2008-07-03T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst Name",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "2017-11-21T00:00:00",
+                            "gender": "F"
+                        }
+                    ]
+                },
+                "isAncillaryProduct": false,
+                "tbxProductId": "GEN"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Codegen Booking Fee",
+                    "highlight": "Codegen Booking Fee",
+                    "primaryAttribute": "Forced Components - Hidden",
+                    "travelDates": {
+                        "startDate": "2026-10-27T00:00:00",
+                        "endDate": "2026-10-27T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-10-27T00:00:00",
+                    "endTime": "2026-10-27T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-10-27T00:00:00",
+                        "endTime": "2026-10-27T00:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "WEB BOOKING",
+                "bookedDate": "2026-01-13T00:00:00",
+                "modifiedDate": "2026-01-13T00:00:00",
+                "rate": {
+                    "price": 6.0,
+                    "priceWithTax": 6.0,
+                    "tax": 0.0,
+                    "basePrice": 6.0,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "childCount": 1,
+                    "travellers": [
+                        {
+                            "firstName": "TestFirst NameThree",
+                            "lastName": "Walker",
+                            "leadTraveller": true,
+                            "title": "Mr",
+                            "dateOfBirth": "1988-11-29T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst NameFour",
+                            "lastName": "lawson",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "1989-03-25T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "TestFirst NameTwo",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "2008-07-03T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst Name",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "2017-11-21T00:00:00",
+                            "gender": "F"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden",
+                    "destination": {}
+                },
+                "isAncillaryProduct": true,
+                "tbxProductId": "GEN"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "West Coast USA Contact",
+                    "highlight": "West Coast USA Contact Details",
+                    "primaryAttribute": "Resort Contact",
+                    "travelDates": {
+                        "startDate": "2026-10-27T00:00:00",
+                        "endDate": "2026-10-27T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-10-27T00:00:00",
+                    "endTime": "2026-10-27T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-10-27T00:00:00",
+                        "endTime": "2026-10-27T00:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "WEB BOOKING",
+                "bookedDate": "2026-01-13T00:00:00",
+                "modifiedDate": "2026-01-13T00:00:00",
+                "rate": {
+                    "price": 0.01,
+                    "priceWithTax": 0.01,
+                    "tax": 0.0,
+                    "basePrice": 0.01,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "childCount": 1,
+                    "travellers": [
+                        {
+                            "firstName": "TestFirst NameThree",
+                            "lastName": "Walker",
+                            "leadTraveller": true,
+                            "title": "Mr",
+                            "dateOfBirth": "1988-11-29T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst NameFour",
+                            "lastName": "lawson",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "1989-03-25T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "TestFirst NameTwo",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "2008-07-03T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst Name",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "2017-11-21T00:00:00",
+                            "gender": "F"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "RCD",
+                    "elementGroupName": "Resort Contact",
+                    "destination": {
+                        "countryCode": "US",
+                        "countryName": "USA"
+                    }
+                },
+                "isAncillaryProduct": true,
+                "tbxProductId": "GEN"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Florida Core",
+                    "highlight": "Florida Core",
+                    "primaryAttribute": "Forced Components - Hidden",
+                    "travelDates": {
+                        "startDate": "2026-10-27T00:00:00",
+                        "endDate": "2026-10-27T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-10-27T00:00:00",
+                    "endTime": "2026-10-27T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-10-27T00:00:00",
+                        "endTime": "2026-10-27T00:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "WEB BOOKING",
+                "bookedDate": "2026-01-13T00:00:00",
+                "modifiedDate": "2026-01-13T00:00:00",
+                "rate": {
+                    "price": 50.36,
+                    "priceWithTax": 50.36,
+                    "tax": 0.0,
+                    "basePrice": 50.36,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "childCount": 1,
+                    "travellers": [
+                        {
+                            "firstName": "TestFirst NameThree",
+                            "lastName": "Walker",
+                            "leadTraveller": true,
+                            "title": "Mr",
+                            "dateOfBirth": "1988-11-29T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst NameFour",
+                            "lastName": "lawson",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "1989-03-25T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "TestFirst NameTwo",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "2008-07-03T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst Name",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "2017-11-21T00:00:00",
+                            "gender": "F"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden",
+                    "destination": {
+                        "countryCode": "US",
+                        "countryName": "USA"
+                    }
+                },
+                "isAncillaryProduct": true,
+                "tbxProductId": "GEN"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "ATOL protected",
+                    "highlight": "ATOL protected",
+                    "primaryAttribute": "Atol protected",
+                    "travelDates": {
+                        "startDate": "2026-10-27T00:00:00",
+                        "endDate": "2026-10-27T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-10-27T00:00:00",
+                    "endTime": "2026-10-27T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-10-27T00:00:00",
+                        "endTime": "2026-10-27T00:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "WEB BOOKING",
+                "bookedDate": "2026-01-13T00:00:00",
+                "modifiedDate": "2026-01-13T00:00:00",
+                "rate": {
+                    "price": 10.0,
+                    "priceWithTax": 10.0,
+                    "tax": 0.0,
+                    "basePrice": 10.0,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "childCount": 1,
+                    "travellers": [
+                        {
+                            "firstName": "TestFirst NameThree",
+                            "lastName": "Walker",
+                            "leadTraveller": true,
+                            "title": "Mr",
+                            "dateOfBirth": "1988-11-29T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst NameFour",
+                            "lastName": "lawson",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "1989-03-25T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "TestFirst NameTwo",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "2008-07-03T00:00:00",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "TestFirst Name",
+                            "lastName": "walker",
+                            "leadTraveller": false,
+                            "title": "Miss",
+                            "dateOfBirth": "2017-11-21T00:00:00",
+                            "gender": "F"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "ATOLLEVY",
+                    "elementGroupName": "Atol protected",
+                    "destination": {}
+                },
+                "isAncillaryProduct": true,
+                "tbxProductId": "GEN"
+            }
+        ],
+        "travellers": [
+            {
+                "firstName": "TestFirst NameThree",
+                "lastName": "Walker",
+                "leadTraveller": true,
+                "title": "Mr",
+                "dateOfBirth": "1988-11-29T00:00:00",
+                "gender": "M"
+            },
+            {
+                "firstName": "TestFirst NameFour",
+                "lastName": "lawson",
+                "leadTraveller": false,
+                "title": "Miss",
+                "dateOfBirth": "1989-03-25T00:00:00",
+                "gender": "F"
+            },
+            {
+                "firstName": "TestFirst NameTwo",
+                "lastName": "walker",
+                "leadTraveller": false,
+                "title": "Mr",
+                "dateOfBirth": "2008-07-03T00:00:00",
+                "gender": "M"
+            },
+            {
+                "firstName": "TestFirst Name",
+                "lastName": "walker",
+                "leadTraveller": false,
+                "title": "Miss",
+                "dateOfBirth": "2017-11-21T00:00:00",
+                "gender": "F"
+            }
+        ],
+        "holidayPackageDetails": {
+            "agentReference": "444174",
+            "definiteDueDate": "2025-02-13",
+            "definiteDate": "2025-02-13",
+            "firmDueDate": "2025-02-13",
+            "firmDate": "2025-02-13",
+            "balanceDueDate": "2026-10-09",
+            "destination": {
+                "cityCode": "LAX",
+                "cityName": "Los Angeles",
+                "countryCode": "US",
+                "countryName": "USA"
+            }
+        }
+    },
+    "status": 200
+}

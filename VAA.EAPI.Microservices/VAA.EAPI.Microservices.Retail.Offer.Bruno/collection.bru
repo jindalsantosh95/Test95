@@ -1,0 +1,29 @@
+meta {
+  name: Retail Offer Microservice
+}
+
+headers {
+  Accept: application/json
+  x-correlation-id: RetailOffer-Bruno-{{$guid}}
+  api-channel: Bruno
+  Ocp-Apim-Subscription-Key: {{apim_subscription_key}}
+}
+
+auth {
+  mode: none
+}
+
+vars {
+  offer_base_url: http://localhost:7071/api
+  offer_id: replace-with-offer-id
+  flight_date: 2027-01-01
+  flight_number: 9
+}
+
+vars:secret [
+  apim_subscription_key
+]
+
+docs {
+  The Common, Delta and ITA folders mirror Triggers/Http in the Retail Offer microservice. Select Dev for APIM and set the apim_subscription_key secret locally. Disable the collection APIM subscription header when using the Local environment with the Functions host. The Reward Seat Calendar Availability request generates its dates 30 days ahead; replace other sample identifiers and dates with approved non-production data.
+}

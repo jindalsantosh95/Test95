@@ -1,0 +1,63 @@
+parameters: 
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  variableGroupName: ''
+  environment: ''
+  SourceFolder: 'C:\EAPI-Agent-6\_work\14\testAutomation'
+
+jobs: 
+  - job: 'SanityTesting'
+    displayName: 'Seat MS Sanity Testing'
+    pool:
+      name: ${{parameters.agentPool}}
+      vmImage: ${{parameters.agentSpecification}}
+    variables:
+      - group: ${{parameters.variableGroupName}}
+
+    steps:
+     - download: current
+       artifact: testAutomation 
+
+      # Task to copy the ARM files to artifactstagingdirectory
+     - task: CopyFiles@2
+       displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+       inputs:
+          SourceFolder: ${{parameters.SourceFolder}}
+          Contents: |
+           **/*
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+
+      # task to perform the sanity test 
+     - task: VSTest@2
+       displayName: 'Seat MS Sanity Testing' 
+       inputs:
+          testAssemblyVer2: |
+            ${{parameters.SourceFolder}}\VAA.EAPI.Automation.NewBookFlow\bin\release\net10.0\VAA.EAPI.Automation.NewBookFlow.dll
+            ${{parameters.SourceFolder}}\VAA.EAPI.Automation.NDC\bin\release\net10.0\VAA.EAPI.Automation.NDC.dll
+            **\*Tests.dll
+          testFiltercriteria: 'Category=SeatMS_CICD'
+          testRunTitle: 'Seat MS Sanity Test'
+          rerunFailedTests: true
+          rerunType: basedOnTestFailureCount
+          rerunMaxAttempts: 2
+       continueOnError: true
+
+     - task: PublishTestResults@2
+       displayName: 'Publish Test Results **/Log_For_*.txt'
+       inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**/Log_For_*.txt'    
+
+     - task: epsteam.EmailReportExtension.EmailReport.EmailReport@1
+       displayName: 'Send Email Report Always'
+       inputs:
+         subject: '[{environmentStatus}] {passPercentage} Seat Tests passed in $(env) stage for $(Build.BuildNumber) '
+         includeInToSectionStr: 2
+         toAddress: 'DF_TestingTeam@fly.virgin.com'
+         defaultDomain: VirginAtlantic365.onmicrosoft.com
+         includeCommits: false
+         includeOthersInTotal: true
+         enableTLS: true
+         smtpConnectionEndpoint: EmailServices

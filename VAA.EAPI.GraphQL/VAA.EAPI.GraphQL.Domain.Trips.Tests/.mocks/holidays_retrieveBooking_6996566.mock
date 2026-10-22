@@ -1,0 +1,1121 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBooking HTTP/1.1
+
+$[?( @.bookingReference == '6996566' )]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"booking": {
+		"id": "6996566",
+		"summary": {
+			"availabilityStatus": "AVAILABLE",
+			"productStatus": "CONFIRMED",
+			"name": "Package",
+			"primaryAttribute": "",
+			"secondaryAttribute": "",
+			"travelDates": {
+				"startDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 30, day)}",
+				"endDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 45, day)}"
+			},
+			"travelDuration": {
+				"duration": "18",
+				"durationType": "DAYS"
+			},
+			"discount": 0.0,
+			"vipBooking": false
+		},
+		"payment": {
+			"deposit": 700.0,
+			"balanceDue": 7179.81,
+			"totalPriceToBePaid": 7879.81,
+			"totalPaidAmount": 700.0,
+			"depositRealised": true,
+			"depositReceived": true,
+			"currencyCode": "GBP"
+		},
+		"status": "Confirmed [ RQ ]",
+		"holidayProducts": [
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "VS",
+					"highlight": "ECONOMY CLASSIC/ECONOMY CLASSIC",
+					"primaryAttribute": "LHR",
+					"secondaryAttribute": "MCO",
+					"travelDates": {
+						"startDate": "2027-08-18T00:00:00",
+						"endDate": "2027-09-02T00:00:00"
+					},
+					"discount": 0.0,
+					"vipBooking": false
+				},
+				"bookedUser": "WEB BOOKING",
+				"bookedDate": "2026-01-14T00:00:00",
+				"modifiedDate": "2026-01-14T00:00:00",
+				"rate": {
+					"price": 3213.25,
+					"priceWithTax": 3213.25,
+					"tax": 1851.68,
+					"basePrice": 3213.25,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"childCount": 2,
+					"travellers": [
+						{
+							"firstName": "Martina",
+							"lastName": "Tapscott",
+							"leadTraveller": true,
+							"title": "Mrs",
+							"dateOfBirth": "1980-12-17T00:00:00",
+							"gender": "F"
+						},
+						{
+							"firstName": "Robert",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1979-11-25T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "George",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mstr",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Elise",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Miss",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "F"
+						}
+					]
+				},
+				"flightDetails": {
+					"sectors": [
+						{
+							"origin": {
+								"code": "LHR"
+							},
+							"destination": {
+								"code": "MCO"
+							},
+							"segments": [
+								{
+									"operatingCarrier": {
+										"flightNumber": "135",
+										"carrierCode": "VS"
+									},
+									"marketingCarrier": {
+										"carrierCode": "VS"
+									},
+									"scheduledDepartureLocal": "2027-08-18T13:50:00",
+									"scheduledArrivalLocal": "2027-08-18T18:10:00",
+									"origin": {
+										"code": "LHR"
+									},
+									"destination": {
+										"code": "MCO"
+									},
+									"legs": [
+										{
+											"operating": {
+												"flightNumber": "135",
+												"carrierCode": "VS"
+											},
+											"marketing": {
+												"carrierCode": "VS"
+											},
+											"scheduledDepartureLocal": "2027-08-18T13:50:00",
+											"scheduledArrivalLocal": "2027-08-18T18:10:00",
+											"origin": {
+												"code": "LHR"
+											},
+											"destination": {
+												"code": "MCO"
+											},
+											"onAirDuration": "0",
+											"aircraft": {}
+										}
+									]
+								}
+							],
+							"scheduledDepartureLocal": "2027-08-18T13:50:00",
+							"scheduledArrivalLocal": "2027-08-18T18:10:00"
+						},
+						{
+							"origin": {
+								"code": "MCO"
+							},
+							"destination": {
+								"code": "LHR"
+							},
+							"segments": [
+								{
+									"operatingCarrier": {
+										"flightNumber": "136",
+										"carrierCode": "VS"
+									},
+									"marketingCarrier": {
+										"carrierCode": "VS"
+									},
+									"scheduledDepartureLocal": "2027-09-01T17:40:00",
+									"scheduledArrivalLocal": "2027-09-02T07:15:00",
+									"origin": {
+										"code": "MCO"
+									},
+									"destination": {
+										"code": "LHR"
+									},
+									"legs": [
+										{
+											"operating": {
+												"flightNumber": "136",
+												"carrierCode": "VS"
+											},
+											"marketing": {
+												"carrierCode": "VS"
+											},
+											"scheduledDepartureLocal": "2027-09-01T17:40:00",
+											"scheduledArrivalLocal": "2027-09-02T07:15:00",
+											"origin": {
+												"code": "MCO"
+											},
+											"destination": {
+												"code": "LHR"
+											},
+											"onAirDuration": "0",
+											"aircraft": {}
+										}
+									]
+								}
+							],
+							"scheduledDepartureLocal": "2027-09-01T17:40:00",
+							"scheduledArrivalLocal": "2027-09-02T07:15:00"
+						}
+					],
+					"airlineLocator": {
+						"pnrLocator": ""
+					},
+					"isBookingSourceAir4": true
+				},
+				"isAncillaryProduct": false,
+				"tbxProductType": "FLT",
+				"tbxProductId": "FLT~1"
+			},
+			{
+				"summary": {
+					"productStatus": "ONREQUEST",
+					"name": "14-Day Disney Magic Ticket",
+					"highlight": "14-Day Disney Ticket.",
+					"primaryAttribute": "Disney - Park Tickets",
+					"travelDates": {
+						"startDate": "2027-08-18T00:00:00",
+						"endDate": "2027-09-04T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "14",
+						"durationType": "DAYS"
+					},
+					"discount": 0.0,
+					"startTime": "2027-08-18T12:00:00",
+					"endTime": "2027-09-04T00:00:00",
+					"travelTimings": {
+						"startTime": "2027-08-18T12:00:00",
+						"endTime": "2027-09-04T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "DISNEY",
+					"elementGroupName": "Disney - Park Tickets"
+				},
+				"bookedUser": "WEB BOOKING",
+				"bookedDate": "2026-01-14T00:00:00",
+				"modifiedDate": "2026-01-14T00:00:00",
+				"rate": {
+					"price": 2134.0,
+					"priceWithTax": 2134.0,
+					"tax": 0.0,
+					"basePrice": 2134.0,
+					"currencyInContract": "USD",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"childCount": 2,
+					"travellers": [
+						{
+							"firstName": "Martina",
+							"lastName": "Tapscott",
+							"leadTraveller": true,
+							"title": "Mrs",
+							"dateOfBirth": "1980-12-17T00:00:00",
+							"gender": "F"
+						},
+						{
+							"firstName": "Robert",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1979-11-25T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "George",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mstr",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Elise",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Miss",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "F"
+						}
+					]
+				},
+				"isAncillaryProduct": false,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~1"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Bahama Bay Resort",
+					"highlight": "2 Bed San Salvador Superior Villa Garden View",
+					"primaryAttribute": "Room Only",
+					"secondaryAttribute": "2 Bed San Salvador Superior Villa Garden View (2 2 0) x 1",
+					"travelDates": {
+						"startDate": "2027-08-18T00:00:00",
+						"endDate": "2027-09-01T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "14",
+						"durationType": "NIGHTS"
+					},
+					"discount": 0.0,
+					"startTime": "2027-08-18T14:00:00",
+					"endTime": "2027-09-01T10:00:00",
+					"travelTimings": {
+						"startTime": "2027-08-18T14:00:00",
+						"endTime": "2027-09-01T10:00:00"
+					},
+					"vipBooking": false
+				},
+				"bookedUser": "WEB BOOKING",
+				"bookedDate": "2026-01-14T00:00:00",
+				"modifiedDate": "2026-01-14T00:00:00",
+				"rate": {
+					"price": 1899.84,
+					"priceWithTax": 1899.84,
+					"tax": 0.0,
+					"basePrice": 1899.84,
+					"currencyInContract": "USD",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"childCount": 2,
+					"travellers": [
+						{
+							"firstName": "Martina",
+							"lastName": "Tapscott",
+							"leadTraveller": true,
+							"title": "Mrs",
+							"dateOfBirth": "1980-12-17T00:00:00",
+							"gender": "F"
+						},
+						{
+							"firstName": "Robert",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1979-11-25T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "George",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mstr",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Elise",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Miss",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "F"
+						}
+					]
+				},
+				"hotelDetails": {
+					"roomDetails": [
+						{
+							"roomType": "2 Bed San Salvador Superior Villa Garden View",
+							"boardBasis": "Room Only",
+							"roomNumber": "1",
+							"paxCount": 4,
+							"travellerInfo": {
+								"adultCount": 2,
+								"childCount": 2,
+								"travellers": [
+									{
+										"leadTraveller": true,
+										"dateOfBirth": "1980-12-17T00:00:00"
+									},
+									{
+										"leadTraveller": false,
+										"dateOfBirth": "1979-11-25T00:00:00"
+									},
+									{
+										"leadTraveller": false,
+										"dateOfBirth": "2017-08-09T00:00:00"
+									},
+									{
+										"leadTraveller": false,
+										"dateOfBirth": "2017-08-09T00:00:00"
+									}
+								]
+							},
+							"rate": {
+								"price": 1899.84,
+								"priceWithTax": 1899.84,
+								"tax": 0.0,
+								"basePrice": 0.0,
+								"totalTax": 0.0,
+								"totalTaxBase": 0.0
+							},
+							"mealPlanName": "Room Only"
+						}
+					],
+					"name": "Bahama Bay Resort - 2 Bed San Salvador Superior Villa Garden View",
+					"startDate": "2027-08-18T14:00:00",
+					"endDate": "2027-09-01T10:00:00",
+					"hotelCode": "H2223",
+					"accommodationType": "H",
+					"hotelAddress": "400 Gran Bahama Boulevard Davenport 33897",
+					"destination": {
+						"cityCode": "ISM",
+						"cityName": "Kissimmee",
+						"countryCode": "US",
+						"countryName": "USA"
+					}
+				},
+				"isAncillaryProduct": false,
+				"tbxProductType": "HTL",
+				"tbxProductId": "HTL~1"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Ford - Escape or similar",
+					"highlight": "Intermediate SUV",
+					"primaryAttribute": "Orlando International Airport",
+					"secondaryAttribute": "Orlando International Airport",
+					"travelDates": {
+						"startDate": "2026-08-18T00:00:00",
+						"endDate": "2026-09-01T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "14",
+						"durationType": "DAYS"
+					},
+					"discount": 0.0,
+					"startTime": "2026-08-18T19:30:00",
+					"endTime": "2026-09-01T14:30:00",
+					"travelTimings": {
+						"startTime": "2026-08-18T19:30:00",
+						"endTime": "2026-09-01T14:30:00"
+					},
+					"vipBooking": false
+				},
+				"bookedUser": "524345",
+				"bookedDate": "2026-01-14T00:00:00",
+				"modifiedDate": "2026-01-16T00:00:00",
+				"rate": {
+					"price": 653.3,
+					"priceWithTax": 653.3,
+					"tax": 0.0,
+					"basePrice": 653.3,
+					"currencyInContract": "USD",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"childCount": 2,
+					"travellers": [
+						{
+							"firstName": "Martina",
+							"lastName": "Tapscott",
+							"leadTraveller": true,
+							"title": "Mrs",
+							"dateOfBirth": "1980-12-17T00:00:00",
+							"gender": "F"
+						},
+						{
+							"firstName": "Robert",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1979-11-25T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "George",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mstr",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Elise",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Miss",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "F"
+						}
+					]
+				},
+				"carDetails": {
+					"name": " - ",
+					"model": "Escape or similar",
+					"make": "Ford",
+					"class": "IFAR",
+					"className": "Intermediate SUV",
+					"type": "5D",
+					"typeName": "5 Door",
+					"maxBaggage": 4,
+					"transmissionType": "Automatic",
+					"pickUpLocations": [
+						{
+							"cityCode": "ORL",
+							"cityName": "Orlando ",
+							"countryCode": "US",
+							"countryName": "USA",
+							"address": "Hertz\n\n*Car pick up/drop off is A side*\n\nOrlando International Airport\n1 Airport Blvd\nORLANDO\nFL 32812\n\nOpening times\n 24/7"
+						}
+					],
+					"returnLocations": [
+						{
+							"cityCode": "ORL",
+							"cityName": "Orlando ",
+							"countryCode": "US",
+							"countryName": "USA",
+							"address": "Hertz\n\n*Car pick up/drop off is A side*\n\nOrlando International Airport\n1 Airport Blvd\nORLANDO\nFL 32812\n\nOpening times\n 24/7"
+						}
+					],
+					"destination": {
+						"cityCode": "ORL",
+						"cityName": "Orlando ",
+						"countryCode": "US",
+						"countryName": "USA",
+						"stateCode": "FL",
+						"stateName": "Florida"
+					},
+					"selectedPickupLocation": {
+						"cityCode": "ORL",
+						"cityName": "Orlando ",
+						"countryCode": "US",
+						"countryName": "USA",
+						"address": "Hertz\n\n*Car pick up/drop off is A side*\n\nOrlando International Airport\n1 Airport Blvd\nORLANDO\nFL 32812\n\nOpening times\n 24/7"
+					},
+					"selectedReturnLocation": {
+						"cityCode": "ORL",
+						"cityName": "Orlando ",
+						"countryCode": "US",
+						"countryName": "USA",
+						"address": "Hertz\n\n*Car pick up/drop off is A side*\n\nOrlando International Airport\n1 Airport Blvd\nORLANDO\nFL 32812\n\nOpening times\n 24/7"
+					},
+					"contractType": "CAR_HIRE"
+				},
+				"isAncillaryProduct": false,
+				"tbxProductType": "CAR",
+				"tbxProductId": "CAR~1"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Codegen Booking Fee",
+					"highlight": "Codegen Booking Fee",
+					"primaryAttribute": "Forced Components - Hidden",
+					"travelDates": {
+						"startDate": "2027-08-18T00:00:00",
+						"endDate": "2027-08-18T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2027-08-18T00:00:00",
+					"endTime": "2027-08-18T00:00:00",
+					"travelTimings": {
+						"startTime": "2027-08-18T00:00:00",
+						"endTime": "2027-08-18T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "FCHIDDEN",
+					"elementGroupName": "Forced Components - Hidden"
+				},
+				"bookedUser": "WEB BOOKING",
+				"bookedDate": "2026-01-14T00:00:00",
+				"modifiedDate": "2026-01-14T00:00:00",
+				"rate": {
+					"price": 6.0,
+					"priceWithTax": 6.0,
+					"tax": 0.0,
+					"basePrice": 6.0,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"childCount": 2,
+					"travellers": [
+						{
+							"firstName": "Martina",
+							"lastName": "Tapscott",
+							"leadTraveller": true,
+							"title": "Mrs",
+							"dateOfBirth": "1980-12-17T00:00:00",
+							"gender": "F"
+						},
+						{
+							"firstName": "Robert",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1979-11-25T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "George",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mstr",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Elise",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Miss",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "F"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "FCHIDDEN",
+					"elementGroupName": "Forced Components - Hidden",
+					"destination": {}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~2"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Own Transport Arrangements - Florida",
+					"highlight": "Own Transport Arrangements Florida",
+					"primaryAttribute": "Own Transport Arrangements",
+					"travelDates": {
+						"startDate": "2027-08-18T00:00:00",
+						"endDate": "2027-08-18T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2027-08-18T00:00:00",
+					"endTime": "2027-08-18T00:00:00",
+					"travelTimings": {
+						"startTime": "2027-08-18T00:00:00",
+						"endTime": "2027-08-18T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "OWA",
+					"elementGroupName": "Own Transport Arrangements"
+				},
+				"bookedUser": "WEB BOOKING",
+				"bookedDate": "2026-01-14T00:00:00",
+				"modifiedDate": "2026-01-14T00:00:00",
+				"rate": {
+					"price": 0.04,
+					"priceWithTax": 0.04,
+					"tax": 0.0,
+					"basePrice": 0.04,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 4,
+					"travellers": [
+						{
+							"firstName": "Martina",
+							"lastName": "Tapscott",
+							"leadTraveller": true,
+							"title": "Mrs",
+							"dateOfBirth": "1980-12-17T00:00:00",
+							"gender": "F"
+						},
+						{
+							"firstName": "Robert",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1979-11-25T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "George",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mstr",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Elise",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Miss",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "F"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "OWA",
+					"elementGroupName": "Own Transport Arrangements",
+					"destination": {}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~3"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Florida Core",
+					"highlight": "Florida Core",
+					"primaryAttribute": "Forced Components - Hidden",
+					"travelDates": {
+						"startDate": "2027-08-18T00:00:00",
+						"endDate": "2027-08-18T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2027-08-18T00:00:00",
+					"endTime": "2027-08-18T00:00:00",
+					"travelTimings": {
+						"startTime": "2027-08-18T00:00:00",
+						"endTime": "2027-08-18T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "FCHIDDEN",
+					"elementGroupName": "Forced Components - Hidden"
+				},
+				"bookedUser": "WEB BOOKING",
+				"bookedDate": "2026-01-14T00:00:00",
+				"modifiedDate": "2026-01-14T00:00:00",
+				"rate": {
+					"price": 50.36,
+					"priceWithTax": 50.36,
+					"tax": 0.0,
+					"basePrice": 50.36,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"childCount": 2,
+					"travellers": [
+						{
+							"firstName": "Martina",
+							"lastName": "Tapscott",
+							"leadTraveller": true,
+							"title": "Mrs",
+							"dateOfBirth": "1980-12-17T00:00:00",
+							"gender": "F"
+						},
+						{
+							"firstName": "Robert",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1979-11-25T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "George",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mstr",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Elise",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Miss",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "F"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "FCHIDDEN",
+					"elementGroupName": "Forced Components - Hidden",
+					"destination": {
+						"countryCode": "US",
+						"countryName": "USA"
+					}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~4"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "Florida Resort Contact",
+					"highlight": "Florida Contact Details",
+					"primaryAttribute": "Resort Contact",
+					"travelDates": {
+						"startDate": "2027-08-18T00:00:00",
+						"endDate": "2027-08-18T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2027-08-18T00:00:00",
+					"endTime": "2027-08-18T00:00:00",
+					"travelTimings": {
+						"startTime": "2027-08-18T00:00:00",
+						"endTime": "2027-08-18T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "RCD",
+					"elementGroupName": "Resort Contact"
+				},
+				"bookedUser": "WEB BOOKING",
+				"bookedDate": "2026-01-14T00:00:00",
+				"modifiedDate": "2026-01-14T00:00:00",
+				"rate": {
+					"price": 0.02,
+					"priceWithTax": 0.02,
+					"tax": 0.0,
+					"basePrice": 0.02,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"childCount": 2,
+					"travellers": [
+						{
+							"firstName": "Martina",
+							"lastName": "Tapscott",
+							"leadTraveller": true,
+							"title": "Mrs",
+							"dateOfBirth": "1980-12-17T00:00:00",
+							"gender": "F"
+						},
+						{
+							"firstName": "Robert",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1979-11-25T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "George",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mstr",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Elise",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Miss",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "F"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "RCD",
+					"elementGroupName": "Resort Contact",
+					"destination": {
+						"countryCode": "US",
+						"countryName": "USA"
+					}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~5"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "ATOL protected",
+					"highlight": "ATOL protected",
+					"primaryAttribute": "Atol protected",
+					"travelDates": {
+						"startDate": "2027-08-18T00:00:00",
+						"endDate": "2027-08-18T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2027-08-18T00:00:00",
+					"endTime": "2027-08-18T00:00:00",
+					"travelTimings": {
+						"startTime": "2027-08-18T00:00:00",
+						"endTime": "2027-08-18T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "ATOLLEVY",
+					"elementGroupName": "Atol protected"
+				},
+				"bookedUser": "WEB BOOKING",
+				"bookedDate": "2026-01-14T00:00:00",
+				"modifiedDate": "2026-01-14T00:00:00",
+				"rate": {
+					"price": 10.0,
+					"priceWithTax": 10.0,
+					"tax": 0.0,
+					"basePrice": 10.0,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"childCount": 2,
+					"travellers": [
+						{
+							"firstName": "Martina",
+							"lastName": "Tapscott",
+							"leadTraveller": true,
+							"title": "Mrs",
+							"dateOfBirth": "1980-12-17T00:00:00",
+							"gender": "F"
+						},
+						{
+							"firstName": "Robert",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1979-11-25T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "George",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mstr",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Elise",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Miss",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "F"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "ATOLLEVY",
+					"elementGroupName": "Atol protected",
+					"destination": {}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~6"
+			},
+			{
+				"summary": {
+					"productStatus": "CONFIRMED",
+					"name": "KSP - Florida",
+					"highlight": "KSP - Florida",
+					"primaryAttribute": "Forced Components - Hidden",
+					"travelDates": {
+						"startDate": "2027-08-18T00:00:00",
+						"endDate": "2027-08-18T00:00:00"
+					},
+					"travelDuration": {
+						"duration": "0",
+						"durationType": "NA"
+					},
+					"discount": 0.0,
+					"startTime": "2027-08-18T00:00:00",
+					"endTime": "2027-08-18T00:00:00",
+					"travelTimings": {
+						"startTime": "2027-08-18T00:00:00",
+						"endTime": "2027-08-18T00:00:00"
+					},
+					"vipBooking": false,
+					"elementGroup": "FCHIDDEN",
+					"elementGroupName": "Forced Components - Hidden"
+				},
+				"bookedUser": "WEB BOOKING",
+				"bookedDate": "2026-01-14T00:00:00",
+				"modifiedDate": "2026-01-14T00:00:00",
+				"rate": {
+					"price": 48.0,
+					"priceWithTax": 48.0,
+					"tax": 0.0,
+					"basePrice": 48.0,
+					"currencyInContract": "GBP",
+					"totalTax": 0.0,
+					"totalTaxBase": 0.0
+				},
+				"travellersComposition": {
+					"adultCount": 2,
+					"childCount": 2,
+					"travellers": [
+						{
+							"firstName": "Martina",
+							"lastName": "Tapscott",
+							"leadTraveller": true,
+							"title": "Mrs",
+							"dateOfBirth": "1980-12-17T00:00:00",
+							"gender": "F"
+						},
+						{
+							"firstName": "Robert",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mr",
+							"dateOfBirth": "1979-11-25T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "George",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Mstr",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "M"
+						},
+						{
+							"firstName": "Elise",
+							"lastName": "Tapscott",
+							"leadTraveller": false,
+							"title": "Miss",
+							"dateOfBirth": "2017-08-09T00:00:00",
+							"gender": "F"
+						}
+					]
+				},
+				"genericProductDetails": {
+					"elementGroup": "FCHIDDEN",
+					"elementGroupName": "Forced Components - Hidden",
+					"destination": {}
+				},
+				"isAncillaryProduct": true,
+				"tbxProductType": "GEN",
+				"tbxProductId": "GEN~7"
+			}
+		],
+		"travellers": [
+			{
+				"firstName": "Martina",
+				"lastName": "Tapscott",
+				"leadTraveller": true,
+				"title": "Mrs",
+				"dateOfBirth": "1980-12-17T00:00:00",
+				"gender": "F"
+			},
+			{
+				"firstName": "Robert",
+				"lastName": "Tapscott",
+				"leadTraveller": false,
+				"title": "Mr",
+				"dateOfBirth": "1979-11-25T00:00:00",
+				"gender": "M"
+			},
+			{
+				"firstName": "George",
+				"lastName": "Tapscott",
+				"leadTraveller": false,
+				"title": "Mstr",
+				"dateOfBirth": "2017-08-09T00:00:00",
+				"gender": "M"
+			},
+			{
+				"firstName": "Elise",
+				"lastName": "Tapscott",
+				"leadTraveller": false,
+				"title": "Miss",
+				"dateOfBirth": "2017-08-09T00:00:00",
+				"gender": "F"
+			}
+		],
+		"holidayPackageDetails": {
+			"agentReference": "WEB BOOKING",
+			"definiteDueDate": "2026-01-14T00:00:00",
+			"definiteDate": "2026-01-14T00:00:00",
+			"firmDueDate": "2026-01-14T00:00:00",
+			"firmDate": "2026-01-14T00:00:00",
+			"balanceDueDate": "2026-05-26T00:00:00",
+			"destination": {
+				"cityCode": "ORL",
+				"cityName": "Orlando ",
+				"countryCode": "US",
+				"countryName": "USA"
+			}
+		}
+	},
+	"status": 200
+}

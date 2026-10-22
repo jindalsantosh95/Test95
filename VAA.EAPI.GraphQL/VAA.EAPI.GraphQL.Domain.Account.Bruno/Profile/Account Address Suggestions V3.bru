@@ -1,0 +1,67 @@
+meta {
+  name: Account Address Suggestions V3
+  type: graphql
+  seq: 18
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query AccountAddressSuggestionsV3 {
+    accountAddressSuggestionsV3(
+      request: {
+        addressLine1: "{{account_address_line1}}"
+        postCode: "{{account_postal_code}}"
+        countryCode: "{{account_country_code}}"
+      }
+    ) {
+      flowId
+      candidates {
+        type
+        text
+        description
+        reference
+      }
+    }
+  }
+}
+
+script:post-response {
+  const body = typeof res.getBody === "function" ? res.getBody() : res.body;
+  const reference = body?.data?.accountAddressSuggestionsV3?.candidates
+    ?.find(candidate => candidate.type === "Address")
+    ?.reference;
+
+  if (reference) bru.setVar("address_lookup_v3_reference", reference);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  No additional v3 subscription key is required from this client. GraphQL uses
+  its existing server-side EnrolmentMSOcpKey and OAuth application token for
+  AddressLookupAPIAppId, matching v2. No end-user token, session header,
+  custom context token or extra Functions key is needed.
+
+  The existing GraphQL REST host also discovers this operation as POST
+  /api/v1/accountAddressSuggestionsV3. Send the normal REST request wrapper:
+  {"request":{"addressLine1":"4","postCode":"RH10 6DF","countryCode":"GB"}}
+
+  The existing free-text query field is still supported instead of addressLine1/postCode.
+  Do not combine address fields with query or reference. Selection still uses a fresh Address reference.
+
+  Suggestions now automatically expand nested containers in batches of at most five Find calls.
+  Only unique Address candidates are returned; choose one for the selection mutation.
+  The service permits at most 20 container expansion calls, then returns SearchTooBroad
+  if more are needed. Narrow the search in that case. Existing per-Find limits still apply.
+  For an existing valid container reference, {"request":{"reference":"<fresh Container reference>"}}
+  remains supported. Expansion never retrieves full address details.
+  Use your configured REST host URL, not the GraphQL endpoint URL above.
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Future Bookings by Phone
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{order_data_base_url}}/FutureBookings
+  body: none
+  auth: inherit
+}
+
+headers {
+  FCNumber:
+  Email:
+  PhoneNo: {{phone_number}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

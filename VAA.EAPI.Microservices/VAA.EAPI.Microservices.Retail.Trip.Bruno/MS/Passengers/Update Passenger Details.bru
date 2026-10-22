@@ -1,0 +1,53 @@
+meta {
+  name: Update Passenger Details
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{trip_base_url}}/passengerDetails/{{trip_booking_id}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "passengerInformation": {
+      "bookingId": "{{trip_booking_id}}",
+      "passengers": [
+        {
+          "passengerResourceId": "{{passenger_resource_id}}",
+          "advancePassengerInformation": {
+            "passengerContact": {
+              "email": {
+                "address": "jane.doe@example.com"
+              },
+              "phone": {
+                "sequenceNum": "1",
+                "deviceType": "CELL",
+                "countryDialingCode": "44",
+                "number": "7000000000"
+              },
+              "refused": false,
+              "applyToAllPassengers": false
+            }
+          },
+          "actionType": "ADD"
+        }
+      ]
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  This request changes passenger contact data. Replace the placeholder IDs and fake contact details with approved test data, and verify the selected environment before sending.
+}

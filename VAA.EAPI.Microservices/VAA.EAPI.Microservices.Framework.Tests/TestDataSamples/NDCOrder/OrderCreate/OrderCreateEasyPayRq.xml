@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<IATA_OrderCreateRQ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersMessage">
+	<DistributionChain>
+		<DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<ContactInfo>
+				<ContactInfoID>AgentContactInfoID</ContactInfoID>
+				<EmailAddress>
+					<EmailAddressText>agentemail@gmail.com</EmailAddressText>
+				</EmailAddress>
+			</ContactInfo>
+			<Ordinal>1</Ordinal>
+			<OrgRole>Seller</OrgRole>
+			<ParticipatingOrg>
+				<Name>Skyscanner</Name>
+				<OrgID>91281035</OrgID>
+			</ParticipatingOrg>
+		</DistributionChainLink>
+		<DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<Ordinal>2</Ordinal>
+			<OrgRole>Carrier</OrgRole>
+			<ParticipatingOrg>
+				<Name>VIRGIN ATLANTIC</Name>
+				<OrgID>VS</OrgID>
+			</ParticipatingOrg>
+		</DistributionChainLink>
+	</DistributionChain>
+	<Request>
+		<CreateOrder xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<AcceptSelectedQuotedOfferList>
+				<SelectedPricedOffer>
+					<OfferRefID>6623012e-006e-482c-a3f8-fd8764b27402|ACV2waURWe4USro0BfhNF1001</OfferRefID>
+					<OwnerCode>VS</OwnerCode>
+					<SelectedOfferItem>
+						<OfferItemRefID>6623012e-006e-482c-a3f8-fd8764b27402|ACV2waURWe4USro0BfhNF1001-1</OfferItemRefID>
+						<PaxRefID>ADULT_1</PaxRefID>
+					</SelectedOfferItem>
+					<TotalOfferPriceAmount CurCode="GBP">1779.22</TotalOfferPriceAmount>
+				</SelectedPricedOffer>
+			</AcceptSelectedQuotedOfferList>
+		</CreateOrder>
+		<DataLists xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<ContactInfoList>
+				<ContactInfo>
+					<ContactInfoID>CID_1</ContactInfoID>
+					<EmailAddress>
+						<EmailAddressText>test.skyscanner@fly.virgin.com</EmailAddressText>
+					</EmailAddress>
+					<Phone>
+						<ContactTypeText>Home</ContactTypeText>
+						<CountryDialingCode>44</CountryDialingCode>
+						<PhoneNumber>123456</PhoneNumber>
+					</Phone>
+				</ContactInfo>
+			</ContactInfoList>
+			<PaxList>
+				<Pax>
+					<ContactInfoRefID>CID_1</ContactInfoRefID>
+					<Individual>
+						<Birthdate>1973-11-06</Birthdate>
+						<GenderCode>U</GenderCode>
+						<GivenName>DAVID</GivenName>
+						<Surname>SMITH</Surname>
+					</Individual>
+					<PaxID>ADULT_1</PaxID>
+					<PTC>ADT</PTC>
+				</Pax>
+			</PaxList>
+		</DataLists>
+		<PaymentFunctions xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<PaymentProcessingDetails>
+				<Amount CurCode="GBP">1779.22</Amount>
+				<PaymentMethod>
+					<IATA_EasyPay>
+						<AccountNumber>2235291458511803</AccountNumber>
+						<ExpirationDate>0126</ExpirationDate>
+					</IATA_EasyPay>
+				</PaymentMethod>
+			</PaymentProcessingDetails>
+		</PaymentFunctions>
+	</Request>
+</IATA_OrderCreateRQ>

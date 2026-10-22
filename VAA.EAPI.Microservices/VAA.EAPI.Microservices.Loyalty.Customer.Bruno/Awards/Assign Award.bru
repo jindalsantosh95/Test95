@@ -1,0 +1,35 @@
+meta {
+  name: Assign Award
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{customer_base_url}}/customer/assignaward/{{customer_member_number}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "id": "{{$guid}}",
+    "type": "VAA.PowerApp.Customer.AssignLoyaltyAward",
+    "source": "Bruno",
+    "subject": "AssignLoyaltyAward",
+    "time": "2026-01-01T00:00:00Z",
+    "datacontenttype": "application/json",
+    "data": {
+      "memberId": "{{customer_member_number}}",
+      "productName": "Top Member"
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

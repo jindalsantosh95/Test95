@@ -1,0 +1,21 @@
+info:
+  name: Address Selection V3
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{baseUrl}}/v3/address-selections"
+  body:
+    type: json
+    data: |-
+      {
+        "reference": "{{addressLookupV3Reference}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

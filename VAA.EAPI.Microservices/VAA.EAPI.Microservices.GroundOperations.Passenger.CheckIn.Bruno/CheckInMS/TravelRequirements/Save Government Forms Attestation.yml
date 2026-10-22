@@ -1,0 +1,40 @@
+info:
+  name: Save Government Forms Attestation
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{checkinms}}/TravelRequirements/SaveGovernmentFormsAttestation"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: |-
+      {
+          "requirementsId": "{{requirementsId}}",
+          "passengerId": "{{pax1_id}}",
+          "sliceId": "{{slice1_id}}",
+          "id": "32738f95-5023-4a23-bf8c-16dd388cbaff",
+          "linkId": "Maldives Traveller Declaration",
+          "text": "Maldives Traveller Declaration",
+          "href": "https://imuga.immigration.gov.mv/"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        var json = res.getBody();
+
+        if (json?.requirementsId) {
+          bru.setVar("requirementsId", json.requirementsId);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

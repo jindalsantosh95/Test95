@@ -1,0 +1,122 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.GroundOperations.LoungeManagement.SkyTeam*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.GroundOperations.LoungeManagement.SkyTeam*
+    exclude:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.GroundOperations.LoungeManagement.SkyTeam.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.GroundOperations.LoungeManagement.SkyTeam*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.GroundOperations.LoungeManagement.SkyTeam*
+    exclude:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.GroundOperations.LoungeManagement.SkyTeam.bruno
+
+variables: 
+  - group: Common_Variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: AzureWebJobsStorage
+  - name: agentPool
+    value: 'Azure Pipelines'    
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release' 
+  - name: testRepoPath_SIT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'   
+  - name: testRepoPath_UAT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'     
+  - name: rootPath
+    value: 'VAA.EAPI.Microservices' 
+  - name: subRootPath
+    value: 'VAA.EAPI.Microservices'   
+  - name: applicationName
+    value: 'GroundOperations.LoungeManagement.SkyTeam'
+  - name: microserviceName
+    value: 'loungems' 
+  - name: apimurlname
+    value: 'loungems'
+  - name: productId
+    value: 'Loyalty-loungems'  
+  - name: functionAppName_DEV
+    value: 'avadeunafnloungemgmt' 
+  - name: functionAppName_SIT
+    value: 'avateunafnloungemgmt' 
+  - name: functionAppName_UAT
+    value: 'avaseunafnloungemgmt' 
+  - name: functionAppName_PRD
+    value: 'avapeunafnloungemgmt'         
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location) 
+      rootPath: $(rootPath)  
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      productId: $(productId)
+      applicationName: $(applicationName)
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      subscriptionId_Prod: $(subscriptionId_Prod)  
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_slot_apim_withproduct_withoutvnet.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification) 
+      location: $(location) 
+      applicationName: $(applicationName)
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      productId: $(productId)
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)  
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      subscriptionId_Prod: $(subscriptionId_Prod)              
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_PRD: $(functionAppName_PRD)  
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)                
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+   

@@ -1,0 +1,47 @@
+meta {
+  name: Search Trip List
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{trip_base_url}}/tripsList/search
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  [
+    {
+      "using": "PNR",
+      "confirmationNum": "{{confirmation_number}}",
+      "encryptedConfirmationNum": "",
+      "ticketNum": "",
+      "creditCardNum": "",
+      "loyaltyNum": "",
+      "givenNames": "{{given_names}}",
+      "surname": "{{surname}}",
+      "departureAirportCode": "{{departure_airport_code}}"
+    },
+    {
+      "using": "PNR",
+      "confirmationNum": "{{confirmation_number_2}}",
+      "encryptedConfirmationNum": "",
+      "ticketNum": "",
+      "creditCardNum": "",
+      "loyaltyNum": "",
+      "givenNames": "{{given_names_2}}",
+      "surname": "{{surname_2}}",
+      "departureAirportCode": "{{departure_airport_code}}"
+    }
+  ]
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

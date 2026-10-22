@@ -1,0 +1,222 @@
+parameters:
+  agentPool: ''
+  agentPool_deployment: ''
+  agentSpecification: ''
+  resourceGroupName_DEV: ''
+  resourceGroupName_SIT: ''
+  resourceGroupName_UAT: ''
+  resourceGroupName_PROD: ''
+  applicationName: ''
+  microserviceName: ''
+  apimurlname: ''
+  buildConfiguration: ''
+  functionAppName_DEV: ''
+  functionAppName_SIT: ''
+  functionAppName_UAT: ''
+  functionAppName_PROD: ''
+  APIM_IP_DEV_SIT_UAT: '' 
+  APIM_IP_PRD: ''
+  WEBSITE_DNS_ALT_SERVER: ''
+  WEBSITE_DNS_SERVER: ''
+  workspaceResourceId: ''
+  workspaceResourceId_prod: ''
+  APIM_NonProd: ''
+  APIMResourceGroupName_NonProd: ''  
+  APIMServiceConnection_NonProd: ''
+  APIMSubscriptionId_NonProd: ''
+  AppInsightsName_DEV: ''
+  AppInsightsName_SIT: ''
+  AppInsightsName_UAT: ''
+  AppInsightsName_PROD: ''
+  storageAccountName_DEV: ''
+  storageAccountName_SIT: ''
+  storageAccountName_UAT: ''
+  storageAccountName_PROD: ''
+  VARIABLE_GROUP_NAME_SCHEMA: ''
+  VARIABLE_GROUP_NAME_NBF_DEV: ''
+  VARIABLE_GROUP_NAME_NBF_SIT: ''
+  VARIABLE_GROUP_NAME_NBF_UAT: ''
+  SLACK_API_TOKEN: ''
+  SLACK_TITLE: ''
+  stitchfunctionAppName_DEV: ''
+  stitchfunctionAppName_SIT: ''
+  stitchfunctionAppName_UAT: ''
+  stitchfunctionAppName_PROD: ''
+  stitchrgname_DEV: ''
+  stitchrgname_SIT: ''
+  stitchrgname_UAT: ''
+  stitchrgname_PROD: ''
+  Redis_DEV: ''
+  Redis_SIT: ''
+  Redis_UAT: ''
+  Redis_PROD: ''
+
+
+
+stages:
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/DEV.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_graphql_paxops.yaml  
+        parameters:
+          functionAppName: ${{parameters.functionAppName_DEV}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}
+          ApplicationInsightName: ${{parameters.AppInsightsName_DEV}}
+          storageAccountName: ${{parameters.storageAccountName_DEV}}
+          stitchfunctionAppName: ${{parameters.stitchfunctionAppName_DEV}}
+          stitchrgname: ${{parameters.stitchrgname_DEV}}
+          Redis_ConnectionString: ${{parameters.Redis_DEV}}
+
+  - stage: 'GraphqlPaxops_DEV'
+    displayName: 'GraphqlPaxops_DEV' 
+    dependsOn: DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/CheckIn/functional_testing_GraphqlCheckIn.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_SIT}}
+
+  - stage: 'SchemaValidation_DEV'
+    displayName: 'SchemaValidation_DEV' 
+    dependsOn: DEV
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/functional_testing_SchemaValidation.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_SCHEMA}}
+          SLACK_API_TOKEN: ${{parameters.SLACK_API_TOKEN}}
+          SLACK_TITLE: ${{parameters.SLACK_TITLE}}
+          
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/SIT.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_graphql_paxops.yaml  
+        parameters:
+          functionAppName: ${{parameters.functionAppName_SIT}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_SIT}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}
+          ApplicationInsightName: ${{parameters.AppInsightsName_SIT}}
+          storageAccountName: ${{parameters.storageAccountName_SIT}}
+          stitchfunctionAppName: ${{parameters.stitchfunctionAppName_SIT}}
+          stitchrgname: ${{parameters.stitchrgname_SIT}}
+          Redis_ConnectionString: ${{parameters.Redis_SIT}}
+
+  - stage: 'GraphqlPaxops_SIT'
+    displayName: 'GraphqlPaxops_SIT' 
+    dependsOn: SIT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/CheckIn/functional_testing_GraphqlCheckIn.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_SIT}}
+          
+  
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/UAT.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_graphql_paxops.yaml   
+        parameters:
+          functionAppName: ${{parameters.functionAppName_UAT}}
+          agentPool: ${{parameters.agentPool}}
+          agentPool_deployment: ${{parameters.agentPool_deployment}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{parameters.resourceGroupName_UAT}}       
+          serviceConnection: ${{variables.serviceConnection}}
+          subscriptionId: ${{variables.subscriptionId}}
+          APIM_IP: ${{parameters.APIM_IP_DEV_SIT_UAT}}
+          WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+          WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}    
+          workspaceResourceId: ${{parameters.workspaceResourceId}}
+          ApplicationInsightName: ${{parameters.AppInsightsName_UAT}}
+          storageAccountName: ${{parameters.storageAccountName_UAT}}
+          stitchfunctionAppName: ${{parameters.stitchfunctionAppName_UAT}}
+          stitchrgname: ${{parameters.stitchrgname_UAT}}
+          Redis_ConnectionString: ${{parameters.Redis_UAT}}
+
+  - stage: 'GraphqlPaxops_UAT'
+    displayName: 'GraphqlPaxops_UAT' 
+    dependsOn: UAT
+    jobs:  
+      - template: /VAA.EAPI.Pipelines/functions/CheckIn/functional_testing_GraphqlCheckIn.yaml
+        parameters:
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          buildConfiguration: ${{parameters.buildConfiguration}} 
+          variableGroupName: ${{parameters.VARIABLE_GROUP_NAME_NBF_UAT}}
+
+ 
+          
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines.DigitalServices/variables_digital/PRD.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), contains(variables['Build.SourceBranch'], 'HotFix')))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines.DigitalServices/functions_digital/deployment_graphql_paxops.yaml 
+        parameters:
+           functionAppName: ${{parameters.functionAppName_PROD}}
+           agentPool: ${{parameters.agentPool}}
+           agentPool_deployment: ${{parameters.agentPool_deployment}}
+           agentSpecification: ${{parameters.agentSpecification}}
+           applicationName: ${{parameters.applicationName}}        
+           environment: ${{variables.environment}}
+           location: ${{variables.location}}          
+           resourceGroupName: ${{parameters.resourceGroupName_PROD}}        
+           serviceConnection: ${{variables.serviceConnection}}
+           subscriptionId: ${{variables.subscriptionId}}   
+           APIM_IP: ${{parameters.APIM_IP_PRD}}  
+           WEBSITE_DNS_ALT_SERVER: ${{parameters.WEBSITE_DNS_ALT_SERVER}}
+           WEBSITE_DNS_SERVER: ${{parameters.WEBSITE_DNS_SERVER}}  
+           workspaceResourceId: ${{parameters.workspaceResourceId_prod}}  
+           ApplicationInsightName: ${{parameters.AppInsightsName_PROD}}
+           storageAccountName: ${{parameters.storageAccountName_PROD}}    
+           stitchfunctionAppName: ${{parameters.stitchfunctionAppName_PROD}}
+           stitchrgname: ${{parameters.stitchrgname_PROD}}
+           Redis_ConnectionString: ${{parameters.Redis_PROD}}
+                         

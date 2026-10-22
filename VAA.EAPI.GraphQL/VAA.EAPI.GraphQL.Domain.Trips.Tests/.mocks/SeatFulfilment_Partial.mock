@@ -1,0 +1,28 @@
+###Request
+PATCH https://testresources.virginatlantic.com/DEV/SeatMicroService/SeatFulfilment HTTP/1.1
+
+$[?(@.bookingReferences.rloc == 'CI777T')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "orderNumber": "febf8417-e9d1-4188-b72f-c96ce8eee76a",
+    "orderItems": [
+        {
+            "orderItemNumber": "1",
+            "flightIdRef": "01",
+            "seatNumber": "46D",
+            "electronicMiscellaneousDocumentNumber": "9320176252730",
+            "paymentDetails": [
+                {}
+            ]
+        }
+    ],
+    "error": [ { "message" : "SEAT NOT AVAILABLE"} ]
+}

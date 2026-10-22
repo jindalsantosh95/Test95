@@ -1,0 +1,68 @@
+meta {
+  name: Verify Email
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{identity_base_url}}/VerifyEmail
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "objectId": "{{entra_user_id}}",
+    "customerDetails": {
+      "firstName": "{{identity_first_name}}",
+      "lastName": "{{identity_last_name}}",
+      "gender": "{{identity_gender}}",
+      "dateOfBirth": "{{identity_date_of_birth}}",
+      "password": "{{identity_password}}",
+      "fcNumber": "{{identity_member_number}}",
+      "customerId": "{{identity_customer_id}}",
+      "memberType": "Individual",
+      "status": "ACTIVE",
+      "enrollmentChannel": "{{identity_enrolment_channel}}",
+      "termsAndConditionsAccepted": true,
+      "contactDetails": {
+        "emailDetails": [
+          {
+            "usage": "Personal",
+            "emailId": "{{identity_email}}",
+            "preferredFlag": "Y"
+          }
+        ],
+        "phoneDetails": [
+          {
+            "phoneType": "Mobile",
+            "usage": "Personal",
+            "countryCode": "{{identity_phone_country_code}}",
+            "phoneNumber": "{{identity_phone_number}}",
+            "preferredFlag": "Y"
+          }
+        ]
+      },
+      "addressDetails": [
+        {
+          "addressType": "Home",
+          "addressLine1": "{{identity_address_line1}}",
+          "city": "{{identity_city}}",
+          "postalCode": "{{identity_postal_code}}",
+          "countryCode": "{{identity_country_code}}",
+          "countryName": "{{identity_country_code}}",
+          "preferredFlag": "Y"
+        }
+      ]
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

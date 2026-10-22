@@ -1,0 +1,222 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "FunctionAppName": {
+      "value": "AVASEUNAFNCRMMICROSERV"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPCUSTOMERM"
+    },
+    "AppInsightsName": {
+      "value": "AVASEUNAICUSTOMERMS"
+    },
+    "APPINSIGHTS_INSTRUMENTATIONKEY": {
+      "value": "73853322-7317-4092-a5ac-746f8d185ef6"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avaseunstcrmms"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AzureWebJobsStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNCRMMICROSERV-Config-StorageAccount/)"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "KeyVaultUri": {
+      "value": "https://avaseunkvems.vault.azure.net/"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-Website-DNS-ALT-Server/)"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-WEBSITE-DNS-SERVER/)"
+    },
+    "WEBSITE_CONTENTSHARE": {
+      "value": "avaseunstcrmms"
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-CRM Microservice"
+    },
+    "OpenApi__Description": {
+      "value": "This API provides ability to update bank details of customer&apos;s against a Case and Payment number in CRM System"
+    },
+    "OpenApi__HostNames": {
+      "value": "https://testresources.virginatlantic.com/dev/crmmicroservice/,https://testresources.virginatlantic.com/sit/crmmicroservice/,https://testresources.virginatlantic.com/crmmicroservice/,https://resources.virginatlantic.com/crmmicroservice/"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/e9e1b8d1-fb62-42c6-9cb7-adc063028d81/.default"
+    },
+    "OpenApi__ForceHttps": {
+      "value": false
+    },
+    "OpenApi__ForceHttp": {
+      "value": true
+    },
+    "CRMPaymentEventHandlerTopicName": {
+      "value": "paymentupdaterequesteventmessage"
+    },
+    "CRMPaymentEventSubscriptionName": {
+      "value": "PaymentUpdateEventSubscriber"
+    },
+    "ServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNCRMMICROSERV-Config-ServiceBusConnectionString/)"
+    },
+    "AzureAd:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAd:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/Common-Config-AzureAd-TenantId/)"
+    },
+    "AzureAd:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+    "CRMWebApi:Endpoint": {
+      "value": "https://vaauat.api.crm4.dynamics.com"
+    },
+    "CRMWebApi:PaymentFilterParams": {
+      "value": "$select=vaa_paymentid,vaa_paymentnumber,vaa_casenumber,vaa_bankname,vaa_ifsc,vaa_bankaccountdetailsentered,vaa_paymentstage&$filter=vaa_paymentnumber eq '{paymentNumber}'"
+    },
+    "CRMWebApi:CallCRMAPIMUrl": {
+      "value": "Y"
+    },
+    "CRMWebApi:CountryFilterParams": {
+      "value": "$select=vaa_countryid,vaa_name,vaa_territoryshortname,vaa_territorycode,vaa_type&$filter=vaa_name eq '{countryName}'"
+    },
+    "CRMWebApi:Version": {
+      "value": "9.2"
+    },
+    "AzureAd:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNCRMMICROSERV-Config-AzureAd-ClientId/)"
+    },
+    "AzureAd:ClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNCRMMICROSERV-Config-AzureAd-ClientSecret/)"
+    },
+    "MicroServiceDBKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNCRMMICROSERV-Config-StorageAccount/)"
+    },
+    "MicroServiceEventStoreTableName": {
+      "value": "CRMPaymentEventStore"
+    },
+    "MicroServiceResponseTableName": {
+      "value": "CRMPaymentResponse"
+    },
+    "AppSetting:CRMWebApi:GetEndpointAPIM": {
+      "value": "https://Testresources.virginatlantic.com/crm/{crm_entity}"
+    },
+    "AppSetting:CRMWebApi:PatchEndpointAPIM": {
+      "value": "https://Testresources.virginatlantic.com/crm/{crm_entity}({entityId})"
+    },
+    "AppSetting:CRMWebApi:OcpSubKey": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNCRMMICROSERV-Config-CRMWebApi-OcpSubKey/)"
+    },
+    "AppSetting:ResponsePollingCount": {
+      "value": "50"
+    },
+    "AppSetting:ResponseDelayTimeInMS": {
+      "value": "100"
+    },
+    "AppSetting:CRMWebApi:PaymentUpdateResponseUrl": {
+      "value": "https://Testresources.virginatlantic.com/uat/crmmicroservice/updatepaymentstatus/{correlationid}"
+    },
+    "AppSetting:CRMWebApi:ResponsiveFeature": {
+      "value": true
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantictest@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+
+    //Azure B2C Settings
+
+    "AzureAdB2C:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNCRMMICROSERV-Config-AzureAd-ClientId/)"
+    },
+    "AzureAdB2C:Instance": {
+      "value": "https://login.microsoftonline.com/"
+    },
+    "AzureAdB2C:SignUpSignInPolicyId": {
+      "value": "https://sts.windows.net/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "AzureAdB2C:TenantId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkvems.vault.azure.net/secrets/AVASEUNAFNCAMPAIGNMANAGEMENT-Config-AzureAdTenantId/)"
+    },
+    "AzureAdB2C:TokenV1Issuer": {
+      "value": "https://sts.windows.net"
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "CRM API",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the CRM API AFN",
+        "ApplicationUsageIdList": "AVASEUNAFNCRM"
+      }
+    }
+  }
+}

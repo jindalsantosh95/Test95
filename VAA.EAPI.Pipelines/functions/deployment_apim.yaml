@@ -1,0 +1,99 @@
+parameters:
+  applicationName: ''
+  microserviceName: ''
+  #productId: ''
+  stage: ''
+  apimEnv: ''
+  apiEnv: ''
+  apisEnv: ''
+  agentPool: ''
+  agentSpecification: ''
+  functionAppName: ''
+  resourceGroupName: ''
+  serviceConnection: ''
+  APIMName: ''
+  apimurlname: ''
+  APIMResourceGroupName: ''
+  APIMServiceConnection: ''
+  APIMSubscriptionId: ''
+  APIM_IP: ''
+  apimParametersFile: ''
+
+jobs:
+  - job:  '${{parameters.stage}}'
+    cancelTimeoutInMinutes: 5
+
+    pool:
+     name: ${{parameters.agentPool}}
+     vmImage: ${{parameters.agentSpecification}}
+
+    steps:
+        - download: current
+          artifact: drop
+
+        # Task to Remove APIM access restrictions
+        - task: AzurePowerShell@5
+          displayName: 'Disable APIM - Access Restrictions'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            azurePowerShellVersion: LatestVersion
+            ScriptType: 'InlineScript'
+            Inline: |
+              Remove-AzWebAppAccessRestrictionRule -ResourceGroupName ${{parameters.resourceGroupName}} -WebAppName ${{parameters.functionAppName}} -Name Allow_APIM
+
+        # Task to set allow all for access
+        - task: AzurePowerShell@5
+          displayName: 'Allow all - Access '
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            azurePowerShellVersion: LatestVersion
+            ScriptType: 'InlineScript'
+            Inline: |
+              $resource = Get-AzResource -ResourceType Microsoft.Web/sites/config -ResourceGroupName ${{parameters.resourceGroupName}} -ResourceName '${{parameters.functionAppName}}/web' -ApiVersion '2023-12-01' -ErrorAction Stop
+              Set-AzResource -ResourceId $resource.ResourceId -ApiVersion '2023-12-01' -Properties @{ ipSecurityRestrictionsDefaultAction = 'Allow' } -UsePatchSemantics -Force -ErrorAction Stop | Out-Null
+
+        # Task to publish API in APIM via Swagger
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Publish API in APIM via Swagger'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.APIMServiceConnection}}
+            subscriptionid: ${{parameters.APIMSubscriptionId}}
+            resourceGroupName:  ${{parameters.APIMResourceGroupName}}
+            location:  'North Europe'
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy_apim.json
+            ${{ if ne(parameters.apimParametersFile, '') }}:
+              csmParametersFile: $(Pipeline.workspace)/drop/${{ parameters.apimParametersFile }}
+            deploymentMode: 'Incremental'
+            overrideParameters: -APIMName ${{parameters.APIMName}} -functionAppName ${{parameters.functionAppName}} -apisEnv ${{parameters.apisEnv}} -apimEnv ${{parameters.apimEnv}} -apiEnv ${{parameters.apiEnv}} -applicationName ${{parameters.microserviceName}} -apimurlname ${{parameters.apimurlname}}
+
+        # Run after success, failure or cancellation. Deny first, then restore the APIM rule.
+        - task: AzurePowerShell@5
+          displayName: 'Restore APIM-only access (always)'
+          condition: always()
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            azurePowerShellVersion: LatestVersion
+            ScriptType: 'InlineScript'
+            Inline: |
+              $ErrorActionPreference = 'Stop'
+              $resourceGroup = '${{parameters.resourceGroupName}}'
+              $appName = '${{parameters.functionAppName}}'
+              $apimIp = '${{parameters.APIM_IP}}'
+              $expectedIp = if ($apimIp.Contains('/')) { $apimIp } else { "$apimIp/32" }
+              $resource = Get-AzResource -ResourceType Microsoft.Web/sites/config -ResourceGroupName $resourceGroup -ResourceName "$appName/web" -ApiVersion '2023-12-01' -ErrorAction Stop -ExpandProperties
+              Set-AzResource -ResourceId $resource.ResourceId -ApiVersion '2023-12-01' -Properties @{ ipSecurityRestrictionsDefaultAction = 'Deny' } -UsePatchSemantics -Force -ErrorAction Stop | Out-Null
+              $resource = Get-AzResource -ResourceId $resource.ResourceId -ApiVersion '2023-12-01' -ErrorAction Stop -ExpandProperties
+              if ($resource.Properties.ipSecurityRestrictionsDefaultAction -ne 'Deny') {
+                throw 'Default-deny access restriction was not restored.'
+              }
+              $rule = @($resource.Properties.ipSecurityRestrictions | Where-Object name -eq 'Allow_APIM')
+              if ($rule.Count -eq 0) {
+                Add-AzWebAppAccessRestrictionRule -ResourceGroupName $resourceGroup -WebAppName $appName -Name Allow_APIM -Priority 1 -Action Allow -IpAddress $apimIp -ErrorAction Stop
+              }
+              $resource = Get-AzResource -ResourceId $resource.ResourceId -ApiVersion '2023-12-01' -ErrorAction Stop -ExpandProperties
+              $rule = @($resource.Properties.ipSecurityRestrictions | Where-Object name -eq 'Allow_APIM')
+              if ($resource.Properties.ipSecurityRestrictionsDefaultAction -ne 'Deny' -or
+                  $rule.Count -ne 1 -or $rule[0].action -ne 'Allow' -or
+                  ($rule[0].ipAddress -ne $apimIp -and $rule[0].ipAddress -ne $expectedIp) -or $rule[0].priority -ne 1) {
+                throw 'APIM-only access restriction verification failed.'
+              }

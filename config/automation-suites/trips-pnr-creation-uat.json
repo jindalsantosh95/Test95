@@ -1,0 +1,17 @@
+{
+  "$schema": "./schema.json",
+  "schemaVersion": 1,
+  "name": "Trips PNR Creation with UAT accounts",
+  "slug": "trips-pnr-creation-uat",
+  "owner": "Trips",
+  "projectPath": "VAA.EAPI.Automation/VAA.EAPI.Automation.Trips/VAA.EAPI.Automation.Trips.csproj",
+  "categories": [
+    "PNRsWithFlyingClubMembers"
+  ],
+  "summaryConfigPath": "config/regression-summary/pnr/pnr-creation-summary.json",
+  "slackConfigPath": "config/regression-summary/pnr/pnr-creation-slack.json",
+  "timeoutMinutes": 60,
+  "runnerLabels": [ "self-hosted", "Windows", "eapi-automation" ],
+  "requiredVariables": [ "BASE_URL", "BASE_URL_DIGITAL", "GRAPHQL_MOBILE_PATH", "GRAPHQL_MYACCOUNT_PUBLIC_PATH", "GRAPHQL_TRIPS_SECURE" ],
+  "requiredSecrets": [ "KEY_VAULT_URL", "KEY_VAULT_TENANT_ID", "KEY_VAULT_CLIENT_ID", "KEY_VAULT_CLIENT_SECRET", "SLACK_WEBHOOK_URL_TRIPS" ]
+}

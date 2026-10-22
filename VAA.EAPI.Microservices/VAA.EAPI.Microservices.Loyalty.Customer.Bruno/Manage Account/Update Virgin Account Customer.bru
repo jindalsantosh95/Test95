@@ -1,0 +1,37 @@
+meta {
+  name: Update Virgin Account Customer
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{customer_base_url}}/UpdateVirginAccountCustomer
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "customerId": "{{customer_id}}",
+    "loyaltyNumber": "{{customer_member_number}}",
+    "firstName": "{{customer_first_name}}",
+    "lastName": "{{customer_last_name}}",
+    "dateOfBirth": "{{customer_date_of_birth}}",
+    "emailId": "{{customer_email}}",
+    "phoneNumber": "{{customer_phone_number}}",
+    "countryCode": "{{customer_phone_country_code}}",
+    "lastUpdatedBy": "{{customer_channel_user_id}}",
+    "createdBy": "{{customer_channel_user_id}}",
+    "channel": "{{customer_enrolment_channel}}",
+    "title": "Ms"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

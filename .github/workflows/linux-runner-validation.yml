@@ -1,0 +1,155 @@
+name: Linux runner validation
+
+on:
+  push:
+    branches: [codex/linux-actions-migration]
+  pull_request:
+    # This fixed matrix validates runner portability. Ordinary PRs use the scoped harness.
+    paths:
+      - '.github/workflows/linux-runner-validation.yml'
+      - 'scripts/check-linux-runner-compatibility.ps1'
+      - 'VAA.EAPI.Automation/scripts/verify.ps1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: linux-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [VAA.EAPI.Infrastructure.Tests, VAA.EAPI.Microservices.CRM.Content.Tests, VAA.EAPI.Microservices.Retail.Offer.Tests, VAA.EAPI.Microservices.GroundOperations.Pax.CheckIn.Tests]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Run representative backend unit tests
+        shell: pwsh
+        run: |
+          dotnet test 'VAA.EAPI.Microservices/${{ matrix.project }}/${{ matrix.project }}.csproj' -c Release --results-directory 'TestResults/linux-backend/${{ matrix.project }}' --logger 'trx;LogFileName=tests.trx' --collect:'XPlat Code Coverage' -p:UseMicrosoftTestingPlatformRunner=false -p:TestingPlatformDotnetTestSupport=false
+      - name: Analyse current test run
+        if: always()
+        shell: pwsh
+        run: ./scripts/analyse-test-run-results.ps1 -TrxPath 'TestResults/linux-backend/${{ matrix.project }}/tests.trx' -SuiteName '${{ matrix.project }}' -EnvironmentName linux
+      - name: Upload backend evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-backend-${{ matrix.project }}
+          path: TestResults/linux-backend/${{ matrix.project }}/**
+
+  agent-command-portability:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install delivery CLI
+        run: npm install -g @openai/codex@0.146.0
+      - name: Check configured commands without executing agent work
+        shell: pwsh
+        env:
+          DELIVERY_COMMAND: ${{ secrets.SEQUENCE_GOAL_AGENT_COMMAND_JSON }}
+          REVIEW_COMMAND: ${{ secrets.SEQUENCE_GOAL_REVIEW_AGENT_COMMAND_JSON }}
+          COMMENT_COMMAND: ${{ secrets.SEQUENCE_GOAL_HUMAN_COMMENT_AGENT_COMMAND_JSON }}
+        run: |
+          foreach ($name in @('DELIVERY_COMMAND', 'REVIEW_COMMAND', 'COMMENT_COMMAND')) {
+            $value = [Environment]::GetEnvironmentVariable($name)
+            if ([string]::IsNullOrWhiteSpace($value)) { throw "$name is unavailable; cannot validate portability." }
+            $command = ConvertFrom-Json $value
+            $executable = if ($command -is [array]) { [string]$command[0] } else { [string]$command.executable }
+            if ($executable -ne 'codex') { throw "$name needs separate review; this probe only validates the installed codex executable." }
+            if ($value -match '(?i)([a-z]:\\|cmd\.exe|powershell\.exe|\.cmd\b)') { throw "$name contains a Windows-specific command or path." }
+            Write-Host "$name resolves to the Linux-supported delivery CLI."
+          }
+          codex --version
+          if ($LASTEXITCODE -ne 0) { throw 'Delivery CLI failed on Linux.' }
+
+  offline-automation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Free disk space for automation build
+        shell: bash
+        run: |
+          df -h /
+          # This job builds .NET and runs offline tests; it does not build Android apps or CodeQL databases.
+          sudo rm -rf -- /usr/local/lib/android /opt/hostedtoolcache/CodeQL
+          df -h /
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Reclaim runner disk space
+        shell: bash
+        run: |
+          df -h /
+          sudo rm -rf /usr/local/lib/android /usr/share/swift /opt/ghc
+          docker system prune --all --force || true
+          df -h /
+      - name: Fetch comparison ref
+        run: git fetch --depth=1 origin main:refs/remotes/origin/main
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Check portable resource paths and checkout
+        shell: pwsh
+        run: ./scripts/check-linux-runner-compatibility.ps1
+      - name: Automation build and offline harness
+        shell: pwsh
+        working-directory: VAA.EAPI.Automation
+        run: ./scripts/verify.ps1 -Base origin/main
+      - name: Upload offline test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-offline-tests
+          path: VAA.EAPI.Automation/TestResults/linux-*/**
+          if-no-files-found: warn
+
+  harness-exercises:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Fetch comparison ref
+        run: git fetch --depth=1 origin main:refs/remotes/origin/main
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Validate manifest routing
+        shell: pwsh
+        run: |
+          ./scripts/resolve-automation-suite.ps1 -ManifestPath config/automation-suites/trips-backend-regression.json
+          ./scripts/resolve-verify-scopes.ps1 -ChangedFiles @('.github/workflows/qa-run-automation-suite.yml')
+      - name: Validate scheduled harness exercises
+        shell: pwsh
+        run: |
+          $exercises = @(
+            'invoke-agent-recovery-exercise',
+            'invoke-self-correcting-loop-exercise',
+            'invoke-behavior-harness-mutation-exercise',
+            'invoke-architecture-fitness-mutation-exercise',
+            'invoke-agent-memory-lifecycle-exercise',
+            'invoke-agent-resource-budget-exercise',
+            'invoke-agent-tool-environment-exercise',
+            'invoke-agent-observability-exercise',
+            'invoke-harness-maturity-evidence-exercise'
+          )
+          $failed = @()
+          foreach ($exercise in $exercises) {
+            & pwsh -NoProfile -File "scripts/$exercise.ps1"
+            if ($LASTEXITCODE -ne 0) { $failed += $exercise }
+          }
+          if ($failed.Count -gt 0) { throw "Failed exercises: $($failed -join ', ')" }

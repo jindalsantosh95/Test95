@@ -1,0 +1,42 @@
+meta {
+  name: Account Address Details
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  query AccountAddressDetails {
+    accountAddressDetails(
+      request: {
+        countryCode: "{{account_country_code}}"
+        postCode: "{{account_postal_code}}"
+        addressLine1: "{{account_address_line1}}"
+      }
+    ) {
+      addressType
+      addressLine1
+      addressLine2
+      addressLine3
+      companyName
+      city
+      postalCode
+      region
+      countryCode
+      countryName
+      preferredFlag
+      addressVerified
+      valid
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

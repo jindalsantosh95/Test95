@@ -1,0 +1,124 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.GroundOperations.Passenger.CheckIn*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.GroundOperations.Passenger.CheckIn*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.GroundOperations.Passenger.CheckIn.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.GroundOperations.Passenger.CheckIn*
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.GroundOperations.Passenger.CheckIn*
+    exclude: 
+      - VAA.EAPI.Microservices/VAA.EAPI.Microservices.GroundOperations.Passenger.CheckIn.bruno
+
+variables: 
+  - group: Common_Variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: AzureWebJobsStorage  
+  - name: agentPool
+    value: 'Azure Pipelines'   
+  - name: agentPool1
+    value: 'EAPITestingAgent' 
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: subRootPath
+    value: 'VAA.EAPI.Microservices'  
+  - name: applicationName
+    value: 'GroundOperations.Passenger.CheckIn'
+  - name: microserviceName
+    value: 'checkinmicroservice' 
+  - name: productId
+    value: 'EAPI-CheckIn' 
+  - name: apimurlname
+    value: 'CheckIn'            
+  - name: functionAppName_DEV
+    value: 'avadeunafncheckinmicroservice' 
+  - name: functionAppName_SIT
+    value: 'avateunafncheckinmicroservice'
+  - name: functionAppName_UAT
+    value: 'avaseunafncheckinmicroservice' 
+  - name: functionAppName_PRD
+    value: 'avapeunafncheckinmicroservice'
+  - name: testRepoPath_SIT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'   
+  - name: testRepoPath_UAT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'  
+
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/CheckIn/build_checkIn.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+  # CD (Deployment) Pipeline
+  - template: functions/CheckIn/release_apim_nonslot.yaml
+    parameters:
+      agentPool: $(agentPool) 
+      agentPool_Sanity: $(agentPool1)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      buildConfiguration: $(buildConfiguration)
+      agentSpecification: $(agentSpecification) 
+      applicationName: $(applicationName)
+      microserviceName: $(microserviceName)
+      apimurlname: $(apimurlname)
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+      subscriptionId_NonProd: $(subscriptionId_NonProd)
+      subscriptionId_Prod: $(subscriptionId_Prod)      
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_PRD: $(functionAppName_PRD)
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)
+      APIMResourceGroupName_NonProd: $(APIMResourceGroupName_NonProd)       
+      APIMServiceConnection_NonProd: $(APIMServiceConnection_NonProd)
+      APIMSubscriptionId_NonProd: $(APIMSubscriptionId_NonProd) 
+      APIMResourceGroupName_Prod: $(APIMResourceGroupName_Prod)       
+      APIMServiceConnection_Prod: $(APIMServiceConnection_Prod)
+      APIMSubscriptionId_Prod: $(APIMSubscriptionId_Prod)
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)
+      VARIABLE_GROUP_NAME_NBF_DEV: "TESTING_NBF_DEV"
+      VARIABLE_GROUP_NAME_NBF_SIT: "TESTING_NBF_SIT"
+      VARIABLE_GROUP_NAME_NBF_UAT: "TESTING_NBF_UAT"

@@ -1,0 +1,111 @@
+info:
+  name: Start Check In
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{checkinms}}"
+  headers:
+    - name: ocp-apim-subscription-key
+      value: "{{checkinms_ocp}}"
+  body:
+    type: json
+    data: |-
+      {
+          "pnrLocator": "{{pnrLocator}}",
+          "originCode": "{{origin}}",
+        "givenNames": "{{pax1_givennames}}",          "surname": "{{pax1_surname}}"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: origin
+      value: ""
+    - name: pax1_givennames
+      value: ""
+    - name: pax1_surname
+      value: ""
+  scripts:
+    - type: after-response
+      code: |-
+        var json = res.getBody();
+
+        // Travel party / PNR
+        bru.setVar("travelPartyId", json.travelPartyId);
+        bru.setVar("pnrLocator", json.reference && json.reference.pnrLocator);
+
+        // Passenger
+        var firstPassenger = json.passengers && json.passengers[0];
+
+        if (firstPassenger) {
+          bru.setVar("pax1_givennames", firstPassenger.givenNames);
+          bru.setVar("pax1_surname", firstPassenger.surname);
+          bru.setVar("pax1_dateOfBirth", firstPassenger.dateOfBirth);
+
+          if (firstPassenger.phone) {
+          bru.setVar(
+            "phoneCountryCode",
+            firstPassenger.phone.countryCode || "44"
+          );
+          bru.setVar("phone", firstPassenger.phone.number);
+        }
+        }
+
+        // Flight
+        var currentSlice = json.currentSlice;
+
+        if (currentSlice) {
+          bru.setVar(
+            "scheduledDepartureLocalDateTime",
+            currentSlice.scheduledDepartureLocalDateTime
+          );
+
+          bru.setVar(
+            "scheduledArrivalLocalDateTime",
+            currentSlice.scheduledArrivalLocalDateTime
+          );
+
+          var segment = currentSlice.segments && currentSlice.segments[0];
+
+          if (segment) {
+            bru.setVar(
+              "marketingFlightNumber",
+              segment.marketingCarrier && segment.marketingCarrier.flightNum
+            );
+
+            bru.setVar(
+              "marketingCarrier",
+              segment.marketingCarrier && segment.marketingCarrier.carrierCode
+            );
+
+            bru.setVar(
+              "operatingCarrier",
+              segment.operatingCarrier && segment.operatingCarrier.carrierCode
+            );
+
+            // Class of service is not present in the response
+            // bru.setVar("classOfService", ...);
+
+            var leg = segment.legs && segment.legs[0];
+
+            if (leg) {
+              bru.setVar(
+                "originAirportCode",
+                leg.origin && leg.origin.code
+              );
+
+              bru.setVar(
+                "destinationAirportCode",
+                leg.destination && leg.destination.code
+              );
+            }
+          }
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

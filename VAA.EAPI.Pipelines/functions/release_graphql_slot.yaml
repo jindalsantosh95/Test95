@@ -1,0 +1,131 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  applicationName: ''
+  buildConfiguration: ''
+  testRepoPath_SIT: ''
+  testRepoPath_UAT: ''  
+  functionAppName_Secure_DEV: ''
+  functionAppName_Secure_SIT: ''
+  functionAppName_Secure_UAT: ''
+  functionAppName_Secure_PRD: ''
+  functionAppName_Public_DEV: ''
+  functionAppName_Public_SIT: ''
+  functionAppName_Public_UAT: ''
+  functionAppName_Public_PRD: ''
+  AzureWebJobsStorage_DEV: ''
+  AzureWebJobsStorage_SIT: ''
+  AzureWebJobsStorage_UAT: ''
+  AzureWebJobsStorage_PROD: ''
+  slotName: ''
+
+stages:
+  - stage: 'DEV'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - DEV' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:   
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphql_slot.yaml   
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_DEV}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_DEV}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}
+          environment: ${{variables.environment_DEV}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_DEV}}       
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}   
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_DEV}}
+          slotName: ${{parameters.slotName}} 
+
+  - stage: 'SIT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - SIT' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphql_slot.yaml    
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_SIT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_SIT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_SIT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_SIT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}} 
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_SIT}}
+          slotName: ${{parameters.slotName}}
+
+  #- stage: 'SanityTestingSIT'
+  #  displayName: 'Sanity Testing - SIT' 
+  #  dependsOn: SIT   
+  #  jobs:  
+  #    - template: /VAA.EAPI.Pipelines/functions/sanitytesting.yaml   
+  #      parameters:
+  #        agentPool: ${{parameters.agentPool}}
+  #        agentSpecification: ${{parameters.agentSpecification}}  
+  #        buildConfiguration: ${{parameters.buildConfiguration}} 
+  #        testRepoPath: ${{parameters.testRepoPath_SIT}}                                            
+
+  - stage: 'UAT'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - UAT' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphql_slot.yaml    
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_UAT}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_UAT}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_UAT}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_UAT}}        
+          serviceConnection: ${{variables.serviceConnection_DEV_SIT_UAT}}
+          subscriptionId: ${{variables.subscriptionId_DEV_SIT_UAT}}
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_UAT}}
+          slotName: ${{parameters.slotName}}
+
+  #- stage: 'SanityTestingUAT'
+  #  displayName: 'Sanity Testing - UAT' 
+  #  dependsOn: UAT   
+  #  jobs:  
+  #    - template: /VAA.EAPI.Pipelines/functions/sanitytesting.yaml   
+  #      parameters:
+  #        agentPool: ${{parameters.agentPool}}
+  #        agentSpecification: ${{parameters.agentSpecification}}  
+  #        buildConfiguration: ${{parameters.buildConfiguration}} 
+  #        testRepoPath: ${{parameters.testRepoPath_UAT}}               
+          
+  - stage: 'PROD'
+    variables: 
+    - template: /VAA.EAPI.Pipelines/variables/GraphQL.yaml
+    displayName: 'Deployment - PROD' 
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: build   
+    jobs:
+      - template: /VAA.EAPI.Pipelines/functions/deployment_graphql_slot.yaml    
+        parameters:
+          functionAppName_Secure: ${{parameters.functionAppName_Secure_PRD}}
+          functionAppName_Public: ${{parameters.functionAppName_Public_PRD}}          
+          agentPool: ${{parameters.agentPool}}
+          agentSpecification: ${{parameters.agentSpecification}}
+          applicationName: ${{parameters.applicationName}}        
+          environment: ${{variables.environment_PROD}}
+          location: ${{variables.location}}          
+          resourceGroupName: ${{variables.resourceGroupName_PROD}}        
+          serviceConnection: ${{variables.serviceConnection_PROD}}
+          subscriptionId: ${{variables.subscriptionId_PROD}}       
+          AzureWebJobsStorage: ${{parameters.AzureWebJobsStorage_PROD}}
+          slotName: ${{parameters.slotName}}

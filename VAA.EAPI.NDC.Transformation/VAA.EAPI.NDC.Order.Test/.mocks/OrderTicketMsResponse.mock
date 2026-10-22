@@ -1,0 +1,92 @@
+﻿###Request
+POST https://Testresources.virginatlantic.com/dev/NdcOrderDocument/order/ticket HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"segmentDetails": [
+		{
+			"odRefId": "OD1",
+			"segmentId": "SEG1",
+			"airCraft": "351",
+			"marketingCarrier": "VS",
+			"marketingFlightNumber": "103",
+			"originAirportCode": "LHR",
+			"destinationAirportCode": "ATL",
+			"classOfService": "T",
+			"scheduledArrivalTime": {
+				"localDateTime": "2026-05-15T15:10:00"
+			},
+			"scheduledDepartureTime": {
+				"localDateTime": "2026-05-15T10:55:00"
+			},
+			"flightDuration": "00:09:15:00",
+			"legs": [
+				{
+					"scheduledDepartureTime": {
+						"localDateTime": "2026-05-15T10:55:00"
+					},
+					"legSequenceNumber": "1",
+					"originAirportCode": "LHR",
+					"scheduledArrivalTime": {
+						"localDateTime": "2026-05-15T15:10:00"
+					},
+					"destinationAirportCode": "ATL",
+					"legDuration": "00:09:15:00",
+					"legId": "LEG1",
+					"carrierAircraftTypeCode": "351",
+					"carrierAircraftTypeName": "351"
+				}
+			],
+			"cabinType": {
+				"cabinCode": "5",
+				"cabinName": "ECONOMY"
+			},
+			"status": {
+				"code": "HK"
+			},
+			"ticketNotValidAfter": "2026-05-15",
+			"ticketNotValidBefore": "2026-05-15"
+		}
+	],
+	"bookingReference": {
+		"rloc": "PWVUAA",
+		"externalRecordLocator": "CI6I8T"
+	},
+	"accountableDocumentRef": [
+		{
+			"documentType": "Ticket",
+			"documentNumber": "9322973112264",
+			"issueDate": "2025-10-07",
+			"customerRefId": "ADULT_1",
+			"coupons": [
+				{
+					"segmentRefId": "SEG1",
+					"couponNumber": "1",
+					"ticketNumber": "9322973112264",
+					"couponStatus": "OPEN",
+					"fareBasis": "OY3QBDLA"
+				}
+			]
+		}
+	],
+	"transactionId": "27be8079-9372-4b71-b80f-3064054f7a2f",
+	"priceClass": [
+		{
+			"id": "PC1",
+			"fareBasisCode": "OY3QBDLA",
+			"fareTypeCode": "ERU",
+			"productName": "Economy Light",
+			"cabinType": {
+				"cabinCode": "5",
+				"cabinName": "Economy"
+			}
+		}
+	]
+}

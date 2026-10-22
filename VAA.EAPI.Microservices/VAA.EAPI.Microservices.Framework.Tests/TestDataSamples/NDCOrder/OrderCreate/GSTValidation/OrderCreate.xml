@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<IATA_OrderCreateRQ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersMessage">
+	<DistributionChain>
+		<DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<ContactInfo>
+				<ContactInfoID>AgentContactInfoID</ContactInfoID>
+				<EmailAddress>
+					<EmailAddressText>agentemail@gmail.com</EmailAddressText>
+				</EmailAddress>
+			</ContactInfo>
+			<Ordinal>1</Ordinal>
+			<OrgRole>Seller</OrgRole>
+			<ParticipatingOrg>
+				<Name>Skyscanner</Name>
+				<OrgID>91281035</OrgID>
+			</ParticipatingOrg>
+		</DistributionChainLink>
+		<DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<Ordinal>2</Ordinal>
+			<OrgRole>Carrier</OrgRole>
+			<ParticipatingOrg>
+				<Name>TRAVEL REPUBLIC.CO.UK</Name>
+				<OrgID>VS</OrgID>
+			</ParticipatingOrg>
+		</DistributionChainLink>
+	</DistributionChain>
+	<Request>
+		<CreateOrder xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<AcceptSelectedQuotedOfferList>
+				<SelectedPricedOffer>
+					<OfferRefID>9dd6ac86-cb86-4f45-989d-d73c7d8a9972|gH1XHXqzlLHMwJye6rodiM001</OfferRefID>
+					<OwnerCode>VS</OwnerCode>
+					<SelectedOfferItem>
+						<OfferItemRefID>9dd6ac86-cb86-4f45-989d-d73c7d8a9972|gH1XHXqzlLHMwJye6rodiM001-1</OfferItemRefID>
+						<PaxRefID>ADULT_1</PaxRefID>
+					</SelectedOfferItem>
+					<TotalOfferPriceAmount CurCode="GBP">1313.72</TotalOfferPriceAmount>
+				</SelectedPricedOffer>
+			</AcceptSelectedQuotedOfferList>
+		</CreateOrder>
+		<DataLists xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<ContactInfoList>
+				<ContactInfo>
+					<ContactInfoID>CID_1</ContactInfoID>
+					<EmailAddress>
+						<EmailAddressText>test.skyscanner@fly.virgin.com</EmailAddressText>
+					</EmailAddress>
+					<Phone>
+						<ContactTypeText>Home</ContactTypeText>
+						<CountryDialingCode>44</CountryDialingCode>
+						<PhoneNumber>123456</PhoneNumber>
+					</Phone>
+				</ContactInfo>
+			</ContactInfoList>
+			<PaxList>
+				<Pax>
+					<ContactInfoRefID>CID_1</ContactInfoRefID>
+					<Employer>
+						<Name>TCS</Name>
+						<SalesTaxRegistration>
+							<CityName>Chennai</CityName>
+							<CountryCode>IND</CountryCode>
+							<CountryDialingCode>91</CountryDialingCode>
+							<EmailAddressText></EmailAddressText>
+							<PhoneNumber></PhoneNumber>
+							<PostalCode>6000</PostalCode>
+							<SalesTaxRegistrationID>11223</SalesTaxRegistrationID>
+							<StreetText>Navaluroad</StreetText>
+							<StreetText>Siruseri</StreetText>
+						</SalesTaxRegistration>
+						<TaxDeductedatSourceCapabilityInd>true</TaxDeductedatSourceCapabilityInd>
+					</Employer>
+					<Individual>
+						<Birthdate>1977-02-04</Birthdate>
+						<GenderCode>X</GenderCode>
+						<GivenName>DAVID</GivenName>
+						<Surname>SMITH</Surname>
+					</Individual>
+					<PaxID>ADULT_1</PaxID>
+					<PTC>ADT</PTC>
+				</Pax>
+			</PaxList>
+		</DataLists>
+		<PaymentFunctions xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<PaymentMethodCriteria>
+				<PaymentTypeCode>CC</PaymentTypeCode>
+			</PaymentMethodCriteria>
+			<PaymentProcessingDetails>
+				<Amount CurCode="GBP">1313.72</Amount>
+				<Payer>
+					<PayerName>
+						<IndividualName>
+							<GivenName>David</GivenName>
+							<Surname>Smith</Surname>
+						</IndividualName>
+					</PayerName>
+				</Payer>
+				<PaymentMethod>
+					<PaymentCard>
+						<CardholderAddress>
+							<CityName>Crawley</CityName>
+							<CountryCode>GB</CountryCode>
+							<PostalCode>RH108HA</PostalCode>
+							<StreetText>8</StreetText>
+							<StreetText>Cobbles Crescent</StreetText>
+						</CardholderAddress>
+						<CardNumber>4444333322221111</CardNumber>
+						<CardSecurityCode>123</CardSecurityCode>
+						<CardTypeText>VI</CardTypeText>
+						<ExpirationDate>1226</ExpirationDate>
+						<SecurePaymentVersion2>
+							<AuthenticationValue>ODQzNjgwNjU0ZjM3N2JmYTg0NTM</AuthenticationValue>
+							<DirectoryServerTrxID>c272b04f-6e7b-43a2-bb78-90f4fb94aa25</DirectoryServerTrxID>
+							<ElectronicCommerceInd>05</ElectronicCommerceInd>
+							<TrxStatusText>Y</TrxStatusText>
+						</SecurePaymentVersion2>
+						<SecureProgram>
+							<EnrollmentStatusText>CardEnrolled3DS2.1.0</EnrollmentStatusText>
+						</SecureProgram>
+					</PaymentCard>
+				</PaymentMethod>
+			</PaymentProcessingDetails>
+		</PaymentFunctions>
+	</Request>
+</IATA_OrderCreateRQ>

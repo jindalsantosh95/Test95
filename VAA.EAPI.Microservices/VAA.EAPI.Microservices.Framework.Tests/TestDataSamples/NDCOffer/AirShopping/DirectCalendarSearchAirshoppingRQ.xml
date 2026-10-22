@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<IATA_AirShoppingRQ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersMessage">
+	<DistributionChain>
+		<DistributionChainLink xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<Ordinal>1</Ordinal>
+			<OrgRole>Seller</OrgRole>
+			<ParticipatingOrg>
+				<Name>go4travel</Name>
+				<OrgID>91269021</OrgID>
+			</ParticipatingOrg>
+		</DistributionChainLink>
+	</DistributionChain>
+	<Request>
+		<FlightRelatedCriteria xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+            <FlightCriteria>
+                <FlightCharacteristicsCriteria>
+                    <CharacteristicCode>Direct</CharacteristicCode>
+                    <PrefLevel>
+                        <PrefLevelCode>Required</PrefLevelCode>
+                    </PrefLevel>
+                </FlightCharacteristicsCriteria>
+            </FlightCriteria>
+        </FlightRelatedCriteria>
+		<FlightRequest xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+            <FlightRequestOriginDestinationsCriteria>
+                <OriginDestCriteria>
+                    <OriginDepCriteria>
+                        <IATA_LocationCode>LHR</IATA_LocationCode>
+                        <Date>2024-05-20</Date>
+                    </OriginDepCriteria>
+                    <DestArrivalCriteria>
+                        <IATA_LocationCode>BOM</IATA_LocationCode>
+                    </DestArrivalCriteria>
+					<CalendarDateCriteria>
+                        <DaysAfterNumber>3</DaysAfterNumber>
+                        <DaysBeforeNumber>3</DaysBeforeNumber>
+                    </CalendarDateCriteria>
+                </OriginDestCriteria>
+            </FlightRequestOriginDestinationsCriteria>
+        </FlightRequest>
+		<PaxList xmlns="http://www.iata.org/IATA/2015/EASD/00/IATA_OffersAndOrdersCommonTypes">
+			<Pax>
+				<PaxID>AX1</PaxID>
+				<PTC>ADT</PTC>
+			</Pax>
+		</PaxList>
+	</Request>
+</IATA_AirShoppingRQ>

@@ -1,0 +1,371 @@
+name: Automation - Shared Services Sign-off
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: Environment to test
+        required: true
+        default: sit
+        type: choice
+        options: [dev, sit, uat]
+      shared_service:
+        description: Implemented shared-service test pack to run, or all implemented services
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - SecurityMS
+          - OfferMS
+          - BrandMS
+          - OrderDataMS
+          - Retail.OrderSearchMS
+          - SeatMS
+          - FlightServicesMS
+          - ReferenceMS
+          - Retail.PaymentMS
+          - Retail.OrderMgmtMS
+          - InRuleMS
+      consumer:
+        description: Consuming EAPI domain, or all consumers
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - Book
+          - Search
+          - MyAccount
+          - Trips
+          - FlightOperations
+          - OCI
+          - MarketingLoyalty
+      hpp_mode:
+        description: HPP driver for the Book payment journey
+        required: true
+        default: playwright
+        type: choice
+        options: [playwright, selenium]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shared-services-sign-off-${{ inputs.target_environment }}
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    name: Resolve projects and filter
+    runs-on: windows-latest
+    outputs:
+      projects: ${{ steps.resolve.outputs.projects }}
+      test_filter: ${{ steps.resolve.outputs.test_filter }}
+    steps:
+      - name: Resolve selected consumers
+        id: resolve
+        shell: pwsh
+        env:
+          SELECTED_SERVICE: ${{ inputs.shared_service }}
+          SELECTED_CONSUMER: ${{ inputs.consumer }}
+        run: |
+          $projects = @(
+            [ordered]@{ consumer = "Book"; project = "VAA.EAPI.Automation/VAA.EAPI.Automation.Book/VAA.EAPI.Automation.Book.csproj"; services = @("OfferMS", "SeatMS", "ReferenceMS", "Retail.PaymentMS", "Retail.OrderMgmtMS") },
+            [ordered]@{ consumer = "Search"; project = "VAA.EAPI.Automation/VAA.EAPI.Automation.Search/VAA.EAPI.Automation.Search.csproj"; services = @("OfferMS", "BrandMS", "ReferenceMS") },
+            [ordered]@{ consumer = "MyAccount"; project = "VAA.EAPI.Automation/VAA.EAPI.Automation.MyAccount/VAA.EAPI.Automation.MyAccount.csproj"; services = @("SecurityMS", "ReferenceMS", "InRuleMS") },
+            [ordered]@{ consumer = "Trips"; project = "VAA.EAPI.Automation/VAA.EAPI.Automation.Trips/VAA.EAPI.Automation.Trips.csproj"; services = @("OrderDataMS", "Retail.OrderSearchMS", "SeatMS", "FlightServicesMS", "Retail.PaymentMS") },
+            [ordered]@{ consumer = "FlightOperations"; project = "VAA.EAPI.Automation/VAA.EAPI.Automation.FlightOperations/VAA.EAPI.Automation.FlightOperations.csproj"; services = @("OrderDataMS", "Retail.OrderSearchMS") },
+            [ordered]@{ consumer = "OCI"; project = "VAA.EAPI.Automation/VAA.EAPI.Automation.OCI/VAA.EAPI.Automation.OCI.csproj"; services = @("ReferenceMS") },
+            [ordered]@{ consumer = "MarketingLoyalty"; project = "VAA.EAPI.Automation/VAA.EAPI.Automation.MarketingLoyalty/VAA.EAPI.Automation.MarketingLoyalty.csproj"; services = @("InRuleMS") }
+          )
+
+          if ($env:SELECTED_SERVICE -ne "all") {
+            $projects = @($projects | Where-Object { $_.services -contains $env:SELECTED_SERVICE })
+          }
+          if ($env:SELECTED_CONSUMER -ne "all") {
+            $projects = @($projects | Where-Object { $_.consumer -eq $env:SELECTED_CONSUMER })
+          }
+
+          if ($projects.Count -eq 0) {
+            throw "No tagged project matches service '$env:SELECTED_SERVICE' and consumer '$env:SELECTED_CONSUMER'."
+          }
+
+          $filterParts = @("Category=SharedServicesSignOff")
+          if ($env:SELECTED_SERVICE -ne "all") {
+            $filterParts += "SharedService=$env:SELECTED_SERVICE"
+          }
+          if ($env:SELECTED_CONSUMER -ne "all") {
+            $filterParts += "SharedServiceConsumer=$env:SELECTED_CONSUMER"
+          }
+          $matrixEntries = @($projects | ForEach-Object {
+            [ordered]@{ consumer = $_.consumer; project = $_.project }
+          })
+          $matrix = ConvertTo-Json -InputObject $matrixEntries -Compress
+          $testFilter = $filterParts -join "&"
+
+          "projects=$matrix" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "test_filter=$testFilter" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          Write-Host "Projects: $matrix"
+          Write-Host "Filter: $testFilter"
+
+  test:
+    name: ${{ matrix.consumer }} (${{ inputs.target_environment }})
+    needs: resolve
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.resolve.outputs.projects) }}
+    runs-on: [self-hosted, Windows, eapi-automation]
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: powershell
+    env:
+      env: ${{ inputs.target_environment }}
+      BaseUrl: ${{ vars.BASE_URL || 'https://testresources.virginatlantic.com' }}
+      BaseUrlDigital: ${{ vars.BASE_URL_DIGITAL || 'https://digital-test.virginatlantic.com' }}
+      graphQL: ${{ vars.GRAPHQL_MOBILE_PATH || '/graphql/mobile/public/v1' }}
+      tripsSecureEndpoint: ${{ vars.GRAPHQL_TRIPS_SECURE || '/digital/graphql/trips' }}
+      graphQlBook: ${{ vars.GRAPHQL_BOOK_PATH || '/graphql/Book/public' }}
+      graphQlSearch: ${{ vars.GRAPHQL_SEARCH_PATH || '/GraphQL/Search/public' }}
+      graphQlMyAccountPublic: ${{ vars.GRAPHQL_MYACCOUNT_PUBLIC_PATH || '/graphql/myaccount/public/v1' }}
+      graphQlMyAccountSecure: ${{ vars.GRAPHQL_MYACCOUNT_SECURE_PATH || '/graphql/myaccount/secure/v1' }}
+      graphQlLoyalty: ${{ vars.GRAPHQL_LOYALTY_PATH || '/graphql/loyalty/public/v1' }}
+      BookHppAutomationMode: ${{ inputs.hpp_mode }}
+      BookHppPlaywrightHeadless: 'true'
+      SHARED_SERVICE_SIGNOFF_SELECTION: ${{ inputs.shared_service }}
+      TEST_FILTER: ${{ needs.resolve.outputs.test_filter }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Display .NET SDK
+        run: dotnet --info
+
+      - name: Restore
+        run: dotnet restore "${{ matrix.project }}"
+
+      - name: Build
+        run: dotnet build "${{ matrix.project }}" -c Release --no-restore
+
+      - name: Run shared-service sign-off tests
+        env:
+          KeyVaultUrl: ${{ secrets.KEY_VAULT_URL }}
+          KeyVaultTenantId: ${{ secrets.KEY_VAULT_TENANT_ID }}
+          KeyVaultClientId: ${{ secrets.KEY_VAULT_CLIENT_ID }}
+          KeyVaultClientSecret: ${{ secrets.KEY_VAULT_CLIENT_SECRET }}
+          HPP_PAGE_ALLOWED_ORIGINS: ${{ vars.HPP_PAGE_ALLOWED_ORIGINS || 'https://enterprisepaymentshpp-si.vs01.vs.air4.com' }}
+          HPP_HEADER_ALLOWED_ORIGINS: ${{ vars.HPP_HEADER_ALLOWED_ORIGINS || 'https://enterprisepaymentshppapi-si.vs01.vs.air4.com,https://stg.virginatlantic.com' }}
+          HppVaaDigitalFirstToken: ${{ secrets.HPP_VAA_DIGITAL_FIRST_TOKEN }}
+          HppDeltaEnterprisePaymentsToken: ${{ secrets.HPP_DELTA_ENTERPRISE_PAYMENTS_TOKEN }}
+          LoyaltyAccountPassword: ${{ secrets.LOYALTY_ACCOUNT_PASSWORD }}
+        run: |
+          New-Item -ItemType Directory -Force -Path "TestResults" | Out-Null
+          dotnet test "${{ matrix.project }}" `
+            -c Release `
+            --no-build `
+            --filter "$env:TEST_FILTER" `
+            --results-directory "TestResults" `
+            --logger "trx;LogFileName=shared-services-${{ matrix.consumer }}-${{ inputs.target_environment }}.trx"
+
+      - name: Analyse run-scoped test results
+        if: always()
+        shell: powershell
+        run: |
+          $trxPath = "TestResults/shared-services-${{ matrix.consumer }}-${{ inputs.target_environment }}.trx"
+          if (-not (Test-Path -Path $trxPath)) {
+            throw "Expected run-scoped TRX was not produced: $trxPath"
+          }
+
+          [xml]$trx = Get-Content -Path $trxPath -Raw
+          $passed = [int]$trx.TestRun.ResultSummary.Counters.passed
+          if ($passed -lt 1) {
+            throw "Shared-service sign-off produced no passed tests for ${{ matrix.consumer }}."
+          }
+
+          $analysis = & "scripts/analyse-test-run-results.ps1" `
+            -TrxPath $trxPath `
+            -SuiteName "Shared services - ${{ matrix.consumer }}" `
+            -EnvironmentName "${{ inputs.target_environment }}"
+          $analysis | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shared-services-${{ matrix.consumer }}-${{ inputs.target_environment }}
+          if-no-files-found: warn
+          retention-days: 14
+          path: TestResults/*.trx
+
+      - name: Add run summary
+        if: always()
+        shell: powershell
+        run: |
+          @"
+          ## Shared-service sign-off: ${{ matrix.consumer }}
+
+          - Environment: ${{ inputs.target_environment }}
+          - Service selection: ${{ inputs.shared_service }}
+          - Filter: $env:TEST_FILTER
+          - Book HPP mode: ${{ inputs.hpp_mode }}
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+
+  notify-slack:
+    name: Notify Slack summary
+    if: ${{ always() }}
+    needs: [resolve, test]
+    runs-on: windows-latest
+    env:
+      HAS_SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_SHARED_SERVICES != '' }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_SHARED_SERVICES }}
+      TEST_JOB_RESULT: ${{ needs.test.result }}
+      EXPECTED_PROJECTS: ${{ needs.resolve.outputs.projects }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Download test results
+        if: env.HAS_SLACK_WEBHOOK == 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          pattern: shared-services-*
+          path: TestResults
+          merge-multiple: true
+
+      - name: Publish results to shared-services-signoff-results
+        if: env.HAS_SLACK_WEBHOOK == 'true'
+        shell: pwsh
+        run: |
+          $total = 0
+          $passed = 0
+          $failed = 0
+          $skipped = 0
+          $projectResults = @{}
+          $projectPaths = @{
+            Book = "VAA.EAPI.Automation.Book"
+            Search = "VAA.EAPI.Automation.Search"
+            MyAccount = "VAA.EAPI.Automation.MyAccount"
+            Trips = "VAA.EAPI.Automation.Trips"
+            FlightOperations = "VAA.EAPI.Automation.FlightOperations"
+            OCI = "VAA.EAPI.Automation.OCI"
+            MarketingLoyalty = "VAA.EAPI.Automation.MarketingLoyalty"
+          }
+
+          if (-not [string]::IsNullOrWhiteSpace($env:EXPECTED_PROJECTS)) {
+            try {
+              foreach ($expectedProject in @($env:EXPECTED_PROJECTS | ConvertFrom-Json)) {
+                $consumer = [string]$expectedProject.consumer
+                $project = if ($projectPaths.ContainsKey($consumer)) { $projectPaths[$consumer] } else { [string]$expectedProject.project }
+                $projectResults[$consumer] = [ordered]@{
+                  Project = $project
+                  Total = 0
+                  Passed = 0
+                  Failed = 0
+                  Skipped = 0
+                }
+              }
+            }
+            catch {
+              Write-Host "::warning::Unable to read the resolved project matrix: $($_.Exception.Message)"
+            }
+          }
+
+          Get-ChildItem -Path "TestResults" -Filter "*.trx" -Recurse -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
+            try {
+              [xml]$trx = Get-Content -Path $_.FullName -Raw
+              $counters = $trx.TestRun.ResultSummary.Counters
+              $total += [int]$counters.total
+              $passed += [int]$counters.passed
+              $failed += [int]$counters.failed
+              $skipped += [int]$counters.notExecuted
+
+              $consumer = if ($_.BaseName -match '^shared-services-(.+)-[^-]+$') { $Matches[1] } else { $_.BaseName }
+              $project = if ($projectPaths.ContainsKey($consumer)) { $projectPaths[$consumer] } else { $consumer }
+              if (-not $projectResults.ContainsKey($consumer)) {
+                $projectResults[$consumer] = [ordered]@{
+                  Project = $project
+                  Total = 0
+                  Passed = 0
+                  Failed = 0
+                  Skipped = 0
+                }
+              }
+
+              $projectResults[$consumer].Total += [int]$counters.total
+              $projectResults[$consumer].Passed += [int]$counters.passed
+              $projectResults[$consumer].Failed += [int]$counters.failed
+              $projectResults[$consumer].Skipped += [int]$counters.notExecuted
+            }
+            catch {
+              Write-Host "::warning::Unable to parse TRX '$($_.FullName)': $($_.Exception.Message)"
+            }
+          }
+
+          $successful = $env:TEST_JOB_RESULT -eq "success" -and $passed -gt 0 -and $failed -eq 0
+          $icon = if ($successful) { ":white_check_mark:" } else { ":x:" }
+          $unsuccessfulJob = @($env:TEST_JOB_RESULT) |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) -and $_ -ne "success" -and $_ -ne "skipped" } |
+            Select-Object -First 1
+          $status = if ($successful) { "PASSED" } elseif ($unsuccessfulJob) { $unsuccessfulJob.ToUpperInvariant() } elseif ($failed -gt 0) { "FAILED" } elseif ($passed -eq 0) { "INCOMPLETE" } else { "UNKNOWN" }
+          $passedProjects = [System.Collections.Generic.List[string]]::new()
+          $failedProjects = [System.Collections.Generic.List[string]]::new()
+          $incompleteProjects = [System.Collections.Generic.List[string]]::new()
+
+          foreach ($consumer in $projectResults.Keys | Sort-Object) {
+            $result = $projectResults[$consumer]
+            $summary = "*$consumer* — ``$($result.Project)`` ($($result.Passed)/$($result.Total) passed)"
+            if ($result.Failed -gt 0) {
+              $failedProjects.Add(":x: $summary")
+            }
+            elseif ($result.Passed -gt 0) {
+              $passedProjects.Add(":white_check_mark: $summary")
+            }
+            else {
+              $incompleteProjects.Add(":warning: $summary")
+            }
+          }
+
+          $projectSections = [System.Collections.Generic.List[string]]::new()
+          if ($passedProjects.Count -gt 0) {
+            $projectSections.Add("*Passed projects:*`n$($passedProjects -join "`n")")
+          }
+          if ($failedProjects.Count -gt 0) {
+            $projectSections.Add("*Failed projects:*`n$($failedProjects -join "`n")")
+          }
+          if ($incompleteProjects.Count -gt 0) {
+            $projectSections.Add("*Incomplete projects:*`n$($incompleteProjects -join "`n")")
+          }
+          $text = @"
+          $icon *EAPI shared-services sign-off: $status*
+          *Environment:* ${{ inputs.target_environment }}
+          *Service:* ${{ inputs.shared_service }}
+          *Consumer:* ${{ inputs.consumer }}
+          *Tests:* $total total | $passed passed | $failed failed | $skipped skipped
+          *Triggered by:* ${{ github.actor }}
+          <$env:RUN_URL|View workflow run>
+
+          $($projectSections -join "`n`n")
+          "@
+
+          try {
+            $payload = @{ text = $text } | ConvertTo-Json -Compress
+            Invoke-RestMethod -Method Post -Uri $env:SLACK_WEBHOOK_URL -ContentType "application/json" -Body $payload
+          }
+          catch {
+            Write-Host "::warning::Slack notification failed: $($_.Exception.Message)"
+          }
+
+      - name: Report missing Slack webhook
+        if: env.HAS_SLACK_WEBHOOK != 'true'
+        shell: pwsh
+        run: Write-Host "::warning::SLACK_WEBHOOK_URL_SHARED_SERVICES is not configured; skipping the shared-services-signoff-results notification."

@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "reviewedAtUtc": "2026-10-08T08:51:34Z",
+  "reviewNotes": "Reviewed all twelve capability entries, owners, entry points and evidence paths against current workflow enrollment and local harness exercises for PR #2379. Corrected resource-cost-control enrollment to six workflows. This is an operational inventory review, not evidence of a new scheduled passing cycle; maturity status and cycle counts remain unchanged.",
+  "owner": "Platform Engineering",
+  "capabilities": [
+    {
+      "id": "memory-resume",
+      "theme": "Memory and state management",
+      "status": "active",
+      "policy": "required",
+      "entryPoint": "scripts/invoke-agent-memory-lifecycle-exercise.ps1",
+      "evidence": ["docs/agent-memory.md", ".codex/state/session-state.example.json", "scripts/update-agent-memory-state.ps1", "scripts/check-agent-memory-state.ps1", "scripts/check-agent-memory-lifecycle.ps1", ".codex/hooks/session_start_context.ps1", ".codex/hooks/post_tool_use_feedback.ps1", ".codex/hooks/stop_verify_reminder.ps1", ".github/workflows/ai-harness-drift-parity.yml"],
+      "passingCycles": 1,
+      "targetCycles": 2,
+      "gap": "Automatic atomic lifecycle updates and cross-process resume are active and exercised on every docs verify plus scheduled drift; two scheduled passing cycles remain required only for maturity promotion.",
+      "owner": "Harness Maintainer"
+    },
+    {
+      "id": "architecture-fitness",
+      "theme": "Architecture fitness harness",
+      "status": "active",
+      "policy": "required",
+      "entryPoint": "scripts/invoke-architecture-fitness-mutation-exercise.ps1",
+      "evidence": ["docs/principles/architecture-principles.md", "docs/architecture-fitness-scopes.json", "scripts/check-architecture-fitness.ps1", "scripts/check-architecture-fitness-strength.ps1", "VAA.EAPI.Automation/VAA.EAPI.Automation.ArchitectureTests", ".github/workflows/ai-harness-drift-parity.yml"],
+      "passingCycles": 1,
+      "targetCycles": 2,
+      "gap": "All active solutions and the repository project graph are enrolled; six invariants and five validator mutations are enforced. Two scheduled cycles remain required only for maturity promotion.",
+      "owner": "Platform Engineering"
+    },
+    {
+      "id": "behavior-strength",
+      "theme": "Behaviour harness",
+      "status": "active",
+      "policy": "required",
+      "entryPoint": "scripts/invoke-behavior-harness-mutation-exercise.ps1",
+      "evidence": ["docs/behavior-harness.md", "scripts/check-behavior-harness.ps1", "scripts/check-behavior-harness-strength.ps1", ".github/workflows/ai-harness-drift-parity.yml"],
+      "passingCycles": 1,
+      "targetCycles": 2,
+      "gap": "All Complete flows are enrolled and the validator kills missing-catalog, broken-path, and placeholder mutations; two scheduled cycles remain required only for maturity promotion.",
+      "owner": "Solution Owners"
+    },
+    {
+      "id": "high-risk-inferential-review",
+      "theme": "Inferential agent review",
+      "status": "active",
+      "policy": "advisory",
+      "entryPoint": ".github/workflows/ai-harness-high-risk-inferential-review.yml",
+      "evidence": ["docs/agent-loop-workflow.md", ".github/workflows/ai-delivery-sequence-goal-pr-review-loop.yml"],
+      "passingCycles": 0,
+      "targetCycles": 2,
+      "gap": "General high-risk review is enrolled; two passing PR review cycles are required for maturity.",
+      "owner": "Platform Engineering"
+    },
+    {
+      "id": "agent-observability",
+      "theme": "Runtime observability",
+      "status": "active",
+      "policy": "required",
+      "entryPoint": "scripts/invoke-observed-docs-harness.ps1",
+      "evidence": ["docs/agent-observability.md", "docs/agent-observability-sources.json", "scripts/invoke-observed-docs-harness.ps1", "scripts/query-agent-observability.ps1", "scripts/check-agent-observability.ps1", "scripts/invoke-agent-observability-exercise.ps1", "scripts/check-agent-observability-strength.ps1", ".github/workflows/ai-harness-drift-parity.yml"],
+      "passingCycles": 1,
+      "targetCycles": 2,
+      "gap": "Local docs-harness logs, metrics and traces have a fail-closed bounded correlation query and mutation exercise; solution production/test telemetry remains a separately authorized scope, while two scheduled cycles remain only for maturity promotion.",
+      "owner": "Solution Owners"
+    },
+    {
+      "id": "semantic-doc-gardening",
+      "theme": "Documentation gardening",
+      "status": "active",
+      "policy": "advisory",
+      "entryPoint": ".github/workflows/ai-harness-docs-semantic-gardening.yml",
+      "evidence": ["docs/doc-gardening.md", ".github/workflows/ai-harness-drift-parity.yml", "docs/harness-remediation-log.md"],
+      "passingCycles": 0,
+      "targetCycles": 2,
+      "gap": "The scheduled semantic provider is enrolled; two passing runs with retained evidence are required for maturity.",
+      "owner": "Harness Maintainer"
+    },
+    {
+      "id": "execution-recovery",
+      "theme": "Execution recovery and replay",
+      "status": "active",
+      "policy": "required",
+      "entryPoint": "scripts/invoke-agent-recovery-exercise.ps1",
+      "evidence": ["docs/agent-execution-and-recovery.md", "scripts/agent-execution-state.ps1", "scripts/check-agent-recovery.ps1", ".github/workflows/ai-harness-drift-parity.yml", ".github/workflows/ai-delivery-sequence-goal-loop.yml"],
+      "passingCycles": 1,
+      "targetCycles": 2,
+      "gap": "Durable recovery and diagnostic replay are active and exercised on every docs verify plus scheduled drift; two scheduled passing cycles remain required only for maturity promotion.",
+      "owner": "Workflow Owners"
+    },
+    {
+      "id": "resource-cost-control",
+      "theme": "Resource and cost controls",
+      "status": "active",
+      "policy": "required",
+      "entryPoint": "scripts/check-agent-resource-budget.ps1",
+      "evidence": ["docs/agent-resource-and-cost-controls.md", "docs/agent-resource-budgets.json", "scripts/check-agent-resource-budget.ps1", "scripts/check-agent-resource-trend.ps1", "scripts/invoke-agent-resource-budget-exercise.ps1", "scripts/check-agent-resource-budget-strength.ps1", ".github/workflows/ai-harness-agent-resource-and-cost-trend-review.yml", ".github/workflows/ai-delivery-sequence-goal-loop.yml", ".github/workflows/ai-delivery-sequence-goal-pr-review-loop.yml", ".github/workflows/ai-delivery-sequence-goal-human-comment-loop.yml", ".github/workflows/ai-delivery-sequence-goal-associated-pr-feedback.yml", ".github/workflows/ai-harness-docs-semantic-gardening.yml", ".github/workflows/ai-harness-high-risk-inferential-review.yml"],
+      "passingCycles": 1,
+      "targetCycles": 2,
+      "gap": "Per-run token and standard-API-equivalent USD ceilings are active for all six enrolled workflows, usage evidence is retained, and rolling 7-day ceilings are scheduled; two scheduled passing cycles remain required only for maturity promotion.",
+      "owner": "Workflow Owners"
+    },
+    {
+      "id": "self-correcting-loop",
+      "theme": "Self-correcting agent loop",
+      "status": "active",
+      "policy": "required",
+      "entryPoint": "scripts/invoke-self-correcting-loop.ps1",
+      "evidence": ["scripts/invoke-self-correcting-loop-exercise.ps1", "scripts/check-self-correcting-loop.ps1", ".github/workflows/ai-harness-drift-parity.yml"],
+      "passingCycles": 1,
+      "targetCycles": 2,
+      "gap": "The general bounded loop is active and exercised locally; two scheduled passing cycles remain required only for maturity promotion.",
+      "owner": "Workflow Owners"
+    },
+    {
+      "id": "runtime-learning",
+      "theme": "Runtime-to-harness learning",
+      "status": "active",
+      "policy": "required",
+      "entryPoint": "scripts/check-agent-observability.ps1",
+      "evidence": ["docs/agent-observability.md", "docs/harness-runtime-feedback.md", "scripts/query-agent-observability.ps1", "scripts/invoke-agent-observability-exercise.ps1"],
+      "passingCycles": 1,
+      "targetCycles": 2,
+      "gap": "Verified local feedback records and bounded query exercises enforce runtime-to-harness learning; solution production/test feedback remains separately owned, while two scheduled cycles remain only for maturity promotion.",
+      "owner": "Solution Owners"
+    },
+    {
+      "id": "tool-executable-environment",
+      "theme": "Tool integration and executable environment",
+      "status": "active",
+      "policy": "required",
+      "entryPoint": "scripts/check-agent-tool-environment.ps1",
+      "evidence": ["docs/agent-tool-and-executable-environments.md", "docs/agent-tool-environments.json", "scripts/check-agent-tool-environment.ps1", "scripts/invoke-agent-tool-environment-exercise.ps1", "scripts/check-agent-tool-environment-strength.ps1", ".github/workflows/ai-harness-drift-parity.yml"],
+      "passingCycles": 1,
+      "targetCycles": 2,
+      "gap": "The /docs local and Codex CI profiles declare tools, isolation, network, secrets, evidence and cleanup; the real local profile plus unsafe/missing-tool mutations pass, with two scheduled cycles remaining only for maturity promotion.",
+      "owner": "Platform Engineering"
+    },
+    {
+      "id": "continuous-maturity-evidence",
+      "theme": "Continuous maturity evidence",
+      "status": "active",
+      "policy": "required",
+      "entryPoint": "scripts/check-harness-maturity-evidence.ps1",
+      "evidence": ["docs/harness-continuous-maturity.md", "docs/harness-maturity-policy.json", "scripts/update-harness-maturity-evidence.ps1", "scripts/check-harness-maturity-evidence.ps1", "scripts/invoke-harness-maturity-evidence-exercise.ps1", "scripts/check-harness-maturity-evidence-strength.ps1", ".github/workflows/ai-harness-drift-parity.yml"],
+      "passingCycles": 1,
+      "targetCycles": 2,
+      "gap": "Every scheduled parity outcome is appended through an always-run retained ledger and maturity is derived from consecutive outcomes; two real scheduled passes remain the promotion requirement and synthetic exercise evidence cannot satisfy it.",
+      "owner": "Harness Maintainer"
+    }
+  ]
+}

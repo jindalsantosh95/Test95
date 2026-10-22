@@ -1,0 +1,33 @@
+meta {
+  name: SavePassport
+  type: graphql
+  seq: 31
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  mutation SavePassport($savePassportRequest: SavePassportRequestInput) {
+    SavePassport(savePassportRequest: $savePassportRequest) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "savePassportRequest": {
+      "isScanned": false
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

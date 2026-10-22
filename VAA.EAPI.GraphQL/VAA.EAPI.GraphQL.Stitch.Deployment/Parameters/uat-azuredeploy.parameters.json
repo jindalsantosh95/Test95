@@ -1,0 +1,111 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "AppSetting:RedisCacheConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkventgraphql.vault.azure.net/secrets/AVASEUNAFNGRAPHQL-Config-RedisCacheConnectionString/)"
+    },
+    "NativeWebSocketsConfiguration": {
+      "value": {
+        "startupHookPath": "D:\\home\\site\\wwwroot\\hostextensions\\VAA.EAPI.GraphQL.WebSocketHost.dll",
+        "existingStartupHooks": "",
+        "workerProcessCount": "1",
+        "path": "/api/v1/GraphQL/ws"
+      }
+    },
+    "NativeWebSocketsBridgeSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkventgraphql.vault.azure.net/secrets/GraphQL-Native-WebSocket-Bridge-Secret/)"
+    },
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaseunkventgraphql.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "uat",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "FunctionAppName": {
+      "value": "AVASEUNAFNGRAPHQLSTITCH"
+    },
+    "EnvironmentName": {
+      "value": "UAT"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-S-EUN-EnterpiseGraphQL"
+    },
+    "AppServicePlanName": {
+      "value": "AVASEUNASPENTGRAPHQL"
+    },
+    "AppInsightsName": {
+      "value": "AVASEUNAIENTGRAPHQLSTITCH"
+    },
+    "storageAccountName": {
+      "value": "avaseunstgraphqlstitch"
+    },
+    "vaultName": {
+      "value": "AVASEUNKVENTGRAPHQL"
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avaseunkventgraphql.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+
+    // Azure Function Settings
+    "AppSetting:AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "AppSetting:FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "AppSetting:FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+
+    "AppSetting:AllowIntrospection": {
+      "value": "true"
+    },
+    "AppSetting:PersistedQueryStore": {
+      "value": "PersistedQueryStore"
+    },
+
+    "Graphql": {
+      "value": {
+        "Endpoints": "@Microsoft.KeyVault(SecretUri=https://avaseunkventgraphql.vault.azure.net/secrets/GraphQL-Stitch-Endpoints/)",
+        "TimeOutInSeconds": 100,
+        "ResponseHeaders": "Set-Cookie"
+      }
+    },
+
+    //vnet settings 
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "API Enterprise",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Graph QL STITCH For Enterprise Microservices",
+        "ApplicationUsageIdList": "\"\"\\\"{\\\\\\\"AppIds\\\"\\\\: [ \\\\\\\"AFNENROLMENT\\\"\\\\]}\\\"\""
+      }
+    }
+  }
+}

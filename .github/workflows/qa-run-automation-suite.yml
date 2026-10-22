@@ -1,0 +1,130 @@
+name: Automation - Manifest-Driven Suite Runner
+
+on:
+  workflow_call:
+    inputs:
+      manifest_path:
+        description: Path to the automation suite manifest
+        required: true
+        type: string
+      target_environment:
+        description: Target environment for the suite
+        required: false
+        default: sit
+        type: string
+      test_environment_json:
+        description: Optional non-secret environment variables for the suite test process
+        required: false
+        default: '{}'
+        type: string
+      enable_slack_for_branch_runs:
+        description: Allow Slack notification outside main
+        required: false
+        default: false
+        type: boolean
+      use_playwright_for_hpp:
+        description: Use Playwright for hosted payment pages
+        required: false
+        default: false
+        type: boolean
+      hpp_page_allowed_origins:
+        description: Exact HTTPS HPP page origins allowed to receive access headers
+        required: false
+        default: https://enterprisepaymentshpp-si.vs01.vs.air4.com
+        type: string
+      hpp_header_allowed_origins:
+        description: Additional exact HTTPS HPP API origins allowed to receive access headers
+        required: false
+        default: https://enterprisepaymentshppapi-si.vs01.vs.air4.com,https://stg.virginatlantic.com
+        type: string
+    secrets:
+      key_vault_url:
+        required: false
+      key_vault_tenant_id:
+        required: false
+      key_vault_client_id:
+        required: false
+      key_vault_client_secret:
+        required: false
+      hpp_vaa_digital_first_token:
+        required: false
+      hpp_delta_enterprise_payments_token:
+        required: false
+      browserstack_username:
+        required: false
+      browserstack_access_key:
+        required: false
+      slack_webhook_url:
+        required: false
+
+jobs:
+  resolve-suite:
+    name: Resolve automation suite manifest
+    runs-on: ubuntu-latest
+    outputs:
+      suite_name: ${{ steps.manifest.outputs.suite_name }}
+      workflow_slug: ${{ steps.manifest.outputs.workflow_slug }}
+      test_project_path: ${{ steps.manifest.outputs.test_project_path }}
+      test_filter: ${{ steps.manifest.outputs.test_filter }}
+      summary_config_path: ${{ steps.manifest.outputs.summary_config_path }}
+      slack_config_path: ${{ steps.manifest.outputs.slack_config_path }}
+      slack_secret_name: ${{ steps.manifest.outputs.slack_secret_name }}
+      timeout_minutes: ${{ steps.manifest.outputs.timeout_minutes }}
+      runner_labels_json: ${{ steps.manifest.outputs.runner_labels_json }}
+      required_variables_json: ${{ steps.manifest.outputs.required_variables_json }}
+      allowed_variables_json: ${{ steps.manifest.outputs.allowed_variables_json }}
+      required_secrets_json: ${{ steps.manifest.outputs.required_secrets_json }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - name: Validate and resolve manifest
+        id: manifest
+        shell: pwsh
+        run: >-
+          ./scripts/resolve-automation-suite.ps1
+          -ManifestPath "${{ inputs.manifest_path }}"
+          -GithubOutputPath $env:GITHUB_OUTPUT
+
+  run-suite:
+    name: Run resolved automation suite
+    needs: resolve-suite
+    uses: ./.github/workflows/qa-reusable-regression-build-test.yml
+    with:
+      suite_name: ${{ needs.resolve-suite.outputs.suite_name }}
+      workflow_slug: ${{ needs.resolve-suite.outputs.workflow_slug }}
+      target_environment: ${{ inputs.target_environment }}
+      test_environment_json: ${{ inputs.test_environment_json }}
+      test_project_path: ${{ needs.resolve-suite.outputs.test_project_path }}
+      test_filter: ${{ needs.resolve-suite.outputs.test_filter }}
+      base_url: ${{ vars.BASE_URL || 'https://testresources.virginatlantic.com' }}
+      base_url_digital: ${{ vars.BASE_URL_DIGITAL || 'https://digital-test.virginatlantic.com' }}
+      graphql_mobile_path: ${{ vars.GRAPHQL_MOBILE_PATH || '/graphql/mobile/public/v1' }}
+      graphql_myaccount_public_path: ${{ vars.GRAPHQL_MYACCOUNT_PUBLIC_PATH || '/graphql/MyAccount/public' }}
+      graphql_trips_secure: ${{ vars.GRAPHQL_TRIPS_SECURE || '/digital/graphql/trips' }}
+      graphql_book_path: ${{ vars.GRAPHQL_BOOK_PATH || '/graphql/Book/public' }}
+      graphql_search_path: ${{ vars.GRAPHQL_SEARCH_PATH || '/GraphQL/Search/public' }}
+      summary_config_path: ${{ needs.resolve-suite.outputs.summary_config_path }}
+      slack_config_path: ${{ needs.resolve-suite.outputs.slack_config_path }}
+      slack_secret_name: ${{ needs.resolve-suite.outputs.slack_secret_name }}
+      enable_slack_for_branch_runs: ${{ inputs.enable_slack_for_branch_runs }}
+      use_playwright_for_hpp: ${{ inputs.use_playwright_for_hpp }}
+      hpp_page_allowed_origins: ${{ inputs.hpp_page_allowed_origins }}
+      hpp_header_allowed_origins: ${{ inputs.hpp_header_allowed_origins }}
+      timeout_minutes: ${{ fromJSON(needs.resolve-suite.outputs.timeout_minutes) }}
+      runner_labels_json: ${{ needs.resolve-suite.outputs.runner_labels_json }}
+      required_variables_json: ${{ needs.resolve-suite.outputs.required_variables_json }}
+      allowed_variables_json: ${{ needs.resolve-suite.outputs.allowed_variables_json }}
+      required_secrets_json: ${{ needs.resolve-suite.outputs.required_secrets_json }}
+    secrets:
+      key_vault_url: ${{ secrets.key_vault_url }}
+      key_vault_tenant_id: ${{ secrets.key_vault_tenant_id }}
+      key_vault_client_id: ${{ secrets.key_vault_client_id }}
+      key_vault_client_secret: ${{ secrets.key_vault_client_secret }}
+      hpp_vaa_digital_first_token: ${{ secrets.hpp_vaa_digital_first_token }}
+      hpp_delta_enterprise_payments_token: ${{ secrets.hpp_delta_enterprise_payments_token }}
+      browserstack_username: ${{ secrets.browserstack_username }}
+      browserstack_access_key: ${{ secrets.browserstack_access_key }}
+      slack_webhook_url: ${{ secrets.slack_webhook_url }}

@@ -1,0 +1,160 @@
+###Request
+GET https://Testresources.virginatlantic.com/dev/digital/orderpaymentmicroservice/payment/VS932SIXTLB26 HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+[
+	{
+		"docType": "PaymentDoc",
+		"createdOn": "2026-08-24T05:53:35",
+		"createdBy": "EAPI-PAY-MS",
+		"modifiedBy": "EAPI-PAY-MS",
+		"modifiedOn": "2026-08-24T05:53:51",
+		"pos": {
+			"countryCode": "GB",
+			"currencyCode": "GBP"
+		},
+		"parties": {
+			"participants": [
+				{
+					"partyType": "Seller",
+					"name": "Skyscanner",
+					"agencyID": "91281035",
+					"ordinal": "1",
+					"pccCode": "6UOL",
+					"contacts": {
+						"email": "Bandaru.JeevanNagaSai@fly.virgin.com"
+					},
+					"isCreditCardAccepted": true,
+					"requestAgentType": "IATA"
+				}
+			]
+		},
+		"bookingReferences": {
+			"rloc": "SIXTLB",
+			"externalRecordLocator": "CSALV8"
+		},
+		"orderId": "VS932SIXTLB26",
+		"paymentDetails": [
+			{
+				"paymentApprovalCode": "111939",
+				"acquirer": "Nuvei",
+				"amount": {
+					"monetaryAmount": "1590.89",
+					"baseCurrency": "GBP",
+					"currencyId": "826"
+				},
+				"cardMethod": {
+					"cardType": "VI",
+					"cardNumber": "444433XXXXXX1111",
+					"cardholderName": "David Smith"
+				},
+				"payer": {
+					"firstName": "David",
+					"lastName": "Smith"
+				}
+			}
+		],
+		"orderItems": [
+			{
+				"productType": "Ticket",
+				"orderItemId": "VS932SIXTLB26-1",
+				"custRefIds": [
+					"ADULT_1"
+				],
+				"segmentRefIds": [
+					"SEG1",
+					"SEG2"
+				],
+				"accountableDocumentRefIds": [
+					"9322520403550"
+				]
+			}
+		],
+		"customerDetails": [
+			{
+				"custId": "ADULT_1",
+				"ptc": "ADT",
+				"firstName": "DAVID",
+				"lastName": "SMITH",
+				"contacts": {
+					"email": "hina.kauser@fly.virgin.com"
+				}
+			}
+		],
+		"journeyType": "RETURN",
+		"segments": [
+			{
+				"segmentId": "SEG1",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "9",
+				"operatingCarrier": "VS",
+				"operatingFlightNumber": "9",
+				"originAirportCode": "LHR",
+				"originCountryCode": "GB",
+				"destinationAirportCode": "JFK",
+				"destinationCountryCode": "US",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-08-24T14:05"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-08-24T11:20"
+				},
+				"fareBasis": "LYH0D8LA"
+			},
+			{
+				"segmentId": "SEG2",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "4030",
+				"operatingCarrier": "DL",
+				"operatingFlightNumber": "3",
+				"originAirportCode": "JFK",
+				"originCountryCode": "US",
+				"destinationAirportCode": "LHR",
+				"destinationCountryCode": "GB",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-09-02T10:20"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-09-01T22:00"
+				},
+				"fareBasis": "MYJ0D8LA"
+			}
+		],
+		"accountableDocumentRefs": [
+			{
+				"documentType": 0,
+				"documentNumber": "9322520403550",
+				"issueDate": "2026-08-24",
+				"customerRefId": "ADULT_1",
+				"coupons": [
+					{
+						"segmentRefId": "SEG1",
+						"couponNumber": "1",
+						"ticketNumber": "9322520403550",
+						"couponStatus": "OPEN",
+						"fareBasis": "LYH0D8LA"
+					},
+					{
+						"segmentRefId": "SEG2",
+						"couponNumber": "2",
+						"ticketNumber": "9322520403550",
+						"couponStatus": "OPEN",
+						"fareBasis": "MYJ0D8LA"
+					}
+				]
+			}
+		],
+		"status": "Payment Captured",
+		"id": "82435994",
+		"partitionKey": "82435994"
+	}
+]

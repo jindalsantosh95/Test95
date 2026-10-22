@@ -1,0 +1,46 @@
+meta {
+  name: Virgin Account Upgrade
+  type: graphql
+  seq: 14
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation VirginAccountUpgrade {
+    virginAccountUpgrade(
+      virginAccountDetails: {
+        gender: "{{account_gender}}"
+        termsAndConditionsAccepted: true
+        enrolmentChannel: "{{account_enrolment_channel}}"
+        mediaCode: "{{account_media_code}}"
+        addressDetails: {
+          addressType: Home
+          addressLine1: "{{account_address_line1}}"
+          addressLine2: "{{account_address_line2}}"
+          addressLine3: "{{account_address_line3}}"
+          city: "{{account_city}}"
+          postalCode: "{{account_postal_code}}"
+          region: "{{account_region}}"
+          country: "{{account_country}}"
+          preferredFlag: "Y"
+        }
+        preferences: [
+          {
+            preferenceType: VaaMarketingPermissions
+            preferenceValue: "Y"
+          }
+        ]
+      }
+    )
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

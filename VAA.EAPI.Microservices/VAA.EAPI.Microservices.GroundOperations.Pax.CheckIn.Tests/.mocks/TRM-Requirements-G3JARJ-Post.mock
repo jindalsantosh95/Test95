@@ -1,0 +1,370 @@
+###Request
+POST https://travelrequirementsmgt-api-si.vs01.vs.air4.com/int/requirements HTTP/1.1
+
+$[?(@.confirmationNum == 'G3JARJ')]
+
+###Response
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+    "requirementsResourceId": "8122e239-3076-460e-960c-ba3c8275f954",
+    "checkin": false,
+    "travelRequirements": {
+        "id": "7c8d5abd-070f-46df-baf3-f2e05847be86",
+        "bookingReference": {
+            "id": "G3JARJ",
+            "creationDate": "2025-06-05T00:00:00Z"
+        },
+        "trips": [
+            {
+                "id": "1952f1b3-3f39-42ff-a00a-0da2c16ee910",
+                "ordinal": 0,
+                "departureStation": {
+                    "code": "MEX",
+                    "name": "Licenciado Benito Juarez International Airport",
+                    "country": {
+                        "code": "MX",
+                        "name": "Mexico",
+                        "isoAlpha3Code": "MEX"
+                    },
+                    "city": {
+                        "name": "Mexico City"
+                    }
+                },
+                "arrivalStation": {
+                    "code": "ATL",
+                    "name": "Hartsfield Jackson Atlanta International Airport",
+                    "country": {
+                        "code": "US",
+                        "name": "United States of America (the)",
+                        "isoAlpha3Code": "USA"
+                    },
+                    "city": {
+                        "name": "Atlanta"
+                    }
+                },
+                "firstDepartureLocalDate": "2025-06-05T13:10:00-06:00",
+                "lastArrivalLocalDate": "2025-06-05T18:38:00-04:00",
+                "segments": [
+                    {
+                        "id": "0ce3206e-785f-4ef5-9e03-ac4d8cbed038",
+                        "ordinal": 1,
+                        "operatingCarrier": {
+                            "code": "DL",
+                            "name": "Delta Air Lines"
+                        },
+                        "flightNum": "0587",
+                        "marketingSegment": {
+                            "flightNum": "0587",
+                            "marketingCarrier": [
+                                {
+                                    "code": "DL",
+                                    "name": "Delta Air Lines"
+                                }
+                            ]
+                        },
+                        "legs": [
+                            {
+                                "id": "392b136d-9458-4454-8d4b-49e0b609e44f",
+                                "ordinal": 1,
+                                "departure": {
+                                    "station": {
+                                        "code": "MEX",
+                                        "name": "Licenciado Benito Juarez International Airport",
+                                        "country": {
+                                            "code": "MX",
+                                            "name": "Mexico",
+                                            "isoAlpha3Code": "MEX"
+                                        },
+                                        "city": {
+                                            "name": "Mexico City"
+                                        }
+                                    },
+                                    "estimatedDepartureLocalDateTime": "2025-06-05T13:10:00-06:00",
+                                    "scheduledDepartureLocalDateTime": "2025-06-05T13:10:00-06:00",
+                                    "estimatedDepartureUTCDateTime": "2025-06-05T19:10:00Z",
+                                    "scheduledDepartureUTCDateTime": "2025-06-05T19:10:00Z"
+                                },
+                                "arrival": {
+                                    "station": {
+                                        "code": "ATL",
+                                        "name": "Hartsfield Jackson Atlanta International Airport",
+                                        "country": {
+                                            "code": "US",
+                                            "name": "United States of America (the)",
+                                            "isoAlpha3Code": "USA"
+                                        },
+                                        "city": {
+                                            "name": "Atlanta"
+                                        }
+                                    },
+                                    "estimatedArrivalLocalDateTime": "2025-06-05T18:38:00-04:00",
+                                    "scheduledArrivalLocalDateTime": "2025-06-05T18:38:00-04:00",
+                                    "estimatedArrivalUTCDateTime": "2025-06-05T22:38:00Z",
+                                    "scheduledArrivalUTCDateTime": "2025-06-05T22:38:00Z"
+                                },
+                                "international": true
+                            }
+                        ],
+                        "international": true,
+                        "transportType": "AIR"
+                    }
+                ],
+                "flown": false,
+                "missingCountryCode": false,
+                "checkin": false
+            }
+        ],
+        "passengers": [
+            {
+                "passengerResourceId": "fa213190-7b2a-45e2-b37b-c5aa11f45fb4",
+                "givenNames": "ONE",
+                "surname": "TEST",
+                "nameNum": "01.01",
+                "customerId": "9962317993117",
+                "birthDate": "1982-07-29T00:00:00Z",
+                "status": {
+                    "code": "COMPLETE"
+                },
+                "advancePassengerInformation": [
+                    {
+                        "passengerLegHealthRequirements": [
+                            {
+                                "datedOperatingLegId": "392b136d-9458-4454-8d4b-49e0b609e44f",
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "CONTACT_TRACING",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "acceptanceWindow": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "from": "PT72H",
+                                                    "to": ""
+                                                },
+                                                "effectivity": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "effectiveUTCDate": "2021-11-08 04:01:00Z",
+                                                    "expirationUTCDate": "2029-11-08 00:00:00Z",
+                                                    "effectiveLocalDate": "2019-01-01 00:00:00Z",
+                                                    "expirationLocalDate": "2129-01-01 00:00:00Z"
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "ruleId": "LEG_INTL_US-S1MEXATL",
+                                                "digitalVerificationEligible": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "status": {
+                                    "code": "COMPLETE"
+                                }
+                            }
+                        ],
+                        "passengerTripHealthRequirements": [
+                            {
+                                "tripId": "1952f1b3-3f39-42ff-a00a-0da2c16ee910",
+                                "status": {
+                                    "code": "COMPLETE"
+                                },
+                                "requirementCategories": [
+                                    {
+                                        "type": "TRAVEL_DOCUMENTS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "PASSPORT",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "returnDateRequired": false,
+                                                "verified": false
+                                            },
+                                            {
+                                                "requirementType": "SECONDARY_DOC",
+                                                "requirementOptions": [
+                                                    "EMBASSY_VISA"
+                                                ],
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "country": {
+                                                    "code": "US",
+                                                    "isoAlpha3Code": "USA"
+                                                },
+                                                "links": [
+                                                    {
+                                                        "linkId": "EMBASSY_VISA_1",
+                                                        "name": "Visa",
+                                                        "text": "<p>You must have a valid visa issued by the USA.</p>",
+                                                        "source": "vendor",
+                                                        "href": "https://apply.joinsherpa.com/products?passport=AFG&destinations=USA&affiliateId=delta&language=en-US"
+                                                    }
+                                                ],
+                                                "transit": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "GOVERNMENT_FORMS",
+                                        "status": {
+                                            "code": "COMPLETE"
+                                        },
+                                        "requirements": [
+                                            {
+                                                "requirementType": "CONTACT_TRACING",
+                                                "status": {
+                                                    "code": "PRESENT"
+                                                },
+                                                "acceptanceWindow": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "from": "PT72H",
+                                                    "to": ""
+                                                },
+                                                "effectivity": {
+                                                    "calculationFromType": "TRIP_ORIGIN_DEPARTURE",
+                                                    "effectiveUTCDate": "2021-11-08 04:01:00Z",
+                                                    "expirationUTCDate": "2029-11-08 00:00:00Z",
+                                                    "effectiveLocalDate": "2019-01-01 00:00:00Z",
+                                                    "expirationLocalDate": "2129-01-01 00:00:00Z"
+                                                },
+                                                "ageEligibility": {
+                                                    "minimumAge": 0,
+                                                    "maximumAge": 0
+                                                },
+                                                "ruleId": "LEG_INTL_US-S1MEXATL",
+                                                "digitalVerificationEligible": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "exceptions": [],
+                                "flown": false,
+                                "missingCountryCode": false,
+                                "checkin": false,
+                                "checkinEligible": true
+                            }
+                        ],
+                        "travelDocuments": [
+                            {
+                                "type": "PASSPORT",
+                                "subType": "P",
+                                "givenNames": "ONE",
+                                "surname": "TEST",
+                                "birthDate": "1982-07-29",
+                                "gender": {
+                                    "code": "M",
+                                    "name": "Male"
+                                },
+                                "number": "798210281",
+                                "expirationDate": "2028-06-05",
+                                "issuingCountry": {
+                                    "code": "AFG",
+                                    "name": "Afghanistan",
+                                    "isoAlpha2Code": "AF"
+                                },
+                                "nationality": {
+                                    "code": "AFG",
+                                    "name": "Afghanistan",
+                                    "isoAlpha2Code": "AF"
+                                },
+                                "countryOfResidence": {
+                                    "code": "AFG",
+                                    "name": "Afghanistan",
+                                    "isoAlpha2Code": "AF"
+                                },
+                                "methodOfDataEntry": "P",
+                                "documentFeature": "NONE",
+                                "sourceFromType": "PNR"
+                            }
+                        ],
+                        "contactInformation": [
+                            {
+                                "requirements": [
+                                    {
+                                        "type": "US_ADDRESS",
+                                        "required": true,
+                                        "allowEmpty": false
+                                    },
+                                    {
+                                        "type": "PRIMARY_PHONE",
+                                        "required": true,
+                                        "allowEmpty": false
+                                    },
+                                    {
+                                        "type": "SECONDARY_PHONE",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    },
+                                    {
+                                        "type": "EMAIL",
+                                        "required": false,
+                                        "allowEmpty": true
+                                    }
+                                ],
+                                "address": {
+                                    "declined": false,
+                                    "streetAddress": "3129 DELTA BLVD",
+                                    "countryCode": "USA",
+                                    "stateCode": "MN",
+                                    "cityCode": "ATL",
+                                    "zipCode": "55068"
+                                },
+                                "phone": [
+                                    {
+                                        "verified": true,
+                                        "preference": "PRIMARY",
+                                        "type": "HOME",
+                                        "countryCode": "001",
+                                        "phoneNumber": "1234567890"
+                                    },
+                                    {
+                                        "verified": true,
+                                        "preference": "SECONDARY"
+                                    }
+                                ]
+                            }
+                        ],
+                        "emergencyContact": [
+                            {
+                                "declined": true
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

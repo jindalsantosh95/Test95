@@ -1,0 +1,516 @@
+@page "/azure-app-settings"
+@attribute [Authorize(Policy = "RequireSpecificGroup")]
+@using VAA.EAPI.HealthStatusApp.Models
+@using VAA.EAPI.HealthStatusApp.Models.AzureAppSettings
+@using VAA.EAPI.HealthStatusApp.Services
+@inject IAzureAppSettingsService AzureAppSettingsService
+@rendermode InteractiveServer
+
+
+<style>
+    .azure-settings-table {
+        background-color: #fff !important;
+        opacity: 1 !important;
+    }
+    .azure-settings-row-changed {
+        background-color: #ff8080 !important;
+    }
+    .azure-Snapshot-btn-wrapper {
+        margin: 16px 0 24px 0;
+        display: flex;
+        align-items: center;
+    }
+    .deployment-status-filter-panel {
+        margin-bottom: 12px;
+    }
+    .deployment-status-filter-input {
+        margin-right: 12px;
+        min-width: 260px;
+    }
+    .azure-alerts-table-wrapper {
+        max-height: 20vh;
+        overflow-y: auto;
+        margin-bottom: 16px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+    .azure-alerts-table {
+        width: 100%;
+        margin-bottom: 0;
+        background-color: #fff;
+    }
+    .azure-alerts-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: #f8f9fa;
+    }
+    .azure-alerts-row-match {
+        background-color: #fff3cd !important;
+    }
+    .azure-alerts-row-hover {
+        background-color: #dbeafe !important;
+    }
+    .azure-alert-action {
+        width: 44px;
+        text-align: center;
+    }
+    .azure-alert-select-btn {
+        padding: 0.1rem 0.35rem;
+    }
+    .azure-select-wrapper {
+        position: relative;
+    }
+    .azure-select-wrapper .form-select {
+        padding-right: 2.5rem;
+    }
+    .azure-select-spinner {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #0d6efd;
+    }
+</style>
+
+<PageTitle>Azure Application Settings</PageTitle>
+
+<section class="deployment-status-container">
+    <h1>Azure Application Settings</h1>
+
+    @if (!string.IsNullOrWhiteSpace(RecentDiffAlertsErrorMessage))
+    {
+        <section class="mt-3" aria-label="Recent app settings diff alerts">
+            <h2>Recent Alerts</h2>
+            <div class="alert alert-danger" role="alert">@RecentDiffAlertsErrorMessage</div>
+        </section>
+    }
+    else if (RecentDiffAlerts.Any())
+    {
+        <section class="mt-3" aria-label="Recent app settings diff alerts">
+            <h2>Recent Alerts</h2>
+            <div class="azure-alerts-table-wrapper">
+                <table class="table table-sm table-striped azure-alerts-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp (UTC)</th>
+                            <th>Subscription</th>
+                            <th>Resource Group</th>
+                            <th>Site/Function App</th>
+                            <th class="azure-alert-action" aria-label="Select alert"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var alert in RecentDiffAlerts)
+                        {
+                            <tr class="@GetAlertRowClass(alert)"
+                                @onmouseenter="@(() => OnAlertRowMouseOver(alert))"
+                                @onmouseleave="OnAlertRowMouseOut">
+                                <td>@alert.Timestamp.ToUniversalTime().ToString("dd-MMM-yyyy HH:mm:ss")</td>
+                                <td>@alert.Subscription</td>
+                                <td>@alert.ResourceGroup</td>
+                                <td>@alert.AppName</td>
+                                <td class="azure-alert-action">
+                                    <button class="btn btn-sm btn-outline-secondary azure-alert-select-btn"
+                                            type="button"
+                                            title="Select this alert context"
+                                            aria-label="Select this alert context"
+                                            disabled="@(IsLoadingSubscriptions || IsLoadingResourceGroups || IsLoadingApps || IsLoadingSettings)"
+                                            @onclick="() => SelectAlertContextAsync(alert)">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+
+    <section class="azure-settings-stepper" aria-label="Azure application settings selector">
+        <div class="azure-settings-step">
+            <label for="subscriptionSelector"><strong>Subscription</strong></label>
+            <div class="azure-select-wrapper">
+                <select id="subscriptionSelector" class="form-select" @onchange="OnSubscriptionChanged" value="@SelectedSubscriptionId" disabled="@IsLoadingSubscriptions">
+                    <option value="">-- Select a subscription --</option>
+                    @foreach (var subscription in Subscriptions)
+                    {
+                        <option value="@subscription.SubscriptionId">@subscription.DisplayName</option>
+                    }
+                </select>
+                @if (IsLoadingSubscriptions)
+                {
+                    <span class="spinner-border spinner-border-sm azure-select-spinner" role="status" aria-label="Loading subscriptions"></span>
+                }
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(SelectedSubscriptionId))
+        {
+            <div class="azure-settings-step">
+                <label for="resourceGroupSelector"><strong>Resource Group</strong></label>
+                <div class="azure-select-wrapper">
+                    <select id="resourceGroupSelector" class="form-select" @onchange="OnResourceGroupChanged" value="@SelectedResourceGroupName" disabled="@(!CanSelectResourceGroup)">
+                        <option value="">-- Select a resource group --</option>
+                        @foreach (var resourceGroup in ResourceGroups)
+                        {
+                            <option value="@resourceGroup.Name">@resourceGroup.Name</option>
+                        }
+                    </select>
+                    @if (IsLoadingResourceGroups)
+                    {
+                        <span class="spinner-border spinner-border-sm azure-select-spinner" role="status" aria-label="Loading resource groups"></span>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(SelectedResourceGroupName))
+        {
+            <div class="azure-settings-step">
+                <label for="appSelector"><strong>Site / Function App</strong></label>
+                <div class="azure-select-wrapper">
+                    <select id="appSelector" class="form-select" @onchange="OnAppChanged" value="@SelectedAppName" disabled="@(!CanSelectApp)">
+                        <option value="">-- Select an app --</option>
+                        @foreach (var app in Apps)
+                        {
+                            <option value="@app.Name">@app.Name</option>
+                        }
+                    </select>
+                    @if (IsLoadingApps)
+                    {
+                        <span class="spinner-border spinner-border-sm azure-select-spinner" role="status" aria-label="Loading apps"></span>
+                    }
+                </div>
+            </div>
+        }
+    </section>
+
+    @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <div class="alert alert-danger mt-3" role="alert">@ErrorMessage</div>
+    }
+
+    @if (CanFilterSettings)
+    {
+        <section class="deployment-status-filter-panel mt-3" aria-label="Application settings filter panel">
+            <ul>
+                <li class="deployment-status-filter-controls">
+                    <input id="appSettingFilter"
+                           class="deployment-status-filter-input"
+                           type="search"
+                           placeholder="Filter setting name"
+                           aria-label="Filter application setting name"
+                           @bind="SettingNameFilter"
+                           @bind:event="oninput" />
+                </li>
+            </ul>
+        </section>
+
+
+        @if (HasDifferences)
+        {
+            <div class="azure-Snapshot-btn-wrapper">
+                <button class="btn btn-primary" @onclick="OnTakeSnapshotAsync">Take Snapshot</button>
+            </div>
+        }
+
+        <div class="deployment-status-table-wrapper">
+            <table class="deployment-status-table azure-settings-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Current Value</th>
+                        <th>
+                            Snapshot Value
+                            @if (AppSettings?.SnapshotDateTime != default)
+                            {
+                                <span style="font-weight: normal; font-size: 0.95em;">&nbsp; (@AppSettings!.SnapshotDateTime.ToString("dd-MMM-yy"))</span>
+                            }
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!FilteredSettings.Any())
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center">No settings match the current filter.</td>
+                        </tr>   
+                    }
+                    else
+                    {
+                        @foreach (var appSetting in FilteredSettings)
+                        {
+                            var isChanged = appSetting.CurrentValue != appSetting.PreviousValue;
+                            <tr class="@(isChanged ? "azure-settings-row-changed" : null)">
+                                <td>@appSetting.Name</td>
+                                <td class="azure-settings-value">@appSetting.CurrentValue</td>
+                                <td class="azure-settings-value">@(string.IsNullOrWhiteSpace(appSetting.PreviousValue) ? "-" : appSetting.PreviousValue)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+@code {
+    private List<AzureSubscriptionModel> Subscriptions { get; set; } = [];
+    private List<AzureResourceGroupModel> ResourceGroups { get; set; } = [];
+    private List<AzureSiteAppModel> Apps { get; set; } = [];
+    private List<AzureAppSettingsDiffAlert> RecentDiffAlerts { get; set; } = [];
+    private AzureAppSettingCompareResponse AppSettings { get; set; } = new AzureAppSettingCompareResponse();
+
+    private string SelectedSubscriptionId { get; set; } = string.Empty;
+    private string SelectedResourceGroupName { get; set; } = string.Empty;
+    private string SelectedAppName { get; set; } = string.Empty;
+    private string SettingNameFilter { get; set; } = string.Empty;
+    private string? RecentDiffAlertsErrorMessage { get; set; }
+    private string? ErrorMessage { get; set; }
+    private AzureAppSettingsDiffAlert? HoveredAlert { get; set; }
+
+    private bool IsLoadingSubscriptions { get; set; }
+    private bool IsLoadingResourceGroups { get; set; }
+    private bool IsLoadingApps { get; set; }
+    private bool IsLoadingSettings { get; set; }
+
+    private bool CanSelectResourceGroup =>
+        !string.IsNullOrWhiteSpace(SelectedSubscriptionId) && !IsLoadingResourceGroups;
+
+    private bool CanSelectApp =>
+        CanSelectResourceGroup && !string.IsNullOrWhiteSpace(SelectedResourceGroupName) && !IsLoadingApps;
+
+    private bool CanFilterSettings => !IsLoadingSettings && AppSettings.AppSettingsState.Any();
+
+    private IEnumerable<AzureAppSettingsState> FilteredSettings =>
+        AppSettings.AppSettingsState.Where(MatchesSettingNameFilter)
+            .OrderByDescending(setting => setting.CurrentValue != setting.PreviousValue)
+            .ThenBy(setting => setting.Name, StringComparer.OrdinalIgnoreCase);
+
+    private bool HasDifferences =>
+        AppSettings.AppSettingsState.Any(s => s.CurrentValue != s.PreviousValue);
+
+    protected override async Task OnInitializedAsync()
+    {
+        var loadRecentDiffAlertsTask = LoadRecentDiffAlertsAsync();
+        var loadSubscriptionsTask = LoadSubscriptionsAsync();
+        await Task.WhenAll(loadRecentDiffAlertsTask, loadSubscriptionsTask);
+    }
+
+    private async Task LoadRecentDiffAlertsAsync()
+    {
+        try
+        {
+            RecentDiffAlertsErrorMessage = null;
+            RecentDiffAlerts = (await AzureAppSettingsService.GetRecentDiffAlertsAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            RecentDiffAlerts = [];
+            RecentDiffAlertsErrorMessage = $"Unable to load recent alerts. {ex.Message}";
+        }
+    }
+
+    private async Task LoadSubscriptionsAsync()
+    {
+        try
+        {
+            IsLoadingSubscriptions = true;
+            ErrorMessage = null;
+
+            Subscriptions = (await AzureAppSettingsService.GetSubscriptionsAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Unable to load subscriptions. {ex.Message}";
+        }
+        finally
+        {
+            IsLoadingSubscriptions = false;
+        }
+    }
+
+    private async Task OnSubscriptionChanged(ChangeEventArgs args)
+    {
+        SelectedSubscriptionId = args.Value?.ToString() ?? string.Empty;
+
+        SelectedResourceGroupName = string.Empty;
+        SelectedAppName = string.Empty;
+        SettingNameFilter = string.Empty;
+
+        ResourceGroups.Clear();
+        Apps.Clear();
+        AppSettings = new AzureAppSettingCompareResponse();
+
+        if (string.IsNullOrWhiteSpace(SelectedSubscriptionId))
+        {
+            return;
+        }
+
+        try
+        {
+            IsLoadingResourceGroups = true;
+            ErrorMessage = null;
+
+            ResourceGroups = (await AzureAppSettingsService.GetResourceGroupsAsync(SelectedSubscriptionId)).ToList();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Unable to load resource groups. {ex.Message}";
+        }
+        finally
+        {
+            IsLoadingResourceGroups = false;
+        }
+    }
+
+    private async Task OnResourceGroupChanged(ChangeEventArgs args)
+    {
+        SelectedResourceGroupName = args.Value?.ToString() ?? string.Empty;
+
+        SelectedAppName = string.Empty;
+        SettingNameFilter = string.Empty;
+
+        Apps.Clear();
+        AppSettings = new AzureAppSettingCompareResponse();
+
+        if (string.IsNullOrWhiteSpace(SelectedResourceGroupName) || string.IsNullOrWhiteSpace(SelectedSubscriptionId))
+        {
+            return;
+        }
+
+        try
+        {
+            IsLoadingApps = true;
+            ErrorMessage = null;
+
+            Apps = (await AzureAppSettingsService.GetSitesAsync(SelectedSubscriptionId, SelectedResourceGroupName)).ToList();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Unable to load site apps. {ex.Message}";
+        }
+        finally
+        {
+            IsLoadingApps = false;
+        }
+    }
+
+    private async Task OnAppChanged(ChangeEventArgs args)
+    {
+        SelectedAppName = args.Value?.ToString() ?? string.Empty;
+        SettingNameFilter = string.Empty;
+        AppSettings = new AzureAppSettingCompareResponse();
+
+        if (string.IsNullOrWhiteSpace(SelectedAppName)
+            || string.IsNullOrWhiteSpace(SelectedSubscriptionId)
+            || string.IsNullOrWhiteSpace(SelectedResourceGroupName))
+        {
+            return;
+        }
+
+        try
+        {
+            IsLoadingSettings = true;
+            ErrorMessage = null;
+
+            AppSettings = await AzureAppSettingsService
+                .GetSiteAppSettingsAsync(SelectedSubscriptionId, SelectedResourceGroupName, SelectedAppName);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Unable to load site app settings. {ex.Message}";
+        }
+        finally
+        {
+            IsLoadingSettings = false;
+        }
+    }
+
+    private bool MatchesSettingNameFilter(AzureAppSettingsState setting)
+    {
+        return string.IsNullOrWhiteSpace(SettingNameFilter)
+            || setting.Name.Contains(SettingNameFilter, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private async Task OnTakeSnapshotAsync()
+    {
+        try
+        {
+            IsLoadingSettings = true;
+            ErrorMessage = null;
+            AppSettings = await AzureAppSettingsService.Snapshot(SelectedSubscriptionId, SelectedResourceGroupName, SelectedAppName);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Unable to take Snapshot. {ex.Message}";
+        }
+        finally
+        {
+            IsLoadingSettings = false;
+        }
+    }
+
+    private async Task SelectAlertContextAsync(AzureAppSettingsDiffAlert alert)
+    {
+        var matchingSubscription = Subscriptions
+            .FirstOrDefault(subscription => alert.Subscription.Contains(subscription.SubscriptionId, StringComparison.OrdinalIgnoreCase));
+
+        SelectedSubscriptionId = matchingSubscription?.SubscriptionId ?? string.Empty;
+        if (matchingSubscription == null)
+        {
+            // If the subscription from the alert isn't in the list, we can't proceed with selecting the alert context
+            return;
+        }
+        await OnSubscriptionChanged(new ChangeEventArgs { Value = SelectedSubscriptionId });
+
+        SelectedResourceGroupName = ResourceGroups.FirstOrDefault(rg => alert.ResourceGroup.Equals(rg.Name, StringComparison.OrdinalIgnoreCase))?.Name ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(SelectedResourceGroupName))
+        {
+            // If the resource group from the alert isn't in the list for the selected subscription, we can't proceed with selecting the alert context
+            return;
+        }
+        await OnResourceGroupChanged(new ChangeEventArgs { Value = SelectedResourceGroupName });
+
+        SelectedAppName = Apps.FirstOrDefault(a => alert.AppName.Equals(a.Name, StringComparison.OrdinalIgnoreCase))?.Name ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(SelectedAppName))
+        {
+            // If the app from the alert isn't in the list for the selected resource group, we can't proceed with selecting the alert context
+            return;
+        }
+        await OnAppChanged(new ChangeEventArgs { Value = SelectedAppName });
+    }
+
+    private string GetAlertRowClass(AzureAppSettingsDiffAlert alert)
+    {
+        var classes = new List<string>();
+
+        if (IsAlertSelectionMatch(alert))
+        {
+            classes.Add("azure-alerts-row-match");
+        }
+
+        if (HoveredAlert == alert)
+        {
+            classes.Add("azure-alerts-row-hover");
+        }
+
+        return string.Join(" ", classes);
+    }
+
+    private bool IsAlertSelectionMatch(AzureAppSettingsDiffAlert alert)
+    {
+        if (string.IsNullOrWhiteSpace(SelectedSubscriptionId))
+        {
+            return false;
+        }
+        return alert.Subscription.Contains(SelectedSubscriptionId, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void OnAlertRowMouseOver(AzureAppSettingsDiffAlert alert) => HoveredAlert = alert;
+
+    private void OnAlertRowMouseOut() => HoveredAlert = null;
+}

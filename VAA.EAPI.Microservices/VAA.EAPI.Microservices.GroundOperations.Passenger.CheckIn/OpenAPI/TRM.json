@@ -1,0 +1,4386 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Travel Requirements Management API - AWS (Public Version)",
+    "description": "Provides an API Gateway to manage travel requirements for the customer. The clients would be able to list, update, scan the customer's travel requirements.",
+    "contact": {
+      "email": "IntlTravelDocsSupport@delta.com"
+    },
+    "version": "3.0.13",
+    "license": {
+      "name": "Proprietary",
+      "url": "https://www.delta.com/terms"
+    },
+    "x-api-type": [
+      "experience",
+      "domain",
+      "proxy"
+    ],
+    "x-business-capability": [
+      "Travel Requirements Management L1",
+      "Travel Requirements L2",
+      "Travel Requirements API L3"
+    ]
+  },
+  "servers": [
+    {
+      "url": "https://travelrequirements-api.pax-clrnc-dev.aws.delta.com/dev"
+    },
+    {
+      "url": "https://travelrequirements-api.pax-clrnc-si.aws.delta.com/int"
+    },
+    {
+      "url": "https://travelrequirements-api.pax-clrnc-prd.aws.delta.com/prd"
+    },
+    {
+      "url": "https://travelrequirements-api.vs-pax-clrnc-si.aws.vs.air4.com/int"
+    },
+    {
+      "url": "https://travelrequirements-api.vs-pax-clrnc-prd.aws.vs.air4.com/prd"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Query Travel Requirements and Status",
+      "description": "Endpoints for querying travel requirements and status information"
+    },
+    {
+      "name": "Submit Travel Requirements",
+      "description": "Endpoints for submitting travel requirement information"
+    },
+    {
+      "name": "Upload Travel Requirements",
+      "description": "Endpoints for uploading travel requirement documents"
+    },
+    {
+      "name": "Transactional Resources",
+      "description": "Endpoints for managing transactional resources"
+    },
+    {
+      "name": "Compliances",
+      "description": "Endpoints for managing compliance information"
+    },
+    {
+      "name": "Document Capture",
+      "description": "Endpoints for document capture functionality"
+    },
+    {
+      "name": "Operations",
+      "description": "Operational endpoints for health checks and monitoring"
+    },
+    {
+      "name": "CORS",
+      "description": "CORS support endpoints"
+    }
+  ],
+  "paths": {
+    "/requirements": {
+      "options": {
+        "summary": "CORS support",
+        "operationId": "optionsRequirements",
+        "description": "Enable CORS by returning correct headers\n",
+        "tags": [
+          "CORS"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\n  \"statusCode\" : 200\n}\n"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'POST'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Query Travel Requirements and Status",
+          "Transactional Resources"
+        ],
+        "summary": "Provide a list of requirement and their statuses for all passengers in a PNR.",
+        "description": "Create a Travel Requirements resource with a unique id. The unique id acts as a short lived token that can be passed on TRM's transactional endpoints.",
+        "operationId": "postRequirements",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "testLab",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The TPF environment. Only needed on test environment.\n  DL\n    - tpb\n    - tsbb\n    - trs\n    - res\n  VS\n    - tvth\n    - trr\n    - air\n"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Used only for code generation"
+          },
+          {
+            "name": "configOptions",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "- Used for overriding a feature flag by request.\n- Format is [ { 'configName1': 'value' } ]. E.g. [{'nativeTravelDocs':'true'}, {'configEnabled':'false'}]\n"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequirementsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequirementsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request. Mandatory data missing or any invalid input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error. System down or any runtime error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway Timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cent-authorizer": []
+          },
+          {
+            "guest-based-auth": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/trm-travelreqsmgt-api-fn-queryreqs-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      }
+    },
+    "/requirements/health": {
+      "get": {
+        "tags": [
+          "Operations",
+          "Transactional Resources"
+        ],
+        "summary": "Get health status of the API",
+        "operationId": "getRequirementsHealth",
+        "responses": {
+          "200": {
+            "description": "Success getting health check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Endpoint not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/trm-travelreqsmgt-api-fn-healthcheck-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      }
+    },
+    "/requirements/{requirementsResourceId}": {
+      "options": {
+        "summary": "CORS support",
+        "operationId": "optionsRequirementsByRequirementsResourceId",
+        "description": "Enable CORS by returning correct headers\n",
+        "tags": [
+          "CORS"
+        ],
+        "parameters": [
+          {
+            "name": "requirementsResourceId",
+            "in": "path",
+            "description": "The UUID from POST /requirements using confirmation,ticket or credit card",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\n  \"statusCode\" : 200\n}\n"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,PATCH'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Query Travel Requirements and Status",
+          "Transactional Resources"
+        ],
+        "summary": "Get travel requirements and completion status",
+        "description": "Obtain Travel Requirements details for an existing resource id",
+        "operationId": "getRequirementsByRequirementsResourceId",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "testLab",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The TPF environment. Only needed on test environment.\n  DL\n    - tpb\n    - tsbb\n    - trs\n    - res\n  VS\n    - tvth\n    - trr\n    - air\n"
+          },
+          {
+            "name": "requirementsResourceId",
+            "in": "path",
+            "description": "The UUID from POST /requirements using confirmation,ticket or credit card",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Used only for code generation"
+          },
+          {
+            "name": "configOptions",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "- Used for overriding a feature flag by request.\n- Format is [ { 'configName1': 'value' } ]. E.g. [{'nativeTravelDocs':'true'}, {'configEnabled':'false'}]\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequirementsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request. Mandatory data missing or any invalid input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error. System down or any runtime error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway Timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cent-authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/trm-travelreqsmgt-api-fn-queryreqs-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Submit Travel Requirements",
+          "Transactional Resources"
+        ],
+        "summary": "Submit a document form",
+        "description": "Create a Document Form resource with a unique id.",
+        "operationId": "patchRequirementsByRequirementsResourceId",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "requirementsResourceId",
+            "in": "path",
+            "description": "The unique id from POST /requirements using confirmation,ticket or credit card",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "testLab",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The TPF environment. Only needed on test environment.\n  DL\n    - tpb\n    - tsbb\n    - trs\n    - res\n  VS\n    - tvth\n    - trr\n    - air\n"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Used only for code generation"
+          },
+          {
+            "name": "configOptions",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "- Used for overriding a feature flag by request.\n- Format is [ { 'configName1': 'value' } ]. E.g. [{'nativeTravelDocs':'true'}, {'configEnabled':'false'}]\n"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequirementFormRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequirementFormResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request. Mandatory data missing or any invalid input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error. System down or any runtime error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway Timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cent-authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/trm-travelreqsmgt-api-fn-submitreq-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      }
+    },
+    "/requirements/compliance": {
+      "options": {
+        "summary": "CORS support",
+        "operationId": "optionsRequirementsCompliance",
+        "description": "Enable CORS by returning correct headers\n",
+        "tags": [
+          "CORS"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\n  \"statusCode\" : 200\n}\n"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'POST'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Compliances"
+        ],
+        "summary": "Send updated compliance for a customer",
+        "description": "Used to send the 'Ready to fly' status for a customer for record keeping only. The status will not be saved to the customer's PNR.",
+        "operationId": "postRequirementsCompliance",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "testLab",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The TPF environment. Only needed on test environment.\n  DL\n    - tpb\n    - tsbb\n    - trs\n    - res\n  VS\n    - tvth\n    - trr\n    - air\n"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Used only for code generation"
+          },
+          {
+            "name": "configOptions",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "- Used for overriding a feature flag by request.\n- Format is [ { 'configName1': 'value' } ]. E.g. [{'nativeTravelDocs':'true'}, {'configEnabled':'false'}]\n"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComplianceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComplianceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway Timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cent-authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/trm-travelreqsmgt-api-fn-reqcompliance-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      }
+    },
+    "/requirements/{requirementsResourceId}/uploads": {
+      "options": {
+        "summary": "CORS support",
+        "operationId": "optionsRequirementsByRequirementsResourceIdUploads",
+        "description": "Enable CORS by returning correct headers\n",
+        "tags": [
+          "CORS"
+        ],
+        "parameters": [
+          {
+            "name": "requirementsResourceId",
+            "in": "path",
+            "description": "The UUID from POST /requirements using confirmation,ticket or credit card",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\n  \"statusCode\" : 200\n}\n"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Upload Travel Requirements",
+          "Transactional Resources"
+        ],
+        "summary": "Upload document",
+        "description": "Creates an Upload Document Resource with a unique id",
+        "operationId": "postRequirementsByRequirementsResourceIdUploads",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "requirementsResourceId",
+            "in": "path",
+            "description": "The UUID from POST /requirements using confirmation,ticket or credit card",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Used only for code generation"
+          },
+          {
+            "name": "configOptions",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "- Used for overriding a feature flag by request.\n- Format is [ { 'configName1': 'value' } ]. E.g. [{'nativeTravelDocs':'true'}, {'configEnabled':'false'}]\n"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequirementUploadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequirementUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Request. Mandatory data missing or any invalid input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error. System down or any runtime error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway Timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cent-authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/trm-travelreqsmgt-api-fn-uploadreq-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      }
+    },
+    "/requirements/traveldocs/capture/init": {
+      "post": {
+        "tags": [
+          "Travel Documents",
+          "Document Capture",
+          "DEPRECATED"
+        ],
+        "summary": "Initialize document capture",
+        "operationId": "postRequirementTraveldocsCaptureInit",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Used only for code generation"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaptureInitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success should return the pre-signed url",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaptureInitResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cent-authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/itd-doc-capture-fn-2-initialize-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      },
+      "options": {
+        "summary": "CORS support",
+        "operationId": "optionsRequirementTraveldocsCaptureInit",
+        "description": "Enable CORS by returning correct headers\n",
+        "tags": [
+          "CORS"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\n  \"statusCode\" : 200\n}\n"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'POST'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requirements/traveldocs/capture/results/{documentId}": {
+      "get": {
+        "tags": [
+          "Travel Documents",
+          "Document Capture",
+          "DEPRECATED"
+        ],
+        "summary": "Obtain document results stored after analysis",
+        "operationId": "getRequirementsTravelDocsCaptureResults",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Used only for code generation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success should return the document information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaptureResultsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cent-authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/itd-doc-capture-fn-2-retrieve-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      },
+      "options": {
+        "summary": "CORS support",
+        "operationId": "optionsRequirementsTravelDocsCaptureResults",
+        "description": "Enable CORS by returning correct headers\n",
+        "tags": [
+          "CORS"
+        ],
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\n  \"statusCode\" : 200\n}\n"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requirements/traveldocs/capture/health": {
+      "options": {
+        "summary": "CORS support",
+        "operationId": "optionsRequirementsTraveldocsCaptureHealth",
+        "description": "Enable CORS by returning correct headers\n",
+        "tags": [
+          "CORS"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\n  \"statusCode\" : 200\n}\n"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Travel Documents",
+          "Document Capture",
+          "Operations",
+          "DEPRECATED"
+        ],
+        "operationId": "getRequirementsTraveldocsCaptureHealth",
+        "summary": "Get the health check status for document capture",
+        "responses": {
+          "200": {
+            "description": "Success should return the document information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaptureHealthCheckResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/itd-doc-capture-fn-2-health-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      }
+    },
+    "/requirements/traveldocs/capture/v1/init": {
+      "post": {
+        "tags": [
+          "Travel Documents",
+          "Document Capture"
+        ],
+        "summary": "Initialize document capture",
+        "operationId": "postRequirementsTraveldocsCaptureV1Init",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Used only for code generation"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaptureInitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success should return the pre-signed url",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaptureInitResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cent-authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/itd-document-capture-function-initialize-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      },
+      "options": {
+        "summary": "CORS support",
+        "operationId": "optionsRequirementsTraveldocsCaptureV1Init",
+        "description": "Enable CORS by returning correct headers\n",
+        "tags": [
+          "CORS"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\n  \"statusCode\" : 200\n}\n"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'POST'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requirements/traveldocs/capture/v1/results/{documentId}": {
+      "options": {
+        "summary": "CORS support",
+        "operationId": "optionsRequirementsTraveldocsCaptureV1ResultsByDocumentId",
+        "description": "Enable CORS by returning correct headers\n",
+        "tags": [
+          "CORS"
+        ],
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\n  \"statusCode\" : 200\n}\n"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Travel Documents",
+          "Document Capture"
+        ],
+        "summary": "Obtain document results stored after analysis",
+        "operationId": "getRequirementsTraveldocsCaptureV1ResultsByDocumentId",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Used only for code generation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success should return the document information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaptureResultsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cent-authorizer": []
+          }
+        ],
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/itd-document-capture-function-retrieve-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      }
+    },
+    "/requirements/traveldocs/capture/v1/health": {
+      "options": {
+        "summary": "CORS support",
+        "operationId": "optionsRequirementsTraveldocsCaptureV1Health",
+        "description": "Enable CORS by returning correct headers\n",
+        "tags": [
+          "CORS"
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\n  \"statusCode\" : 200\n}\n"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              },
+              "responseTemplates": {
+                "application/json": "{}\n"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Travel Documents",
+          "Document Capture",
+          "Operations"
+        ],
+        "operationId": "getRequirementsTraveldocsCaptureV1Health",
+        "summary": "Get the health check status for document capture",
+        "responses": {
+          "200": {
+            "description": "Success should return the document information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaptureHealthCheckResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "connectionType": "INTERNET",
+          "httpMethod": "POST",
+          "type": "AWS_PROXY",
+          "passthroughBehavior": "when_no_match",
+          "uri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/lambda/itd-document-capture-function-health-jvm/version/alias}}/invocations"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Address": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "addressLine1Text": {
+            "type": "string"
+          },
+          "addressLine2Text": {
+            "type": "string"
+          },
+          "cityLocalityName": {
+            "type": "string"
+          },
+          "countrySubdivisionCode": {
+            "type": "string"
+          },
+          "countrySubdivisionName": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string"
+          }
+        },
+        "description": "Address information."
+      },
+      "AddressInfo": {
+        "type": "object",
+        "description": "Contacts Address Information",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "declined": {
+            "type": "boolean"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "streetAddress": {
+            "type": "string"
+          },
+          "countryCode": {
+            "type": "string"
+          },
+          "stateCode": {
+            "type": "string"
+          },
+          "cityCode": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          }
+        }
+      },
+      "AdvancePassengerInformation": {
+        "type": "object",
+        "description": "DEPRECATED. Will be removed in future versions",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "advancePassengerInformationRequirements": {
+            "type": "array",
+            "description": "DEPRECATED. Will be removed in future versions.  List of advance passenger information requirements\n",
+            "items": {
+              "$ref": "#/components/schemas/AdvancePassengerInformationRequirement"
+            }
+          },
+          "passengerLegHealthRequirements": {
+            "type": "array",
+            "description": "DEPRECATED. Will be moved and renamed as Passenger.PassengerLegRequirement. List of travel requirements for each passenger on each leg of the PNR\n",
+            "items": {
+              "$ref": "#/components/schemas/PassengerLegHealthRequirement"
+            }
+          },
+          "passengerTripHealthRequirements": {
+            "type": "array",
+            "description": "DEPRECATED. Will be moved and renamed as Passenger.PassengerTripRequirement. List of travel requirements for each passenger on each trip of the PNR\n",
+            "items": {
+              "$ref": "#/components/schemas/PassengerTripHealthRequirement"
+            }
+          },
+          "travelDocuments": {
+            "type": "array",
+            "description": "DEPRECATED. Will be moved to Requirement.travelDocument List of documents to be presented by passenger for travel\n",
+            "items": {
+              "$ref": "#/components/schemas/IdentityDocument"
+            }
+          },
+          "contactInformation": {
+            "type": "array",
+            "description": "DEPRECATED. Will be moved to Requirement.contactInformation List of documents to be presented by passenger for travel\n",
+            "items": {
+              "$ref": "#/components/schemas/ContactInformation"
+            }
+          },
+          "emergencyContact": {
+            "type": "array",
+            "description": "DEPRECATED. Will be moved to Requirement.emergencyContact List of documents to be presented by passenger for travel\n",
+            "items": {
+              "$ref": "#/components/schemas/PhoneInfo"
+            }
+          },
+          "timaticInfo": {
+            "$ref": "#/components/schemas/TimaticInfo"
+          }
+        }
+      },
+      "AdvancePassengerInformationRequirement": {
+        "type": "string",
+        "description": "DEPRECATED. Will be removed in future versions. Advance passenger information requirement\n",
+        "enum": [
+          "COUNTRY_OF_RESIDENCE",
+          "DATE_OF_BIRTH",
+          "NATIONALITY"
+        ]
+      },
+      "AgeEligibility": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "minimumAge": {
+            "type": "integer",
+            "description": "Minimum age required"
+          },
+          "maximumAge": {
+            "type": "integer",
+            "description": "Maximum age required"
+          }
+        },
+        "description": "Eligibility based on age"
+      },
+      "BookingReference": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Record Locator Id specifies 6-digit alphanumeric algorithmic transformation of the Transaction Processing Facility (TPF) Passenger Name Record (PNR) File Address for a specific booking as well as booking reference ids from Other Airline Partners. Example: QF9IOG"
+          },
+          "creationDate": {
+            "type": "string",
+            "description": "Date PNR was booked/created",
+            "example": "2020-09-16T00:00:00.000+0000"
+          }
+        },
+        "description": "Contains confirmation number and PNR creation date"
+      },
+      "CalculationFromCodeType": {
+        "type": "string",
+        "description": "Basis of calculation for test and vaccine acceptance window",
+        "enum": [
+          "LAST_DOSE",
+          "LEG_ARRIVAL",
+          "LEG_DEPARTURE",
+          "TRIP_DESTINATION_ARRIVAL",
+          "TRIP_ORIGIN_DEPARTURE"
+        ]
+      },
+      "CaptureHealthCheckResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "WARN",
+              "FAIL"
+            ]
+          },
+          "dependencies": {
+            "description": "Dependencies of this resource",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "SUCCESS",
+                    "FAIL"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "CaptureInitRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "pnr": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
+      "CaptureInitResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "documentId": {
+            "type": "string"
+          },
+          "uploadUrl": {
+            "type": "string",
+            "description": "The S3 presigned URL"
+          },
+          "urlExpirationMillis": {
+            "type": "number",
+            "description": "The expiration set on the presigned URL",
+            "format": "int64"
+          },
+          "timeoutDurationMillis": {
+            "type": "number",
+            "description": "Scanner total timeout value",
+            "format": "int64"
+          },
+          "captureSamplingRateMillis": {
+            "type": "number",
+            "description": "Recommended sampling rate for capturing the image frame",
+            "format": "int64"
+          },
+          "resultSamplingRateMillis": {
+            "type": "number",
+            "description": "Recommended sampling rate to get the scanning results",
+            "format": "int64"
+          }
+        }
+      },
+      "CaptureResultsResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "documentBody": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IdentityDocument"
+              },
+              {
+                "description": "The parsed document from MRZ"
+              }
+            ]
+          },
+          "verifyToken": {
+            "type": "string"
+          }
+        }
+      },
+      "Carrier": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "description": "Carrier or airline code"
+          },
+          "name": {
+            "type": "string",
+            "description": "Carrier or airline name"
+          }
+        },
+        "description": "Carrier information"
+      },
+      "Compliance": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Document id"
+          },
+          "identityDocument": {
+            "$ref": "#/components/schemas/IdentityDocument"
+          },
+          "documentType": {
+            "type": "string",
+            "description": "Document type"
+          },
+          "ruleSetId": {
+            "type": "string",
+            "description": "Rule set id"
+          },
+          "status": {
+            "type": "string",
+            "description": "Compliance status"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Compliance reason"
+          },
+          "link": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "consumerId": {
+            "type": "string",
+            "description": "The consumer id of the customer",
+            "example": "b7c7b7d43c5845e2aae2e798a3d57a46"
+          },
+          "labTestResult": {
+            "type": "string",
+            "description": "The compliance result of the lab test",
+            "example": "Negative"
+          },
+          "verificationStatusCode": {
+            "type": "string",
+            "description": "Verification status of health credential",
+            "enum": [
+              "COMPLETE",
+              "INCOMPLETE"
+            ]
+          },
+          "complianceDetail": {
+            "type": "string",
+            "description": "### Additional compliance result detail:\n|Code|Reason|\n|---|---|\n|A|Compliance code A|\n|B|Compliance code B|\n|C|Compliance code C|\n|D|Compliance code D|\n",
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ]
+          },
+          "complianceTypeCode": {
+            "type": "string",
+            "description": "The type of compliance for travel",
+            "enum": [
+              "HEALTH_CREDENTIALS",
+              "HEALTH_FORMS"
+            ]
+          },
+          "reasonDetailCode": {
+            "type": "string",
+            "description": "\"Reasons for validation failure:\n    FORMS_SUBMITTED - Forms submitted and verified\n    NO_ACTION - Customer has not uploaded forms yet\n    PENDING_REVIEW - Review in progress\n    REVIEW_FAILED - Review failed\n    INVALID_FORM_SUBMITTED - Invalid form submitted\n    IGT_REQUEST_FAILED - Call to IGT failed or timed out\"",
+            "enum": [
+              "NO_ACTION",
+              "PENDING_REVIEW",
+              "REVIEW_FAILED",
+              "INVALID_FORM",
+              "IGT_REQUEST_FAILED"
+            ]
+          }
+        },
+        "description": "Contains compliance details including rule sets"
+      },
+      "ComplianceRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "consumers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComplianceConsumers"
+            }
+          }
+        },
+        "description": "The Compliance request"
+      },
+      "ComplianceResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Status of uploadCompliance call from consumer",
+            "example": true
+          }
+        },
+        "description": "The uploadCompliance response indicating whether the request was successfully completed or not."
+      },
+      "ComplianceConsumers": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "consumerToken": {
+            "type": "string",
+            "description": "Consumer token from vendor"
+          },
+          "consumerId": {
+            "type": "string",
+            "description": "The consumer id of the customer"
+          },
+          "compliances": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Compliance"
+            }
+          }
+        },
+        "description": "Compliance consumers"
+      },
+      "ContactInformation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "requirements": {
+            "type": "array",
+            "description": "This sub-requirement list specifies which attributes in CONTACT_TRACING are required or not. If US transit, for example, PRIMARY_PHONE is required, and submitting that should satisfy CONTACT_TRACING.\n",
+            "items": {
+              "$ref": "#/components/schemas/ContactInformationRequirement"
+            }
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressInfo"
+          },
+          "email": {
+            "type": "array",
+            "description": "Can have 0, 1 or multiple emails",
+            "items": {
+              "$ref": "#/components/schemas/EmailInfo"
+            }
+          },
+          "phone": {
+            "minimum": 1,
+            "type": "array",
+            "description": "Can have 0, 1 or multiple phone numbers",
+            "items": {
+              "$ref": "#/components/schemas/PhoneInfo"
+            }
+          },
+          "emergencyContact": {
+            "$ref": "#/components/schemas/PhoneInfo"
+          }
+        }
+      },
+      "ContactInformationRequirement": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ContactInformationRequirementType"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "allowEmpty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ContactInformationRequirementType": {
+        "type": "string",
+        "enum": [
+          "US_ADDRESS",
+          "PRIMARY_PHONE",
+          "SECONDARY_PHONE",
+          "EMAIL",
+          "EMERGENCY_CONTACT"
+        ]
+      },
+      "Country": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "pattern": "^[A-Z]{1,3}",
+            "type": "string",
+            "description": "Country code, e.g. US or USA"
+          },
+          "name": {
+            "type": "string",
+            "description": "Country name"
+          },
+          "isoAlpha2Code": {
+            "type": "string",
+            "description": "ISO Alpha 2 : https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2"
+          },
+          "isoAlpha3Code": {
+            "type": "string",
+            "description": "ISO Alpha 3 : https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3"
+          }
+        },
+        "description": "Country information"
+      },
+      "City": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "description": "City information"
+      },
+      "CredentialChoices": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "testType": {
+            "$ref": "#/components/schemas/TestCodeType"
+          },
+          "testMethod": {
+            "type": "string"
+          },
+          "vaccineType": {
+            "$ref": "#/components/schemas/VaccineCodeType"
+          },
+          "proofOfRecoveryType": {
+            "$ref": "#/components/schemas/ProofOfRecoveryCodeType"
+          },
+          "requiredDoseCount": {
+            "type": "integer"
+          },
+          "acceptedBoosters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CredentialChoices"
+            }
+          },
+          "acceptedTests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CredentialChoices"
+            }
+          },
+          "acceptedLanguages": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Locale"
+            }
+          },
+          "acceptanceWindow": {
+            "$ref": "#/components/schemas/TimeWindow"
+          },
+          "intervalBetweenDoses": {
+            "$ref": "#/components/schemas/TimeWindow"
+          },
+          "testMethods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "testExpectResult": {
+            "type": "string"
+          }
+        },
+        "description": "Credential choices"
+      },
+      "DatedMarketingSegment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "flightNum": {
+            "type": "string",
+            "description": "Marketing Flight Number is assigned by the marketing carrier which uniquely identifies one operating line of Flight from an origin to a destination having zero, one or many stops. The FAA's ATC systems limit flight numbers to four digits (0001 to 9999)."
+          },
+          "marketingCarrier": {
+            "type": "array",
+            "description": "List of carriers  that offer/offered a specific flight service in their schedule.",
+            "items": {
+              "$ref": "#/components/schemas/Carrier"
+            }
+          }
+        },
+        "description": "The operation of a flight with a single flight designator between the point where passengers first board an aircraft and the passengers' final destination. A flight designator includes an airline code and a flight number. A flight segment can include any number of stops where passengers board and deplane the aircraft."
+      },
+      "DatedOperatingLeg": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Leg id"
+          },
+          "ordinal": {
+            "type": "integer",
+            "description": "Number denoting order"
+          },
+          "departure": {
+            "$ref": "#/components/schemas/TransportDeparture"
+          },
+          "arrival": {
+            "$ref": "#/components/schemas/TransportArrival"
+          },
+          "international": {
+            "type": "boolean",
+            "description": "International flight indicator"
+          }
+        },
+        "description": "The operation of a flight with a single flight designator between the point where passengers first board an aircraft and the passengers' direct destination."
+      },
+      "DatedOperatingSegment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Segment id"
+          },
+          "ordinal": {
+            "type": "integer",
+            "description": "Number denoting order"
+          },
+          "operatingCarrier": {
+            "$ref": "#/components/schemas/Carrier"
+          },
+          "flightNum": {
+            "type": "string"
+          },
+          "marketingSegment": {
+            "$ref": "#/components/schemas/DatedMarketingSegment"
+          },
+          "legs": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DatedOperatingLeg"
+            }
+          },
+          "international": {
+            "type": "boolean",
+            "description": "International flight indicator"
+          },
+          "transportType": {
+            "$ref": "#/components/schemas/TransportType"
+          }
+        },
+        "description": "The operation of a flight with a single flight designator between the point where passengers first board an aircraft and the passengers' direct destination."
+      },
+      "DataSourceCodeType": {
+        "type": "string",
+        "description": "Data source for travel documents",
+        "enum": [
+          "MACHINE_READABLE_ZONE",
+          "MANUAL"
+        ]
+      },
+      "DerivedStatus": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "$ref": "#/components/schemas/DerivedStatusCodeType"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "DerivedStatusCodeType": {
+        "type": "string",
+        "description": "COMPLETE - when the overall requirement category has been completed. NOT_COMPLETE - when one of the requirements are still not satisfied. VERIFIED - when Agent has verified the travel documents or SFPD information.\n",
+        "enum": [
+          "COMPLETE",
+          "NOT_COMPLETE",
+          "VERIFIED"
+        ]
+      },
+      "Document": {
+        "type": "object",
+        "description": "Used for Uploading Documents, e.g. PDF, Word Doc, JPEG or PNG",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string",
+            "description": "Content of document"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "Mime type"
+          }
+        }
+      },
+      "DocumentForm": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "digitalVerificationEligible": {
+            "type": "boolean"
+          },
+          "link": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "documentId": {
+            "type": "string"
+          }
+        },
+        "description": "Document form details"
+      },
+      "DocumentUpload": {
+        "type": "object",
+        "properties": {
+          "uploadResourceId": {
+            "type": "string",
+            "description": "UUID for upload resource"
+          },
+          "requirementType": {
+            "$ref": "#/components/schemas/RequirementType"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of upload"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Possible reason that it failed"
+          },
+          "providerDocumentId": {
+            "type": "string",
+            "description": "Provider document id"
+          }
+        },
+        "description": "Document upload details"
+      },
+      "DocumentScanStatusType": {
+        "type": "string",
+        "enum": [
+          "NOT_FOUND",
+          "IN_PROGRESS",
+          "COMPLETE"
+        ]
+      },
+      "DocumentScanResultType": {
+        "type": "string",
+        "enum": [
+          "SUCCESS",
+          "FAIL",
+          "MANUAL"
+        ]
+      },
+      "EmailInfo": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "declined": {
+            "type": "boolean",
+            "description": "- If passenger declined, name, value and type are NULL\n"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "string",
+            "description": "The email itself"
+          }
+        }
+      },
+      "Error": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "description": "Detailed error information structure.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Error Code represents a alpha-numeric error code received from the error",
+            "example": "THP4003"
+          },
+          "displayCode": {
+            "type": "string",
+            "description": "Error Code represents a keyword equivalent of the error code",
+            "example": "ReturnDate"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message represents a textual description of a given error code",
+            "example": "Forbidden"
+          },
+          "developerMessage": {
+            "type": "string",
+            "description": "Developer Message represents technical details about the error message",
+            "example": "Privacy verification failed - Invalid App Details"
+          },
+          "moreInfo": {
+            "type": "array",
+            "description": "More details about the error as needed",
+            "items": {
+              "$ref": "#/components/schemas/MoreInfo"
+            }
+          },
+          "category": {
+            "$ref": "#/components/schemas/ErrorCategoryType"
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Sorting order for error messages"
+          }
+        }
+      },
+      "ErrorCategoryType": {
+        "type": "string",
+        "description": "Category level based on scenarios",
+        "enum": [
+          "PREVALIDATE",
+          "VALIDATE",
+          "ERROR",
+          "NOTIFY"
+        ]
+      },
+      "Gender": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "pattern": "^[MFUX]{1}$",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "description": "Gender types"
+      },
+      "HealthCheck": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/HealthCheckStatus"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "HealthCheckResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/HealthCheckStatus"
+          },
+          "checks": {
+            "type": "array",
+            "description": "Provides which resources are checked and their statuses.",
+            "items": {
+              "$ref": "#/components/schemas/HealthCheck"
+            }
+          }
+        }
+      },
+      "HealthCheckStatus": {
+        "type": "string",
+        "enum": [
+          "SUCCESS",
+          "FAIL",
+          "WARN"
+        ]
+      },
+      "IdentityDocument": {
+        "type": "object",
+        "description": "Document used by passenger as proof of identity for travel. E.g. PASSPORT, VISA, etc",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The scanning UUID. This is used as the S3 file name (object key)"
+          },
+          "type": {
+            "$ref": "#/components/schemas/IdentityDocumentType"
+          },
+          "subType": {
+            "pattern": "^[A-Z]{1,2}$",
+            "type": "string",
+            "description": "Document Code"
+          },
+          "givenNames": {
+            "pattern": "^[A-Z]{1,43}$",
+            "type": "string",
+            "description": "Given names of passenger"
+          },
+          "middleName": {
+            "pattern": "^[A-Z]{0,42}$",
+            "type": "string",
+            "description": "Middle name of passenger"
+          },
+          "surname": {
+            "pattern": "^[A-Z]{1,46}$",
+            "type": "string",
+            "description": "Surname of passenger"
+          },
+          "birthDate": {
+            "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$",
+            "type": "string",
+            "description": "Passenger's date of birth"
+          },
+          "gender": {
+            "$ref": "#/components/schemas/Gender"
+          },
+          "number": {
+            "pattern": "^[0-9A-Z]{1,24}$",
+            "type": "string",
+            "description": "Document number"
+          },
+          "expirationDate": {
+            "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$",
+            "type": "string",
+            "description": "Expiration date of document"
+          },
+          "issuingCountry": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "nationality": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "countryOfResidence": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "dataSourceType": {
+            "$ref": "#/components/schemas/DataSourceCodeType"
+          },
+          "methodOfDataEntry": {
+            "type": "string",
+            "example": "'S' for Swipe, 'P' for Manually entered by passenger, 'A' Manually entered by the agent,\nBlank or Null if unspecified\n"
+          },
+          "documentFeature": {
+            "type": "string",
+            "example": "MRD,None,DigitalPhoto,Biometric"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DocumentScanStatusType"
+          },
+          "result": {
+            "$ref": "#/components/schemas/DocumentScanResultType"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            }
+          },
+          "recordLocator": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "verifyToken": {
+            "type": "string"
+          },
+          "sourceFromType": {
+            "$ref": "#/components/schemas/IdentityDocumentSourceFromType"
+          }
+        }
+      },
+      "IdentityDocumentSourceFromType": {
+        "type": "string",
+        "description": "In combination with DataSourceCodeType, these indicators tell where the Identity \nor Travel Document was obtained by the API - and separate from PassengerV4 Method of Entry \nwhich DataSourceCodeType represents.\n",
+        "enum": [
+          "PNR",
+          "PROFILE",
+          "SELF_DECLARATION_FORM"
+        ]
+      },
+      "IdentityDocumentType": {
+        "type": "string",
+        "description": "Identity document types",
+        "enum": [
+          "NATIONAL_ID",
+          "NEXUS_CARD",
+          "PASSPORT",
+          "PERMANENT_RESIDENT_CARD",
+          "VISA"
+        ]
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string",
+            "description": "Vendor named productId",
+            "example": "TUR_EVISA__20_30DAYS__SINGLE_ENTRY"
+          },
+          "linkId": {
+            "type": "string",
+            "description": "Link id",
+            "example": "scheduleTest"
+          },
+          "name": {
+            "type": "string",
+            "description": "Link name"
+          },
+          "text": {
+            "type": "string",
+            "description": "Link text"
+          },
+          "source": {
+            "type": "string",
+            "description": "Link source"
+          },
+          "href": {
+            "type": "string",
+            "description": "Href is the URL path of the api call.",
+            "example": "https://www.example.com?token=123456"
+          }
+        },
+        "description": "Link to target URI for provider. Link allows api to determine the next steps or options of the API."
+      },
+      "Locale": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "description": "Locale"
+      },
+      "LoyaltyAccount": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "carrier": {
+            "$ref": "#/components/schemas/Carrier"
+          },
+          "programName": {
+            "type": "string",
+            "description": "Program name"
+          },
+          "number": {
+            "type": "string",
+            "description": "Loyalty account number"
+          }
+        },
+        "description": "Loyalty account details of passenger"
+      },
+      "MoreInfo": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "description": "Error code sent by API w.r.t. each validation"
+          },
+          "field": {
+            "type": "string",
+            "description": "Each exact property field that was validated"
+          },
+          "message": {
+            "type": "string",
+            "description": "Each error message on the property level validation done by the API"
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "action": {
+            "$ref": "#/components/schemas/NotificationActionType"
+          },
+          "content": {
+            "$ref": "#/components/schemas/Error"
+          }
+        },
+        "description": "Notification payload"
+      },
+      "NotificationActionType": {
+        "type": "string",
+        "description": "Actions to perform on notification",
+        "enum": [
+          "DISMISS"
+        ]
+      },
+      "OnwardTravelInfo": {
+        "type": "object",
+        "description": "DO NOT USE yet. Will be active in future versions.",
+        "properties": {
+          "declined": {
+            "type": "boolean"
+          },
+          "onwardDate": {
+            "type": "string",
+            "format": "yyyy-MM-dd"
+          }
+        }
+      },
+      "Passenger": {
+        "type": "object",
+        "properties": {
+          "passengerResourceId": {
+            "type": "string",
+            "description": "UUID for a passenger resource"
+          },
+          "givenNames": {
+            "type": "string",
+            "description": "Given names of passenger"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Surname of passenger"
+          },
+          "nameNum": {
+            "type": "string",
+            "description": "Name number"
+          },
+          "customerId": {
+            "type": "string",
+            "description": "Customer id unique to each passenger"
+          },
+          "birthDate": {
+            "type": "string",
+            "description": "Birthdate of passenger"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of passenger"
+          },
+          "advancePassengerInformation": {
+            "type": "array",
+            "description": "DEPRECATED. Will be removed in a future version",
+            "items": {
+              "$ref": "#/components/schemas/AdvancePassengerInformation"
+            }
+          },
+          "infant": {
+            "type": "boolean",
+            "description": "Indicates whether a passenger is an infant or not"
+          },
+          "nameNumber": {
+            "type": "string",
+            "description": "Name Number is the combination of the last name number and the first name number of a passenger in a booking. Example: 03.02 represents the 3rd last name in the booking and the 2nd given name with that same last name.",
+            "example": "3.02"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "First Name of the passenger in the PNR for request",
+            "example": "Jane"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Last Name of the passenger in the PNR for request",
+            "example": "Doe"
+          },
+          "flyReadyStatus": {
+            "type": "string",
+            "description": "Passenger's FlyReady status"
+          }
+        },
+        "description": "Basic passenger details and travel requirements"
+      },
+      "PassengerLegHealthRequirement": {
+        "type": "object",
+        "properties": {
+          "datedOperatingLegId": {
+            "type": "string",
+            "description": "Leg id"
+          },
+          "requirementCategories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequirementCategory"
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/DerivedStatus"
+          }
+        },
+        "description": "Passenger health rules and requirements on a flight leg level"
+      },
+      "PassengerTripHealthRequirement": {
+        "type": "object",
+        "properties": {
+          "tripId": {
+            "type": "string",
+            "description": "Trip id"
+          },
+          "providerToken": {
+            "type": "string",
+            "description": "Provider token"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DerivedStatus"
+          },
+          "requirementCategories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequirementCategory"
+            }
+          },
+          "exceptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            }
+          },
+          "flown": {
+            "type": "boolean",
+            "default": false
+          },
+          "missingCountryCode": {
+            "type": "boolean",
+            "default": false
+          },
+          "checkin": {
+            "type": "boolean",
+            "default": false
+          },
+          "checkinEligible": {
+            "type": "boolean",
+            "default": false
+          },
+          "timaticInfo": {
+            "$ref": "#/components/schemas/TimaticInfo"
+          }
+        },
+        "description": "Passenger travel requirements and statuses on a trip level"
+      },
+      "ProofOfRecoveryCodeType": {
+        "type": "string",
+        "description": "Proof of Recovery type",
+        "enum": [
+          "RECOVERY_CERTIFICATE",
+          "NON_NEGATIVE_TEST"
+        ]
+      },
+      "PhoneInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "declined": {
+            "type": "boolean",
+            "description": "- If passenger declined, other fields are NULL or EMPTY\n"
+          },
+          "verified": {
+            "type": "boolean",
+            "description": "Only applies to contact tracing"
+          },
+          "preference": {
+            "type": "string",
+            "description": "Only applies to contact tracing",
+            "enum": [
+              "PRIMARY",
+              "SECONDARY"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "MOBILE",
+              "HOME",
+              "WORK"
+            ]
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Only applies to emergency contact. PassengerContactData.ContactGivenName in PaxV4"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Only applies to emergency contact. PassengerContactData.ContactSurname in PaxV4"
+          },
+          "countryCode": {
+            "type": "string",
+            "description": "If emergency contact, this is the 2-character country code, e.g. US instead of 01.  PassengerContactData.ContactCountry in PaxV4\n"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "If emergency contact, PassengerContactData.ContactPhone in PaxV4"
+          }
+        }
+      },
+      "Requirement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "requirementType": {
+            "$ref": "#/components/schemas/RequirementType"
+          },
+          "requirementOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequirementOption"
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "DEPRECATED. Will remove in future versions Indicates if a travel requirement type is required, not required, or conditional\n"
+          },
+          "acceptedLanguages": {
+            "type": "array",
+            "description": "DEPRECATED. Will remove in future versions\n",
+            "items": {
+              "type": "string"
+            }
+          },
+          "acceptanceWindow": {
+            "$ref": "#/components/schemas/TimeWindow"
+          },
+          "acceptedTests": {
+            "type": "array",
+            "description": "DEPRECATED. Will remove in future versions\n",
+            "items": {
+              "$ref": "#/components/schemas/CredentialChoices"
+            }
+          },
+          "acceptedVaccines": {
+            "type": "array",
+            "description": "DEPRECATED. Will remove in future versions\n",
+            "items": {
+              "$ref": "#/components/schemas/CredentialChoices"
+            }
+          },
+          "acceptedProofsOfRecovery": {
+            "type": "array",
+            "description": "DEPRECATED. Will remove in future versions\n",
+            "items": {
+              "$ref": "#/components/schemas/CredentialChoices"
+            }
+          },
+          "appliesTo": {
+            "type": "string",
+            "items": {
+              "type": "string"
+            }
+          },
+          "effectivity": {
+            "$ref": "#/components/schemas/TimeWindow"
+          },
+          "requestedForms": {
+            "type": "array",
+            "description": "DEPRECATED. Will remove in future versions\n",
+            "items": {
+              "$ref": "#/components/schemas/CredentialChoices"
+            }
+          },
+          "ageEligibility": {
+            "$ref": "#/components/schemas/AgeEligibility"
+          },
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "testAppointmentLocalDateTime": {
+            "type": "string",
+            "description": "DEPRECATED. Will remove in future versions Test appointment schedule in local date and time\n"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          },
+          "statusSource": {
+            "$ref": "#/components/schemas/RequirementStatusSourceCodeType"
+          },
+          "ruleId": {
+            "type": "string",
+            "description": "TRM Admin Tool Rule ID"
+          },
+          "reusable": {
+            "type": "boolean",
+            "description": "Indicates the user has consented to store or reuse a requirement"
+          },
+          "digitalVerificationEligible": {
+            "type": "boolean",
+            "description": "Indicates whether a requirement is digitally verifiable or not. Usually applies to Inbound to the US and DL have dedicated web page forms to collect data. E.g. Contact Tracing, US address, etc.\n"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "Depending on the requirement type"
+          },
+          "exceptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            }
+          },
+          "returnDateRequired": {
+            "type": "boolean",
+            "description": "DEPRECATED. Will be its own Requirement.Type = RETUNRDATE\n"
+          },
+          "returnDate": {
+            "type": "string",
+            "description": "DEPRECATED. Will be moved and renamed as OnwardTravelInfo.onwardDate\n"
+          },
+          "returnDateDeclined": {
+            "type": "boolean",
+            "description": "DEPRECATED. Will be moved and renamed as OnwardTravelInfo.declined\n"
+          },
+          "transit": {
+            "type": "boolean",
+            "description": "Visa applicability (Transit or Entry)"
+          },
+          "verified": {
+            "type": "boolean",
+            "description": "DEPRECATED. Will be its own status Requirement.Status = VERIFIED\n"
+          },
+          "travelDocuments": {
+            "type": "array",
+            "description": "New location in 3.0.5. From AdvancePassengerInformation.travelDocuments This contains primary and secondary travel docs by default\n",
+            "items": {
+              "$ref": "#/components/schemas/IdentityDocument"
+            }
+          },
+          "contactInformation": {
+            "type": "array",
+            "description": "New location in 3.0.5. From AdvancePassengerInformation.contactInformation - On Retrieve if request.type is CONTACT_TRACING, this field is NOT NULL - On Submit, if contactInformationForAll is NOT NULL, this field SHOULD BE NULL - On Submit and type=TRACING, this field is required UNLESS declined\n",
+            "items": {
+              "$ref": "#/components/schemas/ContactInformation"
+            }
+          },
+          "emergencyContact": {
+            "type": "array",
+            "description": "New location in 3.0.5. From AdvancePassengerInformation.emergencyContact - On Retrieve if request.type is EMERGENCY_CONTACT, this field is NOT NULL - On Submit, if emergencyContactForAll is NOT NULL, this field SHOULD BE NULL - On Submit and type=EMERGENCY, this field is required UNLESS declined\n",
+            "items": {
+              "$ref": "#/components/schemas/PhoneInfo"
+            }
+          },
+          "securityStatus": {
+            "$ref": "#/components/schemas/SecurityStatus"
+          },
+          "onwardTravelInfo": {
+            "$ref": "#/components/schemas/OnwardTravelInfo"
+          },
+          "ofacInfo": {
+            "$ref": "#/components/schemas/OFACInfo"
+          },
+          "uploads": {
+            "$ref": "#/components/schemas/Uploads"
+          }
+        },
+        "description": "Details of travel requirement"
+      },
+      "RequirementCategory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/RequirementCategoryCodeType"
+          },
+          "multiUpload": {
+            "type": "boolean"
+          },
+          "verifications": {
+            "description": "Combined with \n  - RequirementCategory.Type = 'TRAVEL_DOCS', \n  - RequirementCategory.Status.Code = 'VERIFIED', \n  - RequirementCategory.StatusSource = 'A'\n",
+            "type": "array",
+            "example": [
+              "DOCS",
+              "SFPD"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "DOCS",
+                "SFPD"
+              ]
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/DerivedStatus"
+          },
+          "statusSource": {
+            "$ref": "#/components/schemas/RequirementStatusSourceCodeType"
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Requirement"
+            }
+          }
+        },
+        "description": "Requirement category"
+      },
+      "RequirementCategoryCodeType": {
+        "type": "string",
+        "description": "Requirement category type",
+        "enum": [
+          "HEALTH_DOCUMENTS",
+          "GOVERNMENT_FORMS",
+          "TRAVEL_DOCUMENTS",
+          "SECURITY_INFO"
+        ]
+      },
+      "RequirementFormRequest": {
+        "type": "object",
+        "properties": {
+          "passengerResourceId": {
+            "pattern": "^\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b$",
+            "type": "string",
+            "description": "UUID for passenger resource"
+          },
+          "tripId": {
+            "type": "string",
+            "description": "Trip id"
+          },
+          "using": {
+            "$ref": "#/components/schemas/RequirementType"
+          },
+          "identityDocument": {
+            "$ref": "#/components/schemas/IdentityDocument"
+          },
+          "consent": {
+            "type": "boolean",
+            "description": "Indicates consent to upload has been given by customer"
+          },
+          "consentDate": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "boolean"
+          },
+          "saveToProfile": {
+            "type": "boolean",
+            "description": "Allows user to save identity document to profile when added to a booking",
+            "default": false
+          },
+          "documentForm": {
+            "$ref": "#/components/schemas/DocumentForm"
+          },
+          "country": {
+            "description": "When submitting the secondary doc self-declaration, this is the intended country for the submission.",
+            "$ref": "#/components/schemas/Country"
+          },
+          "cityOfTransactionOccurrence": {
+            "description": "The intended checkin or active trip origin airport.",
+            "$ref": "#/components/schemas/Station"
+          },
+          "notification": {
+            "$ref": "#/components/schemas/Notification"
+          },
+          "ofacInfo": {
+            "$ref": "#/components/schemas/OFACInfo"
+          },
+          "onwardDate": {
+            "$ref": "#/components/schemas/OnwardTravelInfo"
+          },
+          "returnDate": {
+            "type": "string",
+            "description": "2023-01-01 format  \n"
+          },
+          "returnDateDeclined": {
+            "type": "boolean"
+          },
+          "contactInformation": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContactInformation"
+            }
+          },
+          "emergencyContact": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhoneInfo"
+            }
+          },
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequirementFormRequest"
+            }
+          },
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          }
+        },
+        "description": "The RequirementsFormRequest object"
+      },
+      "RequirementFormResponse": {
+        "type": "object",
+        "properties": {
+          "requirementsResourceId": {
+            "type": "string",
+            "description": "The UUID from POST /requirements using confirmation,ticket or credit card"
+          },
+          "requirementsRequest": {
+            "$ref": "#/components/schemas/RequirementsRequest"
+          },
+          "checkin": {
+            "type": "boolean"
+          },
+          "checkinEligible": {
+            "type": "boolean"
+          },
+          "travelRequirements": {
+            "$ref": "#/components/schemas/TravelRequirements"
+          },
+          "batchResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequirementFormRequest"
+            }
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "access_token": {
+            "type": "string"
+          },
+          "issued_at": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          }
+        }
+      },
+      "RequirementsRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "using": {
+            "$ref": "#/components/schemas/RequestOptionCodeType"
+          },
+          "confirmationNum": {
+            "type": "string",
+            "description": "Confirmation number or record locator Id"
+          },
+          "ticketNum": {
+            "type": "string",
+            "description": "Ticket number"
+          },
+          "creditCardNum": {
+            "type": "string",
+            "description": "Credit card number"
+          },
+          "creditCardType": {
+            "type": "string",
+            "description": "Type of credit card"
+          },
+          "givenNames": {
+            "type": "string",
+            "description": "First name of passenger"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Last name of passenger"
+          },
+          "departureAirportCode": {
+            "type": "string",
+            "description": "Departure airport"
+          },
+          "fields": {
+            "type": "string",
+            "description": "Request filter - Flight,Passenger,Passport,Requirements, CompletionStatus (If not supplied, return all)"
+          }
+        },
+        "description": "The RequirementsRequest object",
+        "example": {
+          "using": "CONFIRMATION",
+          "confirmationNum": "HGXXB6",
+          "givenNames": "JMM",
+          "surname": "TEST"
+        }
+      },
+      "RequirementsResponse": {
+        "type": "object",
+        "description": "Response object when querying travel requirements or after submitting the primary travel document such as the passport.",
+        "properties": {
+          "requirementsResourceId": {
+            "type": "string",
+            "description": "The UUID from POST /requirements using confirmation,ticket or credit card"
+          },
+          "requirementsRequest": {
+            "$ref": "#/components/schemas/RequirementsRequest"
+          },
+          "checkin": {
+            "type": "boolean"
+          },
+          "checkinEligible": {
+            "type": "boolean"
+          },
+          "travelRequirements": {
+            "$ref": "#/components/schemas/TravelRequirements"
+          },
+          "batchResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequirementFormResponse"
+            }
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "access_token": {
+            "type": "string"
+          },
+          "issued_at": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          }
+        }
+      },
+      "RequirementStatusCodeType": {
+        "type": "string",
+        "description": "Requirement status type,\n  Green Status Indicators\n    - APPROVED\n    - PRESENT\n    - OVERRIDE\n    - EXEMPTED\n    - POSITIVE\n  Not Green Status Indicators\n    - NOT_PRESENT\n    - NOT_APPROVED\n    - PENDING\n    - NOT_OK\n    - NEGATIVE\n    - ERROR\n",
+        "enum": [
+          "NOT_PRESENT",
+          "NOT_APPROVED",
+          "APPROVED",
+          "PENDING",
+          "EXEMPTED",
+          "PRESENT",
+          "NOT_OK",
+          "POSITIVE",
+          "NEGATIVE",
+          "OVERRIDE",
+          "VERIFIED",
+          "ERROR"
+        ]
+      },
+      "RequirementStatusSourceCodeType": {
+        "type": "string",
+        "description": "The compliance status has been updated based on the following sources:\n  - A - Agent (Override from Agent)\n  - P - Partner (DEPRECATED - use V - Vendor)\n  - V - Vendor\n  - R - Rules Engine (Override from Business)\n  - S - Self Declaration (Override from Customer)\n",
+        "enum": [
+          "A",
+          "P",
+          "S",
+          "V",
+          "R"
+        ]
+      },
+      "RequirementOption": {
+        "type": "string",
+        "description": "List of various requirement sub types",
+        "enum": [
+          "E_VISA",
+          "EMBASSY_VISA",
+          "ETA",
+          "VISA_ON_ARRIVAL"
+        ]
+      },
+      "RequestOptionCodeType": {
+        "type": "string",
+        "description": "Request option type",
+        "enum": [
+          "CONFIRMATION",
+          "TICKET",
+          "CREDITCARD"
+        ]
+      },
+      "RequirementType": {
+        "type": "string",
+        "description": "List of various requirement types",
+        "enum": [
+          "COVID_TEST",
+          "COVID_VACCINE",
+          "GOVERNMENT_HEALTH_FORM",
+          "ATTESTATION",
+          "CONTACT_TRACING",
+          "PASSPORT",
+          "SELF_DECLARATION_FORM",
+          "PROOF_OF_RECOVERY",
+          "SECONDARY_DOC",
+          "OFAC",
+          "VISA",
+          "NOTIFICATION",
+          "RETURNDATE",
+          "US_ADDRESS",
+          "SECURITY_STATUS",
+          "EMERGENCY_CONTACT"
+        ]
+      },
+      "RequirementUploadRequest": {
+        "type": "object",
+        "properties": {
+          "passengerResourceId": {
+            "type": "string",
+            "description": "UUID for passenger resource"
+          },
+          "requirementType": {
+            "type": "string",
+            "description": "Requirement type",
+            "example": "test, form, vaccine"
+          },
+          "documentId": {
+            "type": "string"
+          },
+          "documentStream": {
+            "type": "array",
+            "description": "Base64 string representation of the document or image",
+            "items": {
+              "$ref": "#/components/schemas/Document"
+            }
+          },
+          "tripId": {
+            "type": "string",
+            "description": "Trip id"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of passenger"
+          },
+          "fileContentType": {
+            "type": "string",
+            "description": "upload file type for presigned url"
+          },
+          "fileName": {
+            "type": "string",
+            "description": "upload file name for presigned url"
+          },
+          "consent": {
+            "type": "boolean",
+            "description": "Indicates consent to upload has been given by customer"
+          }
+        },
+        "description": "Request structure for uploading a requirement"
+      },
+      "RequirementUploadResponse": {
+        "type": "object",
+        "properties": {
+          "passengerResourceId": {
+            "type": "string"
+          },
+          "tripId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "requirementType": {
+            "type": "string",
+            "example": "test,form,vaccine"
+          },
+          "documentUploads": {
+            "type": "array",
+            "description": "List of documents uploaded with status",
+            "items": {
+              "$ref": "#/components/schemas/DocumentUpload"
+            }
+          },
+          "url": {
+            "type": "string",
+            "description": "AWS preSigned URL for form uploads"
+          },
+          "expiration": {
+            "type": "string",
+            "description": "expiration of presigned url"
+          },
+          "objectKey": {
+            "type": "string",
+            "description": "UUID of filename for S3 key"
+          },
+          "fileName": {
+            "type": "string",
+            "description": "filename of upload"
+          }
+        },
+        "description": "Response structure for requirement upload payload"
+      },
+      "SecurityRestriction": {
+        "type": "object",
+        "description": "Description from PassengerSecurityStatus API: A specific travel restriction from a government or airline\n",
+        "properties": {
+          "issuingGovernmentCountryCode": {
+            "description": "Country code of the government issuing the security status. Empty if security status was issued from an airline. The following two fields (issuingGovernmentCountryCode and issuingCarrierCode) are mutually exclusive.",
+            "type": "string",
+            "pattern": "^[A-Z]{2}$",
+            "example": "US"
+          },
+          "issuingCarrierCode": {
+            "description": "Airline code of the airline issuing the security status. Empty if the security status was issued by a government. The following two fields (issuingGovernmentCountryCode and issuingCarrierCode) are mutually exclusive.",
+            "type": "string",
+            "pattern": "^[A-Z0-9]{2}$",
+            "example": "VS"
+          },
+          "issuingSourceTypeCode": {
+            "description": "Type code identify the source (system/process) of the security info | | 01-Security vetting performed by a government System | | 02-CBP status issued by a government system          | | 03-Name match to a government watchlist              | | 04-Name match to an airline watchlist                | | 05-Manual over-ride/assignment an airline            | | 99-Other/unknown                                     |",
+            "type": "string",
+            "pattern": "^[0-9]{2}$",
+            "example": "01"
+          },
+          "internalSecurityStatus": {
+            "description": "Security status code/value assigned to the passenger. Internal host code/value.",
+            "type": "string",
+            "pattern": "^[A-Z0-9]{3}$",
+            "example": "DNB"
+          },
+          "receivedSecurityStatus": {
+            "description": "Security status code/value assigned to the passenger. Issuing country/airline code/value received.",
+            "type": "string",
+            "pattern": "^[A-Z0-9]{3}$",
+            "example": "DNB"
+          },
+          "supplementalInformationCode": {
+            "description": "Optional supplemental code sent by the issuing Government. Converts to provide additional information or instructions related to the security status assigned.",
+            "type": "string",
+            "pattern": "^[A-Z0-9]{1,5}$",
+            "example": "05"
+          },
+          "supplementalInformationText": {
+            "description": "Optional supplemental text sent by the issuing Government. Provides additional information or instructions related to the security status assigned.",
+            "type": "string",
+            "pattern": "^[A-Z/0-9 ,:-]{1,80}$",
+            "example": "CONTACT THE DHS RESOLUTION DESK AT: 1-800-CALL-DHS"
+          }
+        }
+      },
+      "SecurityStatus": {
+        "type": "object",
+        "description": "Description taken from Passenger Security Status API: Security Vetting Result for a specific passenger. This will be the overall security status including a name match indicator if PNR name matches Security name. If any travel restrictions are sent back from an airline or government, they will be included in Security Restrictions list.\n",
+        "properties": {
+          "overallSecurityCode": {
+            "description": "Overall security code | | 00-Clear                            | | 01–Selectee                         | | 02–Do not board                     | | 03–Clear-TSA preCheck eligible      | | 04–Insufficient or missing SFPD     | | 05-Selectee1-SSSS on all legs       | | 06-Selectee2-SSSS on first leg only | | 07-Clear-TSA precheck eligible      | | 08-Clear-Low risk rules based       |",
+            "type": "string",
+            "pattern": "^[0-9]{2}$",
+            "example": "01"
+          },
+          "overallProcessCode": {
+            "description": "Overall processing code | | 000–OK to process  | | 001–Do not process |",
+            "type": "string",
+            "pattern": "^[A-Z0-9]{3}$",
+            "example": "001"
+          },
+          "dhsEstaStatusCode": {
+            "description": "ESTA-USCBP code | | Z-Travel authorization via ESTA not applicable                                                      | | A-VWP participant passport – Approved travel authorization via ESTA on file                         | | B-VWP participant passport – No application for travel authorization via ESTA on file               | | C-VWP participant passport – US authorized travel document required (ESTA denied)                   | | D-CBP response code for no valid US document on file                                                | | E-VWP participant passport – No EVUS for travel via ESTA on file                                    | | P-CBP response code for pending status result                                                       | | R-CBP response code for matching source found but adverse information exists that prevents boarding | | T-CBP response code for timeout status result                                                       | | X-Insufficient data to provide ESTA status                                                          | | 1-Inhibited                                                                                         |",
+            "type": "string",
+            "pattern": "^[ABCDEPRTXZ1]{1}$",
+            "example": "Z"
+          },
+          "pnrSecurityNameMatch": {
+            "description": "Name match indicator - Does the PNR name match security name?",
+            "type": "boolean",
+            "example": true
+          },
+          "verifyID": {
+            "type": "boolean",
+            "description": "ID Verified indicates if an agent has verified the document.  Used for DHS VID process.  True - document needs to be verified by agent. Default value is false.",
+            "example": true
+          },
+          "securityRestrictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SecurityRestriction"
+            }
+          }
+        }
+      },
+      "Station": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "description": "Station/airport code"
+          },
+          "name": {
+            "type": "string",
+            "description": "Station/airport name"
+          },
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "city": {
+            "$ref": "#/components/schemas/City"
+          }
+        },
+        "description": "Station/airport"
+      },
+      "Status": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "$ref": "#/components/schemas/RequirementStatusCodeType"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Additional reason detail associated to the status code"
+          }
+        },
+        "description": "Requirement status"
+      },
+      "TestCodeType": {
+        "type": "string",
+        "description": "Test code type",
+        "enum": [
+          "ANTIGEN",
+          "CRISP",
+          "HDA",
+          "LAMP",
+          "NEAR",
+          "RT_PCR",
+          "SDA",
+          "TMA",
+          "PCR",
+          "NAAT",
+          "MOLECULAR"
+        ]
+      },
+      "TimaticInfo": {
+        "type": "object",
+        "properties": {
+          "evaluationResult": {
+            "$ref": "#/components/schemas/TimaticInfoEvaluationResultType"
+          }
+        }
+      },
+      "TimaticInfoEvaluationResultType": {
+        "type": "string",
+        "description": "Evaluation ResultType",
+        "enum": [
+          "YES",
+          "CONDITIONAL",
+          "NO"
+        ]
+      },
+      "TimeWindow": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "calculationFromType": {
+            "$ref": "#/components/schemas/CalculationFromCodeType"
+          },
+          "from": {
+            "type": "string",
+            "description": "Calculation from value"
+          },
+          "to": {
+            "type": "string",
+            "description": "Calculation to value"
+          },
+          "effectiveUTCDate": {
+            "type": "string"
+          },
+          "expirationUTCDate": {
+            "type": "string"
+          },
+          "effectiveLocalDate": {
+            "type": "string"
+          },
+          "expirationLocalDate": {
+            "type": "string"
+          }
+        },
+        "description": "Time window a travel requirement is valid for"
+      },
+      "TransportArrival": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "station": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "estimatedArrivalLocalDateTime": {
+            "type": "string",
+            "description": "Estimated arrival on local date and time"
+          },
+          "scheduledArrivalLocalDateTime": {
+            "type": "string",
+            "description": "Scheduled arrival on local date and time"
+          },
+          "estimatedArrivalUTCDateTime": {
+            "type": "string",
+            "description": "Estimated arrival on UTC date and time"
+          },
+          "scheduledArrivalUTCDateTime": {
+            "type": "string",
+            "description": "Scheduled arrival on UTC date and time"
+          }
+        },
+        "description": "The action or process of arriving of a transport vehicle in any place or location."
+      },
+      "TransportDeparture": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "station": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "estimatedDepartureLocalDateTime": {
+            "type": "string",
+            "description": "Estimated departure on local date and time"
+          },
+          "scheduledDepartureLocalDateTime": {
+            "type": "string",
+            "description": "Scheduled departure on local date and time"
+          },
+          "estimatedDepartureUTCDateTime": {
+            "type": "string",
+            "description": "Estimated departure on UTC date and time"
+          },
+          "scheduledDepartureUTCDateTime": {
+            "type": "string",
+            "description": "Scheduled departure on UTC date and time"
+          }
+        },
+        "description": "The action or process of leaving of a transport vehicle from any place or location."
+      },
+      "TransportType": {
+        "type": "string",
+        "enum": [
+          "AIR",
+          "RAIL"
+        ]
+      },
+      "TravelRequirements": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Travel requirement id"
+          },
+          "bookingReference": {
+            "$ref": "#/components/schemas/BookingReference"
+          },
+          "bookingFirstDepartureLocalDate": {
+            "type": "string",
+            "description": "Departure date of first flight in the PNR"
+          },
+          "bookingLastArrivalLocalDate": {
+            "type": "string",
+            "description": "Arrival date of last flight in the PNR"
+          },
+          "trips": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trip"
+            }
+          },
+          "passengers": {
+            "minItems": 1,
+            "type": "array",
+            "description": "List of passengers in the PNR",
+            "items": {
+              "$ref": "#/components/schemas/Passenger"
+            }
+          },
+          "exceptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        },
+        "description": "Travel requirement details"
+      },
+      "Trip": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Trip id"
+          },
+          "ordinal": {
+            "type": "integer",
+            "description": "Number denoting order"
+          },
+          "departureStation": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "arrivalStation": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "firstDepartureLocalDate": {
+            "type": "string",
+            "description": "Departure date of first flight in the trip"
+          },
+          "lastArrivalLocalDate": {
+            "type": "string",
+            "description": "Arrival date of the last flight in the trip"
+          },
+          "segments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DatedOperatingSegment"
+            }
+          },
+          "tripId": {
+            "type": "integer",
+            "description": "Trip Id",
+            "example": 1
+          },
+          "tripDirection": {
+            "type": "string",
+            "description": "Identifies the direction of travel for the customer, whether it is inbound or outbound with respect to a specific country.",
+            "example": "OUTBOUND",
+            "enum": [
+              "INBOUND",
+              "OUTBOUND",
+              "INBOUNDOUTBOUND",
+              "NONE"
+            ]
+          },
+          "tripOriginCountryCode": {
+            "type": "string",
+            "description": "Identifies the Origin Country Code of the customer's current trip segment in a PNR where services begin. (ISO 3166-1 alpha-2 format)",
+            "example": "US"
+          },
+          "tripDestinationCountryCode": {
+            "type": "string",
+            "description": "Identifies the Destination Country Code of the customer's current trip segment in a PNR where services end. (ISO 3166-1 alpha-2 format)",
+            "example": "GB"
+          },
+          "flown": {
+            "type": "boolean",
+            "default": false
+          },
+          "missingCountryCode": {
+            "type": "boolean",
+            "default": false
+          },
+          "checkin": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "description": "Trip represents one directional set of contiguous flight segments for a booking."
+      },
+      "Uploads": {
+        "type": "object",
+        "description": "upload details for government form",
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "description": "customer file name"
+          },
+          "objectKey": {
+            "type": "string",
+            "description": "bucket UUID key from file name"
+          }
+        }
+      },
+      "OFACInfo": {
+        "type": "object",
+        "description": "Additional requirement document when inbound to Cuba",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "digitalVerificationEligible": {
+            "type": "boolean"
+          },
+          "travelReasonText": {
+            "type": "string"
+          },
+          "ofacLicenseNum": {
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "phoneCountryCode": {
+            "type": "string"
+          },
+          "phoneNum": {
+            "type": "string"
+          },
+          "emailAdr": {
+            "type": "string"
+          },
+          "touristCardPresent": {
+            "description": "Evaluate SSR OFAC in the PNR",
+            "type": "boolean"
+          }
+        }
+      },
+      "VaccineCodeType": {
+        "type": "string",
+        "description": "Vaccine type",
+        "enum": [
+          "ASTRAZENECA",
+          "CONVIDECIA",
+          "CORONAVAC",
+          "CORV_SINOPHARM",
+          "COVAXIN",
+          "COVIVAC",
+          "COVISHIELD",
+          "EPIVACCORONA",
+          "JANSSEN",
+          "MINHAI",
+          "MODERNA",
+          "NOVAVAX",
+          "PFIZER",
+          "QAZCOVID",
+          "SINOPHARM",
+          "SINOPHARM_WIBP",
+          "SINOVAC",
+          "SPUTNICL",
+          "SPUTNICV",
+          "ZIFIVAX",
+          "VALNEVA"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "cent-authorizer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "x-amazon-apigateway-authtype": "custom",
+        "x-amazon-apigateway-authorizer": {
+          "authorizerUri": {
+            "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/{{resolve:ssm:/delta/centauth/arn}}/invocations"
+          },
+          "authorizerResultTtlInSeconds": 0,
+          "authorizerCredentials": {
+            "Fn::GetAtt": [
+              "CentralAuthorizerRole",
+              "Arn"
+            ]
+          },
+          "type": "token",
+          "identitySource": "method.request.header.Authorization"
+        }
+      },
+      "guest-based-auth": {
+        "description": "Authorization header with GUEST access",
+        "type": "apiKey",
+        "in": "header",
+        "name": "guest-auth"
+      }
+    }
+  }
+}

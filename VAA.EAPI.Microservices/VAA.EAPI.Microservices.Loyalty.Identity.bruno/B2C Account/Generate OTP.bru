@@ -1,0 +1,36 @@
+meta {
+  name: Generate OTP
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{identity_base_url}}/OTPGenerate
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "emailId": "{{identity_email}}",
+    "returnContinuationToken": true
+  }
+}
+
+script:post-response {
+  var body = res.getBody();
+  var token = body && body.value ? body.value : body;
+  
+  if (typeof token === "string" && token.length > 0) {
+    bru.setVar("otp_token", token);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

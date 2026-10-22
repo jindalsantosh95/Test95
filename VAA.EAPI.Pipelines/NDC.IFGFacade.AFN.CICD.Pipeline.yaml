@@ -1,0 +1,90 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.Facade/VAA.Facade.NDC.IFGFacade*
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.Facade/VAA.Facade.NDC.IFGFacade*
+
+variables: 
+  - group: Common_Variables
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - name: agentPool
+    value: 'Azure Pipelines'    
+  - name: agentPool1
+    value: 'LoyaltySystems'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release' 
+  - name: testRepoPath_SIT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'   
+  - name: testRepoPath_UAT
+    value: 'VAA.ENTERPRISE.API.TESTS.CORE'     
+  - name: rootPath
+    value: 'VAA.EAPI.Facade'  
+  - name: subRootPath
+    value: 'VAA.Facade' 
+  - name: applicationName
+    value: 'NDC.IFGFacade'
+  - name: functionAppName_DEV
+    value: 'AVADEUNAFNIFGFACADE' 
+  - name: functionAppName_SIT
+    value: 'AVATEUNAFNIFGFACADE' 
+  - name: functionAppName_UAT
+    value: 'AVASEUNAFNIFGFACADE' 
+  - name: functionAppName_SANDBOX
+    value: 'AVAIEUNAFNIFGFACADE'
+  - name: functionAppName_PRD
+    value: 'AVAPEUNAFNIFGFACADE'         
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: functions/build_facade.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      applicationName: $(applicationName) 
+      resourceGroupName_DEV: $(resourceGroupNameFacade_DEV)
+      resourceGroupName_SIT: $(resourceGroupNameFacade_SIT)
+      resourceGroupName_UAT: $(resourceGroupNameFacade_UAT)
+      resourceGroupName_SB: $(resourceGroupNameFacade_SB)
+      resourceGroupName_PROD: $(resourceGroupNameFacade_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+  # CD (Deployment) Pipeline
+  - template: functions/release_ndcFacade_withoutvnet.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_SANDBOX: $(agentPool1)
+      agentSpecification: $(agentSpecification) 
+      testRepoPath_SIT: $(testRepoPath_SIT)
+      testRepoPath_UAT: $(testRepoPath_UAT)      
+      applicationName: $(applicationName)    
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_SANDBOX: $(functionAppName_SANDBOX)
+      functionAppName_PRD: $(functionAppName_PRD)  
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+                     

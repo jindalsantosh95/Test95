@@ -1,0 +1,221 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/NdcOrderSearch/OrderHistoryHoldBooking HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"docType": "Indirect",
+	"dataList": {
+		"originDestinationAssociations": [
+			{
+				"odLabel": "OD1",
+				"originDestination": {
+					"originAirport": "LHR",
+					"destinationAirport": "ATL",
+					"departureDate": "2026-05-29"
+				},
+				"journeyRefIds": [
+					"JOUR1"
+				],
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			}
+		],
+		"customerDetails": [
+			{
+				"custId": "ADULT_1",
+				"ptc": "ADT",
+				"firstName": "DAVID",
+				"lastName": "SMITH",
+				"gender": "F",
+				"dateOfBirth": "1993-02-11",
+				"contacts": {
+					"email": "TEST.SKYSCANNER@FLY.VIRGIN.COM",
+					"phone": "123456",
+					"phoneType": "H"
+				},
+				"firstNameNumber": "01",
+				"lastNameNumber": "01"
+			}
+		],
+		"orderInstructions": [],
+		"segmentDetails": [
+			{
+				"odRefId": "OD1",
+				"segmentId": "SEG1",
+				"airCraft": "351",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "103",
+				"originAirportCode": "LHR",
+				"destinationAirportCode": "ATL",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-05-29T15:25:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-05-29T11:15:00"
+				},
+				"flightDuration": "00:09:10:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-05-29T11:15:00"
+						},
+						"legSequenceNumber": "1",
+						"originAirportCode": "LHR",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-05-29T15:25:00"
+						},
+						"destinationAirportCode": "ATL",
+						"legDuration": "00:09:10:00",
+						"legId": "LEG1",
+						"carrierAircraftTypeCode": "351",
+						"carrierAircraftTypeName": "351"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				},
+				"status": {
+					"code": "HK"
+				}
+			}
+		],
+		"priceClass": [
+			{
+				"id": "PC1",
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				}
+			}
+		],
+		"journey": [
+			{
+				"journeyId": "JOUR1",
+				"duration": "09:10",
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			}
+		]
+	},
+	"creationDateTime": {
+		"localDateTime": "11/02/2026 05:28:00"
+	},
+	"orderNumber": {
+		"orderId": "VS932POQAAN26",
+		"ownerAirline": "VS"
+	},
+	"bookingReference": {
+		"rloc": "POQAAN",
+		"rlocCreateDate": "11Feb26",
+		"rlocCreateDateTime": "05:28:00",
+		"externalRecordLocator": "EYUP47",
+		"externalSystem": "1S"
+	},
+	"timeLimits": [
+		{
+			"limit": "2026-02-14 11:00:00 AM"
+		}
+	],
+	"orderItems": [
+		{
+			"orderItemId": "VS932POQAAN26-1",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"originDestinationRefIds": [
+						"OD1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"priceClassRefIds": [
+						"PC1"
+					],
+					"serviceDefinitionRefIds": [
+						"SV1"
+					]
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			}
+		}
+	],
+	"orderStatus": "",
+	"parties": {
+		"participants": [
+			{
+				"partyType": "Seller",
+				"name": "Skyscanner",
+				"agencyID": "91281035",
+				"ordinal": "1",
+				"pccCode": "6UOL",
+				"contacts": {
+					"email": "Bandaru.JeevanNagaSai@fly.virgin.com"
+				},
+				"isCreditCardAccepted": true,
+				"requestAgentType": "IATA"
+			}
+		]
+	},
+	"orderHistory": [
+		{
+			"dataList": {
+				"customerDetails": [
+					{
+						"ptc": "ADT",
+						"firstName": "DAVID",
+						"lastName": "SMITH",
+						"gender": "F",
+						"dateOfBirth": "1993-02-11",
+						"travelDocuments": [],
+						"firstNameNumber": "01",
+						"lastNameNumber": "01"
+					}
+				],
+				"segmentDetails": [
+					{
+						"marketingCarrier": "VS",
+						"marketingFlightNumber": "103",
+						"operatingCarrier": "VS",
+						"originAirportCode": "LHR",
+						"destinationAirportCode": "ATL",
+						"classOfService": "T",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-05-29T15:25:00"
+						},
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-05-29T11:15:00"
+						},
+						"status": {
+							"code": "HK"
+						}
+					}
+				]
+			},
+			"version": "1",
+			"changeDateTime": "2026-02-11T05:28:00Z",
+			"changeType": "OrderItemAdded"
+		}
+	],
+	"id": "VS932POQAAN26",
+	"partitionKey": "VS932POQAAN26"
+}

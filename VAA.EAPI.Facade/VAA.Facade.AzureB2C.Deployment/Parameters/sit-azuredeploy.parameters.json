@@ -1,0 +1,59 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "AppServicePlanName": {
+      "value": "AVATEUNASPEAPI1"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-T-EUN-ENTERPRISEMS"
+    },
+    "FunctionAppName": {
+      "value": "AVATEUNAFNRETAILIDENTITYFACADEMS"
+    },
+    "AppInsightsName": {
+      "value": "AVATEUNAICUSTOMERMS"
+    },
+    "AppsettingAppInsightsKey": {
+      "value": "0833ce80-b6d5-4bbb-b0a0-0760a1267c24"
+    },
+    "AppSettingAzureWebJobStorage": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/IdentityFacade-Webjobstorage-SIT/8e7f9221407140769b4b2ef4ce89b18c)"
+    },
+    "tags": {
+      "value": {
+        "InitialProjectCode": "375",
+        "InitialProjectName": "EAPI Identity Facade ",
+        "InitialBudgetCode": "9320",
+        "ActiveStatus": "NONPROD",
+        "Purpose": "Support functions for the Identity Facade B2C AFN",
+        "ApplicationUsageIdList": "{\"AppIds\": [ \"EAPICUST\"]}"
+      }
+    },
+    
+    "appsettingAzureADEndpoint": {
+      "value": "https://login.microsoftonline.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/"
+    },
+    "appsettingB2CAppId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/IdentityFacade-B2CAppId-UAT/e858361c734e45678ab5ca3a59ca8f1a)"
+    },
+    "appsettingEnrolmentApiBaseURL": {
+      "value": "https://Testresources.virginatlantic.com/"
+    },
+    "appsettingEnrolmentApiURI": {
+      "value": "RunTheOperation/CustomerManagement/CustomerIdentityAndAccessManagement/customers/enrolment/"
+    },
+    "appsettingEnrolmentClientID": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/IdentityFacade-EnrolmentClientID-UAT/5313fd4b31a94ddaad4713f8896bd811)"
+    },
+    "appsettingEnrolmentClientSecretValue": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/IdentityFacade-EnrolmentClientSecretValue-UAT/672a1234eb8a4691b7ce8ade43f689fd)"
+    },
+    "appsettingEnrolmentResource": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/IdentityFacade-EnrolmentResource-UAT/54dee1fa564c466886b721378944e1d8)"
+    },
+    "appsettingEnrolmentSubscriptionNameValue": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avateunkvems.vault.azure.net/secrets/IdentityFacade-EnrolmentSubscriptionNameValue-UAT/83f2daa568e1442fa818480aa5c0c2f7)"
+    }
+  }
+}

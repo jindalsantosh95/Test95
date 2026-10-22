@@ -1,0 +1,289 @@
+meta {
+  name: Save Return Date
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SaveReturnDate {
+      SaveReturnDate(
+          saveReturnDateRequest: {
+              checkInId: "{{checkInId}}"
+              passengerId: "{{pax1_id}}"
+              returnOn: "2026-03-26"
+              noReturnDate: false
+          }
+      ) {
+          passengers {
+              passengerId
+              givenNames
+              surname
+              dateOfBirth
+              email
+              documents {
+                  documentType
+                  givenNames
+                  surname
+                  dateOfBirth
+                  documentNumber
+                  expirationDate
+              }
+              requirements {
+                  passportProvided
+                  passportVerified
+                  baggageDeclared
+                  contactTracing
+                  contactTracingAvailableFromUtc
+                  contactTracingAvailableFromDescription
+                  checkedIn
+                  overall
+                  returnDateStatus
+                  isReturnDateDeclined
+                  returnDate
+                  checkinEligible
+                  passportErrors {
+                      code
+                      message
+                      category
+                      displayCode
+                  }
+              }
+              passengerType {
+                  code
+                  name
+                  category
+              }
+              associatedAdultFullName
+              associatedAdultPassengerId
+              isInfantPassenger
+              phone {
+                  countryCode
+                  number
+              }
+              loyaltyMembership {
+                  programmeCode
+                  number
+              }
+              slices {
+                  sliceId
+                  scheduledDepartureLocalDateTime
+                  scheduledDepartureUtcDateTime
+                  scheduledArrivalLocalDateTime
+                  scheduledArrivalUtcDateTime
+                  origin {
+                      terminalName
+                      code
+                      airportName
+                      cityName
+                      countryName
+                      countryCode
+                  }
+                  segments {
+                      segmentId
+                      ordinal
+                      scheduledDepartureLocalDateTime
+                      scheduledDepartureUtcDateTime
+                      scheduledArrivalLocalDateTime
+                      scheduledArrivalUtcDateTime
+                      marketingCarrier {
+                          flightNum
+                          carrierCode
+                          carrierName
+                      }
+                      operatingCarrier {
+                          flightNum
+                          carrierCode
+                          carrierName
+                      }
+                      legs {
+                          legId
+                          scheduledDepartureLocalDateTime
+                          scheduledDepartureUtcDateTime
+                          scheduledArrivalLocalDateTime
+                          scheduledArrivalUtcDateTime
+                          distanceMiles
+                          flightDuration
+                          aircraftTypeName
+                          status
+                          destination {
+                              terminalName
+                              code
+                              airportName
+                              cityName
+                              countryName
+                              countryCode
+                          }
+                          origin {
+                              terminalName
+                              code
+                              airportName
+                              cityName
+                              countryName
+                              countryCode
+                          }
+                      }
+                      destination {
+                          terminalName
+                          code
+                          airportName
+                          cityName
+                          countryName
+                          countryCode
+                      }
+                      origin {
+                          terminalName
+                          code
+                          airportName
+                          cityName
+                          countryName
+                          countryCode
+                      }
+                  }
+                  destination {
+                      terminalName
+                      code
+                      airportName
+                      cityName
+                      countryName
+                      countryCode
+                  }
+              }
+              contactTracing {
+                  passengerId
+                  streetAddress
+                  city
+                  state
+                  zip
+                  email
+                  inTransit
+                  noEmail
+                  noSecondaryPhoneNumber
+                  primaryPhoneNumber
+                  primaryPhoneNumberCountryCode
+                  secondaryPhoneNumber
+                  secondaryPhoneNumberCountryCode
+              }
+              emergencyContact {
+                  passengerId
+                  firstName
+                  lastName
+                  phoneCountryCode
+                  phoneNumber
+                  passengerRefused
+              }
+          }
+          checkInId
+          reference {
+              pnrLocator
+              createdDate
+          }
+          applyContactTracingToAllPax
+          applyEmergencyContactToAllPax
+          onlineCheckInStatus {
+              available
+              title
+              message
+              code
+              developerMessage
+              displayCode
+              category
+          }
+          currentSlice {
+              sliceId
+              scheduledDepartureLocalDateTime
+              scheduledDepartureUtcDateTime
+              scheduledArrivalLocalDateTime
+              scheduledArrivalUtcDateTime
+              segments {
+                  segmentId
+                  ordinal
+                  scheduledDepartureLocalDateTime
+                  scheduledDepartureUtcDateTime
+                  scheduledArrivalLocalDateTime
+                  scheduledArrivalUtcDateTime
+                  marketingCarrier {
+                      flightNum
+                      carrierCode
+                      carrierName
+                  }
+                  operatingCarrier {
+                      flightNum
+                      carrierCode
+                      carrierName
+                  }
+                  legs {
+                      legId
+                      scheduledDepartureLocalDateTime
+                      scheduledDepartureUtcDateTime
+                      scheduledArrivalLocalDateTime
+                      scheduledArrivalUtcDateTime
+                      distanceMiles
+                      flightDuration
+                      aircraftTypeName
+                      status
+                      destination {
+                          terminalName
+                          code
+                          airportName
+                          cityName
+                          countryName
+                          countryCode
+                      }
+                      origin {
+                          terminalName
+                          code
+                          airportName
+                          cityName
+                          countryName
+                          countryCode
+                      }
+                  }
+                  destination {
+                      terminalName
+                      code
+                      airportName
+                      cityName
+                      countryName
+                      countryCode
+                  }
+                  origin {
+                      terminalName
+                      code
+                      airportName
+                      cityName
+                      countryName
+                      countryCode
+                  }
+              }
+              destination {
+                  terminalName
+                  code
+                  airportName
+                  cityName
+                  countryName
+                  countryCode
+              }
+              origin {
+                  terminalName
+                  code
+                  airportName
+                  cityName
+                  countryName
+                  countryCode
+              }
+          }
+      }
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

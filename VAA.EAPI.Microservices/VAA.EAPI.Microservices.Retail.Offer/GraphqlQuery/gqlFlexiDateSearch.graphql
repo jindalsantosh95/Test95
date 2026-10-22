@@ -1,0 +1,39 @@
+query Query($offerSearchCriteria: OfferSearchCriteriaInput) {
+  searchOffers(offerSearchCriteria: $offerSearchCriteria) {
+    offerResponseId
+    offerDataList {
+      flexReturnDates
+    }
+    offersSets {
+      itineraryDepartureDate
+      offers {
+        offerId
+        offerPricing {
+          totalAmt {
+            currencyEquivalentPrice {
+              currencyCode
+              formattedCurrencyAmt
+            }
+            milesEquivalentPrice {
+              mileCnt
+            }
+          }
+          taxSummary {
+            totalTaxAmt {
+              currencyEquivalentPrice {
+                currencyCode
+                formattedCurrencyAmt
+              }
+            }
+          }
+        }
+        additionalOfferProperties {
+          soldOut
+          lowestFare
+          flexDepartDate
+          flexReturnDate
+        }
+      }
+    }
+  }
+}

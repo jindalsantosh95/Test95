@@ -1,0 +1,11 @@
+﻿namespace VAA.EAPI.Microservices.Retail.Basket.Domain
+{
+    public class AffinityPartnerDetail
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Logo { get; set; }
+        public string IdentifierDisplayName { get; set; }
+        public AffinityMemberDetails AffinityMemberDetails { get; set; }
+    }
+}

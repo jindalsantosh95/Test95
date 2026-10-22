@@ -1,0 +1,42 @@
+info:
+  name: SCHEDULED_CHG-TO-CLEANPNR
+  type: http
+  seq: 3
+
+http:
+  method: PATCH
+  url: "{{delta_mytrips}}/{{reservationResourceId}}"
+  headers:
+    - name: transactionid
+      value: "{{$randomUUID}}"
+    - name: channelid
+      value: MyTrips
+    - name: appid
+      value: DC
+    - name: reservationresourceid
+      value: "{{reservationResourceId}}"
+    - name: cleanPnr
+      value: "true"
+    - name: x-air4_mytrips_test
+      value: "{{appname_test}}"
+    - name: operationalStatusType
+      value: SCHEDULE_CHANGE
+  body:
+    type: json
+    data: "\r\n"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: "let responseData = res.getBody();\r
+
+        bru.setEnvVar(\"reservationResourceId\", responseData.travelReservations[0].reservationResourceId);\r
+
+        bru.setEnvVar(\"passengerResourceId\", responseData.travelReservations[0].passengers[0].passengerResourceId);"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

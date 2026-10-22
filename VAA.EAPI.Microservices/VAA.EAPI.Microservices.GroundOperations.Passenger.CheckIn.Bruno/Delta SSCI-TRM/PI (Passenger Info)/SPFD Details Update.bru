@@ -1,0 +1,52 @@
+meta {
+  name: SPFD Details Update
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{delta_spfd_pi}}/{{reservationResourceId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  AppID: D2
+  channelid: DFMOBILE
+  x-air4_mytrips_test: {{air4_mytrips_test}}
+  transactionId: {{transactionId}}
+}
+
+body:json {
+  {
+    "reservationResourceId": "{{reservationResourceId}}",
+    "passengers": [
+      {
+        "passengerResourceId": "{{passenger1ResourceId}}",
+        "advancePassengerInformation": {
+          "trustedTravelerPrograms": [
+            //only Redress Number or Canadian Traveler Number can be added or updated at a time
+  //           {
+  //             "number": "{{passenger1RedressNumber}}",
+  //             "program": "REDRESS_NUMBER"
+  //           },
+            {
+              "number": "{{passenger1CanadaTravelerNumber}}",
+              "program": "CANADA_TRAVELER_NUMBER"
+            },
+            {
+              "number": "{{passenger1KnownTravelerNumber}}",
+              "program": "KNOWN_TRAVELER_NUMBER"
+            }
+          ]
+        },
+        "actionType": "ADD"
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

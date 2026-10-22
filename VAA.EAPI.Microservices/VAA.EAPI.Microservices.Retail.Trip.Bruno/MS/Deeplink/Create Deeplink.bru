@@ -1,0 +1,30 @@
+meta {
+  name: Create Deeplink
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{trip_base_url}}/deeplink
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "tripReservationId": "{{trip_booking_id}}",
+    "deeplinkOption": "{{deeplink_option}}",
+    "additionalData": [],
+    "posCountryCode": "{{pos_country_code}}",
+    "flightNumber": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

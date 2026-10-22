@@ -1,0 +1,104 @@
+{
+  "RunMode": "Remote",
+  "PayPal": {
+    "Enabled": false,
+    "AllowSandboxPayment": false,
+    "CredentialSafeLoggingConfirmed": false
+  },
+  "FaultInjection": {
+    "AllowPostHppTestPayment": false,
+    "Enabled": false,
+    "IsolatedRoutingConfirmed": false,
+    "UseProcessCapture": false,
+    "Executable": "",
+    "AddonPath": "",
+    "CertificateDirectory": ""
+  },
+  "BackendValidation": {
+    "Enabled": false,
+    "Environment": "SIT",
+    "BaseUrl": "https://testresources.virginatlantic.com",
+    "TimeoutSeconds": 30
+  },
+  "Diagnostics": {
+    "ErrorControlScreenshotsOnFailure": false,
+    "FullScreenScreenshotOnFailure": false,
+    "IosAppLogsOnFailure": true,
+    "IosAppProcessName": "vaa-mobile-ios"
+  },
+  "Platform": "iOS",
+  "IOSLaunch": {
+    "BuildProfile": "sit_standard",
+    "AutomationFeatureFlags": "850100-search-native-entry,850101-search-native-skip-seat-selection"
+  },
+  "Loyalty": {
+    "Password": "replace-with-the-shared-test-account-password"
+  },
+  "Core": {
+    "KeyVaultUrl": "replace-with-the-eapi-test-key-vault-url",
+    "KeyVaultTenantId": "",
+    "KeyVaultClientId": "",
+    "KeyVaultClientSecret": ""
+  },
+  "SelfHealing": {
+    "WarningThreshold": 2
+  },
+  "BrowserStack": {
+    "Local": false,
+    "LocalIdentifier": "",
+    "Username": "replace-with-your-browserstack-username",
+    "AccessKey": "replace-with-your-browserstack-access-key",
+    "Profile": "Fast",
+    "ServerUrl": "https://hub-cloud.browserstack.com/wd/hub",
+    "Platform": "iOS",
+    "DeviceName": "iPhone 17",
+    "PlatformVersion": "26",
+    "DeviceFallbacks": [
+      { "DeviceName": "iPhone 15", "PlatformVersion": "26" },
+      { "DeviceName": "iPhone 14", "PlatformVersion": "26" }
+    ],
+    "App": "bs://replace-with-your-uploaded-app-id",
+    "Project": "Virgin Atlantic Mobile - Search and Book",
+    "Build": "Local-QA-Connectivity",
+    "Name": "Mobile app connectivity",
+    "DisableAnimations": true,
+    "ForceAppLaunch": true,
+    "AppiumVersion": "3.3.0",
+    "CommandTimeoutSeconds": 240,
+    "IdleTimeoutSeconds": 300,
+    "SessionCreationAttempts": 3,
+    "SessionCreationRetryDelaySeconds": 5,
+    "NetworkLogs": true,
+    "CaptureNetworkContent": false
+  },
+  "Appium": {
+    "Android": {
+      "ServerUrl": "http://127.0.0.1:4725",
+      "DeviceName": "Pixel 10a",
+      "UDID": "emulator-5554",
+      "AppPackage": "com.virginatlantic.app.dev",
+      "AppActivity": "com.virginatlantic.app.presentation.main.MainActivity",
+      "App": "",
+      "NoReset": true,
+      "FullReset": false,
+      "ForceAppLaunch": true,
+      "CommandTimeout": 60,
+      "OptionalIntentArguments": "--esa overrideFeatureFlags native-search-and-book-flow"
+    },
+    "iOS": {
+      "ServerUrl": "http://127.0.0.1:4723",
+      "DeviceName": "replace-with-your-simulator-name",
+      "PlatformVersion": "replace-with-your-ios-version",
+      "UDID": "replace-with-your-simulator-or-device-udid",
+      "BundleId": "replace-with-the-installed-app-bundle-id",
+      "App": "",
+      "NoReset": false,
+      "FullReset": false,
+      "AutoLaunch": true,
+      "ForceAppLaunch": true,
+      "CommandTimeout": 240,
+      "WdaLaunchTimeout": 120000,
+      "WdaConnectionTimeout": 120000
+    }
+  }
+}

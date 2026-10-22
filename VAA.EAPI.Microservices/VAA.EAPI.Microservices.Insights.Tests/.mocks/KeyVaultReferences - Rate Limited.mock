@@ -1,0 +1,15 @@
+###Request
+GET https://management.azure.com/subscriptions/test-subscription-id/resourceGroups/test-resource-group/providers/Microsoft.Web/sites/test-rate-limited-app/config/configreferences/appsettings?api-version=2025-05-01 HTTP/1.1
+Authorization: Bearer GOOD_TOKEN
+
+###Response
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json;
+Retry-After: 0
+
+{
+  "error": {
+    "code": "TooManyRequests",
+    "message": "The request rate is too large."
+  }
+}

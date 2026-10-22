@@ -1,0 +1,42 @@
+parameters:
+  microserviceName: ''
+  productId: ''
+  environment: ''
+  apimEnv: '' 
+  apiEnv: ''      
+  apisEnv: ''  
+  agentPool: ''
+  agentSpecification: ''
+  APIMName: '' 
+  apimurlname: ''
+  APIMResourceGroupName: ''
+  APIMServiceConnection: ''
+  APIMSubscriptionId: ''  
+  APIM_IP: ''
+  functionAppName: '' 
+
+jobs: 
+- deployment: '${{parameters.environment}}'      
+  
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}  
+  
+  environment: ${{parameters.environment}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop   
+
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Create Product Id'
+          inputs:
+            azureResourceManagerConnection: ${{parameters.APIMServiceConnection}}
+            subscriptionid: ${{parameters.APIMSubscriptionId}}
+            resourceGroupName:  ${{parameters.APIMResourceGroupName}}
+            location:  'North Europe'
+            csmFile: $(Pipeline.workspace)/drop/Template/azuredeploy.json
+            deploymentMode: 'Incremental'
+            overrideParameters: -APIMName ${{parameters.APIMName}} -apisEnv ${{parameters.apisEnv}} -apimEnv ${{parameters.apimEnv}} -apiEnv ${{parameters.apiEnv}} -applicationName ${{parameters.microserviceName}} -apimurlname ${{parameters.apimurlname}} -productId ${{parameters.productId}} -functionAppName ${{parameters.functionAppName}}

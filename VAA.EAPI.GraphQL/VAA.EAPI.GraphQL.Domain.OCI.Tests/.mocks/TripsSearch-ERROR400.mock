@@ -1,0 +1,17 @@
+###Request
+POST https://testresources.virginatlantic.com/DEV/digital/Trip/trips/search HTTP/1.1
+
+$[?(@.confirmationNum == 'ERROR400')]
+
+###Response
+HTTP/1.1 400 Bad Request
+Content-Type: application/json; charset=utf-8
+
+[
+  {
+    "code": "ROR4082",
+    "message": "Unable to Retrieve - Check Record Locator",
+    "developerMessage": "RetrieverFlightOrderService.invokeFlightOrderRetriever - transactionId:e4f02b16-3475-4102-b868-c0b1b2e8bd29,FE5061:Unable to Retrieve - Check Record Locator:Invalid response from PnrCommon or Trip Service",
+    "errorSource": "Delta"
+  }
+]

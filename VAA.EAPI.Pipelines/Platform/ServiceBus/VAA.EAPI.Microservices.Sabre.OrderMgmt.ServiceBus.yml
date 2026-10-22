@@ -1,0 +1,123 @@
+trigger:
+  branches:
+    include:
+    - '*'
+    
+  paths:
+    include:
+      
+      - VAA.EAPI.Deployments/VAA.EAPI.Microservices.ServiceBus.Sabre.OrderMgmt*
+  
+
+variables:  
+  - name: SolutionName
+    value: 'VAA.EAPI.Microservices.ServiceBus.Sabre.OrderMgmt'
+  - name: RootPath
+    value: 'VAA.EAPI.Deployments'
+  - name: BuildConfiguration
+    value: 'release'
+
+    
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+stages:
+ - stage: 'build'
+   
+   
+   jobs: 
+    - job: buildDev
+      displayName: Build Dev    
+      pool:
+       vmImage: 'windows-latest'
+      
+
+      steps: 
+       - template:  /VAA.EAPI.Pipelines/Platform/ServiceBus/templates/build.yml
+       #- template: templates/build.yml
+         parameters:
+          buildConfiguration: $(BuildConfiguration)
+          applicationName: $(SolutionName)     
+          RootPath:  $(RootPath)
+
+      
+       
+
+ - stage: 'DeploytoDev'
+   variables: 
+    - template: /VAA.EAPI.Pipelines/variables/ServiceBus-dev-var.yml
+   displayName: 'Deploy Function to Dev' 
+   condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+   dependsOn: build   
+   jobs:
+     - template: /VAA.EAPI.Pipelines/Platform/ServiceBus/templates/servicebus.yml   
+     #- template: templates/deployment.yml
+       parameters:
+        JobName: 'DeployDev'
+        ServiceConnection: ${{variables.ServiceConnection}}
+        Environment: ${{variables.Environment}}
+        RG_ServiceBus: ${{variables.RG_ServiceBus}}
+        Subscriptionid: ${{variables.Subscriptionid}}
+
+ - stage: 'DeploytoSIT'
+   variables: 
+    - template: /VAA.EAPI.Pipelines/variables/ServiceBus-sit-var.yml
+   displayName: 'Deploy Function to SIT' 
+   condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+   dependsOn: build   
+   jobs:
+     - template: /VAA.EAPI.Pipelines/Platform/ServiceBus/templates/servicebus.yml   
+     #- template: templates/deployment.yml
+       parameters:
+        JobName: 'DeploytoSIT'
+        ServiceConnection: ${{variables.ServiceConnection}}
+        Environment: ${{variables.Environment}}
+        RG_ServiceBus: ${{variables.RG_ServiceBus}}
+        Subscriptionid: ${{variables.Subscriptionid}}
+
+ - stage: 'DeploytoUAT'
+   variables: 
+    - template: /VAA.EAPI.Pipelines/variables/ServiceBus-uat-var.yml
+   displayName: 'Deploy Function to Uat' 
+   condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+   dependsOn: build   
+   jobs:
+     - template: /VAA.EAPI.Pipelines/Platform/ServiceBus/templates/servicebus.yml  
+     #- template: templates/deployment.yml
+       parameters:
+        JobName: 'DeploytoUAT'
+        ServiceConnection: ${{variables.ServiceConnection}}
+        Environment: ${{variables.Environment}}
+        RG_ServiceBus: ${{variables.RG_ServiceBus}}
+        Subscriptionid: ${{variables.Subscriptionid}}
+
+ - stage: 'DeploytoSANDBOX'
+   variables: 
+    - template: /VAA.EAPI.Pipelines/variables/ServiceBus-sb-var.yml
+   displayName: 'Deploy Function to Sandbox' 
+   condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+   dependsOn: build   
+   jobs:
+     - template: /VAA.EAPI.Pipelines/Platform/ServiceBus/templates/servicebus.yml  
+     #- template: templates/deployment.yml
+       parameters:
+        JobName: 'DeploytoSANDBOX'
+        ServiceConnection: ${{variables.ServiceConnection}}
+        Environment: ${{variables.Environment}}
+        RG_ServiceBus: ${{variables.RG_ServiceBus}}
+        Subscriptionid: ${{variables.Subscriptionid}}
+
+ - stage: 'DeploytoProd'
+   variables: 
+    - template: /VAA.EAPI.Pipelines/variables/ServiceBus-prod-var.yml
+   displayName: 'Deploy Function to Prod' 
+   condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+   dependsOn: build   
+   jobs:
+     - template: /VAA.EAPI.Pipelines/Platform/ServiceBus/templates/servicebus.yml   
+     #- template: templates/deployment.yml
+       parameters:
+        JobName: 'DeploytoProd'
+        ServiceConnection: ${{variables.ServiceConnection}}
+        Environment: ${{variables.Environment}}
+        RG_ServiceBus: ${{variables.RG_ServiceBus}}
+        Subscriptionid: ${{variables.Subscriptionid}}

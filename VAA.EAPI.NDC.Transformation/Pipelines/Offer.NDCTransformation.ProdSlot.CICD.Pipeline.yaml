@@ -1,0 +1,147 @@
+trigger:
+  branches:
+    include:
+      - '*'
+    
+  paths:
+    include:
+      - VAA.EAPI.NDC.Transformation/VAA.EAPI.NDC.Offer
+      - VAA.EAPI.NDC.Transformation/VAA.EAPI.NDC.Offer.Deployment
+      - VAA.EAPI.NDC.Transformation/Pipelines/Offer*
+    exclude: 
+      - VAA.EAPI.NDC.Transformation/VAA.EAPI.NDC.Offer.bruno
+pr:
+  branches:
+    include:
+      - main
+  
+  paths:
+    include:
+      - VAA.EAPI.NDC.Transformation/VAA.EAPI.NDC.Offer
+      - VAA.EAPI.NDC.Transformation/VAA.EAPI.NDC.Offer.Deployment
+      - VAA.EAPI.NDC.Transformation/Pipelines/Offer*
+    exclude: 
+      - VAA.EAPI.NDC.Transformation/VAA.EAPI.NDC.Offer.bruno
+
+variables: 
+  - group: Common_Variables
+  - group: performance_variables
+  - group: NDC_PRFM_Variables
+  - group: APIM  
+  - group: APIM_IP
+  - group: Spectral_Ops
+  - group: AzureWebJobsStorage
+  - name: agentPool
+    value: 'Azure Pipelines' 
+  - name: agentPool1
+    value: 'LoyaltySystems'
+  - name: agentPool2
+    value: 'EAPITestingAgent'
+  - name: agentSpecification
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'release'           
+  - name: rootPath
+    value: 'VAA.EAPI.NDC.Transformation'  
+  - name: subRootPath
+    value: 'VAA.EAPI.NDC.Offer' 
+  - name: microserviceName
+    value: 'NDCOffer' 
+  - name: productId
+    value: 'EAPI_NDCTransformation'  
+  - name: apimurlname
+    value: 'ndctranformationoffer'         
+  - name: functionAppName_DEV
+    value: 'avadeunafnndcoffer' 
+  - name: functionAppName_SIT
+    value: 'avateunafnndcoffer'
+  - name: functionAppName_UAT
+    value: 'avaseunafnndcoffer' 
+  - name: functionAppName_SANDBOX
+    value: 'avaieunafnndcoffer'
+  - name: functionAppName_Preview
+    value: 'avabeunafnndcoffer'
+  - name: functionAppName_PRD
+    value: 'avapeunafnndcoffer'
+  - name: ApiVersion
+    value: 'v2'
+  - name: resourceGroupName_DEV
+    value: 'RG-VA-D-EUN-NDCTRANSFORMATION' 
+  - name: resourceGroupName_SIT
+    value: 'RG-VA-T-EUN-NDCTRANSFORMATION'
+  - name: resourceGroupName_UAT
+    value: 'RG-VA-S-EUN-NDCTRANSFORMATION' 
+  - name: resourceGroupName_SANDBOX
+    value: 'RG-VA-I-EUN-NDCTRANSFORMATION'
+  - name: functionAppName_PRFM
+    value: 'va-tl-eun-ndcoffer-fn-01'
+  - name: resourceGroupName_Preview
+    value: 'RG-VA-b-EUN-NDCTRANSFORMATION'
+  - name: resourceGroupName_PROD
+    value: 'RG-VA-P-EUN-NDCTRANSFORMATION'
+          
+      
+name: $(BuildDefinitionName)_1.0.$(year:yy)$(DayOfYear)$(Rev:.r)
+
+stages:
+  # CI (Build) Pipeline
+  - template: Functions/build.yaml
+    parameters:   
+      agentPool: $(agentPool)
+      agentSpecification: $(agentSpecification)
+      buildConfiguration: $(buildConfiguration)
+      location: $(location)           
+      rootPath: $(rootPath)
+      subRootPath: $(subRootPath)
+      SPECTRAL_DSN: $(SPECTRAL_DSN)
+      SPECTRAL_KEY: $(SPECTRAL_KEY)
+      resourceGroupName_DEV: $(resourceGroupName_DEV)
+      resourceGroupName_SIT: $(resourceGroupName_SIT)
+      resourceGroupName_UAT: $(resourceGroupName_UAT)
+      resourceGroupName_SANDBOX: $(resourceGroupName_SANDBOX)
+      resourceGroupName_Preview: $(resourceGroupName_Preview)
+      resourceGroupName_PROD: $(resourceGroupName_PROD)
+      serviceConnection_NonProd: $(serviceConnection_NonProd)
+      serviceConnection_Prod: $(serviceConnection_Prod)
+
+  # CD (Deployment) Pipeline
+  - template: Functions/release_ProdSlot.yaml
+    parameters:
+      agentPool: $(agentPool)
+      agentPool_Sanity: $(agentPool1)
+      agentPool_PRFM: $(agentPool1)
+      agentPool_SANDBOX: $(agentPool1)
+      agentSpecification: $(agentSpecification) 
+      buildConfiguration: $(buildConfiguration)  
+      location: $(location)                     
+      functionAppName_DEV: $(functionAppName_DEV)
+      functionAppName_SIT: $(functionAppName_SIT)
+      functionAppName_UAT: $(functionAppName_UAT)
+      functionAppName_SANDBOX: $(functionAppName_SANDBOX)
+      functionAppName_Preview: $(functionAppName_Preview)
+      functionAppName_PRD: $(functionAppName_PRD)  
+      AzureWebJobsStorage_DEV: $(AzureWebJobsStorage_NDCOffer_DEV)
+      AzureWebJobsStorage_SIT: $(AzureWebJobsStorage_NDCOffer_SIT)
+      AzureWebJobsStorage_UAT: $(AzureWebJobsStorage_NDCOffer_UAT)
+      AzureWebJobsStorage_SANDBOX: $(AzureWebJobsStorage_NDCOffer_SANDBOX)
+      AzureWebJobsStorage_PROD: $(AzureWebJobsStorage_NDCOffer_PROD)
+      APIM_NonProd: $(APIM_NonProd)
+      APIM_Prod: $(APIM_Prod)           
+      APIM_IP_DEV_SIT_UAT: $(APIM_IP_DEV_SIT_UAT)
+      APIM_IP_PRD: $(APIM_IP_PRD)
+      WEBSITE_DNS_ALT_SERVER: $(WEBSITE_DNS_ALT_SERVER)
+      WEBSITE_DNS_SERVER: $(WEBSITE_DNS_SERVER)        
+      WEBSITE_DNS_ALT_SERVER_SANDBOX: $(WEBSITE_DNS_ALT_SERVER_SANDBOX)
+      WEBSITE_DNS_SERVER_SANDBOX: $(WEBSITE_DNS_SERVER_SANDBOX)
+      VARIABLE_GROUP_NAME_NDC_DEV: "TESTING_NDC_DEV"
+      VARIABLE_GROUP_NAME_NDC_SIT: "TESTING_NDC_SIT"
+      VARIABLE_GROUP_NAME_NDC_UAT: "TESTING_NDC_UAT"
+      VARIABLE_GROUP_NAME_NDC_Preview: "TESTING_NDC_Preview"
+      VARIABLE_GROUP_NAME_NDC_Sandbox: "TESTING_NDC_Sandbox"
+      #Performance Variables
+      functionAppName_PRFM: $(functionAppName_PRFM)
+      keyvault_PRFM: $(Keyvault_old_PRFM)
+      resourceGroupName_PRFM: $(resourceGroupName_PRFM)
+      serviceConnection_NonProd_D: $(serviceConnection_NonProd_D)
+      subscriptionId_NonProd_D: $(subscriptionId_NonProd_D)
+ 

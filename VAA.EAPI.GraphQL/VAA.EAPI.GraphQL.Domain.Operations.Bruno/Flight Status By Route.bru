@@ -1,0 +1,120 @@
+meta {
+  name: Flight Status By Route
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+script:pre-request {
+  const flightDate = new Date();
+  flightDate.setUTCDate(flightDate.getUTCDate() + 1);
+  bru.setVar("flightStatusDate", flightDate.toISOString().slice(0, 10));
+}
+
+body:graphql {
+  query FlightStatusByRoute(
+    $departureAirportCode: String!,
+    $arrivalAirportCode: String!,
+    $scheduledDepartureDate: Date!,
+    $timeRange: [Int!],
+    $stops: [Int!],
+    $first: Boolean
+  ) {
+    flightStatusByRoute(
+      departureAirportCode: $departureAirportCode,
+      arrivalAirportCode: $arrivalAirportCode,
+      scheduledDepartureDate: $scheduledDepartureDate,
+      timeRange: $timeRange,
+      stops: $stops,
+      first: $first
+    ) {
+      departureAirport {
+        code
+        name
+      }
+      arrivalAirport {
+        code
+        name
+      }
+      departureDate
+      routes {
+        pointToPointStops
+        totalRouteTime
+        totalRouteTimeFullText
+        diversionExists
+        segments {
+          enrouteStops
+          changeOfGauge
+          codeShare
+          connectionCarrier
+          legs {
+            id
+            flightNumber
+            departureAirport {
+              code
+              terminal {
+                id
+                name
+              }
+            }
+            arrivalAirport {
+              code
+              terminal {
+                id
+                name
+              }
+            }
+            marketingAirline {
+              code
+              flightNumber
+              name
+            }
+            aircraft {
+              type
+            }
+            status {
+              statusColor
+              statusDescription
+              scheduledDepartureTime
+              scheduledArrivalTime
+              estimatedDepartureTime
+              estimatedArrivalTime
+              actualDepartureTime
+              actualArrivalTime
+            }
+          }
+        }
+      }
+      routeSummary {
+        defaultRouteResultsStopsIndicator
+        multiStop
+        nonStop
+        oneStop
+        timeRangeOne
+        timeRangeTwo
+        timeRangeThree
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "departureAirportCode": "LHR",
+    "arrivalAirportCode": "JFK",
+    "scheduledDepartureDate": "{{flightStatusDate}}",
+    "timeRange": [1, 2, 3],
+    "stops": [0, 1, 2],
+    "first": true
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

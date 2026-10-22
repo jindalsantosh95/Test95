@@ -1,0 +1,11 @@
+###Request
+POST https://reward-offer-boundary.test/api/internal/reward-seat-calendar-availability HTTP/1.1
+
+$[?(@.intervalStart == '2027-03-29' && @.intervalEnd == '2027-03-30' && @.anchorDate == '2027-03-29')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Reward-Anchor: 2027-03-29
+
+{"candidates":[],"marketPolicyVersion":"v1","fareFamilyMappingVersion":"v1","complete":true}

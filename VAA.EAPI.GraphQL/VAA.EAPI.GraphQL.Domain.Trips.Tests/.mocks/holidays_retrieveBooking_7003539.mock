@@ -1,0 +1,969 @@
+﻿###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBooking HTTP/1.1
+
+$[?( @.bookingReference == '7003539' )]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+
+{
+    "booking": {
+        "id": "7003539",
+        "summary": {
+            "availabilityStatus": "AVAILABLE",
+            "productStatus": "CONFIRMED",
+            "name": "Package",
+            "primaryAttribute": "",
+            "secondaryAttribute": "",
+            "travelDates": {
+                "startDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 30, day)}",
+                "endDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 45, day)}"
+            },
+            "travelDuration": {
+                "duration": "14",
+                "durationType": "DAYS"
+            },
+            "discount": 0.0,
+            "vipBooking": false
+        },
+        "payment": {
+            "deposit": 200.0,
+            "balanceDue": 7797.55,
+            "totalPriceToBePaid": 7997.55,
+            "totalPaidAmount": 200.0,
+            "depositRealised": true,
+            "depositReceived": true,
+            "currencyCode": "GBP"
+        },
+        "status": "Confirmed",
+        "holidayProducts": [
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "VS",
+                    "highlight": "PREMIUM/UPPER CLASS",
+                    "primaryAttribute": "LHR",
+                    "secondaryAttribute": "HKT",
+                    "travelDates": {
+                        "startDate": "2026-11-15T00:00:00",
+                        "endDate": "2026-11-28T00:00:00"
+                    },
+                    "discount": 0.0,
+                    "vipBooking": false
+                },
+                "bookedUser": "507847",
+                "bookedDate": "2026-01-24T00:00:00",
+                "modifiedDate": "2026-01-24T00:00:00",
+                "rate": {
+                    "price": 5019.59,
+                    "priceWithTax": 5019.59,
+                    "tax": 1961.98,
+                    "basePrice": 5019.59,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Karen",
+                            "lastName": "Clarke",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "1972-07-22T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Glynn",
+                            "lastName": "Clarke",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1963-08-13T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "flightDetails": {
+                    "sectors": [
+                        {
+                            "origin": {
+                                "code": "LHR"
+                            },
+                            "destination": {
+                                "code": "HKT"
+                            },
+                            "segments": [
+                                {
+                                    "operatingCarrier": {
+                                        "flightNumber": "214",
+                                        "carrierCode": "VS"
+                                    },
+                                    "marketingCarrier": {
+                                        "carrierCode": "VS"
+                                    },
+                                    "scheduledDepartureLocal": "2026-11-15T11:45:00",
+                                    "scheduledArrivalLocal": "2026-11-16T06:55:00",
+                                    "origin": {
+                                        "code": "LHR"
+                                    },
+                                    "destination": {
+                                        "code": "HKT"
+                                    },
+                                    "legs": [
+                                        {
+                                            "operating": {
+                                                "flightNumber": "214",
+                                                "carrierCode": "VS"
+                                            },
+                                            "marketing": {
+                                                "carrierCode": "VS"
+                                            },
+                                            "scheduledDepartureLocal": "2026-11-15T11:45:00",
+                                            "scheduledArrivalLocal": "2026-11-16T06:55:00",
+                                            "origin": {
+                                                "code": "LHR"
+                                            },
+                                            "destination": {
+                                                "code": "HKT"
+                                            },
+                                            "onAirDuration": "730",
+                                            "aircraft": {
+                                                "subfleetCode": "789"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "scheduledDepartureLocal": "2026-11-15T11:45:00",
+                            "scheduledArrivalLocal": "2026-11-16T06:55:00"
+                        },
+                        {
+                            "origin": {
+                                "code": "HKT"
+                            },
+                            "destination": {
+                                "code": "LHR"
+                            },
+                            "segments": [
+                                {
+                                    "operatingCarrier": {
+                                        "flightNumber": "215",
+                                        "carrierCode": "VS"
+                                    },
+                                    "marketingCarrier": {
+                                        "carrierCode": "VS"
+                                    },
+                                    "scheduledDepartureLocal": "2026-11-28T09:20:00",
+                                    "scheduledArrivalLocal": "2026-11-28T16:00:00",
+                                    "origin": {
+                                        "code": "HKT"
+                                    },
+                                    "destination": {
+                                        "code": "LHR"
+                                    },
+                                    "legs": [
+                                        {
+                                            "operating": {
+                                                "flightNumber": "215",
+                                                "carrierCode": "VS"
+                                            },
+                                            "marketing": {
+                                                "carrierCode": "VS"
+                                            },
+                                            "scheduledDepartureLocal": "2026-11-28T09:20:00",
+                                            "scheduledArrivalLocal": "2026-11-28T16:00:00",
+                                            "origin": {
+                                                "code": "HKT"
+                                            },
+                                            "destination": {
+                                                "code": "LHR"
+                                            },
+                                            "onAirDuration": "820",
+                                            "aircraft": {
+                                                "subfleetCode": "789"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "scheduledDepartureLocal": "2026-11-28T09:20:00",
+                            "scheduledArrivalLocal": "2026-11-28T16:00:00"
+                        }
+                    ],
+                    "airlineLocator": {
+                        "pnrLocator": "DZUM2G"
+                    },
+                    "isBookingSourceAir4": true
+                },
+                "isAncillaryProduct": false,
+                "tbxProductType": "FLT",
+                "tbxProductId": "FLT~1"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Khaolak Merlin Resort",
+                    "highlight": "Deluxe Room Double",
+                    "primaryAttribute": "Half Board Plus",
+                    "secondaryAttribute": "Deluxe Room Double (2 0 0) x 1",
+                    "travelDates": {
+                        "startDate": "2026-11-16T00:00:00",
+                        "endDate": "2026-11-28T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "12",
+                        "durationType": "NIGHTS"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-11-16T14:00:00",
+                    "endTime": "2026-11-28T10:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-11-16T14:00:00",
+                        "endTime": "2026-11-28T10:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "507847",
+                "bookedDate": "2026-01-24T00:00:00",
+                "modifiedDate": "2026-01-24T00:00:00",
+                "rate": {
+                    "price": 2768.22,
+                    "priceWithTax": 2768.22,
+                    "tax": 0.0,
+                    "basePrice": 2768.22,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Karen",
+                            "lastName": "Clarke",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "1972-07-22T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Glynn",
+                            "lastName": "Clarke",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1963-08-13T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "hotelDetails": {
+                    "roomDetails": [
+                        {
+                            "roomType": "Deluxe Room Double",
+                            "boardBasis": "Half Board Plus",
+                            "roomNumber": "1",
+                            "paxCount": 2,
+                            "travellerInfo": {
+                                "adultCount": 2,
+                                "travellers": [
+                                    {
+                                        "leadTraveller": true,
+                                        "dateOfBirth": "1972-07-22T00:00:00"
+                                    },
+                                    {
+                                        "leadTraveller": false,
+                                        "dateOfBirth": "1963-08-13T00:00:00"
+                                    }
+                                ]
+                            },
+                            "rate": {
+                                "price": 2768.22,
+                                "priceWithTax": 2768.22,
+                                "tax": 0.0,
+                                "basePrice": 0.0,
+                                "totalTax": 0.0,
+                                "totalTaxBase": 0.0
+                            },
+                            "mealPlanName": "Half Board Plus"
+                        }
+                    ],
+                    "name": "Khaolak Merlin Resort - Deluxe Room Double",
+                    "startDate": "2026-11-16T14:00:00",
+                    "endDate": "2026-11-28T10:00:00",
+                    "hotelCode": "H2951",
+                    "accommodationType": "H",
+                    "hotelAddress": "7/7 Phetkasem, Lumkaen, Thaimuang, พังงา 82210, Thailand",
+                    "destination": {
+                        "cityCode": "HKT",
+                        "cityName": "Phuket",
+                        "countryCode": "TH",
+                        "countryName": "Thailand"
+                    }
+                },
+                "isAncillaryProduct": false,
+                "tbxProductType": "HTL",
+                "tbxProductId": "HTL~1"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Thailand Resort Contact",
+                    "highlight": "Thailand Contact Details",
+                    "primaryAttribute": "Resort Contact",
+                    "travelDates": {
+                        "startDate": "2026-11-15T00:00:00",
+                        "endDate": "2026-11-15T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-11-15T00:00:00",
+                    "endTime": "2026-11-15T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-11-15T00:00:00",
+                        "endTime": "2026-11-15T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "RCD",
+                    "elementGroupName": "Resort Contact"
+                },
+                "bookedUser": "507847",
+                "bookedDate": "2026-01-24T00:00:00",
+                "modifiedDate": "2026-01-24T00:00:00",
+                "rate": {
+                    "price": 0.01,
+                    "priceWithTax": 0.01,
+                    "tax": 0.0,
+                    "basePrice": 0.01,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Karen",
+                            "lastName": "Clarke",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "1972-07-22T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Glynn",
+                            "lastName": "Clarke",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1963-08-13T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "RCD",
+                    "elementGroupName": "Resort Contact",
+                    "destination": {
+                        "countryCode": "TH",
+                        "countryName": "Thailand"
+                    },
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~1"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Codegen Booking Fee",
+                    "highlight": "Codegen Booking Fee",
+                    "primaryAttribute": "Forced Components - Hidden",
+                    "travelDates": {
+                        "startDate": "2026-11-15T00:00:00",
+                        "endDate": "2026-11-15T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-11-15T00:00:00",
+                    "endTime": "2026-11-15T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-11-15T00:00:00",
+                        "endTime": "2026-11-15T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden"
+                },
+                "bookedUser": "507847",
+                "bookedDate": "2026-01-24T00:00:00",
+                "modifiedDate": "2026-01-24T00:00:00",
+                "rate": {
+                    "price": 3.0,
+                    "priceWithTax": 3.0,
+                    "tax": 0.0,
+                    "basePrice": 3.0,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Karen",
+                            "lastName": "Clarke",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "1972-07-22T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Glynn",
+                            "lastName": "Clarke",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1963-08-13T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~2"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "WW Core",
+                    "highlight": "WW Core",
+                    "primaryAttribute": "Forced Components - Hidden",
+                    "travelDates": {
+                        "startDate": "2026-11-15T00:00:00",
+                        "endDate": "2026-11-15T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-11-15T00:00:00",
+                    "endTime": "2026-11-15T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-11-15T00:00:00",
+                        "endTime": "2026-11-15T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden"
+                },
+                "bookedUser": "507847",
+                "bookedDate": "2026-01-24T00:00:00",
+                "modifiedDate": "2026-01-24T00:00:00",
+                "rate": {
+                    "price": 37.62,
+                    "priceWithTax": 37.62,
+                    "tax": 0.0,
+                    "basePrice": 37.62,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Karen",
+                            "lastName": "Clarke",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "1972-07-22T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Glynn",
+                            "lastName": "Clarke",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1963-08-13T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~3"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Retail Booking Fee (Non Refundable)",
+                    "highlight": "Retail Booking Fee",
+                    "primaryAttribute": "Retail Booking Fee",
+                    "travelDates": {
+                        "startDate": "2026-11-15T00:00:00",
+                        "endDate": "2026-11-15T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-11-15T00:00:00",
+                    "endTime": "2026-11-15T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-11-15T00:00:00",
+                        "endTime": "2026-11-15T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "RETAILBOOK",
+                    "elementGroupName": "Retail Booking Fee"
+                },
+                "bookedUser": "507847",
+                "bookedDate": "2026-01-24T00:00:00",
+                "modifiedDate": "2026-01-24T00:00:00",
+                "rate": {
+                    "price": 50.0,
+                    "priceWithTax": 50.0,
+                    "tax": 0.0,
+                    "basePrice": 50.0,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Karen",
+                            "lastName": "Clarke",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "1972-07-22T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Glynn",
+                            "lastName": "Clarke",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1963-08-13T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "RETAILBOOK",
+                    "elementGroupName": "Retail Booking Fee",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~4"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "ATOL protected",
+                    "highlight": "ATOL protected",
+                    "primaryAttribute": "Atol protected",
+                    "travelDates": {
+                        "startDate": "2026-11-15T00:00:00",
+                        "endDate": "2026-11-15T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-11-15T00:00:00",
+                    "endTime": "2026-11-15T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-11-15T00:00:00",
+                        "endTime": "2026-11-15T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "ATOLLEVY",
+                    "elementGroupName": "Atol protected"
+                },
+                "bookedUser": "507847",
+                "bookedDate": "2026-01-24T00:00:00",
+                "modifiedDate": "2026-01-24T00:00:00",
+                "rate": {
+                    "price": 5.0,
+                    "priceWithTax": 5.0,
+                    "tax": 0.0,
+                    "basePrice": 5.0,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Karen",
+                            "lastName": "Clarke",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "1972-07-22T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Glynn",
+                            "lastName": "Clarke",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1963-08-13T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "ATOLLEVY",
+                    "elementGroupName": "Atol protected",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~5"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Thailand Reps/Handling Fees",
+                    "highlight": "Handling/Rep Fees Thailand ELEVATE",
+                    "primaryAttribute": "Handling/Reps Fees",
+                    "travelDates": {
+                        "startDate": "2026-11-15T00:00:00",
+                        "endDate": "2026-11-15T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-11-15T00:00:00",
+                    "endTime": "2026-11-15T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-11-15T00:00:00",
+                        "endTime": "2026-11-15T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "HREPFEES",
+                    "elementGroupName": "Handling/Reps Fees"
+                },
+                "bookedUser": "507847",
+                "bookedDate": "2026-01-24T00:00:00",
+                "modifiedDate": "2026-01-24T00:00:00",
+                "rate": {
+                    "price": 15.19,
+                    "priceWithTax": 15.19,
+                    "tax": 0.0,
+                    "basePrice": 15.19,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Karen",
+                            "lastName": "Clarke",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "1972-07-22T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Glynn",
+                            "lastName": "Clarke",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1963-08-13T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "HREPFEES",
+                    "elementGroupName": "Handling/Reps Fees",
+                    "destination": {
+                        "countryCode": "TH",
+                        "countryName": "Thailand"
+                    },
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~6"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Phuket Airport to Khao Lak Hotels - Unescorted Private Transfer",
+                    "highlight": "Unescorted Private Transfer",
+                    "primaryAttribute": "Phuket Airport , Phuket , Thailand",
+                    "secondaryAttribute": "Khaolak Merlin Resort , Phuket , Thailand",
+                    "travelDates": {
+                        "startDate": "2026-11-16T00:00:00",
+                        "endDate": "2026-11-16T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "MINUTES"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-11-16T00:00:00",
+                    "endTime": "2026-11-16T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-11-16T00:00:00",
+                        "endTime": "2026-11-16T00:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "507847",
+                "bookedDate": "2026-01-24T00:00:00",
+                "modifiedDate": "2026-01-24T00:00:00",
+                "rate": {
+                    "price": 49.46,
+                    "priceWithTax": 49.46,
+                    "tax": 0.0,
+                    "basePrice": 49.46,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Karen",
+                            "lastName": "Clarke",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "1972-07-22T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Glynn",
+                            "lastName": "Clarke",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1963-08-13T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "TRANSFER",
+                    "elementGroupName": "Transfer",
+                    "pickupPoints": [
+                        {
+                            "code": "HKT",
+                            "type": "AIRPORT",
+                            "cityCode": "HKT",
+                            "cityName": "Phuket",
+                            "countryName": "Thailand"
+                        }
+                    ],
+                    "dropoffPoints": [
+                        {
+                            "code": "H2951",
+                            "type": "HOTEL",
+                            "cityCode": "HKT",
+                            "cityName": "Phuket",
+                            "countryName": "Thailand"
+                        }
+                    ],
+                    "destination": {
+                        "cityCode": "HKT",
+                        "cityName": "Phuket",
+                        "countryCode": "TH",
+                        "countryName": "Thailand"
+                    },
+                    "selectedPickupPoint": {
+                        "code": "HKT",
+                        "type": "AIRPORT",
+                        "cityCode": "HKT",
+                        "cityName": "Phuket",
+                        "countryName": "Thailand"
+                    },
+                    "selectedDropoffPoint": {
+                        "code": "H2951",
+                        "type": "HOTEL",
+                        "cityCode": "HKT",
+                        "cityName": "Phuket",
+                        "countryName": "Thailand"
+                    },
+                    "isElementGroupDetailsOverridden": true
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "TRS",
+                "tbxProductId": "TRS~1"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Khao Lak Hotels to Phuket Airport - Unescorted Private Transfer",
+                    "highlight": "Unescorted Private Transfer",
+                    "primaryAttribute": "Khaolak Merlin Resort , Phuket , Thailand",
+                    "secondaryAttribute": "Phuket Airport , Phuket , Thailand",
+                    "travelDates": {
+                        "startDate": "2026-11-28T00:00:00",
+                        "endDate": "2026-11-28T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "MINUTES"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-11-28T00:00:00",
+                    "endTime": "2026-11-28T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-11-28T00:00:00",
+                        "endTime": "2026-11-28T00:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "507847",
+                "bookedDate": "2026-01-24T00:00:00",
+                "modifiedDate": "2026-01-24T00:00:00",
+                "rate": {
+                    "price": 49.46,
+                    "priceWithTax": 49.46,
+                    "tax": 0.0,
+                    "basePrice": 49.46,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Karen",
+                            "lastName": "Clarke",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "1972-07-22T00:00:00",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Glynn",
+                            "lastName": "Clarke",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "1963-08-13T00:00:00",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "TRANSFER",
+                    "elementGroupName": "Transfer",
+                    "pickupPoints": [
+                        {
+                            "code": "H2951",
+                            "type": "HOTEL",
+                            "cityCode": "HKT",
+                            "cityName": "Phuket",
+                            "countryName": "Thailand"
+                        }
+                    ],
+                    "dropoffPoints": [
+                        {
+                            "code": "HKT",
+                            "type": "AIRPORT",
+                            "cityCode": "HKT",
+                            "cityName": "Phuket",
+                            "countryName": "Thailand"
+                        }
+                    ],
+                    "destination": {
+                        "cityCode": "HKT",
+                        "cityName": "Phuket",
+                        "countryCode": "TH",
+                        "countryName": "Thailand"
+                    },
+                    "selectedPickupPoint": {
+                        "code": "H2951",
+                        "type": "HOTEL",
+                        "cityCode": "HKT",
+                        "cityName": "Phuket",
+                        "countryName": "Thailand"
+                    },
+                    "selectedDropoffPoint": {
+                        "code": "HKT",
+                        "type": "AIRPORT",
+                        "cityCode": "HKT",
+                        "cityName": "Phuket",
+                        "countryName": "Thailand"
+                    },
+                    "isElementGroupDetailsOverridden": true
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "TRS",
+                "tbxProductId": "TRS~2"
+            }
+        ],
+        "travellers": [
+            {
+                "firstName": "Karen",
+                "lastName": "Clarke",
+                "leadTraveller": true,
+                "title": "Mrs",
+                "dateOfBirth": "1972-07-22T00:00:00",
+                "gender": "F"
+            },
+            {
+                "firstName": "Glynn",
+                "lastName": "Clarke",
+                "leadTraveller": false,
+                "title": "Mr",
+                "dateOfBirth": "1963-08-13T00:00:00",
+                "gender": "M"
+            }
+        ],
+        "holidayPackageDetails": {
+            "agentReference": "507847",
+            "definiteDueDate": "2026-01-24T00:00:00",
+            "definiteDate": "2026-01-24T00:00:00",
+            "firmDueDate": "2026-01-24T00:00:00",
+            "firmDate": "2026-01-24T00:00:00",
+            "balanceDueDate": "2026-08-23T00:00:00",
+            "destination": {
+                "countryCode": "TH",
+                "countryName": "Thailand"
+            }
+        }
+    },
+    "status": 200
+}

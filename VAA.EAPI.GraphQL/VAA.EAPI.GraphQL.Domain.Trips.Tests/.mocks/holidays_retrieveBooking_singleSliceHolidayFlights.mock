@@ -1,0 +1,127 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBooking HTTP/1.1
+
+$[?( @.bookingReference == '9999999' )]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "booking": {
+    "id": "9999999",
+    "bookingSummary": {
+      "brandName": "Virgin Holidays",
+      "brandCode": "WW",
+      "company": "VHOLS",
+      "companyName": "Virgin Holidays Ltd"
+    },
+    "summary": {
+      "travelDates": {
+        "startDate": "{DateTime(yyyy-MM-ddT00:00:00, -11, day)}",
+        "endDate": "{DateTime(yyyy-MM-ddT00:00:00, 2, day)}"
+      }
+    },
+    "payment": {
+      "balanceDue": 0,
+      "currencyCode": "GBP"
+    },
+    "status": "Confirmed [ TK ]",
+    "travellers": [
+      {
+        "firstName": "Test",
+        "lastName": "User",
+        "leadTraveller": true,
+        "dateOfBirth": "1970-01-01T00:00:00"
+      }
+    ],
+    "holidayPackageDetails": {
+      "destination": {
+        "countryName": "USA"
+      }
+    },
+    "holidayProducts": [
+      {
+        "summary": {
+          "productStatus": "CONFIRMED",
+          "travelDates": {
+            "startDate": "{DateTime(yyyy-MM-ddT00:00:00, -11, day)}",
+            "endDate": "{DateTime(yyyy-MM-ddT00:00:00, 2, day)}"
+          }
+        },
+        "travellersComposition": {
+          "adultCount": 2,
+          "travellers": [
+            {
+              "firstName": "Test",
+              "lastName": "User",
+              "leadTraveller": true,
+              "dateOfBirth": "1970-01-01T00:00:00"
+            },
+            {
+              "firstName": "Dummy",
+              "lastName": "User",
+              "leadTraveller": false,
+              "dateOfBirth": "1970-01-01T00:00:00"
+            }
+          ]
+        },
+        "flightDetails": {
+          "isBookingSourceAir4": true,
+          "airlineLocator": {
+            "pnrLocator": "ZZ9ZZ9",
+            "orderId": "ORDER-ONE"
+          },
+          "sectors": [
+            {
+              "id": "1",
+              "scheduledDepartureLocal": "2026-09-03T17:10:00",
+              "scheduledArrivalLocal": "2026-09-04T06:40:00",
+              "origin": { "code": "MCO", "terminalName": "Terminal 2" },
+              "destination": { "code": "MAN", "terminalName": "Terminal 4" }
+            }
+          ]
+        }
+      },
+      {
+        "summary": {
+          "productStatus": "CONFIRMED",
+          "travelDates": {
+            "startDate": "{DateTime(yyyy-MM-ddT00:00:00, -11, day)}",
+            "endDate": "{DateTime(yyyy-MM-ddT00:00:00, 2, day)}"
+          }
+        },
+        "travellersComposition": {
+          "adultCount": 1,
+          "travellers": [
+            {
+              "firstName": "Test",
+              "lastName": "User",
+              "leadTraveller": true,
+              "dateOfBirth": "1970-01-01T00:00:00"
+            }
+          ]
+        },
+        "flightDetails": {
+          "isBookingSourceAir4": true,
+          "airlineLocator": {
+            "pnrLocator": "YY8YY8",
+            "orderId": "ORDER-TWO"
+          },
+          "sectors": [
+            {
+              "id": "1",
+              "scheduledDepartureLocal": "2026-09-06T20:30:00",
+              "scheduledArrivalLocal": "2026-09-07T09:40:00",
+              "origin": { "code": "MCO", "terminalName": "Terminal 2" },
+              "destination": { "code": "MAN", "terminalName": "Terminal 4" }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "errors": []
+}
+
+

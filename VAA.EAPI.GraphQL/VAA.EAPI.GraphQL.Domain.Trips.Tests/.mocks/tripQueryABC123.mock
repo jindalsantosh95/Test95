@@ -1,0 +1,193 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/tripmicroservice/trips/search HTTP/1.1
+
+$[?(@.confirmationNum == 'ABC123')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "booking": {
+        "id": "6ea123b8-9589-47c6-ac6a-8ddeec7e79bf",
+        "pos": {
+            "countryCode": "GB",
+            "currencyCode": "GBP"
+        },
+        "product": [
+            {
+                "bookingType": "AIRLINE",
+                "reference": {
+                    "airlineDesignator": "VS",
+                    "pnrLocator": "CJV3BF",
+                    "createdDate": "2025-12-05T10:30:00"
+                },
+                "slices": [
+                    {
+                        "id": "1",
+                        "distanceMiles": 3462,
+                        "scheduledDepartureLocalDateTime": "{DateTime(yyyy-MM-ddT08:55:00, 2, week)}",
+                        "scheduledDepartureUtcDateTime": "{DateTime(yyyy-MM-ddT08:55:00, 2, week)}",
+                        "scheduledArrivalLocalDateTime": "{DateTime(yyyy-MM-ddT12:15:00, 2, week)}",
+                        "scheduledArrivalUtcDateTime": "{DateTime(yyyy-MM-ddT17:15:00, 2, week)}",
+                        "origin": {
+                            "terminalName": "Terminal 3",
+                            "code": "LHR",
+                            "airportName": "Heathrow Airport",
+                            "cityName": "London Heathrow",
+                            "countryCode": "GB"
+                        },
+                        "destination": {
+                            "terminalName": "Terminal 4",
+                            "code": "JFK",
+                            "airportName": "John F Kennedy International",
+                            "cityName": "New York",
+                            "countryCode": "US"
+                        },
+                        "segments": [
+                            {
+                                "id": "1",
+                                "ordinal": 0,
+                                "operatingCarrier": {
+                                    "flightNumber": "0003",
+                                    "carrierCode": "VS",
+                                    "carrierName": "Virgin Atlantic",
+                                    "operationalSuffix": "VS"
+                                },
+                                "marketingCarrier": {
+                                    "flightNumber": "0003",
+                                    "carrierCode": "VS",
+                                    "carrierName": "Virgin Atlantic",
+                                    "operationalSuffix": "VS"
+                                },
+                                "scheduledDepartureLocalDateTime": "{DateTime(yyyy-MM-ddT08:55:00, 2, week)}",
+                                "scheduledDepartureUtcDateTime": "{DateTime(yyyy-MM-ddT08:55:00, 2, week)}",
+                                "scheduledArrivalLocalDateTime": "{DateTime(yyyy-MM-ddT12:15:00, 2, week)}",
+                                "scheduledArrivalUtcDateTime": "{DateTime(yyyy-MM-ddT17:15:00, 2, week)}",
+                                "scheduledArrivalBasedOnDepartureLocalDateTime": "{DateTime(yyyy-MM-ddT17:15:00, 2, week)}",
+                                "origin": {
+                                    "code": "LHR",
+                                    "airportName": "Heathrow Airport",
+                                    "cityName": "London Heathrow",
+                                    "countryCode": "GB"
+                                },
+                                "destination": {
+                                    "code": "JFK",
+                                    "airportName": "John F Kennedy International",
+                                    "cityName": "New York",
+                                    "countryCode": "US"
+                                },
+                                "actionCode": "HK",
+                                "legs": [
+                                    {
+                                        "id": "1",
+                                        "operating": {
+                                            "flightNumber": "0003",
+                                            "carrierCode": "VS",
+                                            "carrierName": "Virgin Atlantic"
+                                        },
+                                        "scheduledDepartureLocalDateTime": "{DateTime(yyyy-MM-ddT08:55:00, 2, week)}",
+                                        "scheduledDepartureUtcDateTime": "{DateTime(yyyy-MM-ddT08:55:00, 2, week)}",
+                                        "scheduledArrivalLocalDateTime": "{DateTime(yyyy-MM-ddT12:15:00, 2, week)}",
+                                        "scheduledArrivalUtcDateTime": "{DateTime(yyyy-MM-ddT17:15:00, 2, week)}",
+                                        "scheduledArrivalBasedOnDepartureLocalDateTime": "{DateTime(yyyy-MM-ddT17:15:00, 2, week)}",
+                                        "origin": {
+                                            "terminalName": "Terminal 3",
+                                            "code": "LHR",
+                                            "airportName": "Heathrow Airport",
+                                            "cityName": "London Heathrow",
+                                            "countryCode": "GB"
+                                        },
+                                        "destination": {
+                                            "terminalName": "Terminal 4",
+                                            "code": "JFK",
+                                            "airportName": "John F Kennedy International",
+                                            "cityName": "New York",
+                                            "countryCode": "US"
+                                        },
+                                        "onAirDuration": "PT8H20M",
+                                        "status": "ON_TIME",
+                                        "cabinClass": {
+                                            "code": "C",
+                                            "productCode": "VSUP",
+                                            "name": "Upper Class"
+                                        },
+                                        "aircraft": {
+                                            "code": "351",
+                                            "name": "Airbus A350-1000"
+                                        },
+                                        "seatSelectionType": "VIEW_SEAT"
+                                    }
+                                ],
+                                "flightSegmentId": "1-1",
+                                "totalSegmentDuration": "PT8H20M",
+                                "fareBasisCode": "EY5EBDSA"
+                            }
+                        ],
+                        "totalSliceDuration": "PT8H20M"
+                    }
+                ]
+            }
+        ],
+        "passengers": [
+            {
+                "customerId": "9999217241836",
+                "passengerId": "bf25a509-3c41-4105-a769-0bff6868aaf1",
+                "passengerType": {
+                    "code": "ADT",
+                    "name": "ADULT",
+                    "category": "ADULT"
+                },
+                "lastName": "TEST",
+                "slices": [
+                    {
+                        "id": "1",
+                        "segments": [
+                            {
+                                "id": "1",
+                                "legs": [
+                                    {
+                                        "id": "1",
+                                        "seatAssignments": [
+                                            {
+                                                "seat": {
+                                                    "row": 1,
+                                                    "column": "D",
+                                                    "name": "1D",
+                                                    "type": "D",
+                                                    "actualCabinClass": [
+                                                        {
+                                                            "code": "C",
+                                                            "productCode": "VSUP"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "checkinStatus": "NOT_CHECKED_IN"
+                            }
+                        ],
+                        "checkinStatus": "NOT_CHECKED_IN"
+                    }
+                ],
+                "tickets": [
+                    {
+                        "number": "9322329697294",
+                        "issueDt": "2025-10-08",
+                        "posCurrencyCode": "GBP",
+                        "deliveryType": "ETICKET"
+                    }
+                ],
+                "firstName": "TEST",
+                "firstNameNumber": "01",
+                "lastNameNumber": "01"
+            }
+        ]
+    }
+}

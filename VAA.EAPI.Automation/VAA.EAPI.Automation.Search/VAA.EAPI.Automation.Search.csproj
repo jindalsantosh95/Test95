@@ -1,0 +1,100 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Tests\NewBookFlow\NewFolder\**" />
+	  <EmbeddedResource Remove="Tests\NewBookFlow\NewFolder\**" />
+	  <None Remove="Tests\NewBookFlow\NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Azure.Identity" />
+		<PackageReference Include="Azure.Security.KeyVault.Keys" />
+		<PackageReference Include="Azure.Security.KeyVault.Secrets" />
+		<PackageReference Include="Microsoft.Azure.Cosmos" />
+		<PackageReference Include="Microsoft.Azure.Cosmos.Table" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi.Core" />
+		<PackageReference Include="Microsoft.Data.SqlClient" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="System.Data.OleDb" />
+		<PackageReference Include="System.Data.SqlClient" />
+		<PackageReference Include="xunit" />
+		<PackageReference Include="xunit.abstractions" />
+		<PackageReference Include="xunit.extensibility.core" />
+		<PackageReference Include="xunit.runner.visualstudio">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+  <ItemGroup>
+    <None Update="local.settings.local.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQl\SalesBannerGqlQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQl\SearchOffersGqlQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\GraphQl\SearchOffersNextSliceGqlQuery.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\Body\Microservices\OfferSearch\offersearch.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\OrderCreate\OrderCreate_Request.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Tests\NewBookFlow\Microservices\OfferSearch\Schema\Schema.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\VAA.EAPI.Automation.Core.Delta\VAA.EAPI.Automation.Core.Delta.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.Automation.Core.UI\VAA.EAPI.Automation.Core.UI.csproj" />
+		<ProjectReference Include="..\VAA.EAPI.Automation.Core\VAA.EAPI.Automation.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="VAA.EAPI.Domain.Virgin">
+			<HintPath>..\Assemblies\VAA.EAPI.Domain.Virgin.dll</HintPath>
+			<Private>True</Private>
+		</Reference>
+		<Reference Include="VAA.EAPI.Infrastructure">
+			<HintPath>..\Assemblies\VAA.EAPI.Infrastructure.dll</HintPath>
+		</Reference>
+		<Reference Include="VAA.EAPI.Microservices.Offer">
+			<HintPath>..\Assemblies\VAA.EAPI.Microservices.Offer.dll</HintPath>
+		</Reference>
+		<Reference Include="VAA.EAPI.Microservices.Order.Management">
+			<HintPath>..\Assemblies\VAA.EAPI.Microservices.Order.Management.dll</HintPath>
+		</Reference>
+		<Reference Include="VAA.EAPI.Microservices.Order.Search">
+			<HintPath>..\Assemblies\VAA.EAPI.Microservices.Order.Search.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Requests\Body\GraphQl\" />
+	</ItemGroup>
+
+	<ProjectExtensions>
+		<VisualStudio><UserProperties /></VisualStudio>
+	</ProjectExtensions>
+
+</Project>

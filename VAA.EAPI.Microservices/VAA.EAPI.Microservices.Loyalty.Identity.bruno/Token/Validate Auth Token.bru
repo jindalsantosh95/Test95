@@ -1,0 +1,20 @@
+meta {
+  name: Validate Auth Token
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{identity_base_url}}/ValidateAuthToken
+  body: none
+  auth: inherit
+}
+
+headers {
+  token: {{auth_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

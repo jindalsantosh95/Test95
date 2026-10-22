@@ -1,0 +1,127 @@
+meta {
+  name: 1-2 Retrieve Requirements by PNR
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{delta_trm}}/requirements
+  body: json
+  auth: inherit
+}
+
+headers {
+  transactionId: VS-DigitalFirst-123-{{$guid}}
+  Content-Type: application/json
+  Accept: application/json
+  configOptions: [{'nativeTravelDocs':'true'}]
+  clientId: {{ping_client_id}}
+  X-TRRM_VSDigital_Test: {{X-TRRM_VSDigital_Test}}
+  AppChannelName: {{AppChannelName}}
+  AppID: {{AppID}}
+}
+
+body:json {
+  {
+      "using": "CONFIRMATION",
+      "confirmationNum": "{{pnr}}",   
+    "givenNames": "{{pax1_firstname}}",         "surname": "{{pax1_lastname}}"
+   // "givenNames": "ESTAB",         "surname": "TESTING"
+  //  "givenNames": "ANKUR",         "surname": "RANA"
+  //  "givenNames": "ANTHONY",         "surname": "DSILVA"
+  //  "givenNames": "BARTHOLOMEW",     "surname": "PALMERTOMPKINSON"
+  //  "givenNames": "BOB",     "surname": "DOE"
+  //  "givenNames": "DIANNE",          "surname": "VITKO"
+   // "givenNames": "ONE",          "surname": "VIRGIN"
+  //  "givenNames": "HAROLD",          "surname": "KELLERMAN"
+  //  "givenNames": "INGRID",          "surname": "MARYLN"
+  //  "givenNames": "KATHLINE",         "surname": "GONTERMAN"
+  //  "givenNames": "MALCOM",          "surname": "MCLAMORE"
+  //  "givenNames": "RICHARD",         "surname": "PRONTO"
+  //  "givenNames": "ROBYN",         "surname": "JOESPH"
+  //  "givenNames": "SHERIE",          "surname": "SCHLOTTERBECK"
+  // "givenNames": "SERGIO",             "surname": "DEPIERRE"
+  //  "givenNames": "SHELDON",         "surname": "ELBERT"
+  //  "givenNames": "TEMIKA",          "surname": "ECHEVERRY"
+  //  "givenNames": "VIRGIN",          "surname": "TESTONE"
+  //  "givenNames": "VENKATESHWARANS", "surname": "PANCHAPAKESAN"
+  }
+}
+
+script:post-response {
+  var body = res.getBody();
+  bru.setVar("requirement_resource_id", body.requirementsResourceId);
+  bru.setVar("travel_requirements_response", JSON.stringify(body.travelRequirements));
+
+  var pnr = body.travelRequirements.bookingReference.id;
+  bru.setVar("pnr", pnr)
+
+  var trips = body.travelRequirements.trips;
+  for (let x = 0; x < trips.length; x++) {
+    let trip = trips[x];
+    bru.setVar("trip_resource_id" + (x + 1), trip.id)
+  }
+
+  var passengers = body.travelRequirements.passengers;
+
+  for (let x = 0; x < passengers.length; x++) {
+    let passenger = passengers[x];
+    bru.setVar("passenger_resource_id" + (x + 1), passenger.passengerResourceId);
+    bru.setVar("passenger_givenNames" + (x + 1), passenger.givenNames);
+    bru.setVar("passenger_surname" + (x + 1), passenger.surname);
+    bru.setVar("passenger_dob" + (x + 1), passenger.birthDate.substring(0,10));
+    bru.setVar("passenger_yeardob" + (x + 1), passenger.birthDate.substring(0,4));
+    bru.setVar("passenger_monthdob" + (x + 1), passenger.birthDate.substring(5,7));
+    bru.setVar("passenger_daydob" + (x + 1), passenger.birthDate.substring(8,10));
+  }
+
+  const governmentForm = passengers[0]?.advancePassengerInformation
+    ?.flatMap(information => information.passengerTripHealthRequirements ?? [])
+    ?.find(requirement => requirement.tripId === trips[0]?.id)
+    ?.requirementCategories
+    ?.find(category => category.type === "GOVERNMENT_FORMS")
+    ?.requirements
+    ?.flatMap(requirement => requirement.links ?? [])
+    ?.find(link => link.id && link.linkId && link.text && link.href);
+
+  if (governmentForm) {
+    bru.setVar("government_form_id", governmentForm.id);
+    bru.setVar("government_form_link_id", governmentForm.linkId);
+    bru.setVar("government_form_text", governmentForm.text);
+    bru.setVar("government_form_href", governmentForm.href);
+  }
+
+  const secondaryDocument = passengers[0]?.advancePassengerInformation
+    ?.flatMap(information => information.passengerTripHealthRequirements ?? [])
+    ?.find(requirement => requirement.tripId === trips[0]?.id)
+    ?.requirementCategories
+    ?.find(category => category.type === "TRAVEL_DOCUMENTS")
+    ?.requirements
+    ?.find(requirement => requirement.requirementType === "SECONDARY_DOC");
+  const secondaryDocumentLink = secondaryDocument?.links?.[0];
+
+  if (secondaryDocumentLink) {
+    bru.setVar("secondary_document_id", secondaryDocumentLink.linkId ?? "");
+    bru.setVar("secondary_document_country_code", secondaryDocument?.country?.code ?? "");
+  }
+
+  const lastArrivalLocalDate = trips?.[0]?.lastArrivalLocalDate;
+
+  if (lastArrivalLocalDate) {
+    const [datePart] = String(lastArrivalLocalDate).split("T");
+    const [year, month, day] = datePart.split("-").map(Number);
+
+    const date = new Date(Date.UTC(year, month - 1, day));
+    date.setUTCDate(date.getUTCDate() + 15);
+
+    const returnDate = date.toISOString().slice(0, 10);
+    bru.setVar("returnDate", returnDate);
+  } else {
+    bru.setVar("returnDate", "");
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

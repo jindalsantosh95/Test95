@@ -1,0 +1,154 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avaieunkv001.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "sandbox",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "SANDBOX"
+    },
+    "AppServicePlanName": {
+      "value": "vappeunaspndc01"
+    },
+    "appName": {
+      "value": "va-pp-eun-arcpayment-fn-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-pp-eun-payments-kv-01"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "Retail.Order.ARC.Payment",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "SANDBOX",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "storageaccountName": {
+      "value": "vappeunarcpaymentsa01"
+    },
+    "AppInsightsName": {
+      "value": "va-pp-eun-arcpayment-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "KeyVaultUri": {
+      "value": "https://va-pp-eun-payments-kv-01.vault.azure.net/"
+    },
+
+    // OpenApi
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/7cae01a8-2ddf-45fd-b8a2-7dae05a104b7/.default"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Order ARC Payment Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This API provides ability to have electronic payments"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "true"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "ArcCheckClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pp-eun-payments-kv-01.vault.azure.net/secrets/va-pp-eun-arcpayment-fn-01-Config-ArcCheckClientId/)"
+    },
+    "ArcCheckBaseUrl": {
+      "value": "https://api-uat.arc.travel/arc-check3/api/agency-statuses"
+    },
+    "ArcCheckClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pp-eun-payments-kv-01.vault.azure.net/secrets/va-pp-eun-arcpayment-fn-01-Config-ArcCheckClientSecret/)"
+    },
+    "ArcTransactionClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pp-eun-payments-kv-01.vault.azure.net/secrets/va-pp-eun-arcpayment-fn-01-Config-ArcTransactionClientId/)"
+    },
+    "ArcTransactionClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-pp-eun-payments-kv-01.vault.azure.net/secrets/va-pp-eun-arcpayment-fn-01-Config-ArcTransactionClientSecret/)"
+    },
+    "ArcTransactionAudience": {
+      "value": "https://eum-okta-cic-uat-tapi.arctravel.auth0app.com/api/v2/"
+    },
+    "ArcTransactionTokenUrl": {
+      "value": "https://eum-okta-cic-uat.arctravel.auth0app.com/oauth/token"
+    },
+    "ArcTransactionUrl": {
+      "value": "https://ingestion-uat.settlement-prod.arc.travel/v1/transactions"
+    },
+    "ArcCheckTokenUrl": {
+      "value": "https://myarc.okta.com/oauth2/ause2fx17D7uPsznb356/v1/token"
+    },
+    "TicketingSystemCode": {
+      "value": "DCVS"
+    },
+    "ArcCheckScope": {
+      "value": "arc_check"
+    },
+    "ARCEnvironmentName": {
+      "value": "TEST"
+    },
+    "OrderApiRetryCount": {
+      "value": "3"
+    },
+    "OrderRetryDelayMilliseconds": {
+      "value": "1000"
+    }
+  }
+}

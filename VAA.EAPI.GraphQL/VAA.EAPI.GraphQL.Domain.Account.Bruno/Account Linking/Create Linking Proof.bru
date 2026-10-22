@@ -1,0 +1,38 @@
+meta {
+  name: Create Linking Proof
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{graphql_secure}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation CreateLinkingProof($input: AccountCreateLinkingProofInput!) {
+    accountCreateLinkingProof(input: $input) {
+      proof
+      expiresAtUtc
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "transactionId": "{{account_linking_transaction_id}}",
+      "clientId": "{{account_linking_client_id}}",
+      "resource": "{{account_linking_resource}}",
+      "scope": "account:read"
+    }
+  }
+}
+
+docs {
+  Use the existing authenticated member session and agreed transaction identifiers.
+  The account number is resolved server-side; do not send an account number.
+  Keep proof variables local and never commit or log returned linking proofs. The proxy owns OAuth state and consent; no browser key or signed assertion is required.
+  The existing generic REST projection exposes the same operation; no custom account-linking sub-route is needed.
+}

@@ -1,0 +1,53 @@
+###Request
+POST https://Testresources.virginatlantic.com/dev/checkinmicroservice/TravelRequirements/SaveGovernmentFormsAttestation HTTP/1.1
+
+$[?(@.passengerId == '01.01|required-government-forms-resource-id' && @.sliceId == 'slice-government-forms')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Response-Delay: 00:00:00
+
+{
+  "requirementsId": "requirements-id",
+  "reference": { "pnrLocator": "CNMLQN", "createdDate": "2026-05-31" },
+  "slices": [
+    {
+      "sliceId": "slice-government-forms",
+      "scheduledDepartureLocalDateTime": "2026-06-10T08:20:00",
+      "scheduledDepartureUtcDateTime": "2026-06-10T07:20:00",
+      "scheduledArrivalLocalDateTime": "2026-06-10T11:30:00",
+      "scheduledArrivalUtcDateTime": "2026-06-10T15:30:00",
+      "segments": []
+    }
+  ],
+  "passengers": [
+    {
+      "passengerId": "01.01|required-government-forms-resource-id",
+      "givenNames": "TRAVEL",
+      "surname": "TEST",
+      "documents": [],
+      "sliceRequirements": [
+        {
+          "sliceId": "slice-government-forms",
+          "passportProvided": true,
+          "passportVerified": true,
+          "contactTracing": "NOT_REQUIRED",
+          "returnDateStatus": "NOT_REQUIRED",
+          "passportErrors": [],
+          "secondaryDocumentStatus": "NOT_REQUIRED",
+          "overall": "PART_COMPLETE",
+          "governmentForms": [
+            {
+              "status": "REQUIRED",
+              "id": "32738f95-5023-4a23-bf8c-16dd388cbaff",
+              "linkId": "Maldives Traveller Declaration",
+              "title": "Maldives Traveller Declaration",
+              "url": "https://imuga.immigration.gov.mv/"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

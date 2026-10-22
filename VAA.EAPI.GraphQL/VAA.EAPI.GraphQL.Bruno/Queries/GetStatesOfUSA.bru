@@ -1,0 +1,25 @@
+meta {
+  name: GetStatesOfUSA
+  type: graphql
+  seq: 29
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query GetStatesOfUSA {
+    GetStatesOfUSA {
+      __typename
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

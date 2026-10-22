@@ -1,0 +1,28 @@
+﻿using FluentValidation.Results;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+
+namespace VAA.EAPI.Microservices.Loyalty.Campaign.Management.Domain.Exceptions
+{
+    public class RequestValidationException : Exception
+    {
+        public IEnumerable<string> ValidationErrors { get; set; }
+        public RequestValidationException() { }
+
+        public RequestValidationException(string message) : base(message)
+        {
+            ValidationErrors = new List<string> { message };
+        }
+
+        public RequestValidationException(string message, Exception innerException) : base(message, innerException) { }
+
+        protected RequestValidationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+        public RequestValidationException(string message, List<ValidationFailure> errors) : base(message)
+        {
+            ValidationErrors = errors.Select(err => err.ErrorMessage);
+        }
+    }
+}

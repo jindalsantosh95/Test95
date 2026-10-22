@@ -1,0 +1,15 @@
+###Request
+POST https://testresources.virginatlantic.com/DEV/digital/Trip/trips/search HTTP/1.1
+
+$[?(@.confirmationNum == 'NOPASSENGERDETAILS')]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "booking": {
+    "id": "PassengerDetailsUnavailable-booking-id"
+  },
+  "status": 200
+}

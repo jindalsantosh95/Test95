@@ -1,0 +1,32 @@
+meta {
+  name: InsuranceQuote
+  type: graphql
+  seq: 31
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query InsuranceQuote($basketId: String, $quoteVersionId: Int!) {
+    InsuranceQuote(basketId: $basketId, quoteVersionId: $quoteVersionId) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "basketId": "",
+    "quoteVersionId": 0
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

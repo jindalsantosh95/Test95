@@ -1,0 +1,1064 @@
+###Request
+POST https://testresources.virginatlantic.com/dev/digital/holidays/retrieveBooking HTTP/1.1
+
+$[?( @.bookingReference == '7003024' )]
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+    "booking": {
+        "id": "7003024",
+        "summary": {
+            "availabilityStatus": "AVAILABLE",
+            "productStatus": "CONFIRMED",
+            "name": "Package",
+            "primaryAttribute": "",
+            "secondaryAttribute": "",
+            "travelDates": {
+                "startDate": "2026-06-03T00:00:00",
+                "endDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 15, day)}"
+            },
+            "travelDuration": {
+                "duration": "96",
+                "durationType": "DAYS"
+            },
+            "discount": 180.0,
+            "vipBooking": false
+        },
+        "payment": {
+            "deposit": 275.0,
+            "balanceDue": 3454.01,
+            "totalPriceToBePaid": 3729.01,
+            "totalPaidAmount": 275.0,
+            "depositRealised": true,
+            "depositReceived": true,
+            "currencyCode": "GBP",
+            "pastPayments": [
+                {
+                    "currencyAmount": 275.0,
+                    "realisedDate": "2026-01-23T13:34:34",
+                    "paymentCurrency": "GBP",
+                    "paymentMethodCode": "CRCD",
+                    "realised": true,
+                    "receiptDate": "2026-01-23T13:34:34"
+                }
+            ]
+        },
+        "status": "Confirmed",
+        "holidayProducts": [
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "VS",
+                    "highlight": "ECONOMY CLASSIC/ECONOMY CLASSIC",
+                    "primaryAttribute": "EDI",
+                    "secondaryAttribute": "MCO",
+                    "travelDates": {
+                        "startDate": "2026-06-03T00:00:00",
+                        "endDate": "{DateTime(yyyy-MM-ddTHH:mm:ss, 15, day)}"
+                    },
+                    "discount": 120.0,
+                    "vipBooking": false
+                },
+                "bookedUser": "460027",
+                "bookedDate": "2026-01-23T00:00:00",
+                "modifiedDate": "2026-01-23T00:00:00",
+                "rate": {
+                    "price": 1481.21,
+                    "priceWithTax": 1481.21,
+                    "tax": 958.08,
+                    "basePrice": 1481.21,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 2,
+                    "travellers": [
+                        {
+                            "firstName": "Lesley",
+                            "lastName": "test",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Stuart",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "flightDetails": {
+                    "sectors": [
+                        {
+                            "id": "1",
+                            "origin": {
+                                "code": "EDI"
+                            },
+                            "destination": {
+                                "code": "MCO"
+                            },
+                            "segments": [
+                                {
+                                    "operatingCarrier": {
+                                        "flightNumber": "225",
+                                        "carrierCode": "VS"
+                                    },
+                                    "marketingCarrier": {
+                                        "carrierCode": "VS"
+                                    },
+                                    "scheduledDepartureLocal": "2026-06-03T14:20:00",
+                                    "scheduledArrivalLocal": "2026-06-03T18:15:00",
+                                    "origin": {
+                                        "code": "EDI"
+                                    },
+                                    "destination": {
+                                        "code": "MCO"
+                                    },
+                                    "legs": [
+                                        {
+                                            "operating": {
+                                                "flightNumber": "225",
+                                                "carrierCode": "VS"
+                                            },
+                                            "marketing": {
+                                                "carrierCode": "VS"
+                                            },
+                                            "scheduledDepartureLocal": "2026-06-03T14:20:00",
+                                            "scheduledArrivalLocal": "2026-06-03T18:15:00",
+                                            "origin": {
+                                                "code": "EDI"
+                                            },
+                                            "destination": {
+                                                "code": "MCO"
+                                            },
+                                            "onAirDuration": "535",
+                                            "aircraft": {
+                                                "subfleetCode": "351"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "scheduledDepartureLocal": "2026-06-03T14:20:00",
+                            "scheduledArrivalLocal": "2026-06-03T18:15:00"
+                        },
+                        {
+                            "id": "2",
+                            "origin": {
+                                "code": "MCO"
+                            },
+                            "destination": {
+                                "code": "EDI"
+                            },
+                            "segments": [
+                                {
+                                    "operatingCarrier": {
+                                        "flightNumber": "226",
+                                        "carrierCode": "VS"
+                                    },
+                                    "marketingCarrier": {
+                                        "carrierCode": "VS"
+                                    },
+                                    "scheduledDepartureLocal": "2026-06-20T21:00:00",
+                                    "scheduledArrivalLocal": "2026-06-21T10:00:00",
+                                    "origin": {
+                                        "code": "MCO"
+                                    },
+                                    "destination": {
+                                        "code": "EDI"
+                                    },
+                                    "legs": [
+                                        {
+                                            "operating": {
+                                                "flightNumber": "226",
+                                                "carrierCode": "VS"
+                                            },
+                                            "marketing": {
+                                                "carrierCode": "VS"
+                                            },
+                                            "scheduledDepartureLocal": "2026-06-20T21:00:00",
+                                            "scheduledArrivalLocal": "2026-06-21T10:00:00",
+                                            "origin": {
+                                                "code": "MCO"
+                                            },
+                                            "destination": {
+                                                "code": "EDI"
+                                            },
+                                            "onAirDuration": "480",
+                                            "aircraft": {
+                                                "subfleetCode": "351"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "scheduledDepartureLocal": "2026-06-20T21:00:00",
+                            "scheduledArrivalLocal": "2026-06-21T10:00:00"
+                        }
+                    ],
+                    "airlineLocator": {
+                        "pnrLocator": "C6QBPT"
+                    },
+                    "isBookingSourceAir4": true
+                },
+                "isAncillaryProduct": false,
+                "tbxProductType": "FLT",
+                "tbxProductId": "FLT~1"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "VS",
+                    "highlight": "ECONOMY CLASSIC/ECONOMY CLASSIC",
+                    "primaryAttribute": "EDI",
+                    "secondaryAttribute": "MCO",
+                    "travelDates": {
+                        "startDate": "2026-06-03T00:00:00",
+                        "endDate": "2026-09-06T00:00:00"
+                    },
+                    "discount": 60.0,
+                    "vipBooking": false
+                },
+                "bookedUser": "460027",
+                "bookedDate": "2026-01-23T00:00:00",
+                "modifiedDate": "2026-01-23T00:00:00",
+                "rate": {
+                    "price": 813.98,
+                    "priceWithTax": 813.98,
+                    "tax": 479.04,
+                    "basePrice": 813.98,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 1,
+                    "travellers": [
+                        {
+                            "firstName": "Craig",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "flightDetails": {
+                    "sectors": [
+                        {
+                            "id": "1",
+                            "origin": {
+                                "code": "EDI"
+                            },
+                            "destination": {
+                                "code": "MCO"
+                            },
+                            "segments": [
+                                {
+                                    "operatingCarrier": {
+                                        "flightNumber": "225",
+                                        "carrierCode": "VS"
+                                    },
+                                    "marketingCarrier": {
+                                        "carrierCode": "VS"
+                                    },
+                                    "scheduledDepartureLocal": "2026-06-03T14:20:00",
+                                    "scheduledArrivalLocal": "2026-06-03T18:15:00",
+                                    "origin": {
+                                        "code": "EDI"
+                                    },
+                                    "destination": {
+                                        "code": "MCO"
+                                    },
+                                    "legs": [
+                                        {
+                                            "operating": {
+                                                "flightNumber": "225",
+                                                "carrierCode": "VS"
+                                            },
+                                            "marketing": {
+                                                "carrierCode": "VS"
+                                            },
+                                            "scheduledDepartureLocal": "2026-06-03T14:20:00",
+                                            "scheduledArrivalLocal": "2026-06-03T18:15:00",
+                                            "origin": {
+                                                "code": "EDI"
+                                            },
+                                            "destination": {
+                                                "code": "MCO"
+                                            },
+                                            "onAirDuration": "535",
+                                            "aircraft": {
+                                                "subfleetCode": "351"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "scheduledDepartureLocal": "2026-06-03T14:20:00",
+                            "scheduledArrivalLocal": "2026-06-03T18:15:00"
+                        },
+                        {
+                            "id": "2",
+                            "origin": {
+                                "code": "JFK"
+                            },
+                            "destination": {
+                                "code": "EDI"
+                            },
+                            "segments": [
+                                {
+                                    "operatingCarrier": {
+                                        "flightNumber": "4026",
+                                        "carrierCode": "DL"
+                                    },
+                                    "marketingCarrier": {
+                                        "carrierCode": "VS"
+                                    },
+                                    "scheduledDepartureLocal": "2026-09-05T21:25:00",
+                                    "scheduledArrivalLocal": "2026-09-06T09:20:00",
+                                    "origin": {
+                                        "code": "JFK"
+                                    },
+                                    "destination": {
+                                        "code": "EDI"
+                                    },
+                                    "legs": [
+                                        {
+                                            "operating": {
+                                                "flightNumber": "4026",
+                                                "carrierCode": "DL"
+                                            },
+                                            "marketing": {
+                                                "carrierCode": "VS"
+                                            },
+                                            "scheduledDepartureLocal": "2026-09-05T21:25:00",
+                                            "scheduledArrivalLocal": "2026-09-06T09:20:00",
+                                            "origin": {
+                                                "code": "JFK"
+                                            },
+                                            "destination": {
+                                                "code": "EDI"
+                                            },
+                                            "onAirDuration": "415",
+                                            "aircraft": {
+                                                "subfleetCode": "76W"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "scheduledDepartureLocal": "2026-09-05T21:25:00",
+                            "scheduledArrivalLocal": "2026-09-06T09:20:00"
+                        }
+                    ],
+                    "airlineLocator": {
+                        "pnrLocator": "C6SBDQ"
+                    },
+                    "isBookingSourceAir4": true
+                },
+                "isAncillaryProduct": false,
+                "tbxProductType": "FLT",
+                "tbxProductId": "FLT~7"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Renaissance Orlando Resort & Spa",
+                    "highlight": "Tower Room - 2 Queen Beds",
+                    "primaryAttribute": "Room Only",
+                    "secondaryAttribute": "Tower Room - 2 Queen Beds (TRI 3 0 0) x 1",
+                    "travelDates": {
+                        "startDate": "2026-06-03T00:00:00",
+                        "endDate": "2026-06-20T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "17",
+                        "durationType": "NIGHTS"
+                    },
+                    "discount": 556.29,
+                    "startTime": "2026-06-03T15:00:00",
+                    "endTime": "2026-06-20T11:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-06-03T15:00:00",
+                        "endTime": "2026-06-20T11:00:00"
+                    },
+                    "vipBooking": false
+                },
+                "bookedUser": "460027",
+                "bookedDate": "2026-01-23T00:00:00",
+                "modifiedDate": "2026-01-23T00:00:00",
+                "rate": {
+                    "price": 1298.01,
+                    "priceWithTax": 1298.01,
+                    "tax": 0.0,
+                    "basePrice": 1298.01,
+                    "currencyInContract": "USD",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "travellers": [
+                        {
+                            "firstName": "Lesley",
+                            "lastName": "test",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Stuart",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "Craig",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "hotelDetails": {
+                    "roomDetails": [
+                        {
+                            "roomType": "Tower Room - 2 Queen Beds",
+                            "boardBasis": "Room Only",
+                            "roomNumber": "1",
+                            "paxCount": 3,
+                            "travellerInfo": {
+                                "adultCount": 3,
+                                "travellers": []
+                            },
+                            "rate": {
+                                "price": 1854.3,
+                                "priceWithTax": 1854.3,
+                                "tax": 0.0,
+                                "basePrice": 0.0,
+                                "totalTax": 0.0,
+                                "totalTaxBase": 0.0
+                            },
+                            "mealPlanName": "Room Only"
+                        }
+                    ],
+                    "name": "Renaissance Orlando Resort & Spa - Tower Room - 2 Queen Beds",
+                    "startDate": "2026-06-03T15:00:00",
+                    "endDate": "2026-06-20T11:00:00",
+                    "hotelCode": "H2997",
+                    "accommodationType": "H",
+                    "hotelAddress": "1905 Hotel Plaza Boulevard\nLake Buena Vista\nFlorida\n32830",
+                    "destination": {
+                        "cityCode": "ORL",
+                        "cityName": "Orlando",
+                        "countryCode": "US",
+                        "countryName": "USA",
+                        "stateCode": "FL",
+                        "stateName": "Florida"
+                    }
+                },
+                "isAncillaryProduct": false,
+                "tbxProductType": "HTL",
+                "tbxProductId": "HTL~1"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Codegen Booking Fee",
+                    "highlight": "Codegen Booking Fee",
+                    "primaryAttribute": "Forced Components - Hidden",
+                    "travelDates": {
+                        "startDate": "2026-06-03T00:00:00",
+                        "endDate": "2026-06-03T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-06-03T00:00:00",
+                    "endTime": "2026-06-03T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-06-03T00:00:00",
+                        "endTime": "2026-06-03T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden"
+                },
+                "bookedUser": "460027",
+                "bookedDate": "2026-01-23T00:00:00",
+                "modifiedDate": "2026-01-23T00:00:00",
+                "rate": {
+                    "price": 4.5,
+                    "priceWithTax": 4.5,
+                    "tax": 0.0,
+                    "basePrice": 4.5,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "travellers": [
+                        {
+                            "firstName": "Craig",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "Lesley",
+                            "lastName": "test",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Stuart",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~1"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Own Transport Arrangements - Florida",
+                    "highlight": "Own Transport Arrangements Florida",
+                    "primaryAttribute": "Own Transport Arrangements",
+                    "travelDates": {
+                        "startDate": "2026-06-03T00:00:00",
+                        "endDate": "2026-06-03T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-06-03T00:00:00",
+                    "endTime": "2026-06-03T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-06-03T00:00:00",
+                        "endTime": "2026-06-03T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "OWA",
+                    "elementGroupName": "Own Transport Arrangements"
+                },
+                "bookedUser": "460027",
+                "bookedDate": "2026-01-23T00:00:00",
+                "modifiedDate": "2026-01-23T00:00:00",
+                "rate": {
+                    "price": 0.03,
+                    "priceWithTax": 0.03,
+                    "tax": 0.0,
+                    "basePrice": 0.03,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "travellers": [
+                        {
+                            "firstName": "Craig",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "Lesley",
+                            "lastName": "test",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                           "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Stuart",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "OWA",
+                    "elementGroupName": "Own Transport Arrangements",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~2"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Florida Core",
+                    "highlight": "Florida Core",
+                    "primaryAttribute": "Forced Components - Hidden",
+                    "travelDates": {
+                        "startDate": "2026-06-03T00:00:00",
+                        "endDate": "2026-06-03T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-06-03T00:00:00",
+                    "endTime": "2026-06-03T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-06-03T00:00:00",
+                        "endTime": "2026-06-03T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden"
+                },
+                "bookedUser": "460027",
+                "bookedDate": "2026-01-23T00:00:00",
+                "modifiedDate": "2026-01-23T00:00:00",
+                "rate": {
+                    "price": 37.77,
+                    "priceWithTax": 37.77,
+                    "tax": 0.0,
+                    "basePrice": 37.77,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "travellers": [
+                        {
+                            "firstName": "Craig",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "Lesley",
+                            "lastName": "test",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Stuart",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden",
+                    "destination": {
+                        "countryCode": "US",
+                        "countryName": "USA"
+                    },
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~3"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Retail Booking Fee (Non Refundable)",
+                    "highlight": "Retail Booking Fee",
+                    "primaryAttribute": "Retail Booking Fee",
+                    "travelDates": {
+                        "startDate": "2026-06-03T00:00:00",
+                        "endDate": "2026-06-03T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-06-03T00:00:00",
+                    "endTime": "2026-06-03T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-06-03T00:00:00",
+                        "endTime": "2026-06-03T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "RETAILBOOK",
+                    "elementGroupName": "Retail Booking Fee"
+                },
+                "bookedUser": "460027",
+                "bookedDate": "2026-01-23T00:00:00",
+                "modifiedDate": "2026-01-23T00:00:00",
+                "rate": {
+                    "price": 50.0,
+                    "priceWithTax": 50.0,
+                    "tax": 0.0,
+                    "basePrice": 50.0,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "travellers": [
+                        {
+                            "firstName": "Craig",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "Lesley",
+                            "lastName": "test",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Stuart",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "RETAILBOOK",
+                    "elementGroupName": "Retail Booking Fee",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~4"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "Florida Resort Contact",
+                    "highlight": "Florida Contact Details",
+                    "primaryAttribute": "Resort Contact",
+                    "travelDates": {
+                        "startDate": "2026-06-03T00:00:00",
+                        "endDate": "2026-06-03T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-06-03T00:00:00",
+                    "endTime": "2026-06-03T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-06-03T00:00:00",
+                        "endTime": "2026-06-03T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "RCD",
+                    "elementGroupName": "Resort Contact"
+                },
+                "bookedUser": "460027",
+                "bookedDate": "2026-01-23T00:00:00",
+                "modifiedDate": "2026-01-23T00:00:00",
+                "rate": {
+                    "price": 0.01,
+                    "priceWithTax": 0.01,
+                    "tax": 0.0,
+                    "basePrice": 0.01,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "travellers": [
+                        {
+                            "firstName": "Craig",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                           "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "Lesley",
+                            "lastName": "test",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Stuart",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "RCD",
+                    "elementGroupName": "Resort Contact",
+                    "destination": {
+                        "countryCode": "US",
+                        "countryName": "USA"
+                    },
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~5"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "ATOL protected",
+                    "highlight": "ATOL protected",
+                    "primaryAttribute": "Atol protected",
+                    "travelDates": {
+                        "startDate": "2026-06-03T00:00:00",
+                        "endDate": "2026-06-03T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-06-03T00:00:00",
+                    "endTime": "2026-06-03T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-06-03T00:00:00",
+                        "endTime": "2026-06-03T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "ATOLLEVY",
+                    "elementGroupName": "Atol protected"
+                },
+                "bookedUser": "460027",
+                "bookedDate": "2026-01-23T00:00:00",
+                "modifiedDate": "2026-01-23T00:00:00",
+                "rate": {
+                    "price": 7.5,
+                    "priceWithTax": 7.5,
+                    "tax": 0.0,
+                    "basePrice": 7.5,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "travellers": [
+                        {
+                            "firstName": "Craig",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "Lesley",
+                            "lastName": "test",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Stuart",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "ATOLLEVY",
+                    "elementGroupName": "Atol protected",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~6"
+            },
+            {
+                "summary": {
+                    "productStatus": "CONFIRMED",
+                    "name": "KSP - Florida",
+                    "highlight": "KSP - Florida",
+                    "primaryAttribute": "Forced Components - Hidden",
+                    "travelDates": {
+                        "startDate": "2026-06-03T00:00:00",
+                        "endDate": "2026-06-03T00:00:00"
+                    },
+                    "travelDuration": {
+                        "duration": "0",
+                        "durationType": "NA"
+                    },
+                    "discount": 0.0,
+                    "startTime": "2026-06-03T00:00:00",
+                    "endTime": "2026-06-03T00:00:00",
+                    "travelTimings": {
+                        "startTime": "2026-06-03T00:00:00",
+                        "endTime": "2026-06-03T00:00:00"
+                    },
+                    "vipBooking": false,
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden"
+                },
+                "bookedUser": "460027",
+                "bookedDate": "2026-01-23T00:00:00",
+                "modifiedDate": "2026-01-23T00:00:00",
+                "rate": {
+                    "price": 36.0,
+                    "priceWithTax": 36.0,
+                    "tax": 0.0,
+                    "basePrice": 36.0,
+                    "currencyInContract": "GBP",
+                    "totalTax": 0.0,
+                    "totalTaxBase": 0.0
+                },
+                "travellersComposition": {
+                    "adultCount": 3,
+                    "travellers": [
+                        {
+                            "firstName": "Craig",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        },
+                        {
+                            "firstName": "Lesley",
+                            "lastName": "test",
+                            "leadTraveller": true,
+                            "title": "Mrs",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "F"
+                        },
+                        {
+                            "firstName": "Stuart",
+                            "lastName": "test",
+                            "leadTraveller": false,
+                            "title": "Mr",
+                            "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                            "gender": "M"
+                        }
+                    ]
+                },
+                "genericProductDetails": {
+                    "elementGroup": "FCHIDDEN",
+                    "elementGroupName": "Forced Components - Hidden",
+                    "destination": {},
+                    "isElementGroupDetailsOverridden": false
+                },
+                "isAncillaryProduct": true,
+                "tbxProductType": "GEN",
+                "tbxProductId": "GEN~7"
+            }
+        ],
+        "travellers": [
+            {
+                "firstName": "Craig",
+                "lastName": "test",
+                "leadTraveller": false,
+                "title": "Mr",
+                "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                "gender": "M"
+            },
+            {
+                "firstName": "Lesley",
+                "lastName": "test",
+                "leadTraveller": true,
+                "title": "Mrs",
+                "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                "gender": "F"
+            },
+            {
+                "firstName": "Stuart",
+                "lastName": "test",
+                "leadTraveller": false,
+                "title": "Mr",
+                "dateOfBirth": "{DateTime(yyyy-MM-dd, -30, year)}",
+                "gender": "M"
+            }
+        ],
+        "holidayPackageDetails": {
+            "agentReference": "460027",
+            "definiteDueDate": "2026-01-23T00:00:00",
+            "definiteDate": "2026-01-23T00:00:00",
+            "firmDueDate": "2026-01-23T00:00:00",
+            "firmDate": "2026-01-23T00:00:00",
+            "balanceDueDate": "2026-03-11T00:00:00",
+            "destination": {
+                "cityCode": "ORL",
+                "cityName": "Orlando ",
+                "countryCode": "US",
+                "countryName": "USA"
+            }
+        }
+    },
+    "status": 200
+}

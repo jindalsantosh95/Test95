@@ -1,0 +1,31 @@
+meta {
+  name: vholsRefresh
+  type: graphql
+  seq: 67
+}
+
+post {
+  url: {{graphql_url}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  # Replace generated placeholder values with scenario data before execution.
+  query vholsRefresh($refreshToken: String!) {
+    vholsRefresh(refreshToken: $refreshToken) {
+      __typename
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "refreshToken": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,183 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "prod",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "EnvironmentName": {
+      "value": "PROD"
+    },
+    "FunctionAppName": {
+      "value": "avapeunafncheckinmicroservice"
+    },
+    "ServerFarmIdRg": {
+      "value": "RG-VA-P-EUN-ENTERPRISEMS"
+    },
+    "AppServicePlanName": {
+      "value": "AVAPEUNASPEAPIMS"
+    },
+    "actionGroupsServiceNow": {
+      "value": "ServiceNow"
+    },
+    "actionGroupsEAPISupport": {
+      "value": "EAPI.Support"
+    },
+    "emailAddressServiceNow": {
+      "value": "virginatlantic@service-now.com"
+    },
+    "emailAddressEAPISupport": {
+      "value": "eapi.support@fly.virgin.com"
+    },
+    "Appsetting:WEBSITE_VNET_ROUTE_ALL": {
+      "value": "1"
+    },
+    "Appsetting:WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "Appsetting:DeltaChannelValue": {
+      "value": "DFMOBILE"
+    },
+    "Appsetting:DeltaApiIdValue": {
+      "value": "D2"
+    },
+    "Appsetting:DeltaClientIdValue": {
+      "value": "VAMobileAppAIR4_CC_SI"
+    },
+    "Appsetting:DeltaTestTrmValue": {
+      "value": ""
+    },
+    "AppInsightsName": {
+      "value": "AVAPEUNAICHECKIN"
+    },
+    "workspacename": {
+      "value": "avapeunlaweapi"
+    },
+    "vaultName": {
+      "value": "AVAPEUNKVEMS"
+    },
+    "IPRestriction": {
+      "value": ""
+    },
+    "ResourceGroupSubscriptionId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkvems.vault.azure.net/secrets/Common-config-RGSubscription-Id/)"
+    },
+    "storageAccountName": {
+      "value": "avapeunstcheckinms"
+    },
+    "AlwaysOn": {
+      "value": true
+    },
+    "AzureWebJobsSecretStorageType": {
+      "value": "Files"
+    },
+    "KeyVaultUri": {
+      "value": "https://avapeunkvems.vault.azure.net/"
+    },
+    "FUNCTIONS_EXTENSION_VERSION": {
+      "value": "~4"
+    },
+    "FUNCTIONS_WORKER_RUNTIME": {
+      "value": "dotnet-isolated"
+    },
+    "Appsetting:WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": "1"
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": "1"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "Tags": {
+      "value": {
+        "InitialProjectCode": "414",
+        "InitialProjectName": "CHECKINAPI",
+        "InitialBudgetCode": "9054",
+        "ActiveStatus": "PROD",
+        "Purpose": "Support functions for the CHECKIN MS AFN",
+        "ApplicationUsageIdList": "avapeunafncheckinms"
+      }
+    },
+    // Swagger / OpenAPI
+    "Appsetting:OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "Appsetting:OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "Appsetting:OpenApi__DocTitle": {
+      "value": "Enterprise API-Checkin Microservice"
+    },
+    "Appsetting:OpenApi__Description": {
+      "value": "This endpoint will assist in completing the online checkin process"
+    },
+    "Appsetting:OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "Appsetting:OpenApi__HostNames": {
+      "value": ""
+    },
+    "Appsetting:OpenApi__Version": {
+      "value": "v3"
+    },
+    "Appsetting:OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "Appsetting:OpenApi__ForceHttp": {
+      "value": "true"
+    },
+    "MockDelegatingHandler:Enabled": {
+      "value": "false"
+    },
+    "MockDelegatingHandler:MockServiceUri": {
+      "value": ""
+    },
+    "DeltaSsciEndpoint": {
+      "value": "https://www.virginatlantic.com/PCCOciWeb/apiv2/auth"
+    },
+    "DeltaTrmEndpoint": {
+      "value": "https://travelrequirements-api.vs-pax-clrnc-prd.aws.vs.air4.com/prd"
+    },
+    "DeltaAir4TokenEndpoint": {
+      "value": ""
+    },
+    "DeltaTrmClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkveapis.vault.azure.net/secrets/avapeunafncheckinmicroservice-DeltaTrmClientSecret/)"
+    },
+    "TrmConfigOptionsValue": {
+      "value": "[{'nativeTravelDocs':'true'}]"
+    },
+    "SherpaAffiliateId": {
+      "value": "virginatlantic"
+    },
+    "SecondaryDocumentContentOverrides": {
+      "value": "[{\"countryCode\":\"USA\",\"requirementOption\":\"ETA\",\"displayName\":\"ESTA\",\"governmentTitle\":\"ESTA\",\"governmentUrl\":\"https://esta.cbp.dhs.gov/\"},{\"countryCode\":\"USA\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://www.state.gov/visas/\"},{\"countryCode\":\"GBR\",\"requirementOption\":\"ETA\",\"governmentUrl\":\"https://www.gov.uk/eta\"},{\"countryCode\":\"GBR\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://www.gov.uk/check-uk-visa/\"},{\"countryCode\":\"IND\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://indianvisaonline.gov.in/\"},{\"countryCode\":\"CAN\",\"requirementOption\":\"ETA\",\"governmentUrl\":\"https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta.html\"},{\"countryCode\":\"CAN\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/visitor-visa.html\"},{\"countryCode\":\"JAM\",\"requirementOption\":\"ETA\",\"governmentUrl\":\"https://www.enterjamaica.gov.jm/\"},{\"countryCode\":\"KOR\",\"requirementOption\":\"ETA\",\"governmentUrl\":\"https://www.k-eta.go.kr/\"},{\"countryCode\":\"NGA\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://portal.immigration.gov.ng/\"},{\"countryCode\":\"ZWE\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://www.evisa.gov.zw/index.html\"},{\"countryCode\":\"ISR\",\"requirementOption\":\"ETA\",\"governmentUrl\":\"https://israel-entry.piba.gov.il/\"},{\"countryCode\":\"IRL\",\"requirementOption\":\"E_VISA\",\"governmentUrl\":\"https://www.visas.inis.gov.ie/\"}]"
+    },
+    "Redisconnectionstring": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://avapeunkveapis.vault.azure.net/secrets/avapeunafncheckinmicroservice-Redisconnectionstring/)"
+    },
+    "BoardingPassSlidingExpiryHours": {
+      "value": "48"
+    }
+  }
+}

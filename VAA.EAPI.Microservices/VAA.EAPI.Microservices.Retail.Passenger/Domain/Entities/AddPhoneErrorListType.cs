@@ -1,0 +1,2 @@
+﻿namespace VAA.EAPI.Microservices.Retail.Passenger.Domain.Entities{
+    public class AddPhoneErrorListType    {        public PhoneInfoType PhoneInfo { get; set; }        public ErrorType Error { get; set; }        public string ErrorInfo { get; set; }    }}

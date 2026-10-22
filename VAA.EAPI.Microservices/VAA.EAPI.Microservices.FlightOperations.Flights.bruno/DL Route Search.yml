@@ -1,0 +1,53 @@
+info:
+  name: DL Route Search
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: https://www.virginatlantic.com/flights/routes?departureAirportCode=LHR&arrivalAirportCode=mco&scheduledDepartureDate={{scheduledDepartureDate}}&timeRange=1,2,3&stops=0,1,2&first=true
+  headers:
+    - name: x-vaa-flight-status
+      value: "1"
+  params:
+    - name: departureAirportCode
+      value: LHR
+      type: query
+    - name: arrivalAirportCode
+      value: mco
+      type: query
+    - name: scheduledDepartureDate
+      value: "{{scheduledDepartureDate}}"
+      type: query
+    - name: timeRange
+      value: 1,2,3
+      type: query
+    - name: stops
+      value: 0,1,2
+      type: query
+    - name: first
+      value: "true"
+      type: query
+  auth: inherit
+
+runtime:
+  variables:
+    - name: scheduledDepartureDate
+      value: 2026-10-10T08:20:00+01:00
+  scripts:
+    - type: before-request
+      code: |-
+        const now = new Date();
+        const today = [
+          now.getFullYear(),
+          String(now.getMonth() + 1).padStart(2, "0"),
+          String(now.getDate()).padStart(2, "0")
+        ].join("-");
+        bru.setVar("scheduledDepartureDate", today);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

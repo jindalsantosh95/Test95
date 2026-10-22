@@ -1,0 +1,61 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: ''
+  variableGroupName: ''
+  environment: ''
+  sourceFolder: 'D:\a\1/testAutomation'
+
+jobs: 
+- job: 'TripsFunctional_Testing'
+  displayName: 'Trips MS Functional Tests'
+  pool:
+    name: ${{parameters.agentPool}} 
+    vmImage: ${{parameters.agentSpecification}}
+  variables:
+    - group: ${{parameters.variableGroupName}}
+  
+  steps:
+   - download: current
+     artifact: testAutomation            
+          
+    # Task to copy the ARM files to artifactstagingdirectory
+   - task: CopyFiles@2
+     displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+     inputs:
+       SourceFolder: ${{parameters.sourceFolder}}
+       Contents: |
+         **/*
+       TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+   - task: VSTest@2
+     displayName: 'Trips-GraphQL-TestSuite'
+     inputs:
+       testAssemblyVer2: | 
+          **\VAA.EAPI.Automation.Trips\bin\release\net10.0\VAA.EAPI.Automation.Trips.dll
+       searchFolder: '$(Build.ArtifactStagingDirectory)'
+       testFiltercriteria: 'Category=TripsMS-Regression|Category=TravelChecklistMS-Regression|Category=SpecialAssistanceMS-Regression|Category=PlusGradeAPI-Regression|Category=OperationalScheduleForAircraftDetails-Regression'
+       testRunTitle: 'Trips-MS-TestSuite'
+     continueOnError: true
+
+   - task: PublishTestResults@2
+     displayName: 'Publish Test Results **/Log_For_*.txt'
+     inputs:
+       testResultsFormat: XUnit
+       testResultsFiles: '**/Log_For_*.txt'    
+
+   - task: epsteam.EmailReportExtension.EmailReport.EmailReport@1
+     displayName: 'Send Email Report Always'
+     inputs:
+       subject: '[{environmentStatus}] {passPercentage} -$(env) STAGE | Digital Trips MS Endpoint Tests post deployment'
+       includeInToSectionStr: 2
+       toAddress: 'vinay.dhawan@fly.virgin.com;rachana.srivastava@fly.virgin.com;santosh.jindal@fly.virgin.com;himani.saxena@fly.virgin.com;robert.hutson@fly.virgin.com'
+       defaultDomain: VirginAtlantic365.onmicrosoft.com
+       includeCommits: false
+       includeOthersInTotal: false
+       includeResultsFromOtherJobs: false
+       includeBuildSummary: false
+       groupTestResultsBy: run
+       maxTestFailuresToShow: 10
+       enableTLS: true
+       smtpConnectionEndpoint: EmailServices

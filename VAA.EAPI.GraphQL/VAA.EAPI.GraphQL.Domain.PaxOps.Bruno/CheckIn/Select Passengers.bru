@@ -1,0 +1,103 @@
+meta {
+  name: Select Passengers
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation SelectPassengers {
+      SelectPassengers(checkInId: "{{checkInId}}", passengerIds: [
+         "{{pax1_id}}"
+      ]) {
+          checkInId
+          reference {
+              pnrLocator
+              createdDate
+          }
+          passengers {
+              passengerId
+              givenNames
+              surname
+              dateOfBirth
+              email
+          }
+          currentSlice {
+              sliceId
+              scheduledDepartureLocalDateTime
+              scheduledDepartureUtcDateTime
+              scheduledArrivalLocalDateTime
+              scheduledArrivalUtcDateTime
+              origin {
+                  terminalName
+                  code
+                  airportName
+                  cityName
+                  countryName
+                  countryCode
+              }
+              destination {
+                  terminalName
+                  code
+                  airportName
+                  cityName
+                  countryName
+                  countryCode
+              }
+              segments {
+                  segmentId
+                  ordinal
+                  scheduledDepartureLocalDateTime
+                  scheduledDepartureUtcDateTime
+                  scheduledArrivalLocalDateTime
+                  scheduledArrivalUtcDateTime
+                  origin {
+                      terminalName
+                      code
+                      airportName
+                      cityName
+                      countryName
+                      countryCode
+                  }
+                  legs {
+                      legId
+                      scheduledDepartureLocalDateTime
+                      scheduledDepartureUtcDateTime
+                      scheduledArrivalLocalDateTime
+                      scheduledArrivalUtcDateTime
+                      status
+                  }
+                  destination {
+                      terminalName
+                      code
+                      airportName
+                      cityName
+                      countryName
+                      countryCode
+                  }
+              }
+          }
+          onlineCheckInStatus {
+              available
+              title
+              message
+              code
+          }
+      }
+  }
+  
+}
+
+vars:post-response {
+  checkInId: res("data.SelectPassengers.checkInId")
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

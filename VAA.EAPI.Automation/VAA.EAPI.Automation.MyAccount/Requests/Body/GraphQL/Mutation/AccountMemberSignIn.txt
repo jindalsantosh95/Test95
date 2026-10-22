@@ -1,0 +1,12 @@
+mutation AccountMemberSignIn($request: SignInRequestInput) {
+  accountMemberSignIn(request: $request) {
+    tokenType
+    scope
+    expiresIn
+    accessToken
+    refreshToken
+    idToken
+    continuationToken
+    requiresMFA
+  }
+}

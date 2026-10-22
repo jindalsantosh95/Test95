@@ -1,0 +1,17 @@
+###Request
+POST https://enrolment.test/pnr-link-missing-attribute HTTP/1.1
+
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "errors": [
+    {
+      "message": "The required input field `dateOfBirth` is missing.",
+      "path": [ "request", "customer", "dateOfBirth" ],
+      "extensions": { "field": "CustomerCustMSInput.dateOfBirth" }
+    }
+  ]
+}

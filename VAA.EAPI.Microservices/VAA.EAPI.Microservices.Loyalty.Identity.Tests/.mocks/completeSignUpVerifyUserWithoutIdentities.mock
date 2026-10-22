@@ -1,0 +1,17 @@
+###Request
+GET https://tempuri.org/v1.0/users?$select=Id,Identities,extension_b4e6641f44c644ea8b9a899e786c7579_memberStatus&$filter=identities/any(x: x / issuer eq 'TestDomain' and issuerAssignedId eq 'missing.identities%40example.com') HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users",
+    "value": [
+        {
+            "id": "fallback-identities-user-id",
+            "extension_b4e6641f44c644ea8b9a899e786c7579_memberStatus": "ACTIVE",
+            "identities": []
+        }
+    ]
+}

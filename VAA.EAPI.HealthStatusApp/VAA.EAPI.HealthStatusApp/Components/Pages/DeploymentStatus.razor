@@ -1,0 +1,337 @@
+@page "/deploymentstatus"
+@attribute [Authorize(Policy = "RequireSpecificGroup")]
+@using VAA.EAPI.HealthStatusApp.Models
+@using VAA.EAPI.HealthStatusApp.Models.ADOPipelines
+@using VAA.EAPI.HealthStatusApp.Services
+@inject IDeploymentStatusService DeploymentStatusService
+@rendermode InteractiveServer
+
+<PageTitle>Deployment Status Dashboard</PageTitle>
+
+<section class="deployment-status-container">
+    <h1>Deployment Status Dashboard</h1>
+    <p>Environment view of pending production deployments.</p>
+
+    <section class="deployment-status-summary" aria-label="Deployment status summary">
+        <ul>
+            <li class="deployment-status-summary-dataset-created"><strong>Last Updated:</strong> @GetCreatedDateTime(Deployments.LastUpdated)</li>
+            <li>
+                <button class="summary-filter-button deployment-status-green @GetSummaryButtonClass("deployment-status-green")"
+                        type="button"
+                        @onclick='() => ToggleStatusFilter("deployment-status-green")'
+                        aria-pressed="@(SelectedStatusClass == "deployment-status-green")">
+                    <strong>Green Status:</strong> @GetStatusCount("deployment-status-green")
+                </button>
+            </li>
+            <li>
+                <button class="summary-filter-button deployment-status-amber @GetSummaryButtonClass("deployment-status-amber")"
+                        type="button"
+                        @onclick='() => ToggleStatusFilter("deployment-status-amber")'
+                        aria-pressed="@(SelectedStatusClass == "deployment-status-amber")">
+                    <strong>Amber Status:</strong> @GetStatusCount("deployment-status-amber")
+                </button>
+            </li>
+            <li>
+                <button class="summary-filter-button deployment-status-red @GetSummaryButtonClass("deployment-status-red")"
+                        type="button"
+                        @onclick='() => ToggleStatusFilter("deployment-status-red")'
+                        aria-pressed="@(SelectedStatusClass == "deployment-status-red")">
+                    <strong>Red Status:</strong> @GetStatusCount("deployment-status-red")
+                </button>
+            </li>
+        </ul>
+    </section>
+
+    <section class="deployment-status-filter-panel" aria-label="Pipeline name filter">
+        <ul>
+            <li class="deployment-status-filter-controls">
+                <input id="pipelineNameFilter"
+                       class="deployment-status-filter-input"
+                       type="search"
+                       placeholder="Filter pipeline name"
+                       aria-label="Filter pipeline name"
+                       @bind="PipelineNameFilter"
+                       @bind:event="oninput" />
+            </li>
+        </ul>
+
+        <div class="deployment-status-view-toggle" role="group" aria-label="Toggle date and time display mode">
+            <button type="button"
+                    class="deployment-status-view-button @GetTimeModeButtonClass(isUtc: false)"
+                    @onclick="() => SetDateTimeMode(isUtc: false)"
+                    aria-pressed="@(!ShowUtcTime)"
+                    title="Show local time">
+                Local
+            </button>
+            <button type="button"
+                    class="deployment-status-view-button @GetTimeModeButtonClass(isUtc: true)"
+                    @onclick="() => SetDateTimeMode(isUtc: true)"
+                    aria-pressed="@ShowUtcTime"
+                    title="Show UTC time">
+                UTC
+            </button>
+        </div>
+
+        <div class="deployment-status-view-toggle" role="group" aria-label="Toggle deployment status layout">
+            <button type="button"
+                    class="deployment-status-view-button @GetViewButtonClass(isTableView: false)"
+                    @onclick="() => SetViewMode(isTableView: false)"
+                    aria-pressed="@(!IsTableView)"
+                    title="Grid view">
+                <i class="bi bi-grid-3x3-gap-fill" aria-hidden="true"></i>
+            </button>
+            <button type="button"
+                    class="deployment-status-view-button @GetViewButtonClass(isTableView: true)"
+                    @onclick="() => SetViewMode(isTableView: true)"
+                    aria-pressed="@IsTableView"
+                    title="Table view">
+                <i class="bi bi-table" aria-hidden="true"></i>
+            </button>
+        </div>
+    </section>
+
+    @if (IsTableView)
+    {
+        <div class="deployment-status-table-wrapper">
+            <table class="deployment-status-table">
+                <thead>
+                    <tr>
+                        <th>Pipeline</th>
+                        <th>Latest Prod Build</th>
+                        <th>Latest Prod Deploy</th>
+                        <th>Latest UAT Build</th>
+                        <th>Latest UAT Deploy</th>
+                        <th>Latest SIT Build</th>
+                        <th>Latest SIT Deploy</th>
+                        <th>Latest Dev Build</th>
+                        <th>Latest Dev Deploy</th>
+                        <th>Deployment Queue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var deployment in FilteredDeployments)
+                    {
+                        <tr class="@GetTileClass(deployment)">
+                            <td>
+                                <a href="@DeploymentStatusDisplay.GetPipelineLink(deployment.PipelineId)"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="deployment-status-pipeline-name">
+                                    @if (DeploymentStatusDisplay.IsDigitalPipeline(deployment))
+                                    {
+                                        <i class="bi bi-file-binary-fill deployment-status-digital-pipeline-icon" title="Digital pipeline" aria-label="Digital pipeline"></i>
+                                    }
+                                    <span class="deployment-status-pipeline-label">@deployment.PipelineName</span>
+                                </a>
+                            </td>
+                            <td class="deployment-status-environment-build-cell @GetMatchingBuildCellClass(deployment.LastProdBuildDateTime, deployment.MostRecentIncompleteBuildDateTime)">@GetDateTime(deployment.LastProdBuildDateTime)</td>
+                            <td>@GetDateTime(deployment.LastProdDeployedDateTime)</td>
+                            <td class="deployment-status-environment-build-cell @GetMatchingBuildCellClass(deployment.LastUatBuildDateTime, deployment.MostRecentIncompleteBuildDateTime)">@GetDateTime(deployment.LastUatBuildDateTime)</td>
+                            <td>@GetDateTime(deployment.LastUatDeployedDateTime)</td>
+                            <td class="deployment-status-environment-build-cell @GetMatchingBuildCellClass(deployment.LastSitBuildDateTime, deployment.MostRecentIncompleteBuildDateTime)">@GetDateTime(deployment.LastSitBuildDateTime)</td>
+                            <td>@GetDateTime(deployment.LastSitDeployedDateTime)</td>
+                            <td class="deployment-status-environment-build-cell @GetMatchingBuildCellClass(deployment.LastDevBuildDateTime, deployment.MostRecentIncompleteBuildDateTime)">@GetDateTime(deployment.LastDevBuildDateTime)</td>
+                            <td>@GetDateTime(deployment.LastDevDeployedDateTime)</td>
+                            <td>@deployment.IncompleteDeploys</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="deployment-status-grid">
+            @foreach (var deployment in FilteredDeployments)
+            {
+                <a class="deployment-status-tile-link"
+                   href="@DeploymentStatusDisplay.GetPipelineLink(deployment.PipelineId)"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <article class="deployment-status-tile @GetTileClass(deployment)">
+                        <h2 title="@deployment.PipelineName">
+                            <span class="deployment-status-pipeline-name">
+                                @if (DeploymentStatusDisplay.IsDigitalPipeline(deployment))
+                                {
+                                    <i class="bi bi-file-binary-fill deployment-status-digital-pipeline-icon" title="Digital pipeline" aria-label="Digital pipeline"></i>
+                                }
+                                <span class="deployment-status-pipeline-label">@deployment.PipelineName</span>
+                            </span>
+                        </h2>
+                        <table class="deployment-status-tile-table">
+                            <colgroup>
+                                <col class="deployment-status-col-environment" />
+                                <col class="deployment-status-col-deployed" />
+                                <col class="deployment-status-col-build" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Environment</th>
+                                    <th>Deployed</th>
+                                    <th>Build</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Production</td>
+                                    <td>@GetDateTime(deployment.LastProdDeployedDateTime)</td>
+                                    <td class="deployment-status-environment-build-cell @GetMatchingBuildCellClass(deployment.LastProdBuildDateTime, deployment.MostRecentIncompleteBuildDateTime)">@GetDateTime(deployment.LastProdBuildDateTime)</td>
+                                </tr>
+                                <tr>
+                                    <td>UAT</td>
+                                    <td>@GetDateTime(deployment.LastUatDeployedDateTime)</td>
+                                    <td class="deployment-status-environment-build-cell @GetMatchingBuildCellClass(deployment.LastUatBuildDateTime, deployment.MostRecentIncompleteBuildDateTime)">@GetDateTime(deployment.LastUatBuildDateTime)</td>
+                                </tr>
+                                <tr>
+                                    <td>SIT</td>
+                                    <td>@GetDateTime(deployment.LastSitDeployedDateTime)</td>
+                                    <td class="deployment-status-environment-build-cell @GetMatchingBuildCellClass(deployment.LastSitBuildDateTime, deployment.MostRecentIncompleteBuildDateTime)">@GetDateTime(deployment.LastSitBuildDateTime)</td>
+                                </tr>
+                                <tr>
+                                    <td>Dev</td>
+                                    <td>@GetDateTime(deployment.LastDevDeployedDateTime)</td>
+                                    <td class="deployment-status-environment-build-cell @GetMatchingBuildCellClass(deployment.LastDevBuildDateTime, deployment.MostRecentIncompleteBuildDateTime)">@GetDateTime(deployment.LastDevBuildDateTime)</td>
+                                </tr>
+                                <tr class="deployment-status-pending-row">
+                                    <th>Pending</th>
+                                    <td>@deployment.IncompleteDeploys</td>
+                                    <td>@GetDateTime(deployment.MostRecentIncompleteBuildDateTime)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </article>
+                </a>
+            }
+        </div>
+    }
+</section>
+
+@code {
+    private Models.ADOPipelines.ADODeploymentCollection Deployments = new();
+    private string? SelectedStatusClass;
+    private string PipelineNameFilter = string.Empty;
+    private bool IsTableView;
+    private bool ShowUtcTime = false;
+
+    private IEnumerable<Models.ADOPipelines.ADODeploymentStatus> FilteredDeployments =>
+        Deployments.DeploymentStatuses.Where(MatchesStatusFilter).Where(MatchesPipelineFilter);
+
+    protected override async Task OnInitializedAsync()
+    {
+        Deployments = await DeploymentStatusService.GetDeploymentStatusesAsync();
+    }
+
+    private string GetDateTime(DateTime dt)
+    {
+        return FormatDateTime(dt);
+    }
+
+    private string GetCreatedDateTime(DateTime dt)
+    {
+        return FormatDateTime(dt);
+    }
+
+    private string FormatDateTime(DateTime dt)
+    {
+        if (dt == DateTime.MinValue)
+        {
+            return "N/A";
+        }
+
+        var utcDateTime = NormalizeUtcDateTime(dt);
+        var displayDateTime = ShowUtcTime ? utcDateTime : utcDateTime.ToLocalTime();
+        return $"{displayDateTime:dd-MMM-yy HH:mm}";
+    }
+
+    private static DateTime NormalizeUtcDateTime(DateTime dt)
+    {
+        return dt.Kind switch
+        {
+            DateTimeKind.Utc => dt,
+            DateTimeKind.Local => dt.ToUniversalTime(),
+            _ => DateTime.SpecifyKind(dt, DateTimeKind.Utc)
+        };
+    }
+
+    private int GetStatusCount(string tileClass)
+    {
+        return Deployments.DeploymentStatuses.Count(item => GetTileClass(item) == tileClass);
+    }
+
+    private void ToggleStatusFilter(string tileClass)
+    {
+        SelectedStatusClass = SelectedStatusClass == tileClass ? null : tileClass;
+    }
+
+    private string GetSummaryButtonClass(string tileClass)
+    {
+        return SelectedStatusClass == tileClass ? "summary-filter-button-selected" : string.Empty;
+    }
+
+    private bool MatchesStatusFilter(Models.ADOPipelines.ADODeploymentStatus status)
+    {
+        return SelectedStatusClass is null || GetTileClass(status) == SelectedStatusClass;
+    }
+
+    private bool MatchesPipelineFilter(Models.ADOPipelines.ADODeploymentStatus status)
+    {
+        return string.IsNullOrWhiteSpace(PipelineNameFilter) ||
+               status.PipelineName.Contains(PipelineNameFilter, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void SetViewMode(bool isTableView)
+    {
+        IsTableView = isTableView;
+    }
+
+    private void SetDateTimeMode(bool isUtc)
+    {
+        ShowUtcTime = isUtc;
+    }
+
+    private string GetTimeModeButtonClass(bool isUtc)
+    {
+        return ShowUtcTime == isUtc ? "deployment-status-view-button-selected" : string.Empty;
+    }
+
+    private string GetViewButtonClass(bool isTableView)
+    {
+        return IsTableView == isTableView ? "deployment-status-view-button-selected" : string.Empty;
+    }
+
+    private string GetMatchingBuildCellClass(DateTime environmentBuildDateTime, DateTime mostRecentIncompleteBuildDateTime)
+    {
+        if (environmentBuildDateTime == DateTime.MinValue || mostRecentIncompleteBuildDateTime == DateTime.MinValue)
+        {
+            return string.Empty;
+        }
+
+        var normalizedEnvironmentBuildDateTime = NormalizeUtcDateTime(environmentBuildDateTime);
+        var normalizedMostRecentIncompleteBuildDateTime = NormalizeUtcDateTime(mostRecentIncompleteBuildDateTime);
+
+        return normalizedEnvironmentBuildDateTime == normalizedMostRecentIncompleteBuildDateTime
+            ? "deployment-status-build-match"
+            : string.Empty;
+    }
+
+    private static string GetTileClass(Models.ADOPipelines.ADODeploymentStatus status)
+    {
+        if (status.LastProdDeployedDateTime == DateTime.MinValue)
+        {
+            return "deployment-status-red";
+        }
+
+        if (status.IncompleteDeploys == 0)
+        {
+            return "deployment-status-green";
+        }
+
+        if (status.DaysSinceLatestPendingDeploy > 30)
+        {
+            return "deployment-status-red";
+        }
+
+        return "deployment-status-amber";
+    }
+
+}

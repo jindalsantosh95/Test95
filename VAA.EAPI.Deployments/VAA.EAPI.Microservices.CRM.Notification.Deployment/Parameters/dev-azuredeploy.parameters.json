@@ -1,0 +1,195 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "DataDog": {
+      "value": {
+        "LoggingProvider": "AppInsights",
+        "LogsEndpoint": "https://http-intake.logs.datadoghq.com/api/v2/logs",
+        "ApiKey": "@Microsoft.KeyVault(SecretUri=https://avadeunkveapis.vault.azure.net/secrets/Common-Config-Datadog-ApiKey/)",
+        "Site": "datadoghq.com",
+        "Environment": "dev",
+        "Source": "csharp",
+        "Version": "",
+        "TraceEnabled": true,
+        "RuntimeMetricsEnabled": true,
+        "Tags": "",
+        "BaggageAllowList": "api-session-id,api-operation-id,api-correlation-id,api-channel",
+        "MinimumLogLevel": "Information",
+        "QueueCapacity": 5000,
+        "BatchSize": 100,
+        "FlushIntervalMilliseconds": 2000
+      }
+    },
+    "environment": {
+      "value": "Dev"
+    },
+    "AppServicePlanName": {
+      "value": "vadveunaspdigital02"
+    },
+    "functionappName": {
+      "value": "VA-DV-EUN-NOTIFICATION-FN-01"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "aseRg": {
+      "value": "rg-va-dv-eun-ase-01"
+    },
+    "aseName": {
+      "value": "avadeunase014"
+    },
+    "keyVaultName": {
+      "value": "va-dv-eun-crm-kv-01"
+    },
+    "SlotName": {
+      "value": "DS"
+    },
+    "tags": {
+      "value": {
+        "APPLICATION_NAME": "CRM Notification",
+        "DOMAIN": "DIGITAL",
+        "ENVIRONMENT": "DEV",
+        "BUDGETCODE": "",
+        "PROJECTCODE": "345",
+        "DEPLOYMENT_CR": ""
+      }
+    },
+    "WEBSITE_DNS_SERVER": {
+      "value": ""
+    },
+    "WEBSITE_DNS_ALT_SERVER": {
+      "value": ""
+    },
+    "storageaccountName": {
+      "value": "vadveunnotificationsa01"
+    },
+    "AppInsightsName": {
+      "value": "va-dv-eun-notification-ai-01"
+    },
+    "LAW_RESOURCE_GROUP_NAME": {
+      "value": "rg-va-d-eun-law-018"
+    },
+    "WORKSPACE_NAME": {
+      "value": "avadeunlaw018"
+    },
+    "workspaceResourceId": {
+      "value": ""
+    },
+    "WEBSITE_LOAD_USER_PROFILE": {
+      "value": ""
+    },
+    "WEBSITE_RUN_FROM_PACKAGE": {
+      "value": ""
+    },
+
+    //Message Center API settings
+    "Appsetting:EnableEmailMSAuthentication": {
+      "value": "true"
+    },
+    "Appsetting:EnableAdobeNewEndpoint": {
+      "value": true
+    },
+    "Appsetting:ACMCommunicationChannel": {
+      "value": "0"
+    },
+    "Appsetting:RetryCounter": {
+      "value": "5"
+    },
+    "Appsetting:DelayTime": {
+      "value": "0:0:0:5"
+    },
+    "Appsetting:Scope": {
+      "value": "AdobeID,openid,read_organizations,additional_info.projectedProductContext,additional_info.roles,adobeio_api,read_client_secret,manage_client_secrets,campaign_sdk,campaign_config_server_general,deliverability_service_general"
+    },
+    "Appsetting:AuthenticationUrl": {
+      "value": "https://ims-na1.adobelogin.com/ims/"
+    },
+    "Appsetting:GrantType": {
+      "value": "client_credentials"
+    },
+    "Appsetting:AircraftChangeTemplate": {
+      "value": "vaaTypeChange"
+    },
+    "Appsetting:TestEmail": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-crm-kv-01.vault.azure.net/secrets/AircraftSwapTestEmail)"
+    },
+    "Appsetting:SoapEndpointUriV2": {
+      "value": "https://virginatlantic-rt-stage4-all-lb.campaign.adobe.com/nl/jsp/soaprouter.jsp"
+    },
+    "Appsetting:SoapEndpointUri": {
+      "value": "https://virginatlantic-rt-stage2.campaign.adobe.com/nl/jsp/soaprouter.jsp"
+    },
+    "Appsetting:ACMSessionToken": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-crm-kv-01.vault.azure.net/secrets/NOTIFICATION-ACMSessionToken)"
+    },
+    "Appsetting:ClientId": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-crm-kv-01.vault.azure.net/secrets/NOTIFICATION-AdobeClientID/)"
+    },
+    "Appsetting:ClientSecret": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-crm-kv-01.vault.azure.net/secrets/NOTIFICATION-AdobeClientSecret/)"
+    },
+
+    //swagger settings
+    "OpenApi__Scope": {
+      "value": "https://VirginAtlantic365.onmicrosoft.com/5b7feac5-d831-4988-93e5-5f85a80e1c9f/User_impersonation"
+    },
+    "OpenApi__TokenUrl": {
+      "value": "https://login.microsoft.com/6bdfd5a8-531f-4f14-9af1-dc7b444c3ad8/oauth2/v2.0/token"
+    },
+    "OpenApi__DocTitle": {
+      "value": "Enterprise API-CRM Notification"
+    },
+    "OpenApi__Description": {
+      "value": "This endpoint will provide CRM Notification details"
+    },
+    "OpenApi__DocVersion": {
+      "value": "1.0.0"
+    },
+    "OpenApi__Version": {
+      "value": "v3"
+    },
+    "OpenApi__ForceHttps": {
+      "value": "false"
+    },
+    "OpenApi__ForceHttp": {
+      "value": "true"
+    },
+
+    //Settings
+
+    "NotificationServiceBusConnectionString": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-crm-kv-01.vault.azure.net/secrets/Notifications-ServiceBusConnectionString/)"
+    },
+    "AirshipApiUri": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-crm-kv-01.vault.azure.net/secrets/NOTIFICATION-AirshipApiUri/)"
+    },
+    "AirshipToken": {
+      "value": "@Microsoft.KeyVault(SecretUri=https://va-dv-eun-crm-kv-01.vault.azure.net/secrets/NOTIFICATION-AirshipToken/)"
+    },
+    "FlightCancelledAlertMessage": {
+      "value": "Your flight has been cancelled. Please contact customer service for rebooking options." //TBD
+    },
+    "FlightCancelledContent": {
+      "value": " http://virginatlantic.com/trips" //TBD
+    },
+    "CheckInOpenedAlertMessage": {
+      "value": "Check-in window is open now for your flight." //TBD
+    },
+    "CheckInOpenedContent": {
+      "value": " http://virginatlantic.com/trips"
+    },
+    "FlightTimeChangedAlertMessage": {
+      "value": "Your flight time has been changed. Please check your updated itinerary for new departure detailsr flight. Please check your booking for details." //TBD
+    },
+    "FlightTimeChangedContent": {
+      "value": " http://virginatlantic.com/trips" //TBD
+    },
+    "DefaultAlertMessage": {
+      "value": "Flight Update" //TBD
+    },
+    "DefaultContent": {
+      "value": "http://virginatlantic.com/trips"
+    }
+  }
+}

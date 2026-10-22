@@ -1,0 +1,22 @@
+###Request
+GET https://management.azure.com/subscriptions/test-subscription-id/resourceGroups/test-servicebus-resource-group/providers/Microsoft.ServiceBus/namespaces/test-servicebus-namespace/topics/test-topic/subscriptions?api-version=2024-01-01 HTTP/1.1
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json;
+
+{
+  "value": [
+    {
+      "name": "test-subscription",
+      "type": "Microsoft.ServiceBus/Namespaces/Topics/Subscriptions",
+      "properties": {
+        "countDetails": {
+          "activeMessageCount": 7,
+          "deadLetterMessageCount": 2
+        }
+      }
+    }
+  ],
+  "nextLink": null
+}

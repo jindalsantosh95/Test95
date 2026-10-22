@@ -1,0 +1,94 @@
+﻿@using VAA.EAPI.HealthStatusApp.Models.ViewModels
+@if (Scores == null || Scores?.TotalScore == 0)
+{
+    
+
+
+    <div style="display: flex;
+    justify-content: center;
+    height: 10rem;
+    padding: 1rem;
+    align-content: center;
+    align-items: center;">
+        <h4 style="width:min-content; text-wrap: wrap;">No Data Available</h4>
+</div>
+}
+else
+        {
+
+
+
+    <div style="position: relative;
+    width: 100%;
+    display: flex;
+    height: 10rem;
+    justify-content: center;
+    align-items: center;">
+    <div class="piescore animate" style="--start-deg: 0deg; --p:@Pie1Score; --c: green;"></div>
+        @if (Scores.SecondScore > 0)
+    {
+            <div class="piescore animate" style="--start-deg:@Pie1Enddeg; --p: @Pie2Score; --c: red;"></div>
+    }
+
+        <h3 style="margin-bottom:0;">@Scores.PiePercentage%</h3>
+</div>
+}
+
+
+@code{
+    [Parameter] public PieScoresModel Scores { get; set; }
+
+    public string Pie1Score
+    {
+        get
+        {
+            if (Scores.TotalScore == 0)
+            {
+                return "0";
+            }
+
+            double score = (double)Scores.FirstScore / Scores.TotalScore * 100;
+            return score.ToString();
+        }
+    }
+
+    public string Pie2Score {
+        get {
+            if (Scores.TotalScore == 0)
+            {
+                return "0";
+            }
+
+            double score = (double)(Scores.SecondScore) / Scores.TotalScore * 100;
+            return score.ToString();
+        }
+    }
+
+    public string Pie1Enddeg
+    {
+        get
+        {
+            if (Scores.TotalScore == 0)
+            {
+                return "0";
+            }
+
+            double score = (double)Scores.FirstScore / Scores.TotalScore * 360;
+            return score.ToString() + "Deg";
+        }
+    }
+
+    public string Pie2Enddeg
+    {
+        get
+        {
+            if (Scores.TotalScore == 0)
+            {
+                return "0";
+            }
+
+            double score = (double)(Scores.FirstScore + Scores.SecondScore) / Scores.TotalScore * 360;
+            return score.ToString() + "Deg";
+        }
+    }
+}

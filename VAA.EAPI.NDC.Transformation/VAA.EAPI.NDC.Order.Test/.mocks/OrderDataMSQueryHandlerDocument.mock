@@ -1,0 +1,519 @@
+﻿###Request
+GET https://Testresources.virginatlantic.com/dev/orderdata/orders/VS932RSNRHC25 HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"docType": "Indirect",
+	"fareTypeRequest": {
+		"fareTypeCode": "70J"
+	},
+	"changeType": "DocumentVoided",
+	"dataList": {
+		"originDestinationAssociations": [
+			{
+				"odLabel": "OD1",
+				"originDestination": {
+					"originAirport": "LHR",
+					"destinationAirport": "ATL",
+					"departureDate": "2026-08-07"
+				},
+				"journeyRefIds": [
+					"JOUR1"
+				],
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			}
+		],
+		"customerDetails": [
+			{
+				"custId": "ADULT_1",
+				"ptc": "ADT",
+				"firstName": "DAVID",
+				"lastName": "SMITH",
+				"gender": "M",
+				"dateOfBirth": "1956-12-22",
+				"contacts": {
+					"email": "TEST.SKYSCANNER@FLY.VIRGIN.COM",
+					"phone": "123456",
+					"phoneType": "H",
+					"countryDailingCode": "44"
+				},
+				"firstNameNumber": "01",
+				"lastNameNumber": "01"
+			}
+		],
+		"orderInstructions": [],
+		"segmentDetails": [
+			{
+				"odRefId": "OD1",
+				"segmentId": "SEG1",
+				"airCraft": "351",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "103",
+				"originAirportCode": "LHR",
+				"destinationAirportCode": "ATL",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-08-07T15:10:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-08-07T10:55:00"
+				},
+				"flightDuration": "00:09:10:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-08-07T10:55:00"
+						},
+						"legSequenceNumber": "1",
+						"originAirportCode": "LHR",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-08-07T15:10:00"
+						},
+						"destinationAirportCode": "ATL",
+						"legDuration": "00:09:10:00",
+						"legId": "LEG1",
+						"carrierAircraftTypeCode": "351",
+						"carrierAircraftTypeName": "351"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				},
+				"status": {
+					"code": "HX"
+				},
+				"ticketNotValidAfter": "2026-08-07",
+				"ticketNotValidBefore": "2026-08-07"
+			}
+		],
+		"baggageAllowances": [
+			{
+				"baggageAllowanceId": "BAG1",
+				"baggageAllowanceTypeCode": "Checked",
+				"freeBaggageAllowance": {
+					"dimensionAllowance": [
+						{
+							"heightMeasure": "75",
+							"widthMeasure": "43",
+							"linearMeasure": "208",
+							"lengthMeasure": "90"
+						},
+						{
+							"heightMeasure": "29.5",
+							"widthMeasure": "16",
+							"linearMeasure": "81",
+							"lengthMeasure": "35.5",
+							"lengthUnitOfMeasurement": 2
+						}
+					],
+					"weightAllowance": [
+						{
+							"maximumWeightMeasure": "32"
+						},
+						{
+							"maximumWeightMeasure": "70",
+							"weightUnitOfMeasurement": 1
+						}
+					]
+				}
+			},
+			{
+				"baggageAllowanceId": "BAG2",
+				"baggageAllowanceTypeCode": "CarryOn",
+				"freeBaggageAllowance": {
+					"allowedBagCnt": 1,
+					"dimensionAllowance": [
+						{
+							"heightMeasure": "56",
+							"widthMeasure": "23",
+							"linearMeasure": "115",
+							"lengthMeasure": "36"
+						},
+						{
+							"heightMeasure": "22",
+							"widthMeasure": "9",
+							"linearMeasure": "45",
+							"lengthMeasure": "14",
+							"lengthUnitOfMeasurement": 2
+						}
+					],
+					"weightAllowance": [
+						{
+							"maximumWeightMeasure": "10"
+						},
+						{
+							"maximumWeightMeasure": "22",
+							"weightUnitOfMeasurement": 1
+						}
+					]
+				}
+			}
+		],
+		"priceClass": [
+			{
+				"id": "PC1",
+				"fareBasisCode": "LYKRB8LA",
+				"ticketDesigCode": "VV80",
+				"fareTypeCode": "ERU",
+				"productName": "Economy Light",
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "Economy"
+				}
+			}
+		],
+		"serviceDefinitions": [
+			{
+				"serviceDefinitionId": "SV1",
+				"description": [
+					"A350 (widebody)",
+					"Alcohol & beverages provided",
+					"Seatback on-demand video",
+					"Meals and drinks included",
+					"3-3-3 seat layout",
+					"USB outlet",
+					"Standard seat (31\" pitch)",
+					"Fast web browsing (fee)"
+				]
+			}
+		],
+		"journey": [
+			{
+				"journeyId": "JOUR1",
+				"duration": "09:10",
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			}
+		]
+	},
+	"pointOfSale": {
+		"countryCode": "GB",
+		"currencyCode": "GBP"
+	},
+	"creationDateTime": {
+		"utcDateTime": "2025-12-22T16:50:00Z"
+	},
+	"orderNumber": {
+		"orderId": "VS932RSNRHC25",
+		"ownerAirline": "VS"
+	},
+	"bookingReference": {
+		"rloc": "RSNRHC",
+		"rlocCreateDate": "22Dec25",
+		"rlocCreateDateTime": "2025-12-22 04:50:12 PM",
+		"externalRecordLocator": "D3RTT6",
+		"externalSystem": "1S"
+	},
+	"orderItems": [
+		{
+			"orderItemId": "VS932RSNRHC25-1",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"status": {
+						"status": "CANCELLED"
+					},
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"baggageRefIds": [
+						"BAG1",
+						"BAG2"
+					],
+					"priceClassRefIds": [
+						"PC1"
+					],
+					"serviceDefinitionRefIds": [
+						"SV1"
+					]
+				}
+			],
+			"priceDetails": [
+				{
+					"priceComponentType": "BaseFare",
+					"amount": {
+						"monetaryAmount": "0.00",
+						"baseCurrency": "GBP"
+					}
+				},
+				{
+					"priceComponentType": "BasePrice",
+					"amount": {
+						"monetaryAmount": "0.00",
+						"baseCurrency": "GBP"
+					}
+				},
+				{
+					"priceComponentType": "TotalTax",
+					"amount": {
+						"monetaryAmount": "0.00",
+						"baseCurrency": "GBP"
+					}
+				}
+			],
+			"salePriceDifference": [
+				{
+					"priceComponentType": "BaseFare",
+					"amount": {
+						"monetaryAmount": "-911.00",
+						"baseCurrency": "GBP"
+					}
+				},
+				{
+					"priceComponentType": "BasePrice",
+					"amount": {
+						"monetaryAmount": "-1248.49",
+						"baseCurrency": "GBP"
+					}
+				},
+				{
+					"priceComponentType": "TotalTax",
+					"amount": {
+						"monetaryAmount": "-337.49",
+						"baseCurrency": "GBP"
+					},
+					"taxBreakup": [
+						{
+							"name": "GB",
+							"amount": {
+								"monetaryAmount": "-102.00",
+								"baseCurrency": "GBP"
+							},
+							"refundable": true
+						},
+						{
+							"name": "UB",
+							"amount": {
+								"monetaryAmount": "-50.79",
+								"baseCurrency": "GBP"
+							},
+							"refundable": true
+						},
+						{
+							"name": "US",
+							"amount": {
+								"monetaryAmount": "-17.10",
+								"baseCurrency": "GBP"
+							},
+							"refundable": true
+						},
+						{
+							"name": "XA",
+							"amount": {
+								"monetaryAmount": "-2.90",
+								"baseCurrency": "GBP"
+							},
+							"refundable": true
+						},
+						{
+							"name": "XY",
+							"amount": {
+								"monetaryAmount": "-5.20",
+								"baseCurrency": "GBP"
+							},
+							"refundable": true
+						},
+						{
+							"name": "YC",
+							"amount": {
+								"monetaryAmount": "-5.50",
+								"baseCurrency": "GBP"
+							},
+							"refundable": true
+						},
+						{
+							"name": "YQ",
+							"amount": {
+								"monetaryAmount": "-140.00",
+								"baseCurrency": "GBP"
+							},
+							"refundable": true
+						},
+						{
+							"name": "YR",
+							"amount": {
+								"monetaryAmount": "-14.00",
+								"baseCurrency": "GBP"
+							},
+							"refundable": true
+						}
+					]
+				}
+			],
+			"originalSalePrice": [
+				{
+					"priceComponentType": "BaseFare",
+					"amount": {
+						"monetaryAmount": "911.00",
+						"baseCurrency": "GBP"
+					}
+				},
+				{
+					"priceComponentType": "BasePrice",
+					"amount": {
+						"monetaryAmount": "1248.49",
+						"baseCurrency": "GBP"
+					}
+				},
+				{
+					"priceComponentType": "TotalTax",
+					"amount": {
+						"monetaryAmount": "337.49",
+						"baseCurrency": "GBP"
+					},
+					"taxBreakup": [
+						{
+							"name": "GB",
+							"amount": {
+								"monetaryAmount": "102.00",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"name": "UB",
+							"amount": {
+								"monetaryAmount": "50.79",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"name": "US",
+							"amount": {
+								"monetaryAmount": "17.10",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"name": "XA",
+							"amount": {
+								"monetaryAmount": "2.90",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"name": "XY",
+							"amount": {
+								"monetaryAmount": "5.20",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"name": "YC",
+							"amount": {
+								"monetaryAmount": "5.50",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"name": "YQ",
+							"amount": {
+								"monetaryAmount": "140.00",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"name": "YR",
+							"amount": {
+								"monetaryAmount": "14.00",
+								"baseCurrency": "GBP"
+							}
+						}
+					]
+				}
+			],
+			"refundPrice": [
+				{
+					"amount": {
+						"monetaryAmount": "-1248.49",
+						"baseCurrency": "GBP"
+					}
+				}
+			],
+			"accountableDocumentRefs": [
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520047719",
+					"issueDate": "2025-12-22",
+					"customerRefId": "ADULT_1",
+					"coupons": [
+						{
+							"segmentRefId": "SEG1",
+							"couponNumber": "1",
+							"ticketNumber": "9322520047719",
+							"couponStatus": "OPEN",
+							"fareBasis": "LYKRB8LA"
+						}
+					]
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			},
+			"paymentDetails": [
+				{
+					"formOfPayments": "Cash",
+					"amount": {
+						"monetaryAmount": "1248.49",
+						"baseCurrency": "GBP"
+					},
+					"paymentReferenceId": "176642222470797405",
+					"PaymentProcessingStatus": "SUCCESSFUL",
+					"paymentCommitmentDateTime": "2025-12-22T16:50:24",
+					"trackId": "c8035cc0-a065-4b5b-97c5-95a7899ffa9f",
+					"paxRefIds": [
+						"ADULT_1"
+					],
+					"sequenceId": "1"
+				},
+				{
+					"formOfPayments": "Cash",
+					"amount": {
+						"monetaryAmount": "-1248.49",
+						"baseCurrency": "GBP"
+					},
+					"paymentReferenceId": "176642222470797405-Refund-1",
+					"PaymentProcessingStatus": "SUCCESSFUL",
+					"paymentCommitmentDateTime": "2025-12-22T16:54:17"
+				}
+			]
+		}
+	],
+	"orderStatus": "Cancelled",
+	"parties": {
+		"participants": [
+			{
+				"partyType": "Seller",
+				"name": "Skyscanner",
+				"agencyID": "91281035",
+				"ordinal": "1",
+				"pccCode": "6UOL",
+				"contacts": {
+					"email": "agentemail@gmail.com"
+				},
+				"isCreditCardAccepted": true
+			}
+		]
+	},
+	"id": "VS932RSNRHC25",
+	"partitionKey": "VS932RSNRHC25"
+}
+
+		

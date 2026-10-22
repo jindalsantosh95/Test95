@@ -1,0 +1,15 @@
+{
+  "query": "mutation SecurityUpdateAPIMSubscriptionNDC($request: NDCSubscriptionUpdateMutationRequestInput!) {\r\n  securityUpdateAPIMSubscriptionNDC(request: $request) {\r\n    subscriptionState\r\n    subscriptionKeys {\r\n      key\r\n      validFrom\r\n      validTo\r\n    }\r\n    channel\r\n    environment\r\n    status\r\n  }\r\n}",
+  "variables": {
+    "request": {
+      "party": {
+        "agency": { "agencyId": "" },
+        "aggregator": { "aggregatorId": "" }
+      },
+      "enabled": true,
+      "channel": "",
+      "environment": ""
+    }
+  },
+  "operationName": "SecurityUpdateAPIMSubscriptionNDC"
+}

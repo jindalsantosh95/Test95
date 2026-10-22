@@ -1,0 +1,17 @@
+﻿using System;
+
+namespace VAA.EAPI.Microservices.Retail.Basket.Domain
+{
+    public class Sector
+    {
+        public string FlightNumber { get; set; }
+        public string Airline { get; set; }
+        public string AirlineName { get; set; }
+        public Departing Departing { get; set; }
+        public Arriving Arriving { get; set; }
+        public DateTime DepartingAt { get; set; }
+        public DateTime ArrivingAt { get; set; }
+        public string CabinClass { get; set; }
+        public string Pnr { get; set; }
+    }
+}

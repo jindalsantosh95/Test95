@@ -1,0 +1,456 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+
+        <!--To enable the Microsoft Testing Platform 'dotnet test' experience, add property: -->
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+
+        <!--To enable the Microsoft Testing Platform native command line experience, add property: -->
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+
+        <!--For more information on Microsoft Testing Platform support in xUnit.net, please visit: -->
+        <!--https://xunit.net/docs/getting-started/v3/microsoft-testing-platform-->
+
+    </PropertyGroup>
+
+	<ItemGroup>
+	  <None Include=".mocks\OrderDataMSQueryHandlerDisruptedHoldBookingCancellation.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementResponseDisruptedHoldBookingCancellationPatch.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementResponseDisruptedHoldBookingCancellationGet.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PublishOrderDocDisruptedHoldBookingResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderCancelHoldBookingResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerDisruptionPaymentResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerChangeCancelHoldBooking.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementCancelResponseHoldBookingPatch.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementCancelResponseHoldBookingGet.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentMSRetrieveResponseCommandHandlerPartialFlown.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementCancelResponsePartialFlownPatch.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementCancelResponsePartialFlownGet.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderSearchMSQueryHandlerPartialFlownCancel.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PartialFlownCancelReshopOfferMsQueryHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderChangeNotifAgencyOCNDetails.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\InRuleScheduleMinorResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\InRuleSlowResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\InRuleNotImplementedResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerOCNTimeChangeOrderDocWithoutAggregator.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerOCNTimeChangeOrderDocWithAggregator.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ValidationMSAgencyOCNDetailsWithAggregator.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ValidationMSAgencyOCNDetailsWithoutAggregator.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderChangeNotifDocumentRefunded.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderChangeNotifDocumentVoided.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderChangeNotifHistoricalCancellation.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderChangeNotifOrderNotification.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\BrandMsCommandHandlerResopHoldBookingResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CreatePaymentDocumentCommandHandlerChangeReshopConfirmHoldBookingResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\FlightServiceOfferDocQueryResponse.mock">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ManageCustomerResponseSameSSR.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ManageCustomerGetResponseSameSSR.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CityCodeQueryHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerChangeReshopConfirmHoldBookingResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerChangeReshopHoldBookingResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerChangeRefundResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerPartialFlownChangeResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerResponseCancelSegments.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSPartialFlownCancelQueryHandlerDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerChangeReshopConfirmHoldBooking.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerChangeReshopHoldBooking.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerCancelSegments.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSPartialFlownQueryHandlerDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementResponseCancelSegments.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementResponseCancelSegmentsGet.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementPartialFlownResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementPartialFlownResponseGet.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderMSResponseDeltaPNRissueGet.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderMSResponseDeltaPnrIssue.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementResponseReshopConfirmHoldBookingGet.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementResponseReshopConfirmHoldBookingPatch.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementResponseReshopHoldBookingPatch.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementResponseReshopHoldBookingGet.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentCCRefundResponsePartialFlown.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentMSAuthorizeCommandHandlerPartialFlownResponse.mock">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderSearchCommandHandlerChangeReshopConfirmHoldBookingResponse.mock">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderSearchCommandHandlerResponse.mock">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerSameSSR.mock">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\IFGAgentLookUpResp.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentIfgAuthorizeChangeReshopConfirmHoldBookingResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentIfgCCAuthorizeAgencyResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentIfgOrderChangeReshopConfirmHoldBookingResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SeatOfferDoc.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ArcTransactionResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CheckAgentStatus.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CreatePaymentDocumentCommandHandlerResponseEasyPay.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\CreatePaymentDocumentCommandHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerChangeFailureResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerChangeResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerResponseFlightNoop.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataARCMSQueryHandler.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerDocument HoldBooking.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerFlightNoop.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerSSR.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerDocumentPostSaleSeat.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerDocumentCreate.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerDocumentFailurePayment.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerDocumentNameCorrection.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerHistoryDocumentHoldBooking.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerHistoryDocOCNTimeChange.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerHistoryDocumentPostSaleSeat.mock">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerHistoryDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerFailurePaymentHistoryDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerNameCorrectionHistoryDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerOCNTimeChangeOrderDoc.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerOrderCreateHistoryDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerAmendAPIS.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDataMSQueryHandlerSplit.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDatsMSQueryHandlerHistorySSR.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDatsMSQueryHandlerHistoryAmendAPIS.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+		<None Include=".mocks\OrderHistoryMSCommandHandlerSabreHistoryDocOCNTimeChange.mock">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerSabreHistoryDocOCNTimeChange.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerSabreHistoryDocOCNHoldBookingIssuance.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerHistorySSR.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderDatsMSQueryHandlerHistorySplit.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerHistoryPostSaleSeat.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerSabreHistoryDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerSabreHistoryCreate.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerSabreHistoryHoldBooking - .mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerSabreHistoryFailurePayment.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerSabreHistoryNameCorrection.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerSabreHistorySplit.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderListQueryHandlerFiltersResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderListQueryHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderMsPostResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderHistoryMSCommandHandlerHistoryAmendAPIS.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementResponseFlightNoop.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderManagementResponseFlightNoopGet.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentIfgCCAuthorizeResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentIFGCCRefundResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentIFGRefundResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentIFGOrderExchangeResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PublishOrderDocMSCommandHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\SendOrderEmailHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\TransactionAPIRespose.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ValidationMSCommandHandlerResponseInvalidSubsKey.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ValidationMSCommandHandlerResponseOCN.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ValidationMSCommandHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\AirportDetailsQueryHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\BrandMsCommandHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OfferMsQueryHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderListQueryHandlerFiltersResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderListQueryHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderMsResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderTicketMsResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentIfgAuthorizeResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\PaymentIfgOrderResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderCreateIFGOrderFailure.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderCreateIFGOrderMalformed.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderCreateIFGOrderNullDocument.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderCreateIFGOrderEmptyErrors.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderCreateIFGCancelPnrOk.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderCreateIFGCancelAuthorizationOk.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderCreateIFGCancelPnrFailure.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\OrderCreateIFGCancelAuthorizationFailure.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ReferenceMsQueryHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include=".mocks\ValidationMSCommandHandlerResponse.mock">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>		
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />		
+		<PackageReference Include="Moq" Version="4.20.72" />
+        <PackageReference Include="xunit.v3" Version="3.2.2" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\VAA.EAPI.Microservices\VAA.EAPI.Core.Functions\VAA.EAPI.Core.Functions.csproj" />
+	  <ProjectReference Include="..\..\VAA.EAPI.Microservices\VAA.EAPI.Core.Xunit\VAA.EAPI.Core.Xunit.csproj" />
+	  <ProjectReference Include="..\..\VAA.EAPI.Microservices\VAA.EAPI.Microservices.Framework.Tests\VAA.EAPI.Microservices.Framework.Tests.csproj" />
+	  <ProjectReference Include="..\VAA.EAPI.NDC.Order\VAA.EAPI.NDC.Order.csproj" />
+	</ItemGroup>
+
+</Project>

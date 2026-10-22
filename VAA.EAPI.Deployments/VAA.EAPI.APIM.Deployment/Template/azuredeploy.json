@@ -1,0 +1,82 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "APIMName": {
+      "type": "string"
+    },
+    "apimEnv": {
+      "type": "string"
+    },
+    "apiEnv": {
+      "type": "string"
+    },
+    "applicationName": {
+      "type": "string"
+    },
+    "productId": {
+      "type": "string"
+    },
+    "apimurlname": {
+      "type": "string"
+    },
+    "apisEnv": {
+      "type": "string"
+    },
+    "functionAppName": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "apiName": "[concat(parameters('apimurlname'), '-microservice-', parameters('apisEnv'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service/products",
+      "name": "[concat(parameters('APIMName'), '/' ,parameters('productId'))]",
+      "apiVersion": "2017-03-01",
+      "properties": {
+        "displayName": "[parameters('productId')]",
+        "description": "Subscribers have completely unlimited access to the API. Administrator approval is required.",
+        "terms": null,
+        "subscriptionRequired": true,
+        "approvalRequired": true,
+        "subscriptionsLimit": 1,
+        "state": "published"
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', variables('apiName'))]",
+      "properties": {
+        "displayName": "[variables('apiName')]",
+        "path": "[concat(parameters('apimEnv'), parameters('applicationName'), 'microservice')]",
+        "protocols": [ "https" ]
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[concat(parameters('APIMName'), '/', parameters('productId'), '/', variables('apiName'))]",
+      "properties": {
+        "displayName": "[variables('apiName')]",
+        "apiRevision": "1",
+        "description": "",
+        "serviceUrl": "[concat('https://', parameters('functionAppName'), '.azurewebsites.net/api')]",
+        "path": "[concat(parameters('apimEnv'), parameters('applicationName'), 'Microservice')]",
+        "protocols": [
+          "https"
+        ],
+        "authenticationSettings": null,
+        "subscriptionKeyParameterNames": null,
+        "isCurrent": true
+      },
+
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('APIMName'), variables('apiName'))]"
+      ]
+    }
+
+  ]
+}

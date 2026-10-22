@@ -1,0 +1,18 @@
+###Request
+GET https://management.azure.com/subscriptions/scan-subscription-id/resourcegroups?api-version=2025-04-01 HTTP/1.1
+Authorization: Bearer KEYVAULT_SCAN_TOKEN
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json;
+
+{
+  "value": [
+    {
+      "name": "scan-resource-group",
+      "tags": {
+        "ProjectCode": "345"
+      }
+    }
+  ]
+}

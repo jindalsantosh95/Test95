@@ -1,0 +1,46 @@
+meta {
+  name: Account Entra OTP Validation
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation AccountEntraOtpValidation {
+    accountEntraOtpValidation(
+      request: {
+        token: "{{continuation_token}}"
+        oTP: "{{account_otp}}"
+        validationRequestType: {{entra_validation_request_type}}
+      }
+    ) {
+      tokenType
+      scope
+      expiresIn
+      accessToken
+      refreshToken
+      idToken
+      continuationToken
+    }
+  }
+}
+
+script:post-response {
+  const body = typeof res.getBody === "function" ? res.getBody() : res.body;
+  const token = body?.data?.accountEntraOtpValidation;
+  
+  if (token?.accessToken) bru.setVar("access_token", token.accessToken);
+  if (token?.refreshToken) bru.setVar("refresh_token", token.refreshToken);
+  if (token?.idToken) bru.setVar("id_token", token.idToken);
+  if (token?.continuationToken) bru.setVar("continuation_token", token.continuationToken);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

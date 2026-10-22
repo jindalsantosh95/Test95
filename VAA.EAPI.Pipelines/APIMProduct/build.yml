@@ -1,0 +1,33 @@
+parameters:
+  agentPool: ''
+  agentSpecification: ''
+  buildConfiguration: '' 
+  location: ''   
+  rootPath: ''
+  subRootPath: ''
+  applicationName: ''
+   
+
+stages: 
+  - stage: 'Build'
+    jobs: 
+      - job: 'Build'
+        displayName: 'Build'  
+        pool:
+          name: ${{parameters.agentPool}} 
+          vmImage: ${{parameters.agentSpecification}}         
+          
+        steps:
+
+         - task: CopyFiles@2
+           displayName: 'Copy ARM Files'
+           inputs:
+             SourceFolder: 'VAA.EAPI.Deployments/VAA.EAPI.APIM.Deployment'
+             TargetFolder: '$(build.artifactstagingdirectory)'
+
+        
+         - task: PublishBuildArtifacts@1
+           inputs:
+             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+             ArtifactName: 'drop' 
+             publishLocation: 'Container'   

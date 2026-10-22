@@ -1,0 +1,22 @@
+meta {
+  name: Manage Banner Details
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{graphql_mobile}}
+  body: graphql
+  auth: inherit
+}
+
+body:graphql {
+  mutation ManageBannerDetails {
+    ManageBannerDetails(bannerCode: "{{account_banner_code}}")
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

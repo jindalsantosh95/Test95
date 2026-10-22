@@ -1,0 +1,44 @@
+meta {
+  name: addBags - 3 bags for pax 1
+  type: http
+  seq: 17
+}
+
+post {
+  url: https://stg.virginatlantic.com/PCCOciWeb/apiv2/travelparties/{{travelparty_id}}/addBags
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "checkedBagsCount": [
+      "3"
+    ],
+    "specialItemFlag": [
+      "false"
+    ],
+    "totalOfferItemid": [
+      "{{pax1_bag3_offerid}}"
+    ],
+    "totalMilesFee": [
+      "0"
+    ],
+    "totalBagFee": [
+      "{{pax1_bag3_price}}"
+    ],
+    "passengerNin": [
+      "{{pax1_Nin}}"
+    ]
+  }
+}
+
+script:post-response {
+  bru.setVar("pending_payment", bru.getVar("pax1_bag3_price") > 0);
+  console.log(bru.getVar("pax1_bag3_price") > 0);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

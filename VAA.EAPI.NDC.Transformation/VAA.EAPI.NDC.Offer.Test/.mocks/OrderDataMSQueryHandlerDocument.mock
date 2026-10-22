@@ -1,0 +1,1033 @@
+﻿###Request
+GET https://Testresources.virginatlantic.com/sit/orderdata/orders/VS932QCRIZX26 HTTP/1.11
+
+###Response
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+
+{
+	"docType": "Indirect",
+	"fareTypeRequest": {
+		"fareTypeCode": "70J"
+	},
+	"dataList": {
+		"originDestinationAssociations": [
+			{
+				"odLabel": "OD1",
+				"originDestination": {
+					"originAirport": "LHR",
+					"destinationAirport": "DEL",
+					"departureDate": "2026-11-18"
+				},
+				"journeyRefIds": [
+					"JOUR1"
+				],
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			},
+			{
+				"odLabel": "OD2",
+				"originDestination": {
+					"originAirport": "DEL",
+					"destinationAirport": "LHR",
+					"departureDate": "2026-11-25"
+				},
+				"journeyRefIds": [
+					"JOUR2"
+				],
+				"flightSegmentRefIds": [
+					"SEG2"
+				]
+			}
+		],
+		"customerDetails": [
+			{
+				"custId": "ADULT_1",
+				"ptc": "ADT",
+				"itaPtc": "ADT",
+				"firstName": "DAVID",
+				"lastName": "SMITH",
+				"contacts": {
+					"email": "HINA.KAUSER@FLY.VIRGIN.COM",
+					"phone": "07799668167",
+					"phoneType": "H",
+					"countryDailingCode": "44"
+				},
+				"firstNameNumber": "01",
+				"lastNameNumber": "01",
+				"linkedInfantId": "INFANT_1"
+			},
+			{
+				"custId": "YOUNG_1",
+				"ptc": "GBE",
+				"itaPtc": "GBE",
+				"firstName": "DAVIDALSOV",
+				"lastName": "SMITHQVNPS",
+				"firstNameNumber": "01",
+				"lastNameNumber": "02"
+			},
+			{
+				"custId": "INFANT_1",
+				"ptc": "INF",
+				"itaPtc": "INF",
+				"firstName": "DAVIDFIEHJ",
+				"lastName": "SMITHMPHQF",
+				"firstNameNumber": "01",
+				"lastNameNumber": "03",
+				"associatedWithAdult": "ADULT_1"
+			}
+		],
+		"orderInstructions": [],
+		"segmentDetails": [
+			{
+				"odRefId": "OD1",
+				"segmentId": "SEG1",
+				"airCraft": "351",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "300",
+				"originAirportCode": "LHR",
+				"destinationAirportCode": "DEL",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-11-19T09:00:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-11-18T18:50:00"
+				},
+				"flightDuration": "00:08:40:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-18T18:50:00"
+						},
+						"legSequenceNumber": "1",
+						"originAirportCode": "LHR",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-19T09:00:00"
+						},
+						"destinationAirportCode": "DEL",
+						"legDuration": "00:08:40:00",
+						"legId": "LEG1",
+						"carrierAircraftTypeCode": "A350",
+						"carrierAircraftTypeName": "A350 (widebody)"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				},
+				"fareBasis": "XGERD8LA",
+				"status": {
+					"code": "HK"
+				},
+				"ticketNotValidAfter": "2026-11-18",
+				"ticketNotValidBefore": "2026-11-18"
+			},
+			{
+				"odRefId": "OD2",
+				"segmentId": "SEG2",
+				"airCraft": "351",
+				"marketingCarrier": "VS",
+				"marketingFlightNumber": "303",
+				"originAirportCode": "DEL",
+				"destinationAirportCode": "LHR",
+				"classOfService": "T",
+				"scheduledArrivalTime": {
+					"localDateTime": "2026-11-25T09:30:00"
+				},
+				"scheduledDepartureTime": {
+					"localDateTime": "2026-11-25T04:55:00"
+				},
+				"flightDuration": "00:10:05:00",
+				"legs": [
+					{
+						"scheduledDepartureTime": {
+							"localDateTime": "2026-11-25T04:55:00"
+						},
+						"legSequenceNumber": "2",
+						"originAirportCode": "DEL",
+						"scheduledArrivalTime": {
+							"localDateTime": "2026-11-25T09:30:00"
+						},
+						"destinationAirportCode": "LHR",
+						"legDuration": "00:10:05:00",
+						"legId": "LEG2",
+						"carrierAircraftTypeCode": "A350",
+						"carrierAircraftTypeName": "A350 (widebody)"
+					}
+				],
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				},
+				"fareBasis": "OGGRD8LA",
+				"status": {
+					"code": "HK"
+				},
+				"ticketNotValidAfter": "2026-11-25",
+				"ticketNotValidBefore": "2026-11-25"
+			}
+		],
+		"baggageAllowances": [
+			{
+				"baggageAllowanceId": "BAG1",
+				"baggageAllowanceTypeCode": "Checked",
+				"freeBaggageAllowance": {
+					"allowedBagCnt": 0,
+					"dimensionAllowance": [
+						{
+							"heightMeasure": "75",
+							"widthMeasure": "43",
+							"linearMeasure": "208",
+							"lengthMeasure": "90"
+						},
+						{
+							"heightMeasure": "29.5",
+							"widthMeasure": "16",
+							"linearMeasure": "81",
+							"lengthMeasure": "35.5",
+							"lengthUnitOfMeasurement": 2
+						}
+					],
+					"weightAllowance": [
+						{
+							"maximumWeightMeasure": "32"
+						},
+						{
+							"maximumWeightMeasure": "70",
+							"weightUnitOfMeasurement": 1
+						}
+					]
+				}
+			},
+			{
+				"baggageAllowanceId": "BAG2",
+				"baggageAllowanceTypeCode": "CarryOn",
+				"freeBaggageAllowance": {
+					"allowedBagCnt": 1,
+					"dimensionAllowance": [
+						{
+							"heightMeasure": "56",
+							"widthMeasure": "23",
+							"linearMeasure": "115",
+							"lengthMeasure": "36"
+						},
+						{
+							"heightMeasure": "22",
+							"widthMeasure": "9",
+							"linearMeasure": "45",
+							"lengthMeasure": "14",
+							"lengthUnitOfMeasurement": 2
+						}
+					],
+					"weightAllowance": [
+						{
+							"maximumWeightMeasure": "10"
+						},
+						{
+							"maximumWeightMeasure": "22",
+							"weightUnitOfMeasurement": 1
+						}
+					]
+				}
+			},
+			{
+				"baggageAllowanceId": "BAG3",
+				"baggageAllowanceTypeCode": "CarryOn",
+				"freeBaggageAllowance": {
+					"allowedBagCnt": 1,
+					"dimensionAllowance": [
+						{
+							"heightMeasure": "56",
+							"widthMeasure": "23",
+							"linearMeasure": "115",
+							"lengthMeasure": "36"
+						},
+						{
+							"heightMeasure": "22",
+							"widthMeasure": "9",
+							"linearMeasure": "45",
+							"lengthMeasure": "14",
+							"lengthUnitOfMeasurement": 2
+						}
+					],
+					"weightAllowance": [
+						{
+							"maximumWeightMeasure": "6"
+						},
+						{
+							"maximumWeightMeasure": "13",
+							"weightUnitOfMeasurement": 1
+						}
+					]
+				}
+			}
+		],
+		"penalty": [
+			{
+				"id": "PEN1",
+				"type": "Change",
+				"maxPrice": {
+					"amount": {
+						"monetaryAmount": "200.0",
+						"baseCurrency": "GBP"
+					}
+				},
+				"minPrice": {
+					"amount": {
+						"monetaryAmount": "200.0",
+						"baseCurrency": "GBP"
+					}
+				},
+				"text": "Before Departure: Change allowed for GBP200.00"
+			},
+			{
+				"id": "PEN2",
+				"type": "Change",
+				"maxPrice": {
+					"amount": {
+						"monetaryAmount": "200.0",
+						"baseCurrency": "GBP"
+					}
+				},
+				"minPrice": {
+					"amount": {
+						"monetaryAmount": "200.0",
+						"baseCurrency": "GBP"
+					}
+				},
+				"text": "After Departure: Change allowed for GBP200.00"
+			},
+			{
+				"id": "PEN3",
+				"type": "Cancel",
+				"maxPrice": {
+					"amount": {
+						"monetaryAmount": "330.0",
+						"baseCurrency": "GBP"
+					}
+				},
+				"minPrice": {
+					"amount": {
+						"monetaryAmount": "330.0",
+						"baseCurrency": "GBP"
+					}
+				},
+				"text": "Ticket refund for GBP330.00"
+			}
+		],
+		"priceClass": [
+			{
+				"id": "PC1",
+				"fareBasisCode": "XGERD8LA",
+				"productName": "Economy Light",
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				}
+			},
+			{
+				"id": "PC2",
+				"fareBasisCode": "OGGRD8LA",
+				"productName": "Economy Light",
+				"cabinType": {
+					"cabinCode": "5",
+					"cabinName": "ECONOMY"
+				}
+			}
+		],
+		"serviceDefinitions": [
+			{
+				"serviceDefinitionId": "SRV1",
+				"description": [
+					"A350 (widebody)",
+					"Alcohol & beverages provided",
+					"Seatback on-demand video",
+					"Meals and drinks included",
+					"3-3-3 seat layout",
+					"USB outlet",
+					"Standard seat (31\" pitch)",
+					"Ultra-fast Wi-Fi "
+				]
+			}
+		],
+		"journey": [
+			{
+				"journeyId": "JOUR1",
+				"duration": "08:40",
+				"flightSegmentRefIds": [
+					"SEG1"
+				]
+			},
+			{
+				"journeyId": "JOUR2",
+				"duration": "10:05",
+				"flightSegmentRefIds": [
+					"SEG2"
+				]
+			}
+		]
+	},
+	"pointOfSale": {
+		"countryCode": "GB",
+		"currencyCode": "GBP"
+	},
+	"creationDateTime": {
+		"utcDateTime": "2026-08-01T09:12:00Z"
+	},
+	"orderNumber": {
+		"orderId": "VS932QCRIZX26",
+		"ownerAirline": "VS"
+	},
+	"bookingReference": {
+		"rloc": "QCRIZX",
+		"rlocCreateDate": "01Aug26",
+		"rlocCreateDateTime": "2026-08-01 09:12:41 AM",
+		"externalRecordLocator": "DBSLIC",
+		"externalSystem": "1S"
+	},
+	"orderItems": [
+		{
+			"orderItemId": "VS932QCRIZX26-1",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productOwner": "VS",
+						"productName": "Economy Light",
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"originDestinationRefIds": [
+						"OD1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"baggageRefIds": [
+						"BAG1",
+						"BAG2"
+					],
+					"penaltyRef": {
+						"changePenaltyRefIds": [
+							"PEN1",
+							"PEN2"
+						],
+						"cancellationPenaltyRefIds": [
+							"PEN3"
+						]
+					},
+					"priceClassRefIds": [
+						"PC1"
+					],
+					"serviceDefinitionRefIds": [
+						"SRV1"
+					]
+				},
+				{
+					"serviceId": "SV2",
+					"product": {
+						"productOwner": "VS",
+						"productName": "Economy Light",
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"ADULT_1"
+					],
+					"originDestinationRefIds": [
+						"OD2"
+					],
+					"segmentRefIds": [
+						"SEG2"
+					],
+					"baggageRefIds": [
+						"BAG1",
+						"BAG2"
+					],
+					"penaltyRef": {
+						"changePenaltyRefIds": [
+							"PEN1",
+							"PEN2"
+						],
+						"cancellationPenaltyRefIds": [
+							"PEN3"
+						]
+					},
+					"priceClassRefIds": [
+						"PC2"
+					],
+					"serviceDefinitionRefIds": [
+						"SRV1"
+					]
+				}
+			],
+			"priceDetails": [
+				{
+					"priceComponentType": "BasePrice",
+					"amount": {
+						"monetaryAmount": "564.89",
+						"baseCurrency": "GBP"
+					},
+					"fareCalculation": "LON VS DEL106.95XGERD8LA VS LON34.09OGGRD8LA NUC141.04END ROE0.747967"
+				},
+				{
+					"priceComponentType": "BaseFare",
+					"amount": {
+						"monetaryAmount": "105.00",
+						"baseCurrency": "GBP"
+					},
+					"baseCurrencyAmount": {
+						"amount": "105.00",
+						"currency": "GBP"
+					},
+					"fareCalculation": "LON VS DEL106.95XGERD8LA VS LON34.09OGGRD8LA NUC141.04END ROE0.747967"
+				},
+				{
+					"priceComponentType": "TotalTax",
+					"amount": {
+						"monetaryAmount": "459.89",
+						"baseCurrency": "GBP"
+					},
+					"taxBreakup": [
+						{
+							"code": "GB",
+							"name": "United Kingdom Air Passenger Duty APD",
+							"amount": {
+								"monetaryAmount": "102.00",
+								"baseCurrency": "GBP"
+							},
+							"countryCode": "GB"
+						},
+						{
+							"code": "IN",
+							"name": "India User Development Fee Arrivals",
+							"amount": {
+								"monetaryAmount": "8.50",
+								"baseCurrency": "GBP"
+							},
+							"countryCode": "IN"
+						},
+						{
+							"code": "UB",
+							"name": "United Kingdom Passenger Service Charge Departures",
+							"amount": {
+								"monetaryAmount": "50.79",
+								"baseCurrency": "GBP"
+							},
+							"countryCode": "GB"
+						},
+						{
+							"code": "YQ",
+							"name": "VS YQ surcharge",
+							"amount": {
+								"monetaryAmount": "274.00",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"code": "YR",
+							"name": "VS YR surcharge",
+							"amount": {
+								"monetaryAmount": "14.00",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"code": "P2",
+							"name": "India Aviation Security Fee",
+							"amount": {
+								"monetaryAmount": "10.60",
+								"baseCurrency": "GBP"
+							},
+							"countryCode": "IN"
+						}
+					],
+					"fareCalculation": "LON VS DEL106.95XGERD8LA VS LON34.09OGGRD8LA NUC141.04END ROE0.747967"
+				}
+			],
+			"accountableDocumentRefs": [
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520372844",
+					"issueDate": "2026-08-01",
+					"issueTime": "10:12:00",
+					"customerRefId": "ADULT_1",
+					"fareCalculation": "LON VS DEL106.95XGERD8LA VS LON34.09OGGRD8LA NUC141.04END ROE0.747967",
+					"coupons": [
+						{
+							"segmentRefId": "SEG1",
+							"couponNumber": "1",
+							"ticketNumber": "9322520372844",
+							"couponStatus": "OPEN",
+							"fareBasis": "XGERD8LA",
+							"ticketExpirationDate": "18Nov26",
+							"ticketEffectiveDate": "18Nov26"
+						},
+						{
+							"segmentRefId": "SEG2",
+							"couponNumber": "2",
+							"ticketNumber": "9322520372844",
+							"couponStatus": "OPEN",
+							"fareBasis": "OGGRD8LA",
+							"ticketExpirationDate": "25Nov26",
+							"ticketEffectiveDate": "25Nov26"
+						}
+					]
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			},
+			"paymentDetails": [
+				{
+					"formOfPayments": "Card",
+					"amount": {
+						"monetaryAmount": "1103.57",
+						"baseCurrency": "GBP"
+					},
+					"cardMethod": {
+						"cardNumber": "444433XXXXXX1111",
+						"cardBrandCode": "VI"
+					},
+					"paymentReferenceId": "82329642",
+					"paymentProcessingStatus": "SUCCESSFUL",
+					"paymentCommitmentDateTime": "2026-08-01T09:13:02",
+					"paxRefIds": [
+						"ADULT_1",
+						"YOUNG_1",
+						"INFANT_1"
+					],
+					"sequenceId": "2"
+				}
+			]
+		},
+		{
+			"orderItemId": "VS932QCRIZX26-2",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productOwner": "VS",
+						"productName": "Economy Light",
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"YOUNG_1"
+					],
+					"originDestinationRefIds": [
+						"OD1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"baggageRefIds": [
+						"BAG1",
+						"BAG2"
+					],
+					"penaltyRef": {
+						"changePenaltyRefIds": [
+							"PEN1",
+							"PEN2"
+						],
+						"cancellationPenaltyRefIds": [
+							"PEN3"
+						]
+					},
+					"priceClassRefIds": [
+						"PC1"
+					],
+					"serviceDefinitionRefIds": [
+						"SRV1"
+					]
+				},
+				{
+					"serviceId": "SV2",
+					"product": {
+						"productOwner": "VS",
+						"productName": "Economy Light",
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"YOUNG_1"
+					],
+					"originDestinationRefIds": [
+						"OD2"
+					],
+					"segmentRefIds": [
+						"SEG2"
+					],
+					"baggageRefIds": [
+						"BAG1",
+						"BAG2"
+					],
+					"penaltyRef": {
+						"changePenaltyRefIds": [
+							"PEN1",
+							"PEN2"
+						],
+						"cancellationPenaltyRefIds": [
+							"PEN3"
+						]
+					},
+					"priceClassRefIds": [
+						"PC2"
+					],
+					"serviceDefinitionRefIds": [
+						"SRV1"
+					]
+				}
+			],
+			"priceDetails": [
+				{
+					"priceComponentType": "BasePrice",
+					"amount": {
+						"monetaryAmount": "462.89",
+						"baseCurrency": "GBP"
+					},
+					"fareCalculation": "LON VS DEL106.95XGERD8LA/YP VS LON34.09OGGRD8LA/YP NUC141.04END ROE0.747967"
+				},
+				{
+					"priceComponentType": "BaseFare",
+					"amount": {
+						"monetaryAmount": "105.00",
+						"baseCurrency": "GBP"
+					},
+					"baseCurrencyAmount": {
+						"amount": "105.00",
+						"currency": "GBP"
+					},
+					"fareCalculation": "LON VS DEL106.95XGERD8LA/YP VS LON34.09OGGRD8LA/YP NUC141.04END ROE0.747967"
+				},
+				{
+					"priceComponentType": "TotalTax",
+					"amount": {
+						"monetaryAmount": "357.89",
+						"baseCurrency": "GBP"
+					},
+					"taxBreakup": [
+						{
+							"code": "IN",
+							"name": "India User Development Fee Arrivals",
+							"amount": {
+								"monetaryAmount": "8.50",
+								"baseCurrency": "GBP"
+							},
+							"countryCode": "IN"
+						},
+						{
+							"code": "UB",
+							"name": "United Kingdom Passenger Service Charge Departures",
+							"amount": {
+								"monetaryAmount": "50.79",
+								"baseCurrency": "GBP"
+							},
+							"countryCode": "GB"
+						},
+						{
+							"code": "YQ",
+							"name": "VS YQ surcharge",
+							"amount": {
+								"monetaryAmount": "274.00",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"code": "YR",
+							"name": "VS YR surcharge",
+							"amount": {
+								"monetaryAmount": "14.00",
+								"baseCurrency": "GBP"
+							}
+						},
+						{
+							"code": "P2",
+							"name": "India Aviation Security Fee",
+							"amount": {
+								"monetaryAmount": "10.60",
+								"baseCurrency": "GBP"
+							},
+							"countryCode": "IN"
+						}
+					],
+					"fareCalculation": "LON VS DEL106.95XGERD8LA/YP VS LON34.09OGGRD8LA/YP NUC141.04END ROE0.747967"
+				}
+			],
+			"accountableDocumentRefs": [
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520372845",
+					"issueDate": "2026-08-01",
+					"issueTime": "10:12:00",
+					"customerRefId": "YOUNG_1",
+					"fareCalculation": "LON VS DEL106.95XGERD8LA/YP VS LON34.09OGGRD8LA/YP NUC141.04END ROE0.747967",
+					"coupons": [
+						{
+							"segmentRefId": "SEG1",
+							"couponNumber": "1",
+							"ticketNumber": "9322520372845",
+							"couponStatus": "OPEN",
+							"fareBasis": "XGERD8LA/YP",
+							"ticketExpirationDate": "18Nov26",
+							"ticketEffectiveDate": "18Nov26"
+						},
+						{
+							"segmentRefId": "SEG2",
+							"couponNumber": "2",
+							"ticketNumber": "9322520372845",
+							"couponStatus": "OPEN",
+							"fareBasis": "OGGRD8LA/YP",
+							"ticketExpirationDate": "25Nov26",
+							"ticketEffectiveDate": "25Nov26"
+						}
+					]
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			},
+			"paymentDetails": [
+				{
+					"formOfPayments": "Card",
+					"amount": {
+						"monetaryAmount": "1103.57",
+						"baseCurrency": "GBP"
+					},
+					"cardMethod": {
+						"cardNumber": "444433XXXXXX1111",
+						"cardBrandCode": "VI"
+					},
+					"paymentReferenceId": "82329642",
+					"paymentProcessingStatus": "SUCCESSFUL",
+					"paymentCommitmentDateTime": "2026-08-01T09:13:02",
+					"paxRefIds": [
+						"ADULT_1",
+						"YOUNG_1",
+						"INFANT_1"
+					],
+					"sequenceId": "2"
+				}
+			]
+		},
+		{
+			"orderItemId": "VS932QCRIZX26-3",
+			"ownerAirline": "VS",
+			"services": [
+				{
+					"serviceId": "SV1",
+					"product": {
+						"productOwner": "VS",
+						"productName": "Economy Light",
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"INFANT_1"
+					],
+					"originDestinationRefIds": [
+						"OD1"
+					],
+					"segmentRefIds": [
+						"SEG1"
+					],
+					"baggageRefIds": [
+						"BAG1",
+						"BAG3"
+					],
+					"penaltyRef": {
+						"changePenaltyRefIds": [
+							"PEN1",
+							"PEN2"
+						],
+						"cancellationPenaltyRefIds": [
+							"PEN3"
+						]
+					},
+					"priceClassRefIds": [
+						"PC1"
+					],
+					"serviceDefinitionRefIds": [
+						"SRV1"
+					]
+				},
+				{
+					"serviceId": "SV2",
+					"product": {
+						"productOwner": "VS",
+						"productName": "Economy Light",
+						"productType": "Flight"
+					},
+					"serviceBeneficiaries": [
+						"INFANT_1"
+					],
+					"originDestinationRefIds": [
+						"OD2"
+					],
+					"segmentRefIds": [
+						"SEG2"
+					],
+					"baggageRefIds": [
+						"BAG1",
+						"BAG3"
+					],
+					"penaltyRef": {
+						"changePenaltyRefIds": [
+							"PEN1",
+							"PEN2"
+						],
+						"cancellationPenaltyRefIds": [
+							"PEN3"
+						]
+					},
+					"priceClassRefIds": [
+						"PC2"
+					],
+					"serviceDefinitionRefIds": [
+						"SRV1"
+					]
+				}
+			],
+			"priceDetails": [
+				{
+					"priceComponentType": "BasePrice",
+					"amount": {
+						"monetaryAmount": "75.79",
+						"baseCurrency": "GBP"
+					},
+					"fareCalculation": "LON VS DEL10.69XGERD8LA/IN VS LON3.40OGGRD8LA/IN NUC14.09END ROE0.747967"
+				},
+				{
+					"priceComponentType": "BaseFare",
+					"amount": {
+						"monetaryAmount": "11.00",
+						"baseCurrency": "GBP"
+					},
+					"baseCurrencyAmount": {
+						"amount": "11.00",
+						"currency": "GBP"
+					},
+					"fareCalculation": "LON VS DEL10.69XGERD8LA/IN VS LON3.40OGGRD8LA/IN NUC14.09END ROE0.747967"
+				},
+				{
+					"priceComponentType": "TotalTax",
+					"amount": {
+						"monetaryAmount": "64.79",
+						"baseCurrency": "GBP"
+					},
+					"taxBreakup": [
+						{
+							"code": "UB",
+							"name": "United Kingdom Passenger Service Charge Departures",
+							"amount": {
+								"monetaryAmount": "50.79",
+								"baseCurrency": "GBP"
+							},
+							"countryCode": "GB"
+						},
+						{
+							"code": "YQ",
+							"name": "VS YQ surcharge",
+							"amount": {
+								"monetaryAmount": "14.00",
+								"baseCurrency": "GBP"
+							}
+						}
+					],
+					"fareCalculation": "LON VS DEL10.69XGERD8LA/IN VS LON3.40OGGRD8LA/IN NUC14.09END ROE0.747967"
+				}
+			],
+			"accountableDocumentRefs": [
+				{
+					"documentType": "Ticket",
+					"documentNumber": "9322520372846",
+					"issueDate": "2026-08-01",
+					"issueTime": "10:12:00",
+					"customerRefId": "INFANT_1",
+					"fareCalculation": "LON VS DEL10.69XGERD8LA/IN VS LON3.40OGGRD8LA/IN NUC14.09END ROE0.747967",
+					"coupons": [
+						{
+							"segmentRefId": "SEG1",
+							"couponNumber": "1",
+							"ticketNumber": "9322520372846",
+							"couponStatus": "OPEN",
+							"fareBasis": "XGERD8LA/IN",
+							"ticketExpirationDate": "18Nov26",
+							"ticketEffectiveDate": "18Nov26"
+						},
+						{
+							"segmentRefId": "SEG2",
+							"couponNumber": "2",
+							"ticketNumber": "9322520372846",
+							"couponStatus": "OPEN",
+							"fareBasis": "OGGRD8LA/IN",
+							"ticketExpirationDate": "25Nov26",
+							"ticketEffectiveDate": "25Nov26"
+						}
+					]
+				}
+			],
+			"itemStatus": {
+				"status": "Current"
+			},
+			"paymentDetails": [
+				{
+					"formOfPayments": "Card",
+					"amount": {
+						"monetaryAmount": "1103.57",
+						"baseCurrency": "GBP"
+					},
+					"cardMethod": {
+						"cardNumber": "444433XXXXXX1111",
+						"cardBrandCode": "VI"
+					},
+					"paymentReferenceId": "82329642",
+					"paymentProcessingStatus": "SUCCESSFUL",
+					"paymentCommitmentDateTime": "2026-08-01T09:13:02",
+					"paxRefIds": [
+						"ADULT_1",
+						"YOUNG_1",
+						"INFANT_1"
+					],
+					"sequenceId": "2"
+				}
+			]
+		}
+	],
+	"orderStatus": "Confirmed",
+	"warnings": [],
+	"parties": {
+		"participants": [
+			{
+				"partyType": "Seller",
+				"name": "Skyscanner",
+				"agencyID": "91281035",
+				"ordinal": "1",
+				"pccCode": "6UOL",
+				"contacts": {
+					"email": "Bandaru.JeevanNagaSai@fly.virgin.com"
+				},
+				"isCreditCardAccepted": true,
+				"requestAgentType": "IATA"
+			}
+		]
+	},
+	"orderRemarks": [
+		{
+			"text": "XXTAW/"
+		}
+	],
+	"changeType": "OrderItemAdded",
+	"version": 1,
+	"changeDateTime": {
+		"utcDateTime": "2026-08-01T09:12:00Z"
+	},
+	"id": "VS932QCRIZX26",
+	"partitionKey": "VS932QCRIZX26"
+}
